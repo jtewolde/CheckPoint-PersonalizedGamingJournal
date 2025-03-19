@@ -1,2 +1,2 @@
-# ProgressPal-VideoGameProgressTracker
-ProgressPal is a Next.js-powered web app that helps gamers track their progress, log achievements, and set completion goals across multiple games and platforms so that they know where they left off. This web app helps users stay organized, never lose track of your video game backlog!
+# CheckPoint-PersonalizedGamingJournal
+CheckPoint is a web application designed for gamers to track their progress in the games they are playing and plan to play in the future. It helps users log their gaming sessions, set reminders for the next steps, and visualize their progress over time. With CheckPoint, you'll never forget where you left off in a game!
