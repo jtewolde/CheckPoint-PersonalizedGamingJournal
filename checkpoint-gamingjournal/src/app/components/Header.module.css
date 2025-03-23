@@ -1,0 +1,49 @@
+.header {
+    height: 56px;
+    margin-bottom: 1rem;
+    background-color: lightgray;
+    border-bottom: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  }
+  
+  .inner {
+    height: 3.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo{
+    width: 160px;
+    height: auto;
+    object-fit: contain;
+    margin-left: -90px; /* Moves logo further to the left */  
+  }
+  
+  .link {
+    display: block;
+    line-height: 1;
+    padding: 8px 12px;
+    border-radius: var(--mantine-radius-sm);
+    text-decoration: none;
+    color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+    font-size: 18px;
+    font-weight: 500;
+
+  
+    @mixin hover {
+      background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+    }
+  
+    [data-mantine-color-scheme] &[data-active] {
+      border: 2px solid black;
+      background-color: white;
+      color: black;
+    }
+  }
+
+  .links{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: -180px; /* Moves links further to the right */
+  }
