@@ -4,6 +4,8 @@ import "./globals.css";
 
 import '@mantine/core/styles.css';
 
+import { Header } from "./components/Header/Header";
+
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
 
 const geistSans = Geist({
@@ -34,7 +36,8 @@ export default function RootLayout({
 
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <MantineProvider>
-        {children}
+          <Header/>
+          {children}
         </MantineProvider>
         
       </body>

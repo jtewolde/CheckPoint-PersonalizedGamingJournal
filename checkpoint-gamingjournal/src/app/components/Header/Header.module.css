@@ -2,7 +2,7 @@
     height: 56px;
     margin-bottom: 1rem;
     background-color: lightgray;
-    border-bottom: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+    border-bottom: 1px solid black;
   }
   
   .inner {
@@ -16,9 +16,27 @@
     width: 160px;
     height: auto;
     object-fit: contain;
-    margin-left: -90px; /* Moves logo further to the left */  
+    margin-left: -180px; /* Moves logo further to the left */  
+  }
+
+  @media screen and (max-width: 768px) {
+    .logo{
+      width: 120px;
+      height: auto;
+      object-fit: contain;
+      margin-left: 0px; /* Moves logo further to the left */
+    }
+    
   }
   
+  .links{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: -300px; /* Moves links further to the right */
+  }
+
+
   .link {
     display: block;
     line-height: 1;
@@ -41,9 +59,3 @@
     }
   }
 
-  .links{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-right: -180px; /* Moves links further to the right */
-  }
