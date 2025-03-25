@@ -15,9 +15,21 @@ export default function Home() {
       <Container size={'md'} className={classes.container}>
 
          <Title className={classes.title}> Your Personal Gaming Journal </Title>
-         <Text className={classes.text} size="xl" mt="xl">
-          Build 
-         </Text>
+
+         <Text className={classes.description} size="xl" mt="xl">
+          Keep a clear record of your progress across multiple games. Log your achievements,  
+          quests, and key moments so you never lose track of where you left off. Whether you're  
+          juggling RPGs, tackling competitive matches, or diving into open worlds, Checkpoint  
+          ensures you always pick up right where you left off.
+        </Text>
+
+        <Button variant="gradient"  
+          gradient={{ from: 'rgba(0, 0, 0, 1)', to: 'rgba(176, 176, 176, 1)', deg: 51 }}
+          size="xl" radius="xl" className={classes.control}>
+
+          Create an account to get started!
+
+        </Button>
 
 
       </Container>
