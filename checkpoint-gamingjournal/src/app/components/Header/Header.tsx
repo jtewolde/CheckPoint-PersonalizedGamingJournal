@@ -11,7 +11,7 @@ const links = [
   { link: '/my-games', label: 'My Games' },
   { link: '/journal', label: 'Journal' },
   { link: '/stats', label: 'Stats' },
-  { link: '/createaccount', label: 'Create Account' },
+  { link: '/signup', label: 'Sign Up' },
   { link: '/login', label: 'Login' },
 ];
 

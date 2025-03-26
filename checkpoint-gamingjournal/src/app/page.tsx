@@ -1,7 +1,6 @@
 import { Button, Container, Overlay, Text, Title } from '@mantine/core';
+import { UserRoundPlus } from 'lucide-react';
 import classes from './page.module.css';
-
-import Image from "next/image";
 
 export default function Home() {
   return (
@@ -25,7 +24,7 @@ export default function Home() {
 
         <Button variant="gradient"  
           gradient={{ from: 'rgba(0, 0, 0, 1)', to: 'rgba(176, 176, 176, 1)', deg: 51 }}
-          size="xl" radius="xl" className={classes.control}>
+          size="xl" radius="xl" className={classes.control} rightSection={<UserRoundPlus />}>
 
           Create an account to get started!
 
