@@ -1,10 +1,13 @@
 'use client'
 
 import { useState } from 'react';
-import { Burger, Container, Group } from '@mantine/core';
+import { Burger, Container, Group, Button } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import CheckPointLogo from '../../../../public//CheckPointLogo.png';
 import classes from './Header.module.css';
+
+// TO DO FOR LATER:
+// HAVE DIFFERENT HEADER FOR AUTHENICATED OR NOT
 
 const links = [
   { link: '/', label: 'Home' },
