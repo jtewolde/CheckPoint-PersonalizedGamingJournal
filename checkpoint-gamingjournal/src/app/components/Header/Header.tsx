@@ -1,41 +1,15 @@
 'use client'
 
-import { useState } from 'react';
-import { Burger, Container, Group, Button } from '@mantine/core';
+import { usePathname, useRouter } from 'next/navigation';
+import { Burger, Container, Group } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import CheckPointLogo from '../../../../public//CheckPointLogo.png';
+import CheckPointLogo from '../../../../public/CheckPointLogo.png';
 import classes from './Header.module.css';
+import Link from 'next/link';
 
-// TO DO FOR LATER:
-// HAVE DIFFERENT HEADER FOR AUTHENICATED OR NOT
-
-const links = [
-  { link: '/', label: 'Home' },
-  { link: '/my-games', label: 'My Games' },
-  { link: '/journal', label: 'Journal' },
-  { link: '/stats', label: 'Stats' },
-  { link: '/signup', label: 'Sign Up' },
-  { link: '/login', label: 'Login' },
-];
-
-export function Header(){
+export function Header() {
   const [opened, { toggle }] = useDisclosure(false);
-  const [active, setActive] = useState(links[0].link);
-
-  const items = links.map((link) => (
-    <a
-      key={link.label}
-      href={link.link}
-      className={classes.link}
-      data-active={active === link.link || undefined}
-      onClick={(event) => {
-        event.preventDefault();
-        setActive(link.link);
-      }}
-    >
-      {link.label}
-    </a>
-  ));
+  const pathname = usePathname();
 
   return (
     <header className={classes.header}>
@@ -43,7 +17,12 @@ export function Header(){
         <img src={CheckPointLogo.src} alt="CheckPoint Logo" className={classes.logo} />
         <Container size="md" className={classes.links}>
           <Group gap={5} visibleFrom="xs">
-            {items}
+          <Link href="/" className={`${classes.link} ${pathname === '/' ? classes.active : ''}`}>Home</Link>
+              <Link href="/my-games" className={`${classes.link} ${pathname === '/my-games' ? classes.active : ''}`}>My Games</Link>
+              <Link href="/journal" className={`${classes.link} ${pathname === '/journal' ? classes.active : ''}`}>Journal</Link>
+              <Link href="/stats" className={`${classes.link} ${pathname === '/stats' ? classes.active : ''}`}>Stats</Link>
+              <Link href="/auth/signin" className={`${classes.link} ${pathname === '/auth/signin' ? classes.active : ''}`}>Sign In</Link>
+              <Link href="/auth/signup" className={`${classes.link} ${pathname === '/auth/signup' ? classes.active : ''}`}>Sign Up</Link>
           </Group>
         </Container>
 

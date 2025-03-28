@@ -1,61 +1,59 @@
 .header {
-    height: 56px;
-    background-color: rgba(190, 189, 189, 0.821);
-    border-bottom: 1px solid black;
-  }
-  
-  .inner {
-    height: 3.75rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+  height: 56px;
+  background-color: rgba(190, 189, 189, 0.821);
+  border-bottom: 1px solid black;
+}
 
-  .logo{
-    width: 160px;
-    height: auto;
-    object-fit: contain;
-    margin-left: -25%;
-  }
+.inner {
+  height: 3.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  @media screen and (max-width: 768px) {
-    .logo{
+.logo {
+  width: 160px;
+  height: auto;
+  object-fit: contain;
+  margin-left: -25%;
+}
+
+@media screen and (max-width: 768px) {
+  .logo {
       width: 120px;
       height: auto;
       object-fit: contain;
       margin-left: 0px; /* Moves logo further to the left */
-    }
-    
   }
-  
-  .links{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-right: -18rem;
-  }
+}
 
+.links {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: -18rem;
+}
 
-  .link {
-    display: block;
-    line-height: 1;
-    padding: 8px 12px;
-    border-radius: var(--mantine-radius-sm);
-    text-decoration: none;
-    color: rgb(0, 0, 0);
-    font-size: 20px;
-    font-weight: 500;
-    font-family: 'Poppins';
+.link {
+  display: block;
+  line-height: 1;
+  padding: 8px 12px;
+  border-radius: var(--mantine-radius-sm);
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+  font-size: 20px;
+  font-weight: 500;
+  font-family: 'Poppins';
+  transition: background-color 0.3s, color 0.3s;
+}
 
-  
-    @mixin hover {
-      background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
-    }
-  
-    [data-mantine-color-scheme] &[data-active] {
-      border: 2px solid black;
-      background-color: white;
-      color: black;
-    }
-  }
+.link:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
 
+.active {
+  border: 2px solid black;
+  background-color: white;
+  color: black;
+  font-weight: bold;
+}
