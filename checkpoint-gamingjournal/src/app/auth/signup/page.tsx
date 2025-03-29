@@ -1,7 +1,7 @@
 'use client'
 
-import {Anchor, Button, Checkbox, Paper, PasswordInput, Text, TextInput, Title, } from '@mantine/core';
-import classes from './page.module.css'
+import {Anchor, Button, Checkbox, Paper, PasswordInput, Text, TextInput, Title, Image } from '@mantine/core';
+import classes from './signUppage.module.css';
 
 export default function signUpPage(){
     return(
