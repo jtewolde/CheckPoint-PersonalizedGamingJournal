@@ -1,7 +1,12 @@
 .header {
   height: 56px;
-  background-color: rgba(190, 189, 189, 0.821);
+  background-color: rgba(138, 131, 131, 0.26);
+  display: flex; /* Ensure flexbox is applied */
+  justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid black;
+  padding: 0 2rem; /* Add consistent padding for spacing */
+  box-sizing: border-box; /* Ensure padding is included in width */
 }
 
 .inner {
@@ -9,29 +14,32 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%; /* Ensure it spans the full width */
+  max-width: 1200px; /* Optional: Add a max width for better alignment */
+  margin: 0 auto; /* Center the inner container */
 }
 
 .logo {
   width: 160px;
   height: auto;
   object-fit: contain;
-  margin-left: -25%;
+  margin-left: 0; /* Remove negative margin */
 }
 
 @media screen and (max-width: 768px) {
   .logo {
-      width: 120px;
-      height: auto;
-      object-fit: contain;
-      margin-left: 0px; /* Moves logo further to the left */
+    width: 120px;
+    height: auto;
+    object-fit: contain;
+    margin-left: 0; /* Keep consistent margin */
   }
 }
 
 .links {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-right: -18rem;
+  gap: 1rem; /* Add spacing between links */
+  margin-right: 0; /* Remove negative margin */
 }
 
 .link {

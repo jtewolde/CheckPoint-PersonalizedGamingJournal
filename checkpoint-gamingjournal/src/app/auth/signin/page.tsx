@@ -6,7 +6,7 @@ import Router from 'next/router';
 import CheckPointLogo from '../../../../public/CheckPointLogo.png';
 import classes from './signIn.module.css';
 import { GoogleButton } from '@/app/components/GoogleButton/GoogleButton';
-import { url } from 'inspector';
+import { TwitterButton } from '@/app/components/TwitterButton/TwitterButton';
 
 export default function signInPage(){
     return(
@@ -22,6 +22,7 @@ export default function signInPage(){
 
             <Group grow mb="md" mt="md">
                 <GoogleButton radius="xl">Google</GoogleButton>
+                <TwitterButton radius='xl'>Twitter</TwitterButton>
             </Group>
 
           <TextInput label="Email address" placeholder="hello@gmail.com" size="md" />
