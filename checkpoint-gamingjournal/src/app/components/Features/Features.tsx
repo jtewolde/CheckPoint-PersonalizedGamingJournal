@@ -1,0 +1,66 @@
+
+import { Pin, Notebook, Library, ChartColumnIncreasing, Target, Trophy } from 'lucide-react';
+import { Container, SimpleGrid, Text, ThemeIcon, Title } from '@mantine/core';
+import classes from './Features.module.css';
+
+export const featuresData = [
+    {
+        icon: <Pin size={40} />,
+        title: 'Track Your Game Progress',
+        description: 'Log milestones, achievements, and story progress, see an overview of your gaming journey.',
+    },
+    {
+        icon: <Notebook size={40} />,
+        title: 'Personalized Journal',
+        description: 'Write session recaps, strategies, and personal notes to document your gaming journey.',
+    },
+    {
+        icon: <Library size={40} />,
+        title: 'Game Library Management',
+        description: 'Organize your games into categories like Currently Playing, Backlog, and Completed for easy tracking.',
+    },
+    {
+        icon: <ChartColumnIncreasing size={40} />,
+        title: 'Stats and Insights',
+        description: 'Analyze playtime, favorite genres, and gaming trends to better understand your habits.',
+    },
+]
+
+const Feature = ({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) => (
+    <div className={classes.feature}>
+      <ThemeIcon variant="light" size={40} radius="md" className={classes.icon}>
+        {icon}
+      </ThemeIcon>
+      <Text className={classes.featureTitle}>{title}</Text>
+      <Text size="sm" className={classes.featureDescription}>
+        {description}
+      </Text>
+    </div>
+)
+
+export function FeaturesGrid() {
+
+    const features = featuresData.map((feature, index) => <Feature {...feature} key={index} />);
+
+    return (
+        <Container className={classes.wrapper}>
+          <Title className={classes.title}>Integrate effortlessly with any technology stack</Title>
+    
+          <Container size={560} p={0}>
+            <Text size="sm" className={classes.description}>
+              Every once in a while, you’ll see a Golbat that’s missing some fangs. This happens when
+              hunger drives it to try biting a Steel-type Pokémon.
+            </Text>
+          </Container>
+    
+          <SimpleGrid
+            mt={60}
+            cols={{ base: 1, sm: 2, md: 3 }}
+            spacing={{ base: 'xl', md: 50 }}
+            verticalSpacing={{ base: 'xl', md: 50 }}
+          >
+            {features}
+          </SimpleGrid>
+        </Container>
+      );
+  }

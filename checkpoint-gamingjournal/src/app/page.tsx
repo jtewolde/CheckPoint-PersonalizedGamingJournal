@@ -1,5 +1,6 @@
 import { Button, Container, Overlay, Text, Title } from '@mantine/core';
 import { UserRoundPlus } from 'lucide-react';
+import { FeaturesGrid } from './components/Features/Features';
 import classes from './page.module.css';
 
 export default function Home() {
@@ -23,13 +24,14 @@ export default function Home() {
         </Text>
 
         <Button variant="gradient"  
-          gradient={{ from: 'rgba(0, 0, 0, 1)', to: 'rgba(176, 176, 176, 1)', deg: 51 }}
+          gradient={{ from: 'rgb(86, 82, 82)', to: 'rgba(176, 176, 176, 1)', deg: 51 }}
           size="xl" radius="xl" className={classes.control} rightSection={<UserRoundPlus />}>
 
           Create an account to get started!
 
         </Button>
 
+        <FeaturesGrid />
 
       </Container>
       
