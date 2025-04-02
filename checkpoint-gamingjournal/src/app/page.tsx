@@ -31,7 +31,9 @@ export default function Home() {
 
         </Button>
 
-        <FeaturesGrid />
+        <div className={classes.FeatureSection}>
+          <FeaturesGrid />
+        </div>
 
       </Container>
       

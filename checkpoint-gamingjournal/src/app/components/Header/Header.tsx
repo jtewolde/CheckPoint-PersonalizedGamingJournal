@@ -16,7 +16,7 @@ export function Header() {
       <Container size="md" className={classes.inner}>
         <img src={CheckPointLogo.src} alt="CheckPoint Logo" className={classes.logo} />
         <Container size="md" className={classes.links}>
-          <Group gap={5} visibleFrom="xs">
+          <Group gap={5} visibleFrom="sm">
           <Link href="/" className={`${classes.link} ${pathname === '/' ? classes.active : ''}`}>Home</Link>
               <Link href="/my-games" className={`${classes.link} ${pathname === '/my-games' ? classes.active : ''}`}>My Games</Link>
               <Link href="/journal" className={`${classes.link} ${pathname === '/journal' ? classes.active : ''}`}>Journal</Link>

@@ -1,8 +1,11 @@
 .wrapper {
-    padding-top: calc(var(--mantine-spacing-xl) * 4);
-    padding-bottom: calc(var(--mantine-spacing-xl) * 4);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
     color: white;
-    margin-top: calc(var(--mantine-spacing-xl) * 3); /* Creates space below the Hero section */
+    margin-top: calc(var(--mantine-spacing-xl) * 4); /* Creates space below the Hero section */
 }
 
 .title {
