@@ -7,8 +7,8 @@ export default function Home() {
   return (
     <div className= {classes.hero}>
       <Overlay
-        gradient="linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, .65) 40%)"
-        opacity={1}
+        gradient="linear-gradient(180deg, #1f1c2c 30%, #928dab 90%)"
+        opacity={0.80}
         zIndex={0}
       />
 
@@ -23,9 +23,7 @@ export default function Home() {
           ensures you always pick up right where you left off.
         </Text>
 
-        <Button variant="gradient"  
-          gradient={{ from: 'rgb(86, 82, 82)', to: 'rgba(176, 176, 176, 1)', deg: 51 }}
-          size="xl" radius="xl" className={classes.control} rightSection={<UserRoundPlus />}>
+        <Button variant="filled" color='#2463C4' size="xl" radius="xl" className={classes.control} rightSection={<UserRoundPlus />}>
 
           Create an account to get started!
 

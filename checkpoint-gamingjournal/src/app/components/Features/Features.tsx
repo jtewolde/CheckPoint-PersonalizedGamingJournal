@@ -5,22 +5,22 @@ import classes from './Features.module.css';
 
 export const featuresData = [
     {
-        icon: <Pin size={50} color='#ffb700' />,
+        icon: <Pin size={50} color='#66c7f4' />,
         title: 'Track Your Game Progress',
         description: 'Log milestones, achievements, and story progress, see an overview of your gaming journey.',
     },
     {
-        icon: <Notebook size={50} color='#ffb700'/>,
+        icon: <Notebook size={50} color='#66c7f4'/>,
         title: 'Personalized Journal',
         description: 'Write session recaps, strategies, and personal notes to document your gaming journey.',
     },
     {
-        icon: <Library size={50} color='#ffb700'/>,
+        icon: <Library size={50} color='#66c7f4'/>,
         title: 'Game Library Management',
         description: 'Organize your games into categories like Currently Playing, Backlog, and Completed for easy tracking.',
     },
     {
-        icon: <ChartColumnIncreasing size={50} color='#ffb700'/>,
+        icon: <ChartColumnIncreasing size={50} color='#66c7f4'/>,
         title: 'Stats and Insights',
         description: 'Analyze playtime, favorite genres, and gaming trends to better understand your habits.',
     },

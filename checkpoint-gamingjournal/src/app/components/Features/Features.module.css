@@ -5,7 +5,8 @@
     align-items: center;
     padding: 0;
     color: white;
-    margin-top: calc(var(--mantine-spacing-xl) * 4); /* Creates space below the Hero section */
+    margin-top: calc(var(--mantine-spacing-xl) * 6); /* Creates space below the Hero section */
+    padding-bottom: calc(var(--mantine-spacing-xl) * 4); /* Creates space below the Hero section */
 }
 
 .title {
