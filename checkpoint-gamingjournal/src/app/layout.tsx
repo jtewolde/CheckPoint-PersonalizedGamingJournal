@@ -5,6 +5,7 @@ import "./globals.css";
 import '@mantine/core/styles.css';
 
 import { Header } from "./components/Header/Header";
+import { Toaster } from "react-hot-toast"
 
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
 
@@ -36,6 +37,7 @@ export default function RootLayout({
 
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <MantineProvider>
+          <Toaster />
           <Header/>
           {children}
         </MantineProvider>

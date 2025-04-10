@@ -7,9 +7,23 @@ import CheckPointLogo from '../../../../public/CheckPointLogo.png';
 import classes from './Header.module.css';
 import Link from 'next/link';
 
+import { authClient } from '@/app/lib/auth-client';
+
 export function Header() {
   const [opened, { toggle }] = useDisclosure(false);
+  const [isAuthenticated, setIsAuthenticated] = useDisclosure(false);
+  const router = useRouter();
   const pathname = usePathname();
+
+  // Function to handle sign out for authenicated users
+  const handleSignOut = async () => {
+    const { data, error } = await authClient.signOut();
+    if (error) {
+      console.error('Error signing out:', error);
+    } else {
+      router.push('/auth/signin');
+    }
+  };
 
   return (
     <header className={classes.header}>
