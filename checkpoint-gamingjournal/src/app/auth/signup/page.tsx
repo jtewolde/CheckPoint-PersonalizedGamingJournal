@@ -34,6 +34,7 @@ export default function signInPage(){
       onSuccess: () => {
         setLoading(false);
         toast.success("Account Created Successfully" );
+        router.push("/auth/signin")
 
       },
       onError: () => {

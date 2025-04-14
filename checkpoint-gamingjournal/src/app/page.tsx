@@ -1,9 +1,20 @@
+'use client'
+
 import { Button, Container, Overlay, Text, Title } from '@mantine/core';
 import { UserRoundPlus } from 'lucide-react';
 import { FeaturesGrid } from './components/Features/Features';
+import { useRouter } from 'next/navigation';
 import classes from './page.module.css';
 
+
 export default function Home() {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push('/auth/signup');
+  }
+
+
   return (
     <div className= {classes.hero}>
       <Overlay
@@ -23,7 +34,7 @@ export default function Home() {
           ensures you always pick up right where you left off.
         </Text>
 
-        <Button variant="filled" color='#2463C4' size="xl" radius="xl" className={classes.control} rightSection={<UserRoundPlus />}>
+        <Button variant="filled" color='#2463C4' size="xl" radius="xl" className={classes.control} rightSection={<UserRoundPlus />} onClick={handleClick}>
 
           Create an account to get started!
 

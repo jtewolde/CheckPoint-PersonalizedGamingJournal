@@ -37,10 +37,16 @@
 
 .links {
   display: flex;
-  align-items: center;
-  gap: 0;
+  align-items: flex-end;
+  gap: 20px;
   margin-right: -10rem;
   justify-content: flex-end;
+}
+
+.guestLinks{
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .signUpButton{
