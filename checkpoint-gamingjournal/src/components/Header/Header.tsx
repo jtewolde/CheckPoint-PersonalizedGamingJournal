@@ -3,11 +3,11 @@
 import { usePathname, useRouter } from 'next/navigation';
 import { Burger, Container, Group, Avatar } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import CheckPointLogo from '../../../../public/CheckPointLogo.png';
+import CheckPointLogo from '../../../public/CheckPointLogo.png';
 import classes from './Header.module.css';
 import Link from 'next/link';
 
-import { authClient } from '@/app/lib/auth-client';
+import { authClient } from '@/lib/auth-client';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 

@@ -2,7 +2,7 @@
 
 import { Button, Container, Overlay, Text, Title } from '@mantine/core';
 import { UserRoundPlus } from 'lucide-react';
-import { FeaturesGrid } from './components/Features/Features';
+import { FeaturesGrid } from '../components/Features/Features';
 import { useRouter } from 'next/navigation';
 import classes from './page.module.css';
 

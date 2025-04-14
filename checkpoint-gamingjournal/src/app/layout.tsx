@@ -4,7 +4,7 @@ import "./globals.css";
 
 import '@mantine/core/styles.css';
 
-import { Header } from "./components/Header/Header";
+import { Header } from "../components/Header/Header";
 import { Toaster } from "react-hot-toast"
 
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';

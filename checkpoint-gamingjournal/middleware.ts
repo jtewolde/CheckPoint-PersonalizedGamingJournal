@@ -1,9 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { headers } from "next/headers";
-import { auth } from "./app/utils/auth";
+import { auth } from "./src/utils/auth";
 
 // Routes that do not require authentication
 const authRoutes = [
+  "/",
   "/auth/signin",
   "/auth/signup",
 ];
@@ -17,14 +18,10 @@ const loggedInRoutes = [
   "/profile",
 ];
 
-export const runtime = 'nodejs';
-
-export default async function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const isAuthRoute = authRoutes.includes(pathname);
   const isLoggedInRoute = loggedInRoutes.includes(pathname);
-
-  console.log("🌍 Middleware triggered on:", request.nextUrl.pathname);
 
   // Fetch the session to check if the user is authenticated
   const session = await auth.api.getSession({
@@ -54,15 +51,15 @@ export default async function middleware(request: NextRequest) {
     }
     // Allow access to protected routes
     if (isLoggedInRoute) {
-      return NextResponse.next();
+      return NextResponse.next()
     }
+
   }
 
-  // Default: Allow access to other routes
-  return NextResponse.next();
 }
 
 export const config = {
+  runtime: "nodejs",
   matcher: [
     "/dashboard/:path*",
     "/my-games/:path*",

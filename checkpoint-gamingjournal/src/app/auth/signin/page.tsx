@@ -1,17 +1,17 @@
 'use client'
 
 import {Anchor, Button, Checkbox, Paper, PasswordInput, Text, TextInput, Title, Group} from '@mantine/core';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import React from 'react';
-import { authClient } from '@/app/lib/auth-client';
+import { authClient } from '@/lib/auth-client';
 
 import CheckPointLogo from '../../../../public/CheckPointLogo.png';
 import classes from './signIn.module.css';
-import { GoogleButton } from '@/app/components/GoogleButton/GoogleButton';
-import { TwitterButton } from '@/app/components/TwitterButton/TwitterButton';
+import { GoogleButton } from '@/components/GoogleButton/GoogleButton';
+import { TwitterButton } from '@/components/TwitterButton/TwitterButton';
 
 export default function signInPage(){
 
@@ -21,6 +21,19 @@ export default function signInPage(){
     const [loading, setLoading] = useState(false);
 
     const router = useRouter(); // Initialize router fo navigation
+
+    // Check if the user is authenticated
+    useEffect(() => {
+      const checkAuth = async () => {
+        const { data } = await authClient.getSession();
+        if (data?.user) {
+          // If the user is authenticated, redirect to the dashboard
+          return redirect("/dashboard")
+        }
+      };
+  
+      checkAuth();
+    }, [router]);
 
     // Function to handle form submission
     const handleClick = async ()=> {
