@@ -1,6 +1,6 @@
 'use client'
 
-import {Anchor, Button, Checkbox, Paper, PasswordInput, Text, TextInput, Title, Group} from '@mantine/core';
+import { Anchor, Button, Checkbox, Paper, PasswordInput, Text, TextInput, Title, Group} from '@mantine/core';
 import { redirect, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
