@@ -8,23 +8,18 @@ import classes from './Header.module.css';
 import Link from 'next/link';
 
 import { authClient } from '@/lib/auth-client';
+import { useAuth } from '@/context/Authcontext';
+
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+
+import AvatarMenu from "../AvatarMenu/AvatarMenu";
 
 export function Header() {
   const [opened, { toggle }] = useDisclosure(false);
   const router = useRouter();
   const pathname = usePathname();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // Check authentication status
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data } = await authClient.getSession();
-      setIsAuthenticated(!!data?.user); // Set true if user exists
-    };
-    checkAuth();
-  }, []);
+  const {isAuthenticated, setIsAuthenticated} = useAuth(); // Access global auth state
 
   // Function to handle sign out for authenticated users
   const handleSignOut = async () => {
@@ -51,8 +46,7 @@ export function Header() {
                 <Link href="/my-games" className={`${classes.link} ${pathname === '/my-games' ? classes.active : ''}`}>My Games</Link>
                 <Link href="/journal" className={`${classes.link} ${pathname === '/journal' ? classes.active : ''}`}>Journal</Link>
                 <Link href="/stats" className={`${classes.link} ${pathname === '/stats' ? classes.active : ''}`}>Stats</Link>
-                <Avatar radius="xl" size={40} />
-                <button onClick={handleSignOut} className={classes.link}>Sign Out</button>
+                <AvatarMenu />
               </>
             ) : (
               <>

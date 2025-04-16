@@ -6,6 +6,7 @@ import '@mantine/core/styles.css';
 
 import { Header } from "../components/Header/Header";
 import { Toaster } from "react-hot-toast"
+import { AuthProvider } from "@/context/Authcontext";
 
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
 
@@ -36,11 +37,14 @@ export default function RootLayout({
       </head>
 
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <MantineProvider>
-          <Toaster />
-          <Header/>
-          {children}
-        </MantineProvider>
+
+        <AuthProvider>
+          <MantineProvider>
+            <Toaster />
+            <Header/>
+            {children}
+          </MantineProvider>
+        </AuthProvider>
         
       </body>
     </html>
