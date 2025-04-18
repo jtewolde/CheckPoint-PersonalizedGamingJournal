@@ -5,6 +5,7 @@ import "./globals.css";
 import '@mantine/core/styles.css';
 
 import { Header } from "../components/Header/Header";
+import { Footer } from "../components/Footer/Footer";
 import { Toaster } from "react-hot-toast"
 import { AuthProvider } from "@/context/Authcontext";
 
@@ -43,6 +44,7 @@ export default function RootLayout({
             <Toaster />
             <Header/>
             {children}
+            <Footer />
           </MantineProvider>
         </AuthProvider>
         

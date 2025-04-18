@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname, useRouter } from 'next/navigation';
-import { Burger, Container, Group, Avatar } from '@mantine/core';
+import { Burger, Container, Group } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import CheckPointLogo from '../../../public/CheckPointLogo.png';
 import classes from './Header.module.css';
@@ -38,6 +38,8 @@ export function Header() {
     <header className={classes.header}>
       <Container size="md" className={classes.inner}>
         <img src={CheckPointLogo.src} alt="CheckPoint Logo" className={classes.logo} />
+
+        {/* Desktop Links */}
         <Container size="md" className={classes.links}>
           <Group gap={5} visibleFrom="sm">
             {isAuthenticated ? (
@@ -58,12 +60,12 @@ export function Header() {
               </>
             )}
           </Group>
-
-
-
         </Container>
 
-        <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />
+        {/* Mobile Links */}
+
+
+        <Burger opened={opened} onClick={toggle} hiddenFrom="s" size="md" />
       </Container>
     </header>
   );
