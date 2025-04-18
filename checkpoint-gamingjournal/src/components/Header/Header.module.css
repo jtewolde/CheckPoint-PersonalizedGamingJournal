@@ -43,6 +43,65 @@
   justify-content: flex-end;
 }
 
+.mobileLink{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+  font-family: 'Poppins';
+  font-size: large;
+  width: auto;
+  color: #000000;
+}
+
+.linkSpacing {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center horizontally */
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.mobileLink:hover {
+  background-color: #f0f0f0; /* Light gray background on hover */
+  color: #000000; /* Black text on hover */
+}
+
+.mobileSignInButton,
+.mobileSignUpButton {
+  display: block;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  border-radius: var(--mantine-radius-sm);
+  border: 1px solid black;
+  color: #000000;
+  width: auto;
+  max-width: 200px;
+}
+
+.mobileSignInButton {
+  background-color: #68daa7; /* Green background for Sign In */
+}
+
+.mobileSignUpButton {
+  background-color: #eb0f46; /* Red background for Sign Up */
+}
+
+.mobileSignInButton:hover {
+  background-color: #2aed95; /* Darker green on hover */
+}
+
+.mobileSignUpButton:hover {
+  background-color: #e81b1b; /* Darker red on hover */
+}
+
+
 .guestLinks{
   display: flex;
   align-items: center;
@@ -77,6 +136,10 @@
   font-weight: 400;
   font-family: 'Poppins';
   transition: background-color 0.3s, color 0.3s;
+}
+
+.drawer{
+  color: #DDE0E0;
 }
 
 .link {
@@ -115,6 +178,13 @@
   border-bottom: 2px solid black;
   border-radius: 0;
   color: black;
+  font-weight: bold;
+}
+
+.mobileLink:active{
+  border-bottom: 2px solid black;
+  border-radius: 0;
+  color: darkblue;
   font-weight: bold;
 }
 

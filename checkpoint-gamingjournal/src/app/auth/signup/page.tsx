@@ -52,7 +52,7 @@ export default function signInPage(){
       },
       onError: () => {
         setLoading(false);
-        toast.error("Account Creation Failed")
+        toast.error("Account Creation Failed, Invalid Password or Email!")
       }
     })
   }
