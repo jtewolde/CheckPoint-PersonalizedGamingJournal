@@ -26,6 +26,15 @@
   justify-content: flex-start;
 }
 
+.searchBar {
+  width: 100%; /* Ensure it spans the available width */
+  max-width: 500px; /* Limit the maximum width */
+  margin-left: 7rem; /* Add spacing between the logo and the search bar */
+  padding: 0.5rem; /* Add padding for better spacing */
+  border-radius: 8px; /* Add rounded corners */
+ 
+}
+
 @media screen and (max-width: 768px) {
   .logo {
     width: 120px;

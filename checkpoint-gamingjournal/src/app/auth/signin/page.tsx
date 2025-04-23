@@ -43,11 +43,23 @@ export default function signInPage(){
         email,
         password,
         callbackURL: '/dashboard'
+      },{
+        onRequest: () => {
+          setLoading(true);
+        },
+        onSuccess: () => {
+          setLoading(false);
+          toast.success("Login In Successful!" );
+  
+        },
+        onError: () => {
+          setLoading(false);
+          toast.error("Login Failed, Invalid Email or Password ")
+        }
       })
-      setLoading(false); // Reset Loading state
-      toast.success("Login Successful"); // Show succes toast
 
-    }
+      }
+      
 
     // Function to handle Google sign-in
       // Function to handle Google sign-in authentication

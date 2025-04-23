@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { Burger, Container, Group, Paper, Drawer } from '@mantine/core';
+import { Burger, Container, Group, Paper, Drawer, Autocomplete } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import CheckPointLogo from '../../../public/CheckPointLogo.png';
 import classes from './Header.module.css';
@@ -11,6 +11,7 @@ import { authClient } from '@/lib/auth-client';
 import { useAuth } from '@/context/Authcontext';
 
 import toast from 'react-hot-toast';
+import { IconSearch } from '@tabler/icons-react';
 import AvatarMenu from "../AvatarMenu/AvatarMenu";
 
 export function Header() {
@@ -36,6 +37,9 @@ export function Header() {
     <header className={classes.header}>
       <Container size="md" className={classes.inner}>
         <img src={CheckPointLogo.src} alt="CheckPoint Logo" className={classes.logo} />
+        {isAuthenticated ? (
+          <Autocomplete className={classes.searchBar} placeholder='Search for games' leftSection={<IconSearch size={16}/>} />
+        ) : null}
 
         {/* Desktop Links */}
         <Container size="md" className={classes.links} >
