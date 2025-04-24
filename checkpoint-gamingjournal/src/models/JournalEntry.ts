@@ -6,7 +6,6 @@ const JournalEntrySchema = new mongoose.Schema({
   content: { type: String, required: true },
   game:    { type: mongoose.Schema.Types.ObjectId, ref: 'Game', required: true },
   user:    { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  mood:    { type: String }, // optional: "happy", "frustrated", etc.
   date:    { type: Date, default: Date.now },
 }, { timestamps: true });
 

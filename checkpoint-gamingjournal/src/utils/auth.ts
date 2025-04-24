@@ -16,4 +16,14 @@ export const auth = betterAuth({
         }
     },
 
+    user: {
+        additionalFields: {
+            games: {
+                type: "string[]",
+                required: false,
+                input: false,
+            }
+        }
+    }
+
 })
