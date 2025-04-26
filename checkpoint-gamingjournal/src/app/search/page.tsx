@@ -1,0 +1,82 @@
+'use client';
+
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+
+import classes from './search.module.css';
+
+import { LoadingOverlay } from '@mantine/core';
+import { Pagination, SimpleGrid } from '@mantine/core';
+import PlaceHolderImage from '../../../public/no-cover-image.png';
+
+export default function SearchResults() {
+  const searchParams = useSearchParams();
+  const query = searchParams.get('query') || ''; // Get the search query from the URL
+
+  const [page, setPage] = useState(1) // start with page 1 for pagination
+  const limit = 12; // Set the limit of games on page to 12
+
+  const [games, setGames] = useState<any[]>([]); // State to store games data
+  const [loading, setLoading] = useState(true); // State to handle loading
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        const offset = (page - 1) * limit; // calculate offset based on page
+        const res = await fetch(`/api/igdb/games?query=${encodeURIComponent(query)}&limit=${limit}&offset=${offset}`);
+        if (!res.ok) {
+          throw new Error('Failed to fetch games');
+        }
+        const data = await res.json();
+        setGames(data);
+      } catch (error) {
+        console.error('Error fetching games:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (query) {
+      fetchGames();
+    }
+  }, [query, page]);
+
+  if (loading) {
+    return <LoadingOverlay visible zIndex={1000}  overlayProps={{ radius: "sm", blur: 2 }} />
+  }
+
+  if (!games.length) {
+    return <div>No games found for "{query}"</div>; // Show a message if no games are found
+  }
+
+  return (
+    <div className={classes.wrapper} >
+      <h1 className={classes.searchText}>Search Results for "{query}"</h1>
+        <SimpleGrid cols={5} spacing='sm' verticalSpacing='md'>
+          {games.map((game) => (
+            <div key={game.id} style={{ textAlign: 'center' }}>
+
+              <img
+                src={
+                  game.cover
+                    ? `https:${game.cover.url.replace('t_thumb', 't_cover_big')}`
+                    : '../../../public/no-cover-image.png'// path to your default image in public folder
+                }
+                alt={game.name}
+                style={{ width: '155px', height: '200px', objectFit: 'cover', borderRadius: '8px' }}
+              />
+              <p>{game.name} {game.collections} </p>
+              
+            </div>
+          ))}
+        </SimpleGrid>
+
+        <Pagination total={10} size='lg' style={{ justifyContent: "center" }} 
+        className={classes.pagninaton} value={page} onChange={setPage} />
+        
+    </div>
+  );
+}

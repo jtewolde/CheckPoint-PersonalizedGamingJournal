@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { Burger, Container, Group, Paper, Drawer, Autocomplete } from '@mantine/core';
+import { Burger, Container, Group, Paper, Drawer, Autocomplete, useSafeMantineTheme } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import CheckPointLogo from '../../../public/CheckPointLogo.png';
 import classes from './Header.module.css';
@@ -13,9 +13,12 @@ import { useAuth } from '@/context/Authcontext';
 import toast from 'react-hot-toast';
 import { IconSearch } from '@tabler/icons-react';
 import AvatarMenu from "../AvatarMenu/AvatarMenu";
+import { useState } from 'react';
 
 export function Header() {
   const [opened, { toggle, close }] = useDisclosure(false); // State for Drawer
+  const [searchQuery, setSearchQuery] = useState('') // State for Search Input
+  const [searchResults, setSearchResults] = useState<any[]>([]); // State for search results
   const router = useRouter();
   const pathname = usePathname();
   const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
@@ -33,12 +36,61 @@ export function Header() {
     }
   };
 
+  // Function to handle search
+  const handleSearch = async (query: string) => {
+    setSearchQuery(query);
+  
+    if (query.trim() === '') {
+      setSearchResults([]); // Clear results if the query is empty
+      return;
+    }
+  
+    try {
+      const res = await fetch(`/api/igdb/games?query=${encodeURIComponent(query)}`);
+      if (!res.ok) {
+        throw new Error('Failed to fetch search results');
+      }
+      const data = await res.json();
+  
+      // Remove duplicate game names
+      const uniqueResults = data.filter(
+        (game: any, index: number, self: any[]) =>
+          index === self.findIndex((g) => g.name === game.name)
+      );
+  
+      setSearchResults(uniqueResults); // Update search results with unique values
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    }
+  };
+
+
   return (
     <header className={classes.header}>
       <Container size="md" className={classes.inner}>
         <img src={CheckPointLogo.src} alt="CheckPoint Logo" className={classes.logo} />
         {isAuthenticated ? (
-          <Autocomplete className={classes.searchBar} placeholder='Search for games' leftSection={<IconSearch size={16}/>} />
+          <Autocomplete
+          className={classes.searchBar}
+          placeholder="Search for games"
+          leftSection={<IconSearch size={16} />}
+          value={searchQuery}
+          onChange={handleSearch} // Update the search query state
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && searchQuery.trim() !== '') {
+              router.push(`/search?query=${encodeURIComponent(searchQuery)}`); // Navigate to the search results page
+            }
+          }}
+          data={searchResults.map((game) => ({
+            value: game.name,
+            label: game.name,
+          }))} // Map search results to Autocomplete options
+          onSubmit={(event) => {
+            event.preventDefault();
+            const inputValue = (event.target as HTMLInputElement).value;
+            router.push(`/search?query=${encodeURIComponent(inputValue)}`); // Navigate to the search results page
+          }}
+        />
         ) : null}
 
         {/* Desktop Links */}

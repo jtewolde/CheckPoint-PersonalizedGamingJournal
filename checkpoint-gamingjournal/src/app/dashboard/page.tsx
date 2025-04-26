@@ -5,6 +5,8 @@ import { useRouter, redirect } from 'next/navigation';
 import { LoadingOverlay } from '@mantine/core';
 import { authClient } from '@/lib/auth-client';
 
+import Image from 'next/image';
+
 export default function Dashboard() {
   const router = useRouter();
   const [games, setGames] = useState<any[]>([]); // State to store games data
@@ -58,7 +60,6 @@ export default function Dashboard() {
               alt={game.name}
               style={{ width: '150px', height: '200px', objectFit: 'cover', borderRadius: '8px' }}
             />
-            <p>{game.name}</p>
           </div>
         ))}
       </div>
