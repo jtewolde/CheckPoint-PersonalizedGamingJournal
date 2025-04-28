@@ -1,3 +1,5 @@
+// API Call for getting minimum details for games during searching
+
 import { NextRequest, NextResponse } from 'next/server';
 
 const IGDB_URL = 'https://api.igdb.com/v4/games';

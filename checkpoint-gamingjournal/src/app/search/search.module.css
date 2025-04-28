@@ -1,3 +1,86 @@
-.wrapper{
-    
+/* Wrapper for the entire search page */
+.wrapper {
+    background: linear-gradient(to top, #283048, #859398);
+    padding: 2rem; /* Add padding around the content */
+    min-height: 100vh; /* Ensure the page takes up the full height */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Search results heading */
+.searchText {
+    font-size: 2rem;
+    font-weight: 400;
+    color: white; /* Dark text for contrast */
+    margin-bottom: 3.5rem;
+    text-align: center;
+    font-family: 'Poppins';
+    font-style: italic;
+}
+
+/* Grid layout for game cards */
+.gameGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive grid */
+    gap: 1.5rem; /* Space between grid items */
+    width: 100%;
+    max-width: 1200px; /* Limit the grid width */
+}
+
+/* Individual game card */
+.gameCard {
+    background-color: #ffffff; /* White background for cards */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    overflow: hidden; /* Clip overflowing content */
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gameCard:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+    cursor: pointer;
+}
+
+/* Game image */
+.gameImage {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Ensure the image covers the area */
+    border-bottom: 1px solid #ddd; /* Separator between image and text */
+    cursor: pointer;
+}
+
+.gameImage:hover{
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+    cursor: pointer;
+}
+
+/* Game name */
+.gameName {
+    font-size: 1rem;
+    font-weight: 400;
+    color: white;
+    padding: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Truncate long names */
+    font-family: 'Poppins';
+}
+
+/* Pagination */
+.pagination {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination .mantine-Pagination-root {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 1rem;
 }

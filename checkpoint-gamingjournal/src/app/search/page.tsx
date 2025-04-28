@@ -16,7 +16,7 @@ export default function SearchResults() {
   const query = searchParams.get('query') || ''; // Get the search query from the URL
 
   const [page, setPage] = useState(1) // start with page 1 for pagination
-  const limit = 12; // Set the limit of games on page to 12
+  const limit = 14; // Set the limit of games on page to 12
 
   const [games, setGames] = useState<any[]>([]); // State to store games data
   const [loading, setLoading] = useState(true); // State to handle loading
@@ -57,25 +57,26 @@ export default function SearchResults() {
       <h1 className={classes.searchText}>Search Results for "{query}"</h1>
         <SimpleGrid cols={5} spacing='sm' verticalSpacing='md'>
           {games.map((game) => (
-            <div key={game.id} style={{ textAlign: 'center' }}>
+            <div key={game.id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game.id}`) }} >
 
               <img
                 src={
                   game.cover
                     ? `https:${game.cover.url.replace('t_thumb', 't_cover_big')}`
-                    : '../../../public/no-cover-image.png'// path to your default image in public folder
+                    : PlaceHolderImage.src
                 }
                 alt={game.name}
                 style={{ width: '155px', height: '200px', objectFit: 'cover', borderRadius: '8px' }}
+                className={classes.gameImage}
               />
-              <p>{game.name} {game.collections} </p>
+              <p className={classes.gameName}>{game.name} {game.genres.name} </p>
               
             </div>
           ))}
         </SimpleGrid>
 
         <Pagination total={10} size='lg' style={{ justifyContent: "center" }} 
-        className={classes.pagninaton} value={page} onChange={setPage} />
+        className={classes.pagninaton} value={page} onChange={setPage} color='green' radius="lg" />
         
     </div>
   );
