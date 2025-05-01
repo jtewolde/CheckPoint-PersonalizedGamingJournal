@@ -69,7 +69,7 @@ export default function SearchResults() {
                 style={{ width: '155px', height: '200px', objectFit: 'cover', borderRadius: '8px' }}
                 className={classes.gameImage}
               />
-              <p className={classes.gameName}>{game.name} {game.genres.name} </p>
+              <p className={classes.gameName}>{game.name} </p>
               
             </div>
           ))}

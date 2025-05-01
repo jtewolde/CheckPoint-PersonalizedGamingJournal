@@ -7,15 +7,22 @@ import { FeaturesGrid } from '../components/Features/Features';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import classes from './page.module.css';
+import { useAuth } from '@/context/Authcontext';
 
 
 export default function Home() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+
+    if (isAuthenticated){
+      router.push('/dashboard');
+    }
+
+  }, [isAuthenticated, router]);
 
 
   const handleClick = () => {
@@ -54,9 +61,7 @@ export default function Home() {
 
 
         <Button variant="filled" color='#2463C4' size="xl" radius="xl" className={classes.control} rightSection={<UserRoundPlus />} onClick={handleClick}>
-
           Create an account to get started!
-
         </Button>
 
         <div className={classes.FeatureSection}>

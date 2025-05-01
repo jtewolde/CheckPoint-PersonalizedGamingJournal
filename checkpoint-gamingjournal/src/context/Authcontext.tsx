@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkAuth = async () => {
       const { data } = await authClient.getSession();
+      console.log("Session Data :", data)
       setIsAuthenticated(!!data?.user);
     };
     checkAuth();

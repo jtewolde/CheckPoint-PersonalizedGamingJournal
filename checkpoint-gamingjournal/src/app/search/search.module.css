@@ -84,3 +84,18 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 0.5rem 1rem;
 }
+
+@media screen and (max-width: 768px) {
+    .gameGrid {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Adjust for smaller screens */
+    }
+
+    .gameImage {
+        height: 150px; /* Smaller image height for mobile */
+    }
+
+    .gameName {
+        font-size: 0.9rem; /* Smaller font size for mobile */
+    }
+    
+}

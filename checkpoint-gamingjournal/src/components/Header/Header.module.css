@@ -32,7 +32,15 @@
   margin-left: 7rem; /* Add spacing between the logo and the search bar */
   padding: 0.5rem; /* Add padding for better spacing */
   border-radius: 8px; /* Add rounded corners */
- 
+}
+
+@media screen and (max-width: 768px){
+  .searchBar {
+    width: 100%;
+    max-width: 300px;
+    margin-left: 3rem;
+    position: relative;
+  }
 }
 
 @media screen and (max-width: 768px) {

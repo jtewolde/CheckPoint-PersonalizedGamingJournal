@@ -9,22 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@mantine/core": "^7.17.2",
-    "@mantine/dates": "^7.17.2",
-    "@mantine/hooks": "^7.17.2",
-    "@mantine/notifications": "^7.17.2",
+    "@mantine/carousel": "^7.17.5",
+    "@mantine/core": "^7.17.5",
+    "@mantine/dates": "^7.17.5",
+    "@mantine/hooks": "^7.17.5",
+    "@mantine/notifications": "^7.17.5",
     "@mantinex/dev-icons": "^1.1.0",
     "@tabler/icons-react": "^3.31.0",
     "bcryptjs": "^3.0.2",
     "better-auth": "^1.2.5",
     "dayjs": "^1.11.13",
+    "embla-carousel-react": "^8.6.0",
     "lucide-react": "^0.484.0",
     "mongodb": "^6.15.0",
     "mongoose": "^8.13.2",
     "next": "15.2.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-hot-toast": "^2.5.2"
+    "react-hot-toast": "^2.5.2",
+    "react-multi-carousel": "^2.8.6"
   },
   "devDependencies": {
     "@types/node": "^20",

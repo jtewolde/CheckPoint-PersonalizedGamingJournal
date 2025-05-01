@@ -73,7 +73,7 @@ export function Header() {
           <Autocomplete
           className={classes.searchBar}
           placeholder="Search for games"
-          leftSection={<IconSearch size={16} />}
+          rightSection={<IconSearch size={24} color='black' style={{cursor: 'pointer'}} onClick={() => router.push(`/search?query=${encodeURIComponent(searchQuery)}`)}/>}
           value={searchQuery}
           onChange={handleSearch} // Update the search query state
           onKeyDown={(e) => {

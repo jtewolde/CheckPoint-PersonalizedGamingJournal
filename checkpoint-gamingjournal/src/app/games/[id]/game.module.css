@@ -1,6 +1,6 @@
 .wrapper {
     padding: 2rem;
-    background-color: #f5f7fa;
+    background: linear-gradient(to top, #bdc3c7, #2c3e50);
     min-height: 100vh;
   }
   
@@ -9,12 +9,16 @@
     font-weight: bold;
     margin-bottom: 1.5rem;
     text-align: center;
+    font-family: 'Poppins';
+    color: white;
   }
   
   .details {
     display: flex;
     gap: 2rem;
     margin-bottom: 2rem;
+    font-family: 'Inter';
+    color: whitesmoke;
   }
   
   .cover {
@@ -37,19 +41,28 @@
   
   .screenshotsTitle {
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: 400;
     margin-bottom: 1rem;
-  }
-  
-  .screenshots {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
+    font-family: 'Poppins';
+    color: white;
+    justify-self: center;
+    border-bottom: 2px solid #ffffff;
   }
   
   .screenshot {
-    width: 100%;
-    height: auto;
+    width: 65%;
+    height: 60%;
+    object-fit: cover;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: block;
+    margin: 0 auto;
   }
+
+  .button{
+    align-items: center;
+    font-family: 'Inter';
+    font-weight: 400;
+    margin-bottom: 5rem;
+  }
+  
