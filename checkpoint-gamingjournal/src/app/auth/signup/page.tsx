@@ -10,7 +10,8 @@ import { authClient } from '@/lib/auth-client';
 
 import classes from './signUp.module.css';
 import { GoogleButton } from '@/components/GoogleButton/GoogleButton';
-import { TwitterButton } from '@/components/TwitterButton/TwitterButton';
+import { DiscordButton } from '@/components/DiscordButton/DiscordButton';
+import { Disc } from 'lucide-react';
 
 export default function signInPage(){
 
@@ -61,7 +62,26 @@ export default function signInPage(){
   const handleGoogleSignIn = async () => {
     const {data, error} = await authClient.signIn.social({
       provider: "google",
+      callbackURL: "/dashboard"
     })
+    if (error) {
+      toast.error("Google Sign-in Failed")
+    } else {
+      toast.success("Google Sign-in Successful")
+    }
+  }
+
+  // Function to handle Discord sign-in authentication
+  const handleDiscordSignIn = async () => {
+    const {data, error} = await authClient.signIn.social({
+      provider: "discord",
+      callbackURL:"/dashboard"
+    })
+    if (error) {
+      toast.error("Discord Sign-in Failed")
+    } else {
+      toast.success("Discord Sign-in Successful")
+    }
   }
 
     return(
@@ -77,7 +97,7 @@ export default function signInPage(){
 
             <Group grow mb="md" mt="md">
                 <GoogleButton radius="xl" onClick={handleGoogleSignIn}>Google</GoogleButton>
-                <TwitterButton radius='xl'>Twitter</TwitterButton>
+                <DiscordButton radius="xl" onClick={handleDiscordSignIn}>Discord</DiscordButton>
             </Group>
 
           <TextInput label="Username" placeholder='Your username' size='md' mt='md' value={name} onChange={(e) => setName(e.currentTarget.value)} />

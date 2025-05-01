@@ -12,6 +12,7 @@ import { useAuth } from '@/context/Authcontext';
 
 import toast from 'react-hot-toast';
 import { IconSearch } from '@tabler/icons-react';
+import { LogIn, UserRoundPlus } from 'lucide-react';
 import AvatarMenu from "../AvatarMenu/AvatarMenu";
 import { useState } from 'react';
 
@@ -44,7 +45,6 @@ export function Header() {
       setSearchResults([]); // Clear results if the query is empty
       return;
     }
-  
     try {
       const res = await fetch(`/api/igdb/games?query=${encodeURIComponent(query)}`);
       if (!res.ok) {
@@ -63,7 +63,6 @@ export function Header() {
       console.error('Error fetching search results:', error);
     }
   };
-
 
   return (
     <header className={classes.header}>
@@ -108,8 +107,8 @@ export function Header() {
               <>
                 <div className={classes.guestLinks}>
                   <Link href="/" className={`${classes.link} ${pathname === '/' ? classes.active : ''}`}>Home</Link>
-                  <Link href="/auth/signin" className={`${classes.signInButton} ${pathname === '/auth/signin' ? classes.active : ''}`}>Sign In</Link>
-                  <Link href="/auth/signup" className={`${classes.signUpButton} ${pathname === '/auth/signup' ? classes.active : ''}`}>Get Started</Link>
+                  <Link href="/auth/signin" className={`${classes.signInButton} ${pathname === '/auth/signin' ? classes.active : ''}`}>Sign In <LogIn size={15}/> </Link>
+                  <Link href="/auth/signup" className={`${classes.signUpButton} ${pathname === '/auth/signup' ? classes.active : ''}`}>Register <UserRoundPlus size={15} /> </Link>
                 </div>
               </>
             )}
@@ -138,8 +137,8 @@ export function Header() {
             ) : (
               <>
                 <Link href="/" onClick={close} className={`${classes.mobileLink} ${pathname === '/' ? classes.active : ''}`}>Home</Link>
-                <Link href="/auth/signin" onClick={close} className={`${classes.mobileSignInButton} ${pathname === '/auth/signin' ? classes.active : ''}`}>Sign In</Link>
-                <Link href="/auth/signup" onClick={close} className={`${classes.mobileSignUpButton} ${pathname === '/auth/signup' ? classes.active : ''}`}>Get Started</Link>
+                <Link href="/auth/signin" onClick={close} className={`${classes.mobileSignInButton} ${pathname === '/auth/signin' ? classes.active : ''}`}>Sign In <LogIn size={15}/></Link>
+                <Link href="/auth/signup" onClick={close} className={`${classes.mobileSignUpButton} ${pathname === '/auth/signup' ? classes.active : ''}`}>Register <UserRoundPlus size={15}/> </Link>
               </>
             )}
           </div>

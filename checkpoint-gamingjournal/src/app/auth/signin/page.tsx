@@ -11,7 +11,7 @@ import { authClient } from '@/lib/auth-client';
 import CheckPointLogo from '../../../../public/CheckPointLogo.png';
 import classes from './signIn.module.css';
 import { GoogleButton } from '@/components/GoogleButton/GoogleButton';
-import { TwitterButton } from '@/components/TwitterButton/TwitterButton';
+import { DiscordButton } from '@/components/DiscordButton/DiscordButton';
 
 export default function signInPage(){
 
@@ -59,9 +59,7 @@ export default function signInPage(){
       })
 
       }
-      
 
-    // Function to handle Google sign-in
       // Function to handle Google sign-in authentication
       const handleGoogleSignIn = async () => {
         const {data, error} = await authClient.signIn.social({
@@ -75,7 +73,18 @@ export default function signInPage(){
         }
       }
 
-
+      // Function to handle Discord sign-in authentication
+      const handleDiscordSignIn = async () => {
+        const {data, error} = await authClient.signIn.social({
+          provider: "discord",
+          callbackURL:"/dashboard"
+        })
+        if (error) {
+          toast.error("Discord Sign-in Failed")
+        } else {
+          toast.success("Discord Sign-in Successful")
+        }
+      }
 
     return(
       <div className={classes.wrapper}>
@@ -90,7 +99,7 @@ export default function signInPage(){
 
             <Group grow mb="md" mt="md">
                 <GoogleButton radius="xl" onClick={handleGoogleSignIn}>Google</GoogleButton>
-                <TwitterButton radius='xl'>Twitter</TwitterButton>
+                <DiscordButton radius='xl' onClick={handleDiscordSignIn}>Discord </DiscordButton>
             </Group>
 
           <TextInput label="Email address" placeholder="Your email" size="md" required mt="md" value={email} onChange={(e) => setEmail(e.currentTarget.value)} />
