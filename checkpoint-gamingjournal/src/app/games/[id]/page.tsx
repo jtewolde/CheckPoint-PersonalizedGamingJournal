@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 import { LoadingOverlay, Image, Button } from '@mantine/core';
 
-import  Carousel from 'react-multi-carousel';
+import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 
 import classes from './game.module.css';
@@ -17,6 +17,7 @@ export default function GameDetails() {
   const { id } = useParams(); // Get the game ID from the URL
   const [game, setGame] = useState<any>(null); // State to store game details
   const [loading, setLoading] = useState(true); // State to handle loading
+  const [addingToLibrary, setAddingToLibrary] = useState(false); // State to handle button loading
 
   useEffect(() => {
     const fetchGameDetails = async () => {
@@ -39,6 +40,45 @@ export default function GameDetails() {
     }
   }, [id]);
 
+  const handleAddToLibrary = async () => {
+    if (!game) return;
+
+    setAddingToLibrary(true);
+
+    try {
+      const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token from localStorage
+      const res = await fetch('/api/library/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`, // Include the Bearer token
+        },
+        body: JSON.stringify({
+          gameID: id,
+          gameDetails: {
+            title: game.name,
+            genre: game.genres?.map((genre: any) => genre.name).join(', '),
+            coverImage: game.cover.url,
+            releaseDate: game.first_release_date
+              ? new Date(game.first_release_date * 1000).toISOString()
+              : null,
+          },
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to add game to library');
+      }
+
+      toast.success('Game added to your library!')
+    } catch (error) {
+      console.error('Error adding game to library:', error);
+      toast.error('Failed to add game to your library. Please try again.');
+    } finally {
+      setAddingToLibrary(false);
+    }
+  };
+
   if (loading) {
     return <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
   }
@@ -46,11 +86,6 @@ export default function GameDetails() {
   if (!game) {
     return <div>Game not found</div>; // Show a message if the game is not found
   }
-
-  // Handle click to add game to library
-  // const handleClick = () => {
-
-  // }
 
   const responsive = {
     desktop: {
@@ -87,13 +122,21 @@ export default function GameDetails() {
           <p><strong>Genres:</strong> {game.genres?.map((genre: any) => genre.name).join(', ') || 'N/A'}</p>
           <p><strong>Platforms:</strong> {game.platforms?.map((platform: any) => platform.name).join(', ') || 'N/A'}</p>
           <p><strong>Companies Involved:</strong> {game.involved_companies?.map((involved_companies: any) => involved_companies.company.name).join(', ') || 'N/A'}</p>
-          <p><strong>Aggregated Rating: </strong> {game.aggregated_rating || 'No rating available' }</p>
         </div>
       </div>
 
-      <Button variant="filled" color='#2bdd66' size="xl" radius="xl" className={classes.button} rightSection={<NotebookPen />} >
-          Add to your Library! 
-        </Button>
+      <Button
+        variant="filled"
+        color="#2bdd66"
+        size="xl"
+        radius="xl"
+        className={classes.button}
+        rightSection={<NotebookPen />}
+        onClick={handleAddToLibrary}
+        loading={addingToLibrary}
+      >
+        Add to your Library!
+      </Button>
 
       <h2 className={classes.screenshotsTitle}>Screenshots: </h2>
 
@@ -112,7 +155,7 @@ export default function GameDetails() {
               src={`https:${screenshot.url.replace('t_thumb', 't_screenshot_big')}`}
               alt={`Screenshot of ${game.name}`}
               className={classes.screenshot}
-              />
+            />
           </div>
         ))}
       </Carousel>

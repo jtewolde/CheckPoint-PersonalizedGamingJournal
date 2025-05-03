@@ -1,7 +1,7 @@
 'use client'
 
 import {Anchor, Button, Checkbox, Paper, PasswordInput, Text, TextInput, Title, Group} from '@mantine/core';
-import toast, { Toast } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 import { useState, useEffect } from 'react';
 import { useRouter, redirect } from 'next/navigation';
@@ -11,7 +11,6 @@ import { authClient } from '@/lib/auth-client';
 import classes from './signUp.module.css';
 import { GoogleButton } from '@/components/GoogleButton/GoogleButton';
 import { DiscordButton } from '@/components/DiscordButton/DiscordButton';
-import { Disc } from 'lucide-react';
 
 export default function signInPage(){
 
@@ -40,7 +39,7 @@ export default function signInPage(){
       email,
       password,
       name,
-      callbackURL: "/dashboard"
+      callbackURL: "/auth/signin"
     }, {
       onRequest: () => {
         setLoading(true);
