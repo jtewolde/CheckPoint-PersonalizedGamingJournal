@@ -16,7 +16,7 @@ export default function SearchResults() {
   const query = searchParams.get('query') || ''; // Get the search query from the URL
 
   const [page, setPage] = useState(1) // start with page 1 for pagination
-  const limit = 14; // Set the limit of games on page to 12
+  const limit = 50; // Set the limit of games on page to 12
 
   const [games, setGames] = useState<any[]>([]); // State to store games data
   const [loading, setLoading] = useState(true); // State to handle loading
@@ -52,6 +52,11 @@ export default function SearchResults() {
     return <div>No games found for "{query}"</div>; // Show a message if no games are found
   }
 
+    // Calculate the games to display on the current page
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const paginatedGames = games.slice(startIndex, endIndex);
+
   return (
     <div className={classes.wrapper} >
       <h1 className={classes.searchText}>Search Results for "{query}"</h1>
@@ -74,10 +79,11 @@ export default function SearchResults() {
             </div>
           ))}
         </SimpleGrid>
-
-        <Pagination total={10} size='lg' style={{ justifyContent: "center" }} 
-        className={classes.pagninaton} value={page} onChange={setPage} color='green' radius="lg" />
         
+        {games.length > limit && (
+        <Pagination total={Math.ceil(games.length/ limit)} size='lg' style={{ justifyContent: "center" }} 
+        className={classes.pagninaton} value={page} onChange={setPage} color='blue' radius="lg" />
+        )}
     </div>
   );
 }

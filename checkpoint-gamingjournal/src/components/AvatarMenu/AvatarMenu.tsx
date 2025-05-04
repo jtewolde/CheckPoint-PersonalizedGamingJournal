@@ -3,7 +3,7 @@ import { LogOut, User } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect} from "react";
 import toast from "react-hot-toast";
 import { useAuth } from "@/context/Authcontext";
 
@@ -12,6 +12,22 @@ export default function AvatarMenu(){
     const pathname = usePathname();
     const { isAuthenticated, setIsAuthenticated}  = useAuth();
     const [user, setUser] = useState<{ name?: string; image?: string } | null>(null);
+
+
+      // 🧠 Fetch session info on mount
+      useEffect(() => {
+        const fetchSession = async () => {
+            const session = await authClient.getSession(); // Get current session
+            if (session?.data?.user) {
+                setUser({
+                    name: session.data.user.name,
+                    image: session.data.user.image || undefined,
+                });
+            }
+        };
+
+        fetchSession();
+    }, []);
       
 
     // Function to handle sign out for authenticated users
