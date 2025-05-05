@@ -51,6 +51,11 @@ export function Header() {
         throw new Error('Failed to fetch search results');
       }
       const data = await res.json();
+
+      if (!Array.isArray(data)) {
+        console.log("Unexpected response format:", data);
+        return;
+      }
   
       // Remove duplicate game names
       const uniqueResults = data.filter(
@@ -98,7 +103,7 @@ export function Header() {
             {isAuthenticated ? (
               <>
                 <Link href="/dashboard" className={`${classes.link} ${pathname === '/dashboard' ? classes.active : ''}`}>Dashboard</Link>
-                <Link href="/my-games" className={`${classes.link} ${pathname === '/library' ? classes.active : ''}`}>Library</Link>
+                <Link href="/library" className={`${classes.link} ${pathname === '/library' ? classes.active : ''}`}>Library</Link>
                 <Link href="/journal" className={`${classes.link} ${pathname === '/journal' ? classes.active : ''}`}>Journal</Link>
                 <Link href="/stats" className={`${classes.link} ${pathname === '/stats' ? classes.active : ''}`}>Stats</Link>
                 <AvatarMenu />
@@ -129,7 +134,7 @@ export function Header() {
             {isAuthenticated ? (
               <>
                 <Link href="/dashboard" onClick={close} className={`${classes.mobileLink} ${pathname === '/dashboard' ? classes.active : ''}`}>Dashboard</Link>
-                <Link href="/my-games" onClick={close} className={`${classes.mobileLink} ${pathname === '/library' ? classes.active : ''}`}>Library</Link>
+                <Link href="/library" onClick={close} className={`${classes.mobileLink} ${pathname === '/library' ? classes.active : ''}`}>Library</Link>
                 <Link href="/journal" onClick={close} className={`${classes.mobileLink} ${pathname === '/journal' ? classes.active : ''}`}>Journal</Link>
                 <Link href="/stats" onClick={close} className={`${classes.mobileLink} ${pathname === '/stats' ? classes.active : ''}`}>Stats</Link>
                 <button onClick={handleSignOut} className={classes.link}>Log Out</button>

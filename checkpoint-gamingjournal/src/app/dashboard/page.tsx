@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter, redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { LoadingOverlay } from '@mantine/core';
 import { authClient } from '@/lib/auth-client';
 
@@ -18,7 +18,7 @@ export default function Dashboard() {
       const { data } = await authClient.getSession();
       if (!data?.user) {
         // If the user isn't authenticated, redirect to the sign-in page
-        return redirect('/auth/signin');
+        router.push('/auth/signin')
       }
     };
 

@@ -28,6 +28,13 @@
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
+
+  .media {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem; /* space between image and button */
+  }
   
   .info {
     flex: 1;
@@ -50,7 +57,7 @@
   }
   
   .screenshot {
-    width: 65%;
+    width: 60%;
     height: 60%;
     object-fit: cover;
     border-radius: 8px;
@@ -64,5 +71,33 @@
     font-family: 'Inter';
     font-weight: 400;
     margin-bottom: 5rem;
+    position: relative;
+  }
+
+  .similarGamesName{
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    margin-top: 3rem;
+    font-family: 'Poppins';
+    color: white;
+    justify-self: center;
+    border-bottom: 2px solid #ffffff;
+  }
+
+  .similarGameCover{
+    width: 60%;
+    height: 80%;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+  }
+
+  .similarGameCover:hover{
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
   }
   

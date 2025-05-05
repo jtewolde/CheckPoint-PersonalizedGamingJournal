@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 
-import classes from './search.module.css';
+import classes from './library.module.css';
 
 import { LoadingOverlay } from '@mantine/core';
 import { Pagination, SimpleGrid } from '@mantine/core';
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
-export default function GameLibrary(){
+export default function Library(){
     const [page, setPage] = useState(1) // Used to keep track of page for pagination, starting at 1
     const limit = 14; // Set the limit of games on page to 12
 
@@ -38,6 +38,7 @@ export default function GameLibrary(){
 
                 const data = await res.json();
                 setGames(data.games) // Store the games in state
+                console.log(data.games)
             } catch(error) {
                 console.log('Error fetching user library', error);
             } finally {
@@ -49,7 +50,15 @@ export default function GameLibrary(){
 
 
     return(
-        <div></div>
+        <div className={classes.wrapper} >
+            
+            {loading && <LoadingOverlay visible zIndex={1000}  overlayProps={{ radius: "sm", blur: 2 }} />}
+
+            {!loading && games.length === 0 && (
+                <p className={classes.noGames}> You have no games in your library. </p>
+            )}
+
+        </div>
     )
     
 }

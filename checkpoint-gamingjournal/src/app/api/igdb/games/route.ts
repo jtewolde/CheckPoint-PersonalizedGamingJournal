@@ -45,10 +45,15 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const searchQuery = searchParams.get('query') || '';
-    const limit = parseInt(searchParams.get('limit') || '12', 12); // Default to 10 results per page
-    const offset = parseInt(searchParams.get('offset') || '0', 12); // Default to 0 offset
+    const limit = parseInt(searchParams.get('limit') || '12', 10); // Default to 12 results per page
+    const offset = parseInt(searchParams.get('offset') || '0', 10); // Default to 0 offset
 
     const accessToken = await getAccessToken();
+
+    // Construct the query body
+    const body = searchQuery
+      ? `fields name, summary, genres, cover.url, version_title; where version_parent = null & name ~ *"${searchQuery}"*; sort rating desc; limit ${limit}; offset ${offset};`
+      : `fields name, summary, genres, cover.url, version_title; where version_parent = null; sort rating desc; limit ${limit}; offset ${offset};`;
 
     const igdbRes = await fetch(IGDB_URL, {
       method: 'POST',
@@ -57,7 +62,7 @@ export async function GET(req: NextRequest) {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'text/plain',
       },
-      body: `fields name, summary, genres, cover.url, version_title, collections ; search "${searchQuery}"; limit ${limit}; offset ${offset};`,
+      body,
     });
 
     if (!igdbRes.ok) {
