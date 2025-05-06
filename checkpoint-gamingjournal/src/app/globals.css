@@ -43,3 +43,16 @@ a {
     color-scheme: dark;
   }
 }
+
+/* Ensure the body takes up the full height of the viewport */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Full viewport height */
+  margin: 0;
+}
+
+/* Allow the main content to grow and push the footer down */
+.main-content {
+  flex-grow: 1;
+}

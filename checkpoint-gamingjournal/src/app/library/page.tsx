@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import classes from './library.module.css';
 
 import { LoadingOverlay } from '@mantine/core';
-import { Pagination, SimpleGrid } from '@mantine/core';
+import { Pagination, SimpleGrid, Button, Image, Text, Card  } from '@mantine/core';
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 export default function Library(){
@@ -57,6 +57,31 @@ export default function Library(){
             {!loading && games.length === 0 && (
                 <p className={classes.noGames}> You have no games in your library. </p>
             )}
+
+                <h2 className={classes.title}>My Library</h2>
+                
+                {!loading && games.length > 0 && (
+                    <div className={classes.library}>
+                        <SimpleGrid cols={6} spacing="sm" verticalSpacing='md'>
+                            {games.map((game) => (
+                                <div key={game._id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game._id}`) }} >
+                                    <Image
+                                        src={
+                                            game.coverImage
+                                                ? `https:${game.coverImage.replace('t_thumb', 't_cover_big')}` // Replace thumbnail size with a larger size
+                                                : PlaceHolderImage.src // Use placeholder if cover is missing
+                                        }
+                                        alt={game.name}
+                                        radius="md"
+                                        className={classes.image}
+                                    />
+                                    <Text size="lg" mt="md">{game.name}</Text>
+                                </div>
+                            ))}
+                        </SimpleGrid>
+                    </div>
+                )}
+
 
         </div>
     )

@@ -10,7 +10,7 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import classes from './game.module.css';
 
-import { NotebookPen } from 'lucide-react';
+import { NotebookPen, Delete } from 'lucide-react';
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
 
 export default function GameDetails() {
@@ -18,6 +18,7 @@ export default function GameDetails() {
   const [game, setGame] = useState<any>(null); // State to store game details
   const [loading, setLoading] = useState(true); // State to handle loading
   const [addingToLibrary, setAddingToLibrary] = useState(false); // State to handle button loading
+  const [isGameInLibrary, setIsInLibrary] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -36,11 +37,39 @@ export default function GameDetails() {
       }
     };
 
+    // Function to check if the game is in the user's library
+    const checkIfInLibrary = async () => {
+      try {
+        const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token
+        const res = await fetch('/api/user/getLibrary', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) {
+          throw new Error('Failed to fetch user library');
+        }
+
+        const data = await res.json();
+        const isGameInLibrary = data.games.some((libraryGame: any) => libraryGame._id === id);
+        setIsInLibrary(isGameInLibrary); // Update the state
+      } catch (error) {
+        console.error('Error checking if game is in library:', error);
+      }
+    };
+
     if (id) {
       fetchGameDetails();
+      checkIfInLibrary();
     }
   }, [id]);
 
+  
+
+  // Function to handle adding the game to the user's library
   const handleAddToLibrary = async () => {
     if (!game) return;
 
@@ -72,6 +101,7 @@ export default function GameDetails() {
       }
 
       toast.success('Game added to your library!')
+      setIsInLibrary(true); // Update the state to show that the game is in the user's library
     } catch (error) {
       console.error('Error adding game to library:', error);
       toast.error('Failed to add game to your library. Please try again.');
@@ -79,6 +109,47 @@ export default function GameDetails() {
       setAddingToLibrary(false);
     }
   };
+
+  // Function to handle removing the game from the user's library
+  const handleRemoveFromLibrary = async () => {
+    if (!game) return;
+
+    setAddingToLibrary(true);
+
+    try {
+      const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token from localStorage
+      const res = await fetch('/api/library/delete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`, // Include the Bearer token
+        },
+        body: JSON.stringify({
+          gameID: id,
+          gameDetails: {
+            title: game.name,
+            genre: game.genres?.map((genre: any) => genre.name).join(', '),
+            coverImage: game.cover.url,
+            releaseDate: game.first_release_date
+              ? new Date(game.first_release_date * 1000).toISOString()
+              : null,
+          },
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to remove game from library');
+      }
+
+      toast.success('Game removed from your library!')
+      setIsInLibrary(false); // Update the state to show that the game is not in the user's library
+    } catch (error) {
+      console.error('Error removing game from library:', error);
+      toast.error('Failed to remove game from your library. Please try again.');
+    } finally {
+      setAddingToLibrary(false);
+    }
+  }
 
   if (loading) {
     return <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
@@ -135,6 +206,21 @@ export default function GameDetails() {
             className={classes.cover}
           />
 
+        {isGameInLibrary ? (
+          <Button
+          variant="filled"
+          color="#d8070b"
+          size="xl"
+          radius="xl"
+          className={classes.button}
+          rightSection={<Delete />}
+          onClick={handleRemoveFromLibrary}
+          loading={addingToLibrary}
+        >
+          Remove from your Library!
+        </Button>
+        ) : (
+          
           <Button
             variant="filled"
             color="#2bdd66"
@@ -147,6 +233,7 @@ export default function GameDetails() {
           >
             Add to your Library!
           </Button>
+        )}
 
         </div>
 

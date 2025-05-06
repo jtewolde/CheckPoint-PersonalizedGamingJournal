@@ -1,0 +1,29 @@
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    background: linear-gradient(to top, #000000, #434343);
+    height: 100vh; 
+}
+
+.title{
+    font-size: 2rem;
+    font-weight: 400;
+    color: white; /* Dark text for contrast */
+    margin-bottom: 3.5rem;
+    text-align: center;
+    font-family: 'Poppins';
+    font-style: italic;
+}
+
+.image{
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+}
+
+.image:hover{
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+    cursor: pointer;
+}

@@ -37,17 +37,15 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
 
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-
+      <body className={`${geistSans.variable} ${geistMono.variable} page-container`}>
         <AuthProvider>
           <MantineProvider>
             <Toaster />
-            <Header/>
-            {children}
+            <Header />
+            <main className="main-content">{children}</main>
             <Footer />
           </MantineProvider>
         </AuthProvider>
-        
       </body>
     </html>
   );
