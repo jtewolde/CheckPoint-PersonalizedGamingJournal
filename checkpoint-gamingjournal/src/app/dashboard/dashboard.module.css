@@ -1,0 +1,58 @@
+.wrapper {
+    padding: 2rem;
+    min-height: 100vh;
+    background: linear-gradient(to right, #1f1c2c, #67666b);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  
+  .trendingText {
+    font-size: 1.6rem;
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+    align-items: flex-start;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(194, 191, 191);
+  }
+  
+  .trendingGames {
+    width: 100%;
+    max-width: 1200px; /* Add a max width to prevent it from stretching too wide */
+    margin: 0 auto;
+    padding: 1rem 0;
+  }
+  
+  .carouselContainer {
+    padding: 0 1rem;
+  }
+  
+  .carouselItem {
+    display: flex !important; /* react-multi-carousel needs this to align children */
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .gameTitle {
+    font-size: 1.5rem;
+    font-weight: 200;
+    margin: 0.5rem 0;
+    text-align: center;
+    color: white;
+    font-family: 'Inter';
+  }
+  
+  .cover {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .cover:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }
+  

@@ -12,6 +12,13 @@ export const auth = betterAuth({
         maxPasswordLength: 128
     },
 
+    account: {
+        accountLinking:{
+            enabled: true,
+            trustedProviders: ["google", "discord"],
+        }
+    },
+
     user: {
         modelName: "users",
 
@@ -39,6 +46,12 @@ export const auth = betterAuth({
             coverImageId: {
                 type: "string",
                 required: false,
+            },
+            status: {
+                type: "string",
+                required: false,
+                enum: ["playing", "completed", "on_hold", "dropped", "plan_to_play"],
+                defaultValue: "plan_to_play",
             },
             summary: {
                 type: "string",

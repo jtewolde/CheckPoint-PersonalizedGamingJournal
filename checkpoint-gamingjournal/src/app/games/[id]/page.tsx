@@ -92,6 +92,7 @@ export default function GameDetails() {
             releaseDate: game.first_release_date
               ? new Date(game.first_release_date * 1000).toISOString()
               : null,
+            status,
           },
         }),
       });
@@ -167,7 +168,7 @@ export default function GameDetails() {
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
-      items: 2, // Show one slide at a time
+      items: 1, // Show one slide at a time
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
@@ -179,7 +180,8 @@ export default function GameDetails() {
   const similarGameResponsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 3, // Show one slide at a time
+      items: 3, // Show three slides at a time for desktop
+      slidesToSlide: 3, // Number of slides to scroll at once
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },

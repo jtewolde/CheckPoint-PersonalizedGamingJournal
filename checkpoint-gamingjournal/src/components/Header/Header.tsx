@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { Burger, Container, Group, Paper, Drawer, Autocomplete, useSafeMantineTheme } from '@mantine/core';
+import { Burger, Container, Group, Paper, Drawer, Autocomplete, Image } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import CheckPointLogo from '../../../public/CheckPointLogo.png';
 import classes from './Header.module.css';
@@ -72,7 +72,9 @@ export function Header() {
   return (
     <header className={classes.header}>
       <Container size="md" className={classes.inner}>
-        <img src={CheckPointLogo.src} alt="CheckPoint Logo" className={classes.logo} />
+        
+        <Image src={CheckPointLogo.src} alt="CheckPoint Logo" className={classes.logo} />
+
         {isAuthenticated ? (
           <Autocomplete
           className={classes.searchBar}

@@ -6,6 +6,7 @@ const GameSchema = new mongoose.Schema({
   name:         { type: String, required: true },
   coverImageId: { type: String },
   summary:      { type: String },
+  status:      { type: String, enum: ['playing', 'completed', 'on_hold', 'dropped', 'plan_to_play'], default: 'plan_to_play' },
   platforms:    [String],
   genres:       [String],
   user:         { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

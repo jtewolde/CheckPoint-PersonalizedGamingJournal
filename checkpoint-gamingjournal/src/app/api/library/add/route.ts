@@ -20,14 +20,19 @@ export async function POST(req: NextRequest) {
             headers: req.headers,
         });
 
-        console.log("Authorization Header:", req.headers.get("authorization"));
-        console.log("Session: ", session);
+        console.log("Game Data: ", gameDetails);
+        console.log("Game Status", gameDetails.status);
 
         if (!session || !session.user) {
             return NextResponse.json({ error: "Unauthorized", session }, { status: 401 });
         }
 
         const userId = session.user.id; // Extract userId from the session
+
+        // Ensure that the status of a game in library is defaulted to "plan to play"
+        if(!gameDetails.status){
+            gameDetails.status = "plan_to_play"; // Default status of game if not provided
+        }
 
         // Add game to the games collection
         const gameResult = await GameCollection.updateOne(

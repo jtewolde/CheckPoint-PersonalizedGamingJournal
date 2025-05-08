@@ -3,16 +3,25 @@
     flex-direction: column;
     padding: 2rem;
     background: linear-gradient(to top, #000000, #434343);
-    height: 100vh; 
+    min-height: 100vh; 
 }
 
 .title{
     font-size: 2rem;
     font-weight: 400;
     color: white; /* Dark text for contrast */
-    margin-bottom: 3.5rem;
+    margin-bottom: 1.5rem;
     text-align: center;
     font-family: 'Poppins';
+    font-style: italic;
+}
+
+.subTitle{
+    font-size: 1.5rem;
+    font-weight: 200;
+    color: rgb(208, 205, 205); /* Dark text for contrast */
+    margin-bottom: 3.5rem;
+    font-family: 'Inter';
     font-style: italic;
 }
 
@@ -26,4 +35,34 @@
     transform: translateY(-5px); /* Slight lift on hover */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
     cursor: pointer;
+}
+
+.responsiveGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* Default: 6 columns */
+  gap: 16px; /* Adjust spacing between items */
+}
+
+@media (max-width: 1200px) {
+  .responsiveGrid {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns for screens smaller than 1200px */
+  }
+}
+
+@media (max-width: 768px) {
+  .responsiveGrid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for screens smaller than 768px */
+  }
+}
+
+@media (max-width: 480px) {
+  .responsiveGrid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for screens smaller than 480px */
+  }
+}
+
+@media (max-width: 320px) {
+  .responsiveGrid {
+    grid-template-columns: repeat(1, 1fr); /* 1 column for screens smaller than 320px */
+  }
 }

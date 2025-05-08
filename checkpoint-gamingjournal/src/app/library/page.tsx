@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import classes from './library.module.css';
 
 import { LoadingOverlay } from '@mantine/core';
-import { Pagination, SimpleGrid, Button, Image, Text, Card  } from '@mantine/core';
+import { Pagination, SimpleGrid, Button, Image, Text,  } from '@mantine/core';
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 export default function Library(){
@@ -15,6 +15,7 @@ export default function Library(){
     const limit = 14; // Set the limit of games on page to 12
 
     const [games, setGames] = useState<any[]>([]); // State to store games data
+    const [totalGames, setTotalGames] = useState(0); // Store number of games in library
     const [loading, setLoading] = useState(true); // State to handle loading
     const router = useRouter();
 
@@ -38,6 +39,8 @@ export default function Library(){
 
                 const data = await res.json();
                 setGames(data.games) // Store the games in state
+                console.log("Total games ", data.games.length)
+                setTotalGames(data.games.length)
                 console.log(data.games)
             } catch(error) {
                 console.log('Error fetching user library', error);
@@ -46,6 +49,7 @@ export default function Library(){
             }
         };
         fetchUserGames();
+
     }, [])
 
 
@@ -54,15 +58,11 @@ export default function Library(){
             
             {loading && <LoadingOverlay visible zIndex={1000}  overlayProps={{ radius: "sm", blur: 2 }} />}
 
-            {!loading && games.length === 0 && (
-                <p className={classes.noGames}> You have no games in your library. </p>
-            )}
-
-                <h2 className={classes.title}>My Library</h2>
+                <p className={classes.subTitle}> You have {totalGames} games in your library. </p>
                 
                 {!loading && games.length > 0 && (
                     <div className={classes.library}>
-                        <SimpleGrid cols={6} spacing="sm" verticalSpacing='md'>
+                        <SimpleGrid cols={6} spacing="sm" verticalSpacing='md' className={classes.responsiveGrid}>
                             {games.map((game) => (
                                 <div key={game._id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game._id}`) }} >
                                     <Image
