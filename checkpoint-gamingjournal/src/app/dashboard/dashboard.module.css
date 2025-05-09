@@ -4,7 +4,6 @@
     background: linear-gradient(to right, #1f1c2c, #67666b);
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: flex-start;
   }
   
@@ -35,14 +34,6 @@
     padding: 1rem;
   }
 
-  .gameTitle {
-    font-size: 1.5rem;
-    font-weight: 200;
-    margin: 0.5rem 0;
-    text-align: center;
-    color: white;
-    font-family: 'Inter';
-  }
   
   .cover {
     width: 100%;
@@ -54,5 +45,22 @@
   .cover:hover {
     transform: scale(1.05);
     transition: transform 0.3s ease;
+  }
+
+  .playingText{
+    font-size: 1.6rem;
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+    align-items: flex-start;
+    font-family: 'Poppins', sans-serif;
+    margin-top: 3rem;
+    color: rgb(194, 191, 191);
+  }
+
+  .playingGames{
+    width: 100%;
+    max-width: 1200px; /* Add a max width to prevent it from stretching too wide */
+    margin: 0 auto;
+    padding: 1rem 0;
   }
   

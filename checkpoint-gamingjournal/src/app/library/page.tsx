@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import classes from './library.module.css';
 
 import { LoadingOverlay } from '@mantine/core';
-import { Pagination, SimpleGrid, Button, Image, Text,  } from '@mantine/core';
+import { SimpleGrid, Badge, Image, Text,  } from '@mantine/core';
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 export default function Library(){
@@ -64,7 +64,7 @@ export default function Library(){
                     <div className={classes.library}>
                         <SimpleGrid cols={6} spacing="sm" verticalSpacing='md' className={classes.responsiveGrid}>
                             {games.map((game) => (
-                                <div key={game._id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game._id}`) }} >
+                                <div className={classes.imageContainer} key={game._id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game._id}`) }} >
                                     <Image
                                         src={
                                             game.coverImage
@@ -75,7 +75,7 @@ export default function Library(){
                                         radius="md"
                                         className={classes.image}
                                     />
-                                    <Text size="lg" mt="md">{game.name}</Text>
+                                    <Badge className={classes.badge} color='blue' variant='filled' size='md' >{game.status || "No Status"}</Badge>
                                 </div>
                             ))}
                         </SimpleGrid>

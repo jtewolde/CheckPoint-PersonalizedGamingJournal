@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useDisclosure } from '@mantine/hooks';
 import { useParams, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
-import { LoadingOverlay, Image, Button } from '@mantine/core';
+import { LoadingOverlay, Image, Button, Modal, Select, Badge} from '@mantine/core';
 
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -15,14 +16,21 @@ import PlaceHolderImage from '../../../../public/no-cover-image.png';
 
 export default function GameDetails() {
   const { id } = useParams(); // Get the game ID from the URL
+
   const [game, setGame] = useState<any>(null); // State to store game details
+  const [libraryGame, setLibraryGame] = useState<any>(null);
+
   const [loading, setLoading] = useState(true); // State to handle loading
+
   const [addingToLibrary, setAddingToLibrary] = useState(false); // State to handle button loading
   const [isGameInLibrary, setIsInLibrary] = useState(false);
+
+  const [status, setStatus] = useState(''); // State to handle game status
+  const [opened, {open, close} ] = useDisclosure(false);
   const router = useRouter();
 
   useEffect(() => {
-    const fetchGameDetails = async () => {
+    const fetchIGDBGameDetails = async () => {
       try {
         const res = await fetch(`/api/igdb/game?id=${id}`); // Fetch game details from your API
         if (!res.ok) {
@@ -30,6 +38,7 @@ export default function GameDetails() {
         }
         const data = await res.json();
         setGame(data); // Store the game details in state
+        setStatus(data.status);
       } catch (error) {
         console.error('Error fetching game details:', error);
       } finally {
@@ -55,14 +64,19 @@ export default function GameDetails() {
 
         const data = await res.json();
         const isGameInLibrary = data.games.some((libraryGame: any) => libraryGame._id === id);
+        const currentGame = data.games.find((libraryGame: any) => libraryGame._id === id);
+        setLibraryGame(currentGame); // Store the current game details in state
+        setStatus(currentGame.status);
         setIsInLibrary(isGameInLibrary); // Update the state
       } catch (error) {
         console.error('Error checking if game is in library:', error);
       }
     };
 
+    
+
     if (id) {
-      fetchGameDetails();
+      fetchIGDBGameDetails();
       checkIfInLibrary();
     }
   }, [id]);
@@ -92,7 +106,7 @@ export default function GameDetails() {
             releaseDate: game.first_release_date
               ? new Date(game.first_release_date * 1000).toISOString()
               : null,
-            status,
+            status: game.status
           },
         }),
       });
@@ -152,6 +166,37 @@ export default function GameDetails() {
     }
   }
 
+  // Function to handle updating the game status
+  const handleUpdateStatus = async (newStatus: string) => {
+  try {
+    const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token
+    const res = await fetch('/api/library/updateStatus', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`, // Include the Bearer token
+      },
+      body: JSON.stringify({
+        gameID: id, // Pass the game ID
+        gameDetails: {
+          status: newStatus, // Pass the new status
+        },
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to update game status');
+    }
+
+    const data = await res.json();
+    console.log('Game status updated:', data);
+    toast.success('Game status updated successfully!');
+  } catch (error) {
+    console.error('Error updating game status:', error);
+    toast.error('Failed to update game status. Please try again.');
+  }
+};
+
   if (loading) {
     return <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
   }
@@ -209,18 +254,40 @@ export default function GameDetails() {
           />
 
         {isGameInLibrary ? (
-          <Button
-          variant="filled"
-          color="#d8070b"
-          size="xl"
-          radius="xl"
-          className={classes.button}
-          rightSection={<Delete />}
-          onClick={handleRemoveFromLibrary}
-          loading={addingToLibrary}
-        >
-          Remove from your Library!
-        </Button>
+
+          <><Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>{libraryGame.status || 'No Status Given'}</Badge>
+          
+            <Modal opened={opened} onClose={close} title="Change Game Status">
+                <Select
+                  className={classes.statusSelect}
+                  value={status}
+                  onChange={(value) => {
+                    setStatus(value || '');
+                    handleUpdateStatus(value || '');
+                  } }
+                  data={[
+                    { value: 'Playing', label: 'Playing' },
+                    { value: 'Completed', label: 'Completed' },
+                    { value: 'On Hold', label: 'On Hold' },
+                    { value: 'Dropped', label: 'Dropped' },
+                    { value: 'Plan to Play', label: 'Plan to Play' },
+                  ]}
+                  placeholder="Select game status" />
+
+              </Modal>
+              
+              <Button
+                variant="filled"
+                color="#d8070b"
+                size="xl"
+                radius="xl"
+                className={classes.button}
+                rightSection={<Delete />}
+                onClick={handleRemoveFromLibrary}
+                loading={addingToLibrary}
+              >
+                Remove from your Library!
+              </Button></>
         ) : (
           
           <Button

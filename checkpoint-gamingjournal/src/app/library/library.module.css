@@ -25,6 +25,11 @@
     font-style: italic;
 }
 
+.imageContainer{
+  position: relative;
+  display: inline-block
+}
+
 .image{
     width: 100%;
     height: auto;
@@ -35,6 +40,18 @@
     transform: translateY(-5px); /* Slight lift on hover */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
     cursor: pointer;
+}
+
+.badge {
+  position: absolute; /* Position the badge relative to the container */
+  top: 8px; /* Adjust the distance from the top */
+  left: 8px; /* Adjust the distance from the left */
+  z-index: 10; /* Ensure the badge appears above the image */
+  background-color: rgba(0, 0, 0, 0.7); /* Optional: Add a semi-transparent background */
+  color: white; /* Ensure the text is readable */
+  padding: 4px 8px; /* Add some padding for better appearance */
+  border-radius: 4px; /* Optional: Add rounded corners */
+  font-size: 0.8rem; /* Adjust the font size */
 }
 
 .responsiveGrid {
