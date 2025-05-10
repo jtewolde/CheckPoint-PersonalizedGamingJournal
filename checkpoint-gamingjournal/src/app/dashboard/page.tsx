@@ -83,7 +83,8 @@ export default function Dashboard() {
   return (
     <div className={classes.wrapper}>
 
-      <h1 className={classes.trendingText}>Top 6 Trending Games from Last 30 Days</h1>
+      
+      <h1 className={classes.trendingText}>Top Trending Games from Last 30 Days</h1>
 
       <div className={classes.trendingGames}>
 

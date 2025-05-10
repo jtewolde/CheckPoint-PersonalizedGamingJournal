@@ -1,6 +1,6 @@
 'use client'
 
-import { Anchor, Button, Checkbox, Paper, PasswordInput, Text, TextInput, Title, Group} from '@mantine/core';
+import { Anchor, Button, Checkbox, Paper, PasswordInput, Text, TextInput, Title, Group, Divider} from '@mantine/core';
 import { redirect, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
@@ -101,6 +101,8 @@ export default function signInPage(){
                 <GoogleButton radius="xl" onClick={handleGoogleSignIn}>Google</GoogleButton>
                 <DiscordButton radius='xl' onClick={handleDiscordSignIn}>Discord </DiscordButton>
             </Group>
+
+            <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
           <TextInput label="Email address" placeholder="Your email" size="md" required mt="md" value={email} onChange={(e) => setEmail(e.currentTarget.value)} />
           <PasswordInput label="Password" placeholder="Your password" size="md" required mt="md" value={password} onChange={(e) => setPassword(e.currentTarget.value)} />

@@ -11,6 +11,7 @@
   padding-top: 80px;
   background-color: whitesmoke;
   font-family: 'Poppins';
+  justify-content: center;
 
   @media (max-width: $mantine-breakpoint-sm) {
     max-width: 100%;

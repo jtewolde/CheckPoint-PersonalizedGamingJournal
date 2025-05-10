@@ -51,21 +51,17 @@ export const auth = betterAuth({
                 type: "string",
                 required: false,
                 enum: ["playing", "completed", "on_hold", "dropped", "plan_to_play"],
-                defaultValue: "plan_to_play",
+                defaultValue: "No Status Given",
             },
             summary: {
                 type: "string",
                 required: false,
             },
-            platforms:{
-                type:"string[]",
-                required:false,
+            journalEntries: {
+                type: "string[]",
+                required: false,
+                defaultValue: [],
             },
-            genres:{
-                type:"string[]",
-                required:false,
-            },
-
             userId: {
                 type: "string",
                 required: true,
@@ -82,6 +78,10 @@ export const auth = betterAuth({
                 required: true,
             },
             userId: {
+                type: "string",
+                required: true,
+            },
+            title: {
                 type: "string",
                 required: true,
             },

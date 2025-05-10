@@ -8,12 +8,12 @@
   }
   
   .trendingText {
-    font-size: 1.6rem;
-    font-weight: 300;
-    margin-bottom: 1.5rem;
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: 1.0rem;
     align-items: flex-start;
-    font-family: 'Poppins', sans-serif;
-    color: rgb(194, 191, 191);
+    font-family: 'Inter';
+    color: rgb(222, 219, 219);
   }
   
   .trendingGames {
@@ -48,13 +48,12 @@
   }
 
   .playingText{
-    font-size: 1.6rem;
-    font-weight: 300;
-    margin-bottom: 1.5rem;
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: 1.0rem;
     align-items: flex-start;
-    font-family: 'Poppins', sans-serif;
-    margin-top: 3rem;
-    color: rgb(194, 191, 191);
+    font-family: 'Inter';
+    color: rgb(222, 219, 219);
   }
 
   .playingGames{

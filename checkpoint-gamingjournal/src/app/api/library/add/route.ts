@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
 
         // Ensure that the status of a game in library is defaulted to "plan to play"
         if(!gameDetails.status){
-            gameDetails.status = "plan_to_play"; // Default status of game if not provided
+            gameDetails.status = "No Status Given"; // Default status of game if not provided
         }
 
         // Add game to the games collection

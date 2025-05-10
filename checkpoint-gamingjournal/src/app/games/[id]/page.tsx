@@ -65,9 +65,10 @@ export default function GameDetails() {
         const data = await res.json();
         const isGameInLibrary = data.games.some((libraryGame: any) => libraryGame._id === id);
         const currentGame = data.games.find((libraryGame: any) => libraryGame._id === id);
-        setLibraryGame(currentGame); // Store the current game details in state
-        setStatus(currentGame.status);
+
         setIsInLibrary(isGameInLibrary); // Update the state
+        setLibraryGame(currentGame || null); // Store the current game details in state 
+        setStatus(currentGame?.status);
       } catch (error) {
         console.error('Error checking if game is in library:', error);
       }
@@ -106,7 +107,8 @@ export default function GameDetails() {
             releaseDate: game.first_release_date
               ? new Date(game.first_release_date * 1000).toISOString()
               : null,
-            status: game.status
+            status: game.status,
+            journalEntries: [],
           },
         }),
       });
@@ -190,7 +192,7 @@ export default function GameDetails() {
 
     const data = await res.json();
     console.log('Game status updated:', data);
-    toast.success('Game status updated successfully!');
+    toast.success('Game status updated successfully! Refresh page to see changes!');
   } catch (error) {
     console.error('Error updating game status:', error);
     toast.error('Failed to update game status. Please try again.');
@@ -255,7 +257,7 @@ export default function GameDetails() {
 
         {isGameInLibrary ? (
 
-          <><Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>{libraryGame.status || 'No Status Given'}</Badge>
+          <><Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>{libraryGame?.status || 'No Status Given'}</Badge>
           
             <Modal opened={opened} onClose={close} title="Change Game Status">
                 <Select
