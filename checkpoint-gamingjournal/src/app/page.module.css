@@ -70,3 +70,31 @@
   right: 0;
   margin-top: 10rem; /* Moves it closer to the text */
 }
+
+
+.screenshotsTitle{
+  color: var(--mantine-color-white);
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 4rem;
+  text-align: center;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    font-size: 40px;
+    line-height: 1.2;
+  }
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    font-size: 28px;
+    line-height: 1.3;
+  }
+}
+
+.screenshotImage{
+  width: 100%;
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 8px; /* Rounded corners */
+  object-fit: cover; /* Ensure the image covers the container */
+  margin-bottom: 1rem; /* Add spacing below the image */
+}

@@ -1,13 +1,19 @@
 'use client'
 
-import { Button, Container, Overlay, Text, Title } from '@mantine/core';
+import { Button, Container, Overlay, Text, Title, SimpleGrid } from '@mantine/core';
 import { Transition } from '@mantine/core';
+
 import { UserRoundPlus } from 'lucide-react';
 import { FeaturesGrid } from '../components/Features/Features';
+
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
+
 import classes from './page.module.css';
 import { useAuth } from '@/context/Authcontext';
+
+import Carousel from 'react-multi-carousel';
 
 
 export default function Home() {
@@ -67,6 +73,7 @@ export default function Home() {
         <div className={classes.FeatureSection}>
           <FeaturesGrid />
         </div>
+            
 
       </Container>
       

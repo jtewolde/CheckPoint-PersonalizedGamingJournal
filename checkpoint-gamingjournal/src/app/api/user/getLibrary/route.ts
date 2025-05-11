@@ -3,8 +3,6 @@ import { UserCollection, GameCollection } from "@/utils/db";
 import { ObjectId } from "mongodb";
 
 import { auth } from "@/utils/auth";
-import User from "@/models/User";
-import { error } from "console";
 
 // This API route is used to get the user's library
 export async function GET(req: NextRequest){

@@ -281,7 +281,7 @@ export default function GameDetails() {
               <Button
                 variant="filled"
                 color="#d8070b"
-                size="xl"
+                size="lg"
                 radius="xl"
                 className={classes.button}
                 rightSection={<Delete />}
@@ -295,7 +295,7 @@ export default function GameDetails() {
           <Button
             variant="filled"
             color="#2bdd66"
-            size="xl"
+            size="lg"
             radius="xl"
             className={classes.button}
             rightSection={<NotebookPen />}
