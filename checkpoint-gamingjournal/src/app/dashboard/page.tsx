@@ -82,10 +82,6 @@ export default function Dashboard() {
 
   return (
     <div className={classes.wrapper}>
-
-      <button className={classes.addButton} onClick={() => router.push('/journalForm')}>
-        Add Journal Entry
-        </button>
       
       <h1 className={classes.trendingText}>Top Trending Games from Last 30 Days</h1>
 

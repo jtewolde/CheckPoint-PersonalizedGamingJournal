@@ -33,12 +33,14 @@ export default function GameDetails() {
     const fetchIGDBGameDetails = async () => {
       try {
         const res = await fetch(`/api/igdb/game?id=${id}`); // Fetch game details from your API
+        console.log("API Response", res)
         if (!res.ok) {
           throw new Error('Failed to fetch game details');
         }
         const data = await res.json();
         setGame(data); // Store the game details in state
         setStatus(data.status);
+
       } catch (error) {
         console.error('Error fetching game details:', error);
       } finally {

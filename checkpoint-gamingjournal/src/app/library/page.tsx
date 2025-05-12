@@ -3,11 +3,10 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-
 import classes from './library.module.css';
 
 import { LoadingOverlay } from '@mantine/core';
-import { SimpleGrid, Badge, Image, Text,  } from '@mantine/core';
+import { SimpleGrid, Badge, Image } from '@mantine/core';
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 export default function Library(){

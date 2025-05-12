@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GameCollection, JournalEntriesCollection, UserCollection } from "@/utils/db";
 import { ObjectId } from "mongodb";
+import {v4 as uuidv4} from 'uuid';
 import { auth } from "@/utils/auth";
 
 // this API route is used to create a journal entry for a game
@@ -42,12 +43,13 @@ export async function POST(req: NextRequest) {
 
       // Create the journal entry
       const journalEntry = {
+        uuid: uuidv4(),
         gameId: gameID,
         gameName,
         userId,
         title,
         content,
-        date: new Date(date), // Ensure the date is stored as a valid Date object
+        date
       };
 
       // Insert the journal entry into the journalEntries collection
@@ -56,12 +58,12 @@ export async function POST(req: NextRequest) {
       // Append the journal entry ID to the game's journalEntries field
       const updateGameResult = await GameCollection.updateOne(
           { _id: gameID },
-          { $addToSet: { journalEntries: result.insertedId } } // Prevent duplicates
+          { $addToSet: { journalEntries: journalEntry.uuid } } // Prevent duplicates
       )
 
       return NextResponse.json({
         message: "Journal entry created and appended successfully",
-        journalEntryId: result.insertedId,
+        journalEntryId: journalEntry.uuid
       });
     } catch (error) {
       console.error("Error creating journal entry:", error);

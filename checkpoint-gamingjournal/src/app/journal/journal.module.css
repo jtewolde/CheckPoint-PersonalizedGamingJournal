@@ -1,0 +1,69 @@
+.container {
+    height: 100vh;
+    margin: 0 auto;
+    padding: 20px;
+    background-image: url('../../../public/journalBackground.png');
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.journalWrapper{
+    position: relative;
+    z-index: 1;
+    border-radius: 12px; /* Rounded corners */
+    margin-top: 4rem;
+}
+
+.tableContainer{
+    position: relative;
+    z-index: 1;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.journalTitle {
+    margin-top: 4rem;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Poppins';
+    color: white;
+}
+
+.addButton {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #07e333;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.addButton:hover {
+    background-color: #0056b3;
+}
+
+.deleteButton{
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #df1515;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.deleteButton:hover{
+    background-color: #c21414;
+}

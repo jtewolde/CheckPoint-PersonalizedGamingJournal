@@ -36,7 +36,7 @@ export const auth = betterAuth({
 
         fields:{
             igdbId: {
-                type: "number",
+                type: "string",
                 required: true,
             },
             name: {

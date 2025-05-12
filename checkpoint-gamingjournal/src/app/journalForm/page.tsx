@@ -64,11 +64,12 @@ export default function JournalForm() {
 
     setAddtoJournal(true)
 
-    const currentDate = date || new Date().toISOString().split("T")[0]; // Use the current date if `date` is empty
+    const currentDate = date || new Date().toLocaleString(); // Use the current date if `date` is empty
 
     // Find the selected game's title
     const selectedGame = games.find((game) => game._id === gameID);
-    console.log("Selectedgame",selectedGame)
+    console.log("Selectedgame",selectedGame);
+    console.log(currentDate);
     const gameName = selectedGame ? selectedGame.title : "";
 
     try {
@@ -93,7 +94,7 @@ export default function JournalForm() {
       }
 
       toast.success("Journal entry created successfully!");
-      router.push("/library"); // Redirect to the library or another page
+      router.push("/journal"); // Redirect to the library or another page
     } catch (error) {
       console.error("Error creating journal entry:", error);
       toast.error("Failed to create journal entry. Please try again.");
