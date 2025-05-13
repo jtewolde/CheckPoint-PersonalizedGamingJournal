@@ -1,12 +1,18 @@
 import { Mail } from "lucide-react";
 import { IconBrandLinkedin } from "@tabler/icons-react";
 import { ActionIcon, Group, Container, Text } from "@mantine/core";
+import Link from "next/link";
 import classes from './Footer.module.css';
 
 export function Footer() {
   return (
     <div className={classes.footer}>
       <Container className={classes.inner}>
+
+        <Text size="sm" color="dimmed" className={classes.igdbText}>
+          Data provided by <Link href="https://www.igdb.com" target="_blank" className={classes.igdbLink}>IGDB</Link>.
+        </Text>
+
         <Text size="sm" color="dimmed" className={classes.text}>
           © {new Date().getFullYear()} Checkpoint. All rights reserved.
         </Text>

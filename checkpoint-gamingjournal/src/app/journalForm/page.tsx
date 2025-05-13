@@ -64,7 +64,16 @@ export default function JournalForm() {
 
     setAddtoJournal(true)
 
-    const currentDate = date || new Date().toLocaleString(); // Use the current date if `date` is empty
+      const currentDate = new Date().toLocaleString("en-US", {
+      timeZone: "UTC", // Use UTC timezone
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      timeZoneName: "short", // Include timezone abbreviation
+    });
 
     // Find the selected game's title
     const selectedGame = games.find((game) => game._id === gameID);

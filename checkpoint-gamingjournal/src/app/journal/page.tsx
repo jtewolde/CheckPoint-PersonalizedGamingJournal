@@ -76,13 +76,13 @@ export default function Journal() {
     };
 
     // Function to create the rows of the table with the data of journal entries
-    const rows = entries.map((entry) => (
+        const rows = entries.map((entry) => (
         <Table.Tr key={entry._id}>
-            <Table.Td>{entry.gameName}</Table.Td>
-            <Table.Td>{entry.title}</Table.Td>
-            <Table.Td>{entry.content}</Table.Td>
-            <Table.Td>{entry.date}</Table.Td>
-            <Table.Td>
+            <Table.Td className={classes.tableCell}>{entry.gameName}</Table.Td>
+            <Table.Td className={classes.tableCell}>{entry.title}</Table.Td>
+            <Table.Td className={classes.tableCell}>{entry.content}</Table.Td>
+            <Table.Td className={classes.tableCell}>{entry.date}</Table.Td>
+            <Table.Td className={classes.deleteButtonCell}>
                 <Button
                     className={classes.deleteButton}
                     onClick={() => deleteJournalEntry(entry._id, entry.gameId)}
@@ -121,11 +121,11 @@ export default function Journal() {
                     <Table>
                         <Table.Thead>
                             <Table.Tr>
-                                <Table.Th>Game</Table.Th>
-                                <Table.Th>Title</Table.Th>
-                                <Table.Th>Content</Table.Th>
-                                <Table.Th>Date</Table.Th>
-                                <Table.Th>Delete Entry</Table.Th>
+                                <Table.Th className={classes.tableHeader}>Game</Table.Th>
+                                <Table.Th className={classes.tableHeader}>Title</Table.Th>
+                                <Table.Th className={classes.tableHeader}>Content</Table.Th>
+                                <Table.Th className={classes.tableHeader}>Date</Table.Th>
+                                <Table.Th className={classes.tableHeader}>Delete Entry</Table.Th>
                             </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>{rows}</Table.Tbody>

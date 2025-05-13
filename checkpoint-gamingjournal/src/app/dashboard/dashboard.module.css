@@ -6,10 +6,20 @@
     flex-direction: column;
     justify-content: flex-start;
   }
+
+  .welcomeText{
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 1.0rem;
+    align-self: center;
+    font-family: 'Poppins';
+    color: rgb(222, 219, 219);
+    margin-bottom: 5rem;
+  }
   
   .trendingText {
     font-size: 1.4rem;
-    font-weight: 500;
+    font-weight: 360;
     margin-bottom: 1.0rem;
     align-items: flex-start;
     font-family: 'Inter';
@@ -49,11 +59,12 @@
 
   .playingText{
     font-size: 1.4rem;
-    font-weight: 500;
+    font-weight: 360;
     margin-bottom: 1.0rem;
     align-items: flex-start;
     font-family: 'Inter';
     color: rgb(222, 219, 219);
+    margin-top: 4rem;
   }
 
   .playingGames{
@@ -62,4 +73,60 @@
     margin: 0 auto;
     padding: 1rem 0;
   }
+
+  .recentEntriesText {
+    font-size: 1.4rem;
+    font-weight: 360;
+    margin-bottom: 1.0rem;
+    align-items: flex-start;
+    font-family: 'Inter';
+    color: rgb(222, 219, 219);
+    margin-top: 4rem;
+}
+
+.recentEntries {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.entryCard {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.entryCard:hover{
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.entryGame{
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    font-family: 'Poppins';
+}
+
+
+.entryTitle {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    font-family: 'Poppins';
+}
+
+.entryContent {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.entryDate {
+    font-size: 0.9rem;
+    color: #888;
+}
   

@@ -17,12 +17,27 @@
   font-size: large;
   align-items: center;
   color: black;
+  text-align: center;
   font-family: 'Poppins';
-  justify-content: center;
+  flex: 1;
+}
+
+.igdbText{
+  font-size: large;
+  align-self: center;
+  justify-self: flex-end;
+  color: black;
+  font-family: 'Poppins';
+  text-align: left;
+}
+
+.igdbLink{
+  font-weight: bold;
 }
 
 .links {
   display: flex;
   gap: var(--mantine-spacing-sm);
-  margin-top: var(--mantine-spacing-sm);
+  margin-left: auto;
+  justify-content: flex-end;
 }

@@ -10,8 +10,10 @@ import classes from './dashboard.module.css';
 
 export default function Dashboard() {
   const router = useRouter();
+  const [userName, setUserName] = useState("")
   const [games, setGames] = useState<any[]>([]); // State to store games data
   const [playingGames, setPlayingGames] = useState<any[]>([]); // State to store games that the user is currently playing
+  const [recentEntries, setRecentEntries] = useState<any[]>([]); // State to store recent journal entries
   const [loading, setLoading] = useState(true); // State to handle loading
   const [hasMounted, setHasMounted] = useState(false);
 
@@ -22,6 +24,8 @@ export default function Dashboard() {
       if (!data?.user) {
         // If the user isn't authenticated, redirect to the sign-in page
         router.push('/auth/signin')
+      } else {
+        setUserName(data.user.name)
       }
     };
 
@@ -74,16 +78,46 @@ export default function Dashboard() {
   }
 };
 
+
+  const fetchRecentJournalEntries = async () => {
+      try {
+          const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
+          const res = await fetch('/api/journal/getEntries', {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`,
+              },
+          });
+
+          if (!res.ok) {
+              throw new Error('Failed to fetch journal entries');
+          }
+
+          const data = await res.json();
+          const sortedEntries = data.journalEntries
+              .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Sort by date (most recent first)
+              .slice(0, 5); // Limit to the 5 most recent entries
+          setRecentEntries(sortedEntries); // Store the recent entries in state
+          console.log('Recent Journal Entries:', sortedEntries);
+      } catch (error) {
+          console.error('Error fetching recent journal entries:', error);
+      }
+  };
+
   useEffect(() => {
     fetchPlayingGames();
+    fetchRecentJournalEntries();
   }, []);
  
     
 
   return (
     <div className={classes.wrapper}>
+
+      <h1 className={classes.welcomeText}> Welcome {userName}! </h1>
       
-      <h1 className={classes.trendingText}>Top Trending Games from Last 30 Days</h1>
+      <h1 className={classes.trendingText}>Top Trending Games from Last 30 Days:</h1>
 
       <div className={classes.trendingGames}>
 
@@ -119,6 +153,29 @@ export default function Dashboard() {
             </div>
           ))}
         </SimpleGrid>
+      </div>
+
+      <h1 className={classes.recentEntriesText}>Recent Journal Entries: </h1>
+
+      <div className={classes.recentEntries}>
+          {recentEntries.length === 0 ? (
+              <p>No recent journal entries found.</p>
+          ) : (
+              <SimpleGrid cols={4} spacing="lg">
+                  {recentEntries.map((entry) => (
+                      <div key={entry._id} className={classes.entryCard} onClick={() => router.push('/journal')}>
+                          <h3 className={classes.entryGame}>{entry.gameName}</h3>
+                          <h3 className={classes.entryTitle}>{entry.title}</h3>
+                          <p className={classes.entryContent}>
+                              {entry.content.length > 100
+                                  ? `${entry.content.slice(0, 100)}...` // Truncate long content
+                                  : entry.content}
+                          </p>
+                          <p className={classes.entryDate}>{entry.date}</p>
+                      </div>
+                  ))}
+              </SimpleGrid>
+          )}
       </div>
 
     </div>
