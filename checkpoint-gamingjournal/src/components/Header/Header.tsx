@@ -37,6 +37,15 @@ export function Header() {
     }
   };
 
+  // Function to handle clicking the logo and redirecting user to dashboard or homepage based on authenication
+  const handleLogoClick = async () => {
+    if(isAuthenticated){
+      router.push('/dashboard')
+    } else {
+      router.push('/')
+    }
+  }
+
   // Function to handle search
   const handleSearch = async (query: string) => {
     setSearchQuery(query);
@@ -73,7 +82,7 @@ export function Header() {
     <header className={classes.header}>
       <Container size="md" className={classes.inner}>
         
-        <Image src={CheckPointLogo.src} alt="CheckPoint Logo" className={classes.logo} />
+        <Image src={CheckPointLogo.src} alt="CheckPoint Logo" className={classes.logo} onClick={handleLogoClick} style={{cursor: 'pointer'}} />
 
         {isAuthenticated ? (
           <Autocomplete
