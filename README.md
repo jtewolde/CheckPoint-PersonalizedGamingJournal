@@ -1,10 +1,10 @@
 # CheckPoint-PersonalizedGamingJournal
 
-CheckPoint is a web application designed for gamers to track their progress in the games they are playing and plan to play in the future. It helps users log their gaming sessions, set reminders for the next steps, and visualize their progress over time. With CheckPoint, you'll never forget where you left off in a game!
+CheckPoint is a web application designed for gamers to track their progress in the games they are playing and plan to play in the future. It helps users log their gaming sessions, create journal entries for games they play, and visualize their progress over time. With CheckPoint, you'll never forget where you left off in a game!
 
 ---
 
-## Tech Stack
+## Tech Stack:
 
 CheckPoint is built using the following technologies:
 
@@ -19,7 +19,7 @@ CheckPoint is built using the following technologies:
   - [IGDB API](https://www.igdb.com/api) for game data.
 
 - **Authentication**:
-  - [Better-Auth](https://www.better-auth.com/) for the authenication system with Email/Password or social media providers like Google and Discord
+  - [Better-Auth](https://www.better-auth.com/) for the authentication system with Email/Password or social media providers like Google and Discord
 
 - **Other Tools**:
   - [Toast](https://react-hot-toast.com/) for notifications.
@@ -47,11 +47,12 @@ Follow these steps to set up the project locally:
    cd CheckPoint-PersonalizedGamingJournal
 
 2. **Install Dependencies**:
+   ```
     npm install
     # or
     yarn install
 
-3. **Set up Enviroment Variables**:
+4. **Set up Enviroment Variables**:
     Create a .env.local file in the root directory and add the following variables:
 
     MONGODB_URI=your-mongodb-connection-string
@@ -59,7 +60,12 @@ Follow these steps to set up the project locally:
     IGDB_CLIENT_SECRET=your-igdb-client-secret
     NEXT_PUBLIC_BASE_URL=http://localhost:3000
 
-## Features:
- - Game Tracking: Log games you're playing, completed, or plan to play.
- - Journal Entries: Add detailed journal entries for each game session.
- - Responsive Design: Works seamlessly on desktop and mobile devices.
+## **Features:**
+  - **Detailed Game Information:** Learn more about the details of a game, like storylines, companies involved, and screenshots to view.
+ - **Game Tracking:** Log games you're playing, completed, or plan to play.
+ - **Journal Entries:** Add detailed journal entries for each game session.
+ - **Responsive Design:** Works seamlessly on desktop and mobile devices.
+
+## Acknowledgements:
+  - Data provided by [IGDB](https://www.igdb.com/api).
+  - Icons by Lucide and Tabler.
