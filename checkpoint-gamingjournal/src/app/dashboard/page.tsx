@@ -22,6 +22,9 @@ export default function Dashboard() {
   const [planToPlayLength, setPlanToPlayLength] = useState(0) // State to store length of game that the user plans to play
   const [onHoldLength, setOnHoldLength] = useState(0)
 
+  const [numOfGames, setNumOfGames] = useState(0);
+  const [completedPercentage, setCompletedPercentage] = useState(0)
+
   const [recentEntries, setRecentEntries] = useState<any[]>([]); // State to store recent journal entries
   const [loading, setLoading] = useState(true); // State to handle loading
   const [hasMounted, setHasMounted] = useState(false);
@@ -83,18 +86,26 @@ export default function Dashboard() {
     
     setPlayingGames(playingGames); // Store the playing games in state
 
+    const totalGames = data.games.length // Store total number of games
+    
     const planToPlay = data.games.filter((game: any) => game.status === 'Plan to Play').length;
     const playing = data.games.filter((game: any) => game.status === 'Playing').length;
     const completed = data.games.filter((game: any) => game.status === 'Completed').length;
     const noStatus = data.games.filter((game: any) => game.status === 'No Status Given').length;
     const onHold = data.games.filter((game: any) => game.status === 'On Hold').length;
 
+    // Get the completation Rate of the user's completed games compared to total games in their library
+    const completationRate = Math.round((completed / totalGames) * 100) 
+
     setPlanToPlayLength(planToPlay);
     setPlayGamesLength(playing);
     setCompletedLength(completed);
     setNoStatusLength(noStatus);
-    setOnHoldLength(onHold)
+    setOnHoldLength(onHold);
+    setNumOfGames(totalGames);
+    setCompletedPercentage(completationRate);
 
+    console.log("Completation Percentage", completedPercentage);
     console.log("Length of Plan to Play Games:", planToPlay);
     console.log("Length of Playing Games:", playing);
     console.log("Length of Completed Games:", completed);
@@ -148,31 +159,43 @@ export default function Dashboard() {
       <div className={classes.statCards}>
 
         <SimpleGrid cols={4} spacing="lg" className={classes.statusGrid}>
+
+          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+            <h3 className={classes.statusTitle}>Progress Summary</h3>
+            <p className={classes.statusCount}>{numOfGames} Games Total</p>
+            <p className={classes.statusCount}>{completedPercentage}% Completed</p>
+          </Paper>
+
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
             <IconDeviceGamepad size={40} color="blue" />
             <h3 className={classes.statusTitle}>Playing</h3>
             <p className={classes.statusCount}>{playGamesLength}</p>
           </Paper>
+
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
             <IconBookmark size={40} color="green" />
             <h3 className={classes.statusTitle}>Plan to Play</h3>
             <p className={classes.statusCount}>{planToPlayLength}</p>
           </Paper>
+
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
             <IconCheck size={40} color="purple" />
             <h3 className={classes.statusTitle}>Completed</h3>
             <p className={classes.statusCount}>{completedLength}</p>
           </Paper>
+
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
             <IconQuestionMark size={40} color='#fc8a08' />
             <h3 className={classes.statusTitle}>No Status</h3>
             <p className={classes.statusCount}>{noStatusLength}</p>
           </Paper>
+
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
             <IconPlayerPause size={40} color="red" />
             <h3 className={classes.statusTitle}>On Hold</h3>
             <p className={classes.statusCount}>{onHoldLength}</p>
           </Paper>
+
         </SimpleGrid>
 
       </div>

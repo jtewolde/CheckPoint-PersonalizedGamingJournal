@@ -9,13 +9,14 @@
 }
 
 .inner {
-  height: 3.75rem;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  width: 100%; /* Ensure it spans the full width */
-  max-width: 1200px; /* Optional: Add a max width for better alignment */
-  margin: 0 auto; /* Center the inner container */
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  gap: 2rem;
 }
 
 .logo {
@@ -33,13 +34,15 @@
   margin-left: 7rem; /* Add spacing between the logo and the search bar */
   padding: 0.5rem; /* Add padding for better spacing */
   border-radius: 8px; /* Add rounded corners */
+  justify-self: center;
 }
 
 @media screen and (max-width: 768px){
   .searchBar {
     width: 100%;
     max-width: 300px;
-    margin-left: 3rem;
+    margin-left: 0;
+    justify-self: center;
     position: relative;
   }
 }

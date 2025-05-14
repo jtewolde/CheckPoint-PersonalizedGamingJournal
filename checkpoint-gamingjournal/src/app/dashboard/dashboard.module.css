@@ -22,8 +22,9 @@
   }
 
   .statusGrid {
-    display: flex;
+    display: grid;
     align-items: center;
+    grid-template-columns: repeat(6, 1fr); /* Default to 4 columns */
     justify-content: center;
   }
 
@@ -45,13 +46,13 @@
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
     color: #333;
-    font-family: 'Inter';
+    font-family: 'Poppins';
   }
 
   .statusCount {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #555;
+    color: #000000;
   }
   
   .trendingText {
@@ -178,6 +179,18 @@
 
 @media (max-width: 768px) {
   .entriesGrid {
+    grid-template-columns: repeat(2, 1fr); /* 3 columns for screens smaller than 768px */
+  }
+}
+
+@media (max-width: 1200px) {
+  .statusGrid {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns for screens smaller than 1200px */
+  }
+}
+
+@media (max-width: 768px) {
+  .statusGrid {
     grid-template-columns: repeat(2, 1fr); /* 3 columns for screens smaller than 768px */
   }
 }
