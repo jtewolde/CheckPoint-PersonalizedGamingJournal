@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
     // Construct the query body
     const body = searchQuery
       ? `fields name, summary, genres, cover.url, version_title; where version_parent = null & name ~ *"${searchQuery}"*; sort rating desc; limit ${limit}; offset ${offset};`
-      : `fields name, summary, genres, cover.url, version_title; where version_parent = null & first_release_date >= ${thirtyDaysAgo} & first_release_date <= ${Math.floor(now.getTime() / 1000)}; sort rating desc; limit 6; offset ${offset};`;
+      : `fields name, summary, genres, cover.url, version_title; where version_parent = null & first_release_date >= ${thirtyDaysAgo} & first_release_date <= ${Math.floor(now.getTime() / 1000)} & cover != null; sort rating desc; limit 6; offset ${offset};`;
 
     const igdbRes = await fetch(IGDB_URL, {
       method: 'POST',

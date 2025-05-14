@@ -14,7 +14,44 @@
     align-self: center;
     font-family: 'Poppins';
     color: rgb(222, 219, 219);
-    margin-bottom: 5rem;
+    margin-bottom: 2rem;
+  }
+
+  .statCards {
+    margin-bottom: 2rem;
+  }
+
+  .statusGrid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .statusCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .statusTitle {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-family: 'Inter';
+  }
+
+  .statusCount {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #555;
   }
   
   .trendingText {
@@ -24,6 +61,7 @@
     align-items: flex-start;
     font-family: 'Inter';
     color: rgb(222, 219, 219);
+    text-decoration: underline;
   }
   
   .trendingGames {
@@ -32,7 +70,6 @@
     margin: 0 auto;
     padding: 1rem 0;
   }
-  
   
   .cover {
     width: 100%;
@@ -54,6 +91,7 @@
     font-family: 'Inter';
     color: rgb(222, 219, 219);
     margin-top: 4rem;
+    text-decoration: underline;
   }
 
   .playingGames{
@@ -71,6 +109,7 @@
     font-family: 'Inter';
     color: rgb(222, 219, 219);
     margin-top: 4rem;
+    text-decoration: underline;
 }
 
 .recentEntries {
@@ -128,6 +167,18 @@
 @media (max-width: 768px) {
   .gamesGrid {
     grid-template-columns: repeat(3, 1fr); /* 3 columns for screens smaller than 768px */
+  }
+}
+
+@media (max-width: 1200px) {
+  .entriesGrid {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns for screens smaller than 1200px */
+  }
+}
+
+@media (max-width: 768px) {
+  .entriesGrid {
+    grid-template-columns: repeat(2, 1fr); /* 3 columns for screens smaller than 768px */
   }
 }
 

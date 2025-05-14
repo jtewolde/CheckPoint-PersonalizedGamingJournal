@@ -118,7 +118,7 @@ export default function Journal() {
                 </Button>
 
                 <div className={classes.tableContainer}>
-                    <Table>
+                    <Table striped={true} stripedColor='#ededed'>
                         <Table.Thead>
                             <Table.Tr>
                                 <Table.Th className={classes.tableHeader}>Game</Table.Th>

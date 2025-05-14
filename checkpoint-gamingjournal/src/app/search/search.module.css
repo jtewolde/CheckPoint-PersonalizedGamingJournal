@@ -13,10 +13,21 @@
     font-size: 2rem;
     font-weight: 400;
     color: white; /* Dark text for contrast */
-    margin-bottom: 3.5rem;
+    margin-bottom: 1rem;
     text-align: center;
     font-family: 'Poppins';
     font-style: italic;
+}
+
+/* Number of search results */
+.numberText{
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: rgb(235, 231, 231); /* Dark text for contrast */
+    margin-bottom: 3.5rem;
+    font-family: 'Inter';
+    font-style: italic;
+    align-self: flex-start;
 }
 
 /* Grid layout for game cards */

@@ -2,17 +2,26 @@
 
 import React, { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
-import { LoadingOverlay, SimpleGrid, Image } from '@mantine/core';
+import { LoadingOverlay, SimpleGrid, Image, Paper } from '@mantine/core';
 import { authClient } from '@/lib/auth-client';
 
 import PlaceHolderImage from "../../../public/no-cover-image.png"
+import { IconDeviceGamepad, IconPlayerPause, IconBookmark, IconCheck, IconQuestionMark } from '@tabler/icons-react';
 import classes from './dashboard.module.css';
 
 export default function Dashboard() {
   const router = useRouter();
   const [userName, setUserName] = useState("")
+
   const [games, setGames] = useState<any[]>([]); // State to store games data
   const [playingGames, setPlayingGames] = useState<any[]>([]); // State to store games that the user is currently playing
+
+  const [playGamesLength, setPlayGamesLength] = useState(0) // State to store length of playing games user has
+  const [noStatusLength, setNoStatusLength] = useState(0) // State to store length of games user has that has no status
+  const [completedLength, setCompletedLength] = useState(0) // State to store length of completed games user has
+  const [planToPlayLength, setPlanToPlayLength] = useState(0) // State to store length of game that the user plans to play
+  const [onHoldLength, setOnHoldLength] = useState(0)
+
   const [recentEntries, setRecentEntries] = useState<any[]>([]); // State to store recent journal entries
   const [loading, setLoading] = useState(true); // State to handle loading
   const [hasMounted, setHasMounted] = useState(false);
@@ -71,14 +80,34 @@ export default function Dashboard() {
 
     const data = await res.json();
     const playingGames = data.games.filter((game: any) => game.status === 'Playing').slice(0,5) // Filter games that are currently being played with the first 5 games
+    
     setPlayingGames(playingGames); // Store the playing games in state
+
+    const planToPlay = data.games.filter((game: any) => game.status === 'Plan to Play').length;
+    const playing = data.games.filter((game: any) => game.status === 'Playing').length;
+    const completed = data.games.filter((game: any) => game.status === 'Completed').length;
+    const noStatus = data.games.filter((game: any) => game.status === 'No Status Given').length;
+    const onHold = data.games.filter((game: any) => game.status === 'On Hold').length;
+
+    setPlanToPlayLength(planToPlay);
+    setPlayGamesLength(playing);
+    setCompletedLength(completed);
+    setNoStatusLength(noStatus);
+    setOnHoldLength(onHold)
+
+    console.log("Length of Plan to Play Games:", planToPlay);
+    console.log("Length of Playing Games:", playing);
+    console.log("Length of Completed Games:", completed);
+    console.log("Length of No Status Games:", noStatus);
+
     console.log("Playing Games", playingGames);
+
   } catch (error) {
     console.error('Error fetching playing games: ', error);
   }
 };
 
-
+  // Use API call to fetch most recent journal entries
   const fetchRecentJournalEntries = async () => {
       try {
           const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
@@ -109,18 +138,48 @@ export default function Dashboard() {
     fetchPlayingGames();
     fetchRecentJournalEntries();
   }, []);
- 
-    
+
 
   return (
     <div className={classes.wrapper}>
 
       <h1 className={classes.welcomeText}> Welcome {userName}! </h1>
+
+      <div className={classes.statCards}>
+
+        <SimpleGrid cols={4} spacing="lg" className={classes.statusGrid}>
+          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+            <IconDeviceGamepad size={40} color="blue" />
+            <h3 className={classes.statusTitle}>Playing</h3>
+            <p className={classes.statusCount}>{playGamesLength}</p>
+          </Paper>
+          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+            <IconBookmark size={40} color="green" />
+            <h3 className={classes.statusTitle}>Plan to Play</h3>
+            <p className={classes.statusCount}>{planToPlayLength}</p>
+          </Paper>
+          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+            <IconCheck size={40} color="purple" />
+            <h3 className={classes.statusTitle}>Completed</h3>
+            <p className={classes.statusCount}>{completedLength}</p>
+          </Paper>
+          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+            <IconQuestionMark size={40} color='#fc8a08' />
+            <h3 className={classes.statusTitle}>No Status</h3>
+            <p className={classes.statusCount}>{noStatusLength}</p>
+          </Paper>
+          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+            <IconPlayerPause size={40} color="red" />
+            <h3 className={classes.statusTitle}>On Hold</h3>
+            <p className={classes.statusCount}>{onHoldLength}</p>
+          </Paper>
+        </SimpleGrid>
+
+      </div>
       
       <h1 className={classes.trendingText}>Top Trending Games from Last 30 Days:</h1>
 
       <div className={classes.trendingGames}>
-
         {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
         <SimpleGrid cols={6} spacing="lg" className={classes.gamesGrid}>
           {games.map((game) => (
@@ -161,7 +220,7 @@ export default function Dashboard() {
           {recentEntries.length === 0 ? (
               <p>No recent journal entries found.</p>
           ) : (
-              <SimpleGrid cols={4} spacing="lg" className={classes.gamesGrid}>
+              <SimpleGrid cols={4} spacing="lg" className={classes.entriesGrid}>
                   {recentEntries.map((entry) => (
                       <div key={entry._id} className={classes.entryCard} onClick={() => router.push('/journal')}>
                           <h3 className={classes.entryGame}>{entry.gameName}</h3>

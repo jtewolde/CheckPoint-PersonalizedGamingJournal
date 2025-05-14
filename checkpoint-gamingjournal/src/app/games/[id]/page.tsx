@@ -194,7 +194,8 @@ export default function GameDetails() {
 
     const data = await res.json();
     console.log('Game status updated:', data);
-    toast.success('Game status updated successfully! Refresh page to see changes!');
+    toast.success('Game status updated successfully!');
+    router.push(`/games/${game.id}`)
   } catch (error) {
     console.error('Error updating game status:', error);
     toast.error('Failed to update game status. Please try again.');

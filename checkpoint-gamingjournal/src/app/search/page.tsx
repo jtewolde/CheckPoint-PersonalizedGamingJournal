@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import classes from './search.module.css';
 
 import { LoadingOverlay } from '@mantine/core';
-import { Pagination, SimpleGrid } from '@mantine/core';
+import { Pagination, SimpleGrid, Text } from '@mantine/core';
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 export default function SearchResults() {
@@ -19,6 +19,7 @@ export default function SearchResults() {
   const limit = 80; // Set the limit of games on page to 12
 
   const [games, setGames] = useState<any[]>([]); // State to store games data
+  const [length, setLength] = useState("")
   const [loading, setLoading] = useState(true); // State to handle loading
   const router = useRouter();
 
@@ -32,6 +33,8 @@ export default function SearchResults() {
         }
         const data = await res.json();
         setGames(data);
+        setLength(data.length);
+        console.log(data.length)
       } catch (error) {
         console.error('Error fetching games:', error);
       } finally {
@@ -60,6 +63,7 @@ export default function SearchResults() {
   return (
     <div className={classes.wrapper} >
       <h1 className={classes.searchText}>Search Results for "{query}"</h1>
+        <h2 className={classes.numberText}>{length} Games:</h2>
         <SimpleGrid cols={5} spacing='sm' verticalSpacing='md'>
           {games.map((game) => (
             <div key={game.id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game.id}`) }} >
