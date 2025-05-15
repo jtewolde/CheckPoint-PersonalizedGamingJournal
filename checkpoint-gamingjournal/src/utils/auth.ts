@@ -5,6 +5,15 @@ import db from "./db";
 
 export const auth = betterAuth({
     database: mongodbAdapter(db),
+
+    cors: {
+    origin: [
+      "https://checkpoint-gaming.vercel.app",
+      "https://checkpoint-gaming-qpy6bmti8-joseph-tewoldes-projects.vercel.app"
+    ],
+    credentials: true
+  },
+
     emailAndPassword: {
         enabled: true,
         autoSignIn: true,
