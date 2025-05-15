@@ -203,6 +203,7 @@ export default function Dashboard() {
       <h1 className={classes.trendingText}>Top Trending Games from Last 30 Days:</h1>
 
       <div className={classes.trendingGames}>
+        
         {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
         <SimpleGrid cols={6} spacing="lg" className={classes.gamesGrid}>
           {games.map((game) => (

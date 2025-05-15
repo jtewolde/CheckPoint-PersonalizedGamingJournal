@@ -110,7 +110,7 @@ export function Header() {
 
         {/* Desktop Links */}
         <Container size="md" className={classes.links} >
-          <Group gap={5} visibleFrom='sm'>
+          <Group gap='lg' visibleFrom='sm' justify='flex-end' className={classes.linkGroup}>
             {isAuthenticated ? (
               <>
                 <Link href="/dashboard" className={`${classes.link} ${pathname === '/dashboard' ? classes.active : ''}`}>Dashboard</Link>

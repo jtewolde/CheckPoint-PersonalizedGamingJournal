@@ -30,8 +30,8 @@
 
 .searchBar {
   width: 100%; /* Ensure it spans the available width */
-  max-width: 500px; /* Limit the maximum width */
-  margin-left: 7rem; /* Add spacing between the logo and the search bar */
+  max-width: 520px; /* Limit the maximum width */
+  margin-left: 5rem; /* Add spacing between the logo and the search bar */
   padding: 0.5rem; /* Add padding for better spacing */
   border-radius: 8px; /* Add rounded corners */
   justify-self: center;
@@ -40,7 +40,7 @@
 @media screen and (max-width: 768px){
   .searchBar {
     width: 100%;
-    max-width: 300px;
+    max-width: 350px;
     margin-left: 0;
     justify-self: center;
     position: relative;
@@ -73,6 +73,15 @@
   font-size: large;
   width: auto;
   color: #000000;
+}
+
+.linkGroup{
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* Center horizontally */
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
 }
 
 .linkSpacing {

@@ -101,7 +101,7 @@ export default function Journal() {
     return (
         <div className={classes.container}>
             <Overlay
-                gradient="linear-gradient(180deg,rgb(67, 67, 67) 30%,rgb(112, 112, 112) 90%)"
+                gradient="linear-gradient(180deg,rgb(67, 67, 67) 30%,rgb(94, 94, 94) 90%)"
                 opacity={0.8}
                 zIndex={0}
             />
@@ -110,6 +110,7 @@ export default function Journal() {
                 <h2 className={classes.journalTitle}>My Journal</h2>
 
                 <Button
+                    radius= 'lg'
                     className={classes.addButton}
                     onClick={() => router.push('/journalForm')}
                     rightSection={<FilePlus />}
@@ -118,7 +119,7 @@ export default function Journal() {
                 </Button>
 
                 <div className={classes.tableContainer}>
-                    <Table striped={true} stripedColor='#ededed'>
+                    <Table striped={true} stripedColor='#ededed' borderColor='black' withColumnBorders={true} highlightOnHover={true}>
                         <Table.Thead>
                             <Table.Tr>
                                 <Table.Th className={classes.tableHeader}>Game</Table.Th>
