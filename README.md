@@ -4,30 +4,58 @@ CheckPoint is a web application designed for gamers to track their progress in t
 
 ---
 
-## Tech Stack:
+## 📋 Table of Contents
 
-CheckPoint is built using the following technologies:
-
-- **Frontend**: 
-  - [React](https://reactjs.org/) with [Next.js](https://nextjs.org/) for server-side rendering and routing.
-  - [Mantine](https://mantine.dev/) for UI components and styling.
-  - [TypeScript](https://www.typescriptlang.org/) for type safety.
-
-- **Backend**:
-  - [Node.js](https://nodejs.org/) with [Next.js API routes](https://nextjs.org/docs/api-routes/introduction).
-  - [MongoDB](https://www.mongodb.com/) for the database.
-  - [IGDB API](https://www.igdb.com/api) for game data.
-
-- **Authentication**:
-  - [Better-Auth](https://www.better-auth.com/) for the authentication system with Email/Password or social media providers like Google and Discord
-
-- **Other Tools**:
-  - [Toast](https://react-hot-toast.com/) for notifications.
-  - [Lucide Icons](https://lucide.dev/) for icons.
-  - [Tabler Icons](https://tabler-icons.io/) for additional icons.
+1. [Features](#features)  
+2. [Tech Stack](#tech-stack)  
+3. [Getting Started](#getting-started)  
+   - [Prerequisites](#prerequisites)  
+   - [Installation](#installation)  
+   - [Environment Variables](#environment-variables)  
+   - [Running Locally](#running-locally)  
+   - [Deployment](#deployment)  
+4. [How It Works](#how-it-works)  
+5. [Contributing](#contributions)  
 
 ---
 
+## Features
+
+- **Game Tracking**  
+  Organize your games by current, planned, and completed statuses.
+
+- **Journal Entries**  
+  Log your play sessions with custom notes and progress updates.
+
+- **Game Info**  
+  Automatically fetch detailed data using the IGDB API.
+
+- **Visual Timeline**  
+  See your gaming history come to life.
+
+- **Responsive Design**  
+  Optimized for both desktop and mobile use.
+
+- **Authentication**  
+  Secure login with Better-Auth (email/password or Google/Discord).
+
+---
+
+## Tech Stack
+
+| Layer           | Technology                          |
+| --------------- | ----------------------------------- |
+| Framework       | Next.js (App Router)                |
+| Language        | TypeScript                          |
+| Styling         | Mantine UI + Tailwind CSS           |
+| Database        | MongoDB (via Mongoose)              |
+| Game Data       | IGDB API                            |
+| Auth            | Better-Auth                         |
+| Notifications   | Toast                               |
+| Icons           | Lucide + Tabler                     |
+| Deployment      | Vercel                              |
+
+---
 ## Getting Started
 
 Follow these steps to set up the project locally:
@@ -52,20 +80,54 @@ Follow these steps to set up the project locally:
     # or
     yarn install
 
-4. **Set up Enviroment Variables**:
-    Create a .env.local file in the root directory and add the following variables:
+### Environment Variables
+  Create a .env.local file in the root directory and add the following variables:
 
-    MONGODB_URI=your-mongodb-connection-string
+  ```
+    MONGODB_URI=your-mongodb-uri
+
     IGDB_CLIENT_ID=your-igdb-client-id
+
     IGDB_CLIENT_SECRET=your-igdb-client-secret
+
     NEXT_PUBLIC_BASE_URL=http://localhost:3000
+```
 
-## **Features:**
-  - **Detailed Game Information:** Learn more about the details of a game, like storylines, companies involved, and screenshots to view.
- - **Game Tracking:** Log games you're playing, completed, or plan to play.
- - **Journal Entries:** Add detailed journal entries for each game session.
- - **Responsive Design:** Works seamlessly on desktop and mobile devices.
+### Running Locally:
+   ```
+     npm run dev
+   ```
+  Then visit: http://localhost:3000
 
+## Deployment:
+
+  1. Push your project to GitHub
+  2. Connect your GitHub Repo to Vercel
+  3. Add your environment variables in the Vercel Dashboard
+  4. Deploy - Your app is now live!
+
+## How It Works:
+  1. Users sign in with Better-Auth.
+
+  2. Authenticated users can search for games using the IGDB API.
+  
+  3. Game sessions and journals are saved to MongoDB.
+  
+  4. Progress and history are displayed in the UI.
+
+## Contributions:
+
+1. Fork & create a branch:
+   ```bash
+   git checkout -b feature/my-new-tool
+   ```
+2. Implement your feature or fix.
+3. Add tests/documentation if needed.
+4. Open a pull request against `main`.
+
+---
+
+   
 ## Acknowledgements:
   - Data provided by [IGDB](https://www.igdb.com/api).
   - Icons by Lucide and Tabler.
