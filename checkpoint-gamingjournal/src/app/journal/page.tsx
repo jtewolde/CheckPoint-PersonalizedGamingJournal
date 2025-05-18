@@ -80,7 +80,7 @@ export default function Journal() {
         <Table.Tr key={entry._id}>
             <Table.Td className={classes.tableCell}>{entry.gameName}</Table.Td>
             <Table.Td className={classes.tableCell}>{entry.title}</Table.Td>
-            <Table.Td className={classes.tableCell}>{entry.content}</Table.Td>
+            <Table.Td className={`${classes.tableCell} ${classes.truncatedContent}`}>{entry.content}</Table.Td>
             <Table.Td className={classes.tableCell}>{entry.date}</Table.Td>
             <Table.Td className={classes.deleteButtonCell}>
 
