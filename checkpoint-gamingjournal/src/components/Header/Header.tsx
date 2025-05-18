@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { Burger, Container, Group, Paper, Drawer, Autocomplete, Image } from '@mantine/core';
+import { Burger, Container, Group, Paper, Drawer, Autocomplete, Image, Button } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import CheckPointLogo from '../../../public/CheckPointLogo.png';
 import classes from './Header.module.css';
@@ -12,7 +12,7 @@ import { useAuth } from '@/context/Authcontext';
 
 import toast from 'react-hot-toast';
 import { IconSearch } from '@tabler/icons-react';
-import { LogIn, UserRoundPlus } from 'lucide-react';
+import { LogIn, UserRoundPlus, LogOut } from 'lucide-react';
 import AvatarMenu from "../AvatarMenu/AvatarMenu";
 import { useState } from 'react';
 
@@ -87,6 +87,7 @@ export function Header() {
         {isAuthenticated ? (
           <Autocomplete
           className={classes.searchBar}
+          visibleFrom='sm'
           placeholder="Search for games"
           rightSection={<IconSearch size={24} color='black' style={{cursor: 'pointer'}} onClick={() => router.push(`/search?query=${encodeURIComponent(searchQuery)}`)}/>}
           value={searchQuery}
@@ -146,7 +147,32 @@ export function Header() {
                 <Link href="/dashboard" onClick={close} className={`${classes.mobileLink} ${pathname === '/dashboard' ? classes.active : ''}`}>Dashboard</Link>
                 <Link href="/library" onClick={close} className={`${classes.mobileLink} ${pathname === '/library' ? classes.active : ''}`}>Library</Link>
                 <Link href="/journal" onClick={close} className={`${classes.mobileLink} ${pathname === '/journal' ? classes.active : ''}`}>Journal</Link>
-                <button onClick={handleSignOut} className={classes.link}>Log Out</button>
+                <Button onClick={handleSignOut} className={classes.mobileSignOutButton} style={{cursor:"pointer"}} rightSection={<LogOut size={16} />}>Log Out </Button>
+
+                <Autocomplete
+                  className={classes.searchBar}
+                  label='Search For Games'
+                  color='black'
+                  placeholder="Search for games"
+                  rightSection={<IconSearch size={24} color='black' style={{cursor: 'pointer'}} onClick={() => router.push(`/search?query=${encodeURIComponent(searchQuery)}`)}/>}
+                  value={searchQuery}
+                  onChange={handleSearch} // Update the search query state
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && searchQuery.trim() !== '') {
+                      router.push(`/search?query=${encodeURIComponent(searchQuery)}`); // Navigate to the search results page
+                    }
+                  }}
+                  data={searchResults.map((game) => ({
+                    value: game.name,
+                    label: game.name,
+                  }))} // Map search results to Autocomplete options
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    const inputValue = (event.target as HTMLInputElement).value;
+                    router.push(`/search?query=${encodeURIComponent(inputValue)}`); // Navigate to the search results page
+                  }}
+                />
+
               </>
             ) : (
               <>

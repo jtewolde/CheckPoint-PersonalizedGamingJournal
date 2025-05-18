@@ -284,7 +284,7 @@ export default function GameDetails() {
               <Button
                 variant="filled"
                 color="#d8070b"
-                size="lg"
+                size="md"
                 radius="xl"
                 className={classes.button}
                 rightSection={<Delete />}

@@ -13,8 +13,6 @@ import { useState, useEffect } from 'react';
 import classes from './page.module.css';
 import { useAuth } from '@/context/Authcontext';
 
-import Carousel from 'react-multi-carousel';
-
 
 export default function Home() {
   const router = useRouter();

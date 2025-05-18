@@ -37,22 +37,44 @@
   justify-self: center;
 }
 
+
 @media screen and (max-width: 768px){
   .searchBar {
     width: 100%;
-    max-width: 350px;
+    max-width: 400px;
     margin-left: 0;
     justify-self: center;
     position: relative;
+  }
+
+  .searchBar label{
+    color: black;
+    font-family: 'Poppins';
+    text-align: left;
+    font-weight: bold;
+    margin-top: 0.4rem;
+  }
+
+    /* Header.module.css */
+  .searchBar :global(input) {
+    background-color: #ffffff; /* example: dark background */
+    color: rgb(0, 0, 0);              /* input text color */
+    border: 1px solid #000000;    /* optional border */
+  }
+
+  .searchBar :global(.mantine-Autocomplete-dropdown) {
+    background-color: #dcdbdb; /* dropdown background */
+    color: white;              /* dropdown text color */
   }
 }
 
 @media screen and (max-width: 768px) {
   .logo {
-    width: 120px;
+    width: 150px;
     height: auto;
     object-fit: contain;
     margin-left: 0; /* Keep consistent margin */
+    
   }
 }
 
@@ -99,7 +121,8 @@
 }
 
 .mobileSignInButton,
-.mobileSignUpButton {
+.mobileSignUpButton,
+.mobileSignOutButton {
   display: block;
   line-height: 1;
   padding: 8px 12px;
@@ -130,6 +153,13 @@
   background-color: #e81b1b; /* Darker red on hover */
 }
 
+.mobileSignOutButton {
+  background-color: #e3101e; /* Red background for Sign Up */
+}
+
+.mobileSignOutButton:hover {
+  background-color: #aa1313; /* Darker red on hover */
+}
 
 .guestLinks{
   display: flex;

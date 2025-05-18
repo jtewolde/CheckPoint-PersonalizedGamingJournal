@@ -8,7 +8,7 @@ import classes from './journal.module.css';
 import { Table, Button, LoadingOverlay, Overlay } from '@mantine/core';
 
 import toast from 'react-hot-toast';
-import { FilePlus, DeleteIcon } from 'lucide-react';
+import { FilePlus, DeleteIcon, Eye } from 'lucide-react';
 
 export default function Journal() {
     // State variables for the journal entries
@@ -83,14 +83,30 @@ export default function Journal() {
             <Table.Td className={classes.tableCell}>{entry.content}</Table.Td>
             <Table.Td className={classes.tableCell}>{entry.date}</Table.Td>
             <Table.Td className={classes.deleteButtonCell}>
+
+                <Button
+                    className={classes.viewButton}
+                    onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}
+                    color="blue"
+                    radius="lg"
+                    variant="filled"
+                    style={{ marginRight: 8 }}
+                    rightSection={<Eye />}
+                >
+                    View
+                </Button>
+
                 <Button
                     className={classes.deleteButton}
                     onClick={() => deleteJournalEntry(entry._id, entry.gameId)}
                     rightSection={<DeleteIcon />}
+                    radius='lg'
                 >
                     Delete
                 </Button>
+
             </Table.Td>
+
         </Table.Tr>
     ));
 
@@ -126,7 +142,7 @@ export default function Journal() {
                                 <Table.Th className={classes.tableHeader}>Title</Table.Th>
                                 <Table.Th className={classes.tableHeader}>Content</Table.Th>
                                 <Table.Th className={classes.tableHeader}>Date</Table.Th>
-                                <Table.Th className={classes.tableHeader}>Delete Entry</Table.Th>
+                                <Table.Th className={classes.tableHeader}>View/Delete Entry</Table.Th>
                             </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>{rows}</Table.Tbody>

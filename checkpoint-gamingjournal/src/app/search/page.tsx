@@ -64,10 +64,10 @@ export default function SearchResults() {
     <div className={classes.wrapper} >
       <h1 className={classes.searchText}>Search Results for "{query}"</h1>
         <h2 className={classes.numberText}>{length} Games:</h2>
-        <SimpleGrid cols={5} spacing='sm' verticalSpacing='md'>
-          {games.map((game) => (
-            <div key={game.id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game.id}`) }} >
 
+        <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>
+          {games.map((game) => (
+            <div className={classes.gameContainer} key={game.id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game.id}`) }} >
               <img
                 src={
                   game.cover
@@ -75,7 +75,6 @@ export default function SearchResults() {
                     : PlaceHolderImage.src
                 }
                 alt={game.name}
-                style={{ width: '155px', height: '200px', objectFit: 'cover', borderRadius: '8px' }}
                 className={classes.gameImage}
               />
               <p className={classes.gameName}>{game.name} </p>
