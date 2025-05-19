@@ -1,0 +1,19 @@
+.background{
+    background: linear-gradient(to right, #232526, #808385);
+}
+
+.wrapper {
+  padding-top: calc(var(--mantine-spacing-xl) * 2);
+  padding-bottom: calc(var(--mantine-spacing-xl) * 2);
+  min-height: 650px;
+}
+
+.title{
+    padding-bottom: 2rem;
+    font-family: 'Poppins';
+    color: white;
+}
+
+.accordion{
+    font-family: 'Poppins';
+}

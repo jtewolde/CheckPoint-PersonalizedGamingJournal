@@ -160,7 +160,7 @@ export default function GameDetails() {
         throw new Error('Failed to remove game from library');
       }
 
-      toast.success('Game removed from your library!')
+      toast.error('Game removed from your library!')
       setIsInLibrary(false); // Update the state to show that the game is not in the user's library
     } catch (error) {
       console.error('Error removing game from library:', error);

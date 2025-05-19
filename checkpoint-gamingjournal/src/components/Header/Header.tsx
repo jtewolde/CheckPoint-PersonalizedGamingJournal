@@ -147,7 +147,7 @@ export function Header() {
                 <Link href="/dashboard" onClick={close} className={`${classes.mobileLink} ${pathname === '/dashboard' ? classes.active : ''}`}>Dashboard</Link>
                 <Link href="/library" onClick={close} className={`${classes.mobileLink} ${pathname === '/library' ? classes.active : ''}`}>Library</Link>
                 <Link href="/journal" onClick={close} className={`${classes.mobileLink} ${pathname === '/journal' ? classes.active : ''}`}>Journal</Link>
-                <Button onClick={handleSignOut} className={classes.mobileSignOutButton} style={{cursor:"pointer"}} rightSection={<LogOut size={16} />}>Log Out </Button>
+                <AvatarMenu />
 
                 <Autocomplete
                   className={classes.searchBar}
