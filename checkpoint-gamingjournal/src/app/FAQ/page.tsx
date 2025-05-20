@@ -1,6 +1,6 @@
 'use client'
 
-import { Accordion, Container, Title } from '@mantine/core';
+import { Accordion, Container, Title, Overlay } from '@mantine/core';
 import classes from './FAQ.module.css'
 
 // Data that has the frequently asked questions and answers to use in the FAQ UI
@@ -44,6 +44,12 @@ export default function FAQ() {
 
         <div className={classes.background}>
 
+            <Overlay
+                gradient="linear-gradient(180deg,rgb(67, 67, 67) 30%,rgb(112, 112, 112) 90%)"
+                opacity={0.50}
+                zIndex={0}
+            />
+
             <Container className={classes.wrapper} size='sm'>
 
                 <Title ta='center' className={classes.title}>
@@ -51,7 +57,9 @@ export default function FAQ() {
                 </Title>
 
                 <Accordion variant='separated' radius='xl' className={classes.accordion}>
-                    {items}
+                    <div className={classes.accordionItems} >
+                        {items}
+                    </div>
                 </Accordion>
 
             </Container>

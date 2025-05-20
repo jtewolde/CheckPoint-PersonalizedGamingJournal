@@ -1,19 +1,36 @@
 .background{
-    background: linear-gradient(to right, #232526, #808385);
+  min-height: 100vh;
+  background-image: url('../../../public/FAQBackground.jpg');
+  position: relative;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  font-family: 'Poppins', sans-serif;
 }
 
 .wrapper {
   padding-top: calc(var(--mantine-spacing-xl) * 2);
   padding-bottom: calc(var(--mantine-spacing-xl) * 2);
-  min-height: 650px;
+  min-height: 100vh;
+  z-index: 1;
 }
 
 .title{
-    padding-bottom: 2rem;
+    padding-bottom: 5rem;
     font-family: 'Poppins';
     color: white;
 }
 
 .accordion{
     font-family: 'Poppins';
+}
+
+.accordionItems {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
