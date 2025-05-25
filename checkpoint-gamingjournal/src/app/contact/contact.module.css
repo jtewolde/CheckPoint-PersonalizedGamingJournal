@@ -25,6 +25,7 @@
   flex-direction: column;
   z-index: 1;
   gap: 1.5rem;
+  opacity: 95%;
 }
 
 /* Title and description */
