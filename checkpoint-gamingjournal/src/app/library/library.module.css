@@ -20,9 +20,26 @@
     font-size: 1.5rem;
     font-weight: 200;
     color: rgb(208, 205, 205); /* Dark text for contrast */
-    margin-bottom: 3.5rem;
+    margin-bottom: 1.5rem;
     font-family: 'Inter';
     font-style: italic;
+}
+
+.filterButton{
+  width: 16%;
+  margin-bottom: 1.5rem;
+  border: 1px solid black;
+}
+
+.noGamesText{
+  font-size: 1.5rem;
+  font-weight: 200;
+  color: rgb(208, 205, 205); /* Dark text for contrast */
+  margin-bottom: 2.5rem;
+  font-family: 'Poppins';
+  font-style: italic;
+  text-align: center;
+  margin-top: 2rem;
 }
 
 .imageContainer{
