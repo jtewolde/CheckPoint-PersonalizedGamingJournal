@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState, useEffect, use } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LoadingOverlay, SimpleGrid, Image, Paper } from '@mantine/core';
+import { LoadingOverlay, SimpleGrid, Image, Paper, SemiCircleProgress, Text } from '@mantine/core';
 import { authClient } from '@/lib/auth-client';
 
 import PlaceHolderImage from "../../../public/no-cover-image.png"
-import { IconDeviceGamepad, IconPlayerPause, IconBookmark, IconCheck, IconQuestionMark } from '@tabler/icons-react';
+import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconBookmarkFilled, IconCheck, IconQuestionMark, IconClipboardList, IconBookmarksFilled, IconClipboardListFilled } from '@tabler/icons-react';
 import classes from './dashboard.module.css';
 
 export default function Dashboard() {
@@ -154,26 +154,33 @@ export default function Dashboard() {
   return (
     <div className={classes.wrapper}>
 
-      <h1 className={classes.welcomeText}> Welcome {userName}! </h1>
+      <h1 className={classes.welcomeText}> Welcome back, {userName}! </h1>
 
       <div className={classes.statCards}>
+
+        <h1 className={classes.profileStats}>Profile Stats:</h1>
 
         <SimpleGrid cols={4} spacing="lg" className={classes.statusGrid}>
 
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+            <IconClipboardListFilled size={40} color='#f018e8' />
             <h3 className={classes.statusTitle}>Progress Summary</h3>
-            <p className={classes.statusCount}>{numOfGames} Games Total</p>
-            <p className={classes.statusCount}>{completedPercentage}% Completed</p>
+            <p className={classes.statusTotalCount}>Total Games: {numOfGames}</p>
+
+            <SemiCircleProgress value={completedPercentage} filledSegmentColor='#f018e8' size={170} thickness={15} 
+              label={<Text c='#f018e8' component='span' size='lg' fw={600}>{completedPercentage}% Completed</Text>}>
+            </SemiCircleProgress>
+
           </Paper>
 
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
-            <IconDeviceGamepad size={40} color="blue" />
+            <IconDeviceGamepad3Filled size={40} color="blue" />
             <h3 className={classes.statusTitle}>Playing</h3>
             <p className={classes.statusCount}>{playGamesLength}</p>
           </Paper>
 
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
-            <IconBookmark size={40} color="green" />
+            <IconBookmarkFilled size={40} color="green" />
             <h3 className={classes.statusTitle}>Plan to Play</h3>
             <p className={classes.statusCount}>{planToPlayLength}</p>
           </Paper>
@@ -191,7 +198,7 @@ export default function Dashboard() {
           </Paper>
 
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
-            <IconPlayerPause size={40} color="red" />
+            <IconPlayerPauseFilled size={40} color="red" />
             <h3 className={classes.statusTitle}>On Hold</h3>
             <p className={classes.statusCount}>{onHoldLength}</p>
           </Paper>
@@ -200,7 +207,7 @@ export default function Dashboard() {
 
       </div>
       
-      <h1 className={classes.trendingText}>Top Trending Games from Last 30 Days:</h1>
+      <h1 className={classes.trendingText}>Top Trending Games from Last 45 Days:</h1>
 
       <div className={classes.trendingGames}>
         
@@ -244,7 +251,7 @@ export default function Dashboard() {
           {recentEntries.length === 0 ? (
               <p>No recent journal entries found.</p>
           ) : (
-              <SimpleGrid cols={4} spacing="lg" className={classes.entriesGrid}>
+              <SimpleGrid cols={5} spacing="lg" className={classes.entriesGrid}>
                   {recentEntries.map((entry) => (
                       <div key={entry._id} className={classes.entryCard} onClick={() => router.push('/journal')}>
                           <h3 className={classes.entryGame}>{entry.gameName}</h3>

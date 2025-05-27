@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenAI } from "@google/genai"
+import { streamText } from "ai";
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
+
 
 // To make sure the the API Key for Gemini is in the .env file
 if(!process.env.GEMINI_API_KEY){
@@ -7,16 +9,27 @@ if(!process.env.GEMINI_API_KEY){
 }
 
 // Initialize Gemini with API Key
-const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY});
+const google = createGoogleGenerativeAI({
+    apiKey: process.env.GEMINI_API_KEY
+})
+
+const model = google('gemini-2.0-flash')
 
 export async function POST(req: NextRequest){
     try{
-        const {prompt, history} = await req.json();
+        const { messages } = await req.json();
 
-        // Prepare chat history if needed
-        const chatHistory = history || [];
+        const result = streamText({
+            model,
+            system: "You are a helpful assistant.",
+            messages,
+        });
 
-        const result
+        return result.toDataStreamResponse();
+
+    } catch (error) {
+        console.error("Gemini API error:", error);
+        return NextResponse.json({ error: "Failed to get response from Gemini." }, { status: 500 });
     }
 }
 
