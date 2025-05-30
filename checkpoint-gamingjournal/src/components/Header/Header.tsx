@@ -117,6 +117,7 @@ export function Header() {
                 <Link href="/dashboard" className={`${classes.link} ${pathname === '/dashboard' ? classes.active : ''}`}>Dashboard</Link>
                 <Link href="/library" className={`${classes.link} ${pathname === '/library' ? classes.active : ''}`}>Library</Link>
                 <Link href="/journal" className={`${classes.link} ${pathname === '/journal' ? classes.active : ''}`}>Journal</Link>
+                <Link href="/chat" className={`${classes.link} ${pathname === '/chat' ? classes.active : ''}`}>Chat</Link>
                 <AvatarMenu />
               </>
             ) : (
@@ -147,6 +148,7 @@ export function Header() {
                 <Link href="/dashboard" onClick={close} className={`${classes.mobileLink} ${pathname === '/dashboard' ? classes.active : ''}`}>Dashboard</Link>
                 <Link href="/library" onClick={close} className={`${classes.mobileLink} ${pathname === '/library' ? classes.active : ''}`}>Library</Link>
                 <Link href="/journal" onClick={close} className={`${classes.mobileLink} ${pathname === '/journal' ? classes.active : ''}`}>Journal</Link>
+                <Link href="/chat" className={`${classes.link} ${pathname === '/chat' ? classes.active : ''}`}>Chat</Link>
                 <AvatarMenu />
 
                 <Autocomplete

@@ -21,7 +21,7 @@ export async function POST(req: NextRequest){
 
         const result = streamText({
             model,
-            system: "You are a helpful assistant.",
+            system: "You are a helpful assistant that knows about video games. Give out knowledgable but brief responses to the suer",
             messages,
         });
 

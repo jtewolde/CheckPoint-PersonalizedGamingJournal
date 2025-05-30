@@ -52,7 +52,16 @@ export default function signInPage(){
           toast.success("Login In Successful!" );
   
         },
-        onError: () => {
+        onError: (ctx) => {
+
+          // If the user's email isn't vertified, an 403 error will occur
+          if(ctx.error.status === 403){
+            console.log(ctx.error)
+            toast.error("Please verify your email address! ")
+          }
+
+          console.log(ctx.error.message)
+
           setLoading(false);
           toast.error("Login Failed, Invalid Email or Password ")
         }

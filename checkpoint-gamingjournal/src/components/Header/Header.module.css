@@ -31,7 +31,7 @@
 .searchBar {
   width: 100%; /* Ensure it spans the available width */
   max-width: 520px; /* Limit the maximum width */
-  margin-left: 5rem; /* Add spacing between the logo and the search bar */
+  margin-left: 3rem; /* Add spacing between the logo and the search bar */
   padding: 0.5rem; /* Add padding for better spacing */
   border-radius: 8px; /* Add rounded corners */
   justify-self: center;
@@ -102,7 +102,7 @@
   flex-direction: row;
   align-items: center; /* Center horizontally */
   justify-content: center;
-  gap: 20px;
+  gap: 10px;
   text-align: center;
 }
 
@@ -237,7 +237,7 @@
   border-bottom: 2px solid black;
   border-radius: 0;
   color: black;
-  font-weight: bold;
+  font-weight: bolder;
 }
 
 .mobileLink:active{

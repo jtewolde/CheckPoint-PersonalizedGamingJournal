@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ai-sdk/google": "^1.2.18",
+    "@ai-sdk/react": "^1.2.12",
     "@google/genai": "^1.0.1",
     "@mantine/carousel": "^7.17.5",
     "@mantine/core": "^7.17.5",
@@ -30,7 +31,9 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",
+    "react-markdown": "^10.1.0",
     "react-multi-carousel": "^2.8.6",
+    "resend": "^4.5.1",
     "uuid": "^11.1.0"
   },
   "devDependencies": {

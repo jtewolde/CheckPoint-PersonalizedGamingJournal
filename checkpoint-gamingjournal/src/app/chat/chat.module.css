@@ -1,0 +1,67 @@
+.container{
+    padding: 2rem;
+    min-height: 100vh;
+    background: linear-gradient(to right, #232526, #414345);
+    display: flex;
+    flex-direction: column;
+    font-family: 'Poppins';
+}
+
+.headerTitle{
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 1.0rem;
+    align-self: center;
+    font-family: 'Poppins';
+    color: #dfdede;
+    margin-bottom: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.description{
+    font-size: 1.0rem;
+    font-weight: 500;
+    margin-bottom: 1.0rem;
+    align-self: center;
+    font-family: 'Poppins';
+    color: rgb(210, 207, 207);
+    margin-bottom: 2rem;
+}
+
+.chatRoom{
+    justify-content: center;
+    justify-self: center;
+    align-self: center;
+    width: 75%;
+    height: auto;
+    background: transparent; /* Dark background */
+    border-radius: 16px;
+    border: 1px solid #444;
+    padding: 16px;
+    margin-bottom: 16px;
+    overflow-y: auto;
+}
+
+.form{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.askQuestionText{
+    width: 50%;
+    justify-content: center;
+    justify-self: center;
+    align-self: center;
+    height: auto;
+    background-color: #232526;
+    color: #444
+}
+
+.askQuestionText input{
+    background: #232526;      /* background color */
+    color: #fff;              /* text color */
+}

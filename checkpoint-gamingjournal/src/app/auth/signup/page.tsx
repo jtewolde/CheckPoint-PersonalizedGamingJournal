@@ -46,7 +46,7 @@ export default function signInPage(){
       },
       onSuccess: () => {
         setLoading(false);
-        toast.success("Account Created Successfully" );
+        toast.success("Account Created Successfully, A Vertification link has been sent to your email" );
         router.push("/auth/signin")
 
       },

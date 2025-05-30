@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { bearer } from "better-auth/plugins";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
+import { resend } from "./resend";
 import db from "./db";
 
 export const auth = betterAuth({
@@ -18,7 +19,22 @@ export const auth = betterAuth({
         enabled: true,
         autoSignIn: true,
         minPasswordLength: 8,
-        maxPasswordLength: 128
+        maxPasswordLength: 128,
+        requireEmailVerification: true
+    },
+
+    emailVerification: {
+        sendOnSignUp: true,
+        autoSignInAfterVerification: true,
+        sendVerificationEmail: async ( { user, url}) => {
+            console.log("Email Vertification for: ", user.email)
+            await resend.emails.send({
+                from: "Acme <onboarding@resend.dev>",
+                to: user.email,
+                subject: "CheckPoint Email Vertification",
+                html: `Please click the link to verify your email to use CheckPoint: ${url}`,
+            });
+        }
     },
 
     account: {
