@@ -19,6 +19,8 @@
     "@mantine/notifications": "^7.17.5",
     "@mantinex/dev-icons": "^1.1.0",
     "@tabler/icons-react": "^3.31.0",
+    "@upstash/ratelimit": "^2.0.5",
+    "@vercel/kv": "^3.0.0",
     "ai": "^4.3.16",
     "bcryptjs": "^3.0.2",
     "better-auth": "^1.2.5",

@@ -1,8 +1,8 @@
-// API Call for getting minimum details for games during searching
+// API Call for getting top 5 popular games to display on dashboard
 
 import { NextRequest, NextResponse } from 'next/server';
 
-const IGDB_URL = 'https://api.igdb.com/v4/games';
+const IGDB_URL = 'https://api.igdb.com/v4/popularity_primitives';
 
 let cachedAccessToken: string | null = null; // Store the access token
 let tokenExpirationTime: number | null = null; // Store the token expiration time (in UNIX timestamp)
@@ -52,12 +52,10 @@ export async function GET(req: NextRequest) {
 
     // Calculate the date range for the last 30 days
     const now = new Date();
-    const thirtyDaysAgo = Math.floor((now.getTime() - 30 * 24 * 60 * 60 * 1000) / 1000); // 45 days ago in seconds
+    const thirtyDaysAgo = Math.floor((now.getTime() - 45 * 24 * 60 * 60 * 1000) / 1000); // 45 days ago in seconds
 
     // Construct the query body
-    const body = searchQuery
-      ? `fields name, summary, genres, cover.url, version_title; where version_parent = null & name ~ *"${searchQuery}"*; sort rating desc; limit ${limit}; offset ${offset};`
-      : `fields name, summary, genres, cover.url, version_title; where rating >= 80 & first_release_date >= ${thirtyDaysAgo} & first_release_date <= ${Math.floor(now.getTime() / 1000)} & cover != null; sort rating desc; limit 6; offset ${offset};`;
+    const body = 'fields game_id,value,popularity_type; sort value desc; limit 6; where popularity_type = 1;'
 
     const igdbRes = await fetch(IGDB_URL, {
       method: 'POST',
@@ -78,7 +76,34 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const games = await igdbRes.json();
+    const popularGames = await igdbRes.json();
+    const gameIds = popularGames.map((g: any) => g.game_id).filter(Boolean);
+
+    if (gameIds.length === 0) {
+      return NextResponse.json([], { status: 200 });
+    }
+
+    // Step 2: Fetch the game details like name and cover images for those IDs
+    const gamesRes = await fetch('https://api.igdb.com/v4/games', {
+      method: 'POST',
+      headers: {
+        'Client-ID': process.env.IGDB_API_CLIENT_ID!,
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'text/plain',
+      },
+      body: `fields id, name, cover.url, first_release_date; where id = (${gameIds.join(',')});`,
+    });
+
+    if (!gamesRes.ok) {
+      const errorData = await gamesRes.json();
+      console.error("IGDB API Error (games):", errorData);
+      return NextResponse.json(
+        { message: 'Failed to fetch game details from IGDB', error: errorData },
+        { status: gamesRes.status }
+      );
+    }
+
+    const games = await gamesRes.json();
     return NextResponse.json(games, { status: 200 });
   } catch (err: any) {
     console.error("Error:", err);

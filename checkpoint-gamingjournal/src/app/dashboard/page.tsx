@@ -15,6 +15,7 @@ export default function Dashboard() {
 
   const [games, setGames] = useState<any[]>([]); // State to store games data
   const [playingGames, setPlayingGames] = useState<any[]>([]); // State to store games that the user is currently playing
+  const [popularGames, setPopularGames] = useState<any[]>([]);
 
   const [playGamesLength, setPlayGamesLength] = useState(0) // State to store length of playing games user has
   const [noStatusLength, setNoStatusLength] = useState(0) // State to store length of games user has that has no status
@@ -46,22 +47,22 @@ export default function Dashboard() {
 
   // Fetch games data from the API
   useEffect(() => {
-    const fetchGames = async () => {
+    const fetchPopularGames = async () => {
       try {
-        const res = await fetch('/api/igdb/games');
+        const res = await fetch('/api/igdb/populargames');
         if (!res.ok) {
-          throw new Error('Failed to fetch games');
+          throw new Error('Failed to fetch popular games');
         }
         const data = await res.json();
         setGames(data); // Store the games data in state
         console.log(data);
       } catch (error) {
-        console.error('Error fetching games:', error);
+        console.error('Error fetching popular games:', error);
       } finally {
         setLoading(false); // Set loading to false after fetching
       }
     };
-    fetchGames();
+    fetchPopularGames();
     setHasMounted(true);
   }, []);
 
@@ -207,7 +208,7 @@ export default function Dashboard() {
 
       </div>
       
-      <h1 className={classes.trendingText}>Top Trending Games from Last 45 Days:</h1>
+      <h1 className={classes.trendingText}>Most Popular Visited Games on IGDB Website:</h1>
 
       <div className={classes.trendingGames}>
         

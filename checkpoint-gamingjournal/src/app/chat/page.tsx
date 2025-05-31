@@ -25,26 +25,43 @@ export default function Chat() {
     const [user, setUser] = useState<{ name?: string; image?: string } | null>(null);
     
     
-        // Fetch session info on mount to get the user's name and image for chatroom
-        useEffect(() => {
-        const fetchSession = async () => {
-            const session = await authClient.getSession(); // Get current session
-            if (session?.data?.user) {
-                setUser({
-                    name: session.data.user.name,
-                    image: session.data.user.image || undefined,
-                });
-            }
-        };
+    // Fetch session info on mount to get the user's name and image for chatroom
+    useEffect(() => {
+    const fetchSession = async () => {
+        const session = await authClient.getSession(); // Get current session
+        if (session?.data?.user) {
+            setUser({
+                name: session.data.user.name,
+                image: session.data.user.image || undefined,
+            });
+        }
+    };
 
         fetchSession();
     }, []);
 
-    // Function to handle sending message to the Gemini AI
+    // Function to handle sending message to the Gemini AI and if rate limit is exceeded, send out message
     const handleSend = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!input.trim()) return;
-        await append({ role: 'user', content: input });
+        try {
+            await append({ role: 'user', content: input });
+        } catch (error: any) {
+            // If the error is a rate limit error, show it as a Gemini message
+            if (error?.response?.status === 429) {
+                // Add a Gemini error message to the chat
+                await append({
+                    role: 'assistant',
+                    content: "⚠️ Rate limit exceeded. Please try again in a minute.",
+                });
+            } else {
+                // Add a generic Gemini error message
+                await append({
+                    role: 'assistant',
+                    content: "⚠️ Sorry, something went wrong. Please try again later.",
+                });
+            }
+        }
         setInput('');
     };
 

@@ -2,6 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { streamText } from "ai";
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 
+import { Ratelimit } from '@upstash/ratelimit';
+import { kv } from '@vercel/kv';
+
+
+// Create ratelimit variable to put a limit on amount of api calls for Gemini to 5 per min
+const ratelimit = new Ratelimit({
+    redis: kv,
+    limiter: Ratelimit.slidingWindow(5, '1m'),
+})
+
+export const config = {
+    runtime: 'edge'
+}
 
 // To make sure the the API Key for Gemini is in the .env file
 if(!process.env.GEMINI_API_KEY){
@@ -16,6 +29,23 @@ const google = createGoogleGenerativeAI({
 const model = google('gemini-2.0-flash')
 
 export async function POST(req: NextRequest){
+
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '127.0.0.1';
+
+    // Check rate limit before processing
+    const { success, limit, remaining, reset } = await ratelimit.limit(ip);
+    if (!success) {
+        return NextResponse.json(
+            {
+                error: "Rate limit exceeded. Please try again later.",
+                limit,
+                remaining,
+                reset
+            },
+            { status: 429 }
+        );
+    }
+
     try{
         const { messages } = await req.json();
 
