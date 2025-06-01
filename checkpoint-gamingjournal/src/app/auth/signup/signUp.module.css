@@ -1,14 +1,18 @@
 .wrapper {
-  min-height: 900px;
+  min-height: 100vh;
   background-size: cover;
-  background-image: url('../../../../public/signupImage.jpg');
+  background-image: url('../../../../public/ContactBackground.jpg');
+
 }
 
 .form {
-  border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
+  justify-self: flex-end;
+  border-left: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
   min-height: 900px;
   max-width: 450px;
   padding-top: 80px;
+  padding-right: 60px;
+  padding-left: 40px;
   background-color: whitesmoke;
   font-family: 'Poppins';
   justify-content: center;

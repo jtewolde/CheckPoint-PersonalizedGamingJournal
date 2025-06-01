@@ -1,9 +1,8 @@
 
-
 import { Mail } from "lucide-react";
 import { IconBrandLinkedin } from "@tabler/icons-react";
 import { ActionIcon, Group, Text } from "@mantine/core";
-import CheckPointLogo from '../../../public/CheckPointLogo.png';
+import CheckPointLogo from '../../../public/CheckPointSmall.png';
 import Link from "next/link";
 import Image from "next/image";
 import classes from './Footer.module.css';
@@ -12,6 +11,7 @@ export function Footer() {
 
   return (
     <div className={classes.footer}>
+      
       <div className={classes.inner}>
 
         {/* Left side: IGDB + copyright */}

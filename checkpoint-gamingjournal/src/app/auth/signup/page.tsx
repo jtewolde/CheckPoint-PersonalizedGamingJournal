@@ -1,6 +1,6 @@
 'use client'
 
-import {Anchor, Button, Checkbox, Paper, PasswordInput, Text, TextInput, Title, Group, Divider} from '@mantine/core';
+import {Anchor, Button, Overlay, Paper, PasswordInput, Text, TextInput, Title, Group, Divider} from '@mantine/core';
 import toast from 'react-hot-toast';
 
 import { useState, useEffect } from 'react';
@@ -85,7 +85,8 @@ export default function signInPage(){
 
     return(
       <div className={classes.wrapper}>
-        <Paper className={classes.form} radius={0} p={30}>
+
+        <Paper className={classes.form} radius={0}  withBorder>
           <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
             Welcome to CheckPoint! 
           </Title>

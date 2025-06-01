@@ -1,5 +1,5 @@
 .header {
-  height: 56px;
+  height: 65px;
   background-color: #DDE0E0;
   display: flex; /* Ensure flexbox is applied */
   justify-content: space-between;
@@ -20,18 +20,19 @@
 }
 
 .logo {
-  width: 160px;
+  width: 170px;
   height: auto;
   object-fit: contain;
   margin-top: 0.4rem;
-  margin-left: 0; /* Remove negative margin */
+  margin-left: -5rem; /* Remove negative margin */
+  justify-self: flex-start;
   justify-content: flex-start;
 }
 
 .searchBar {
   width: 100%; /* Ensure it spans the available width */
-  max-width: 520px; /* Limit the maximum width */
-  margin-left: 3rem; /* Add spacing between the logo and the search bar */
+  max-width: 550px; /* Limit the maximum width */
+  margin-left: 5rem; /* Add spacing between the logo and the search bar */
   padding: 0.5rem; /* Add padding for better spacing */
   border-radius: 8px; /* Add rounded corners */
   justify-self: center;
@@ -167,15 +168,28 @@
   gap: 16px;
 }
 
+.homeButton{
+  display: block;
+  line-height: 1;
+  padding: 8px 12px;
+  border: 2px solid black;
+  text-decoration: none;
+  color: black;
+  background-color: transparent;
+  font-size: 20px;
+  font-weight: 400;
+  font-family: 'Poppins';
+  transition: background-color 0.3s, color 0.3s;
+}
+
 .signUpButton{
   display: block;
   line-height: 1;
   padding: 8px 12px;
-  border-radius: var(--mantine-radius-sm);
   border: 2px solid black;
   text-decoration: none;
   color: black;
-  background-color: #c6c1c3;
+  background-color: #d8d4d6;
   font-size: 20px;
   font-weight: 400;
   font-family: 'Poppins';
@@ -186,7 +200,6 @@
   display: block;
   line-height: 1;
   padding: 8px 12px;
-  border-radius: var(--mantine-radius-sm);
   border: 2px solid black;
   text-decoration: none;
   color: black;
@@ -221,6 +234,11 @@
   font-weight: bold;
 }
 
+.homeButton:hover{
+  background-color: rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+}
+
 .signInButton:hover {
   background-color: rgba(0, 0, 0, 0.1);
   background-color: #2aed95;
@@ -235,9 +253,9 @@
 
 .active {
   border-bottom: 2px solid black;
-  border-radius: 0;
   color: black;
   font-weight: bolder;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .mobileLink:active{

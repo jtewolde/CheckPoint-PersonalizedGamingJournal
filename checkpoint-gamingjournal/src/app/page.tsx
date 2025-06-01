@@ -37,7 +37,7 @@ export default function Home() {
   return (
     <div className= {classes.hero}>
       <Overlay
-        gradient="linear-gradient(180deg, #1f1c2c 30%,rgb(46, 31, 116) 90%)"
+        gradient="linear-gradient(180deg, #1f1c2c 30%,rgb(47, 45, 58) 90%)"
         opacity={0.80}
         zIndex={0}
       />
@@ -64,8 +64,8 @@ export default function Home() {
         </Transition>
 
 
-        <Button variant="filled" color='#2463C4' size="xl" radius="xl" className={classes.control} rightSection={<UserRoundPlus />} onClick={handleClick}>
-          Create an account to get started!
+        <Button variant="filled" color='#2463C4' size="lg" radius="xl" className={classes.control} rightSection={<UserRoundPlus />} onClick={handleClick}>
+          Create an account to join CheckPoint!
         </Button>
 
         <div className={classes.FeatureSection}>
