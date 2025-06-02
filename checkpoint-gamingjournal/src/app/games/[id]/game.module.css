@@ -1,6 +1,6 @@
 .wrapper {
     padding: 2rem;
-    background: linear-gradient(to top, #bdc3c7, #2c3e50);
+    background: linear-gradient(to top, #232526, #212931);
     min-height: 100vh;
   }
   
@@ -68,7 +68,7 @@
 
   .button{
     align-items: center;
-    font-family: 'Inter';
+    font-family: 'Poppins';
     font-weight: 400;
     margin-bottom: 5rem;
     position: relative;

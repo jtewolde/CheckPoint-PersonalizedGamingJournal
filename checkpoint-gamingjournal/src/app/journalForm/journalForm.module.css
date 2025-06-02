@@ -64,20 +64,19 @@
 }
 
 .submitButton {
-  width: 60%;
+  width: 25%;
   margin-top: auto;
   padding: 0.75rem;
   font-size: 1rem;
+  font-family: 'Inter';
   font-weight: bold;
-  background-color: #2463c4;
   color: rgb(255, 255, 255);
   align-self: center;
   border: 1px solid black;
-  border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #1e4fa3; /* Darker blue on hover */
+    background-color: #10d29e; /* Darker blue on hover */
   }
 }

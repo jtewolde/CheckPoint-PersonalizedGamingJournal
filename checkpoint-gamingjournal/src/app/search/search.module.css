@@ -1,6 +1,6 @@
 /* Wrapper for the entire search page */
 .wrapper {
-    background: linear-gradient(to top, #283048, #859398);
+    background: linear-gradient(to top, #283048, #232526);
     padding: 2rem; /* Add padding around the content */
     min-height: 100vh; /* Ensure the page takes up the full height */
     display: flex;

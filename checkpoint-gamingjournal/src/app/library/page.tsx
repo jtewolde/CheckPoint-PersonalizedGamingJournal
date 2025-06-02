@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { authClient } from '@/lib/auth-client';
 
 import classes from './library.module.css';
 
@@ -20,6 +21,18 @@ export default function Library(){
     const [selectedStatus, setSelectedStatus] = useState('all');
 
     const router = useRouter();
+
+    // Check If the user is authenticated, if not redirect to signin page
+    useEffect(() => {
+        const checkAuth = async () => {
+            const session = await authClient.getSession();
+            if (!session.data?.user) {
+                router.push('/auth/signin');
+            }
+        }
+        checkAuth();
+
+    }, [router]);
 
     useEffect(() => {
         const fetchUserGames = async () => {

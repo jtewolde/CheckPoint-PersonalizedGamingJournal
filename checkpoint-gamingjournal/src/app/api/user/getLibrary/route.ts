@@ -15,6 +15,7 @@ export async function GET(req: NextRequest){
         console.log(session)
 
         if(!session?.user) {
+            console.log("Unauthorized access attempt to get user's library");
             return NextResponse.json({ error: "Unauthorized"}, {status: 401});
         }
 

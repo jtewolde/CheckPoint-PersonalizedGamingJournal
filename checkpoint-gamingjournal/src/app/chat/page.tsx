@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect} from 'react'
+import { useRouter } from 'next/navigation';
 import { useChat } from '@ai-sdk/react'
 import { TextInput, Button, Loader, Avatar } from '@mantine/core'; 
 import Markdown from 'react-markdown';
@@ -11,7 +12,10 @@ import { authClient } from '@/lib/auth-client';
 import classes from './chat.module.css';
 
 export default function Chat() {
+    
     const [input, setInput] = useState('');
+    const router = useRouter();
+
     const { messages, append, isLoading } = useChat({
         initialMessages:[
             {
@@ -23,8 +27,19 @@ export default function Chat() {
     });
 
     const [user, setUser] = useState<{ name?: string; image?: string } | null>(null);
-    
-    
+
+    // Check If the user is authenticated, if not redirect to signin page
+    useEffect(() => {
+        const checkAuth = async () => {
+            const session = await authClient.getSession();
+            if (!session.data?.user) {
+                router.push('/auth/signin');
+            }
+        }
+        checkAuth();
+
+    }, [router]);
+
     // Fetch session info on mount to get the user's name and image for chatroom
     useEffect(() => {
     const fetchSession = async () => {

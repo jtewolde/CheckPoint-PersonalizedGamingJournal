@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+
 import { TextInput, Textarea, Button, Select, Overlay } from "@mantine/core";
 
 import toast from "react-hot-toast";
@@ -22,6 +24,18 @@ export default function JournalForm() {
   const [games, setGames] = useState<any[]>([]); // Store games data
   const [loading, setLoading] = useState(true);
   const [addToJournal, setAddtoJournal] = useState(false);
+
+  // Check If the user is authenticated, if not redirect to signin page
+    useEffect(() => {
+        const checkAuth = async () => {
+            const session = await authClient.getSession();
+            if (!session.data?.user) {
+                router.push('/auth/signin');
+            }
+        }
+        checkAuth();
+
+    }, [router]);
 
   // Fetch the user's library of games
   useEffect(() => {
@@ -168,7 +182,7 @@ export default function JournalForm() {
               radius="lg"
               size="lg"
               rightSection={<Send/>}
-              color="blue"
+              color='teal'
               style={{ marginTop: "1rem" }}
               loading={addToJournal}
             >

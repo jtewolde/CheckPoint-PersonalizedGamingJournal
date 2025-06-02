@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { authClient } from '@/lib/auth-client';
 
 import classes from './journal.module.css';
 
@@ -15,6 +16,14 @@ export default function Journal() {
     const [entries, setEntries] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
+
+    // Check if the user is authenticated, if not redirect to auth page
+    const checkAuth = async () => {
+        const session = await authClient.getSession();
+        if (!session.data?.user) {
+            router.push('/auth/signin');
+        }
+    }
 
     // Function to fetch journal entries
     const fetchEntries = async () => {
@@ -45,7 +54,8 @@ export default function Journal() {
 
     useEffect(() => {
         fetchEntries();
-    }, []);
+        checkAuth(); // Check authentication on component mount
+    }, [router]);
 
     // Function to delete a journal entry
     const deleteJournalEntry = async (journalEntryId: string, gameID: string) => {
@@ -89,7 +99,7 @@ export default function Journal() {
                     onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}
                     color="blue"
                     radius="lg"
-                    variant="filled"
+                    variant="light"
                     style={{ marginRight: 8 }}
                     rightSection={<Eye />}
                 >
@@ -101,6 +111,8 @@ export default function Journal() {
                     onClick={() => deleteJournalEntry(entry._id, entry.gameId)}
                     rightSection={<DeleteIcon />}
                     radius='lg'
+                    variant='light'
+                    color='red'
                 >
                     Delete
                 </Button>
@@ -118,7 +130,7 @@ export default function Journal() {
         <div className={classes.container}>
             <Overlay
                 gradient="linear-gradient(180deg,rgb(67, 67, 67) 30%,rgb(94, 94, 94) 90%)"
-                opacity={0.8}
+                opacity={0.5}
                 zIndex={0}
             />
 
@@ -126,6 +138,9 @@ export default function Journal() {
                 <h2 className={classes.journalTitle}>My Journal</h2>
 
                 <Button
+                    variant='filled'
+                    color='lime'
+                    size='md'
                     radius= 'lg'
                     className={classes.addButton}
                     onClick={() => router.push('/journalForm')}

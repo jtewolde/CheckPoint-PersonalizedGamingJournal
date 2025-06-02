@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { useParams, useRouter } from 'next/navigation';
+import { authClient } from '@/lib/auth-client';
+
 import toast from 'react-hot-toast';
 
 import { LoadingOverlay, Image, Button, Modal, Select, Badge} from '@mantine/core';
@@ -28,6 +30,18 @@ export default function GameDetails() {
   const [status, setStatus] = useState(''); // State to handle game status
   const [opened, {open, close} ] = useDisclosure(false);
   const router = useRouter();
+
+  // Check If the user is authenticated, if not redirect to signin page
+  useEffect(() => {
+      const checkAuth = async () => {
+          const session = await authClient.getSession();
+          if (!session.data?.user) {
+              router.push('/auth/signin');
+          }
+      }
+      checkAuth();
+
+  }, [router]);
 
   useEffect(() => {
     const fetchIGDBGameDetails = async () => {
@@ -76,15 +90,11 @@ export default function GameDetails() {
       }
     };
 
-    
-
     if (id) {
       fetchIGDBGameDetails();
       checkIfInLibrary();
     }
   }, [id]);
-
-  
 
   // Function to handle adding the game to the user's library
   const handleAddToLibrary = async () => {

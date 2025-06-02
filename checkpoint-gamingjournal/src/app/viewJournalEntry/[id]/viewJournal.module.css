@@ -11,9 +11,9 @@
   padding: 2rem;
 }
 
-.backBtn {
+.backbtn {
   margin-bottom: 1rem;
-  border: 1px solid black;
+  border: 1px solid rgb(91, 2, 121);
 }
 
 .entryContainer {
@@ -42,6 +42,7 @@
 .date {
   font-size: 1rem;
   margin-bottom: 3rem;
+  font-family: 'Poppins';
 }
 
 .content {
