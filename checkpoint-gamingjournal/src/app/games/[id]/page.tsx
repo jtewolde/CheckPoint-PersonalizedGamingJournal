@@ -7,7 +7,7 @@ import { authClient } from '@/lib/auth-client';
 
 import toast from 'react-hot-toast';
 
-import { LoadingOverlay, Image, Button, Modal, Select, Badge} from '@mantine/core';
+import { LoadingOverlay, Image, Button, Modal, Select, Badge, RingProgress, Text} from '@mantine/core';
 
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -205,6 +205,7 @@ export default function GameDetails() {
     const data = await res.json();
     console.log('Game status updated:', data);
     toast.success('Game status updated successfully!');
+    
     router.push(`/games/${game.id}`)
   } catch (error) {
     console.error('Error updating game status:', error);
@@ -279,6 +280,7 @@ export default function GameDetails() {
                   onChange={(value) => {
                     setStatus(value || '');
                     handleUpdateStatus(value || '');
+                    close();
                   } }
                   data={[
                     { value: 'Playing', label: 'Playing' },
@@ -332,6 +334,54 @@ export default function GameDetails() {
         </div>
       </div>
 
+      <h2 className={classes.screenshotsTitle}>Ratings: </h2>
+
+      <div className={classes.ratings}>
+
+        <div className={classes.igdbRating}>
+
+            <RingProgress
+              size={300}
+              thickness={18}
+              sections={[
+                { value: game.rating || 0, color: 'blue' },
+                { value: 100 - (game.rating || 0), color: 'gray' },
+              ]}
+              label={
+                <Text size="xl" fw={600} c='white' className={classes.ratingLabel}>
+                  {game.rating ? `${Math.round(game.rating)}%` : 'N/A'}
+                </Text>
+              }
+            />
+            <Text className={classes.ratingText} size="md" c='white'>
+              {game.rating_count ? `${game.rating_count} average user ratings from IGDB` : 'No ratings available'}
+            </Text>
+
+          </div>
+
+          <div className={classes.aggregatedRating}>
+
+            <RingProgress
+              size={300}
+              thickness={18}
+              sections={[
+                { value: game.aggregated_rating || 0, color: 'red' },
+                { value: 100 - (game.aggregated_rating || 0), color: 'gray' },
+              ]}
+              label={
+                <Text size="xl" fw={600} c='white' className={classes.ratingLabel}>
+                  {game.aggregated_rating ? `${Math.round(game.aggregated_rating)}%` : 'N/A'}
+                </Text>
+              }
+            />
+            <Text className={classes.ratingText} size="md" c='white'>
+              {game.aggregated_rating_count ? `${game.aggregated_rating_count} ratings from external critics` : 'No ratings available'}
+            </Text>
+
+          </div>
+
+      </div>
+
       <h2 className={classes.screenshotsTitle}>Screenshots: </h2>
 
       <Carousel
@@ -339,7 +389,7 @@ export default function GameDetails() {
         infinite={true}
         autoPlay={false}
         keyBoardControl={true}
-        showDots={true}
+        showDots={false}
         containerClass={classes.carouselContainer}
         itemClass={classes.carouselItem}
       >

@@ -88,7 +88,7 @@ export default function Journal() {
     // Function to create the rows of the table with the data of journal entries
         const rows = entries.map((entry) => (
         <Table.Tr key={entry._id}>
-            <Table.Td className={classes.tableCell}>{entry.gameName}</Table.Td>
+            <Table.Td className={classes.tableCell}><b>{entry.gameName}</b></Table.Td>
             <Table.Td className={classes.tableCell}>{entry.title}</Table.Td>
             <Table.Td className={`${classes.tableCell} ${classes.truncatedContent}`}>{entry.content}</Table.Td>
             <Table.Td className={classes.tableCell}>{entry.date}</Table.Td>
@@ -135,7 +135,7 @@ export default function Journal() {
             />
 
             <div className={classes.journalWrapper}>
-                <h2 className={classes.journalTitle}>My Journal</h2>
+                <h2 className={classes.journalTitle}>Your Journal Entries</h2>
 
                 <Button
                     variant='filled'

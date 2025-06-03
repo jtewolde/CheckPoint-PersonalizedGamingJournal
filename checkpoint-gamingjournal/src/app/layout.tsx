@@ -46,16 +46,16 @@ export default function RootLayout({
                   style: {
                     background: "#d9f8de",
                     fontFamily: 'Poppins',
-                    fontWeight: 'bold',
-                    border: '1px solid black'
+                    fontWeight: '700',
+                    border: '0.5px solid black'
                   },
                 },
                 error: {
                   style: {
                     background: '#ffcece',
                     fontFamily: 'Poppins',
-                    fontWeight: 'bold',
-                    border: '1px solid black'
+                    fontWeight: '700',
+                    border: '0.5px solid black'
                   }
                 }  
               }}

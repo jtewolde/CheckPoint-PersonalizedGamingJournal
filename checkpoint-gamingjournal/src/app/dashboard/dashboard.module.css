@@ -162,7 +162,7 @@
 
 .entryTitle {
     font-size: 1rem;
-    font-weight: bold;
+    font-weight: 700;
     margin-bottom: 0.5rem;
     font-family: 'Poppins';
 }
@@ -175,6 +175,7 @@
 
 .entryDate {
     font-size: 0.9rem;
+    font-weight: 500;
     color: #888;
 }
 

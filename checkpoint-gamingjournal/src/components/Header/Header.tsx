@@ -179,10 +179,33 @@ export function Header() {
           <div className={classes.linkSpacing}>
             {isAuthenticated ? (
               <>
-                <Link href="/dashboard" onClick={close} className={`${classes.mobileLink} ${pathname === '/dashboard' ? classes.active : ''}`}>Dashboard</Link>
-                <Link href="/library" onClick={close} className={`${classes.mobileLink} ${pathname === '/library' ? classes.active : ''}`}>Library</Link>
-                <Link href="/journal" onClick={close} className={`${classes.mobileLink} ${pathname === '/journal' ? classes.active : ''}`}>Journal</Link>
-                <Link href="/chat" className={`${classes.link} ${pathname === '/chat' ? classes.active : ''}`}>Chat</Link>
+                <Link href="/dashboard" className={`${classes.link} ${pathname === '/dashboard' ? classes.active : ''}`}>
+                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <LayoutDashboard size={20} style={{ marginBottom: 2 }} />
+                    Dashboard
+                  </div>
+                </Link>
+
+                <Link href="/library" className={`${classes.link} ${pathname === '/library' ? classes.active : ''}`}>
+                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <Library size={20} style={{ marginBottom: 2 }} />
+                    Library
+                  </div>
+                </Link>
+
+                <Link href="/journal" className={`${classes.link} ${pathname === '/journal' ? classes.active : ''}`}>
+                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <Notebook size={20} style={{ marginBottom: 2 }} />
+                    Journal
+                  </div>
+                </Link>
+
+                <Link href="/chat" className={`${classes.link} ${pathname === '/chat' ? classes.active : ''}`}>
+                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <BotMessageSquare size={20} style={{ marginBottom: 2 }} />
+                    Chat
+                  </div>
+                </Link>
                 <AvatarMenu />
 
                 <Autocomplete

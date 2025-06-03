@@ -182,7 +182,7 @@ export default function JournalForm() {
               radius="lg"
               size="lg"
               rightSection={<Send/>}
-              color='teal'
+              color='green'
               style={{ marginTop: "1rem" }}
               loading={addToJournal}
             >

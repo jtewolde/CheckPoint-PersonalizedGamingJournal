@@ -60,7 +60,7 @@ export async function GET(req: NextRequest){
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'text/plain',
             },
-            body: `fields name, summary, storyline, genres.name, platforms.name, involved_companies.company.name, cover.url, aggregated_rating, version_title, screenshots.url, first_release_date, similar_games.cover.url ; where id = ${id};`,
+            body: `fields name, summary, storyline, genres.name, platforms.name, involved_companies.company.name, cover.url, rating, rating_count, aggregated_rating, aggregated_rating_count, version_title, screenshots.url, first_release_date, similar_games.cover.url ; where id = ${id};`,
         });
 
         if(!igdbRes.ok){
