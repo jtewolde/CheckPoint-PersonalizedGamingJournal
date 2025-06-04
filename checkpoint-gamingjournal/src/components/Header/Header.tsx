@@ -12,7 +12,7 @@ import { useAuth } from '@/context/Authcontext';
 
 import toast from 'react-hot-toast';
 import { IconSearch } from '@tabler/icons-react';
-import { LogIn, UserRoundPlus, LayoutDashboard, Library, BotMessageSquare, Notebook } from 'lucide-react';
+import { LogIn, UserRoundPlus, LayoutDashboard, Library, BotMessageSquare, Notebook, House } from 'lucide-react';
 import AvatarMenu from "../AvatarMenu/AvatarMenu";
 import { useState } from 'react';
 
@@ -84,7 +84,6 @@ export function Header() {
         
         <Image src={CheckPointLogo.src} alt="CheckPoint Logo" className={classes.logo} onClick={handleLogoClick} style={{cursor: 'pointer'}} />
 
-        {isAuthenticated ? (
           <Autocomplete
           className={classes.searchBar}
           radius='lg'
@@ -109,7 +108,6 @@ export function Header() {
             router.push(`/search?query=${encodeURIComponent(inputValue)}`); // Navigate to the search results page
           }}
         />
-        ) : null}
 
         {/* Desktop Links */}
         <Container size="md" className={classes.links} >
@@ -149,16 +147,16 @@ export function Header() {
             ) : (
               <>
                 <div className={classes.guestLinks}>
-                  <Button variant='outline' color='black' size='md' radius='md' className={`${classes.homeButton} ${pathname === '/' ? classes.active : ''}`} onClick={() => router.push('/')}>
+                  <Button variant='outline' color='black' rightSection={<House size={20} />} size='md' radius='md' className={`${classes.homeButton} ${pathname === '/' ? classes.active : ''}`} onClick={() => router.push('/')}>
                     Home
                   </Button>
 
-                  <Button variant='outline' color='black' size='md' radius='md' className={`${classes.signInButton} ${pathname === '/auth/signin' ? classes.active : ''}`} onClick={() => router.push('/auth/signin')}>
-                    Sign In <LogIn size={15} />
+                  <Button variant='outline' color='black' rightSection={<LogIn size={20} />}size='md' radius='md' className={`${classes.signInButton} ${pathname === '/auth/signin' ? classes.active : ''}`} onClick={() => router.push('/auth/signin')}>
+                    Sign In 
                   </Button>
 
-                  <Button variant='outline' color='black' size='md' radius='md' className={`${classes.signUpButton} ${pathname === '/auth/signup' ? classes.active : ''}`} onClick={() => router.push('/auth/signup')}>
-                    Register <UserRoundPlus size={15} />
+                  <Button variant='outline' color='black' rightSection={<UserRoundPlus size={20} />} size='md' radius='md' className={`${classes.signUpButton} ${pathname === '/auth/signup' ? classes.active : ''}`} onClick={() => router.push('/auth/signup')}>
+                    Register 
                   </Button>
                 </div>
               </>
@@ -167,50 +165,30 @@ export function Header() {
         </Container>
 
         {/* Mobile Links */}
-        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="md" />
+        <Burger className={classes.burger} opened={opened} onClick={toggle} hiddenFrom="sm" size="md" />
 
         <Drawer
           opened={opened}
           onClose={close}
-          position="top"
-          size="50%"
+          position="left"
+          size="60%"
           className={classes.drawer}
+          overlayProps={
+            {
+              backgroundOpacity: 0.5,
+              blur: 4,
+              c: 'gray'
+            }
+          }
         >
           <div className={classes.linkSpacing}>
             {isAuthenticated ? (
               <>
-                <Link href="/dashboard" className={`${classes.link} ${pathname === '/dashboard' ? classes.active : ''}`}>
-                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                    <LayoutDashboard size={20} style={{ marginBottom: 2 }} />
-                    Dashboard
-                  </div>
-                </Link>
-
-                <Link href="/library" className={`${classes.link} ${pathname === '/library' ? classes.active : ''}`}>
-                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                    <Library size={20} style={{ marginBottom: 2 }} />
-                    Library
-                  </div>
-                </Link>
-
-                <Link href="/journal" className={`${classes.link} ${pathname === '/journal' ? classes.active : ''}`}>
-                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                    <Notebook size={20} style={{ marginBottom: 2 }} />
-                    Journal
-                  </div>
-                </Link>
-
-                <Link href="/chat" className={`${classes.link} ${pathname === '/chat' ? classes.active : ''}`}>
-                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                    <BotMessageSquare size={20} style={{ marginBottom: 2 }} />
-                    Chat
-                  </div>
-                </Link>
-                <AvatarMenu />
 
                 <Autocomplete
                   className={classes.searchBar}
-                  label='Search For Games'
+                  radius='lg'
+                  size='md'
                   color='black'
                   placeholder="Search for games"
                   rightSection={<IconSearch size={24} color='black' style={{cursor: 'pointer'}} onClick={() => router.push(`/search?query=${encodeURIComponent(searchQuery)}`)}/>}
@@ -232,12 +210,56 @@ export function Header() {
                   }}
                 />
 
+                <div className={classes.mobileLinksContainer} >
+
+                  <Link href="/dashboard" className={`${classes.link} ${pathname === '/dashboard' ? classes.active : ''}`}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                      <LayoutDashboard size={20} style={{ marginBottom: 2 }} />
+                      Dashboard
+                    </div>
+                  </Link>
+
+                  <Link href="/library" className={`${classes.link} ${pathname === '/library' ? classes.active : ''}`}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                      <Library size={20} style={{ marginBottom: 2 }} />
+                      Library
+                    </div>
+                  </Link>
+
+                  <Link href="/journal" className={`${classes.link} ${pathname === '/journal' ? classes.active : ''}`}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                      <Notebook size={20} style={{ marginBottom: 2 }} />
+                      Journal
+                    </div>
+                  </Link>
+
+                  <Link href="/chat" className={`${classes.link} ${pathname === '/chat' ? classes.active : ''}`}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                      <BotMessageSquare size={20} style={{ marginBottom: 2 }} />
+                      Chat
+                    </div>
+                  </Link>
+
+                 </div>
+
+                  <AvatarMenu />
+
               </>
             ) : (
               <>
-                <Link href="/" onClick={close} className={`${classes.mobileLink} ${pathname === '/' ? classes.active : ''}`}>Home</Link>
-                <Link href="/auth/signin" onClick={close} className={`${classes.mobileSignInButton} ${pathname === '/auth/signin' ? classes.active : ''}`}>Sign In <LogIn size={15}/></Link>
-                <Link href="/auth/signup" onClick={close} className={`${classes.mobileSignUpButton} ${pathname === '/auth/signup' ? classes.active : ''}`}>Register <UserRoundPlus size={15}/> </Link>
+                <div className={classes.guestMobileLinksContainer} >
+                  <Button variant='outline' color='black' rightSection={<House size={20} />} size='lg' radius='md' className={`${classes.homeButton} ${pathname === '/' ? classes.active : ''}`} onClick={() => router.push('/')}>
+                    Home
+                  </Button>
+
+                  <Button variant='outline' color='black' rightSection={<LogIn size={20} />}size='lg' radius='md' className={`${classes.signInButton} ${pathname === '/auth/signin' ? classes.active : ''}`} onClick={() => router.push('/auth/signin')}>
+                    Sign In 
+                  </Button>
+
+                  <Button variant='outline' color='black' rightSection={<UserRoundPlus size={20} />} size='lg' radius='md' className={`${classes.signUpButton} ${pathname === '/auth/signup' ? classes.active : ''}`} onClick={() => router.push('/auth/signup')}>
+                    Register 
+                  </Button>
+                </div>
               </>
             )}
           </div>

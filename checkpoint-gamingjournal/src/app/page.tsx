@@ -71,6 +71,8 @@ export default function Home() {
         <div className={classes.FeatureSection}>
           <FeaturesGrid />
         </div>
+
+        
             
 
       </Container>

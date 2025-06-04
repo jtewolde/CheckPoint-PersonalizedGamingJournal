@@ -1,5 +1,5 @@
 .header {
-  height: 65px;
+  height: 69px;
   background-color: #DDE0E0;
   display: flex; /* Ensure flexbox is applied */
   justify-content: space-between;
@@ -214,7 +214,29 @@
   color: #DDE0E0;
 }
 
+.mobileLinksContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 1rem;
+}
+
+.guestMobileLinksContainer{
+  margin-top: 6rem;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  padding: 1rem;
+}
+
 .link {
+  margin-top: 0.4rem;
   display: block;
   line-height: 1;
   padding: 8px 12px;

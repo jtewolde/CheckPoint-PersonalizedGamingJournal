@@ -3,7 +3,7 @@
 import React, { useState, useEffect} from 'react'
 import { useRouter } from 'next/navigation';
 import { useChat } from '@ai-sdk/react'
-import { TextInput, Button, Loader, Avatar } from '@mantine/core'; 
+import { Textarea, Button, Loader, Avatar } from '@mantine/core'; 
 import Markdown from 'react-markdown';
 
 import { Send, SendIcon } from 'lucide-react';
@@ -131,16 +131,24 @@ export default function Chat() {
             </div>
 
             <form onSubmit={handleSend} className={classes.form}>
-                <TextInput
+                <Textarea
+                    autosize
+                    minRows={1}
                     className={classes.askQuestionText}
                     variant='filled'
+                    inputSize='md'
                     size='lg'
                     radius='lg'
-                    type="text"
                     value={input}
                     onChange={e => setInput(e.target.value)}
                     placeholder="Ask Gemini anything!"
                     disabled={isLoading}
+                    onKeyDown={e => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSend(e);
+                        }
+                    }}
                 />
 
                 <Button variant='outline' color='white' size='md' radius='lg' type='submit'>{<SendIcon size={30}/>}</Button>

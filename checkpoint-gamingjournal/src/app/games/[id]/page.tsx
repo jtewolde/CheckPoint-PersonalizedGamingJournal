@@ -15,6 +15,7 @@ import classes from './game.module.css';
 
 import { NotebookPen, Delete } from 'lucide-react';
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
+import { useAuth } from '@/context/Authcontext';
 
 export default function GameDetails() {
   const { id } = useParams(); // Get the game ID from the URL
@@ -29,19 +30,11 @@ export default function GameDetails() {
 
   const [status, setStatus] = useState(''); // State to handle game status
   const [opened, {open, close} ] = useDisclosure(false);
+
+  const {isAuthenticated, setIsAuthenticated} = useAuth(); // Access global auth state
+
   const router = useRouter();
 
-  // Check If the user is authenticated, if not redirect to signin page
-  useEffect(() => {
-      const checkAuth = async () => {
-          const session = await authClient.getSession();
-          if (!session.data?.user) {
-              router.push('/auth/signin');
-          }
-      }
-      checkAuth();
-
-  }, [router]);
 
   useEffect(() => {
     const fetchIGDBGameDetails = async () => {
@@ -92,7 +85,9 @@ export default function GameDetails() {
 
     if (id) {
       fetchIGDBGameDetails();
+      if(isAuthenticated) { // Only check library if user is authenticated}
       checkIfInLibrary();
+      }
     }
   }, [id]);
 
@@ -269,11 +264,13 @@ export default function GameDetails() {
             className={classes.cover}
           />
 
-        {isGameInLibrary ? (
-
-          <><Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>{libraryGame?.status || 'No Status Given'}</Badge>
-          
-            <Modal opened={opened} onClose={close} title="Change Game Status">
+        {isAuthenticated ? (
+          isGameInLibrary ? (
+            <>
+              <Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>
+                {libraryGame?.status || 'No Status Given'}
+              </Badge>
+              <Modal opened={opened} onClose={close} title="Change Game Status">
                 <Select
                   className={classes.statusSelect}
                   value={status}
@@ -281,7 +278,7 @@ export default function GameDetails() {
                     setStatus(value || '');
                     handleUpdateStatus(value || '');
                     close();
-                  } }
+                  }}
                   data={[
                     { value: 'Playing', label: 'Playing' },
                     { value: 'Completed', label: 'Completed' },
@@ -289,10 +286,9 @@ export default function GameDetails() {
                     { value: 'Dropped', label: 'Dropped' },
                     { value: 'Plan to Play', label: 'Plan to Play' },
                   ]}
-                  placeholder="Select game status" />
-
+                  placeholder="Select game status"
+                />
               </Modal>
-              
               <Button
                 variant="filled"
                 color="#d8070b"
@@ -304,9 +300,23 @@ export default function GameDetails() {
                 loading={addingToLibrary}
               >
                 Remove from your Library!
-              </Button></>
+              </Button>
+            </>
+          ) : (
+            <Button
+              variant="filled"
+              color="#2bdd66"
+              size="lg"
+              radius="xl"
+              className={classes.button}
+              rightSection={<NotebookPen />}
+              onClick={handleAddToLibrary}
+              loading={addingToLibrary}
+            >
+              Add to your Library!
+            </Button>
+          )
         ) : (
-          
           <Button
             variant="filled"
             color="#2bdd66"
@@ -314,10 +324,9 @@ export default function GameDetails() {
             radius="xl"
             className={classes.button}
             rightSection={<NotebookPen />}
-            onClick={handleAddToLibrary}
-            loading={addingToLibrary}
+            onClick={() => router.push('/auth/signup')}
           >
-            Add to your Library!
+            Create an account use CheckPoint!
           </Button>
         )}
 

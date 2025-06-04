@@ -34,7 +34,7 @@
     align-self: center;
     width: 75%;
     height: auto;
-    background: transparent; /* Dark background */
+    background: #232526;
     border-radius: 16px;
     border: 1px solid #444;
     padding: 16px;
@@ -61,7 +61,7 @@
     color: #444
 }
 
-.askQuestionText input{
+.askQuestionText textarea{
     background: #232526;      /* background color */
     color: #fff;              /* text color */
 }
