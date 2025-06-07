@@ -111,10 +111,13 @@ export default function Chat() {
                                 {!isUser && "🤖"}
                             </Avatar>
                             <div
+                                className={classes.messageBubble}
                                 style={{
-                                    background: isUser ? '#c8cad3' : '#c8cad3',
+                                    background: isUser ? '#c8cad3' : '#f3f4fd',
                                     color: '#000',
-                                    padding: '10px 16px',
+                                    padding: '16px 24px',
+                                    fontSize: 17,
+                                    fontWeight: 520,
                                     borderRadius: 16,
                                     maxWidth: '70%',
                                     boxShadow: '0 1px 3px rgba(0,0,0,0.04)',

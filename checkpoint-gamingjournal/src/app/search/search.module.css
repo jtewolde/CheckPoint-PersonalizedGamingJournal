@@ -17,16 +17,18 @@
     text-align: center;
     font-family: 'Poppins';
     font-style: italic;
+    border-bottom: 2px solid white;
 }
 
 /* Number of search results */
 .numberText{
     font-size: 1.5rem;
-    font-weight: 400;
-    color: rgb(235, 231, 231); /* Dark text for contrast */
-    margin-bottom: 3.5rem;
+    font-weight: 300;
+    color: rgb(208, 205, 205); /* Dark text for contrast */
+    margin-bottom: 1.5rem;
     font-family: 'Inter';
     font-style: italic;
+    text-align: center;
     align-self: flex-start;
 }
 
@@ -60,12 +62,10 @@
 /* Game name */
 .gameName {
     font-size: 1rem;
-    font-weight: 400;
+    font-weight: 300;
     color: white;
     padding: 0.5rem;
-    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* Truncate long names */
     font-family: 'Poppins';
 }
 
@@ -98,7 +98,6 @@
     .gameName {
         font-size: 0.85rem;
         max-width: 140px; /* match the mobile image size */
-        white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         text-align: center;

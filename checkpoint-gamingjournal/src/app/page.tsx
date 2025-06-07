@@ -13,6 +13,9 @@ import { useState, useEffect } from 'react';
 import classes from './page.module.css';
 import { useAuth } from '@/context/Authcontext';
 
+import LibraryPage from '../../public/LibraryPage.gif';
+import GameDetailsPage from '../../public//GameDetailsPage.gif'
+import ChatroomPage from '../../public/ChatroomPage.gif';
 
 export default function Home() {
   const router = useRouter();
@@ -72,11 +75,94 @@ export default function Home() {
           <FeaturesGrid />
         </div>
 
-        
-            
+        <div className={classes.librarySection}>
+
+          <div className={classes.imageContainer} >
+
+            <Image
+              src={LibraryPage}
+              alt="Library Page"
+              className={classes.image}
+              width={650}
+              height={500}
+            />
+
+            <div className={classes.imageTextContainer} >
+              <Text className={classes.libraryImageTitle} size='xl' mt='lg' >
+                Your Game Library Awaits
+              </Text>
+
+              <Text className={classes.libraryImageText} size='lg' mt='lg' >
+                Explore your game library with ease. Our intuitive interface allows you to browse,
+                filter, and manage your games effortlessly. Whether you're looking for a specific title
+                or just want to see what you have, Checkpoint makes it simple.
+              </Text>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div className={classes.gameDetailsSection}>
+
+          <div className={classes.imageContainer} >
+
+            <div className={classes.imageTextContainer} >
+
+              <Text className={classes.gameDetailsTitle} size='xl' mt='lg' >
+                Dive into Game Details
+              </Text>
+
+              <Text className={classes.gameDetailsText} size='lg' mt='lg' >
+                Get comprehensive details about each game in your library and searching for new ones.
+                View game descriptions, cover images, platforms, and screenshots that the game is available on, and more.
+                See games that are similar to the one you are viewing, so you can discover new titles that match your interests.
+                Add games to your library with just a click, and start tracking your progress right away.
+              </Text>
+            </div>
+
+            <Image
+              src={GameDetailsPage}
+              alt="Game Details Page"
+              className={classes.image}
+              width={650}
+              height={500}
+            />
+
+          </div>
+
+        </div>
+
+        <div className={classes.chatRoomSection}>
+
+          <div className={classes.imageContainer} >
+
+            <Image
+              src={ChatroomPage}
+              alt="Chatroom Page"
+              className={classes.image}
+              width={800}
+              height={600}
+            />
+
+            <div className={classes.imageTextContainer} >
+              <Text className={classes.chatRoomTitle} size='xl' mt='lg' >
+                Chat with Gemini AI
+              </Text>
+
+              <Text className={classes.chatRoomText} size='lg' mt='lg' >
+                Get instant answers to your gaming questions. Whether you need help with a specific game,
+                want recommendations, or just want to chat about the latest in gaming, Gemini AI is here
+                to assist you.
+              </Text>
+            </div>
+
+          </div>
+
+        </div>
 
       </Container>
-      
+
     </div>
 
   );

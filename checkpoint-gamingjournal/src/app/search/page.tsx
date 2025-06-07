@@ -63,7 +63,7 @@ export default function SearchResults() {
   return (
     <div className={classes.wrapper} >
       <h1 className={classes.searchText}>Search Results for "{query}"</h1>
-        <h2 className={classes.numberText}>{length} Games:</h2>
+        <h2 className={classes.numberText}>{length} Game Results:</h2>
 
         <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>
           {games.map((game) => (

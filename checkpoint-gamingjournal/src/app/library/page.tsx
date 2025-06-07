@@ -78,7 +78,7 @@ export default function Library(){
             {/* Status Filter Dropdown */}
             <Popover width={300} position='right' withArrow shadow='lg'>
                 <Popover.Target>
-                    <Button className={classes.filterButton} radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Status</Button>
+                    <Button className={classes.filterButton} size='md' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Status</Button>
                 </Popover.Target>
 
                 <Popover.Dropdown>
