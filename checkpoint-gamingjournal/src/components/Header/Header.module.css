@@ -31,19 +31,42 @@
 
 .searchBar {
   width: 100%; /* Ensure it spans the available width */
-  max-width: 550px; /* Limit the maximum width */
-  margin-left: 5rem; /* Add spacing between the logo and the search bar */
+  max-width: 610px; /* Limit the maximum width */
+  margin-left: 2rem; /* Add spacing between the logo and the search bar */
   padding: 0.5rem; /* Add padding for better spacing */
   border-radius: 8px; /* Add rounded corners */
+  transition: width 0.2s;
   justify-self: center;
 }
 
+  .searchBar :global(input) {
+    background-color: #f9f4f4; /* example: dark background */
+    color: rgb(0, 0, 0);       /* input text color */
+    border: 0.5px solid black;
+  }
+
+  .searchBar :global(.mantine-Autocomplete-dropdown) {
+    background-color: #dcdbdb; /* dropdown background */
+    color: white;              /* dropdown text color */
+  }
 
 @media screen and (max-width: 768px){
+
+  .logo {
+    width: 140px;
+    height: auto;
+    object-fit: contain;
+    margin-left: -2rem; /* Keep consistent margin */
+  }
+
+  .burger{
+    margin-right: -2rem;
+  }
+
   .searchBar {
     width: 100%;
-    max-width: 400px;
-    margin-left: 0;
+    max-width: 65%;
+    margin-left: -2rem;
     justify-self: center;
     position: relative;
   }
@@ -60,22 +83,11 @@
   .searchBar :global(input) {
     background-color: #ffffff; /* example: dark background */
     color: rgb(0, 0, 0);              /* input text color */
-    border: 1px solid #000000;    /* optional border */
   }
 
   .searchBar :global(.mantine-Autocomplete-dropdown) {
     background-color: #dcdbdb; /* dropdown background */
     color: white;              /* dropdown text color */
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .logo {
-    width: 150px;
-    height: auto;
-    object-fit: contain;
-    margin-left: 0; /* Keep consistent margin */
-    
   }
 }
 
@@ -176,7 +188,7 @@
   text-decoration: none;
   color: black;
   background-color: transparent;
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 400;
   font-family: 'Poppins';
   transition: background-color 0.3s, color 0.3s;
@@ -204,7 +216,7 @@
   text-decoration: none;
   color: black;
   background-color: transparent;
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 400;
   font-family: 'Poppins';
   transition: background-color 0.3s, color 0.3s;

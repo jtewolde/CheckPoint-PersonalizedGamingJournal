@@ -11,7 +11,7 @@ export async function GET(req: NextRequest){
             headers: req.headers,
         });
 
-        // If there is no session/authencicated, return an error
+        // If there is no session/authencitated, return an error
         console.log(session)
 
         if(!session?.user) {
@@ -32,8 +32,6 @@ export async function GET(req: NextRequest){
 
        // Retrieve all journal entries for the user
         const journalEntries = await JournalEntriesCollection.find({ userId: userId }).toArray();
-
-        console.log("Journal Entries",journalEntries)
 
         // Return the journal entries
         return NextResponse.json({ journalEntries }, { status: 200 });

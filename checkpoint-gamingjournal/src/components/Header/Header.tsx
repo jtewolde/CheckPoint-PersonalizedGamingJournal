@@ -88,7 +88,7 @@ export function Header() {
           className={classes.searchBar}
           radius='lg'
           size='md'
-          visibleFrom='sm'
+          variant='filled'
           placeholder="Search for games"
           rightSection={<IconSearch size={24} color='black' style={{cursor: 'pointer'}} onClick={() => router.push(`/search?query=${encodeURIComponent(searchQuery)}`)}/>}
           value={searchQuery}
@@ -182,34 +182,10 @@ export function Header() {
           }
         >
           <div className={classes.linkSpacing}>
+
+            
             {isAuthenticated ? (
               <>
-
-                <Autocomplete
-                  className={classes.searchBar}
-                  radius='lg'
-                  size='md'
-                  color='black'
-                  placeholder="Search for games"
-                  rightSection={<IconSearch size={24} color='black' style={{cursor: 'pointer'}} onClick={() => router.push(`/search?query=${encodeURIComponent(searchQuery)}`)}/>}
-                  value={searchQuery}
-                  onChange={handleSearch} // Update the search query state
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && searchQuery.trim() !== '') {
-                      router.push(`/search?query=${encodeURIComponent(searchQuery)}`); // Navigate to the search results page
-                    }
-                  }}
-                  data={searchResults.map((game) => ({
-                    value: game.name,
-                    label: game.name,
-                  }))} // Map search results to Autocomplete options
-                  onSubmit={(event) => {
-                    event.preventDefault();
-                    const inputValue = (event.target as HTMLInputElement).value;
-                    router.push(`/search?query=${encodeURIComponent(inputValue)}`); // Navigate to the search results page
-                  }}
-                />
-
                 <div className={classes.mobileLinksContainer} >
 
                   <Link href="/dashboard" className={`${classes.link} ${pathname === '/dashboard' ? classes.active : ''}`}>
