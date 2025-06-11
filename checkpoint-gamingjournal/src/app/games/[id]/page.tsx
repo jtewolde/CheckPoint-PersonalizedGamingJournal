@@ -38,7 +38,11 @@ export default function GameDetails() {
   useEffect(() => {
     const fetchIGDBGameDetails = async () => {
       try {
-        const res = await fetch(`/api/igdb/game?id=${id}`); // Fetch game details from your API
+        const res = await fetch(`/api/igdb/game?id=${id}`,
+          {
+            cache: 'force-cache' //Force cache to avoid API rate limits for game details
+          }
+        ); // Fetch game details from your API
         console.log("API Response", res)
         if (!res.ok) {
           throw new Error('Failed to fetch game details');

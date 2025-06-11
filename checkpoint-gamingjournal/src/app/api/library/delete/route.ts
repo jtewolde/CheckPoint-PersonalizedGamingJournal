@@ -3,6 +3,7 @@ import { UserCollection, GameCollection } from "@/utils/db";
 import { ObjectId } from "mongodb";
 
 import { auth } from "@/utils/auth";
+import { redis } from "@/utils/redis";
 
 // This API route is used to delete a game from the user's library
 export async function POST(req: NextRequest) {
@@ -20,9 +21,6 @@ export async function POST(req: NextRequest) {
             headers: req.headers,
         });
 
-        console.log("Authorization Header:", req.headers.get("authorization"));
-        console.log("Session: ", session);
-
         if (!session || !session.user) {
             return NextResponse.json({ error: "Unauthorized", session }, { status: 401 });
         }
@@ -38,7 +36,10 @@ export async function POST(req: NextRequest) {
         const userResult = await UserCollection.updateOne(
             { _id: new ObjectId(userId) },
             { $pull: { games: gameID } } // Prevent duplicates
-        )
+        );
+
+        // Invalidate/clear cache for the user's library after deletion
+        await redis.del(`user_library:${userId}`);
 
         return NextResponse.json({
             message: "Game deleted from library successfully",

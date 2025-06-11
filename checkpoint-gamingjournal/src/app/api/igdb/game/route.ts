@@ -1,7 +1,7 @@
 // API Call for getting all necessary details of a specific game with id
 
-import { error } from 'console';
 import { NextRequest, NextResponse } from 'next/server';
+import { redis } from '@/utils/redis';
 
 const IGDB_URL = 'https://api.igdb.com/v4/games';
 
@@ -51,6 +51,16 @@ export async function GET(req: NextRequest){
             return NextResponse.json({ message: "Game ID is required "}, {status: 400});
         }
 
+        // Create unique cache key based on game ID
+        const cacheKey = `igdb_game_details:${id}`
+
+        // Try to get cached data from Redis
+        const cachedData = await redis.get(cacheKey);
+        if(cachedData){
+          console.log("Returning cached data of game details for: ", cacheKey);
+          return NextResponse.json(JSON.parse(cachedData), { status: 200 });
+        }
+
         const accessToken = await getAccessToken();
 
         const igdbRes = await fetch(IGDB_URL, {
@@ -73,7 +83,13 @@ export async function GET(req: NextRequest){
         }
 
         const game = await igdbRes.json();
+
+        // Cache the response in Redis for 10 minutes
+        await redis.set(cacheKey, JSON.stringify(game), 'EX', 600);
+
         return NextResponse.json(game[0], {status: 200});
+
+
       } catch (err: any) {
         console.error("Error", err);
         return NextResponse.json(

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { GameCollection } from "@/utils/db";
 
 import { auth } from "@/utils/auth";
+import { redis } from "@/utils/redis";
 
 // This API route is used to update the status of a game in the user's library
 export async function POST(req: NextRequest) {
@@ -19,9 +20,6 @@ export async function POST(req: NextRequest) {
             headers: req.headers,
         });
 
-        console.log("Game Data: ", gameDetails);
-        console.log("Game Status", gameDetails.status);
-
         if (!session || !session.user) {
             return NextResponse.json({ error: "Unauthorized", session }, { status: 401 });
         }
@@ -33,6 +31,9 @@ export async function POST(req: NextRequest) {
             { _id: gameID },
             { $set: gameDetails }
         );
+
+        // Invalidate/clear cache for the user's library after deletion
+        await redis.del(`user_library:${userId}`);
 
         return NextResponse.json({
             message: "Game status updated successfully",

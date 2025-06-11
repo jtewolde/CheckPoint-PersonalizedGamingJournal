@@ -3,6 +3,7 @@ import { UserCollection, GameCollection } from "@/utils/db";
 import { ObjectId } from "mongodb";
 
 import { auth } from "@/utils/auth";
+import { redis } from "@/utils/redis";
 
 // This API route is used to add a game to the user's library
 export async function POST(req: NextRequest) {
@@ -46,6 +47,9 @@ export async function POST(req: NextRequest) {
             { _id: new ObjectId(userId) },
             { $addToSet: { games: gameID } } // Prevent duplicates
         );
+
+        // Invalidate/clear the cache for the user's library
+        await redis.del(`user_library:${userId}`);
 
         return NextResponse.json({
             message: "Game added to library successfully",

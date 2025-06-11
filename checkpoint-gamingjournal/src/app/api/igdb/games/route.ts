@@ -1,6 +1,7 @@
 // API Call for getting minimum details for games during searching
 
 import { NextRequest, NextResponse } from 'next/server';
+import { redis } from '@/utils/redis';
 
 const IGDB_URL = 'https://api.igdb.com/v4/games';
 
@@ -48,6 +49,18 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '12', 10); // Default to 12 results per page
     const offset = parseInt(searchParams.get('offset') || '0', 10); // Default to 0 offset
 
+    // Create a unique cache key based on search parameters, limit and offset
+    const cacheKey = `igdb_games:${searchQuery}:${limit}:${offset}`;
+
+    // Try to get cached data from Redis
+    const cachedData = await redis.get(cacheKey);
+
+    if (cachedData) {
+      console.log("Returning cached data for: ", cacheKey);
+      return NextResponse.json(JSON.parse(cachedData), { status: 200 });
+    }
+
+    // Get new access token
     const accessToken = await getAccessToken();
 
     // Calculate the date range for the last 30 days
@@ -79,7 +92,13 @@ export async function GET(req: NextRequest) {
     }
 
     const games = await igdbRes.json();
+
+    // Cache the response in Redis for 10 minutes
+    await redis.set(cacheKey, JSON.stringify(games), 'EX', 600); 
+
     return NextResponse.json(games, { status: 200 });
+
+
   } catch (err: any) {
     console.error("Error:", err);
     return NextResponse.json(

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoadingOverlay, SimpleGrid, Image, Paper, SemiCircleProgress, Text } from '@mantine/core';
 import { authClient } from '@/lib/auth-client';
@@ -50,6 +50,7 @@ export default function Dashboard() {
     const fetchPopularGames = async () => {
       try {
         const res = await fetch('/api/igdb/populargames');
+        
         if (!res.ok) {
           throw new Error('Failed to fetch popular games');
         }
@@ -164,44 +165,69 @@ export default function Dashboard() {
         <SimpleGrid cols={4} spacing="lg" className={classes.statusGrid}>
 
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
-            <IconClipboardListFilled size={40} color='#f018e8' />
-            <h3 className={classes.statusTitle}>Progress Summary</h3>
-            <p className={classes.statusTotalCount}>Total Games: {numOfGames}</p>
 
-            <SemiCircleProgress value={completedPercentage} filledSegmentColor='#f018e8' size={170} thickness={15} 
-              label={<Text c='#f018e8' component='span' size='lg' fw={600}>{completedPercentage}% Completed</Text>}>
-            </SemiCircleProgress>
+            <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
+
+              <IconClipboardListFilled size={40} color='#f018e8' />
+              <h3 className={classes.statusTitle}>Progress Summary</h3>
+              <p className={classes.statusTotalCount}>Total Games: {numOfGames}</p>
+
+              <SemiCircleProgress value={completedPercentage} filledSegmentColor='#f018e8' size={170} thickness={15} 
+                label={<Text c='#f018e8' component='span' size='lg' fw={600}>{completedPercentage}% Completed</Text>}>
+              </SemiCircleProgress>
+
+            </Suspense>
 
           </Paper>
 
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
-            <IconDeviceGamepad3Filled size={40} color="blue" />
-            <h3 className={classes.statusTitle}>Playing</h3>
-            <p className={classes.statusCount}>{playGamesLength}</p>
+
+            <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
+              <IconDeviceGamepad3Filled size={40} color="blue" />
+              <h3 className={classes.statusTitle}>Playing</h3>
+              <p className={classes.statusCount}>{playGamesLength}</p>
+            </Suspense>
+
           </Paper>
 
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
-            <IconBookmarkFilled size={40} color="green" />
-            <h3 className={classes.statusTitle}>Plan to Play</h3>
-            <p className={classes.statusCount}>{planToPlayLength}</p>
+
+            <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
+              <IconBookmarkFilled size={40} color="green" />
+              <h3 className={classes.statusTitle}>Plan to Play</h3>
+              <p className={classes.statusCount}>{planToPlayLength}</p>
+            </Suspense>
+
           </Paper>
 
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
-            <IconCheck size={40} color="purple" />
-            <h3 className={classes.statusTitle}>Completed</h3>
-            <p className={classes.statusCount}>{completedLength}</p>
+
+            <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
+              <IconCheck size={40} color="purple" />
+              <h3 className={classes.statusTitle}>Completed</h3>
+              <p className={classes.statusCount}>{completedLength}</p>
+            </Suspense>
+
           </Paper>
 
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
-            <IconQuestionMark size={40} color='#fc8a08' />
-            <h3 className={classes.statusTitle}>No Status</h3>
-            <p className={classes.statusCount}>{noStatusLength}</p>
+
+             <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
+              <IconQuestionMark size={40} color='#fc8a08' />
+              <h3 className={classes.statusTitle}>No Status</h3>
+              <p className={classes.statusCount}>{noStatusLength}</p>
+            </Suspense>
+
           </Paper>
 
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
-            <IconPlayerPauseFilled size={40} color="red" />
-            <h3 className={classes.statusTitle}>On Hold</h3>
-            <p className={classes.statusCount}>{onHoldLength}</p>
+
+            <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
+              <IconPlayerPauseFilled size={40} color="red" />
+              <h3 className={classes.statusTitle}>On Hold</h3>
+              <p className={classes.statusCount}>{onHoldLength}</p>
+            </Suspense>
+
           </Paper>
 
         </SimpleGrid>

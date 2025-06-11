@@ -28,6 +28,7 @@ export default function SearchResults() {
       try {
         const offset = (page - 1) * limit; // calculate offset based on page
         const res = await fetch(`/api/igdb/games?query=${encodeURIComponent(query)}&limit=${limit}&offset=${offset}`);
+
         if (!res.ok) {
           throw new Error('Failed to fetch games');
         }

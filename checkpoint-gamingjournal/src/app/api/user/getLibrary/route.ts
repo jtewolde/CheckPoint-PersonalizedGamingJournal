@@ -3,6 +3,7 @@ import { UserCollection, GameCollection } from "@/utils/db";
 import { ObjectId } from "mongodb";
 
 import { auth } from "@/utils/auth";
+import { redis } from "@/utils/redis";
 
 // This API route is used to get the user's library
 export async function GET(req: NextRequest){
@@ -10,9 +11,6 @@ export async function GET(req: NextRequest){
         const session = await auth.api.getSession({
             headers: req.headers,
         });
-
-        // If there is no session/authencicated, return an error
-        console.log(session)
 
         if(!session?.user) {
             console.log("Unauthorized access attempt to get user's library");
@@ -32,10 +30,24 @@ export async function GET(req: NextRequest){
         // Get the list of game IDs from the games field
         const gameIds = user.games || [];
 
+        // Create unique cache key based on user ID
+        const cacheKey = `user_library:${userId}`;
+
+        // Attempt to get cached data from Redis
+        const cachedData = await redis.get(cacheKey);
+        if (cachedData) {
+            console.log('Returning cached user library for: ', cacheKey);
+            return NextResponse.json({ games: JSON.parse(cachedData) }, { status: 200 });
+        }
+
         // Fetch the game details from the `games` collection
         const games = await GameCollection.find({ _id: { $in: gameIds } }).toArray();
 
+        // Cache the games data in Redis for 30 minutes
+        await redis.set(cacheKey, JSON.stringify([ ...games]), 'EX', 1800);
+
         return NextResponse.json({ games }, { status: 200 });
+
     } catch (error) {
         console.error("Error fetching user's library:", error);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });

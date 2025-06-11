@@ -11,17 +11,12 @@ export async function GET(req: NextRequest){
             headers: req.headers,
         });
 
-        // If there is no session/authencitated, return an error
-        console.log(session)
-
         if(!session?.user) {
             return NextResponse.json({ error: "Unauthorized"}, {status: 401});
         }
 
         // Get user Id from session
         const userId = session.user.id
-
-        console.log("User ID", userId);
 
         // Find the user in the collection of users
         const user = await UserCollection.findOne({ _id: new ObjectId(userId)})
