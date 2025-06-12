@@ -3,6 +3,7 @@ import { GameCollection, JournalEntriesCollection } from "@/utils/db";
 import { ObjectId } from "mongodb";
 
 import { auth } from "@/utils/auth";
+import { redis } from "@/utils/redis";
 
 export async function POST(req: NextRequest) {
     try {
@@ -65,13 +66,15 @@ export async function POST(req: NextRequest) {
             { $pull: { journalEntries: journalEntry.uuid } }
         );
 
-        console.log(gameResult.modifiedCount)
+        //Invalidate/clear the cache of the user's journal entries after deletion
+        await redis.del(`user_journal_entries:${userId}`);
 
         return NextResponse.json({
             message: "Journal entry deleted successfully",
             journalResult,
             gameResult,
         });
+
     } catch (error) {
         console.error("Error deleting journal entry:", error);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });

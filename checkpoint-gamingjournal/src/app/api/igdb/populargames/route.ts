@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
     const thirtyDaysAgo = Math.floor((now.getTime() - 45 * 24 * 60 * 60 * 1000) / 1000); // 45 days ago in seconds
 
     // Construct the query body
-    const body = 'fields game_id,value,popularity_type; sort value desc; limit 6; where popularity_type = 1;'
+    const body = 'fields game_id,value,popularity_type; sort value desc; limit 17; where popularity_type = 1;'
 
     const igdbRes = await fetch(IGDB_URL, {
       method: 'POST',
@@ -83,6 +83,10 @@ export async function GET(req: NextRequest) {
       return NextResponse.json([], { status: 200 });
     }
 
+    // Get the current year start and end timestamps
+    const currentYearStart = new Date(new Date().getFullYear(), 0, 1).getTime() / 1000; // Jan 1st, 2025
+    const currentYearEnd = new Date(new Date().getFullYear(), 11, 31, 23, 59, 59).getTime() / 1000; // Dec 31st, 2025
+
     // Step 2: Fetch the game details like name and cover images for those IDs
     const gamesRes = await fetch('https://api.igdb.com/v4/games', {
       method: 'POST',
@@ -91,7 +95,7 @@ export async function GET(req: NextRequest) {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'text/plain',
       },
-      body: `fields id, name, cover.url, first_release_date; where id = (${gameIds.join(',')});`,
+      body: `fields id, name, cover.url, first_release_date; where id = (${gameIds.join(',')}); sort first_release_date desc;`
     });
 
     if (!gamesRes.ok) {

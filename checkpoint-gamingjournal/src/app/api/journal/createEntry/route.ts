@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { GameCollection, JournalEntriesCollection, UserCollection } from "@/utils/db";
 import { ObjectId } from "mongodb";
 import {v4 as uuidv4} from 'uuid';
+
 import { auth } from "@/utils/auth";
+import { redis } from "@/utils/redis";
 
 // this API route is used to create a journal entry for a game
 // and append the journal entry ID to the game's journalEntries field
@@ -61,10 +63,14 @@ export async function POST(req: NextRequest) {
           { $addToSet: { journalEntries: journalEntry.uuid } } // Prevent duplicates
       )
 
+      //Invalidate/clear the cache for the user's journal entries after creation
+      await redis.del(`user_journal_entries:${userId}`);
+
       return NextResponse.json({
         message: "Journal entry created and appended successfully",
         journalEntryId: journalEntry.uuid
       });
+
     } catch (error) {
       console.error("Error creating journal entry:", error);
       return NextResponse.json(

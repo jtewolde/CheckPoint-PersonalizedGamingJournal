@@ -96,6 +96,7 @@
     object-fit: cover;
     border-radius: 8px;
     cursor: pointer;
+    border: 0.5 solid rgb(183, 183, 183);
   }
 
   .cover:hover {
