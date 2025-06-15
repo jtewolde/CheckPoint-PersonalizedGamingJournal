@@ -18,6 +18,8 @@ export default function signInPage(){
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
+  const [error, setError] = useState("")
+
   const router = useRouter();
 
   // Check if the user is authenticated
@@ -33,7 +35,7 @@ export default function signInPage(){
         checkAuth();
       }, [router]);
 
-  const handleClick = async () => {
+  const handleEmailSignUp = async () => {
     setLoading(true);
     const {data, error} = await authClient.signUp.email({
       email,
@@ -50,7 +52,8 @@ export default function signInPage(){
         router.push("/auth/signin")
 
       },
-      onError: () => {
+      onError: (ctx) => {
+        setError(ctx.error?.message)
         setLoading(false);
         toast.error("Account Creation Failed, Invalid Password or Email!")
       }
@@ -103,10 +106,10 @@ export default function signInPage(){
             <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
           <TextInput label="Username" placeholder='Your username' size='md' mt='md' value={name} onChange={(e) => setName(e.currentTarget.value)} />
-          <TextInput label="Email address" placeholder="hello@gmail.com" size="md" mt="md" value={email} onChange={(e) => setEmail(e.currentTarget.value)} />
-          <PasswordInput label="Password" placeholder="Your password" mt="md" size="md" value={password} onChange={(e) => setPassword(e.currentTarget.value)} />
+          <TextInput label="Email address" placeholder="hello@gmail.com" size="md" mt="md" value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error}/>
+          <PasswordInput label="Password" placeholder="Your password" mt="md" size="md" value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={error}/>
           {/* <PasswordInput label="Confirm Password" placeholder="Your password" mt="md" size="md" /> */}
-          <Button fullWidth mt="xl" size="md" loading={loading} onClick={handleClick}>
+          <Button fullWidth mt="xl" size="md" loading={loading} onClick={handleEmailSignUp}>
             Register Account
           </Button>
 

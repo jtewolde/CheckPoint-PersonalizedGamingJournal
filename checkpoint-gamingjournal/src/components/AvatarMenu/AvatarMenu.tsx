@@ -1,5 +1,5 @@
 import { Menu, Avatar } from "@mantine/core";
-import { LogOut, User, CircleHelp } from "lucide-react";
+import { LogOut, User, CircleHelp, Settings } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
@@ -54,6 +54,11 @@ export default function AvatarMenu(){
                 <Menu.Item leftSection={<User size={30}/>} >
                 {user?.name || "Account"}
                 </Menu.Item>
+
+                <Menu.Item leftSection={<Settings size={30} color="gray" />}>
+                    Settings
+                </Menu.Item>
+                    
 
                 <Menu.Item leftSection={<CircleHelp size={30} color='green'/>} onClick={() => router.push('/FAQ')}>
                     FAQ

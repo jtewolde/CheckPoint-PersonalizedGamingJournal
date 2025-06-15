@@ -1,8 +1,9 @@
 .wrapper {
   min-height: 100vh;
   background-size: cover;
-  background-image: url('../../../../public/ContactBackground.jpg');
-
+  position: relative;
+  background-image: url('../../../../public/journalBackground.png');
+  background-position: center;
 }
 
 .form {
@@ -15,6 +16,7 @@
   background-color: whitesmoke;
   font-family: 'Poppins';
   justify-content: center;
+  z-index: 1;
 
   @media (max-width: $mantine-breakpoint-sm) {
     max-width: 100%;
@@ -24,4 +26,5 @@
 .title {
   color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
   font-family: 'Poppins';
+  z-index: 1;
 }
