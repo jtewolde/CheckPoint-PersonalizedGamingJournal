@@ -1,3 +1,9 @@
-// 'use client'
+'use client'
 
-// import
+import React from 'react'
+
+export const SettingsPage = () => {
+  return (
+    <div>SettingsPage</div>
+  )
+}
