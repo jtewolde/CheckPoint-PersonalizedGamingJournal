@@ -68,7 +68,7 @@ export default function Home() {
 
 
         <Button variant="filled" color='#2463C4' size="lg" radius="xl" className={classes.control} rightSection={<UserRoundPlus />} onClick={handleClick}>
-          Create an account to join CheckPoint!
+          Create an account now!
         </Button>
 
         <div className={classes.FeatureSection}>

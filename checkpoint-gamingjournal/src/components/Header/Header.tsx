@@ -2,15 +2,16 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import { Burger, Container, Group, Paper, Drawer, Autocomplete, Image, Button } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery} from '@mantine/hooks';
+
 import CheckPointLogo from '../../../public/CheckPointLogo.png';
+import CheckPointMobileLogo from '../../../public/CheckPointMobileLogo.png';
+
 import classes from './Header.module.css';
 import Link from 'next/link';
 
-import { authClient } from '@/lib/auth-client';
 import { useAuth } from '@/context/Authcontext';
 
-import toast from 'react-hot-toast';
 import { IconSearch } from '@tabler/icons-react';
 import { LogIn, UserRoundPlus, LayoutDashboard, Library, BotMessageSquare, Notebook, House } from 'lucide-react';
 import AvatarMenu from "../AvatarMenu/AvatarMenu";
@@ -22,20 +23,9 @@ export function Header() {
   const [searchResults, setSearchResults] = useState<any[]>([]); // State for search results
   const router = useRouter();
   const pathname = usePathname();
-  const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
 
-  // Function to handle sign out for authenticated users
-  const handleSignOut = async () => {
-    const { error } = await authClient.signOut();
-    if (error) {
-      console.error('Error signing out:', error);
-    } else {
-      setIsAuthenticated(false);
-      router.push('/'); // Redirect to home page after sign out
-      toast.success('Signed out successfully!'); // Show success toast
-      close(); // Close the drawer after sign out
-    }
-  };
+  const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
+  const isMobile = useMediaQuery('(max-width: 415px)');
 
   // Function to handle clicking the logo and redirecting user to dashboard or homepage based on authenication
   const handleLogoClick = async () => {
@@ -82,7 +72,12 @@ export function Header() {
     <header className={classes.header}>
       <Container size="md" className={classes.inner}>
         
-        <Image src={CheckPointLogo.src} alt="CheckPoint Logo" className={classes.logo} onClick={handleLogoClick} style={{cursor: 'pointer'}} />
+        {isMobile ? (
+          <Image src={CheckPointMobileLogo.src} alt="CheckPoint Logo" className={classes.mobileLogo} onClick={handleLogoClick} style={{cursor: 'pointer'}} />
+        ): (
+          <Image src={CheckPointLogo.src} alt="CheckPoint Logo" className={classes.logo} onClick={handleLogoClick} style={{cursor: 'pointer'}} />
+        )
+      }
 
           <Autocomplete
           className={classes.searchBar}

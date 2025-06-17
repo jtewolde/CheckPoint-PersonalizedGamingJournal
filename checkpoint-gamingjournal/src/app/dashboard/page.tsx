@@ -137,9 +137,9 @@ export default function Dashboard() {
           }
 
           const data = await res.json();
-          const sortedEntries = data.journalEntries
-              .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Sort by date (most recent first)
-              .slice(0, 5).reverse(); // Limit to the 5 most recent entries
+          console.log("Data", data)
+          
+          const sortedEntries = data.journalEntries.reverse().slice(0, 5); // Limit to the 5 most recent entries
           setRecentEntries(sortedEntries); // Store the recent entries in state
           console.log('Recent Journal Entries:', sortedEntries);
       } catch (error) {
@@ -162,17 +162,20 @@ export default function Dashboard() {
 
         <h1 className={classes.profileStats}>Profile Stats:</h1>
 
-        <SimpleGrid cols={4} spacing="lg" className={classes.statusGrid}>
+        <SimpleGrid cols={6} spacing="lg" className={classes.statusGrid}>
 
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
 
             <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
 
-              <IconClipboardListFilled size={40} color='#f018e8' />
+              <div className={classes.statusLogoCenter} >
+                <IconClipboardListFilled size={60} color='#f018e8' className={classes.statusLogo}/>
+              </div>
+              
               <h3 className={classes.statusTitle}>Progress Summary</h3>
               <p className={classes.statusTotalCount}>Total Games: {numOfGames}</p>
 
-              <SemiCircleProgress value={completedPercentage} filledSegmentColor='#f018e8' size={170} thickness={15} 
+              <SemiCircleProgress className={classes.statusProgress} value={completedPercentage} filledSegmentColor='#f018e8' size={170} thickness={15} 
                 label={<Text c='#f018e8' component='span' size='lg' fw={600}>{completedPercentage}% Completed</Text>}>
               </SemiCircleProgress>
 
@@ -183,9 +186,14 @@ export default function Dashboard() {
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
 
             <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-              <IconDeviceGamepad3Filled size={40} color="blue" />
+
+              <div className={classes.statusLogoCenter} >
+                <IconDeviceGamepad3Filled size={60} color="blue" />
+              </div>
+
               <h3 className={classes.statusTitle}>Playing</h3>
               <p className={classes.statusCount}>{playGamesLength}</p>
+
             </Suspense>
 
           </Paper>
@@ -193,9 +201,14 @@ export default function Dashboard() {
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
 
             <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-              <IconBookmarkFilled size={40} color="green" />
+
+              <div className={classes.statusLogoCenter} >
+                <IconBookmarkFilled size={60} color="green" className={classes.statusLogo}/>
+              </div>
+
               <h3 className={classes.statusTitle}>Plan to Play</h3>
               <p className={classes.statusCount}>{planToPlayLength}</p>
+
             </Suspense>
 
           </Paper>
@@ -203,7 +216,11 @@ export default function Dashboard() {
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
 
             <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-              <IconCheck size={40} color="purple" />
+
+              <div className={classes.statusLogoCenter} >
+                <IconCheck size={60} color="purple" className={classes.statusLogo}/>
+              </div>
+
               <h3 className={classes.statusTitle}>Completed</h3>
               <p className={classes.statusCount}>{completedLength}</p>
             </Suspense>
@@ -213,7 +230,9 @@ export default function Dashboard() {
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
 
              <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-              <IconQuestionMark size={40} color='#fc8a08' />
+              <div className={classes.statusLogoCenter} >
+                <IconQuestionMark size={60} color='#fc8a08' className={classes.statusLogo}/>
+              </div>
               <h3 className={classes.statusTitle}>No Status</h3>
               <p className={classes.statusCount}>{noStatusLength}</p>
             </Suspense>
@@ -223,9 +242,14 @@ export default function Dashboard() {
           <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
 
             <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-              <IconPlayerPauseFilled size={40} color="red" />
+
+              <div className={classes.statusLogoCenter} >
+                <IconPlayerPauseFilled size={60} color="red" className={classes.statusLogo}/>
+              </div>
+
               <h3 className={classes.statusTitle}>On Hold</h3>
               <p className={classes.statusCount}>{onHoldLength}</p>
+              
             </Suspense>
 
           </Paper>
@@ -233,10 +257,10 @@ export default function Dashboard() {
         </SimpleGrid>
 
       </div>
-      
-      <h1 className={classes.trendingText}>Most Popular Visited Games on IGDB Website:</h1>
 
       <div className={classes.trendingGames}>
+
+        <h1 className={classes.trendingText}>Popular Visited Games on IGDB Website:</h1>
         
         {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
         <SimpleGrid cols={5} spacing="lg" className={classes.gamesGrid}>
@@ -253,9 +277,9 @@ export default function Dashboard() {
         </SimpleGrid>
       </div>
 
-      <h1 className={classes.playingText}>Games that you are currently playing:</h1>
-
       <div className={classes.playingGames} >
+
+        <h1 className={classes.playingText}>Games that you are currently playing:</h1>
 
         {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
         <SimpleGrid cols={6} spacing="lg" className={classes.gamesGrid}>
@@ -272,9 +296,10 @@ export default function Dashboard() {
         </SimpleGrid>
       </div>
 
-      <h1 className={classes.recentEntriesText}>Recent Journal Entries: </h1>
-
       <div className={classes.recentEntries}>
+
+          <h1 className={classes.recentEntriesText}>Recent Journal Entries: </h1>
+
           {recentEntries.length === 0 ? (
               <p>No recent journal entries found.</p>
           ) : (

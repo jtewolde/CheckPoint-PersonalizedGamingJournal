@@ -29,13 +29,22 @@
   justify-content: flex-start;
 }
 
+.mobileLogo{
+  width: 69px;
+  height: auto;
+  object-fit: contain;
+  margin-top: 0.1rem;
+  margin-left: -3rem; /* Remove negative margin */
+  justify-self: flex-start;
+  justify-content: flex-start;
+}
+
 .searchBar {
   width: 100%; /* Ensure it spans the available width */
-  max-width: 610px; /* Limit the maximum width */
+  max-width: 52%; /* Limit the maximum width */
   margin-left: 2rem; /* Add spacing between the logo and the search bar */
   padding: 0.5rem; /* Add padding for better spacing */
   border-radius: 8px; /* Add rounded corners */
-  transition: width 0.2s;
   justify-self: center;
 }
 
@@ -50,23 +59,45 @@
     color: white;              /* dropdown text color */
   }
 
-@media screen and (max-width: 768px){
+  @media screen and (max-width: 768px) {
+    .searchBar {
+      width: 100%;
+      max-width: 69%;
+      margin-left: -1.5rem;
+      justify-self: center;
+      position: relative;
+    }
+
+    .logo{
+      width: 140px;
+      height: auto;
+      object-fit: contain;
+      margin-left: -2rem; /* Keep consistent margin */
+    }
+
+    .burger{
+      margin-right: -2.5rem;
+    }
+
+  }
+
+@media screen and (max-width: 415px){
 
   .logo {
-    width: 140px;
+    width: 120px;
     height: auto;
     object-fit: contain;
     margin-left: -2rem; /* Keep consistent margin */
   }
 
   .burger{
-    margin-right: -2rem;
+    margin-right: -2.5rem;
   }
 
   .searchBar {
     width: 100%;
-    max-width: 65%;
-    margin-left: -2rem;
+    max-width: 89%;
+    margin-left: -1.5rem;
     justify-self: center;
     position: relative;
   }
@@ -148,6 +179,7 @@
   font-weight: 400;
   font-family: 'Poppins';
   transition: background-color 0.3s, color 0.3s;
+  transition: width 0.2s;
 }
 
 .mobileSignInButton {

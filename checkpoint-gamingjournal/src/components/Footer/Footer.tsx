@@ -1,8 +1,7 @@
 
 import { Mail } from "lucide-react";
-import { IconBrandLinkedin } from "@tabler/icons-react";
+import { IconBrandLinkedin, IconBrandGithub } from "@tabler/icons-react";
 import { ActionIcon, Group, Text } from "@mantine/core";
-import CheckPointLogo from '../../../public/CheckPointSmall.png';
 import Link from "next/link";
 import Image from "next/image";
 import classes from './Footer.module.css';
@@ -40,23 +39,36 @@ export function Footer() {
               component="a"
               href="mailto:jotewolde20@gmail.com"
               target="_blank"
-              size="lg"
+              size="xl"
               color="gray"
               variant="subtle"
               aria-label="Email"
             >
               <Mail size={40} color="red" />
             </ActionIcon>
+
             <ActionIcon
               component="a"
               href="https://www.linkedin.com/in/joseph-tewolde-88295a244/"
               target="_blank"
-              size="lg"
-              color="gray"
+              size="xl"
+              color="white"
               variant="subtle"
               aria-label="LinkedIn"
             >
-              <IconBrandLinkedin size={40} color="black" />
+              <IconBrandLinkedin size={60} stroke={1.7} color="#0072B1" />
+            </ActionIcon>
+
+            <ActionIcon
+              component="a"
+              href="https://github.com/jtewolde/CheckPoint-PersonalizedGamingJournal"
+              target="_blank"
+              size="xl"
+              color="white"
+              variant="subtle"
+              aria-label="LinkedIn"
+            >
+              <IconBrandGithub size={60} stroke={1.7} color="black" />
             </ActionIcon>
           </Group>
         </div>

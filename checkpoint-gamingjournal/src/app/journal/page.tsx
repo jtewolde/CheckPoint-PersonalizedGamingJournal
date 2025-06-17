@@ -6,15 +6,16 @@ import { authClient } from '@/lib/auth-client';
 
 import classes from './journal.module.css';
 
-import { Table, Button, LoadingOverlay, Overlay } from '@mantine/core';
+import { Table, Button, LoadingOverlay, Overlay, Popover, Select, Flex } from '@mantine/core';
 
 import toast from 'react-hot-toast';
-import { FilePlus, DeleteIcon, Eye } from 'lucide-react';
+import { FilePlus, DeleteIcon, Eye, ListFilter } from 'lucide-react';
 
 export default function Journal() {
     // State variables for the journal entries
     const [entries, setEntries] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [gameName, setGameName] = useState('all')
     const router = useRouter();
 
     // Check if the user is authenticated, if not redirect to auth page
@@ -57,6 +58,14 @@ export default function Journal() {
         checkAuth(); // Check authentication on component mount
     }, [router]);
 
+    // Get unique game names from entries for the dropdown
+    const gameNames = Array.from(new Set(entries.map(entry => entry.gameName)));
+
+    // Derived Filtered List
+    const filteredEntries = entries.filter(
+    (entry) => gameName === 'all' || entry.gameName === gameName
+    );
+
     // Function to delete a journal entry
     const deleteJournalEntry = async (journalEntryId: string, gameID: string) => {
         try {
@@ -86,7 +95,7 @@ export default function Journal() {
     };
 
     // Function to create the rows of the table with the data of journal entries
-        const rows = entries.map((entry) => (
+        const rows = filteredEntries.map((entry) => (
         <Table.Tr key={entry._id}>
             <Table.Td className={classes.tableCell}><b>{entry.gameName}</b></Table.Td>
             <Table.Td className={classes.tableCell}>{entry.title}</Table.Td>
@@ -135,9 +144,12 @@ export default function Journal() {
             />
 
             <div className={classes.journalWrapper}>
+
                 <h2 className={classes.journalTitle}>Your Journal Entries</h2>
 
-                <Button
+                <div className={classes.buttonGroup} >
+
+                    <Button
                     variant='filled'
                     color='lime'
                     size='md'
@@ -145,9 +157,38 @@ export default function Journal() {
                     className={classes.addButton}
                     onClick={() => router.push('/journalForm')}
                     rightSection={<FilePlus />}
-                >
-                    Add Journal Entry
-                </Button>
+                    >
+                        Add Journal Entry
+                    </Button>
+
+                    <Popover width={300} position='bottom' withArrow shadow='lg'>
+                        <Popover.Target>
+                            <Button className={classes.filterButton} size='md' color='orange' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Name</Button>
+                        </Popover.Target>
+
+                        <Popover.Dropdown>
+                            <Select
+                                label="Choose a game to filter your journal by"
+                                placeholder="Filter by Game"
+                                checkIconPosition='right'
+                                data={[
+                                    { value: 'all', label: 'All Games' },
+                                    ...gameNames.map((gameName) => ({
+                                        value: gameName,
+                                        label: gameName
+                                    }))
+                                ]}
+                                value={gameName}
+                                onChange={(value) => setGameName(value || 'all')}
+                                className={classes.filterDropdown}
+                                mb="md"
+                            />
+                        </Popover.Dropdown>
+
+                    </Popover>
+
+                </div>
+                
 
                 <div className={classes.tableContainer}>
                     <Table striped={true} stripedColor='#ededed' borderColor='black' withColumnBorders={true} highlightOnHover={true}>

@@ -58,11 +58,6 @@ export default function AvatarMenu(){
                 <Menu.Item leftSection={<Settings size={30} color="gray" />}>
                     Settings
                 </Menu.Item>
-                    
-
-                <Menu.Item leftSection={<CircleHelp size={30} color='green'/>} onClick={() => router.push('/FAQ')}>
-                    FAQ
-                </Menu.Item>
 
                 <Menu.Item leftSection={<LogOut size={30} color="red"/>} onClick={handleSignOut} color="red">
                     Log Out
