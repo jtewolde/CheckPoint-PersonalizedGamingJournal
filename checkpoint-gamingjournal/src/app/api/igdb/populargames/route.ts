@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
     const thirtyDaysAgo = Math.floor((now.getTime() - 45 * 24 * 60 * 60 * 1000) / 1000); // 45 days ago in seconds
 
     // Construct the query body
-    const body = 'fields game_id,value,popularity_type; sort value desc; limit 17; where popularity_type = 1;'
+    const body = 'fields game_id,value,popularity_type; sort value desc; limit 18; where popularity_type = 1;'
 
     const igdbRes = await fetch(IGDB_URL, {
       method: 'POST',
