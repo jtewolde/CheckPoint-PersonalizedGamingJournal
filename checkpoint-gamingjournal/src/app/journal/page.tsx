@@ -6,7 +6,7 @@ import { authClient } from '@/lib/auth-client';
 
 import classes from './journal.module.css';
 
-import { Table, Button, LoadingOverlay, Overlay, Popover, Select, Flex } from '@mantine/core';
+import { Table, Button, LoadingOverlay, Overlay, Popover, Select, Flex, SimpleGrid, Paper } from '@mantine/core';
 
 import toast from 'react-hot-toast';
 import { FilePlus, DeleteIcon, Eye, ListFilter } from 'lucide-react';
@@ -189,21 +189,49 @@ export default function Journal() {
 
                 </div>
                 
+                    {entries.length === 0 ? (
+                        <p>No recent journal entries found.</p>
+                    ) : (
+                        <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
+                            {filteredEntries.map((entry) => (
+                                <div key={entry._id} className={classes.entryCard} >
+                                    <h3 className={classes.entryGame}>{entry.gameName}</h3>
+                                    <h3 className={classes.entryTitle}>{entry.title}</h3>
+                                    <p className={classes.entryContent}>
+                                        {entry.content.length > 150
+                                            ? `${entry.content.slice(0, 200)}...` // Truncate long content
+                                            : entry.content}
+                                    </p>
+                                    <p className={classes.entryDate}>{entry.date}</p>
 
-                <div className={classes.tableContainer}>
-                    <Table striped={true} stripedColor='#ededed' borderColor='black' withColumnBorders={true} highlightOnHover={true}>
-                        <Table.Thead>
-                            <Table.Tr>
-                                <Table.Th className={classes.tableHeader}>Game</Table.Th>
-                                <Table.Th className={classes.tableHeader}>Title</Table.Th>
-                                <Table.Th className={classes.tableHeader}>Content</Table.Th>
-                                <Table.Th className={classes.tableHeader}>Date</Table.Th>
-                                <Table.Th className={classes.tableHeader}>View/Delete Entry</Table.Th>
-                            </Table.Tr>
-                        </Table.Thead>
-                        <Table.Tbody>{rows}</Table.Tbody>
-                    </Table>
-                </div>
+                                    <div className={classes.entryActions}>
+                                        <Button
+                                            className={classes.viewButton}
+                                            onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}
+                                            color="blue"
+                                            radius="md"
+                                            variant="light"
+                                            style={{ marginRight: 8 }}
+                                            rightSection={<Eye />}
+                                        >
+                                            View
+                                        </Button>
+
+                                        <Button
+                                            className={classes.deleteButton}
+                                            onClick={() => deleteJournalEntry(entry._id, entry.gameId)}
+                                            rightSection={<DeleteIcon />}
+                                            radius='md'
+                                            variant='light'
+                                            color='red'
+                                        >
+                                            Delete
+                                        </Button>
+                                    </div>
+                                </div>
+                            ))}
+                        </SimpleGrid>
+                    )}
             </div>
         </div>
     );

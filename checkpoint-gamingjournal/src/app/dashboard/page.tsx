@@ -263,7 +263,7 @@ export default function Dashboard() {
         <h1 className={classes.trendingText}>Popular Visited Games on IGDB Website:</h1>
         
         {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
-        <SimpleGrid cols={5} spacing="lg" className={classes.gamesGrid}>
+        <SimpleGrid cols={6} spacing="lg" className={classes.gamesGrid}>
           {games.map((game) => (
             <div key={game.id} className={classes.gameCard}>
               <Image src={
@@ -303,7 +303,7 @@ export default function Dashboard() {
           {recentEntries.length === 0 ? (
               <p>No recent journal entries found.</p>
           ) : (
-              <SimpleGrid cols={5} spacing="lg" className={classes.entriesGrid}>
+              <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
                   {recentEntries.map((entry) => (
                       <div key={entry._id} className={classes.entryCard} onClick={() => router.push('/journal')}>
                           <h3 className={classes.entryGame}>{entry.gameName}</h3>
