@@ -190,7 +190,9 @@ export default function Journal() {
                 </div>
                 
                     {entries.length === 0 ? (
-                        <p>No recent journal entries found.</p>
+
+                        <p className={classes.noEntriesText}>No recent journal entries found.</p>
+
                     ) : (
                         <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
                             {filteredEntries.map((entry) => (

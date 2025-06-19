@@ -46,6 +46,7 @@ export async function GET(req: NextRequest){
     try{
         const { searchParams } = new URL(req.url);
         const id = searchParams.get('id');
+        console.log("game ID passed", id)
 
         if(!id){
             return NextResponse.json({ message: "Game ID is required "}, {status: 400});
@@ -54,12 +55,12 @@ export async function GET(req: NextRequest){
         // Create unique cache key based on game ID
         const cacheKey = `igdb_game_details:${id}`
 
-        // Try to get cached data from Redis
-        const cachedData = await redis.get(cacheKey);
-        if(cachedData){
-          console.log("Returning cached data of game details for: ", cacheKey);
-          return NextResponse.json(JSON.parse(cachedData), { status: 200 });
-        }
+        // // Try to get cached data from Redis
+        // const cachedData = await redis.get(cacheKey);
+        // if(cachedData){
+        //   console.log("Returning cached data of game details for: ", cacheKey);
+        //   return NextResponse.json(JSON.parse(cachedData), { status: 200 });
+        // }
 
         const accessToken = await getAccessToken();
 
@@ -84,11 +85,14 @@ export async function GET(req: NextRequest){
 
         const game = await igdbRes.json();
 
-        // Cache the response in Redis for 10 minutes
-        await redis.set(cacheKey, JSON.stringify(game), 'EX', 600);
+        // // Cache the response in Redis for 5 minutes
+        // await redis.set(cacheKey, JSON.stringify(game[0]), 'EX', 300);
 
-        return NextResponse.json(game[0], {status: 200});
+        if (!game || game.length === 0) {
+          return NextResponse.json({ message: "Game not found from IGDB." }, { status: 404 });
+        }
 
+        return NextResponse.json(game[0], { status: 200 });
 
       } catch (err: any) {
         console.error("Error", err);

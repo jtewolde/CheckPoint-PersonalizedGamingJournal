@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GameCollection } from "@/utils/db";
+import { ObjectId } from "mongodb";
 
 import { auth } from "@/utils/auth";
 import { redis } from "@/utils/redis";
@@ -26,9 +27,17 @@ export async function POST(req: NextRequest) {
 
         const userId = session.user.id; // Extract userId from the session
 
-        // Update game in the games collection
+        //Check if the instance of the game exists and belongs to the user
+        const game = await GameCollection.findOne({
+            gameId: gameID, // Query as a string
+            userId: userId, // Query as a string
+        });
+
+        // Update game in the games collection for only the user's instance
         const gameResult = await GameCollection.updateOne(
-            { _id: gameID },
+            { _id: game?._id,
+                userId: userId
+            },
             { $set: gameDetails }
         );
 
