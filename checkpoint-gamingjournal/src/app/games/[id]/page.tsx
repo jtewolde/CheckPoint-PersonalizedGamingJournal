@@ -38,17 +38,14 @@ export default function GameDetails() {
   useEffect(() => {
     const fetchIGDBGameDetails = async () => {
       try {
-        const res = await fetch(`/api/igdb/game?id=${id}`,
-          {
-            cache: 'force-cache' //Force cache to avoid API rate limits for game details
-          }
-        ); // Fetch game details from your API
+        const res = await fetch(`/api/igdb/game?id=${id}`); // Fetch game details from your API
         console.log("API Response", res)
         if (!res.ok) {
           throw new Error('Failed to fetch game details');
         }
         const data = await res.json();
         setGame(data); // Store the game details in state
+        console.log("Game Data", data)
         setStatus(data.status);
 
       } catch (error) {
@@ -75,8 +72,10 @@ export default function GameDetails() {
         }
 
         const data = await res.json();
-        const isGameInLibrary = data.games.some((libraryGame: any) => libraryGame._id === id);
-        const currentGame = data.games.find((libraryGame: any) => libraryGame._id === id);
+
+        const isGameInLibrary = data.games.some((libraryGame: any) => libraryGame.gameId === id);
+        const currentGame = data.games.find((libraryGame: any) => libraryGame.gameId === id);
+        console.log("Current Game", currentGame)
 
         setIsInLibrary(isGameInLibrary); // Update the state
         setLibraryGame(currentGame || null); // Store the current game details in state 
@@ -90,9 +89,12 @@ export default function GameDetails() {
       fetchIGDBGameDetails();
       if(isAuthenticated) { // Only check library if user is authenticated}
       checkIfInLibrary();
+      } else {
+        setIsInLibrary(false)
+        setLibraryGame(null)
       }
     }
-  }, [id]);
+  }, [id, isAuthenticated]);
 
   // Function to handle adding the game to the user's library
   const handleAddToLibrary = async () => {

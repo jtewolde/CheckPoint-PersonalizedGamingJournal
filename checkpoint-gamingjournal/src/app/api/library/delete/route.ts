@@ -27,9 +27,23 @@ export async function POST(req: NextRequest) {
 
         const userId = session.user.id; // Extract userId from the session
 
+        //Check if the instance of the game exists and belongs to the user
+        const game = await GameCollection.findOne({
+            gameId: gameID, // Query as a string
+            userId: userId, // Query as a string
+        });
+
+        if (!game) {
+            console.error("This game not found or unauthorized");
+            return NextResponse.json(
+                { error: "This game not found or unauthorized" },
+                { status: 404 }
+            );
+        }
+
         // Delete game from the games collection
         const gameResult = await GameCollection.deleteOne(
-            { _id: gameID }
+            { _id: game._id }
         );
 
         // Remove game ID from the user's game array
@@ -43,6 +57,7 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({
             message: "Game deleted from library successfully",
+            userResult,
             gameResult,
         });
     } catch (error) {

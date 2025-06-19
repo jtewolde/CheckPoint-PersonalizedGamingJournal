@@ -34,9 +34,15 @@ export async function POST(req: NextRequest) {
 
       const userId = session.user.id;
 
-      // Check if the game exists in the user's library
-      const user = await UserCollection.findOne({ _id: new ObjectId(userId) });
-      if (!user || !user.games || !user.games.includes(gameID)) {
+      //Check if the instance of the game exists and belongs to the user
+        const game = await GameCollection.findOne({
+            gameId: gameID, // Query as a string
+            userId: userId, // Query as a string
+        });
+
+      console.log("game", game, gameID, userId)
+
+      if (!game) {
         return NextResponse.json(
           { error: "Game not found in user's library" },
           { status: 404 }
@@ -59,7 +65,9 @@ export async function POST(req: NextRequest) {
 
       // Append the journal entry ID to the game's journalEntries field
       const updateGameResult = await GameCollection.updateOne(
-          { _id: gameID },
+          { gameId: gameID,
+            userId: userId
+           },
           { $addToSet: { journalEntries: journalEntry.uuid } } // Prevent duplicates
       )
 

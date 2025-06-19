@@ -111,7 +111,7 @@ export default function Library(){
                                 className={classes.imageContainer}
                                 key={game._id}
                                 style={{ textAlign: 'center' }}
-                                onClick={() => router.push(`/games/${game._id}`)}
+                                onClick={() => router.push(`/games/${game.gameId}`)}
                             >
                                 <Image
                                     src={

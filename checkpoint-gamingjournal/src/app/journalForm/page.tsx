@@ -90,7 +90,7 @@ export default function JournalForm() {
     });
 
     // Find the selected game's title
-    const selectedGame = games.find((game) => game._id === gameID);
+    const selectedGame = games.find((game) => game.gameId === gameID);
     console.log("Selectedgame",selectedGame);
     console.log(currentDate);
     const gameName = selectedGame ? selectedGame.title : "";
@@ -145,7 +145,7 @@ export default function JournalForm() {
               label="Select Game"
               placeholder="Choose a game"
               data={games.map((game) => ({
-                value: game._id, // Use the game's ID as the value
+                value: game.gameId, // Use the game's ID as the value
                 label: game.title, // Display the game's name
               }))}
               value={gameID}

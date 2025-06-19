@@ -46,6 +46,9 @@ export const auth = betterAuth({
 
     user: {
         modelName: "users",
+        deleteUser: {
+            enabled:true
+        },
 
         additionalFields: {
             games: {

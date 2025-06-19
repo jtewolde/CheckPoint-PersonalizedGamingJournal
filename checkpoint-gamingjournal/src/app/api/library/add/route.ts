@@ -35,17 +35,21 @@ export async function POST(req: NextRequest) {
             gameDetails.status = "No Status Given"; // Default status of game if not provided
         }
 
+        // Create a game with the user's ID
+        const game = {
+            userId: userId,
+            gameId: gameID,
+            ...gameDetails
+        }
+
         // Add game to the games collection
-        const gameResult = await GameCollection.updateOne(
-            { _id: gameID },
-            { $set: gameDetails },
-            { upsert: true }
-        );
+        const gameResult = await GameCollection.insertOne(game);
+        const insertedGameId = gameResult.insertedId
 
         // Add game ID to the user's games array
         const userResult = await UserCollection.updateOne(
             { _id: new ObjectId(userId) },
-            { $addToSet: { games: gameID } } // Prevent duplicates
+            { $addToSet: { games: insertedGameId } } // Prevent duplicates
         );
 
         // Invalidate/clear the cache for the user's library
