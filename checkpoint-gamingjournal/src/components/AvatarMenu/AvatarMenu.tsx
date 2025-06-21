@@ -55,7 +55,7 @@ export default function AvatarMenu(){
                 {user?.name || "Account"}
                 </Menu.Item>
 
-                <Menu.Item leftSection={<Settings size={30} color="gray" />}>
+                <Menu.Item leftSection={<Settings size={30} color="gray" />} onClick={() => router.push('/settings')}>
                     Settings
                 </Menu.Item>
 

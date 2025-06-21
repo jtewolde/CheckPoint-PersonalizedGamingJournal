@@ -4,6 +4,7 @@ import { ObjectId} from "mongodb";
 
 import { auth } from "@/utils/auth";
 import User from "@/models/User";
+import Game from "@/models/Game";
 
 // This API route is for deleting users and their data from the database
 export async function POST(req: NextRequest){
@@ -26,14 +27,20 @@ export async function POST(req: NextRequest){
             {_id: objectId}
         )
 
-        // Step 2: Delete all Journal entries of that user
+        // Step 2: Delete all of the games that the user has in their library
+        const gamesResult = await GameCollection.deleteMany({
+            userId: userId
+        })
+
+        // Step 3: Delete all Journal entries of that user
         const entriesResult = await JournalEntriesCollection.deleteMany({
-            userID: userId
+            userId: userId
         })
 
        return NextResponse.json({
         message: "User and all associated data deleted successfully",
         deletedUser: userResult.deletedCount,
+        deletedGames: gamesResult.deletedCount,
         deletedEntries: entriesResult.deletedCount,
     }, { status: 200 });
 
