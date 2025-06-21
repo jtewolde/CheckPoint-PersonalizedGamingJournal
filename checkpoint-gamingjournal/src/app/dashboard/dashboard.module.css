@@ -103,13 +103,15 @@
   .gamesGrid {
     display: grid;
     grid-template-columns: repeat(5, 1fr); /* Default: 5 columns */
-    gap: 1rem;
+    gap: 3rem;
     justify-content: center;
-    align-content: c;
+    align-content: center;
+    justify-items: center;
+    margin-left: 8rem;
   }
   
   .cover {
-    width: 100%;
+    width: 120%;
     object-fit: cover;
     border-radius: 8px;
     cursor: pointer;
