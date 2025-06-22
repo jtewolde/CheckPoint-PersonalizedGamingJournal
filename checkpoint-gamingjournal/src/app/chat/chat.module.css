@@ -72,7 +72,7 @@
     align-self: center;
     height: auto;
     background-color: #232526;
-    color: #444;
+    color: white;
 }
 
 .askQuestionText textarea{
@@ -107,4 +107,8 @@
         align-items: center;
     }
 
+}
+
+@media (max-width: 500px){
+    
 }

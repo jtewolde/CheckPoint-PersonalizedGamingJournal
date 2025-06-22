@@ -23,41 +23,23 @@ export default function SettingsLayout({ children }: { children: ReactNode}) {
     const [isMobile, setIsMobile] = useState(false);
 
     return (
-        <Flex direction={{ base: 'column', sm: 'row' }} style={{ minHeight: 'calc(100vh - 148px)' }}>
-        {/* Burger for mobile */}
-        {isMobile && (
-            <Box p="md">
-            <Burger opened={opened} onClick={toggle} aria-label="Toggle settings menu" />
-            </Box>
-        )}
+        <Flex direction={{ base: 'column', sm: 'row' }} style={{ minHeight: 'calc(100vh - 140px)' }}>
 
         {/* Sidebar */}
         {(!isMobile || opened) && (
             <Paper
             withBorder
             shadow="sm"
+            h={{ base: '100%'}}
             w={{ base: '100%', sm: 270 }}
             p="md"
-            style={{ backgroundColor: '#f0f0f0', borderRight: '1px solid black'}}
+            style={{ background: 'rgb(167, 167, 167)', borderRight: '1px solid white'}}
             >
                 <Stack gap="lg">
-                    <NavLink
-                    label="Profile"
-                    styles={{
-                        label:{
-                            fontFamily: 'Poppins',
-                            fontWeight: 600,
-                            fontSize: '1.5rem'
-                        }
-                    }}
-                    leftSection={<User size={30} />}
-                    component={Link}
-                    href="/settings/profile"
-                    active={pathname === '/settings/profile'}
-                    />
 
                     <NavLink
                     label="Email"
+                    autoContrast
                     styles={{
                         label:{
                             fontFamily: 'Poppins',
@@ -69,6 +51,24 @@ export default function SettingsLayout({ children }: { children: ReactNode}) {
                     component={Link}
                     href="/settings/email"
                     active={pathname === '/settings/email'}
+                    color='white'
+                    />
+
+                    <NavLink
+                    label="Profile"
+                    autoContrast
+                    styles={{
+                        label:{
+                            fontFamily: 'Poppins',
+                            fontWeight: 600,
+                            fontSize: '1.5rem',
+                        }
+                    }}
+                    leftSection={<User size={30} />}
+                    component={Link}
+                    href="/settings/profile"
+                    active={pathname === '/settings/profile'}
+                    color="white"
                     />
 
                     <NavLink
@@ -76,14 +76,16 @@ export default function SettingsLayout({ children }: { children: ReactNode}) {
                         label:{
                             fontFamily: 'Poppins',
                             fontWeight: 600,
-                            fontSize: '1.5rem'
+                            fontSize: '1.5rem',
                         }
                     }}
                     label="Password"
+                    autoContrast
                     leftSection={<FileLock size={30} />}
                     component={Link}
                     href="/settings/password"
                     active={pathname === '/settings/password'}
+                    color="white"
                     />
                 </Stack>
 
@@ -91,7 +93,7 @@ export default function SettingsLayout({ children }: { children: ReactNode}) {
         )}
 
         {/* Main Content */}
-        <Box p="xl" style={{ flex: 1, backgroundColor: 'white' }}>
+        <Box p="xl" style={{ flex: 1, background: 'linear-gradient(to top,rgb(72, 71, 71),rgb(73, 73, 73)' }}>
             {children}
         </Box>
     </Flex>

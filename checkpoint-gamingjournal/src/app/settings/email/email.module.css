@@ -1,0 +1,40 @@
+
+.emailWrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: 'Poppins';
+}
+
+.title{
+    font-family: 'Poppins';
+}
+
+.currentEmail{
+    color: red;
+    font-weight: 700;
+}
+
+.enterEmail{
+    color: white;
+    width: 40%;
+}
+
+.submitButton{
+    width: 20%;
+}
+
+.enterEmail textarea{
+    background: #232526;      /* background color */
+    color: #fff;  
+}
+
+@media (max-width: 560px){
+    .enterEmail{
+        width: 70%;
+    }
+
+    .submitButton{
+        width: 60%;
+    }
+}

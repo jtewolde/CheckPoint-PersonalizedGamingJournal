@@ -1,0 +1,36 @@
+
+.profileWrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: 'Poppins';
+}
+
+.container{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+.title{
+    font-family: 'Poppins';
+}
+
+.currentName{
+    color: red;
+    font-weight: 700;
+}
+
+.avatarSection{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.avatar{
+    border: 2px solid lightgray;
+}

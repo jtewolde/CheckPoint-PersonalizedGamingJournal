@@ -98,6 +98,10 @@
   .responsiveGrid {
     grid-template-columns: repeat(2, 1fr); /* 2 columns for screens smaller than 480px */
   }
+
+  .filterButton{
+    width: 60%;
+  }
 }
 
 @media (max-width: 320px) {

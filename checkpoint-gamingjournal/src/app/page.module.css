@@ -1,8 +1,8 @@
 .hero {
   background-image: url('../../public/checkpointHomeBackground.jpg');
   position: relative;
-  background-size: cover;
-  background-repeat: no-repeat;
+  background-size: contain;
+  background-repeat: repeat;
   background-position: center;
   min-height: 100vh; /* This ensures the hero fills the full screen */
   max-width: 100vw;
