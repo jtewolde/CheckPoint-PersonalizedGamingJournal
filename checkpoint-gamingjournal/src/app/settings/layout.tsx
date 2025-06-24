@@ -1,6 +1,6 @@
 'use client'
 
-import { Paper, NavLink, Stack, Box, Flex, Burger } from "@mantine/core";
+import { Paper, NavLink, Stack, Box, Flex, Burger, rem } from "@mantine/core";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -33,21 +33,29 @@ export default function SettingsLayout({ children }: { children: ReactNode}) {
             h={{ base: '100%'}}
             w={{ base: '100%', sm: 270 }}
             p="md"
-            style={{ background: 'rgb(167, 167, 167)', borderRight: '1px solid white'}}
+            style={{ background: 'linear-gradient(to bottom, #2e2e2e, #3e3e3e)', borderRight: '1px solid white'}}
             >
-                <Stack gap="lg">
+                <Stack gap="xl">
 
                     <NavLink
+                    className={classes.navLinks}
                     label="Email"
+                    description="Update your Email Address"
                     autoContrast
                     styles={{
+                        root: {
+                            borderBottom: pathname === '/settings/email' ? '4px solid white': undefined,
+                            color: pathname === '/settings/email' ? 'white' : undefined,
+                        },
+
                         label:{
                             fontFamily: 'Poppins',
                             fontWeight: 600,
-                            fontSize: '1.5rem'
+                            fontSize: '1.5rem',
+                            color: 'white'
                         }
                     }}
-                    leftSection={<Mail size={30} />}
+                    leftSection={<Mail size={30} color="white"/>}
                     component={Link}
                     href="/settings/email"
                     active={pathname === '/settings/email'}
@@ -55,16 +63,23 @@ export default function SettingsLayout({ children }: { children: ReactNode}) {
                     />
 
                     <NavLink
+                    className={classes.navLinks}
                     label="Profile"
+                    description="Update your Avatar/Username"
                     autoContrast
                     styles={{
+                        root: {
+                            borderBottom: pathname === '/settings/profile' ? '4px solid white': undefined,
+                            color: pathname === '/settings/profile' ? 'white' : undefined,
+                        },
                         label:{
                             fontFamily: 'Poppins',
                             fontWeight: 600,
                             fontSize: '1.5rem',
+                            color: 'white'
                         }
                     }}
-                    leftSection={<User size={30} />}
+                    leftSection={<User size={30} color="white"/>}
                     component={Link}
                     href="/settings/profile"
                     active={pathname === '/settings/profile'}
@@ -72,16 +87,23 @@ export default function SettingsLayout({ children }: { children: ReactNode}) {
                     />
 
                     <NavLink
+                    className={classes.navLinks}
+                    description="Change your Password"
                     styles={{
+                        root: {
+                            borderBottom: pathname === '/settings/password' ? '4px solid white': undefined,
+                            color: pathname === '/settings/password' ? 'white' : undefined,
+                        },
                         label:{
                             fontFamily: 'Poppins',
                             fontWeight: 600,
                             fontSize: '1.5rem',
+                            color: 'white'
                         }
                     }}
                     label="Password"
                     autoContrast
-                    leftSection={<FileLock size={30} />}
+                    leftSection={<FileLock size={30} color="white"/>}
                     component={Link}
                     href="/settings/password"
                     active={pathname === '/settings/password'}
@@ -93,7 +115,7 @@ export default function SettingsLayout({ children }: { children: ReactNode}) {
         )}
 
         {/* Main Content */}
-        <Box p="xl" style={{ flex: 1, background: 'linear-gradient(to top,rgb(72, 71, 71),rgb(73, 73, 73)' }}>
+        <Box p="xl" style={{ flex: 1, background: 'linear-gradient(to top, #444444, #333333)' }}>
             {children}
         </Box>
     </Flex>

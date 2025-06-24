@@ -69,7 +69,7 @@ export default function Email(){
 
       <Title className={classes.title} c='white' order={1} >Email</Title>
       
-      <Text size='lg' c='white' fw={600}> Your current email is:  
+      <Text size='lg' c='white' fw={400}> Your current email is:  
         
         <span className={classes.currentEmail}> {email} </span>
 
@@ -77,6 +77,12 @@ export default function Email(){
 
       <TextInput 
         className={classes.enterEmail}
+        styles={{
+          input:{
+            backgroundColor: '#232526',
+            color: 'white'
+          }
+        }}
         size='lg' 
         inputSize='md' 
         label='New Email' 

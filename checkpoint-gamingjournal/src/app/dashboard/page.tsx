@@ -56,7 +56,7 @@ export default function Dashboard() {
         }
         const data = await res.json();
         setGames(data); // Store the games data in state
-        console.log(data);
+        console.log("Popular Games: ",data);
       } catch (error) {
         console.error('Error fetching popular games:', error);
       } finally {

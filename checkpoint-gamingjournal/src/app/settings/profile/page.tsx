@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { TextInput, Button, Text, Title, FileButton, Avatar } from '@mantine/core'
 
-import { MailPlus } from 'lucide-react';
+import { FileLock } from 'lucide-react';
 
 import { authClient } from '@/lib/auth-client'
 
@@ -21,6 +21,7 @@ export default function Profile(){
   const [username, setUserName] = useState('')
   const [profileImage, setProfileImage] = useState('')
   const [profilePicture, setProfilePicture] = useState<File | null>(null)
+  const [error, setError] = useState('')
 
   // Check if the user is authenticated
   useEffect(() => {
@@ -37,6 +38,8 @@ export default function Profile(){
 
     checkAuth();
   }, [router]);
+
+  // Function to handle updating the user's username and/or profile
 
   return(
 
@@ -56,17 +59,35 @@ export default function Profile(){
 
         </div>
 
-        <Text size='lg' c='white' fw={600}> Current Username:   
-          
-          <span className={classes.currentName}> {username} </span>
+        <div className={classes.usernameSection} >
 
-        </Text>
+          <Text size='lg' c='white' fw={400}> Current Username:   
+            <span className={classes.currentName}> {username} </span>
+          </Text>
+
+          <TextInput 
+            className={classes.enterUsername}
+            styles={{
+              input:{
+                backgroundColor: '#232526',
+                color: 'white'
+              }
+            }}
+            size='lg' 
+            inputSize='md' 
+            label='New Username' 
+            placeholder='Enter your new username' 
+            leftSection={<FileLock size={20} />}
+            error={error} 
+          />
+
+          <Button color='#280582' size='md' radius='md' variant='filled' >Confirm Change</Button>
+
+        </div>
         
       </div>
 
     </div>
-
-      
 
   )
 
