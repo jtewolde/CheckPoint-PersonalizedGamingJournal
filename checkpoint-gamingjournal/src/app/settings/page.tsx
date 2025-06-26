@@ -1,17 +1,8 @@
-'use client'
 
-import { AppShell, Button, TextInput, Avatar } from "@mantine/core";
-import { useState, useEffect } from "react";
-import toast from "react-hot-toast";
+// app/settings/page.tsx
 
-import classes from './settings.module.css';
+import { redirect } from "next/navigation";
 
-export default function Settings() {
-
-
-    return(
-        <AppShell >
-            
-        </AppShell>
-    )
+export default function SettingsHome() {
+  redirect('/settings/email');
 }

@@ -50,6 +50,10 @@ export const auth = betterAuth({
             enabled:true
         },
 
+        changeEmail: {
+            enabled: true
+        },
+
         additionalFields: {
             games: {
                 type: "string[]",

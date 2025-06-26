@@ -44,10 +44,10 @@ export default function AvatarMenu(){
 
     return(
 
-        <Menu width={200} shadow="md">
+        <Menu width={200} shadow="md" position='bottom-start'>
 
             <Menu.Target>
-                <Avatar radius="xl" size={50} src={user?.image || undefined} alt={user?.name || "User"} style={{ cursor: "pointer", border:'3px solid black' }} />
+                <Avatar radius="xl" size={50} src={user?.image || undefined} alt={user?.name || "User"} style={{ cursor: "pointer", border:'2px solid black' }} />
             </Menu.Target>
 
             <Menu.Dropdown>
@@ -55,7 +55,7 @@ export default function AvatarMenu(){
                 {user?.name || "Account"}
                 </Menu.Item>
 
-                <Menu.Item leftSection={<Settings size={30} color="gray" />}>
+                <Menu.Item leftSection={<Settings size={30} color="gray" />} onClick={() => router.push('/settings')}>
                     Settings
                 </Menu.Item>
 

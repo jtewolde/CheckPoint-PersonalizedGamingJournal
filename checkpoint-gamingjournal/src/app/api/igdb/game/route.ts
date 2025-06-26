@@ -56,11 +56,11 @@ export async function GET(req: NextRequest){
         const cacheKey = `igdb_game_details:${id}`
 
         // // Try to get cached data from Redis
-        // const cachedData = await redis.get(cacheKey);
-        // if(cachedData){
-        //   console.log("Returning cached data of game details for: ", cacheKey);
-        //   return NextResponse.json(JSON.parse(cachedData), { status: 200 });
-        // }
+        const cachedData = await redis.get(cacheKey);
+        if(cachedData){
+          console.log("Returning cached data of game details for: ", cacheKey);
+          return NextResponse.json(JSON.parse(cachedData), { status: 200 });
+        }
 
         const accessToken = await getAccessToken();
 
@@ -85,8 +85,8 @@ export async function GET(req: NextRequest){
 
         const game = await igdbRes.json();
 
-        // // Cache the response in Redis for 5 minutes
-        // await redis.set(cacheKey, JSON.stringify(game[0]), 'EX', 300);
+        // Cache the response in Redis for 5 minutes
+        await redis.set(cacheKey, JSON.stringify(game[0]), 'EX', 300);
 
         if (!game || game.length === 0) {
           return NextResponse.json({ message: "Game not found from IGDB." }, { status: 404 });
