@@ -55,7 +55,7 @@ export async function GET(req: NextRequest){
         // Create unique cache key based on game ID
         const cacheKey = `igdb_game_details:${id}`
 
-        // Try to get cached data from Redis
+        // // Try to get cached data from Redis
         const cachedData = await redis.get(cacheKey);
         if(cachedData){
           console.log("Returning cached data of game details for: ", cacheKey);
