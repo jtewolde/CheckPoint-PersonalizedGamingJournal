@@ -48,13 +48,11 @@ export default function Email(){
         setLoading(true)
       },
       onSuccess: () => {
-        setLoading(true)
+        setLoading(false)
         toast.success("Updated Email Successful!")
       },
       onError: (ctx) => {
-
           setError(ctx.error?.message || "Invalid Credentials")
-
           setLoading(false);
           toast.error(ctx.error?.message)
       }

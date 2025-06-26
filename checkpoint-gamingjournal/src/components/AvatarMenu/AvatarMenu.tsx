@@ -47,7 +47,7 @@ export default function AvatarMenu(){
         <Menu width={200} shadow="md" position='bottom-start'>
 
             <Menu.Target>
-                <Avatar radius="xl" size={50} src={user?.image || undefined} alt={user?.name || "User"} style={{ cursor: "pointer", border:'3px solid black' }} />
+                <Avatar radius="xl" size={50} src={user?.image || undefined} alt={user?.name || "User"} style={{ cursor: "pointer", border:'2px solid black' }} />
             </Menu.Target>
 
             <Menu.Dropdown>

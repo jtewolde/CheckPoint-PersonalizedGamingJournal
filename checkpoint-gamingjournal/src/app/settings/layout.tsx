@@ -53,6 +53,10 @@ export default function SettingsLayout({ children }: { children: ReactNode}) {
                             fontWeight: 600,
                             fontSize: '1.5rem',
                             color: 'white'
+                        },
+                        description: {
+                            fontFamily: 'Poppins',
+                            fontSize: '0.75rem'
                         }
                     }}
                     leftSection={<Mail size={30} color="white"/>}
@@ -77,6 +81,10 @@ export default function SettingsLayout({ children }: { children: ReactNode}) {
                             fontWeight: 600,
                             fontSize: '1.5rem',
                             color: 'white'
+                        },
+                        description: {
+                            fontFamily: 'Poppins',
+                            fontSize: '0.75rem'
                         }
                     }}
                     leftSection={<User size={30} color="white"/>}
@@ -99,6 +107,10 @@ export default function SettingsLayout({ children }: { children: ReactNode}) {
                             fontWeight: 600,
                             fontSize: '1.5rem',
                             color: 'white'
+                        },
+                        description: {
+                            fontFamily: 'Poppins',
+                            fontSize: '0.75rem'
                         }
                     }}
                     label="Password"
