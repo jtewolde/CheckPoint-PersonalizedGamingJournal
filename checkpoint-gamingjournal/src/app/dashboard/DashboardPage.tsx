@@ -176,7 +176,7 @@ export default function Dashboard() {
               <p className={classes.statusTotalCount}>Total Games: {numOfGames}</p>
 
               <SemiCircleProgress className={classes.statusProgress} value={completedPercentage} filledSegmentColor='#f018e8' size={170} thickness={15} 
-                label={<Text c='#f018e8' component='span' size='lg' fw={600}>{completedPercentage}% Completed</Text>}>
+                label={<Text c='#f018e8' component='span' size='lg' fw={600}>{completedPercentage || '0'}% Completed</Text>}>
               </SemiCircleProgress>
 
             </Suspense>
@@ -280,20 +280,26 @@ export default function Dashboard() {
       <div className={classes.playingGames} >
 
         <h1 className={classes.playingText}>Games that you are currently playing:</h1>
-
-        {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
-        <SimpleGrid cols={6} spacing="lg" className={classes.gamesGrid}>
-          {playingGames.map((game) => (
-            <div key={game._id} className={classes.gameCard}>
-              <Image src={
-                game.coverImage ? `https:${game.coverImage.replace('t_thumb', 't_cover_big')}` : PlaceHolderImage.src } 
-                alt={game.name} 
-                className={classes.cover} 
-                onClick={() => router.push(`/games/${game._id}`)} 
-                />
-            </div>
-          ))}
-        </SimpleGrid>
+        
+        {playingGames.length === 0 ? (
+              <p className={classes.noEntriesText}>You have no games that have the 'Playing' status.</p>
+          ) : (
+            <>
+              {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
+              <SimpleGrid cols={6} spacing="lg" className={classes.gamesGrid}>
+                {playingGames.map((game) => (
+                  <div key={game._id} className={classes.gameCard}>
+                    <Image src={
+                      game.coverImage ? `https:${game.coverImage.replace('t_thumb', 't_cover_big')}` : PlaceHolderImage.src } 
+                      alt={game.name} 
+                      className={classes.cover} 
+                      onClick={() => router.push(`/games/${game._id}`)} 
+                      />
+                  </div>
+                ))}
+              </SimpleGrid>
+            </>
+          )}
       </div>
 
       <div className={classes.recentEntries}>
@@ -301,7 +307,7 @@ export default function Dashboard() {
           <h1 className={classes.recentEntriesText}>Recent Journal Entries: </h1>
 
           {recentEntries.length === 0 ? (
-              <p>No recent journal entries found.</p>
+              <p className={classes.noEntriesText}>No recent journal entries found.</p>
           ) : (
               <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
                   {recentEntries.map((entry) => (

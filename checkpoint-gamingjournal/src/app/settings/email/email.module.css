@@ -1,4 +1,10 @@
 
+.container{
+    display: flex;
+    flex-direction: row;
+    gap: 200px;
+}
+
 .emailWrapper{
     display: flex;
     flex-direction: column;
@@ -8,20 +14,21 @@
 
 .title{
     font-family: 'Poppins';
+    border-bottom: 2px solid lightgray;
 }
 
 .currentEmail{
-    color: red;
+    color: rgb(54, 140, 238);
     font-weight: 700;
 }
 
 .enterEmail{
     color: white;
-    width: 40%;
+    width: 89%;
 }
 
 .submitButton{
-    width: 20%;
+    width: 60%;
 }
 
 .enterEmail textarea{
@@ -29,12 +36,39 @@
     color: #fff;  
 }
 
+.deleteUserWrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: 'Poppins';
+}
+
+.deleteButton{
+    width: 50%
+}
+
+.modalText{
+    text-align: center;
+    justify-content: center;
+    font-family: 'Poppins';
+    color: white;
+}
+
 @media (max-width: 560px){
+    .container{
+        display: flex;
+        flex-direction: column;
+        gap: 6rem;
+    }
     .enterEmail{
         width: 70%;
     }
 
     .submitButton{
         width: 60%;
+    }
+
+    .deleteButton{
+        width: 90%;
     }
 }

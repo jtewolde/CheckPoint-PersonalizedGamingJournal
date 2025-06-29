@@ -95,23 +95,9 @@ export default function Profile(){
 
     <div className={classes.profileWrapper}>
 
-      <Title className={classes.title} c='white' order={1} >Update Profile </Title>
-
-      <div className={classes.container}>
-
-        <div className={classes.avatarSection} >
-
-          <Text size='xl' c='white' fw={300}>Avatar</Text>
-
-          <Avatar className={classes.avatar} radius="xl" size={160} src={profileImage} alt={username || "User"} style={{ cursor: "pointer"}} />
-
-          <FileButton onChange={setProfilePicture} accept='image/png,image/jpeg'>
-            {(props) => <Button color='#f21616' size='md' radius='md' variant='filled' rightSection={<Upload size={30} />}{...props}>Upload Image</Button>}
-          </FileButton>
-
-        </div>
-
         <div className={classes.usernameSection} >
+
+          <Title className={classes.title} c='white' fw={450} order={1} >Update Username</Title>
 
           <Text size='lg' c='white' fw={400}> Current Username:   
             <span className={classes.currentName}> {oldUserName} </span>
@@ -136,19 +122,29 @@ export default function Profile(){
           />
 
           <Button 
-          color='#2bdd66' 
-          rightSection={<CircleCheck size={30} />} 
-          size='md' 
-          radius='md' 
-          variant='filled' 
-          loading={loading}
-          onClick={handleUpdateName}>
-          Confirm Change
+            color='#2bdd66' 
+            rightSection={<CircleCheck size={30} />} 
+            size='md' 
+            radius='md' 
+            variant='filled' 
+            loading={loading}
+            onClick={handleUpdateName}>
+            Confirm Change
           </Button>
 
         </div>
-        
-      </div>
+
+        <div className={classes.avatarSection} >
+
+          <Title className={classes.avatarTitle} c='white' fw={450} order={1} >Update Avatar</Title>
+
+          <Avatar className={classes.avatar} radius="xl" size={200} src={profileImage} alt={username || "User"} style={{ cursor: "pointer"}} />
+
+          <FileButton onChange={setProfilePicture} accept='image/png,image/jpeg'>
+            {(props) => <Button color='#f21616' size='md' radius='md' variant='filled' rightSection={<Upload size={30} />}{...props}>Upload Image</Button>}
+          </FileButton>
+
+        </div>
 
     </div>
 

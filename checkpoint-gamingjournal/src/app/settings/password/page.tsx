@@ -1,9 +1,12 @@
-import React from 'react'
 
-const Password = () => {
-  return (
-    <div>Password</div>
-  )
+import { Metadata } from "next";
+import PasswordPage from "./PasswordPage";
+
+// Set the page title for Password page
+export const metadata: Metadata = {
+  title: "Settings - Password | CheckPoint"
 }
 
-export default Password
+export default function Page(){
+  return <PasswordPage />
+}
