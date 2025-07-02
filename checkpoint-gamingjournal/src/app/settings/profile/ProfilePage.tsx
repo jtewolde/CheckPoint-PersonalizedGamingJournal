@@ -8,6 +8,7 @@ import { TextInput, Button, Text, Title, FileButton, Avatar } from '@mantine/cor
 import { FileLock, Upload, CircleCheck } from 'lucide-react';
 
 import { authClient } from '@/lib/auth-client'
+import { UploadButton } from '@/utils/uploadthing';
 
 import toast from 'react-hot-toast';
 
@@ -70,11 +71,11 @@ export default function Profile(){
   }
 
   // Function to handle changing user's avatar
-  const handleUpdateAvatar = async () => {
+  const handleUpdateAvatar = async (imageUrl: string) => {
     setLoading(true)
 
     const res = await authClient.updateUser({
-      image: profileImage
+      image: imageUrl
     },{
       onRequest: () => {
         setLoading(true)
@@ -140,9 +141,30 @@ export default function Profile(){
 
           <Avatar className={classes.avatar} radius="xl" size={200} src={profileImage} alt={username || "User"} style={{ cursor: "pointer"}} />
 
-          <FileButton onChange={setProfilePicture} accept='image/png,image/jpeg'>
-            {(props) => <Button color='#f21616' size='md' radius='md' variant='filled' rightSection={<Upload size={30} />}{...props}>Upload Image</Button>}
-          </FileButton>
+          <UploadButton endpoint={"imageUploader"} onClientUploadComplete={async (res) => {
+            if (res && res.length > 0) {
+              const newURL = res[0].ufsUrl;
+              setProfileImage(newURL);
+              console.log("Avatar URL: ", newURL);
+              await handleUpdateAvatar(newURL);
+            } else {
+              toast.error("Failed to upload avatar.");
+            }
+          }} 
+          appearance={{
+            button: {
+              backgroundColor: '#f21616',
+              color: 'white',
+            },
+            allowedContent: {
+              color: 'white'
+            }
+          }}
+          onUploadError={(error) => {
+            console.error("Upload Error: ", error);
+            toast.error("Failed to upload avatar.");
+          }}
+          />
 
         </div>
 

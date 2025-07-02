@@ -19,6 +19,7 @@
     "@mantine/notifications": "^7.17.5",
     "@mantinex/dev-icons": "^1.1.0",
     "@tabler/icons-react": "^3.31.0",
+    "@uploadthing/react": "^7.3.2",
     "@upstash/ratelimit": "^2.0.5",
     "@vercel/kv": "^3.0.0",
     "ai": "^4.3.16",
@@ -37,6 +38,7 @@
     "react-markdown": "^10.1.0",
     "react-multi-carousel": "^2.8.6",
     "resend": "^4.5.1",
+    "uploadthing": "^7.7.3",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
