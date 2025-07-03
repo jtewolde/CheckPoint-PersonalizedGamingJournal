@@ -28,17 +28,15 @@ export default function PasswordPage(){
         if (!data?.user) {
         // If the user isn't authenticated, redirect to the sign-in page
         router.push('/auth/signin')
-        } else {
-        data.user.
         }
-    };
-
+    }
+    
     checkAuth();
     }, [router]);
 
     return(
         <div className={classes.passwordContainer} >
-
+            
         </div>
     )
 
