@@ -13,6 +13,7 @@ import { UploadButton } from '@/utils/uploadthing';
 import toast from 'react-hot-toast';
 
 import classes from './profile.module.css';
+import "@uploadthing/react/styles.css";
 
 export default function Profile(){
 
