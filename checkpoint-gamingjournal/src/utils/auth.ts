@@ -2,6 +2,8 @@ import { betterAuth } from "better-auth";
 import { bearer } from "better-auth/plugins";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { resend } from "./resend";
+import ForgotPasswordEmail from "@/emails/forgot-password";
+import verifyEmail from "@/emails/verify-email";
 import db from "./db";
 
 export const auth = betterAuth({
@@ -20,7 +22,20 @@ export const auth = betterAuth({
         autoSignIn: true,
         minPasswordLength: 8,
         maxPasswordLength: 128,
-        requireEmailVerification: true
+        requireEmailVerification: true,
+        sendResetPassword: async ({ user, url }) => {
+            console.log("Password Reset for : ", user.email);
+            await resend.emails.send({
+                from: "Acme <noreply@emails.checkpoint-gamingjournal.com>",
+                to: user.email,
+                subject: "CheckPoint Reset Password",
+                react: ForgotPasswordEmail({
+                    username: user.name,
+                    resetUrl: url,
+                    userEmail: user.email,
+                }),
+            })
+        }
     },
 
     emailVerification: {
@@ -29,10 +44,13 @@ export const auth = betterAuth({
         sendVerificationEmail: async ( { user, url}) => {
             console.log("Email Vertification for: ", user.email)
             await resend.emails.send({
-                from: "Acme <onboarding@resend.dev>",
+                from: "Acme <noreply@emails.checkpoint-gamingjournal.com>",
                 to: user.email,
                 subject: "CheckPoint Email Vertification",
-                html: `Please click the link to verify your email to use CheckPoint: ${url}`,
+                react: verifyEmail({
+                    username: user.name,
+                    verifyUrl: url,
+                })
             });
         }
     },

@@ -39,66 +39,85 @@ export default function signInPage(){
       checkAuth();
     }, [router]);
 
-    // Function to handle form submission for email authentication
-    const handleEmailLogin = async ()=> {
-      setLoading(true); // Set loading state to true 
+  // Function to handle form submission for email authentication
+  const handleEmailLogin = async ()=> {
+    setLoading(true); // Set loading state to true 
 
-      const res = await authClient.signIn.email({
-        email,
-        password,
-        callbackURL: '/dashboard'
+    const res = await authClient.signIn.email({
+      email,
+      password,
+      callbackURL: '/dashboard'
 
-      },{
-        onRequest: () => {
-          setLoading(true);
-        },
-        onSuccess: () => {
-          setLoading(false);
-          toast.success("Login In Successful!" );
-  
-        },
-        onError: (ctx) => {
+    },{
+      onRequest: () => {
+        setLoading(true);
+      },
+      onSuccess: () => {
+        setLoading(false);
+        toast.success("Login In Successful!" );
 
-          setError(ctx.error?.message || "Invalid Credentials")
+      },
+      onError: (ctx) => {
 
-          // If the user's email isn't vertified, an 403 error will occur
-          if(ctx.error.status === 403){
-            console.log(ctx.error)
-            toast.error("Please verify your email address! ")
-          }
+        setError(ctx.error?.message || "Invalid Credentials")
 
-          setLoading(false);
-          toast.error("Login Failed, Invalid Email or Password ")
+        // If the user's email isn't vertified, an 403 error will occur
+        if(ctx.error.status === 403){
+          console.log(ctx.error)
+          toast.error("Please verify your email address! ")
         }
+
+        setLoading(false);
+        toast.error("Login Failed, Invalid Email or Password ")
+      }
+    })
+
+    }
+
+    // Function to handle Google sign-in authentication
+    const handleGoogleSignIn = async () => {
+      const {data, error} = await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/dashboard"
+      })
+      if (error) {
+        toast.error("Google Sign-in Failed")
+      } else {
+        toast.success("Google Sign-in Successful")
+      }
+    }
+
+    // Function to handle Discord sign-in authentication
+    const handleDiscordSignIn = async () => {
+      const {data, error} = await authClient.signIn.social({
+        provider: "discord",
+        callbackURL:"/dashboard"
+      })
+      if (error) {
+        toast.error("Discord Sign-in Failed")
+      } else {
+        toast.success("Discord Sign-in Successful")
+      }
+    }
+
+    // Function to search for a user by email and send a reset password link
+    const handleResetPaswword = async () => {
+      setLoading(true);
+
+      const { error } = await authClient.forgetPassword({
+        email: email,
+        redirectTo: '/reset-password'
       })
 
+      if (error) {
+        toast.error(error.message || "Failed to send reset link");
+      } else {
+        toast.success("Reset link sent to your email! ");
       }
 
-      // Function to handle Google sign-in authentication
-      const handleGoogleSignIn = async () => {
-        const {data, error} = await authClient.signIn.social({
-          provider: "google",
-          callbackURL: "/dashboard"
-        })
-        if (error) {
-          toast.error("Google Sign-in Failed")
-        } else {
-          toast.success("Google Sign-in Successful")
-        }
-      }
-
-      // Function to handle Discord sign-in authentication
-      const handleDiscordSignIn = async () => {
-        const {data, error} = await authClient.signIn.social({
-          provider: "discord",
-          callbackURL:"/dashboard"
-        })
-        if (error) {
-          toast.error("Discord Sign-in Failed")
-        } else {
-          toast.success("Discord Sign-in Successful")
-        }
-      }
+      setLoading(false);
+      close();
+    }
 
     return(
       <div className={classes.wrapper}>
@@ -131,23 +150,41 @@ export default function signInPage(){
             </Anchor>
 
             {/* Forgot Password Modal */}
-            <Modal opened={opened} onClose={close} centered>
+            <Modal opened={opened} onClose={close} centered styles={{content: {backgroundColor: '#232526'}, header: {backgroundColor: '#232526'}}}>
 
               <Group className={classes.modalText} mb={20} ta='center'>
-                <Title className={classes.modalTitle} ta="center">
+                <Title className={classes.modalTitle} ta="center" c='white'>
                   Forgot your password?
                 </Title>
 
-                <Text c="dimmed" fz="sm" ta="center" mb={10}>
+                <Text c='lightgrey' fz="sm" ta="center" mb={10}>
                   Enter your email to get a reset link
                 </Text>
+
               </Group>
               
-              <TextInput label="Email address" placeholder="Enter Your email" size="md" required mt="sm" mb='sm' value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error} />
+              <TextInput 
+                styles={{
+                  input:{
+                    backgroundColor: '#232526',
+                    color: 'white'
+                  },
+                  label: {
+                    color: 'white'
+                  }
+                }}
+                label="Email address" 
+                placeholder="Enter Your Email" 
+                size="md" 
+                required mt="sm" 
+                mb='sm' value={email} 
+                onChange={(e) => setEmail(e.currentTarget.value)} 
+                error={error} 
+              />
 
               <Flex justify='center' >
                 <Button className={classes.modalButton} variant='filled' color='blue' radius='md' size='md' >
-                  Reset Password
+                  Send Reset Link
                 </Button>
               </Flex>
 
