@@ -6,7 +6,8 @@ import { LoadingOverlay, SimpleGrid, Image, Paper, SemiCircleProgress, Text } fr
 import { authClient } from '@/lib/auth-client';
 
 import PlaceHolderImage from "../../../public/no-cover-image.png"
-import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconBookmarkFilled, IconCheck, IconQuestionMark, IconClipboardList, IconBookmarksFilled, IconClipboardListFilled } from '@tabler/icons-react';
+import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconBookmarkFilled, IconCheck, IconQuestionMark, IconClipboardListFilled } from '@tabler/icons-react';
+import { TrendingUp, Notebook, Gamepad } from 'lucide-react';
 import classes from './dashboard.module.css';
 
 export default function Dashboard() {
@@ -139,7 +140,7 @@ export default function Dashboard() {
           const data = await res.json();
           console.log("Data", data)
           
-          const sortedEntries = data.journalEntries.reverse().slice(0, 5); // Limit to the 5 most recent entries
+          const sortedEntries = data.journalEntries.reverse().slice(0, 4); // Limit to the 5 most recent entries
           setRecentEntries(sortedEntries); // Store the recent entries in state
           console.log('Recent Journal Entries:', sortedEntries);
       } catch (error) {
@@ -260,7 +261,7 @@ export default function Dashboard() {
 
       <div className={classes.trendingGames}>
 
-        <h1 className={classes.trendingText}>Popular Visited Games on IGDB Website:</h1>
+        <h1 className={classes.trendingText}> <TrendingUp size={30} /> Popular Visited Games on IGDB Website </h1>
         
         {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
         <SimpleGrid cols={6} spacing="lg" className={classes.gamesGrid}>
@@ -279,8 +280,8 @@ export default function Dashboard() {
 
       <div className={classes.playingGames} >
 
-        <h1 className={classes.playingText}>Games that you are currently playing:</h1>
-        
+        <h1 className={classes.playingText}> <Gamepad size={30} /> Games that you are currently playing:</h1>
+
         {playingGames.length === 0 ? (
               <p className={classes.noEntriesText}>You have no games that have the 'Playing' status.</p>
           ) : (
@@ -304,12 +305,12 @@ export default function Dashboard() {
 
       <div className={classes.recentEntries}>
 
-          <h1 className={classes.recentEntriesText}>Recent Journal Entries: </h1>
+          <h1 className={classes.recentEntriesText}> <Notebook size={30} /> Recent Journal Entries: </h1>
 
           {recentEntries.length === 0 ? (
               <p className={classes.noEntriesText}>No recent journal entries found.</p>
           ) : (
-              <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
+              <SimpleGrid cols={4} spacing="lg" className={classes.entriesGrid}>
                   {recentEntries.map((entry) => (
                       <div key={entry._id} className={classes.entryCard} onClick={() => router.push('/journal')}>
                           <h3 className={classes.entryGame}>{entry.gameName}</h3>

@@ -11,14 +11,17 @@ import { authClient } from '@/lib/auth-client';
 import classes from './signUp.module.css';
 import { GoogleButton } from '@/components/GoogleButton/GoogleButton';
 import { DiscordButton } from '@/components/DiscordButton/DiscordButton';
+import { useTextSelection } from '@mantine/hooks';
 
 export default function signInPage(){
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [error, setError] = useState("")
+  const [passwordError, setPasswordError] = useState("");
 
   const router = useRouter();
 
@@ -35,8 +38,17 @@ export default function signInPage(){
         checkAuth();
       }, [router]);
 
+  // Fuction to handle email sign-up authentication
   const handleEmailSignUp = async () => {
     setLoading(true);
+    
+    // Validate password and confirm password 
+    if (password !== confirmPassword) {
+      setPasswordError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
+
     const {data, error} = await authClient.signUp.email({
       email,
       password,
@@ -107,8 +119,8 @@ export default function signInPage(){
 
           <TextInput label="Username" placeholder='Your username' size='md' mt='md' value={name} onChange={(e) => setName(e.currentTarget.value)} />
           <TextInput label="Email address" placeholder="hello@gmail.com" size="md" mt="md" value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error}/>
-          <PasswordInput label="Password" placeholder="Your password" mt="md" size="md" value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={error}/>
-          {/* <PasswordInput label="Confirm Password" placeholder="Your password" mt="md" size="md" /> */}
+          <PasswordInput label="Password" placeholder="Your password" mt="md" size="md" value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={passwordError}/>
+          <PasswordInput label="Confirm Password" placeholder="Confirm password" mt="md" size="md" value={confirmPassword} onChange={(e) => setConfirmPassword(e.currentTarget.value)} error={passwordError}/>
           <Button fullWidth mt="xl" size="md" loading={loading} onClick={handleEmailSignUp}>
             Register Account
           </Button>

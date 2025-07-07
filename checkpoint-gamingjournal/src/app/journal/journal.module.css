@@ -3,11 +3,8 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
-    background-image: url('../../../public/journalBackground.png');
     position: relative;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+    background-color: #1d1e30;
 }
 
 .journalWrapper{
@@ -20,7 +17,7 @@
 .journalTitle{
     display: block;
     justify-self: center;
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     font-weight: bold;
     text-align: center;
     margin-bottom: 1.5rem;
@@ -29,24 +26,23 @@
     border-bottom: 3px solid white;
 }
 
-
 .noEntriesText{
-    display: block;
-    background-color: #000000;
-    justify-self: center;
-    font-size: 3.5rem;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 10rem;
-    color: rgb(255, 255, 255);
-    font-family: 'Poppins';
+  font-weight: 300;
+  font-size: 2.3rem;
+  color: rgb(208, 205, 205); /* Dark text for contrast */
+  margin-bottom: 1rem;
+  text-align: center;
+  justify-self: center;
+  font-family: 'Poppins';
+  font-style: italic;
+  margin-top: 1rem;
 }
 
 .entryCard {
     padding: 1rem;
     border: 1px solid #ddd;
     border-radius: 8px;
-    background-color: #fff;
+    background-color: #d5d5d5;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -57,7 +53,6 @@
     font-family: 'Poppins';
 }
 
-
 .entryTitle {
     font-size: 1rem;
     font-weight: 700;
@@ -67,24 +62,14 @@
 
 .entryContent {
     font-size: 1rem;
-    color: #555;
+    color: #414141;
     margin-bottom: 0.5rem;
 }
 
 .entryDate {
     font-size: 0.9rem;
     font-weight: 500;
-    color: #888;
-}
-
-.journalTitle {
-    margin-top: 4rem;
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
-    font-family: 'Poppins';
-    color: white;
+    color: #636363;
 }
 
 .buttonGroup{
@@ -92,6 +77,7 @@
     justify-content: center;
     align-items: center;
     gap: 1rem; /* space between buttons */
+    margin-top: 1rem;
     margin-bottom: 2rem;
     flex-wrap: wrap; /* optional: ensures it looks good on smaller screens */
 }

@@ -22,6 +22,7 @@
   .playingText,
   .recentEntriesText{
     display: inline-block;
+    flex-direction: row;
     justify-self: start;
     font-size: 1.4rem;
     font-weight: 400;
@@ -149,18 +150,18 @@
 }
 
 .recentEntries {
-    padding: 1rem;
-    border-radius: 8px;
-    margin-top: -1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: -1rem;
 }
 
 .entryCard {
-    padding: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #d5d5d5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 
 .entryCard:hover{
@@ -185,14 +186,14 @@
 
 .entryContent {
     font-size: 1rem;
-    color: #555;
+    color: #414141;
     margin-bottom: 0.5rem;
 }
 
 .entryDate {
     font-size: 0.9rem;
     font-weight: 500;
-    color: #888;
+    color: #424242;
 }
 
 @media (max-width: 1200px) {
