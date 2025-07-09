@@ -2,17 +2,21 @@
 
 import { Anchor, Button, Paper, PasswordInput, Text, TextInput, Title, Flex, Group, Divider, Modal} from '@mantine/core';
 import { redirect, useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
 
 import { useState, useEffect } from 'react';
 import React from 'react';
 import { authClient } from '@/lib/auth-client';
 
-import CheckPointLogo from '../../../../public/CheckPointLogo.png';
-import classes from './signIn.module.css';
 import { GoogleButton } from '@/components/GoogleButton/GoogleButton';
 import { DiscordButton } from '@/components/DiscordButton/DiscordButton';
 import { useDisclosure } from '@mantine/hooks';
+
+import { AirVent, Lock, Mail } from 'lucide-react';
+
+import toast from 'react-hot-toast';
+
+import classes from './signIn.module.css';
+
 
 export default function signInPage(){
 
@@ -22,6 +26,7 @@ export default function signInPage(){
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [modalError, setModalError] = useState("");
     const [opened, { open, close}] = useDisclosure(false);
 
     const router = useRouter(); // Initialize router fo navigation
@@ -101,22 +106,37 @@ export default function signInPage(){
     }
 
     // Function to search for a user by email and send a reset password link
-    const handleResetPaswword = async () => {
+    const handleForgotPassword = async () => {
       setLoading(true);
 
-      const { error } = await authClient.forgetPassword({
-        email: email,
-        redirectTo: '/reset-password'
-      })
-
-      if (error) {
-        toast.error(error.message || "Failed to send reset link");
-      } else {
-        toast.success("Reset link sent to your email! ");
+      if(!resetEmail) {
+        setError("Please enter your email address");
+        return;
       }
 
-      setLoading(false);
-      close();
+      const {data, error } = await authClient.forgetPassword({
+        email: resetEmail,
+        redirectTo: '/reset-password',
+
+        fetchOptions: {
+          onRequest: () => {
+            setLoading(true);
+          },
+          onResponse: () => {
+            setLoading(false);
+          },
+          onSuccess: () => {
+            toast.success("Reset link sent to your email! Please check your inbox!")
+            close();
+          },
+          onError: (ctx) => {
+            setModalError(ctx.error.message || "Failed to send reset link");
+            toast.error(ctx.error.message);
+          }
+        }
+        
+      })
+      
     }
 
     return(
@@ -137,7 +157,7 @@ export default function signInPage(){
 
             <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
-          <TextInput label="Email address" placeholder="Your email" size="md" required mt="md" mb='md' value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error} />
+          <TextInput label="Email address" placeholder="Your email" size="md" leftSection={<Mail size={20} />} required mt="md" mb='md' value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error} />
 
           <Group justify='space-between' mb={1}>
 
@@ -150,14 +170,14 @@ export default function signInPage(){
             </Anchor>
 
             {/* Forgot Password Modal */}
-            <Modal opened={opened} onClose={close} centered styles={{content: {backgroundColor: '#232526'}, header: {backgroundColor: '#232526'}}}>
+            <Modal opened={opened} onClose={close} centered styles={{content: {backgroundColor: '#0c0d21'}, header: {backgroundColor: '#0c0d21'}, close: {color: 'white'}}}>
 
               <Group className={classes.modalText} mb={20} ta='center'>
                 <Title className={classes.modalTitle} ta="center" c='white'>
                   Forgot your password?
                 </Title>
 
-                <Text c='lightgrey' fz="sm" ta="center" mb={10}>
+                <Text c='whitesmoke' fz="md" ta="center" mb={10}>
                   Enter your email to get a reset link
                 </Text>
 
@@ -175,15 +195,16 @@ export default function signInPage(){
                 }}
                 label="Email address" 
                 placeholder="Enter Your Email" 
+                leftSection={<Mail size={20} />}
                 size="md" 
                 required mt="sm" 
-                mb='sm' value={email} 
-                onChange={(e) => setEmail(e.currentTarget.value)} 
-                error={error} 
+                mb='sm' value={resetEmail} 
+                onChange={(e) => setResetEmail(e.currentTarget.value)} 
+                error={modalError} 
               />
 
               <Flex justify='center' >
-                <Button className={classes.modalButton} variant='filled' color='blue' radius='md' size='md' >
+                <Button className={classes.modalButton} variant='filled' color='blue' radius='md' size='md' loading={loading} disabled={!resetEmail}onClick={handleForgotPassword} >
                   Send Reset Link
                 </Button>
               </Flex>
@@ -192,7 +213,7 @@ export default function signInPage(){
 
           </Group>
 
-          <PasswordInput placeholder="Your Password" id='password' size="md" required value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={error} />
+          <PasswordInput placeholder="Your Password" id='password' size="md" leftSection={<Lock size={20} />} required value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={error} />
 
           <Button fullWidth mt="xl" size="md" loading={loading} onClick={handleEmailLogin}>
             Login

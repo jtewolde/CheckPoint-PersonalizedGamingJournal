@@ -43,22 +43,23 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} page-container`}>
         <AuthProvider>
           <MantineProvider>
-            <Toaster 
+            <Toaster
               toastOptions={{
+                duration: 5000,
                 success: {
                   style: {
                     background: "#d9f8de",
                     fontFamily: 'Poppins',
-                    fontWeight: '700',
-                    border: '0.5px solid black'
+                    fontWeight: '610',
+                    border: '0.2px solid black'
                   },
                 },
                 error: {
                   style: {
-                    background: '#ffcece',
+                    background: '#ffd1d1',
                     fontFamily: 'Poppins',
-                    fontWeight: '700',
-                    border: '0.5px solid black'
+                    fontWeight: '610',
+                    border: '0.2px solid black'
                   }
                 }  
               }}

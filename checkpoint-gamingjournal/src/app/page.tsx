@@ -40,8 +40,8 @@ export default function Home() {
   return (
     <div className= {classes.hero}>
       <Overlay
-        gradient="linear-gradient(180deg, #1f1c2c 30%,rgb(47, 45, 58) 90%)"
-        opacity={0.80}
+        gradient="linear-gradient(180deg, #1f1c2c 10%,rgb(47, 45, 58) 20%)"
+        opacity={0.10}
         zIndex={0}
       />
 
@@ -67,7 +67,7 @@ export default function Home() {
         </Transition>
 
 
-        <Button variant="filled" color='#63687c' size="xl" radius="xl" className={classes.control} rightSection={<UserRoundPlus />} onClick={handleClick}>
+        <Button variant="filled" color='#0063ff' size="xl" radius="xl" className={classes.control} rightSection={<UserRoundPlus />} onClick={handleClick}>
           Create an account now!
         </Button>
 
@@ -127,6 +127,7 @@ export default function Home() {
               className={classes.image}
               width={650}
               height={500}
+              unoptimized
             />
 
           </div>
@@ -143,6 +144,7 @@ export default function Home() {
               className={classes.image}
               width={800}
               height={600}
+              unoptimized
             />
 
             <div className={classes.imageTextContainer} >

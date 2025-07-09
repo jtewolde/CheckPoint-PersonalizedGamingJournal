@@ -23,7 +23,16 @@ export const auth = betterAuth({
         minPasswordLength: 8,
         maxPasswordLength: 128,
         requireEmailVerification: true,
-        sendResetPassword: async ({ user, url }) => {
+        resetPasswordTokenExpiresIn: 60 * 60,
+        
+        sendResetPassword: async ({ user, url, token }) => {
+
+            console.log("Reset password for: ", user.email);
+
+            if(!user.email) {
+                throw new Error("No account found with that email address")
+            }
+
             console.log("Password Reset for : ", user.email);
             await resend.emails.send({
                 from: "Acme <noreply@emails.checkpoint-gamingjournal.com>",

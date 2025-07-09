@@ -58,6 +58,10 @@ const ForgotPasswordEmail = (props: ForgotPasswordEmailProps) => {
                   </Button>
 
                   <Text style={text}>
+                    There is a 1 hour time limit on this link, so please reset your password as soon as possible.
+                  </Text>
+
+                  <Text style={text}>
                     Thanks!
                   </Text>
 

@@ -11,7 +11,8 @@ import { authClient } from '@/lib/auth-client';
 import classes from './signUp.module.css';
 import { GoogleButton } from '@/components/GoogleButton/GoogleButton';
 import { DiscordButton } from '@/components/DiscordButton/DiscordButton';
-import { useTextSelection } from '@mantine/hooks';
+
+import { Lock, Mail } from 'lucide-react';
 
 export default function signInPage(){
 
@@ -38,7 +39,7 @@ export default function signInPage(){
         checkAuth();
       }, [router]);
 
-  // Fuction to handle email sign-up authentication
+  // Function to handle email sign-up authentication
   const handleEmailSignUp = async () => {
     setLoading(true);
     
@@ -118,9 +119,9 @@ export default function signInPage(){
             <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
           <TextInput label="Username" placeholder='Your username' size='md' mt='md' value={name} onChange={(e) => setName(e.currentTarget.value)} />
-          <TextInput label="Email address" placeholder="hello@gmail.com" size="md" mt="md" value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error}/>
-          <PasswordInput label="Password" placeholder="Your password" mt="md" size="md" value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={passwordError}/>
-          <PasswordInput label="Confirm Password" placeholder="Confirm password" mt="md" size="md" value={confirmPassword} onChange={(e) => setConfirmPassword(e.currentTarget.value)} error={passwordError}/>
+          <TextInput label="Email address" placeholder="hello@gmail.com" size="md" leftSection={<Mail size={20} />} mt="md" value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error}/>
+          <PasswordInput label="Password" placeholder="Your password" leftSection={<Lock size={20} />} mt="md" size="md" value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={passwordError}/>
+          <PasswordInput label="Confirm Password" placeholder="Confirm password" leftSection={<Lock size={20} />} mt="md" size="md" value={confirmPassword} onChange={(e) => setConfirmPassword(e.currentTarget.value)} error={passwordError}/>
           <Button fullWidth mt="xl" size="md" loading={loading} onClick={handleEmailSignUp}>
             Register Account
           </Button>
