@@ -116,8 +116,8 @@ export default function signInPage(){
 
       const {data, error } = await authClient.forgetPassword({
         email: resetEmail,
-        redirectTo: '/reset-password',
-
+        redirectTo: '/auth/reset-password',
+        
         fetchOptions: {
           onRequest: () => {
             setLoading(true);

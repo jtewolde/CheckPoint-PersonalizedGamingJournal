@@ -294,7 +294,7 @@ export default function Dashboard() {
                       game.coverImage ? `https:${game.coverImage.replace('t_thumb', 't_cover_big')}` : PlaceHolderImage.src } 
                       alt={game.name} 
                       className={classes.cover} 
-                      onClick={() => router.push(`/games/${game._id}`)} 
+                      onClick={() => router.push(`/games/${game.gameId}`)} 
                       />
                   </div>
                 ))}

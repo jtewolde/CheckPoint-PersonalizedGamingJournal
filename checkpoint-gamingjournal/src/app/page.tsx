@@ -67,7 +67,7 @@ export default function Home() {
         </Transition>
 
 
-        <Button variant="filled" color='#0063ff' size="xl" radius="xl" className={classes.control} rightSection={<UserRoundPlus />} onClick={handleClick}>
+        <Button variant="filled" color='#5474b4' size="xl" radius="xl" className={classes.control} rightSection={<UserRoundPlus />} onClick={handleClick}>
           Create an account now!
         </Button>
 

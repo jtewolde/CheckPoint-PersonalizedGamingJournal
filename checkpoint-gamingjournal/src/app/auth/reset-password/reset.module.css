@@ -1,0 +1,66 @@
+
+.formContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 80vh;
+    margin: auto;
+    background-color: #0c0d21;
+}
+
+.formTitle{
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: white;
+    font-family: 'Inter';
+    margin-bottom: 1.5rem;
+    border-bottom: 3px solid white;
+}
+
+.formSubtitle{
+    font-size: 1.1rem;
+    text-align: center;
+    color: white;
+    font-family: 'Poppins';
+    line-height: 1.7;
+    word-wrap: break-word;
+    margin-bottom: 1rem;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    max-width: 30%;
+    gap: 1rem;
+    margin: 0 auto;
+}
+
+.password input{
+    background-color: #0c0d21;
+    color: white;
+}
+
+.password label{
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .formContainer {
+        width: 100%;
+        height: auto;
+        padding: 2rem;
+    }
+    .form {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 500px){
+    .formTitle{
+        font-size: 2.2rem;
+    }
+}

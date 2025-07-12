@@ -58,6 +58,13 @@ const ForgotPasswordEmail = (props: ForgotPasswordEmailProps) => {
                   </Button>
 
                   <Text style={text}>
+                    If the button above does not work, copy and paste the following link into your browser:
+                    <Link href={resetUrl} style={{color: '#0a259c'}}>
+                      {resetUrl}
+                    </Link>
+                  </Text>
+
+                  <Text style={text}>
                     There is a 1 hour time limit on this link, so please reset your password as soon as possible.
                   </Text>
 
