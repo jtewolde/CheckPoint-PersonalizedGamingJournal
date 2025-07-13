@@ -6,6 +6,7 @@ import { LoadingOverlay, SimpleGrid, Image, Paper, SemiCircleProgress, Text } fr
 import { authClient } from '@/lib/auth-client';
 
 import PlaceHolderImage from "../../../public/no-cover-image.png"
+
 import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconBookmarkFilled, IconCheck, IconQuestionMark, IconClipboardListFilled } from '@tabler/icons-react';
 import { TrendingUp, Notebook, Gamepad } from 'lucide-react';
 import classes from './dashboard.module.css';

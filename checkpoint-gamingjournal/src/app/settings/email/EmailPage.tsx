@@ -69,7 +69,7 @@ export default function Email(){
     })
     
   }
-
+  
   // Function to handle deleting a user's account permanently
   const handleDeleteUser = async () => {
     if(!checked){

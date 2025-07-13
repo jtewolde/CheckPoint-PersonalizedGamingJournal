@@ -60,6 +60,7 @@
         flex-direction: column;
         gap: 6rem;
     }
+@media (max-width: 560px){
     .enterEmail{
         width: 70%;
     }

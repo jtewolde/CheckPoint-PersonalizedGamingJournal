@@ -8,6 +8,7 @@ import { TextInput, Button, Text, Title, FileButton, Avatar } from '@mantine/cor
 import { FileLock, Upload, CircleCheck } from 'lucide-react';
 
 import { authClient } from '@/lib/auth-client'
+
 import { UploadButton } from '@/utils/uploadthing';
 
 import toast from 'react-hot-toast';
