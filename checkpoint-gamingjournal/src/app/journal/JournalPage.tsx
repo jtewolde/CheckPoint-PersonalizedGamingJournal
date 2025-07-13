@@ -164,7 +164,7 @@ export default function Journal() {
 
                     <Popover width={300} position='bottom' withArrow shadow='lg'>
                         <Popover.Target>
-                            <Button className={classes.filterButton} size='md' color='orange' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Name</Button>
+                            <Button className={classes.filterButton} size='md' color='#854bcb' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Name</Button>
                         </Popover.Target>
 
                         <Popover.Dropdown>
@@ -192,7 +192,7 @@ export default function Journal() {
                 
                     {entries.length === 0 ? (
 
-                        <p className={classes.noEntriesText}>No recent journal entries found.</p>
+                        <p className={classes.noEntriesText}>No journal entries created.</p>
 
                     ) : (
                         <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>

@@ -9,9 +9,12 @@ import { FileLock, Upload, CircleCheck } from 'lucide-react';
 
 import { authClient } from '@/lib/auth-client'
 
+import { UploadButton } from '@/utils/uploadthing';
+
 import toast from 'react-hot-toast';
 
 import classes from './profile.module.css';
+import "@uploadthing/react/styles.css";
 
 export default function Profile(){
 
@@ -70,11 +73,11 @@ export default function Profile(){
   }
 
   // Function to handle changing user's avatar
-  const handleUpdateAvatar = async () => {
+  const handleUpdateAvatar = async (imageUrl: string) => {
     setLoading(true)
 
     const res = await authClient.updateUser({
-      image: profileImage
+      image: imageUrl
     },{
       onRequest: () => {
         setLoading(true)
@@ -95,23 +98,9 @@ export default function Profile(){
 
     <div className={classes.profileWrapper}>
 
-      <Title className={classes.title} c='white' order={1} >Update Profile </Title>
-
-      <div className={classes.container}>
-
-        <div className={classes.avatarSection} >
-
-          <Text size='xl' c='white' fw={300}>Avatar</Text>
-
-          <Avatar className={classes.avatar} radius="xl" size={160} src={profileImage} alt={username || "User"} style={{ cursor: "pointer"}} />
-
-          <FileButton onChange={setProfilePicture} accept='image/png,image/jpeg'>
-            {(props) => <Button color='#f21616' size='md' radius='md' variant='filled' rightSection={<Upload size={30} />}{...props}>Upload Image</Button>}
-          </FileButton>
-
-        </div>
-
         <div className={classes.usernameSection} >
+
+          <Title className={classes.title} c='white' fw={450} order={1} >Update Username</Title>
 
           <Text size='lg' c='white' fw={400}> Current Username:   
             <span className={classes.currentName}> {oldUserName} </span>
@@ -136,19 +125,50 @@ export default function Profile(){
           />
 
           <Button 
-          color='#2bdd66' 
-          rightSection={<CircleCheck size={30} />} 
-          size='md' 
-          radius='md' 
-          variant='filled' 
-          loading={loading}
-          onClick={handleUpdateName}>
-          Confirm Change
+            color='#2bdd66' 
+            rightSection={<CircleCheck size={30} />} 
+            size='md' 
+            radius='md' 
+            variant='filled' 
+            loading={loading}
+            onClick={handleUpdateName}>
+            Confirm Change
           </Button>
 
         </div>
-        
-      </div>
+
+        <div className={classes.avatarSection} >
+
+          <Title className={classes.avatarTitle} c='white' fw={450} order={1} >Update Avatar</Title>
+
+          <Avatar className={classes.avatar} radius="xl" size={200} src={profileImage} alt={username || "User"} style={{ cursor: "pointer"}} />
+
+          <UploadButton endpoint={"imageUploader"} onClientUploadComplete={async (res) => {
+            if (res && res.length > 0) {
+              const newURL = res[0].ufsUrl;
+              setProfileImage(newURL);
+              console.log("Avatar URL: ", newURL);
+              await handleUpdateAvatar(newURL);
+            } else {
+              toast.error("Failed to upload avatar.");
+            }
+          }} 
+          appearance={{
+            button: {
+              backgroundColor: '#f21616',
+              color: 'white',
+            },
+            allowedContent: {
+              color: 'white'
+            }
+          }}
+          onUploadError={(error) => {
+            console.error("Upload Error: ", error);
+            toast.error("Failed to upload avatar.");
+          }}
+          />
+
+        </div>
 
     </div>
 

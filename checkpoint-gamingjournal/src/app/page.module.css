@@ -1,9 +1,9 @@
 .hero {
-  background-image: url('../../public/checkpointHomeBackground.jpg');
+  background:
+    linear-gradient(transparent, #232526 23%),
+    url('/Expedition33.jpg') top center/contain no-repeat;
+  
   position: relative;
-  background-size: contain;
-  background-repeat: repeat;
-  background-position: center;
   min-height: 100vh; /* This ensures the hero fills the full screen */
   max-width: 100vw;
   width: 100%;
@@ -25,9 +25,16 @@
   position: relative;
 }
 
+@media (max-width: $mantine-breakpoint-sm) {
+  .container {
+    margin-top: -4rem;
+  }
+}
+
 .title {
   color: var(--mantine-color-white);
-  font-size: 60px;
+  font-family: 'Inter';
+  font-size: 65px;
   font-weight: 900;
   line-height: 1.1;
   text-align: center;
@@ -38,7 +45,7 @@
   }
 
   @media (max-width: $mantine-breakpoint-xs) {
-    font-size: 28px;
+    font-size: 40px;
     line-height: 1.3;
   }
 }
@@ -48,6 +55,7 @@
   max-width: 600px;
   font-weight: 400;
   text-align: center;
+  font-family: 'Poppins';
 
   @media (max-width: $mantine-breakpoint-sm) {
     max-width: 100%;
@@ -70,10 +78,8 @@
   position: relative;
   left: 0;
   right: 0;
-  margin-top: 10rem; /* Moves it closer to the text */
+  margin-top: 3rem; /* Moves it closer to the text */
 }
-
-
 
 .librarySection {
   display: flex;

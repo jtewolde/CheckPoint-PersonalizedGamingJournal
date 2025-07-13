@@ -65,3 +65,9 @@
     font-size: 16px;
     margin-top: var(--mantine-spacing-md);
 }
+
+@media (max-width: $mantine-breakpoint-sm) {
+    .feature {
+        max-width: 100%; /* Allows feature cards to take full width on smaller screens */
+    }
+}

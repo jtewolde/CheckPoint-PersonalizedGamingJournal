@@ -2,17 +2,21 @@
 
 import { Anchor, Button, Paper, PasswordInput, Text, TextInput, Title, Flex, Group, Divider, Modal} from '@mantine/core';
 import { redirect, useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
 
 import { useState, useEffect } from 'react';
 import React from 'react';
 import { authClient } from '@/lib/auth-client';
 
-import CheckPointLogo from '../../../../public/CheckPointLogo.png';
-import classes from './signIn.module.css';
 import { GoogleButton } from '@/components/GoogleButton/GoogleButton';
 import { DiscordButton } from '@/components/DiscordButton/DiscordButton';
 import { useDisclosure } from '@mantine/hooks';
+
+import { AirVent, Lock, Mail } from 'lucide-react';
+
+import toast from 'react-hot-toast';
+
+import classes from './signIn.module.css';
+
 
 export default function signInPage(){
 
@@ -22,6 +26,7 @@ export default function signInPage(){
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [modalError, setModalError] = useState("");
     const [opened, { open, close}] = useDisclosure(false);
 
     const router = useRouter(); // Initialize router fo navigation
@@ -39,66 +44,100 @@ export default function signInPage(){
       checkAuth();
     }, [router]);
 
-    // Function to handle form submission for email authentication
-    const handleEmailLogin = async ()=> {
-      setLoading(true); // Set loading state to true 
+  // Function to handle form submission for email authentication
+  const handleEmailLogin = async ()=> {
+    setLoading(true); // Set loading state to true 
 
-      const res = await authClient.signIn.email({
-        email,
-        password,
-        callbackURL: '/dashboard'
+    const res = await authClient.signIn.email({
+      email,
+      password,
+      callbackURL: '/dashboard'
 
-      },{
-        onRequest: () => {
-          setLoading(true);
-        },
-        onSuccess: () => {
-          setLoading(false);
-          toast.success("Login In Successful!" );
-  
-        },
-        onError: (ctx) => {
+    },{
+      onRequest: () => {
+        setLoading(true);
+      },
+      onSuccess: () => {
+        setLoading(false);
+        toast.success("Login In Successful!" );
 
-          setError(ctx.error?.message || "Invalid Credentials")
+      },
+      onError: (ctx) => {
 
-          // If the user's email isn't vertified, an 403 error will occur
-          if(ctx.error.status === 403){
-            console.log(ctx.error)
-            toast.error("Please verify your email address! ")
-          }
+        setError(ctx.error?.message || "Invalid Credentials")
 
-          setLoading(false);
-          toast.error("Login Failed, Invalid Email or Password ")
+        // If the user's email isn't vertified, an 403 error will occur
+        if(ctx.error.status === 403){
+          console.log(ctx.error)
+          toast.error("Please verify your email address! ")
         }
+
+        setLoading(false);
+        toast.error("Login Failed, Invalid Email or Password ")
+      }
+    })
+
+    }
+
+    // Function to handle Google sign-in authentication
+    const handleGoogleSignIn = async () => {
+      const {data, error} = await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/dashboard"
       })
+      if (error) {
+        toast.error("Google Sign-in Failed")
+      } else {
+        toast.success("Google Sign-in Successful")
+      }
+    }
 
+    // Function to handle Discord sign-in authentication
+    const handleDiscordSignIn = async () => {
+      const {data, error} = await authClient.signIn.social({
+        provider: "discord",
+        callbackURL:"/dashboard"
+      })
+      if (error) {
+        toast.error("Discord Sign-in Failed")
+      } else {
+        toast.success("Discord Sign-in Successful")
+      }
+    }
+
+    // Function to search for a user by email and send a reset password link
+    const handleForgotPassword = async () => {
+      setLoading(true);
+
+      if(!resetEmail) {
+        setError("Please enter your email address");
+        return;
       }
 
-      // Function to handle Google sign-in authentication
-      const handleGoogleSignIn = async () => {
-        const {data, error} = await authClient.signIn.social({
-          provider: "google",
-          callbackURL: "/dashboard"
-        })
-        if (error) {
-          toast.error("Google Sign-in Failed")
-        } else {
-          toast.success("Google Sign-in Successful")
+      const {data, error } = await authClient.forgetPassword({
+        email: resetEmail,
+        redirectTo: '/auth/reset-password',
+        
+        fetchOptions: {
+          onRequest: () => {
+            setLoading(true);
+          },
+          onResponse: () => {
+            setLoading(false);
+          },
+          onSuccess: () => {
+            toast.success("Reset link sent to your email! Please check your inbox!")
+            close();
+          },
+          onError: (ctx) => {
+            setModalError(ctx.error.message || "Failed to send reset link");
+            toast.error(ctx.error.message);
+          }
         }
-      }
-
-      // Function to handle Discord sign-in authentication
-      const handleDiscordSignIn = async () => {
-        const {data, error} = await authClient.signIn.social({
-          provider: "discord",
-          callbackURL:"/dashboard"
-        })
-        if (error) {
-          toast.error("Discord Sign-in Failed")
-        } else {
-          toast.success("Discord Sign-in Successful")
-        }
-      }
+        
+      })
+      
+    }
 
     return(
       <div className={classes.wrapper}>
@@ -118,7 +157,7 @@ export default function signInPage(){
 
             <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
-          <TextInput label="Email address" placeholder="Your email" size="md" required mt="md" mb='md' value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error} />
+          <TextInput label="Email address" placeholder="Your email" size="md" leftSection={<Mail size={20} />} required mt="md" mb='md' value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error} />
 
           <Group justify='space-between' mb={1}>
 
@@ -131,23 +170,42 @@ export default function signInPage(){
             </Anchor>
 
             {/* Forgot Password Modal */}
-            <Modal opened={opened} onClose={close} centered>
+            <Modal opened={opened} onClose={close} centered styles={{content: {backgroundColor: '#0c0d21'}, header: {backgroundColor: '#0c0d21'}, close: {color: 'white'}}}>
 
               <Group className={classes.modalText} mb={20} ta='center'>
-                <Title className={classes.modalTitle} ta="center">
+                <Title className={classes.modalTitle} ta="center" c='white'>
                   Forgot your password?
                 </Title>
 
-                <Text c="dimmed" fz="sm" ta="center" mb={10}>
+                <Text c='whitesmoke' fz="md" ta="center" mb={10}>
                   Enter your email to get a reset link
                 </Text>
+
               </Group>
               
-              <TextInput label="Email address" placeholder="Enter Your email" size="md" required mt="sm" mb='sm' value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error} />
+              <TextInput 
+                styles={{
+                  input:{
+                    backgroundColor: '#232526',
+                    color: 'white'
+                  },
+                  label: {
+                    color: 'white'
+                  }
+                }}
+                label="Email address" 
+                placeholder="Enter Your Email" 
+                leftSection={<Mail size={20} />}
+                size="md" 
+                required mt="sm" 
+                mb='sm' value={resetEmail} 
+                onChange={(e) => setResetEmail(e.currentTarget.value)} 
+                error={modalError} 
+              />
 
               <Flex justify='center' >
-                <Button className={classes.modalButton} variant='filled' color='blue' radius='md' size='md' >
-                  Reset Password
+                <Button className={classes.modalButton} variant='filled' color='blue' radius='md' size='md' loading={loading} disabled={!resetEmail}onClick={handleForgotPassword} >
+                  Send Reset Link
                 </Button>
               </Flex>
 
@@ -155,7 +213,7 @@ export default function signInPage(){
 
           </Group>
 
-          <PasswordInput placeholder="Your Password" id='password' size="md" required value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={error} />
+          <PasswordInput placeholder="Your Password" id='password' size="md" leftSection={<Lock size={20} />} required value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={error} />
 
           <Button fullWidth mt="xl" size="md" loading={loading} onClick={handleEmailLogin}>
             Login
