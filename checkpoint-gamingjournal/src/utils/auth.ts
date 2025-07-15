@@ -35,7 +35,7 @@ export const auth = betterAuth({
 
             console.log("Password Reset for : ", user.email);
             await resend.emails.send({
-                from: "Acme <noreply@emails.checkpoint-gamingjournal.com>",
+                from: "CheckPoint <noreply@emails.checkpoint-gamingjournal.com>",
                 to: user.email,
                 subject: "CheckPoint Reset Password",
                 react: ForgotPasswordEmail({
@@ -53,7 +53,7 @@ export const auth = betterAuth({
         sendVerificationEmail: async ( { user, url}) => {
             console.log("Email Vertification for: ", user.email)
             await resend.emails.send({
-                from: "Acme <noreply@emails.checkpoint-gamingjournal.com>",
+                from: "CheckPoint <noreply@emails.checkpoint-gamingjournal.com>",
                 to: user.email,
                 subject: "CheckPoint Email Vertification",
                 react: verifyEmail({

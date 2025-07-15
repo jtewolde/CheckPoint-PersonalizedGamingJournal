@@ -1,6 +1,6 @@
 .hero {
   background:
-    linear-gradient(transparent, #232526 23%),
+    linear-gradient(transparent, #203a43 20%),
     url('/Expedition33.jpg') top center/contain no-repeat;
   
   position: relative;
@@ -12,6 +12,22 @@
   justify-content: center; /* Centers content horizontally */
   z-index: 1;
   padding-top: 10rem;
+}
+
+@media (max-width: 1245px){
+  .hero{
+    background:
+      linear-gradient(transparent, #203a43 10%),
+      url('/Expedition33.jpg') top center/contain no-repeat;
+    }
+}
+
+/* Responsive: keep the background image and gradient the same on mobile */
+@media (max-width: 768px) {
+  .hero {
+    background:
+      linear-gradient(#325d6b, #203a43 42%),
+  }
 }
 
 .container {

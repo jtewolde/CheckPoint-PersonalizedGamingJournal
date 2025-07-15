@@ -131,6 +131,7 @@ export default function Profile(){
             radius='md' 
             variant='filled' 
             loading={loading}
+            disabled={!username || loading}
             onClick={handleUpdateName}>
             Confirm Change
           </Button>

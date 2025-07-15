@@ -147,7 +147,7 @@ export default function Email(){
           error={error} 
         />
 
-        <Button className={classes.submitButton} color='green' size='md' rightSection={<FolderPen size={20} />} mt={15} radius='lg' variant='filled'  onClick={handleUpdateEmail}>Update Email</Button>
+        <Button className={classes.submitButton} color='green' size='md' rightSection={<FolderPen size={20} />} mt={15} radius='lg' variant='filled' disabled={!updatedEmail || loading} loading={loading} onClick={handleUpdateEmail}>Update Email</Button>
 
       </div>
 

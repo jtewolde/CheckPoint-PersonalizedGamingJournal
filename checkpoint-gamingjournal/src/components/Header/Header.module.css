@@ -37,7 +37,7 @@
 }
 
 .searchBar {
-  width: 45%; /* Ensure it spans the available width */
+  width: 45.5rem; /* Ensure it spans the available width */
   max-width: 100%; /* Limit the maximum width */
   margin-left: 2rem;
   padding: 0.5rem; /* Add padding for better spacing */
@@ -110,7 +110,7 @@
   }
 
   .searchBar {
-    width: 70%;
+    width: 40rem;
     margin-left: -1.5rem;
     justify-self: center;
   }
