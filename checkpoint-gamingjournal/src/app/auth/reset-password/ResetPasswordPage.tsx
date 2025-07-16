@@ -74,7 +74,7 @@ export default function ResetPasswordPage() {
 
                 <PasswordInput className={classes.password} label="Confirm Password" placeholder="Confirm password" leftSection={<Lock size={20} />} mt="sm" size="md" value={confirmPassword} onChange={(e) => setConfirmPassword(e.currentTarget.value)} error={passwordError}/>
 
-                <Button className={classes.submitButton} color="gray" type="submit" mt='md' size="lg" radius='lg' rightSection={<Send size={20} />} loading={loading} >
+                <Button className={classes.submitButton} color="pink" type="submit" mt='md' size="lg" radius='lg' rightSection={<Send size={20} />} loading={loading} disabled={!password || !confirmPassword || loading}>
                     Reset Password
                 </Button>
             

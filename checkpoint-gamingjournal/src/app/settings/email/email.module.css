@@ -24,11 +24,11 @@
 
 .enterEmail{
     color: white;
-    width: 89%;
+    width: 24rem;
 }
 
 .submitButton{
-    width: 60%;
+    width: 15rem;
 }
 
 .enterEmail textarea{
@@ -44,7 +44,7 @@
 }
 
 .deleteButton{
-    width: 50%
+    width: 15rem;
 }
 
 .modalText{
@@ -54,10 +54,12 @@
     color: white;
 }
 
-@media (max-width: 560px){
+@media (max-width: 1000px){
     .container{
         display: flex;
         flex-direction: column;
+        justify-content: center;
+        align-items: center;
         gap: 6rem;
     }
     .enterEmail{
@@ -69,6 +71,6 @@
     }
 
     .deleteButton{
-        width: 90%;
+        width: 60%;
     }
 }

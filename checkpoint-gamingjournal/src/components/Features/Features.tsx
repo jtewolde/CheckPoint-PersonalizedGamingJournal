@@ -1,5 +1,5 @@
 
-import { Pin, Notebook, Library, BotMessageSquare, Search} from 'lucide-react';
+import { Pin, Notebook, Library, BotMessageSquare, Gamepad2, Smartphone} from 'lucide-react';
 import { Container, SimpleGrid, Text, ThemeIcon, Title } from '@mantine/core';
 import { Transition } from '@mantine/core';
 import { useState, useEffect } from 'react';
@@ -30,11 +30,24 @@ export const featuresData = [
         title: 'Gemini AI Powered Chat',
         description: 'Be able to chat with the Gemini AI about your gaming progress, ask questions, and get game recommendations."'
     },
+
+    {
+        icon: <Gamepad2 size={50} color='white' />,
+        title: 'Detailed Game Info',
+        description: 'Access rich game details including release dates, genres, ratings, screenshots, and more to learn about your favorite titles from IGDB.'
+    },
+
+    {
+        icon: <Smartphone size={50} color='white' />,
+        title: 'Responsive Design',
+        description: 'Enjoy a seamless experience on both desktop and mobile devices, perfect for logging sessions on the go.'
+    }
+    
 ]
 
 const Feature = ({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) => (
     <div className={classes.feature}>
-      <ThemeIcon variant="light" size={70} radius="md" className={classes.icon}>
+      <ThemeIcon variant='gradient' size={80} radius="lg" className={classes.icon}>
         {icon}
       </ThemeIcon>
       <Text className={classes.featureTitle}>{title}</Text>
@@ -81,7 +94,7 @@ export function FeaturesGrid() {
             <SimpleGrid
               style={styles}
               mt={60}
-              cols={{ base: 1, sm: 2, md: 2 }}
+              cols={{ base: 1, sm: 2, md: 3, xs: 1 }}
               spacing={{ base: 'xl', md: 50 }}
               verticalSpacing={{ base: 'xl', md: 50 }}
             >

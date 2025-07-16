@@ -50,7 +50,15 @@ export default function AvatarMenu(){
                 <Avatar radius="xl" size={50} src={user?.image || undefined} alt={user?.name || "User"} style={{ cursor: "pointer", border:'2px solid black' }} />
             </Menu.Target>
 
-            <Menu.Dropdown>
+            <Menu.Dropdown styles={{
+                dropdown: {
+                    backgroundColor: '#DDE0E0',
+                    border: '1px solid black',
+                    fontFamily: 'Poppins',
+                    fontWeight: 550,
+                    
+                }
+            }}>
                 <Menu.Item leftSection={<User size={30}/>} >
                 {user?.name || "Account"}
                 </Menu.Item>
