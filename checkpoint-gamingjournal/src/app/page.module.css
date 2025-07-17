@@ -26,7 +26,10 @@
 @media (max-width: 768px) {
   .hero {
     background:
-      linear-gradient(#325d6b, #203a43 42%),
+      linear-gradient(#325d6b, #203a43 42%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top center
   }
 }
 
