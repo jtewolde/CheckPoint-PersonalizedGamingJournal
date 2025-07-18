@@ -68,7 +68,7 @@ export function Footer() {
               variant="subtle"
               aria-label="LinkedIn"
             >
-              <IconBrandGithub size={60} stroke={1.7} color="black" />
+              <IconBrandGithub size={60} stroke={1.7} color="white" />
             </ActionIcon>
           </Group>
         </div>

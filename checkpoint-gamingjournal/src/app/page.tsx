@@ -13,9 +13,10 @@ import { useState, useEffect } from 'react';
 import classes from './page.module.css';
 import { useAuth } from '@/context/Authcontext';
 
-import LibraryPage from '../../public/LibraryPage.gif';
-import GameDetailsPage from '../../public//GameDetailsPage.gif'
-import ChatroomPage from '../../public/ChatroomPage.gif';
+import LibraryPage from '../../public/Library.png';
+import GameDetailsPage from '../../public//GameDetails.png'
+import ChatroomPage from '../../public/ChatRoom.png';
+import JournalPage from '../../public/JournalPage.png';
 
 export default function Home() {
   const router = useRouter();
@@ -105,7 +106,16 @@ export default function Home() {
 
         <div className={classes.gameDetailsSection}>
 
-          <div className={classes.imageContainer} >
+          <div className={classes.imageReverseContainer} >
+
+            <Image
+              src={GameDetailsPage}
+              alt="Game Details Page"
+              className={classes.image}
+              width={650}
+              height={500}
+              unoptimized
+            />
 
             <div className={classes.imageTextContainer} >
 
@@ -121,14 +131,37 @@ export default function Home() {
               </Text>
             </div>
 
+          </div>
+
+        </div>
+
+        <div className={classes.journalSection}>
+
+          <div className={classes.imageContainer}>
+
             <Image
-              src={GameDetailsPage}
-              alt="Game Details Page"
+              src={JournalPage}
+              alt='Journal Page'
               className={classes.image}
-              width={650}
-              height={500}
+              width={800}
+              height={600}
               unoptimized
             />
+
+            <div className={classes.imageTextContainer}>
+
+              <Text className={classes.chatRoomTitle} size='xl' mt='lg' >
+                Your Personal Gaming Journal
+              </Text>
+
+              <Text className={classes.chatRoomText} size='lg' mt='lg' >
+                Keep track of your gaming journey with our journal entries feature.
+                Write about your gaming experiences, document your achievements, and reflect on your
+                progress. Whether it's a memorable quest, a tough boss fight, or a new strategy you
+                discovered, your journal is the perfect place to capture it all.
+              </Text>
+
+            </div>
 
           </div>
 
@@ -136,7 +169,7 @@ export default function Home() {
 
         <div className={classes.chatRoomSection}>
 
-          <div className={classes.imageContainer} >
+          <div className={classes.imageReverseContainer} >
 
             <Image
               src={ChatroomPage}
@@ -162,6 +195,7 @@ export default function Home() {
           </div>
 
         </div>
+        
 
       </Container>
 

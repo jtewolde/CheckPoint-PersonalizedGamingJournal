@@ -1,10 +1,10 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { Burger, Container, Group, Paper, Drawer, Autocomplete, Image, Button } from '@mantine/core';
+import { Burger, Group, Drawer, Autocomplete, Image, Button } from '@mantine/core';
 import { useDisclosure, useMediaQuery} from '@mantine/hooks';
 
-import CheckPointLogo from '../../../public/CheckPointLogo.png';
+import CheckPointLogo from '../../../public/CheckPointBlackLogo.png';
 import CheckPointMobileLogo from '../../../public/CheckPointMobileLogo.png';
 
 import classes from './Header.module.css';
@@ -142,15 +142,15 @@ export function Header() {
             ) : (
               <>
                 <div className={classes.guestLinks}>
-                  <Button variant='outline' color='black' rightSection={<House size={20} />} size='md' radius='md' className={`${classes.homeButton} ${pathname === '/' ? classes.active : ''}`} onClick={() => router.push('/')}>
+                  <Button variant='outline' color='black' rightSection={<House size={20} />} size='md' radius='md' className={`${classes.homeButton} ${pathname === '/' ? classes.guestActive : ''}`} onClick={() => router.push('/')}>
                     Home
                   </Button>
 
-                  <Button variant='outline' color='black' rightSection={<LogIn size={20} />}size='md' radius='md' className={`${classes.signInButton} ${pathname === '/auth/signin' ? classes.active : ''}`} onClick={() => router.push('/auth/signin')}>
+                  <Button variant='outline' color='black' rightSection={<LogIn size={20} />}size='md' radius='md' className={`${classes.signInButton} ${pathname === '/auth/signin' ? classes.guestActive : ''}`} onClick={() => router.push('/auth/signin')}>
                     Sign In 
                   </Button>
 
-                  <Button variant='outline' color='black' rightSection={<UserRoundPlus size={20} />} size='md' radius='md' className={`${classes.signUpButton} ${pathname === '/auth/signup' ? classes.active : ''}`} onClick={() => router.push('/auth/signup')}>
+                  <Button variant='outline' color='black' rightSection={<UserRoundPlus size={20} />} size='md' radius='md' className={`${classes.signUpButton} ${pathname === '/auth/signup' ? classes.guestActive : ''}`} onClick={() => router.push('/auth/signup')}>
                     Register 
                   </Button>
                 </div>

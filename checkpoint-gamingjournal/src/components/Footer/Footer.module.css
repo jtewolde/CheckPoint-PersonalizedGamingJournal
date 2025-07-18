@@ -1,7 +1,7 @@
 .footer {
   margin-top: 0px;
   border-top: 1px solid black;
-  background-color: #DDE0E0;
+  background-color: #2b2c3d;
 }
 
 .inner {
@@ -27,7 +27,7 @@
 .text{
   font-size: 14px;
   align-items: center;
-  color: black;
+  color: rgb(255, 255, 255);
   text-align: center;
   font-family: 'Poppins';
   flex: 1;
@@ -37,7 +37,7 @@
   font-size: 14px;
   align-self: center;
   justify-self: flex-end;
-  color: black;
+  color: rgb(255, 255, 255);
   font-family: 'Poppins';
   text-align: left;
 }
@@ -48,7 +48,7 @@
 
 .igdbLink:hover{
   font-weight: bolder;
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid rgb(255, 255, 255);
   font-size: 16px;
 }
 
@@ -65,16 +65,16 @@
   font-size: 18px;
   align-self: center;
   justify-self: center;
-  color: rgb(75, 74, 74);
+  color: rgb(255, 255, 255);
   font-family: 'Inter';
   text-align: center;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid rgb(255, 255, 255);
 }
 
 .FAQLink:hover{
   font-size: 20px;
   font-weight: 600;
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid rgb(255, 255, 255);
 }
 
 .links {

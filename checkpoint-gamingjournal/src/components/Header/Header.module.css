@@ -1,6 +1,7 @@
 .header {
   height: 69px;
-  background-color: #DDE0E0;
+  background-color: #2b2c3d;
+  opacity: 0.95;
   display: flex; /* Ensure flexbox is applied */
   justify-content: center;
   align-items: center;
@@ -47,7 +48,7 @@
 }
 
   .searchBar :global(input) {
-    background-color: #f9f4f4; /* example: dark background */
+    background-color: #232526; /* example: dark background */
     color: rgb(0, 0, 0);       /* input text color */
     border: 0.5px solid rgb(148, 148, 148);
   }
@@ -234,7 +235,7 @@
   border: 2px solid black;
   text-decoration: none;
   color: black;
-  background-color: transparent;
+  background-color: #d8d4d6;
   font-size: 19px;
   font-weight: 400;
   font-family: 'Poppins';
@@ -248,7 +249,7 @@
   border: 2px solid black;
   text-decoration: none;
   color: black;
-  background-color: #d8d4d6;
+  background-color: #e3101e;
   font-size: 20px;
   font-weight: 400;
   font-family: 'Poppins';
@@ -262,7 +263,7 @@
   border: 2px solid black;
   text-decoration: none;
   color: black;
-  background-color: transparent;
+  background-color: #2aed95;
   font-size: 19px;
   font-weight: 400;
   font-family: 'Poppins';
@@ -301,7 +302,7 @@
   padding: 8px 12px;
   border-radius: var(--mantine-radius-sm);
   text-decoration: none;
-  color: rgb(0, 0, 0);
+  color: white;
   font-size: 20px;
   font-weight: 500;
   font-family: 'Poppins';
@@ -309,7 +310,7 @@
 }
 
 .link:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(226, 223, 223, 0.1);
   border-bottom: 2px solid black;
   border-radius: 0;
   font-weight: bold;
@@ -317,6 +318,7 @@
 
 .homeButton:hover{
   background-color: rgba(0, 0, 0, 0.1);
+  background-color: #d8d4d6;
   font-weight: bold;
 }
 
@@ -333,10 +335,15 @@
 }
 
 .active {
-  border-bottom: 2px solid black;
-  color: black;
+  border-bottom: 2px solid rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
   font-weight: bolder;
-  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.guestActive {
+  border-bottom: 2px solid rgb(0, 0, 0);
+  color: rgb(0, 0, 0);
+  font-weight: bolder;
 }
 
 .mobileLink:active{

@@ -119,6 +119,15 @@
   padding: 0 20px; /* Padding for the container */
 }
 
+.imageReverseContainer{
+  display: flex;
+  justify-content: center; /* Centers images horizontally */
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 3rem; /* Space between images */
+  padding: 0 20px; /* Padding for the container */
+}
+
 .image{
   width: 100%; /* Full width of the container */
   max-width: 800px; /* Maximum width for each image */
@@ -159,9 +168,10 @@
   max-width: 800px; /* Limit width for better readability */
 }
 
-.gameDetailsSection{
+.gameDetailsSection,
+.librarySection{
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
   align-items: center;
   justify-content: center;
   margin-top: 3rem;
@@ -169,6 +179,7 @@
   margin-bottom: 10rem;
 }
 
+.journalSection,
 .chatRoomSection{
   display: flex;
   flex-direction: row;
@@ -180,8 +191,12 @@
 }
 
 
-@media (max-width: 768px) {
-  .imageContainer {
+@media (max-width: 1245px) {
+  .image{
+    width: 100%;
+  }
+
+  .imageContainer, .imageReverseContainer {
     flex-direction: column; /* Stack images vertically on smaller screens */
     align-items: center; /* Center images */
   }
