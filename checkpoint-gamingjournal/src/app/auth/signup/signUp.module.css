@@ -7,13 +7,13 @@
 }
 
 .form {
-  border-left: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
+  border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
   min-height: 900px;
   max-width: 450px;
   padding-top: 40px;
   padding-right: 60px;
   padding-left: 40px;
-  background-color: whitesmoke;
+  background-color: #1d1e30;
   font-family: 'Poppins';
   justify-content: center;
   z-index: 1;
@@ -24,7 +24,35 @@
 }
 
 .title {
-  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+  color: white;
   font-family: 'Poppins';
   z-index: 1;
+  margin-bottom: -1.5rem;
+}
+
+.usernameInput input{
+  background-color: #1d1e30;
+  color: white
+}
+
+.usernameInput label{
+  color: white;
+}
+
+.emailInput input{
+  background-color: #1d1e30;
+  color: white
+}
+
+.emailInput label{
+  color: white
+}
+
+.passwordInput input{
+  background-color: #1d1e30;
+  color: white
+}
+
+.passwordInput label{
+  color: white
 }

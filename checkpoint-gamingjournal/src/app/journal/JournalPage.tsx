@@ -65,7 +65,9 @@ export default function Journal() {
     // Derived Filtered List
     const filteredEntries = entries.filter(
     (entry) => gameName === 'all' || entry.gameName === gameName
-    );
+    )
+    .slice()
+    .reverse();
 
     // Function to delete a journal entry
     const deleteJournalEntry = async (journalEntryId: string, gameID: string) => {
