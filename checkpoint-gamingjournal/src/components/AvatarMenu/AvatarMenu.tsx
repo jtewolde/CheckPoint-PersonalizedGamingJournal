@@ -52,18 +52,17 @@ export default function AvatarMenu(){
 
             <Menu.Dropdown styles={{
                 dropdown: {
-                    backgroundColor: '#DDE0E0',
+                    backgroundColor: '#1d1e30',
                     border: '1px solid black',
                     fontFamily: 'Poppins',
-                    fontWeight: 550,
-                    
+                    fontWeight: 690,
                 }
             }}>
-                <Menu.Item leftSection={<User size={30}/>} >
+                <Menu.Item leftSection={<User size={30}/>} color="white" >
                 {user?.name || "Account"}
                 </Menu.Item>
 
-                <Menu.Item leftSection={<Settings size={30} color="gray" />} onClick={() => router.push('/settings')}>
+                <Menu.Item leftSection={<Settings size={30} color="lightgray" />} onClick={() => router.push('/settings')} color="white">
                     Settings
                 </Menu.Item>
 
