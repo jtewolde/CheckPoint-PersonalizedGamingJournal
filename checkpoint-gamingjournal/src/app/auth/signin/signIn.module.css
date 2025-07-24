@@ -1,15 +1,16 @@
 .wrapper {
-    min-height: 900px;
+    min-height: 80vh;
     background-size: cover;
     background-image: url('../../../../public/signupImage.jpg');
   }
   
 .form {
   border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
-  min-height: 900px;
+  min-height: 80vh;
   max-width: 450px;
   padding-top: 80px;
-  background-color: #1d1e30;
+  background-color: #2b2c3d
+;
   font-family: 'Poppins';
 
   @media (max-width: $mantine-breakpoint-sm) {

@@ -1,5 +1,5 @@
 .wrapper {
-  min-height: 100vh;
+  min-height: 90vh;
   background-size: cover;
   position: relative;
   background-image: url('../../../../public/video_games_art_background.jpg');
@@ -8,12 +8,12 @@
 
 .form {
   border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
-  min-height: 900px;
+  min-height: 750px;
   max-width: 450px;
   padding-top: 40px;
   padding-right: 60px;
   padding-left: 40px;
-  background-color: #1d1e30;
+  background-color: #2b2c3d;
   font-family: 'Poppins';
   justify-content: center;
   z-index: 1;

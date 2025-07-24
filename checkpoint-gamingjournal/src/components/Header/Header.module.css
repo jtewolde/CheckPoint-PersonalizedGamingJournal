@@ -1,7 +1,6 @@
 .header {
   height: 69px;
   background-color: #1d1e30;
-  opacity: 0.95;
   display: flex; /* Ensure flexbox is applied */
   justify-content: center;
   align-items: center;
@@ -47,43 +46,48 @@
   align-self: center;
 }
 
-  .searchBar :global(input) {
-    background-color: #232526; /* example: dark background */
-    color: rgb(0, 0, 0);       /* input text color */
-    border: 0.5px solid rgb(148, 148, 148);
+.searchBar input {
+  background-color: #232526; /* example: dark background */
+  color: white;/* input text color */
+  border: 0.2px solid rgb(148, 148, 148);
+}
+
+.autocompleteOption {
+  background-color: #232526;
+  color: white;
+}
+
+.autocompleteOption:hover {
+  background-color: #3a3a3c; /* Darker hover color */
+  color: #ffffff;
+}
+
+@media screen and (max-width: 868px) {
+
+  .inner{
+    flex-wrap: nowrap;
+    padding: 0 1rem;
   }
 
-  .searchBar :global(.mantine-Autocomplete-dropdown) {
-    background-color: #dcdbdb; /* dropdown background */
-    color: white;              /* dropdown text color */
+  .searchBar {
+    width: 100%;
+    max-width: 69%;
+    margin-left: -1.5rem;
+    justify-self: center;
   }
 
-  @media screen and (max-width: 868px) {
-
-    .inner{
-      flex-wrap: nowrap;
-      padding: 0 1rem;
-    }
-
-    .searchBar {
-      width: 100%;
-      max-width: 69%;
-      margin-left: -1.5rem;
-      justify-self: center;
-    }
-
-    .logo{
-      width: 140px;
-      height: auto;
-      object-fit: contain;
-      margin-left: 0.3rem; /* Keep consistent margin */
-    }
-
-    .burger{
-      margin-left: auto;
-      margin-right: 0;
-    }
+  .logo{
+    width: 140px;
+    height: auto;
+    object-fit: contain;
+    margin-left: 0.3rem; /* Keep consistent margin */
   }
+
+  .burger{
+    margin-left: auto;
+    margin-right: 0;
+  }
+}
 
 @media screen and (max-width: 420px){
 
@@ -124,17 +128,6 @@
     text-align: left;
     font-weight: bold;
     margin-top: 0.4rem;
-  }
-
-    /* Header.module.css */
-  .searchBar :global(input) {
-    background-color: #ededed; /* example: dark background */
-    color: rgb(0, 0, 0);              /* input text color */
-  }
-
-  .searchBar :global(.mantine-Autocomplete-dropdown) {
-    background-color: #dcdbdb; /* dropdown background */
-    color: white;              /* dropdown text color */
   }
 }
 
@@ -343,7 +336,7 @@
 .guestActive {
   border-bottom: 2px solid rgb(0, 0, 0);
   color: rgb(0, 0, 0);
-  font-weight: bolder;
+  font-weight: 799
 }
 
 .mobileLink:active{
@@ -352,4 +345,3 @@
   color: darkblue;
   font-weight: bold;
 }
-
