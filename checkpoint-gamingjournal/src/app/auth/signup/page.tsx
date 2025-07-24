@@ -1,6 +1,6 @@
 'use client'
 
-import {Anchor, Button, Overlay, Paper, PasswordInput, Text, TextInput, Title, Group, Divider} from '@mantine/core';
+import {Anchor, Button, Paper, PasswordInput, Text, TextInput, Title, Group, Divider} from '@mantine/core';
 import toast from 'react-hot-toast';
 
 import { useState, useEffect } from 'react';
@@ -12,7 +12,7 @@ import classes from './signUp.module.css';
 import { GoogleButton } from '@/components/GoogleButton/GoogleButton';
 import { DiscordButton } from '@/components/DiscordButton/DiscordButton';
 
-import { Lock, Mail } from 'lucide-react';
+import { Lock, Mail, CircleUser } from 'lucide-react';
 
 export default function signInPage(){
 
@@ -27,17 +27,17 @@ export default function signInPage(){
   const router = useRouter();
 
   // Check if the user is authenticated
-      useEffect(() => {
-        const checkAuth = async () => {
-          const { data } = await authClient.getSession();
-          if (data?.user) {
-            // If the user is authenticated, redirect to the dashboard
-            return redirect("/dashboard")
-          }
-        };
-    
-        checkAuth();
-      }, [router]);
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data } = await authClient.getSession();
+      if (data?.user) {
+        // If the user is authenticated, redirect to the dashboard
+        return redirect("/dashboard")
+      }
+    };
+
+    checkAuth();
+  }, [router]);
 
   // Function to handle email sign-up authentication
   const handleEmailSignUp = async () => {
@@ -102,31 +102,31 @@ export default function signInPage(){
     return(
       <div className={classes.wrapper}>
 
-        <Paper className={classes.form} radius={0}  withBorder>
+        <Paper className={classes.form} radius={0}  >
           <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
             Welcome to CheckPoint! 
           </Title>
 
-          <Text ta='center' mt='lg'>
+          <Text ta='center' c='white' mt='lg'>
             Sign up by using
           </Text>
 
-            <Group grow mb="md" mt="md">
-                <GoogleButton radius="xl" onClick={handleGoogleSignIn}>Google</GoogleButton>
-                <DiscordButton radius="xl" onClick={handleDiscordSignIn}>Discord</DiscordButton>
-            </Group>
+          <Group grow mb="md" mt="md">
+              <GoogleButton radius="xl" onClick={handleGoogleSignIn}>Google</GoogleButton>
+              <DiscordButton radius="xl" onClick={handleDiscordSignIn}>Discord</DiscordButton>
+          </Group>
 
-            <Divider label="Or continue with email" labelPosition="center" my="lg" />
-
-          <TextInput label="Username" placeholder='Your username' size='md' mt='md' value={name} onChange={(e) => setName(e.currentTarget.value)} />
-          <TextInput label="Email address" placeholder="hello@gmail.com" size="md" leftSection={<Mail size={20} />} mt="md" value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error}/>
-          <PasswordInput label="Password" placeholder="Your password" leftSection={<Lock size={20} />} mt="md" size="md" value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={passwordError}/>
-          <PasswordInput label="Confirm Password" placeholder="Confirm password" leftSection={<Lock size={20} />} mt="md" size="md" value={confirmPassword} onChange={(e) => setConfirmPassword(e.currentTarget.value)} error={passwordError}/>
+          <Divider styles={{label: {color: 'white'}}} label="Or continue with email" labelPosition="center" color='white' my="lg"  />
+          
+          <TextInput className={classes.usernameInput} label="Username" placeholder='Your username' size='md' leftSection={<CircleUser size={20} />} mt='md' value={name} onChange={(e) => setName(e.currentTarget.value)} />
+          <TextInput className={classes.emailInput} label="Email address" placeholder="hello@gmail.com" size="md" leftSection={<Mail size={20} />} mt="md" value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error}/>
+          <PasswordInput className={classes.passwordInput} label="Password" placeholder="Your password" leftSection={<Lock size={20} />} mt="md" size="md" value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={passwordError}/>
+          <PasswordInput className={classes.passwordInput} label="Confirm Password" placeholder="Confirm password" leftSection={<Lock size={20} />} mt="md" size="md" value={confirmPassword} onChange={(e) => setConfirmPassword(e.currentTarget.value)} error={passwordError}/>
           <Button fullWidth mt="xl" size="md" loading={loading} onClick={handleEmailSignUp}>
             Register Account
           </Button>
 
-          <Text ta='center' mt='lg'>
+          <Text ta='center' mt='lg' c='white'>
             Already have an account?{' '}
             <Anchor<'a'> size="sm" onClick={() => router.push('/auth/signin')} href="/auth/signin" fw={700}>
               Sign in

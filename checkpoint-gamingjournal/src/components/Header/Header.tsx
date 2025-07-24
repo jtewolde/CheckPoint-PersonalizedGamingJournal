@@ -1,11 +1,11 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { Burger, Container, Group, Paper, Drawer, Autocomplete, Image, Button } from '@mantine/core';
+import { Burger, Group, Drawer, Autocomplete, Image, Button } from '@mantine/core';
 import { useDisclosure, useMediaQuery} from '@mantine/hooks';
 
-import CheckPointLogo from '../../../public/CheckPointLogo.png';
-import CheckPointMobileLogo from '../../../public/CheckPointMobileLogo.png';
+import CheckPointLogo from '../../../public/CheckPointBlackLogo.png';
+import CheckPointMobileLogo from '../../../public/CheckPointMobileBlackLogo.png';
 
 import classes from './Header.module.css';
 import Link from 'next/link';
@@ -80,28 +80,40 @@ export function Header() {
         }
 
         <Autocomplete
-        className={classes.searchBar}
-        radius='lg'
-        size='md'
-        variant='filled'
-        placeholder="Search for games"
-        rightSection={<IconSearch size={24} color='black' style={{cursor: 'pointer'}} onClick={() => router.push(`/search?query=${encodeURIComponent(searchQuery)}`)}/>}
-        value={searchQuery}
-        onChange={handleSearch} // Update the search query state
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' && searchQuery.trim() !== '') {
-            router.push(`/search?query=${encodeURIComponent(searchQuery)}`); // Navigate to the search results page
+          classNames={{
+            option: classes.autocompleteOption
+          }}
+          styles={
+            {
+              dropdown: {
+                backgroundColor: '#232526',
+                color: 'white',
+              },
+            }
           }
-        }}
-        data={searchResults.map((game) => ({
-          value: game.name,
-          label: game.name,
-        }))} // Map search results to Autocomplete options
-        onSubmit={(event) => {
-          event.preventDefault();
-          const inputValue = (event.target as HTMLInputElement).value;
-          router.push(`/search?query=${encodeURIComponent(inputValue)}`); // Navigate to the search results page
-        }}
+          comboboxProps={{ transitionProps: { transition: 'fade-down', duration: 200 } }}
+          className={classes.searchBar}
+          radius='lg'
+          size='md'
+          variant='filled'
+          placeholder="Search for games"
+          rightSection={<IconSearch size={24} style={{cursor: 'pointer'}} onClick={() => router.push(`/search?query=${encodeURIComponent(searchQuery)}`)}/>}
+          value={searchQuery}
+          onChange={handleSearch} // Update the search query state
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && searchQuery.trim() !== '') {
+              router.push(`/search?query=${encodeURIComponent(searchQuery)}`); // Navigate to the search results page
+            }
+          }}
+          data={searchResults.map((game) => ({
+            value: game.name,
+            label: game.name,
+          }))} // Map search results to Autocomplete options
+          onSubmit={(event) => {
+            event.preventDefault();
+            const inputValue = (event.target as HTMLInputElement).value;
+            router.push(`/search?query=${encodeURIComponent(inputValue)}`); // Navigate to the search results page
+          }}
         />
 
         {/* Desktop Links */}
@@ -142,15 +154,15 @@ export function Header() {
             ) : (
               <>
                 <div className={classes.guestLinks}>
-                  <Button variant='outline' color='black' rightSection={<House size={20} />} size='md' radius='md' className={`${classes.homeButton} ${pathname === '/' ? classes.active : ''}`} onClick={() => router.push('/')}>
+                  <Button variant='outline' color='black' rightSection={<House size={20} />} size='md' radius='md' className={`${classes.homeButton} ${pathname === '/' ? classes.guestActive : ''}`} onClick={() => router.push('/')}>
                     Home
                   </Button>
 
-                  <Button variant='outline' color='black' rightSection={<LogIn size={20} />}size='md' radius='md' className={`${classes.signInButton} ${pathname === '/auth/signin' ? classes.active : ''}`} onClick={() => router.push('/auth/signin')}>
+                  <Button variant='outline' color='black' rightSection={<LogIn size={20} />}size='md' radius='md' className={`${classes.signInButton} ${pathname === '/auth/signin' ? classes.guestActive : ''}`} onClick={() => router.push('/auth/signin')}>
                     Sign In 
                   </Button>
 
-                  <Button variant='outline' color='black' rightSection={<UserRoundPlus size={20} />} size='md' radius='md' className={`${classes.signUpButton} ${pathname === '/auth/signup' ? classes.active : ''}`} onClick={() => router.push('/auth/signup')}>
+                  <Button variant='outline' color='black' rightSection={<UserRoundPlus size={20} />} size='md' radius='md' className={`${classes.signUpButton} ${pathname === '/auth/signup' ? classes.guestActive : ''}`} onClick={() => router.push('/auth/signup')}>
                     Register 
                   </Button>
                 </div>
@@ -160,7 +172,7 @@ export function Header() {
         </div>
 
         {/* Mobile Links */}
-        <Burger className={classes.burger} opened={opened} onClick={toggle} hiddenFrom="lg" size="md" />
+        <Burger className={classes.burger} opened={opened} onClick={toggle} hiddenFrom="lg" size="md" color='white' />
 
         <Drawer
           opened={opened}
@@ -168,13 +180,17 @@ export function Header() {
           position='right'
           size="60%"
           className={classes.drawer}
-          overlayProps={
-            {
-              backgroundOpacity: 0.5,
-              blur: 4,
-              c: 'gray'
+          styles={{
+            content: {
+              backgroundColor: '#1d1e30'
+            },
+            header: {
+              backgroundColor: '#1d1e30'
+            },
+            close: {
+              color: 'white'
             }
-          }
+          }}
         >
           <div className={classes.linkSpacing}>
 
@@ -219,15 +235,15 @@ export function Header() {
             ) : (
               <>
                 <div className={classes.guestMobileLinksContainer} >
-                  <Button variant='outline' color='black' rightSection={<House size={20} />} size='lg' radius='md' className={`${classes.homeButton} ${pathname === '/' ? classes.active : ''}`} onClick={() => router.push('/')}>
+                  <Button variant='outline' color='black' rightSection={<House size={20} />} size='lg' radius='md' className={`${classes.homeButton} ${pathname === '/' ? classes.guestActive : ''}`} onClick={() => router.push('/')}>
                     Home
                   </Button>
 
-                  <Button variant='outline' color='black' rightSection={<LogIn size={20} />}size='lg' radius='md' className={`${classes.signInButton} ${pathname === '/auth/signin' ? classes.active : ''}`} onClick={() => router.push('/auth/signin')}>
+                  <Button variant='outline' color='black' rightSection={<LogIn size={20} />}size='lg' radius='md' className={`${classes.signInButton} ${pathname === '/auth/signin' ? classes.guestActive : ''}`} onClick={() => router.push('/auth/signin')}>
                     Sign In 
                   </Button>
 
-                  <Button variant='outline' color='black' rightSection={<UserRoundPlus size={20} />} size='lg' radius='md' className={`${classes.signUpButton} ${pathname === '/auth/signup' ? classes.active : ''}`} onClick={() => router.push('/auth/signup')}>
+                  <Button variant='outline' color='black' rightSection={<UserRoundPlus size={20} />} size='lg' radius='md' className={`${classes.signUpButton} ${pathname === '/auth/signup' ? classes.guestActive : ''}`} onClick={() => router.push('/auth/signup')}>
                     Register 
                   </Button>
                 </div>

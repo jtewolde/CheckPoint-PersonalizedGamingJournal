@@ -51,7 +51,7 @@ export async function POST(req: NextRequest){
 
         const result = streamText({
             model,
-            system: "You are a helpful and friendly assistant that knows about video games. Give out knowledgable but brief responses to the user.",
+            system: "You are a friendly and expert assistant who specializes in video games. When responding, provide accurate, clear, and helpful answers based on real game data and common knowledge. Do not guess. If you're unsure, say so. Prioritize clarity over brevity.",
             messages,
         });
 
