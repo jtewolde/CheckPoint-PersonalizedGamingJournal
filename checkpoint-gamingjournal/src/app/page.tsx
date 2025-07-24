@@ -81,7 +81,7 @@ export default function Home() {
           <div className={classes.imageContainer} >
 
             <Image
-              src={LibraryPage}
+              src="/Library.png"
               alt="Library Page"
               className={classes.image}
               width={650}
@@ -109,7 +109,7 @@ export default function Home() {
           <div className={classes.imageReverseContainer} >
 
             <Image
-              src={GameDetailsPage}
+              src="/GameDetails.png"
               alt="Game Details Page"
               className={classes.image}
               width={650}
@@ -140,7 +140,7 @@ export default function Home() {
           <div className={classes.imageContainer}>
 
             <Image
-              src={JournalPage}
+              src="/JournalPage.png"
               alt='Journal Page'
               className={classes.image}
               width={800}
@@ -172,7 +172,7 @@ export default function Home() {
           <div className={classes.imageReverseContainer} >
 
             <Image
-              src={ChatroomPage}
+              src="/ChatRoom.png"
               alt="Chatroom Page"
               className={classes.image}
               width={800}
