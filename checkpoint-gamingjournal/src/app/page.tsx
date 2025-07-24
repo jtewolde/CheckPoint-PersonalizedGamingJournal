@@ -14,7 +14,7 @@ import classes from './page.module.css';
 import { useAuth } from '@/context/Authcontext';
 
 import LibraryPage from '../../public/Library.png';
-import GameDetailsPage from '../../public//GameDetails.png'
+import GameDetailsPage from '../../public/GameDetails.png'
 import ChatroomPage from '../../public/ChatRoom.png';
 import JournalPage from '../../public/JournalPage.png';
 
