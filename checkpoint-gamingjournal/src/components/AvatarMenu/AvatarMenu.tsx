@@ -52,7 +52,7 @@ export default function AvatarMenu(){
 
             <Menu.Dropdown styles={{
                 dropdown: {
-                    backgroundColor: '#1d1e30',
+                    backgroundColor: '#434343',
                     border: '1px solid black',
                     fontFamily: 'Poppins',
                     fontWeight: 690,

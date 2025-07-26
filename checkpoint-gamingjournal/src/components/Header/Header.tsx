@@ -172,7 +172,7 @@ export function Header() {
         </div>
 
         {/* Mobile Links */}
-        <Burger className={classes.burger} opened={opened} onClick={toggle} hiddenFrom="lg" size="md" color='white' />
+        <Burger className={classes.burger} opened={opened} onClick={toggle} hiddenFrom="lg" size="lg" color='white' />
 
         <Drawer
           opened={opened}

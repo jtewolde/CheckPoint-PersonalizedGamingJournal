@@ -166,7 +166,7 @@ export default function Dashboard() {
 
         <SimpleGrid cols={6} spacing="lg" className={classes.statusGrid}>
 
-          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+          <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
             <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
 
@@ -185,7 +185,7 @@ export default function Dashboard() {
 
           </Paper>
 
-          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+          <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
             <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
 
@@ -200,7 +200,7 @@ export default function Dashboard() {
 
           </Paper>
 
-          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+          <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
             <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
 
@@ -215,7 +215,7 @@ export default function Dashboard() {
 
           </Paper>
 
-          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+          <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
             <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
 
@@ -229,7 +229,7 @@ export default function Dashboard() {
 
           </Paper>
 
-          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+          <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
              <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
               <div className={classes.statusLogoCenter} >
@@ -241,7 +241,7 @@ export default function Dashboard() {
 
           </Paper>
 
-          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+          <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
             <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
 
@@ -265,7 +265,7 @@ export default function Dashboard() {
         <h1 className={classes.trendingText}> <TrendingUp size={30} /> Popular Visited Games on IGDB Website </h1>
         
         {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
-        <SimpleGrid cols={6} spacing="lg" className={classes.gamesGrid}>
+        <SimpleGrid cols={6} spacing="lg" className={classes.trendingGamesGrid}>
           {games.map((game) => (
             <div key={game.id} className={classes.gameCard}>
               <Image src={
