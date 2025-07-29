@@ -1,150 +1,198 @@
 .wrapper {
-    padding: 2rem;
-    min-height: 100vh;
-    background: linear-gradient(to top, #2a2929, #434343);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
+  padding: 2rem;
+  min-height: 100vh;
+  background: #121212;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
 
-  .welcomeText{
-    font-size: 1.8rem;
-    font-weight: 500;
-    margin-bottom: 1.0rem;
-    align-self: center;
-    font-family: 'Poppins';
-    color: rgb(222, 219, 219);
-    margin-bottom: 2rem;
-  }
+.welcomeText{
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 1.0rem;
+  align-self: center;
+  font-family: 'Barlow';
+  color: #f4f4f4;
+  margin-bottom: 2rem;
+}
 
-  .profileStats,
-  .trendingText,
-  .playingText,
-  .recentEntriesText{
-    display: inline-block;
-    flex-direction: row;
-    justify-self: start;
-    font-size: 1.4rem;
-    font-weight: 400;
-    margin-bottom: 1.5rem;
-    align-items: flex-start;
-    font-family: 'Inter';
-    color: rgb(222, 219, 219);
-    border-bottom: 3px solid #ddd;
-  }
+.profileStats,
+.trendingText,
+.playingText,
+.recentEntriesText{
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  align-items: flex-end;
+  justify-content: space-between;
+  font-family: 'Barlow';
+  color: #e9e9e9;
+}
 
-  .statCards {
-    margin-bottom: 5rem;
-  }
+.titleLogo{
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+  border-bottom: 1px solid #c5c5c5;
+}
 
-  .statusGrid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr); /* Default: 3 columns */
-    gap: 1rem;
-  }
+.viewMoreText{
+  justify-self: flex-end;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 1.4rem;
+}
 
-  .statusCard {
-    padding: 1rem;
-    border-radius: 8px;
-    background-color: #25252b;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+.gamesPlayingText{
+  font-size: 1.8rem;
+}
 
-  .statusLogo{
-    justify-self: center;
-    align-self: center;
-  }
+.statCards {
+  margin-bottom: 5rem;
+}
 
-  .statusLogoCenter{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.statusGrid {
+  display: grid;
+  padding: 1rem;
+  grid-template-columns: repeat(6, 1fr); /* Default: 3 columns */
+  gap: 1rem;
+}
 
-  .statusTitle {
-    font-size: 1.5rem;
-    font-weight: 450;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    color: #ffffff;
-    font-family: 'Poppins';
-    text-decoration: underline;
-    text-align: center;
-  }
+.statusCard {
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #282828;
+  border: 1px solid #363636;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-  .statusCount {
-    font-size: 4rem;
-    font-weight: bold;
-    color: #ffffff;
-    font-family: 'Poppins';
-    text-align: center;
-  }
+.statusLogo{
+  justify-self: center;
+  align-self: center;
+}
 
-  .statusTotalCount{
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: #ffffff;
-    font-family: 'Poppins';
-    text-align: center;
-  }
-  
-  .statusProgress{
-    justify-self: center;
-  }
-  
-  .trendingGames {
-    width: 100%;
-    max-width: 1200px; /* Add a max width to prevent it from stretching too wide */
-    display: block;
-    margin: 0;
-    padding: 1rem 0;
-  }
+.statusLogoCenter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .gamesGrid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr); /* Default: 5 columns */
-    gap: 3rem;
-    justify-content: center;
-    align-content: center;
-    justify-items: center;
-  }
+.statusTitle {
+  font-size: 1.5rem;
+  font-weight: 450;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+  font-family: 'Poppins';
+  text-decoration: underline;
+  text-align: center;
+}
 
-  .trendingGamesGrid{
-    display: grid;
-    grid-template-columns: repeat(6, 1fr); /* Default: 5 columns */
-    gap: 3rem;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
-  }
-  
-  .cover {
-    width: 120%;
-    object-fit: cover;
-    border-radius: 8px;
-    cursor: pointer;
-    border: 0.5 solid rgb(183, 183, 183);
-  }
+.statusCount {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #ffffff;
+  font-family: 'Poppins';
+  text-align: center;
+}
 
-  .cover:hover {
-    transform: scale(1.05);
-    transition: transform 0.3s ease;
-  }
+.statusTotalCount{
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #ffffff;
+  font-family: 'Poppins';
+  text-align: center;
+}
 
-  .playingText{
-    margin-top: 5rem;
-  }
+.statusProgress{
+  justify-self: center;
+}
 
-  .playingGames{
-    width: 100%;
-    max-width: 1200px; /* Add a max width to prevent it from stretching too wide */
-    margin-top: -1rem;
-    padding: 1rem 0;
-    display: block;
-  }
+.trendingGames {
+  width: 100%;
+  max-width: 95%; /* Add a max width to prevent it from stretching too wide */
+  display: block;
+  margin: 0;
+  padding: 1rem 0;
+}
 
-  .recentEntriesText {
-    margin-top: 4rem;
+.gameCard{
+  position: relative;
+  cursor: pointer;
+}
+
+.gameName {
+  display: block;
+  opacity: 0;
+  color: white;
+  font-size: 15px;
+  margin-top: 1rem;
+  text-align: center;
+  justify-self: center;
+  font-weight: 600;
+  transition: opacity 0.3s ease;
+  pointer-events: none; /* Prevents accidental hover/clicks */
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: rgba(30, 30, 30, 0.85);
+  border-radius: 0 0 8px 8px;
+  z-index: 2;
+}
+
+.gameCard:hover .gameName {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.gamesGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* Default: 5 columns */
+  gap: 3rem;
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+}
+
+.trendingGamesGrid{
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* Default: 5 columns */
+  gap: 3rem;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
+.cover {
+  width: 120%;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 0.5 solid rgb(74, 74, 74);
+}
+
+.cover:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.playingText{
+  margin-top: 5rem;
+}
+
+.playingGames{
+  width: 100%;
+  max-width: 1200px; /* Add a max width to prevent it from stretching too wide */
+  margin-top: -1rem;
+  padding: 1rem 0;
+  display: block;
+}
+
+.recentEntriesText {
+  margin-top: 4rem;
 }
 
 .noEntriesText{
@@ -165,9 +213,8 @@
 
 .entryCard {
   padding: 1rem;
-  border: 1px solid #ddd;
   border-radius: 8px;
-  background-color: #d5d5d5;
+  background-color: #282828;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
@@ -178,35 +225,39 @@
 }
 
 .entryGame{
-    font-size: 1.4rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    font-family: 'Poppins';
+  color: white;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-family: 'Poppins';
 }
 
-
 .entryTitle {
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    font-family: 'Poppins';
+  font-size: 1rem;
+  color: white;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  font-family: 'Poppins';
 }
 
 .entryContent {
-    font-size: 1rem;
-    color: #414141;
-    margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #e0e0e0;
+  margin-bottom: 0.5rem;
 }
 
 .entryDate {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #424242;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #c5c5c5;
 }
 
 @media (max-width: 1200px) {
   .gamesGrid {
     grid-template-columns: repeat(4, 1fr); /* 4 columns for screens smaller than 1200px */
+  }
+  .trendingGamesGrid{
+    grid-template-columns: repeat(4, 1fr);
   }
   .statusGrid {
     grid-template-columns: repeat(4, 1fr); /* 4 columns for screens smaller than 1200px */
@@ -220,11 +271,12 @@
   .gamesGrid {
     grid-template-columns: repeat(3, 1fr); /* 3 columns for screens smaller than 768px */
   }
-
+  .trendingGamesGrid{
+    grid-template-columns: repeat(3, 1fr);
+  }
   .entriesGrid {
     grid-template-columns: repeat(1, 1fr); /* 1 column for screens smaller than 768px */
   }
-
   .statusGrid {
     grid-template-columns: repeat(2, 1fr); /* 2 columns for screens smaller than 768px */
   }
@@ -233,7 +285,7 @@
 
 @media (max-width: 480px) {
   .statusGrid {
-    margin-left: -1.4rem;;
+    margin-left: -2rem;
     grid-template-columns: repeat(2, 1fr); /* 2 columns for screens smaller than 768px */
   }
 
@@ -243,6 +295,10 @@
 
   .gamesGrid {
     grid-template-columns: repeat(2, 1fr); /* 2 columns for screens smaller than 480px */
+  }
+
+  .trendingGamesGrid{
+    grid-template-columns: repeat(2, 1fr);
   }
     
   .welcomeText{

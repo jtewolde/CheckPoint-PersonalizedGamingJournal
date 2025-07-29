@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
     const thirtyDaysAgo = Math.floor((now.getTime() - 45 * 24 * 60 * 60 * 1000) / 1000); // 45 days ago in seconds
 
     // Construct the query body
-    const body = `fields game_id,value,popularity_type; sort value desc; limit ${limit} ; where popularity_type = 5;`
+    const body = `fields game_id,value,popularity_type; sort value desc; limit ${limit} ; where popularity_type = 3;`
 
     const igdbRes = await fetch(IGDB_URL, {
       method: 'POST',
@@ -77,7 +77,6 @@ export async function GET(req: NextRequest) {
 
     const popularGames = await igdbRes.json();
     const gameIds = popularGames.map((g: any) => g.game_id).filter(Boolean);
-    console.log("Game Ids: ", gameIds)
 
     if (gameIds.length === 0) {
       return NextResponse.json([], { status: 200 });
@@ -87,8 +86,6 @@ export async function GET(req: NextRequest) {
     const currentYear = new Date().getFullYear();
     const currentYearStart = new Date(2024, 10, 1).getTime() / 1000; // Jan 1st, 2025
     const currentTimestamp = Math.floor(Date.now() / 1000); // current time in seconds
-
-    console.log(currentYearStart, currentTimestamp, currentYear)
 
     // Step 2: Fetch the game details like name and cover images for those IDs
     const gamesRes = await fetch('https://api.igdb.com/v4/games', {
@@ -111,7 +108,6 @@ export async function GET(req: NextRequest) {
     }
 
     const games = await gamesRes.json();
-    console.log(games)
     return NextResponse.json(games, { status: 200 });
   } catch (err: any) {
     console.error("Error:", err);
