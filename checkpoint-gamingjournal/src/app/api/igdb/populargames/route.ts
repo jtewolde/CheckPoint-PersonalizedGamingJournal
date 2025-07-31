@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
     const thirtyDaysAgo = Math.floor((now.getTime() - 45 * 24 * 60 * 60 * 1000) / 1000); // 45 days ago in seconds
 
     // Construct the query body
-    const body = `fields game_id,value,popularity_type; sort value desc; limit ${limit} ; where popularity_type = 3;`
+    const body = `fields game_id,value,popularity_type; sort value desc; limit ${limit} ; where popularity_type = 5;`
 
     const igdbRes = await fetch(IGDB_URL, {
       method: 'POST',
@@ -96,7 +96,7 @@ export async function GET(req: NextRequest) {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'text/plain',
       },
-      body: `fields id, name, cover.url, first_release_date; where id = (${gameIds.join(',')}) ; sort first_release_date desc; limit ${gameIds.length};`
+      body: `fields id, name, cover.url, aggregated_rating, first_release_date; where id = (${gameIds.join(',')}) ; sort first_release_date desc; limit ${gameIds.length};`
     });
 
     if (!gamesRes.ok) {

@@ -408,7 +408,6 @@ export default function GameDetails() {
         infinite={true}
         autoPlay={false}
         keyBoardControl={true}
-        arrows={false}
         showDots={false}
         containerClass={classes.carouselContainer}
         itemClass={classes.carouselItem}
