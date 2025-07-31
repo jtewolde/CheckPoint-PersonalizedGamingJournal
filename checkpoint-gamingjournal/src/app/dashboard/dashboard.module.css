@@ -24,9 +24,9 @@
   display: flex;
   flex-direction: row;
   gap: 0.4rem;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 800;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.2rem;
   align-items: flex-end;
   justify-content: space-between;
   font-family: 'Barlow';
@@ -42,12 +42,13 @@
 
 .viewMoreText{
   justify-self: flex-end;
-  border-bottom: 1px solid #e0e0e0;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
+  color: #a7a7a7;
+  font-weight: 400;
 }
 
 .gamesPlayingText{
-  font-size: 1.8rem;
+  font-size: 1.5rem;
 }
 
 .statCards {
@@ -308,10 +309,13 @@
   
   .trendingText,
   .playingText,
-  .recentEntriesText{
+  .recentEntriesText,
+  .gamesPlayingText{
     text-align: center;
-    font-size: 18px;
+    font-size: 1.1rem;
   }
+
+  
 }
 
 @media (max-width: 320px) {

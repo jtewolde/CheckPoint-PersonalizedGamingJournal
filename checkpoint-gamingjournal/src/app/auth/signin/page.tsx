@@ -17,7 +17,6 @@ import toast from 'react-hot-toast';
 
 import classes from './signIn.module.css';
 
-
 export default function signInPage(){
 
     // State variables for form inputs and tracking errors

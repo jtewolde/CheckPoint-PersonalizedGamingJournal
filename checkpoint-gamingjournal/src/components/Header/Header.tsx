@@ -182,10 +182,10 @@ export function Header() {
           className={classes.drawer}
           styles={{
             content: {
-              backgroundColor: '#1d1e30'
+              backgroundColor: '#3b3b3b'
             },
             header: {
-              backgroundColor: '#1d1e30'
+              backgroundColor: '#3b3b3b'
             },
             close: {
               color: 'white'

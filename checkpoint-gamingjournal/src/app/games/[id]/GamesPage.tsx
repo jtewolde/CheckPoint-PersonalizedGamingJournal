@@ -31,6 +31,9 @@ export default function GameDetails() {
   const [status, setStatus] = useState(''); // State to handle game status
   const [opened, {open, close} ] = useDisclosure(false);
 
+  const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null); // State to handle selected screenshot for modal
+  const [modalOpen, setModalOpen] = useState(false); // State to handle modal open/close
+
   const {isAuthenticated, setIsAuthenticated} = useAuth(); // Access global auth state
 
   const router = useRouter();
@@ -183,36 +186,37 @@ export default function GameDetails() {
 
   // Function to handle updating the game status
   const handleUpdateStatus = async (newStatus: string) => {
-  try {
-    const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token
-    const res = await fetch('/api/library/updateStatus', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`, // Include the Bearer token
-      },
-      body: JSON.stringify({
-        gameID: id, // Pass the game ID
-        gameDetails: {
-          status: newStatus, // Pass the new status
+    try {
+      const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token
+      const res = await fetch('/api/library/updateStatus', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`, // Include the Bearer token
         },
-      }),
-    });
+        body: JSON.stringify({
+          gameID: id, // Pass the game ID
+          gameDetails: {
+            status: newStatus, // Pass the new status
+          },
+        }),
+      });
 
-    if (!res.ok) {
-      throw new Error('Failed to update game status');
+      if (!res.ok) {
+        throw new Error('Failed to update game status');
+      }
+
+      const data = await res.json();
+      console.log('Game status updated:', data);
+      toast.success('Game status updated successfully!');
+      
+      router.push(`/games/${game.id}`)
+    } catch (error) {
+      console.error('Error updating game status:', error);
+      toast.error('Failed to update game status. Please try again.');
     }
+  };
 
-    const data = await res.json();
-    console.log('Game status updated:', data);
-    toast.success('Game status updated successfully!');
-    
-    router.push(`/games/${game.id}`)
-  } catch (error) {
-    console.error('Error updating game status:', error);
-    toast.error('Failed to update game status. Please try again.');
-  }
-};
 
   if (loading) {
     return <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
@@ -404,6 +408,7 @@ export default function GameDetails() {
         infinite={true}
         autoPlay={false}
         keyBoardControl={true}
+        arrows={false}
         showDots={false}
         containerClass={classes.carouselContainer}
         itemClass={classes.carouselItem}
@@ -414,12 +419,40 @@ export default function GameDetails() {
               src={`https:${screenshot.url.replace('t_thumb', 't_screenshot_big')}`}
               alt={`Screenshot of ${game.name}`}
               className={classes.screenshot}
+              onClick={() => {
+                setSelectedScreenshot(`https:${screenshot.url.replace('t_thumb', 't_screenshot_big')}`);
+                setModalOpen(true);
+              }}
             />
           </div>
         ))}
       </Carousel>
 
-        <h2 className={classes.similarGamesName}>Similar Games: </h2>
+      <Modal
+        styles={{
+          content: {
+            backgroundColor: '#121212'
+          }
+        }}
+        opened={modalOpen}
+        onClose={() => setModalOpen(false)}
+        centered
+        size='80%'
+        overlayProps={{ blur: 5}}
+        withCloseButton={false}
+        >
+          {selectedScreenshot && (
+            <Image
+              src={selectedScreenshot}
+              alt="Screenshot"
+              className={classes.modalScreenshot}
+              style={{ width: '100%', height: '100%' }} // Ensure the image fills the modal
+            />
+          )}
+
+        </Modal>
+
+      <h2 className={classes.similarGamesName}>Similar Games: </h2>
 
       <div className={classes.similarGames}>
         <Carousel

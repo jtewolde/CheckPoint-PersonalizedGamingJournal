@@ -267,11 +267,11 @@ export default function Dashboard() {
         <div className={classes.trendingText}>
           
           <div className={classes.titleLogo}>
-            <TrendingUp size={40} />
-            <h1 className={classes.gamesPlayingText}>Most Visited Games on IGDB Website:</h1>
+            <TrendingUp size={30} />
+            <h1 className={classes.gamesPlayingText}>Most Popular Games:</h1>
           </div>
 
-          <a className={classes.viewMoreText} href='' >View more</a>
+          <a className={classes.viewMoreText} href='/search/trending' >View more</a>
         </div>
         
         {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
@@ -295,7 +295,7 @@ export default function Dashboard() {
         <div className={classes.playingText}>
 
           <div className={classes.titleLogo}>
-            <Gamepad size={40} /> 
+            <Gamepad size={30} /> 
             <h1 className={classes.gamesPlayingText}>Games that you are currently playing:</h1>
           </div>
           
@@ -327,7 +327,7 @@ export default function Dashboard() {
         <div className={classes.recentEntriesText}>
           
           <div className={classes.titleLogo}>
-            <Notebook size={40} />
+            <Notebook size={30} />
             <h1 className={classes.gamesPlayingText}>Recent Journal Entries:</h1>
           </div>
 

@@ -7,53 +7,49 @@ import { useRouter } from 'next/navigation';
 import { LoadingOverlay } from '@mantine/core';
 import { Pagination, SimpleGrid } from '@mantine/core';
 
-import PlaceHolderImage from '../../../public/no-cover-image.png';
+import PlaceHolderImage from '../../../../public/no-cover-image.png';
+import { TrendingUp } from 'lucide-react';
 
-import classes from './search.module.css';
+import classes from './Trending.module.css';
 
-export default function SearchResults() {
-  const searchParams = useSearchParams();
-  const query = searchParams.get('query') || ''; // Get the search query from the URL
+export default function TrendingPage() {
 
   const [page, setPage] = useState(1) // start with page 1 for pagination
-  const limit = 30; // Set the limit of games on page to 12
+  const limit = 30; // Set the limit of games on page to 30
 
   const [games, setGames] = useState<any[]>([]); // State to store games data
   const [length, setLength] = useState("")
   const [loading, setLoading] = useState(true); // State to handle loading
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchGames = async () => {
-      try {
-        const offset = (page - 1) * limit; // calculate offset based on page
-        const res = await fetch(`/api/igdb/games?query=${encodeURIComponent(query)}&limit=${limit}&offset=${offset}`);
-
-        if (!res.ok) {
-          throw new Error('Failed to fetch games');
+  // Fetch games data from the API
+    useEffect(() => {
+      const fetchPopularGames = async () => {
+        try {
+          const res = await fetch(`/api/igdb/populargames?limit=${limit}`);
+          
+          if (!res.ok) {
+            throw new Error('Failed to fetch popular games');
+          }
+          const data = await res.json();
+          setGames(data); // Store the games data in state
+          setLength(data.length);
+          console.log("Popular Games: ",data);
+        } catch (error) {
+          console.error('Error fetching popular games:', error);
+        } finally {
+          setLoading(false); // Set loading to false after fetching
         }
-        const data = await res.json();
-        setGames(data);
-        setLength(data.length);
-        console.log(data.length)
-      } catch (error) {
-        console.error('Error fetching games:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (query) {
-      fetchGames();
-    }
-  }, [query, page]);
+      };
+      fetchPopularGames();
+    }, []);
 
   if (loading) {
     return <LoadingOverlay visible zIndex={1000}  overlayProps={{ radius: "sm", blur: 2 }} />
   }
 
   if (!games.length) {
-    return <div>No games found for "{query}"</div>; // Show a message if no games are found
+    return <div>No games found </div>; // Show a message if no games are found
   }
 
     // Calculate the games to display on the current page
@@ -63,7 +59,12 @@ export default function SearchResults() {
 
   return (
     <div className={classes.wrapper} >
-      <h1 className={classes.searchText}>Search Results for "{query}"</h1>
+
+        <div className={classes.titleLogo}>
+          <TrendingUp size={40} />
+          <h1 className={classes.searchText}>Trending Games:</h1>
+        </div>
+
         <h2 className={classes.numberText}>{length} Game Results:</h2>
 
         <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>

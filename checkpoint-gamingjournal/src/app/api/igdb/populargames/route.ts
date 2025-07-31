@@ -46,6 +46,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const searchQuery = searchParams.get('query') || '';
     const limit = parseInt(searchParams.get('limit') || '12', 10); // Default to 12 results per page
+    const page = parseInt(searchParams.get('page') || '1', 10);
 
     const accessToken = await getAccessToken();
 
