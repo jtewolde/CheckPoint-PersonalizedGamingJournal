@@ -40,13 +40,13 @@
 
 .entryCard {
     padding: 1rem;
-    border: 1px solid #ddd;
     border-radius: 8px;
-    background-color: #d5d5d5;
+    background-color: #25252b;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .entryGame{
+    color: white;
     font-size: 1.4rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
@@ -54,6 +54,7 @@
 }
 
 .entryTitle {
+    color: white;
     font-size: 1rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
@@ -62,14 +63,14 @@
 
 .entryContent {
     font-size: 1rem;
-    color: #414141;
+    color: #e1e1e1;
     margin-bottom: 0.5rem;
 }
 
 .entryDate {
     font-size: 0.9rem;
     font-weight: 500;
-    color: #636363;
+    color: #bababa;
 }
 
 .buttonGroup{

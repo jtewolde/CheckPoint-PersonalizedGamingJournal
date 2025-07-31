@@ -172,7 +172,7 @@ export function Header() {
         </div>
 
         {/* Mobile Links */}
-        <Burger className={classes.burger} opened={opened} onClick={toggle} hiddenFrom="lg" size="md" color='white' />
+        <Burger className={classes.burger} opened={opened} onClick={toggle} hiddenFrom="lg" size="lg" color='white' />
 
         <Drawer
           opened={opened}
@@ -182,10 +182,10 @@ export function Header() {
           className={classes.drawer}
           styles={{
             content: {
-              backgroundColor: '#1d1e30'
+              backgroundColor: '#3b3b3b'
             },
             header: {
-              backgroundColor: '#1d1e30'
+              backgroundColor: '#3b3b3b'
             },
             close: {
               color: 'white'

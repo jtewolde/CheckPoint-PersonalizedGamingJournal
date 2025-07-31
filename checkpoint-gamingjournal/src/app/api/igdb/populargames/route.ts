@@ -1,4 +1,4 @@
-// API Call for getting top 5 popular games to display on dashboard
+// API Call for getting top 12 popular games to display on dashboard
 
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -46,7 +46,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const searchQuery = searchParams.get('query') || '';
     const limit = parseInt(searchParams.get('limit') || '12', 10); // Default to 12 results per page
-    const offset = parseInt(searchParams.get('offset') || '0', 10); // Default to 0 offset
+    const page = parseInt(searchParams.get('page') || '1', 10);
 
     const accessToken = await getAccessToken();
 
@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
     const thirtyDaysAgo = Math.floor((now.getTime() - 45 * 24 * 60 * 60 * 1000) / 1000); // 45 days ago in seconds
 
     // Construct the query body
-    const body = 'fields game_id,value,popularity_type; sort value desc; limit 18; where popularity_type = 5;'
+    const body = `fields game_id,value,popularity_type; sort value desc; limit ${limit} ; where popularity_type = 5;`
 
     const igdbRes = await fetch(IGDB_URL, {
       method: 'POST',
@@ -84,8 +84,9 @@ export async function GET(req: NextRequest) {
     }
 
     // Get the current year start and end timestamps
-    const currentYearStart = new Date(new Date().getFullYear(), 0, 1).getTime() / 1000; // Jan 1st, 2025
-    const currentYearEnd = new Date(new Date().getFullYear(), 11, 31, 23, 59, 59).getTime() / 1000; // Dec 31st, 2025
+    const currentYear = new Date().getFullYear();
+    const currentYearStart = new Date(2024, 10, 1).getTime() / 1000; // Jan 1st, 2025
+    const currentTimestamp = Math.floor(Date.now() / 1000); // current time in seconds
 
     // Step 2: Fetch the game details like name and cover images for those IDs
     const gamesRes = await fetch('https://api.igdb.com/v4/games', {
@@ -95,7 +96,7 @@ export async function GET(req: NextRequest) {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'text/plain',
       },
-      body: `fields id, name, cover.url, first_release_date; where id = (${gameIds.join(',')}); sort first_release_date desc;`
+      body: `fields id, name, cover.url, aggregated_rating, first_release_date; where id = (${gameIds.join(',')}) ; sort first_release_date desc; limit ${gameIds.length};`
     });
 
     if (!gamesRes.ok) {

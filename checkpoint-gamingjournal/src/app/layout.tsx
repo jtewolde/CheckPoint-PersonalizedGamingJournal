@@ -42,7 +42,15 @@ export default function RootLayout({
 
       <body className={`${geistSans.variable} ${geistMono.variable} page-container`}>
         <AuthProvider>
-          <MantineProvider>
+          <MantineProvider
+            withGlobalClasses
+            theme={{
+              primaryColor: 'blue',
+              fontFamily: 'Poppins, sans-serif',
+              defaultRadius: 'md',
+            }}
+          >
+
             <Toaster
               toastOptions={{
                 duration: 5000,

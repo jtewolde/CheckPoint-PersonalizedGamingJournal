@@ -162,11 +162,13 @@ export default function Dashboard() {
 
       <div className={classes.statCards}>
 
-        <h1 className={classes.profileStats}>Profile Stats:</h1>
+        <div className={classes.profileStats}>
+          <p className={classes.titleLogo}>Profile Stats: </p>
+        </div>
 
         <SimpleGrid cols={6} spacing="lg" className={classes.statusGrid}>
 
-          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+          <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
             <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
 
@@ -185,7 +187,7 @@ export default function Dashboard() {
 
           </Paper>
 
-          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+          <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
             <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
 
@@ -200,7 +202,7 @@ export default function Dashboard() {
 
           </Paper>
 
-          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+          <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
             <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
 
@@ -215,7 +217,7 @@ export default function Dashboard() {
 
           </Paper>
 
-          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+          <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
             <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
 
@@ -229,7 +231,7 @@ export default function Dashboard() {
 
           </Paper>
 
-          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+          <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
              <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
               <div className={classes.statusLogoCenter} >
@@ -241,7 +243,7 @@ export default function Dashboard() {
 
           </Paper>
 
-          <Paper shadow="md" radius="lg" withBorder className={classes.statusCard}>
+          <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
             <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
 
@@ -262,10 +264,18 @@ export default function Dashboard() {
 
       <div className={classes.trendingGames}>
 
-        <h1 className={classes.trendingText}> <TrendingUp size={30} /> Popular Visited Games on IGDB Website </h1>
+        <div className={classes.trendingText}>
+          
+          <div className={classes.titleLogo}>
+            <TrendingUp size={30} />
+            <h1 className={classes.gamesPlayingText}>Most Popular Games:</h1>
+          </div>
+
+          <a className={classes.viewMoreText} href='/search/trending' >View more</a>
+        </div>
         
         {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
-        <SimpleGrid cols={6} spacing="lg" className={classes.gamesGrid}>
+        <SimpleGrid cols={7} spacing="lg" verticalSpacing='xl' className={classes.trendingGamesGrid}>
           {games.map((game) => (
             <div key={game.id} className={classes.gameCard}>
               <Image src={
@@ -274,6 +284,7 @@ export default function Dashboard() {
                 className={classes.cover} 
                 onClick={() => router.push(`/games/${game.id}`)} 
                 />
+                <Text className={classes.gameName}>{game.name}</Text>
             </div>
           ))}
         </SimpleGrid>
@@ -281,7 +292,14 @@ export default function Dashboard() {
 
       <div className={classes.playingGames} >
 
-        <h1 className={classes.playingText}> <Gamepad size={30} /> Games that you are currently playing:</h1>
+        <div className={classes.playingText}>
+
+          <div className={classes.titleLogo}>
+            <Gamepad size={30} /> 
+            <h1 className={classes.gamesPlayingText}>Games that you are currently playing:</h1>
+          </div>
+          
+        </div>
 
         {playingGames.length === 0 ? (
               <p className={classes.noEntriesText}>You have no games that have the 'Playing' status.</p>
@@ -306,7 +324,14 @@ export default function Dashboard() {
 
       <div className={classes.recentEntries}>
 
-          <h1 className={classes.recentEntriesText}> <Notebook size={30} /> Recent Journal Entries: </h1>
+        <div className={classes.recentEntriesText}>
+          
+          <div className={classes.titleLogo}>
+            <Notebook size={30} />
+            <h1 className={classes.gamesPlayingText}>Recent Journal Entries:</h1>
+          </div>
+
+        </div>
 
           {recentEntries.length === 0 ? (
               <p className={classes.noEntriesText}>No recent journal entries found.</p>

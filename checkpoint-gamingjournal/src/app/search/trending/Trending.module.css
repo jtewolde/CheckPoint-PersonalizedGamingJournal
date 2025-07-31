@@ -13,10 +13,17 @@
     font-size: 2rem;
     font-weight: 600;
     color: white; /* Dark text for contrast */
-    margin-bottom: 1rem;
+    margin-bottom: 0.1rem;
     text-align: center;
     font-family: 'Barlow';
-    border-bottom: 2px solid white;
+}
+
+.titleLogo{
+  display: flex;
+  flex-direction: row;
+  gap: 0.8rem;
+  color: white;
+  border-bottom: 2px solid #ffffff;
 }
 
 /* Number of search results */
@@ -29,6 +36,7 @@
     font-style: italic;
     text-align: center;
     align-self: flex-start;
+    margin-top: 1rem;
 }
 
 /* Grid layout for game cards */

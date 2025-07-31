@@ -215,7 +215,7 @@ export default function Journal() {
                                             onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}
                                             color="blue"
                                             radius="md"
-                                            variant="light"
+                                            variant="filled"
                                             style={{ marginRight: 8 }}
                                             rightSection={<Eye />}
                                         >
@@ -227,7 +227,7 @@ export default function Journal() {
                                             onClick={() => deleteJournalEntry(entry._id, entry.gameId)}
                                             rightSection={<DeleteIcon />}
                                             radius='md'
-                                            variant='light'
+                                            variant='filled'
                                             color='red'
                                         >
                                             Delete
