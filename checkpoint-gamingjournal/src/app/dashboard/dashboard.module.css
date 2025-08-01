@@ -168,7 +168,7 @@
 }
 
 .cover {
-  width: 120%;
+  width: 115%;
   object-fit: cover;
   border-radius: 8px;
   cursor: pointer;
@@ -286,8 +286,7 @@
 
 @media (max-width: 480px) {
   .statusGrid {
-    margin-left: -2rem;
-    grid-template-columns: repeat(2, 1fr); /* 2 columns for screens smaller than 768px */
+    grid-template-columns: repeat(1, 1fr); /* 2 columns for screens smaller than 768px */
   }
 
   .cover{
@@ -314,7 +313,6 @@
     text-align: center;
     font-size: 1.1rem;
   }
-
   
 }
 

@@ -118,10 +118,10 @@ export default function signInPage(){
 
           <Divider styles={{label: {color: 'white'}}} label="Or continue with email" labelPosition="center" color='white' my="lg"  />
           
-          <TextInput className={classes.usernameInput} label="Username" placeholder='Your username' size='md' leftSection={<CircleUser size={20} />} mt='md' value={name} onChange={(e) => setName(e.currentTarget.value)} />
-          <TextInput className={classes.emailInput} label="Email address" placeholder="hello@gmail.com" size="md" leftSection={<Mail size={20} />} mt="md" value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error}/>
-          <PasswordInput className={classes.passwordInput} label="Password" placeholder="Your password" leftSection={<Lock size={20} />} mt="md" size="md" value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={passwordError}/>
-          <PasswordInput className={classes.passwordInput} label="Confirm Password" placeholder="Confirm password" leftSection={<Lock size={20} />} mt="md" size="md" value={confirmPassword} onChange={(e) => setConfirmPassword(e.currentTarget.value)} error={passwordError}/>
+          <TextInput className={classes.usernameInput} label="Username" placeholder='Your username' required size='md' leftSection={<CircleUser size={20} />} mt='md' value={name} onChange={(e) => setName(e.currentTarget.value)} />
+          <TextInput className={classes.emailInput} label="Email address" placeholder="hello@gmail.com" required size="md" leftSection={<Mail size={20} />} mt="md" value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error}/>
+          <PasswordInput className={classes.passwordInput} label="Password" placeholder="Your password" required leftSection={<Lock size={20} />} mt="md" size="md" value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={passwordError}/>
+          <PasswordInput className={classes.passwordInput} label="Confirm Password" placeholder="Confirm password" required leftSection={<Lock size={20} />} mt="md" size="md" value={confirmPassword} onChange={(e) => setConfirmPassword(e.currentTarget.value)} error={passwordError}/>
           <Button fullWidth mt="xl" size="md" loading={loading} onClick={handleEmailSignUp}>
             Register Account
           </Button>

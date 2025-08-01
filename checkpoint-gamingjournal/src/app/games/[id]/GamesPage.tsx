@@ -6,16 +6,16 @@ import { useParams, useRouter } from 'next/navigation';
 
 import toast from 'react-hot-toast';
 
-import { LoadingOverlay, Image, Button, Modal, Select, Badge, RingProgress, Text} from '@mantine/core';
+import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text} from '@mantine/core';
+import Image from 'next/image';
 
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import classes from './game.module.css';
 
-import { NotebookPen, Delete } from 'lucide-react';
+import { ArrowBigLeft, ArrowBigRight ,NotebookPen, Delete } from 'lucide-react';
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
 import { useAuth } from '@/context/Authcontext';
-
 
 export default function GameDetails() {
   const { id } = useParams(); // Get the game ID from the URL
@@ -37,7 +37,6 @@ export default function GameDetails() {
   const {isAuthenticated, setIsAuthenticated} = useAuth(); // Access global auth state
 
   const router = useRouter();
-
 
   useEffect(() => {
     const fetchIGDBGameDetails = async () => {
@@ -408,7 +407,8 @@ export default function GameDetails() {
         infinite={true}
         autoPlay={false}
         keyBoardControl={true}
-        showDots={false}
+        showDots={true}
+        arrows={false}
         containerClass={classes.carouselContainer}
         itemClass={classes.carouselItem}
       >
@@ -418,6 +418,10 @@ export default function GameDetails() {
               src={`https:${screenshot.url.replace('t_thumb', 't_screenshot_big')}`}
               alt={`Screenshot of ${game.name}`}
               className={classes.screenshot}
+              width={800}
+              height={450}
+              loading='lazy'
+              layout='responsive'
               onClick={() => {
                 setSelectedScreenshot(`https:${screenshot.url.replace('t_thumb', 't_screenshot_big')}`);
                 setModalOpen(true);
@@ -436,7 +440,7 @@ export default function GameDetails() {
         opened={modalOpen}
         onClose={() => setModalOpen(false)}
         centered
-        size='80%'
+        size='100%'
         overlayProps={{ blur: 5}}
         withCloseButton={false}
         >
@@ -445,7 +449,9 @@ export default function GameDetails() {
               src={selectedScreenshot}
               alt="Screenshot"
               className={classes.modalScreenshot}
-              style={{ width: '100%', height: '100%' }} // Ensure the image fills the modal
+              width={800}
+              height={450}
+              layout='responsive'
             />
           )}
 

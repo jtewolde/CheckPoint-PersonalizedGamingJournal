@@ -156,7 +156,7 @@ export default function signInPage(){
 
             <Divider styles={{label: {color: 'white'}}} label="Or continue with email" labelPosition="center" color='white' my="lg"  />
 
-          <TextInput className={classes.emailInput} label="Email address" placeholder="Your email" size="md" leftSection={<Mail size={20} />} required mt="md" mb='md' value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error} />
+          <TextInput className={classes.emailInput} label="Email Address" placeholder="Your email" size="md" leftSection={<Mail size={20} />} required mt="md" mb='md' value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error} />
 
           <Group justify='space-between' mb={1}>
 
@@ -212,7 +212,7 @@ export default function signInPage(){
 
           </Group>
 
-          <PasswordInput className={classes.passwordInput} placeholder="Your Password" id='password' size="md" leftSection={<Lock size={20} />} required value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={error} />
+          <PasswordInput className={classes.passwordInput} label='Password' placeholder="Your Password" id='password' size="md" leftSection={<Lock size={20} />} required value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={error} />
 
           <Button fullWidth mt="xl" size="md" loading={loading} onClick={handleEmailLogin}>
             Login

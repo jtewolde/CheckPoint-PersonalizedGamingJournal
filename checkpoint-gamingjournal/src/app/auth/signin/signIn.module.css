@@ -25,20 +25,21 @@
 
 .emailInput input{
   background-color: #1d1e30;
-  color: white
+  color: white;
 }
 
 .emailInput label{
-  color: white
+  color: white;
+  font-weight: 600;
 }
 
 .passwordInput input{
   background-color: #1d1e30;
-  color: white
+  color: white;
 }
 
 .passwordInput label{
-  color: white
+  color: white;
 }
 
 .modalText{
