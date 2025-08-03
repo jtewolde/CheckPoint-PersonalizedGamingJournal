@@ -402,24 +402,16 @@ export default function GameDetails() {
 
       <h2 className={classes.screenshotsTitle}>Screenshots: </h2>
 
-      <Carousel
-        responsive={responsive}
-        infinite={true}
-        autoPlay={false}
-        keyBoardControl={true}
-        showDots={true}
-        arrows={false}
-        containerClass={classes.carouselContainer}
-        itemClass={classes.carouselItem}
-      >
+      <div className={classes.screenshotGrid}>
+      
         {game.screenshots?.map((screenshot: any) => (
           <div key={screenshot.id} className={classes.carouselSlide}>
             <Image
               src={`https:${screenshot.url.replace('t_thumb', 't_screenshot_big')}`}
               alt={`Screenshot of ${game.name}`}
               className={classes.screenshot}
-              width={800}
-              height={450}
+              width={750}
+              height={400}
               loading='lazy'
               layout='responsive'
               onClick={() => {
@@ -429,33 +421,21 @@ export default function GameDetails() {
             />
           </div>
         ))}
-      </Carousel>
+      </div>
 
-      <Modal
-        styles={{
-          content: {
-            backgroundColor: '#121212'
-          }
-        }}
-        opened={modalOpen}
-        onClose={() => setModalOpen(false)}
-        centered
-        size='100%'
-        overlayProps={{ blur: 5}}
-        withCloseButton={false}
-        >
-          {selectedScreenshot && (
-            <Image
-              src={selectedScreenshot}
-              alt="Screenshot"
-              className={classes.modalScreenshot}
-              width={800}
-              height={450}
-              layout='responsive'
-            />
-          )}
-
-        </Modal>
+      {selectedScreenshot && modalOpen && (
+        <div className={classes.fullScreenOverlay} onClick={() => setModalOpen(false)}>
+          <Image
+            src={selectedScreenshot}
+            alt="Screenshot"
+            className={classes.fullScreenImage}
+            width={800}
+            height={450}
+            style={{ objectFit: 'contain'}}
+            layout='responsive'
+          />
+        </div>
+      )}
 
       <h2 className={classes.similarGamesName}>Similar Games: </h2>
 

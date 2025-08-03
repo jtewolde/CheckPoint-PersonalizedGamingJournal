@@ -93,7 +93,7 @@ export function Header() {
           }
           comboboxProps={{ transitionProps: { transition: 'fade-down', duration: 200 } }}
           className={classes.searchBar}
-          radius='md'
+          radius='lg'
           size='md'
           variant='filled'
           placeholder="Search For Games"

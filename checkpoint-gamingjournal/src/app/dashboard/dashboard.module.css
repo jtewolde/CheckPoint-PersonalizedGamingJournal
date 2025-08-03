@@ -47,6 +47,11 @@
   font-weight: 400;
 }
 
+.viewMoreText:hover{
+  color: #ffffff;
+  font-weight: 600;
+}
+
 .gamesPlayingText{
   font-size: 1.5rem;
 }
