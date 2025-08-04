@@ -104,7 +104,7 @@ export default function Home() {
           <div className={classes.imageReverseContainer} >
 
             <Image
-              src="/ContactBackground.jpg"
+              src="/ImageGameDetails.png"
               alt="Game Details Page"
               className={classes.image}
               width={650}
