@@ -137,7 +137,7 @@
     align-items: center;
     cursor: zoom-out;
     padding: 1rem;
-}
+  }
 
   .fullScreenImage{
     max-width: 100%;
@@ -232,6 +232,10 @@
     width: 100%;
     height: auto;
     margin-bottom: 3rem;
+  }
+
+  .modalScreenshot{
+    width: 200%;
   }
 
   .similarGamesName {
