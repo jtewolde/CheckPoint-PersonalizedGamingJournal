@@ -13,11 +13,6 @@ import { useState, useEffect } from 'react';
 import classes from './page.module.css';
 import { useAuth } from '@/context/Authcontext';
 
-import LibraryPage from '../../public/Library.png';
-import GameDetailsPage from '../../public/GameDetails.png'
-import ChatroomPage from '../../public/ChatRoom.png';
-import JournalPage from '../../public/JournalPage.png';
-
 export default function Home() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
@@ -85,7 +80,7 @@ export default function Home() {
               alt="Library Page"
               className={classes.image}
               width={650}
-              height={600}
+              height={560}
             />
 
             <div className={classes.imageTextContainer} >
@@ -109,7 +104,7 @@ export default function Home() {
           <div className={classes.imageReverseContainer} >
 
             <Image
-              src="/GameDetails.png"
+              src="/ImageGameDetails.png"
               alt="Game Details Page"
               className={classes.image}
               width={650}
