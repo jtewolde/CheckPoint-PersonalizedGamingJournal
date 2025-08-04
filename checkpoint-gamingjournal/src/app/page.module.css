@@ -121,8 +121,8 @@
 
 .image{
   width: 100%; /* Full width of the container */
-  max-width: 2000px; /* Maximum width for each image */
-  height: 500px; /* Maintain aspect ratio */
+  max-width: 96%; /* Maximum width for each image */
+  height: 450px; /* Maintain aspect ratio */
   border-radius: 10px; /* Optional: rounded corners for images */
   box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Optional: subtle shadow for depth */
   border: 1px solid #6b6b6b

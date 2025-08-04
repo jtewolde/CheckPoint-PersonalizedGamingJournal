@@ -85,7 +85,7 @@ export default function Home() {
               alt="Library Page"
               className={classes.image}
               width={650}
-              height={600}
+              height={560}
             />
 
             <div className={classes.imageTextContainer} >
