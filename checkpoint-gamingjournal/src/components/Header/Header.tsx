@@ -96,8 +96,8 @@ export function Header() {
           radius='lg'
           size='md'
           variant='filled'
-          placeholder="Search for games"
-          rightSection={<IconSearch size={24} style={{cursor: 'pointer'}} onClick={() => router.push(`/search?query=${encodeURIComponent(searchQuery)}`)}/>}
+          placeholder="Search For Games"
+          rightSection={<IconSearch size={24} color='white' style={{cursor: 'pointer'}} onClick={() => router.push(`/search?query=${encodeURIComponent(searchQuery)}`)}/>}
           value={searchQuery}
           onChange={handleSearch} // Update the search query state
           onKeyDown={(e) => {

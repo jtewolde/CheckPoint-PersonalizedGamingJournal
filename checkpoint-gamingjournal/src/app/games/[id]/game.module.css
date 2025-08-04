@@ -30,7 +30,7 @@
     object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: 0.5px solid #ccc;
+    border: 0.5px solid #232526;
   }
 
   .media {
@@ -87,34 +87,61 @@
   }
   
   .screenshotsTitle {
-    font-size: 1.5rem;
-    font-weight: 400;
-    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
     font-family: 'Poppins';
     color: white;
     justify-self: center;
     border-bottom: 2px solid #ffffff;
   }
+
+  .carouselContainer {
+    margin-bottom: 1rem;
+    padding: 1rem;
+  }
+
+  .carouselSlide{
+    width: 90%;
+  }
+
+  .screenshotGrid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    justify-items: center;
+    align-items: center;
+  }
   
   .screenshot {
-    width: 76%;
-    height: 76%;
     object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #414546;
     display: block;
     margin: 0 auto;
-    margin-bottom: 6rem;
+    margin-bottom: 2rem;
     cursor: pointer;
   }
 
-  .modalScreenshot {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: block;
+  .fullScreenOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: zoom-out;
+    padding: 1rem;
+  }
+
+  .fullScreenImage{
+    max-width: 100%;
+    max-height: 100%;
   }
 
   .button{
@@ -125,9 +152,16 @@
     position: relative;
   }
 
+  .similarGameSlide{
+    position: relative;
+    width: 78%;
+    justify-content: center;
+    margin: 0 auto;
+  }
+
   .similarGamesName{
-    font-size: 1.5rem;
-    font-weight: 400;
+    font-size: 1.8rem;
+    font-weight: 600;
     margin-bottom: 1rem;
     margin-top: 3rem;
     font-family: 'Poppins';
@@ -137,8 +171,7 @@
   }
 
   .similarGameCover{
-    width: 60%;
-    height: 80%;
+    width: 300px;
     object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -148,13 +181,12 @@
   }
 
   .similarGameCover:hover{
-    transform: scale(1.05);
+    transform: scale(1.03);
     transition: transform 0.3s ease;
   }
   
   .badge{
     cursor: pointer;
-    
   }
 
   @media screen and (max-width: 768px) {
@@ -192,10 +224,14 @@
     margin-bottom: 7rem;
   }
 
+  .carouselSlide{
+    width: 100%;
+  }
+
   .screenshot {
-    width: 140%;
+    width: 100%;
     height: auto;
-    margin-bottom: 6rem;
+    margin-bottom: 3rem;
   }
 
   .modalScreenshot{

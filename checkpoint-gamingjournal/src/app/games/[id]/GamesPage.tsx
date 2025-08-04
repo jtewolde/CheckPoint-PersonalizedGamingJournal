@@ -6,16 +6,16 @@ import { useParams, useRouter } from 'next/navigation';
 
 import toast from 'react-hot-toast';
 
-import { LoadingOverlay, Image, Button, Modal, Select, Badge, RingProgress, Text} from '@mantine/core';
+import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text} from '@mantine/core';
+import Image from 'next/image';
 
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import classes from './game.module.css';
 
-import { NotebookPen, Delete } from 'lucide-react';
+import { ArrowBigLeft, ArrowBigRight ,NotebookPen, Delete } from 'lucide-react';
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
 import { useAuth } from '@/context/Authcontext';
-
 
 export default function GameDetails() {
   const { id } = useParams(); // Get the game ID from the URL
@@ -37,7 +37,6 @@ export default function GameDetails() {
   const {isAuthenticated, setIsAuthenticated} = useAuth(); // Access global auth state
 
   const router = useRouter();
-
 
   useEffect(() => {
     const fetchIGDBGameDetails = async () => {
@@ -205,7 +204,7 @@ export default function GameDetails() {
       if (!res.ok) {
         throw new Error('Failed to update game status');
       }
-
+        
       const data = await res.json();
       console.log('Game status updated:', data);
       toast.success('Game status updated successfully!');
@@ -403,21 +402,18 @@ export default function GameDetails() {
 
       <h2 className={classes.screenshotsTitle}>Screenshots: </h2>
 
-      <Carousel
-        responsive={responsive}
-        infinite={true}
-        autoPlay={false}
-        keyBoardControl={true}
-        showDots={false}
-        containerClass={classes.carouselContainer}
-        itemClass={classes.carouselItem}
-      >
+      <div className={classes.screenshotGrid}>
+      
         {game.screenshots?.map((screenshot: any) => (
           <div key={screenshot.id} className={classes.carouselSlide}>
             <Image
               src={`https:${screenshot.url.replace('t_thumb', 't_screenshot_big')}`}
               alt={`Screenshot of ${game.name}`}
               className={classes.screenshot}
+              width={750}
+              height={400}
+              loading='lazy'
+              layout='responsive'
               onClick={() => {
                 setSelectedScreenshot(`https:${screenshot.url.replace('t_thumb', 't_screenshot_big')}`);
                 setModalOpen(true);
@@ -425,31 +421,21 @@ export default function GameDetails() {
             />
           </div>
         ))}
-      </Carousel>
+      </div>
 
-      <Modal
-        styles={{
-          content: {
-            backgroundColor: '#121212'
-          }
-        }}
-        opened={modalOpen}
-        onClose={() => setModalOpen(false)}
-        centered
-        size='80%'
-        overlayProps={{ blur: 5}}
-        withCloseButton={false}
-        >
-          {selectedScreenshot && (
-            <Image
-              src={selectedScreenshot}
-              alt="Screenshot"
-              className={classes.modalScreenshot}
-              style={{ width: '100%', height: '100%' }} // Ensure the image fills the modal
-            />
-          )}
-
-        </Modal>
+      {selectedScreenshot && modalOpen && (
+        <div className={classes.fullScreenOverlay} onClick={() => setModalOpen(false)}>
+          <Image
+            src={selectedScreenshot}
+            alt="Screenshot"
+            className={classes.fullScreenImage}
+            width={800}
+            height={450}
+            style={{ objectFit: 'contain'}}
+            layout='responsive'
+          />
+        </div>
+      )}
 
       <h2 className={classes.similarGamesName}>Similar Games: </h2>
 

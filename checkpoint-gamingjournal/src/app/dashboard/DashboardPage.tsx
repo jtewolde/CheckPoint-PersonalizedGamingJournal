@@ -306,7 +306,7 @@ export default function Dashboard() {
           ) : (
             <>
               {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
-              <SimpleGrid cols={6} spacing="lg" className={classes.gamesGrid}>
+              <SimpleGrid cols={5} spacing="lg" className={classes.gamesGrid}>
                 {playingGames.map((game) => (
                   <div key={game._id} className={classes.gameCard}>
                     <Image src={

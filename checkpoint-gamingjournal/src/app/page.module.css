@@ -121,8 +121,8 @@
 
 .image{
   width: 100%; /* Full width of the container */
-  max-width: 800px; /* Maximum width for each image */
-  height: auto; /* Maintain aspect ratio */
+  max-width: 2000px; /* Maximum width for each image */
+  height: 500px; /* Maintain aspect ratio */
   border-radius: 10px; /* Optional: rounded corners for images */
   box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Optional: subtle shadow for depth */
   border: 1px solid #6b6b6b
@@ -166,7 +166,7 @@
   flex-direction: row-reverse;
   align-items: center;
   justify-content: center;
-  margin-top: 3rem;
+  margin-top: 1rem;
   flex-wrap: wrap;
   margin-bottom: 10rem;
 }
@@ -177,7 +177,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-top: 3rem;
+  margin-top: 1rem;
   flex-wrap: wrap;
   margin-bottom: 10rem;
 }
@@ -201,7 +201,8 @@
 
 @media (max-width: 500px) {
   .image{
-    width: 100%;
+    width: 400px;
+    height: 300px;
   }
 
   .imageContainer, .imageReverseContainer {
