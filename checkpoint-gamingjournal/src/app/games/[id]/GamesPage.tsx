@@ -204,7 +204,7 @@ export default function GameDetails() {
       if (!res.ok) {
         throw new Error('Failed to update game status');
       }
-
+        
       const data = await res.json();
       console.log('Game status updated:', data);
       toast.success('Game status updated successfully!');
