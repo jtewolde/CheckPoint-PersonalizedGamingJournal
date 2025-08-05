@@ -25,7 +25,7 @@ export function Header() {
   const pathname = usePathname();
 
   const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
-  const isMobile = useMediaQuery('(max-width: 420px)');
+  const isMobile = useMediaQuery('(max-width: 510px)');
 
   // Function to handle clicking the logo and redirecting user to dashboard or homepage based on authenication
   const handleLogoClick = async () => {

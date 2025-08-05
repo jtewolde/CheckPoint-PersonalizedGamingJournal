@@ -11,7 +11,7 @@ import { GoogleButton } from '@/components/GoogleButton/GoogleButton';
 import { DiscordButton } from '@/components/DiscordButton/DiscordButton';
 import { useDisclosure } from '@mantine/hooks';
 
-import { AirVent, Lock, Mail } from 'lucide-react';
+import { LogIn, Lock, Mail } from 'lucide-react';
 
 import toast from 'react-hot-toast';
 
@@ -160,11 +160,11 @@ export default function signInPage(){
 
           <Group justify='space-between' mb={1}>
 
-            <Text component='label' htmlFor='password' size='md' fw={500}>
+            <Text className={classes.passwordLabel} component='label' c='white' htmlFor='password' size='md' fw={600}>
               Password
             </Text>
 
-            <Anchor size='sm' pt={2} onClick={open} >
+            <Anchor size='sm' pt={2} onClick={open} fw={500}>
               Forgot your password?
             </Anchor>
 
@@ -212,9 +212,9 @@ export default function signInPage(){
 
           </Group>
 
-          <PasswordInput className={classes.passwordInput} label='Password' placeholder="Your Password" id='password' size="md" leftSection={<Lock size={20} />} required value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={error} />
+          <PasswordInput className={classes.passwordInput} placeholder="Your Password" id='password' size="md" leftSection={<Lock size={20} />} required value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={error} />
 
-          <Button fullWidth mt="xl" size="md" loading={loading} onClick={handleEmailLogin}>
+          <Button fullWidth mt="xl" size="md" loading={loading} rightSection={<LogIn size={25} />} onClick={handleEmailLogin}>
             Login
           </Button>
 

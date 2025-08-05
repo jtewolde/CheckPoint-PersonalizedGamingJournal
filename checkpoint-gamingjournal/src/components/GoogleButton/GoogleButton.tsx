@@ -6,7 +6,7 @@ function GoogleIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
       xmlns="http://www.w3.org/2000/svg"
       preserveAspectRatio="xMidYMid"
       viewBox="0 0 256 262"
-      style={{ width: 14, height: 14 }}
+      style={{ width: 22, height: 22 }}
       {...props}
     >
       <path
@@ -30,5 +30,5 @@ function GoogleIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 }
 
 export function GoogleButton(props: ButtonProps & React.ComponentPropsWithoutRef<'button'>) {
-  return <Button leftSection={<GoogleIcon />} variant="default" {...props} />;
+  return <Button size='md' style={{border: '0.5px solid #969492'}} color='#191919ff' leftSection={<GoogleIcon />} variant="filled" {...props} />;
 }

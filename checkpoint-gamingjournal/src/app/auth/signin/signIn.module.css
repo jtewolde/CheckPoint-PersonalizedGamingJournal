@@ -9,8 +9,7 @@
   min-height: 80vh;
   max-width: 450px;
   padding-top: 80px;
-  background-color: #2b2c3d
-;
+  background-color: #303134;
   font-family: 'Poppins';
 
   @media (max-width: $mantine-breakpoint-sm) {
@@ -24,7 +23,7 @@
 }
 
 .emailInput input{
-  background-color: #1d1e30;
+  background-color: #181818ff;
   color: white;
 }
 
@@ -34,11 +33,7 @@
 }
 
 .passwordInput input{
-  background-color: #1d1e30;
-  color: white;
-}
-
-.passwordInput label{
+  background-color: #181818ff;
   color: white;
 }
 
