@@ -1,6 +1,6 @@
 'use client'
 
-import {Anchor, Button, Paper, PasswordInput, Text, TextInput, Title, Group, Divider} from '@mantine/core';
+import { Anchor, Button, Paper, PasswordInput, Text, TextInput, Title, Group, Divider} from '@mantine/core';
 import toast from 'react-hot-toast';
 
 import { useState, useEffect } from 'react';
@@ -9,6 +9,7 @@ import React from 'react';
 import { authClient } from '@/lib/auth-client';
 
 import classes from './signUp.module.css';
+import { UserRoundPlus } from 'lucide-react';
 import { GoogleButton } from '@/components/GoogleButton/GoogleButton';
 import { DiscordButton } from '@/components/DiscordButton/DiscordButton';
 
@@ -122,7 +123,7 @@ export default function signInPage(){
           <TextInput className={classes.emailInput} label="Email address" placeholder="hello@gmail.com" required size="md" leftSection={<Mail size={20} />} mt="md" value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error}/>
           <PasswordInput className={classes.passwordInput} label="Password" placeholder="Your password" required leftSection={<Lock size={20} />} mt="md" size="md" value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={passwordError}/>
           <PasswordInput className={classes.passwordInput} label="Confirm Password" placeholder="Confirm password" required leftSection={<Lock size={20} />} mt="md" size="md" value={confirmPassword} onChange={(e) => setConfirmPassword(e.currentTarget.value)} error={passwordError}/>
-          <Button fullWidth mt="xl" size="md" loading={loading} onClick={handleEmailSignUp}>
+          <Button fullWidth mt="xl" size="md" loading={loading} rightSection={<UserRoundPlus size={25} />} onClick={handleEmailSignUp}>
             Register Account
           </Button>
 
