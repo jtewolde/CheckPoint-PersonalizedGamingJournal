@@ -5,7 +5,6 @@
     display: flex;
     flex-direction: column;
     font-family: 'Poppins';
-    margin-top: 0;
 }
 
 .headerTitle{
@@ -14,9 +13,7 @@
     margin-bottom: 1.0rem;
     align-self: center;
     font-family: 'Poppins';
-    color: #dfdede;
-    margin-bottom: 0.5rem;
-    margin-top: 1.5rem;
+    color: #fef7f7;
 }
 
 .description{
@@ -25,7 +22,7 @@
     margin-bottom: 1.0rem;
     align-self: center;
     font-family: 'Poppins';
-    color: rgb(210, 207, 207);
+    color: rgb(238, 236, 236);
     margin-bottom: 2rem;
 }
 
@@ -77,6 +74,40 @@
     background: #232526;      /* background color */
     color: #fff;              /* text color */
 }
+.markdownContent {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.05rem;
+  color: #222;
+  line-height: 1.75;
+}
+
+.markdownContent ul {
+  padding-left: 1.5rem; /* adds indentation for bullet points */
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.markdownContent li {
+  margin-bottom: 0.75rem; /* spacing between list items */
+}
+
+.markdownContent p {
+  margin-bottom: 0.1rem; /* spacing between paragraphs */
+  font-weight: 500;
+}
+
+.markdownContent strong {
+  color: #000;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.markdownContent code {
+  background: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.95em;
+}
 
 @media (max-width: 768px) {
 
@@ -105,8 +136,4 @@
         align-items: center;
     }
 
-}
-
-@media (max-width: 500px){
-    
 }

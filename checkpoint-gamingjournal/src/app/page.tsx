@@ -76,7 +76,7 @@ export default function Home() {
           <div className={classes.imageContainer} >
 
             <Image
-              src="/Library.png"
+              src="/Library1.png"
               alt="Library Page"
               className={classes.image}
               width={650}

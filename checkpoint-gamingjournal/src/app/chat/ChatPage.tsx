@@ -6,6 +6,8 @@ import { useChat } from '@ai-sdk/react'
 import { Textarea, Button, Loader, Avatar } from '@mantine/core';
 
 import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 
 import { Send, SendIcon } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
@@ -126,7 +128,16 @@ export default function Chat() {
                                     textAlign: 'left',
                                 }}
                             >
-                                <Markdown>{msg.content}</Markdown>
+                            
+                            <div className={classes.markdownContent}>
+                                <Markdown
+                                    remarkPlugins={[remarkGfm]} 
+                                    rehypePlugins={[rehypeRaw]}
+                                >
+                                {msg.content}
+                                </Markdown>
+                            </div>
+
                             </div>
                         </div>
                     );
@@ -139,10 +150,11 @@ export default function Chat() {
                     autosize
                     minRows={1}
                     className={classes.askQuestionText}
+                    rightSection={<SendIcon size={30} color='white' style={{cursor: 'pointer'}} type='submit' onClick={handleSend}/>}
                     variant='filled'
                     inputSize='md'
                     size='lg'
-                    radius='lg'
+                    radius='sm'
                     value={input}
                     onChange={e => setInput(e.target.value)}
                     placeholder="Ask Gemini anything!"
@@ -155,7 +167,6 @@ export default function Chat() {
                     }}
                 />
 
-                <Button variant='outline' color='white' size='md' radius='lg' type='submit'>{<SendIcon size={30}/>}</Button>
             </form>
         </div>
     );
