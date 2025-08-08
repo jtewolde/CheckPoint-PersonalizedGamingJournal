@@ -6,7 +6,6 @@ import { useChat } from '@ai-sdk/react'
 import { Textarea, Button, Loader, Avatar } from '@mantine/core';
 
 import Markdown from 'react-markdown';
-import remark
 
 import { Send, SendIcon } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
