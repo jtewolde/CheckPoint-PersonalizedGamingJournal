@@ -38,10 +38,10 @@
 
 
 .select{
-    color: white;
-    font-family: 'Poppins';
-    font-weight: 400;
-    width: 100%;
+  color: white;
+  font-family: 'Poppins';
+  font-weight: 400;
+  width: 100%;
 }
 
 .textInput{
@@ -71,11 +71,17 @@
   font-weight: bold;
   color: rgb(255, 255, 255);
   align-self: center;
-  border: 1px solid black;
+  border: 0.5px solid black;
   cursor: pointer;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #10d29e; /* Darker blue on hover */
+    background-color: #14f54c; /* Darker blue on hover */
+  }
+}
+
+@media (max-width: 530px){
+  .submitButton{
+    width: auto;
   }
 }

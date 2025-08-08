@@ -6,7 +6,7 @@
   
 .form {
   border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
-  min-height: 80vh;
+  min-height: 84.5vh;
   max-width: 450px;
   padding-top: 80px;
   background-color: #303134;

@@ -76,7 +76,7 @@ export default function Home() {
           <div className={classes.imageContainer} >
 
             <Image
-              src="/Library.png"
+              src="/Library2.png"
               alt="Library Page"
               className={classes.image}
               width={650}
@@ -104,7 +104,7 @@ export default function Home() {
           <div className={classes.imageReverseContainer} >
 
             <Image
-              src="/ImageGameDetails.png"
+              src="/gde3.png"
               alt="Game Details Page"
               className={classes.image}
               width={650}
@@ -135,7 +135,7 @@ export default function Home() {
           <div className={classes.imageContainer}>
 
             <Image
-              src="/JournalPage.png"
+              src="/JournalPage1.png"
               alt='Journal Page'
               className={classes.image}
               width={800}
