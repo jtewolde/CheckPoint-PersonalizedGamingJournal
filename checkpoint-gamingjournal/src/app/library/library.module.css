@@ -7,26 +7,26 @@
 }
 
 .title{
-    font-size: 2rem;
-    font-weight: 400;
-    color: white; /* Dark text for contrast */
-    margin-bottom: 1.5rem;
-    text-align: center;
-    font-family: 'Poppins';
-    font-style: italic;
+  font-size: 2rem;
+  font-weight: 400;
+  color: white; /* Dark text for contrast */
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-family: 'Poppins';
+  font-style: italic;
 }
 
 .subTitle{
-    font-size: 1.5rem;
-    font-weight: 200;
-    color: rgb(208, 205, 205); /* Dark text for contrast */
-    margin-bottom: 1.5rem;
-    font-family: 'Inter';
-    font-style: italic;
+  font-size: 1.5rem;
+  font-weight: 200;
+  color: rgb(208, 205, 205); /* Dark text for contrast */
+  margin-bottom: 1.5rem;
+  font-family: 'Inter';
+  font-style: italic;
 }
 
 .filterButton{
-  width: 16%;
+  width: 200px;
   margin-bottom: 1.5rem;
   border: 1px solid black;
 }
@@ -79,10 +79,6 @@
 
 @media (max-width: 1200px) {
 
-  .filterButton{
-    width: 47%;
-  }
-
   .responsiveGrid {
     grid-template-columns: repeat(4, 1fr); /* 4 columns for screens smaller than 1200px */
   }
@@ -99,9 +95,6 @@
     grid-template-columns: repeat(2, 1fr); /* 2 columns for screens smaller than 480px */
   }
 
-  .filterButton{
-    width: 60%;
-  }
 }
 
 @media (max-width: 320px) {

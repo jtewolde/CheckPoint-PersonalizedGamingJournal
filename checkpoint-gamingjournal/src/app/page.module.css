@@ -91,15 +91,6 @@
   margin-top: 3rem; /* Moves it closer to the text */
 }
 
-.librarySection {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin-top: 3rem;
-  flex-wrap: wrap;
-  margin-bottom: 10rem;
-}
 
 .imageContainer {
   display: flex;
@@ -168,7 +159,7 @@
   justify-content: center;
   margin-top: 1rem;
   flex-wrap: wrap;
-  margin-bottom: 10rem;
+  margin-bottom: 6rem;
 }
 
 .journalSection,
@@ -179,7 +170,7 @@
   justify-content: center;
   margin-top: 1rem;
   flex-wrap: wrap;
-  margin-bottom: 10rem;
+  margin-bottom: 6rem;
 }
 
 
