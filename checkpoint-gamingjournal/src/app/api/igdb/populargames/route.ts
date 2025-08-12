@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
     const thirtyDaysAgo = Math.floor((now.getTime() - 45 * 24 * 60 * 60 * 1000) / 1000); // 45 days ago in seconds
 
     // Construct the query body
-    const body = `fields game_id,value,popularity_type; sort value desc; limit ${limit} ; where popularity_type = 5;`
+    const body = `fields game_id,value,popularity_type; sort value desc; limit ${limit} ; where popularity_type = 4;`
 
     const igdbRes = await fetch(IGDB_URL, {
       method: 'POST',
@@ -85,7 +85,7 @@ export async function GET(req: NextRequest) {
 
     // Get the current year start and end timestamps
     const currentYear = new Date().getFullYear();
-    const currentYearStart = new Date(2024, 10, 1).getTime() / 1000; // Jan 1st, 2025
+    const currentYearStart = new Date(2010, 0, 1).getTime() / 1000; // Jan 1st, 2010
     const currentTimestamp = Math.floor(Date.now() / 1000); // current time in seconds
 
     // Step 2: Fetch the game details like name and cover images for those IDs
@@ -96,7 +96,7 @@ export async function GET(req: NextRequest) {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'text/plain',
       },
-      body: `fields id, name, cover.url, aggregated_rating, first_release_date; where id = (${gameIds.join(',')}) ; sort first_release_date desc; limit ${gameIds.length};`
+      body: `fields id, name, cover.url, platforms.name, themes.name, age_ratings.rating_category, aggregated_rating, first_release_date; where id = (${gameIds.join(',')}) & aggregated_rating != null; sort first_release_date desc; limit ${gameIds.length};`
     });
 
     if (!gamesRes.ok) {

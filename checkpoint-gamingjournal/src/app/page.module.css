@@ -111,8 +111,7 @@
 }
 
 .image{
-  width: 100%; /* Full width of the container */
-  max-width: 96%; /* Maximum width for each image */
+  width: 850px;
   height: auto;
   border-radius: 10px; /* Optional: rounded corners for images */
   box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Optional: subtle shadow for depth */

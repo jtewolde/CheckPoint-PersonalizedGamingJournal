@@ -15,7 +15,7 @@ import classes from './Trending.module.css';
 export default function TrendingPage() {
 
   const [page, setPage] = useState(1) // start with page 1 for pagination
-  const limit = 30; // Set the limit of games on page to 30
+  const limit = 61; // Set the limit of games on page to 60
 
   const [games, setGames] = useState<any[]>([]); // State to store games data
   const [length, setLength] = useState("")
@@ -62,7 +62,7 @@ export default function TrendingPage() {
 
         <div className={classes.titleLogo}>
           <TrendingUp size={40} />
-          <h1 className={classes.searchText}>Trending Games:</h1>
+          <h1 className={classes.searchText}> Top 60 Trending Games:</h1>
         </div>
 
         <h2 className={classes.numberText}>{length} Game Results:</h2>
