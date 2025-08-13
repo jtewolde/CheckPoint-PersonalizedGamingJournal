@@ -46,7 +46,6 @@ export default function RootLayout({
             withGlobalClasses
             theme={{
               primaryColor: 'blue',
-              fontFamily: 'Poppins, sans-serif',
               defaultRadius: 'md',
             }}
           >

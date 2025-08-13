@@ -9,7 +9,7 @@ import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 
-import { SendIcon, MessageCircleQuestion, MessageSquare } from 'lucide-react';
+import { SendIcon, MessageCircleQuestion, MessageSquare, Earth, Gamepad2, Hourglass, Users} from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
 
 import classes from './chat.module.css';
@@ -75,10 +75,10 @@ export default function Chat() {
 
     // Array of common game-related questions to use as quick prompts for user in suggestion cards
     const gameSuggestions = [
-        "What are the best open-world games this year?",
-        "Can you recommend some indie games?",
-        "What are the most anticipated games coming out?",
-        "I'm looking for co-op games to play with friends."
+        {icon: <Earth size={30} color='lime'/> , text: "Best open-world games this year?"},
+        {icon: <Gamepad2 size={30} color='cyan'/> , text: "Can you recommend some indie games?"},
+        {icon: <Hourglass size={30} color='yellow'/> , text: "Most anticipated games coming out?"},
+        {icon: <Users size={30} color='pink'/> , text: "Looking for co-op games to play with friends."}
     ]
 
     return (
@@ -86,10 +86,8 @@ export default function Chat() {
 
             {!hasUserMessage && (
                 <>
-                    <h2 className={classes.headerTitle}>Welcome to <span className={classes.highlight}>CheckPoint AI Video Game Assistant!</span></h2>
-                    <p className={classes.description}>Here you can have quick access to Gemini AI to ask <br />
-                        a quick question on game recommendations, help for completing tasks, and more!
-                    </p>
+                    <h2 className={classes.headerTitle}>Welcome to <span className={classes.highlight}>CheckPoint AI!</span></h2>
+                    <h3 className={classes.description}>Ask CheckPoint AI anything about video games and <br/> get instant and accurate answers!</h3>
                 </>
             )}
 
@@ -112,19 +110,20 @@ export default function Chat() {
                                 size={40}
                                 src={isUser ? user?.image : undefined}
                                 alt={isUser ? (user?.name || "User") : "Gemini"}
-                                style={{ margin: isUser ? '0 0 0 12px' : '0 12px 12px 0', background: isUser ? undefined : '#e2e2e2ff' }}
+                                style={{ margin: isUser ? '0 0 0 12px' : '0 12px 12px 0', background: isUser ? undefined : '#383838ff' }}
                             >
                                 {!isUser && "🤖"}
                             </Avatar>
                             <div
                                 className={classes.messageBubble}
                                 style={{ 
-                                    background: isUser ? '#858484ff' : '#474747ff',
+                                    background: isUser ? '#424344ff' : '#5c5b5bff',
                                     color: '#fff',
                                     padding: '12px 12px',
+                                    fontFamily: 'Inter',
                                     fontSize: 12,
                                     fontWeight: 520,
-                                    borderRadius: isUser ? '16px' : '',
+                                    borderRadius: isUser ? '16px' : '16px',
                                     boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                                     wordBreak: 'break-word',
                                     textAlign: 'left',
@@ -155,14 +154,15 @@ export default function Chat() {
                         key={index}
                         variant="outline"
                         color="gray"
-                        size="md"
+                        size="lg"
+                        leftSection={suggestion.icon}
                         radius="md"
                         className={classes.suggestionButton}
                         onClick={() => {
-                            setInput(suggestion);
+                            setInput(suggestion.text);
                         }}
                     >
-                        {suggestion}
+                        {suggestion.text}
                     </Button>
                 ))}
             </div>
