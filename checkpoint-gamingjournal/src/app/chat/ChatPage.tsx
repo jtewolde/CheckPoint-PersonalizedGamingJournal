@@ -19,6 +19,8 @@ export default function Chat() {
     const [input, setInput] = useState('');
     const router = useRouter();
 
+    const chatContainer = useRef<HTMLDivElement>(null); // Used for scrolling
+
     const { messages, append, isLoading } = useChat({
         api: '/api/geminichat'
     });
@@ -68,8 +70,10 @@ export default function Chat() {
     };
 
     // Function to scroll the page down automatically
-
-
+    useEffect(() => {
+        chatContainer.current?.scrollIntoView({ behavior: 'smooth'})
+    }, [messages]);
+    
     // Check if the user has sent any messages, used for making introductory text disappear
     const hasUserMessage = messages.some(msg => msg.role === 'user');
 
@@ -119,7 +123,7 @@ export default function Chat() {
                                 style={{ 
                                     background: isUser ? '#424344ff' : '#5c5b5bff',
                                     color: '#fff',
-                                    padding: '12px 12px',
+                                    padding: '6px 12px',
                                     fontFamily: 'Inter',
                                     fontSize: 12,
                                     fontWeight: 520,
@@ -139,6 +143,8 @@ export default function Chat() {
                                 </Markdown>
                             </div>
 
+                            <div ref={chatContainer} />
+                            
                             </div>
                         </div>
                     );
@@ -190,6 +196,8 @@ export default function Chat() {
                         }
                     }}
                 />
+
+                <p className={classes.note}>Note: CheckPoint AI can be inaccurate at times.</p>
             </form>
         </div>
     );
