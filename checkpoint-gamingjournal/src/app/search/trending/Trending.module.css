@@ -68,11 +68,11 @@
 /* Game name */
 .gameName {
     font-size: 1rem;
-    font-weight: 300;
+    font-weight: 500;
     color: white;
     padding: 0.5rem;
     overflow: hidden;
-    font-family: 'Poppins';
+    font-family: 'Inter';
 }
 
 /* Pagination */
@@ -91,7 +91,7 @@
 
 @media screen and (max-width: 1245px) {
     .gameGrid {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* fewer games per row */
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* fewer games per row */
         justify-items: center;
     }
 

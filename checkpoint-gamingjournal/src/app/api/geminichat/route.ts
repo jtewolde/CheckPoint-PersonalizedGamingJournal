@@ -26,7 +26,7 @@ const google = createGoogleGenerativeAI({
     apiKey: process.env.GEMINI_API_KEY
 })
 
-const model = google('gemini-2.0-flash')
+const model = google('gemini-2.0-flash', { useSearchGrounding: true});
 
 export async function POST(req: NextRequest){
 
@@ -47,6 +47,7 @@ export async function POST(req: NextRequest){
     }
 
     try{
+
         const { messages } = await req.json();
 
         const result = streamText({

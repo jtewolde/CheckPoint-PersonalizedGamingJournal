@@ -30,6 +30,7 @@ export default function SettingsLayout({ children }: { children: ReactNode}) {
             <Paper
             withBorder
             shadow="sm"
+            radius='xs'
             h={{ base: '100%'}}
             w={{ base: '100%', sm: 270 }}
             p="md"

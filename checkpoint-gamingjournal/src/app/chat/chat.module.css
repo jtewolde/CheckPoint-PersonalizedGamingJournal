@@ -1,81 +1,143 @@
 .container{
-    padding: 4rem;
-    min-height: 100vh;
-    background: linear-gradient(to right, #232526, #414345);
+    padding: 2rem;
+    min-height: 100%;
+    background: #212121;
     display: flex;
     flex-direction: column;
-    font-family: 'Poppins';
-    margin-top: 0;
+    justify-content: center;
+    font-family: 'Inter';
+    gap: 0.5rem;
 }
 
 .headerTitle{
-    font-size: 1.8rem;
+    font-size: xx-large;
     font-weight: bold;
     margin-bottom: 1.0rem;
     align-self: center;
     font-family: 'Poppins';
-    color: #dfdede;
-    margin-bottom: 0.5rem;
-    margin-top: 1.5rem;
+    color: #fef7f7;
+}
+
+.highlight{
+    background: linear-gradient(to right, #4e81b0, #1aaaba);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+    font-size: xx-large;
 }
 
 .description{
-    font-size: 1.0rem;
-    font-weight: 500;
-    margin-bottom: 1.0rem;
+    font-weight: 400;
     align-self: center;
     font-family: 'Poppins';
-    color: rgb(210, 207, 207);
-    margin-bottom: 2rem;
+    color: rgb(227, 226, 226);
+    line-height: 1.5;
+    text-align: center;
 }
 
 .chatRoom{
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    justify-self: center;
-    align-self: center;
-    width: 90%;
-    height: 80%;
-    background: #232526;
+    padding: 8px;
     border-radius: 16px;
-    border: 1px solid #444;
-    padding: 16px;
     margin-bottom: 16px;
     overflow-y: auto;
 }
 
 .messageBubble{
-    color: '#000';
-    padding: '16px 24px';
-    border-radius: 16;
-    max-width: '70%';
-    box-shadow: '0 1px 3px rgba(0,0,0,0.04)';
-    word-break: 'break-word';
-    text-align: 'left';
+    max-width: 80%;
 }
 
 .form{
+    position: sticky;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
+    bottom: 0;
     gap: 0.5rem;
+    padding-top: 0.5rem;
+    padding: 1rem;
     justify-content: center;
-    margin-top: 3rem;
+    background-color: #232526;
+    margin-bottom: -2rem;
+}
+
+.note{
+    font-size: 12px;
+    color: #f5f5f5;
+}
+
+.suggestions{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 2rem;
+}
+
+.suggestionButton{
+    background: #2a2a2a;
+    width: 95%;
+    color: white;
+    font-family: 'Poppins';
+    font-weight: 500;
+    text-align: center;
+    text-overflow: ellipsis;
 }
 
 .askQuestionText{
     width: 50%;
     justify-content: center;
+    position: relative;
     justify-self: center;
     align-self: center;
     height: auto;
     background-color: #232526;
     color: white;
+    border: 1px solid #ebebeb;
+    border-radius: 16px;
 }
 
 .askQuestionText textarea{
     background: #232526;      /* background color */
     color: #fff;              /* text color */
+}
+
+.markdownContent {
+  font-family: 'Noto Sans', sans-serif;
+  font-size: medium;
+  color: #ebebeb;
+  line-height: 1.75;
+}
+
+.markdownContent ul {
+  padding-left: 1.5rem; /* adds indentation for bullet points */
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.markdownContent li {
+  margin-bottom: 0.75rem; /* spacing between list items */
+}
+
+.markdownContent p {
+  margin-bottom: 0.1rem; /* spacing between paragraphs */
+  font-weight: 540;
+}
+
+.markdownContent strong {
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.markdownContent code {
+  background: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.95em;
 }
 
 @media (max-width: 768px) {
@@ -89,6 +151,7 @@
         width: 100%;
         height: auto;
         margin: 0 auto;
+        padding: 12px 12px;
     }
 
     .messageBubble{
@@ -96,17 +159,18 @@
         text-align: center;
     }
 
+    .suggestions{
+        grid-template-columns: 1fr;
+    }
+
     .askQuestionText {
         width: 100%;
     }
 
     .form {
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
+        gap: 1rem;
     }
 
-}
-
-@media (max-width: 500px){
-    
 }
