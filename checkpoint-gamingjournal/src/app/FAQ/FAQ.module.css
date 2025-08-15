@@ -17,12 +17,15 @@
   padding-bottom: calc(var(--mantine-spacing-xl) * 2);
   min-height: 100vh;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .title{
-    padding-bottom: 5rem;
     font-family: 'Poppins';
     color: white;
+    border-bottom: 3px solid white;
 }
 
 .accordion{

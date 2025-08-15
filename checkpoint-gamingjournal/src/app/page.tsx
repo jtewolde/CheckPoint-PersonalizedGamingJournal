@@ -11,6 +11,9 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 import classes from './page.module.css';
+
+import Questions from '@/components/FrequentQuestions/FrequentQuestions';
+
 import { useAuth } from '@/context/Authcontext';
 
 export default function Home() {
@@ -191,6 +194,15 @@ export default function Home() {
 
         </div>
         
+        <div className={classes.faqSection}>
+
+          <Title className={classes.faqTitle} c='white' size='xl' mt='lg' >
+            FAQ:
+          </Title>
+
+          <Questions />
+
+        </div>
 
       </Container>
 
