@@ -28,6 +28,10 @@ const frequentQuestions = [
         question: "Can I use CheckPoint on mobile devices?",
         answer: "Yes! Checkpoint was built to be fully scalable for desktop and mobile devices!"
     },
+    {
+        question: "Is my data safe with CheckPoint?",
+        answer: "Yes! CheckPoint takes data security seriously. All your information is encrypted and stored securely in the cloud. There are also strict privacy policies in place to protect your data."
+    }
 ]
 
 export default function Questions() {
@@ -44,7 +48,7 @@ export default function Questions() {
     ));
 
     return (
-        <Accordion className={classes.accordion} styles={{item: {background: '#fafafaff'}}} variant='separated' radius='lg'>
+        <Accordion className={classes.accordion} styles={{item: {background: '#e6ecf6ff'}}} variant='filled' radius='lg'>
             {items}
         </Accordion>
     );

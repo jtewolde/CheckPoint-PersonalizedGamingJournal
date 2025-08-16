@@ -4,5 +4,6 @@
     flex-direction: column;
     margin-top: 2rem;
     gap: 20px;
-    font-family: 'Poppins';
+    font-family: 'Noto Sans';
+    font-weight: 600;
 }

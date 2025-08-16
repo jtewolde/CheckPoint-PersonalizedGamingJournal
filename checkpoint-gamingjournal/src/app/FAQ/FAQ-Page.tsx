@@ -20,7 +20,7 @@ export default function FAQ() {
             <Container className={classes.wrapper} size='sm'>
 
                 <Title ta='center' className={classes.title}>
-                    Frequently Asked Questions:
+                    FAQ:
                 </Title>
 
                 <Questions />
