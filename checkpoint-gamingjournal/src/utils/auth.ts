@@ -12,7 +12,8 @@ export const auth = betterAuth({
     cors: {
     origin: [
       "https://checkpoint-gaming.vercel.app",
-      "https://checkpoint-gaming-qpy6bmti8-joseph-tewoldes-projects.vercel.app"
+      "https://checkpoint-gaming-qpy6bmti8-joseph-tewoldes-projects.vercel.app",
+      "https://www.checkpoint-gamingjournal.com"
     ],
     credentials: true
   },
