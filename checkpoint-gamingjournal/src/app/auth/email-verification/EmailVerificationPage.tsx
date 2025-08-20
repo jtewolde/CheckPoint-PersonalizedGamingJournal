@@ -7,11 +7,16 @@ import toast from "react-hot-toast";
 import { Send } from "lucide-react";
 
 import classes from './verification.module.css';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function EmailVerificationPage() {
     const [loading, setLoading] = useState(false);
-    const [userEmail, setUserEmail] = useState(localStorage.getItem("UnverifiedEmail") || '');
+    const [userEmail, setUserEmail] = useState('');
+
+    // Get the unverified email from local storage
+    useEffect(() => {
+        setUserEmail(localStorage.getItem("UnverifiedEmail") || '');
+    }, [])
 
     // Function to resend verification email 
     const sendVerificationEmail = async () => {
