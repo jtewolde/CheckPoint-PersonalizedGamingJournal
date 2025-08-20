@@ -19,9 +19,7 @@ export function Footer() {
           <Group gap="xs" className={classes.footerText}>
             <Text size="sm" color="dimmed" className={classes.igdbText}>
               Data provided by <Link href="https://www.igdb.com" target="_blank" className={classes.igdbLink}>IGDB</Link>.
-            </Text>
-            <Text size="sm" color="dimmed" className={classes.text}>
-              © {new Date().getFullYear()} Checkpoint. All rights reserved.
+              <br /> © {new Date().getFullYear()} Checkpoint. All rights reserved.
             </Text>
           </Group>
         </div>
@@ -56,7 +54,7 @@ export function Footer() {
               variant="subtle"
               aria-label="LinkedIn"
             >
-              <IconBrandLinkedin size={60} stroke={1.7} color="#0072B1" />
+              <IconBrandLinkedin size={40} stroke={1.7} color="#0072B1" />
             </ActionIcon>
 
             <ActionIcon
@@ -68,7 +66,7 @@ export function Footer() {
               variant="subtle"
               aria-label="LinkedIn"
             >
-              <IconBrandGithub size={60} stroke={1.7} color="white" />
+              <IconBrandGithub size={40} stroke={1.7} color="white" />
             </ActionIcon>
           </Group>
         </div>

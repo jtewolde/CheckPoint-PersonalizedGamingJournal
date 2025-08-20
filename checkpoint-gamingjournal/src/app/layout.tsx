@@ -58,7 +58,8 @@ export default function RootLayout({
                     background: "#d9f8de",
                     fontFamily: 'Poppins',
                     fontWeight: '610',
-                    border: '0.2px solid black'
+                    border: '0.2px solid black',
+                    width: '400px'
                   },
                 },
                 error: {
@@ -66,7 +67,9 @@ export default function RootLayout({
                     background: '#ffd1d1',
                     fontFamily: 'Poppins',
                     fontWeight: '610',
-                    border: '0.2px solid black'
+                    border: '0.2px solid black',
+                    textAlign: 'left',
+                    width: '60%'
                   }
                 }  
               }}

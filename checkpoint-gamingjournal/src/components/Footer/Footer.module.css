@@ -1,15 +1,16 @@
 .footer {
-  margin-top: 0px;
+
   border-top: 1px solid rgb(0, 0, 0);
   background-color: #3a3a3a;
+  width: 100%;
 }
 
 .inner {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: var(--mantine-spacing-md) var(--mantine-spacing-md);
-  flex: 1;
+  padding-top: 8px;
+  padding-bottom: 8px;
   flex-wrap: wrap;
 }
 
@@ -18,27 +19,16 @@
   flex-direction: column;
   justify-content: flex-start;
   gap: 0px;
-}
-
-.left{
-  padding-left: 1rem;
-}
-
-.text{
-  font-size: 14px;
-  align-items: center;
-  color: rgb(255, 255, 255);
-  text-align: center;
-  font-family: 'Poppins';
-  flex: 1;
+  text-align: left;
 }
 
 .igdbText{
   font-size: 14px;
+  font-weight: 600;
   align-self: center;
   justify-self: flex-end;
   color: rgb(255, 255, 255);
-  font-family: 'Poppins';
+  font-family: 'Inter';
   text-align: left;
 }
 
@@ -62,7 +52,8 @@
 }
 
 .FAQLink{
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 600;
   align-self: center;
   justify-self: center;
   color: rgb(255, 255, 255);
@@ -72,8 +63,8 @@
 }
 
 .FAQLink:hover{
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 650;
   border-bottom: 2px solid rgb(255, 255, 255);
 }
 
@@ -89,6 +80,10 @@
     flex-direction: column;
     text-align: center;
     gap: 8px;
+  }
+
+  .igdbText{
+    text-align: center;
   }
 
   .left,
