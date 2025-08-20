@@ -67,8 +67,10 @@ export default function signInPage(){
 
         // If the user's email isn't vertified, an 403 error will occur
         if(ctx.error.status === 403){
+          localStorage.setItem("UnverifiedEmail", email);
           console.log(ctx.error)
-          toast.error("Please verify your email address! ")
+          router.push('/auth/email-verification')
+          return;
         }
 
         setLoading(false);
@@ -156,7 +158,7 @@ export default function signInPage(){
 
             <Divider styles={{label: {color: 'white'}}} label="Or continue with email" labelPosition="center" color='white' my="lg"  />
 
-          <TextInput className={classes.emailInput} label="Email Address" placeholder="Your email" size="md" leftSection={<Mail size={20} />} required mt="md" mb='md' value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error} />
+          <TextInput className={classes.emailInput} label="Email Address" placeholder="Your Email" size="md" leftSection={<Mail size={20} />} required mt="md" mb='md' value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error} />
 
           <Group justify='space-between' mb={1}>
 

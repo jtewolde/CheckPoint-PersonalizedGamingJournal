@@ -12,8 +12,8 @@ export default function FAQ() {
         <div className={classes.background}>
 
             <Overlay
-                gradient="linear-gradient(180deg,rgb(67, 67, 67) 30%,rgb(112, 112, 112) 90%)"
-                opacity={0.50}
+                gradient="linear-gradient(180deg,rgb(67, 67, 67) 30%,rgba(42, 41, 41, 1) 90%)"
+                opacity={0.75}
                 zIndex={0}
             />
 

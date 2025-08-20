@@ -47,7 +47,7 @@ export const featuresData = [
 
 const Feature = ({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) => (
     <div className={classes.feature}>
-      <ThemeIcon variant='light' size={80} radius="lg" className={classes.icon}>
+      <ThemeIcon variant='filled' color='#d1b053ff' size={80} radius="lg" className={classes.icon}>
         {icon}
       </ThemeIcon>
       <Text className={classes.featureTitle}>{title}</Text>
