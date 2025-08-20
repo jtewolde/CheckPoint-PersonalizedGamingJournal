@@ -1,12 +1,12 @@
 .wrapper {
-    min-height: 80vh;
+    min-height: 83vh;
     background-size: cover;
     background-image: url('../../../../public/signupImage.jpg');
   }
   
 .form {
   border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
-  min-height: 84.5vh;
+  min-height: 85vh;
   max-width: 450px;
   padding-top: 80px;
   background-color: #303134;
