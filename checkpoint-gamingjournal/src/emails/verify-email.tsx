@@ -33,7 +33,7 @@ const verifyEmail = (props: verifyEmailProps) => {
 
               <Container style={container}>
 
-                <Img src={`${baseUrl}/static/CheckPointLogoEmail.png`} style={logo} alt="CheckPoint" width={260} height={90}/>
+                <Img src="https://uh2u77zswq.ufs.sh/f/w1tMu8eAipZ2ftykWHdiSkirqVu906aPsGDnUe1WJwmHZ4gB" style={logo} alt="CheckPoint" width={260} height={90}/>
 
                 <Section style={textSection}>
 
@@ -93,7 +93,7 @@ const title = {
   fontFamily: "'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
   fontWeight: 'bold',
   marginTop: '20px',
-  marginBottom: '25px'
+  marginBottom: '25px',
 }
 
 const text = {

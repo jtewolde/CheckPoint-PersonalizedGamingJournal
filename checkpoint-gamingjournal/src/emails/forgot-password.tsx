@@ -36,7 +36,7 @@ const ForgotPasswordEmail = (props: ForgotPasswordEmailProps) => {
 
               <Container style={container}>
 
-                <Img src={`${baseUrl}/static/CheckPointLogoEmail.png`} style={logo} alt="CheckPoint" width={260} height={90}/>
+                <Img src="https://uh2u77zswq.ufs.sh/f/w1tMu8eAipZ2ftykWHdiSkirqVu906aPsGDnUe1WJwmHZ4gB" style={logo} alt="CheckPoint" width={260} height={90}/>
 
                 <Section style={textSection}>
 
@@ -53,9 +53,13 @@ const ForgotPasswordEmail = (props: ForgotPasswordEmailProps) => {
                     Remember to follow strong password guidelines when creating a password for your account!
                   </Text>
 
-                  <Button style={button} href={resetUrl} >
-                    Reset your Password
-                  </Button>
+                  <Container style={{justifyContent: 'center', display: 'flex'}}>
+
+                    <Button style={button} href={resetUrl}>
+                      Reset your Password
+                    </Button>
+
+                  </Container>
 
                   <Text style={text}>
                     If the button above does not work, copy and paste the following link into your browser:
