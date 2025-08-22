@@ -42,10 +42,10 @@ const ForgotPasswordEmail = (props: ForgotPasswordEmailProps) => {
 
                   <Text style={title}> Forgot Password </Text>
 
-                  <Text style={text}> Hello There, {username}! </Text>
+                  <Text style={text}> Hello There, <b>{username}!</b> </Text>
 
                   <Text style={text}>
-                    Someone recently requested a password reset on your CheckPoint account using this email address: {userEmail},
+                    Someone recently requested a password reset on your CheckPoint account using this email address: <b>{userEmail}</b>,
                     If this was indeed you, click on the reset password button below. Otherwise, you can ignore this email.
                   </Text>
 

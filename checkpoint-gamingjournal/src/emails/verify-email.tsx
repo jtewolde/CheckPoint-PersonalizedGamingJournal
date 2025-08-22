@@ -39,7 +39,7 @@ const verifyEmail = (props: verifyEmailProps) => {
 
                   <Text style={title}> Verify your Email </Text>
 
-                  <Text style={text}> Hello There, {username}! </Text>
+                  <Text style={text}> Hello There, <b>{username}!</b></Text>
 
                   <Text style={text}>
                     Welcome to CheckPoint! With this website, CheckPoint is a web application designed for gamers to track their progress in the games they are playing and plan to play in the future. 
@@ -51,9 +51,13 @@ const verifyEmail = (props: verifyEmailProps) => {
                     To get started, please verify your email address by clicking the button below.
                   </Text>
 
-                  <Button style={button} href={verifyUrl} >
-                    Verify your Email
-                  </Button>
+                  <Container style={{justifyContent: 'center', display: 'flex'}}>
+
+                    <Button style={button} href={verifyUrl} >
+                      Verify your Email
+                    </Button>
+
+                  </Container>
 
                   <Text style={text}>
                     Thanks!
