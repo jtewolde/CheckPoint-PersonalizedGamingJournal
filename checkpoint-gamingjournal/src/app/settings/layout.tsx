@@ -31,7 +31,7 @@ export default function SettingsLayout({ children }: { children: ReactNode}) {
             withBorder
             shadow="sm"
             radius='xs'
-            h={{ base: '100%'}}
+            h={{ base: '85vh'}}
             w={{ base: '100%', sm: 270 }}
             p="md"
             style={{ background: 'linear-gradient(to bottom, #2e2e2e, #3e3e3e)', border: '1px solid black', borderRight: '1px solid white'}}

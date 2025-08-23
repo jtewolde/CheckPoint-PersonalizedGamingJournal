@@ -32,6 +32,7 @@ export default function GameDetails() {
   const [opened, {open, close} ] = useDisclosure(false);
 
   const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null); // State to handle selected screenshot for modal
+
   const [modalOpen, setModalOpen] = useState(false); // State to handle modal open/close
 
   const {isAuthenticated, setIsAuthenticated} = useAuth(); // Access global auth state
@@ -404,7 +405,7 @@ export default function GameDetails() {
 
       <div className={classes.screenshotGrid}>
       
-        {game.screenshots?.map((screenshot: any) => (
+        {game.screenshots?.map((screenshot: any, index: number) => (
           <div key={screenshot.id} className={classes.carouselSlide}>
             <Image
               src={`https:${screenshot.url.replace('t_thumb', 't_screenshot_big')}`}
@@ -427,7 +428,7 @@ export default function GameDetails() {
         <div className={classes.fullScreenOverlay} onClick={() => setModalOpen(false)}>
           <Image
             src={selectedScreenshot}
-            alt="Screenshot"
+            alt={`Screenshot of ${game.name}`}
             className={classes.fullScreenImage}
             width={800}
             height={450}

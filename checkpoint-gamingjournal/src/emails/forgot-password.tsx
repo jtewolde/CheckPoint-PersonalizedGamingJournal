@@ -36,16 +36,16 @@ const ForgotPasswordEmail = (props: ForgotPasswordEmailProps) => {
 
               <Container style={container}>
 
-                <Img src={`${baseUrl}/static/CheckPointLogoEmail.png`} style={logo} alt="CheckPoint" width={260} height={90}/>
+                <Img src="https://uh2u77zswq.ufs.sh/f/w1tMu8eAipZ2ftykWHdiSkirqVu906aPsGDnUe1WJwmHZ4gB" style={logo} alt="CheckPoint" width={260} height={90}/>
 
                 <Section style={textSection}>
 
                   <Text style={title}> Forgot Password </Text>
 
-                  <Text style={text}> Hello There, {username}! </Text>
+                  <Text style={text}> Hello There, <b>{username}!</b> </Text>
 
                   <Text style={text}>
-                    Someone recently requested a password reset on your CheckPoint account using this email address: {userEmail},
+                    Someone recently requested a password reset on your CheckPoint account using this email address: <b>{userEmail}</b>,
                     If this was indeed you, click on the reset password button below. Otherwise, you can ignore this email.
                   </Text>
 
@@ -53,9 +53,13 @@ const ForgotPasswordEmail = (props: ForgotPasswordEmailProps) => {
                     Remember to follow strong password guidelines when creating a password for your account!
                   </Text>
 
-                  <Button style={button} href={resetUrl} >
-                    Reset your Password
-                  </Button>
+                  <Container style={{justifyContent: 'center', display: 'flex'}}>
+
+                    <Button style={button} href={resetUrl}>
+                      Reset your Password
+                    </Button>
+
+                  </Container>
 
                   <Text style={text}>
                     If the button above does not work, copy and paste the following link into your browser:
