@@ -26,6 +26,8 @@ export function Footer() {
 
         {/* Center: FAQ */}
         <div className={classes.center}>
+          <Link href='/about' className={classes.FAQLink}>About</Link>
+          <Link href='/about/terms' className={classes.FAQLink}>Terms of Service</Link>
           <Link href='/contact' className={classes.FAQLink}>Contact</Link>
           <Link href="/FAQ" className={classes.FAQLink}>FAQ</Link>
         </div>

@@ -44,12 +44,14 @@
   border-radius: 8px; /* Add rounded corners */
   justify-self: center;
   align-self: center;
+  
 }
 
 .searchBar input {
   background-color: #232526; /* example: dark background */
   color: white;/* input text color */
   border: 0.2px solid rgb(148, 148, 148);
+  font-family: 'Noto Sans';
 }
 
 .autocompleteOption {

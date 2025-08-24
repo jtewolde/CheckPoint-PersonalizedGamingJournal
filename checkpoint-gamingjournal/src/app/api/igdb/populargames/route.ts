@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const searchQuery = searchParams.get('query') || '';
-    const limit = parseInt(searchParams.get('limit') || '12', 10); // Default to 12 results per page
+    const limit = parseInt(searchParams.get('limit') || '14', 10); // Default to 12 results per page
     const page = parseInt(searchParams.get('page') || '1', 10);
 
     const accessToken = await getAccessToken();
@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
     const thirtyDaysAgo = Math.floor((now.getTime() - 45 * 24 * 60 * 60 * 1000) / 1000); // 45 days ago in seconds
 
     // Construct the query body
-    const body = `fields game_id,value,popularity_type; sort value desc; limit ${limit} ; where popularity_type = 4;`
+    const body = `fields game_id,value,popularity_type; sort value desc; limit ${limit} ; where popularity_type = 3;`
 
     const igdbRes = await fetch(IGDB_URL, {
       method: 'POST',
