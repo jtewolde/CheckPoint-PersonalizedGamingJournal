@@ -9,7 +9,7 @@ import { useDisclosure } from "@mantine/hooks";
 
 import { ReactNode } from "react";
 
-import { ReceiptText, FileLock } from "lucide-react";
+import { ReceiptText, FileLock, AppWindow, MailPlus, Mail } from "lucide-react";
 
 import classes from './about.module.css';
 
@@ -22,7 +22,7 @@ export default function AboutLayout({ children }: { children: ReactNode}) {
     const [isMobile, setIsMobile] = useState(false);
 
     return (
-        <Flex direction={{ base: 'column', sm: 'row' }} style={{ minHeight: 'calc(100vh - 140px)' }}>
+        <Flex direction={{ base: 'column', sm: 'row' }} style={{ minHeight: 'calc(100vh - 100px)' }}>
 
         {/* Sidebar */}
         {(!isMobile || opened) && (
@@ -31,7 +31,7 @@ export default function AboutLayout({ children }: { children: ReactNode}) {
             shadow="sm"
             radius='xs'
             h={{ base: '100%'}}
-            w={{ base: '100%', sm: 270 }}
+            w={{ base: '100%', sm: 300 }}
             p="md"
             style={{ background: 'linear-gradient(to bottom, #2e2e2e, #282727ff)', border: '1px solid black', borderRight: '2px solid white'}}
             >
@@ -39,7 +39,6 @@ export default function AboutLayout({ children }: { children: ReactNode}) {
 
                     <NavLink
                     className={classes.navLinks}
-                    description="Learn more about CheckPoint"
                     styles={{
                         root: {
                             borderBottom: pathname === '/about' ? '4px solid white': undefined,
@@ -47,7 +46,7 @@ export default function AboutLayout({ children }: { children: ReactNode}) {
                         },
                         label:{
                             fontFamily: 'Poppins',
-                            fontWeight: 600,
+                            fontWeight: 420,
                             fontSize: '1.5rem',
                             color: 'white'
                         },
@@ -58,7 +57,7 @@ export default function AboutLayout({ children }: { children: ReactNode}) {
                     }}
                     label="About"
                     autoContrast
-                    leftSection={<FileLock size={30} color="white"/>}
+                    leftSection={<AppWindow size={30} color="white"/>}
                     component={Link}
                     href="/about"
                     active={pathname === '/about'}
@@ -77,7 +76,7 @@ export default function AboutLayout({ children }: { children: ReactNode}) {
 
                         label:{
                             fontFamily: 'Poppins',
-                            fontWeight: 600,
+                            fontWeight: 420,
                             fontSize: '1.5rem',
                             color: 'white'
                         },
@@ -104,7 +103,7 @@ export default function AboutLayout({ children }: { children: ReactNode}) {
                         },
                         label:{
                             fontFamily: 'Poppins',
-                            fontWeight: 600,
+                            fontWeight: 420,
                             fontSize: '1.5rem',
                             color: 'white'
                         },
@@ -117,6 +116,33 @@ export default function AboutLayout({ children }: { children: ReactNode}) {
                     component={Link}
                     href="/about/privacy"
                     active={pathname === '/about/privacy'}
+                    color="white"
+                    />
+
+                    <NavLink
+                    className={classes.navLinks}
+                    label="Contact Us"
+                    autoContrast
+                    styles={{
+                        root: {
+                            borderBottom: pathname === '/about/contact' ? '4px solid white': undefined,
+                            color: pathname === '/about/contact' ? 'white' : undefined,
+                        },
+                        label:{
+                            fontFamily: 'Poppins',
+                            fontWeight: 420,
+                            fontSize: '1.5rem',
+                            color: 'white'
+                        },
+                        description: {
+                            fontFamily: 'Poppins',
+                            fontSize: '0.75rem'
+                        }
+                    }}
+                    leftSection={<MailPlus size={30} color="white"/>}
+                    component={Link}
+                    href="/about/contact"
+                    active={pathname === '/about/contact'}
                     color="white"
                     />
 
