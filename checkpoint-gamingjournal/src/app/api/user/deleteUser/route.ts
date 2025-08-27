@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { UserCollection, GameCollection, JournalEntriesCollection } from "@/utils/db";
-import { ObjectId} from "mongodb";
+import { ObjectId } from "mongodb";
 
 import { auth } from "@/utils/auth";
-import User from "@/models/User";
-
-import Game from "@/models/Game";
 
 // This API route is for deleting users and their data from the database
 export async function POST(req: NextRequest){

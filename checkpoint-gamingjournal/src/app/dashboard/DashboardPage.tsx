@@ -86,8 +86,8 @@ export default function Dashboard() {
     }
 
     const data = await res.json();
-    const playingGames = data.games.filter((game: any) => game.status === 'Playing').slice(0,5) // Filter games that are currently being played with the first 5 games
-    
+    const playingGames = data.games.filter((game: any) => game.status === 'Playing').slice(0,6) // Filter games that are currently being played with the first 6 games
+
     setPlayingGames(playingGames); // Store the playing games in state
 
     const totalGames = data.games.length // Store total number of games
