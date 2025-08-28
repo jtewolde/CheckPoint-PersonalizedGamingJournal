@@ -142,7 +142,8 @@ export default function JournalForm() {
           <h1 className={classes.journalTitle}>Create Journal Entry</h1>
           <form onSubmit={handleSubmit} className={classes.form}>
             <Select
-            className={classes.select}
+              className={classes.select}
+              size="lg"
               label="Select Game"
               placeholder="Choose a game"
               data={games.map((game) => ({
@@ -156,6 +157,7 @@ export default function JournalForm() {
             />
             <TextInput
               className={classes.textInput}
+              size="lg"
               label="Title"
               placeholder="Enter the title of your journal entry"
               value={title}
@@ -174,7 +176,7 @@ export default function JournalForm() {
               required
               minRows={2}
               style={{ marginTop: "1rem" }}
-              size="md"
+              size="lg"
             />
             <Button
               className={classes.submitButton}
