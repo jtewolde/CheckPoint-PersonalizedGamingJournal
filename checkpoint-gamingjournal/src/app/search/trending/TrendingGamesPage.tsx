@@ -16,6 +16,7 @@ export default function TrendingPage() {
 
   const [page, setPage] = useState(1) // start with page 1 for pagination
   const limit = 61; // Set the limit of games on page to 60
+  const [total, setTotal] = useState(0);
 
   const [games, setGames] = useState<any[]>([]); // State to store games data
   const [length, setLength] = useState("")
@@ -26,7 +27,7 @@ export default function TrendingPage() {
     useEffect(() => {
       const fetchPopularGames = async () => {
         try {
-          const res = await fetch(`/api/igdb/populargames?limit=${limit}`);
+          const res = await fetch(`/api/igdb/populargames?limit=${limit}&page=${page}`);
           
           if (!res.ok) {
             throw new Error('Failed to fetch popular games');
@@ -34,7 +35,9 @@ export default function TrendingPage() {
           const data = await res.json();
           setGames(data); // Store the games data in state
           setLength(data.length);
+          setTotal(data.total);
           console.log("Popular Games: ",data);
+          console.log("Total Games: ", data.total)
         } catch (error) {
           console.error('Error fetching popular games:', error);
         } finally {
@@ -85,10 +88,8 @@ export default function TrendingPage() {
           ))}
         </SimpleGrid>
         
-        {games.length > limit && (
-        <Pagination total={Math.ceil(games.length/ limit)} size='lg' style={{ justifyContent: "center" }} 
+        <Pagination total={Math.ceil(total/ limit)} size='lg' style={{ justifyContent: "center" }} 
         className={classes.pagninaton} value={page} onChange={setPage} color='blue' radius="lg" />
-        )}
     </div>
   );
 }

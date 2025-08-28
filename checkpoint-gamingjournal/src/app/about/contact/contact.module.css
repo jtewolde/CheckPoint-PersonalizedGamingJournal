@@ -1,31 +1,35 @@
 /* Base layout */
 .wrapper {
-  min-height: 100vh;
-  background-image: url('../../../public/ContactBackground.jpg');
-  position: relative;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-  font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 100%;
+    gap: 1rem;
+    padding: 1rem;
 }
 
 /* Card container */
 .container {
-  background-color: #3f3e3e;
-  border-radius: 1rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  padding: 3rem 2.5rem;
   width: 100%;
   max-width: 600px;
   display: flex;
   flex-direction: column;
   z-index: 1;
   gap: 1.5rem;
-  opacity: 95%;
+}
+
+.title{
+    font-family: 'Poppins';
+    font-weight: 600;
+    border-bottom: 2px solid white;
+}
+
+.text{
+    color: rgb(209, 209, 209);
+    font-size: 1.4rem;
+    font-family: 'Poppins';
+    text-align: left;
+    max-width: 800px;
 }
 
 /* Title and description */
@@ -54,23 +58,30 @@
   gap: 1.25rem;
 }
 
+.selectOption:hover {
+  background-color: #464545;
+}
+
 .name,
 .email,
-.message {
+.message
+.subject {
   font-family: 'Poppins', sans-serif;
   font-size: 1rem;
 }
 
 .name label,
 .email label,
-.message label {
-  font-family: 'Poppins', sans-serif;
+.message label,
+.subject label {
+  font-family: 'Poppins';
   font-size: 1rem;
   color: #e4e4e4;
 }
 
 .name input,
-.email input{
+.email input,
+.subject input{
   background-color: #212121;
   border: 1px solid #e4e4e4;
   color: white;
