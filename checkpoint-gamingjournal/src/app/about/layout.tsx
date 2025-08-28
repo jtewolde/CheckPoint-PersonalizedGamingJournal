@@ -9,7 +9,7 @@ import { useDisclosure } from "@mantine/hooks";
 
 import { ReactNode } from "react";
 
-import { ReceiptText, FileLock, AppWindow, MailPlus, Mail } from "lucide-react";
+import { ReceiptText, FileLock, AppWindow, MailPlus, ShieldQuestion } from "lucide-react";
 
 import classes from './about.module.css';
 
@@ -143,6 +143,33 @@ export default function AboutLayout({ children }: { children: ReactNode}) {
                     component={Link}
                     href="/about/contact"
                     active={pathname === '/about/contact'}
+                    color="white"
+                    />
+
+                    <NavLink
+                    className={classes.navLinks}
+                    label="FAQ"
+                    autoContrast
+                    styles={{
+                        root: {
+                            borderBottom: pathname === '/about/FAQ' ? '4px solid white': undefined,
+                            color: pathname === '/about/FAQ' ? 'white' : undefined,
+                        },
+                        label:{
+                            fontFamily: 'Poppins',
+                            fontWeight: 420,
+                            fontSize: '1.5rem',
+                            color: 'white'
+                        },
+                        description: {
+                            fontFamily: 'Poppins',
+                            fontSize: '0.75rem'
+                        }
+                    }}
+                    leftSection={<ShieldQuestion size={30} color="white"/>}
+                    component={Link}
+                    href="/about/FAQ"
+                    active={pathname === '/about/FAQ'}
                     color="white"
                     />
 
