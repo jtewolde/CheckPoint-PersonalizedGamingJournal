@@ -20,18 +20,11 @@ export async function POST(req: NextRequest) {
             headers: req.headers,
         });
 
-        console.log("Authorization Header:", req.headers.get("authorization"));
-        console.log("Session: ", session);
-
         if (!session || !session.user) {
             return NextResponse.json({ error: "Unauthorized", session }, { status: 401 });
         }
 
         const userId = session.user.id; // Extract userId from the session
-
-        console.log("JournalEntryId:", journalEntryId);
-        console.log("GameID:", gameID);
-        console.log("UserID:", userId);
 
         // Check if the journal entry exists and belongs to the user
         const journalEntry = await JournalEntriesCollection.findOne({
@@ -68,6 +61,9 @@ export async function POST(req: NextRequest) {
 
         //Invalidate/clear the cache of the user's journal entries after deletion
         await redis.del(`user_journal_entries:${userId}`);
+
+        // Invalidate/clear the cache for the first page of journal entries
+        await redis.del(`user_journal_entries:${userId}:page:1:limit:6`);
 
         return NextResponse.json({
             message: "Journal entry deleted successfully",

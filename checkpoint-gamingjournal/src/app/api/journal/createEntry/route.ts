@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
       console.log(body);
 
       // Validate required fields
-      if (!gameID || !title || !content || !date) {
+      if (!gameID || !title || !content) {
         return NextResponse.json(
           { error: "Missing required fields" },
           { status: 400 }
@@ -35,12 +35,10 @@ export async function POST(req: NextRequest) {
       const userId = session.user.id;
 
       //Check if the instance of the game exists and belongs to the user
-        const game = await GameCollection.findOne({
-            gameId: gameID, // Query as a string
-            userId: userId, // Query as a string
-        });
-
-      console.log("game", game, gameID, userId)
+      const game = await GameCollection.findOne({
+          gameId: gameID, // Query as a string
+          userId: userId, // Query as a string
+      });
 
       if (!game) {
         return NextResponse.json(
@@ -48,6 +46,21 @@ export async function POST(req: NextRequest) {
           { status: 404 }
         );
       }
+
+      // Generate a createdAt timestamp for the database to sort entries more easily
+      const createdAt = new Date();
+
+      // Convert createdAt date to user-friendly string
+      const displayDate = createdAt.toLocaleString("en-US", {
+        timeZone: "UTC", // Use UTC timezone
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZoneName: "short", // Include timezone abbreviation
+      });
 
       // Create the journal entry
       const journalEntry = {
@@ -57,7 +70,8 @@ export async function POST(req: NextRequest) {
         userId,
         title,
         content,
-        date
+        createdAt,
+        displayDate
       };
 
       // Insert the journal entry into the journalEntries collection
@@ -71,8 +85,11 @@ export async function POST(req: NextRequest) {
           { $addToSet: { journalEntries: journalEntry.uuid } } // Prevent duplicates
       )
 
-      //Invalidate/clear the cache for the user's journal entries after creation
+      // Invalidate/clear the cache for the user's journal entries after creation
       await redis.del(`user_journal_entries:${userId}`);
+
+      // Invalidate/clear the cache for the first page of journal entries
+      await redis.del(`user_journal_entries:${userId}:page:1:limit:6`);
 
       return NextResponse.json({
         message: "Journal entry created and appended successfully",

@@ -109,14 +109,6 @@ export default function Dashboard() {
     setNumOfGames(totalGames);
     setCompletedPercentage(completationRate);
 
-    console.log("Completation Percentage", completedPercentage);
-    console.log("Length of Plan to Play Games:", planToPlay);
-    console.log("Length of Playing Games:", playing);
-    console.log("Length of Completed Games:", completed);
-    console.log("Length of No Status Games:", noStatus);
-
-    console.log("Playing Games", playingGames);
-
   } catch (error) {
     console.error('Error fetching playing games: ', error);
   }
@@ -126,7 +118,7 @@ export default function Dashboard() {
   const fetchRecentJournalEntries = async () => {
       try {
           const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
-          const res = await fetch('/api/journal/getEntries', {
+          const res = await fetch('/api/journal/getRecentEntries', {
               method: 'GET',
               headers: {
                   'Content-Type': 'application/json',
@@ -296,7 +288,7 @@ export default function Dashboard() {
 
           <div className={classes.titleLogo}>
             <Gamepad size={30} /> 
-            <h1 className={classes.gamesPlayingText}>Games that you are currently playing:</h1>
+            <h1 className={classes.gamesPlayingText}>Games That You're playing:</h1>
           </div>
           
         </div>
@@ -346,7 +338,7 @@ export default function Dashboard() {
                                   ? `${entry.content.slice(0, 150)}...` // Truncate long content
                                   : entry.content}
                           </p>
-                          <p className={classes.entryDate}>{entry.date}</p>
+                          <p className={classes.entryDate}>{entry.displayDate}</p>
                       </div>
                   ))}
               </SimpleGrid>

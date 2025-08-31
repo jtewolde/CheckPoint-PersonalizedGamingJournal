@@ -79,21 +79,8 @@ export default function JournalForm() {
 
     setAddtoJournal(true)
 
-      const currentDate = new Date().toLocaleString("en-US", {
-      timeZone: "UTC", // Use UTC timezone
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      timeZoneName: "short", // Include timezone abbreviation
-    });
-
     // Find the selected game's title
     const selectedGame = games.find((game) => game.gameId === gameID);
-    console.log("Selectedgame",selectedGame);
-    console.log(currentDate);
     const gameName = selectedGame ? selectedGame.title : "";
 
     try {
@@ -109,7 +96,6 @@ export default function JournalForm() {
           content,
           gameID,
           gameName,
-          date: currentDate
         }),
       });
 
