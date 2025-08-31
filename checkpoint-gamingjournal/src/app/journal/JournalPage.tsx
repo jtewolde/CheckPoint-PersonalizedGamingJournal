@@ -62,9 +62,12 @@ export default function Journal() {
     };
 
     useEffect(() => {
-        fetchEntries(page);
         checkAuth(); // Check authentication on component mount
-    }, [page, router]);
+    }, [router]);
+
+    useEffect(() => {
+        fetchEntries(page);
+    }, [page]);
 
     // Get unique game names from entries for the dropdown
     const gameNames = Array.from(new Set(entries.map(entry => entry.gameName)));
@@ -109,6 +112,7 @@ export default function Journal() {
 
     return (
         <div className={classes.container}>
+
             <Overlay
                 gradient="linear-gradient(180deg,rgb(67, 67, 67) 30%,rgb(94, 94, 94) 90%)"
                 opacity={0.5}
@@ -204,17 +208,17 @@ export default function Journal() {
                         </div>
                     ))}
                 </SimpleGrid>
-            </div>
 
-            <div className={classes.paginationWrapper}>
-                <Pagination
-                    size='lg'
-                    total={totalPages}
-                    value={page}
-                    onChange={setPage}
-                />
-            </div>
+                <div className={classes.paginationWrapper}>
+                    <Pagination
+                        size='lg'
+                        total={totalPages}
+                        value={page}
+                        onChange={setPage}
+                    />
+                </div>
 
+            </div>
         </div>
     );
 }
