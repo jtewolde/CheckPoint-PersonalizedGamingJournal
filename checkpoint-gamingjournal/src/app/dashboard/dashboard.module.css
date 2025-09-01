@@ -311,6 +311,11 @@
     text-align: center;
     font-size: 1.5rem;
   }
+
+  .profileStats{
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+  }
   
   .trendingText,
   .playingText,

@@ -6,7 +6,7 @@ import { authClient } from '@/lib/auth-client';
 
 import classes from './journal.module.css';
 
-import { Table, Button, LoadingOverlay, Overlay, Popover, Select, Flex, SimpleGrid, Paper } from '@mantine/core';
+import { Table, Button, LoadingOverlay, Overlay, Popover, Select, SimpleGrid, Pagination } from '@mantine/core';
 
 import toast from 'react-hot-toast';
 import { FilePlus, DeleteIcon, Eye, ListFilter } from 'lucide-react';
@@ -15,7 +15,10 @@ import { FilePlus, DeleteIcon, Eye, ListFilter } from 'lucide-react';
 export default function Journal() {
     // State variables for the journal entries
     const [entries, setEntries] = useState<any[]>([]);
+    const [totalEntries, setTotalEntries] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
     const [gameName, setGameName] = useState('all')
     const router = useRouter();
 
@@ -28,11 +31,11 @@ export default function Journal() {
     }
 
     // Function to fetch journal entries
-    const fetchEntries = async () => {
+    const fetchEntries = async (pageNum = 1) => {
         setLoading(true);
         try {
             const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token
-            const res = await fetch('/api/journal/getEntries', {
+            const res = await fetch(`/api/journal/getEntries?page=${pageNum}&limit=6`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -45,8 +48,12 @@ export default function Journal() {
             }
 
             const data = await res.json();
-            setEntries(data.journalEntries);
             console.log('Journal Entries', data.journalEntries);
+            console.log('Pagination', data.pagination);
+            console.log('Total Entries from API:', data.pagination.totalEntries);
+            setEntries(data.journalEntries);
+            setTotalPages(data.pagination.totalPages);
+            setTotalEntries(data.pagination.totalEntries)
         } catch (error) {
             console.log('Error fetching user journal entries', error);
         } finally {
@@ -55,9 +62,12 @@ export default function Journal() {
     };
 
     useEffect(() => {
-        fetchEntries();
         checkAuth(); // Check authentication on component mount
     }, [router]);
+
+    useEffect(() => {
+        fetchEntries(page);
+    }, [page]);
 
     // Get unique game names from entries for the dropdown
     const gameNames = Array.from(new Set(entries.map(entry => entry.gameName)));
@@ -67,7 +77,6 @@ export default function Journal() {
     (entry) => gameName === 'all' || entry.gameName === gameName
     )
     .slice()
-    .reverse();
 
     // Function to delete a journal entry
     const deleteJournalEntry = async (journalEntryId: string, gameID: string) => {
@@ -97,49 +106,13 @@ export default function Journal() {
         }
     };
 
-    // Function to create the rows of the table with the data of journal entries
-        const rows = filteredEntries.map((entry) => (
-        <Table.Tr key={entry._id}>
-            <Table.Td className={classes.tableCell}><b>{entry.gameName}</b></Table.Td>
-            <Table.Td className={classes.tableCell}>{entry.title}</Table.Td>
-            <Table.Td className={`${classes.tableCell} ${classes.truncatedContent}`}>{entry.content}</Table.Td>
-            <Table.Td className={classes.tableCell}>{entry.date}</Table.Td>
-            <Table.Td className={classes.deleteButtonCell}>
-
-                <Button
-                    className={classes.viewButton}
-                    onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}
-                    color="blue"
-                    radius="lg"
-                    variant="light"
-                    style={{ marginRight: 8 }}
-                    rightSection={<Eye />}
-                >
-                    View
-                </Button>
-
-                <Button
-                    className={classes.deleteButton}
-                    onClick={() => deleteJournalEntry(entry._id, entry.gameId)}
-                    rightSection={<DeleteIcon />}
-                    radius='lg'
-                    variant='light'
-                    color='red'
-                >
-                    Delete
-                </Button>
-
-            </Table.Td>
-
-        </Table.Tr>
-    ));
-
     if (loading) {
         return <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
     }
 
     return (
         <div className={classes.container}>
+
             <Overlay
                 gradient="linear-gradient(180deg,rgb(67, 67, 67) 30%,rgb(94, 94, 94) 90%)"
                 opacity={0.5}
@@ -196,7 +169,6 @@ export default function Journal() {
                     <p className={classes.entriesCount}>{filteredEntries.length} Journal Entries found</p>
                 </div>
                 
-                
                 <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
                     {filteredEntries.map((entry) => (
                         <div key={entry._id} className={classes.entryCard} >
@@ -207,7 +179,7 @@ export default function Journal() {
                                     ? `${entry.content.slice(0, 200)}...` // Truncate long content
                                     : entry.content}
                             </p>
-                            <p className={classes.entryDate}>{entry.date}</p>
+                            <p className={classes.entryDate}>{entry.displayDate}</p>
 
                             <div className={classes.entryActions}>
                                 <Button
@@ -236,6 +208,16 @@ export default function Journal() {
                         </div>
                     ))}
                 </SimpleGrid>
+
+                <div className={classes.paginationWrapper}>
+                    <Pagination
+                        size='lg'
+                        total={totalPages}
+                        value={page}
+                        onChange={setPage}
+                    />
+                </div>
+
             </div>
         </div>
     );

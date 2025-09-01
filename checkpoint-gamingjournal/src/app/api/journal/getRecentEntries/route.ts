@@ -19,12 +19,6 @@ export async function GET(req: NextRequest){
         // Get user Id from session
         const userId = session.user.id
 
-        // Setup pagination for journal entries
-        const { searchParams } = new URL(req.url);
-        const page = parseInt(searchParams.get('page') || "1", 10)
-        const limit = parseInt(searchParams.get('limit') || "10", 10)
-        const skip = (page - 1) * limit;
-
         // Find the user in the collection of users
         const user = await UserCollection.findOne({ _id: new ObjectId(userId)})
 
@@ -33,37 +27,24 @@ export async function GET(req: NextRequest){
         }
 
         // Create unique cache key based on user ID
-        const cacheKey = `user_journal_entries:${userId}:page:${page}:limit:${limit}`;
+        const cacheKey = `user_journal_entries:${userId}`;
 
         // Attempt to get cached data from Redis
         const cachedData = await redis.get(cacheKey);
 
         if(cachedData) {
             console.log('Returning cached journal entries for: ', cacheKey);
-            return NextResponse.json(JSON.parse(cachedData), { status: 200 });
+            return NextResponse.json({ journalEntries: JSON.parse(cachedData) }, { status: 200 });
         }
 
-        // Count all journal entries for the user
-        const totalEntries = await JournalEntriesCollection.countDocuments({ userId: userId });
-
        // Retrieve all journal entries for the user
-        const journalEntries = await JournalEntriesCollection.find({ userId: userId }).sort({ createdAt: -1}).skip(skip).limit(limit).toArray();
-
-        // Create response object that has journal entries and pagination info
-        const response = {
-            journalEntries,
-            pagination: {
-                totalEntries,
-                currentPage: page,
-                totalPages: Math.ceil(totalEntries / limit),
-            },
-        };
+        const journalEntries = await JournalEntriesCollection.find({ userId: userId }).toArray();
 
         // Cache the games data in Redis for 30 minutes
-        await redis.set(cacheKey, JSON.stringify(response), 'EX', 1800);
+        await redis.set(cacheKey, JSON.stringify([ ...journalEntries]), 'EX', 1800);
 
         // Return the journal entries
-        return NextResponse.json(response, { status: 200 });
+        return NextResponse.json({ journalEntries }, { status: 200 });
     } catch (error) {
         console.error("Error fetching journal entries:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
