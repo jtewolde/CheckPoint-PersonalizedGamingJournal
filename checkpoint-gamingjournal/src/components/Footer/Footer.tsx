@@ -30,7 +30,7 @@ export function Footer() {
           <Link href='/about/terms' className={classes.FAQLink}>Terms</Link>
           <Link href='/about/privacy' className={classes.FAQLink}>Privacy</Link>
           <Link href='/about/contact' className={classes.FAQLink}>Contact</Link>
-          <Link href="/FAQ" className={classes.FAQLink}>FAQ</Link>
+          <Link href="/about/FAQ" className={classes.FAQLink}>FAQ</Link>
         </div>
 
         {/* Right side: Socials */}

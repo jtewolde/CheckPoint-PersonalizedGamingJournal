@@ -1,11 +1,16 @@
 
-.main{
-    height: 100%;
+.roadmap{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    height: 100%;
     padding: 1rem;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .title{
@@ -27,22 +32,34 @@
     font-family: 'Poppins';
     text-align: left;
     max-width: 800px;
-    margin-bottom: 2rem;
+}
+
+.card{
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #454546;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cardTitle{
+    color:#fdfdfd;
+    font-family: 'Inter';
+    font-weight: 600;
+}
+
+.cardDescription{
+    color:#d8d8d8;
+    font-family: 'Poppins';
 }
 
 .list{
     color: rgb(209, 209, 209);
-    font-size: 1rem;
+    font-size: 1.4rem;
     font-family: 'Poppins';
     text-align: left;
-    margin-bottom: 2rem;
 }
 
 .navLinks:hover{
-    background-color: rgb(0, 0, 0, 0.5);
+    background-color: rgb(0, 0, 0, 0.1);
     border-bottom: 4px solid white;
-}
-
-.mobileSidebarBorder{
-    border-bottom: 2px solid white;
 }
