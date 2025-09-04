@@ -9,7 +9,7 @@ import { useDisclosure } from "@mantine/hooks";
 
 import { ReactNode } from "react";
 
-import { ReceiptText, FileLock, AppWindow, MailPlus, ShieldQuestion } from "lucide-react";
+import { ReceiptText, FileLock, AppWindow, MailPlus, ShieldQuestion, Map } from "lucide-react";
 
 import classes from './about.module.css';
 
@@ -33,7 +33,8 @@ export default function AboutLayout({ children }: { children: ReactNode}) {
             h={{ base: '100%'}}
             w={{ base: '100%', sm: 300 }}
             p="md"
-            style={{ background: 'linear-gradient(to bottom, #2e2e2e, #282727ff)', border: '1px solid black', borderRight: '2px solid white'}}
+            className={isMobile ? classes.mobileSidebarBorder: undefined}
+            style={{ background: 'linear-gradient(to bottom, #2e2e2e, #282727ff)', border: '1px solid black', borderRight: '2px solid white', borderBottom: '1px solid black'}}
             >
                 <Stack gap="xl">
 
@@ -143,6 +144,33 @@ export default function AboutLayout({ children }: { children: ReactNode}) {
                     component={Link}
                     href="/about/contact"
                     active={pathname === '/about/contact'}
+                    color="white"
+                    />
+
+                    <NavLink
+                    className={classes.navLinks}
+                    label="Roadmap"
+                    autoContrast
+                    styles={{
+                        root: {
+                            borderBottom: pathname === '/about/roadmap' ? '4px solid white': undefined,
+                            color: pathname === '/about/roadmap' ? 'white' : undefined,
+                        },
+                        label:{
+                            fontFamily: 'Poppins',
+                            fontWeight: 420,
+                            fontSize: '1.5rem',
+                            color: 'white'
+                        },
+                        description: {
+                            fontFamily: 'Poppins',
+                            fontSize: '0.75rem'
+                        }
+                    }}
+                    leftSection={<Map size={30} color="white"/>}
+                    component={Link}
+                    href="/about/roadmap"
+                    active={pathname === '/about/roadmap'}
                     color="white"
                     />
 

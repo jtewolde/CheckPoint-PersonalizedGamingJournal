@@ -121,47 +121,52 @@ export default function Journal() {
 
             <div className={classes.journalWrapper}>
 
-                <h2 className={classes.journalTitle}>Your Journal Entries</h2>
 
-                <div className={classes.buttonGroup} >
+                <div className={classes.journalHeader}>
 
-                    <Button
-                    variant='filled'
-                    color='lime'
-                    size='md'
-                    radius= 'lg'
-                    className={classes.addButton}
-                    onClick={() => router.push('/journalForm')}
-                    rightSection={<FilePlus />}
-                    >
-                        Add Journal Entry
-                    </Button>
+                    <h2 className={classes.journalTitle}>Your Journal Entries</h2>
 
-                    <Popover width={300} position='bottom' withArrow shadow='lg'>
-                        <Popover.Target>
-                            <Button className={classes.filterButton} size='md' color='#854bcb' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Name</Button>
-                        </Popover.Target>
+                    <div className={classes.buttonGroup} >
 
-                        <Popover.Dropdown>
-                            <Select
-                                label="Choose a game to filter your journal by"
-                                placeholder="Filter by Game"
-                                checkIconPosition='right'
-                                data={[
-                                    { value: 'all', label: 'All Games' },
-                                    ...gameNames.map((gameName) => ({
-                                        value: gameName,
-                                        label: gameName
-                                    }))
-                                ]}
-                                value={gameName}
-                                onChange={(value) => setGameName(value || 'all')}
-                                className={classes.filterDropdown}
-                                mb="md"
-                            />
-                        </Popover.Dropdown>
+                        <Button
+                        variant='filled'
+                        color='lime'
+                        size='md'
+                        radius= 'lg'
+                        className={classes.addButton}
+                        onClick={() => router.push('/journalForm')}
+                        rightSection={<FilePlus />}
+                        >
+                            Add Journal Entry
+                        </Button>
 
-                    </Popover>
+                        <Popover width={300} position='bottom' withArrow shadow='lg'>
+                            <Popover.Target>
+                                <Button className={classes.filterButton} size='md' color='#854bcb' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Name</Button>
+                            </Popover.Target>
+
+                            <Popover.Dropdown>
+                                <Select
+                                    label="Choose a game to filter your journal by"
+                                    placeholder="Filter by Game"
+                                    checkIconPosition='right'
+                                    data={[
+                                        { value: 'all', label: 'All Games' },
+                                        ...gameNames.map((gameName) => ({
+                                            value: gameName,
+                                            label: gameName
+                                        }))
+                                    ]}
+                                    value={gameName}
+                                    onChange={(value) => setGameName(value || 'all')}
+                                    className={classes.filterDropdown}
+                                    mb="md"
+                                />
+                            </Popover.Dropdown>
+
+                        </Popover>
+
+                    </div>
 
                 </div>
 
@@ -212,6 +217,7 @@ export default function Journal() {
                 <div className={classes.paginationWrapper}>
                     <Pagination
                         size='lg'
+                        radius='lg'
                         total={totalPages}
                         value={page}
                         onChange={setPage}

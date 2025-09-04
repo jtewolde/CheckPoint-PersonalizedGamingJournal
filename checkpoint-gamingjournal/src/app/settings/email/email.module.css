@@ -2,6 +2,9 @@
 .container{
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 1rem;
     gap: 200px;
 }
 
@@ -29,6 +32,7 @@
 
 .submitButton{
     width: 15rem;
+    align-self: center;
 }
 
 .enterEmail textarea{
@@ -39,12 +43,14 @@
 .deleteUserWrapper{
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 20px;
     font-family: 'Poppins';
 }
 
 .deleteButton{
     width: 15rem;
+    align-self: center;
 }
 
 .modalText{

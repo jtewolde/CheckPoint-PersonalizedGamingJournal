@@ -2,6 +2,8 @@
 .profileWrapper{
     display: flex;
     flex-direction: row;
+    align-items: flex-start;
+    padding: 1rem;
     gap: 40%;
     font-family: 'Poppins';
 }
