@@ -65,7 +65,7 @@ export default function TrendingPage() {
 
         <div className={classes.titleLogo}>
           <TrendingUp size={40} />
-          <h1 className={classes.searchText}> Top 60 Trending Games:</h1>
+          <h1 className={classes.searchText}> Top 50 Trending Games:</h1>
         </div>
 
         <h2 className={classes.numberText}>{length} Game Results:</h2>
@@ -88,8 +88,9 @@ export default function TrendingPage() {
           ))}
         </SimpleGrid>
         
-        <Pagination total={Math.ceil(total/ limit)} size='lg' style={{ justifyContent: "center" }} 
-        className={classes.pagninaton} value={page} onChange={setPage} color='blue' radius="lg" />
+        {/* <Pagination total={Math.ceil(total/ limit)} size='lg' style={{ justifyContent: "center" }} 
+        className={classes.pagninaton} value={page} onChange={setPage} color='blue' radius="lg" /> */}
+
     </div>
   );
 }

@@ -1,11 +1,14 @@
 /* Wrapper for the entire search page */
 .wrapper {
-    background: linear-gradient(to top, #283048, #232526);
+    background: linear-gradient(to top, #2d313e, #232526);
     padding: 2rem; /* Add padding around the content */
+    padding-left: 2rem;
+    padding-right: 2rem;
     min-height: 100vh; /* Ensure the page takes up the full height */
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 1rem;
 }
 
 /* Search results heading */
@@ -46,6 +49,8 @@
   gap: 16px;
   width: 100%;
   box-sizing: border-box;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .gameContainer{
@@ -113,4 +118,15 @@
         text-align: center;
         align-self: center;
     }
+}
+
+@media screen and (max-width: 550px) {
+    .gameContainer{
+        padding: 0;
+    }
+
+    .searchText{
+        font-size: 1.5rem;
+    }
+    
 }
