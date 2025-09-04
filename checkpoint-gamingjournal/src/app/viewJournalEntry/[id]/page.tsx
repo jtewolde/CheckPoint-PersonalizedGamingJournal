@@ -50,7 +50,7 @@ export default function ViewJournalEntry() {
             <Text className={classes.gameName}>{entry.gameName}</Text>
             <Text className={classes.title}>{entry.title}</Text>
             <Text className={classes.content}>{entry.content}</Text>
-            <Text className={classes.date}><b>Date Created:</b> {entry.date}</Text>
+            <Text className={classes.date}><b>Date Created:</b> {entry.displayDate}</Text>
             <Button className={classes.backbtn} variant='filled' color='violet' radius='lg' size='md' rightSection={<ArrowLeft />} onClick={() => router.back()}>Go Back</Button>
         </div>
 
