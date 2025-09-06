@@ -1,10 +1,12 @@
 .journalContainer {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh; /* Full height of the viewport */
   background-image: url('../../../public/video_games_art_background.jpg');
   position: relative;
+  background-attachment: fixed;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -16,12 +18,11 @@
   z-index: 1;
   border-radius: 12px; /* Rounded corners */
   width: 100%;
-  max-width: 700px; /* Increased max width for a larger form */
-  margin-top: -4rem;
+  max-width: 800px; /* Increased max width for a larger form */
 }
 
 .journalTitle {
-  font-size: 2rem;
+  font-size: 2.6rem;
   font-weight: bold;
   text-align: center;
   margin-bottom: 1.5rem;
@@ -29,19 +30,21 @@
   font-family: 'Poppins';
 }
 
-
 .form {
   display: flex;
   flex-direction: column;
   gap: 1rem; /* Add spacing between form elements */
 }
 
+.select input{
+  color: #212121;
+  font-family: 'Noto Sans';
+}
 
-.select{
+.select label,
+.textInput label{
+  font-family: 'Inter';
   color: white;
-  font-family: 'Poppins';
-  font-weight: 400;
-  width: 100%;
 }
 
 .textInput{
@@ -68,15 +71,17 @@
   padding: 0.75rem;
   font-size: 1rem;
   font-family: 'Inter';
+  font-size: 18px;
   font-weight: bold;
-  color: rgb(255, 255, 255);
   align-self: center;
   border: 0.5px solid black;
   cursor: pointer;
   transition: background-color 0.3s ease;
+}
 
-  &:hover {
-    background-color: #14f54c; /* Darker blue on hover */
+@media (max-width: 500px) {
+  .journalTitle{
+    font-size: 2rem;
   }
 }
 

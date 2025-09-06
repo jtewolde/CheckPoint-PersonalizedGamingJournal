@@ -7,7 +7,7 @@ import { authClient } from "@/lib/auth-client";
 import { TextInput, Textarea, Button, Select, Overlay } from "@mantine/core";
 
 import toast from "react-hot-toast";
-import { Send } from "lucide-react";
+import { Send, Gamepad2, Captions, MessageSquareText } from "lucide-react";
 
 import classes from './journalForm.module.css';
 
@@ -119,19 +119,24 @@ export default function JournalForm() {
     <div className={classes.journalContainer}>
 
       <Overlay
-        gradient="linear-gradient(180deg,rgb(67, 67, 67) 30%,rgb(112, 112, 112) 90%)"
+        gradient="linear-gradient(180deg,rgb(67, 67, 67) 30%,rgba(79, 78, 78, 1) 90%)"
         opacity={0.80}
         zIndex={0}
       />
 
         <div className={classes.journalWrapper} >
+
           <h1 className={classes.journalTitle}>Create Journal Entry</h1>
+
           <form onSubmit={handleSubmit} className={classes.form}>
+
             <Select
+              leftSection={<Gamepad2 size={30} />}
               className={classes.select}
+              styles={{ wrapper: { color: '#212121'}}}
               size="lg"
               label="Select Game"
-              placeholder="Choose a game"
+              placeholder="Choose a game from your library"
               data={games.map((game) => ({
                 value: game.gameId, // Use the game's ID as the value
                 label: game.title, // Display the game's name
@@ -141,21 +146,24 @@ export default function JournalForm() {
               required
               disabled={loading} // Disable the dropdown while loading
             />
+
             <TextInput
               className={classes.textInput}
               size="lg"
               label="Title"
               placeholder="Enter the title of your journal entry"
+              leftSection={<Captions size={30} />}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
               style={{ marginTop: "1rem" }}
             />
+
             <Textarea
               className={classes.textArea}
               classNames={{ input: classes.input}}
               label="Content"
-              placeholder="Write your journal entry here..."
+              placeholder="Write your journal entry here"
               autosize
               value={content}
               onChange={(e) => setContent(e.target.value)}
@@ -164,6 +172,7 @@ export default function JournalForm() {
               style={{ marginTop: "1rem" }}
               size="lg"
             />
+
             <Button
               className={classes.submitButton}
               type="submit"
@@ -174,6 +183,7 @@ export default function JournalForm() {
               color='green'
               style={{ marginTop: "1rem" }}
               loading={addToJournal}
+              disabled={!gameID || !title || !content || addToJournal}
             >
               Submit
             </Button>
