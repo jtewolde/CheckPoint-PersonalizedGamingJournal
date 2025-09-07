@@ -1,12 +1,10 @@
 .wrapper {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh; /* Full height of the viewport */
   position: relative;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
   background: linear-gradient(to top, #283048, #545c5f); 
   padding: 2rem;
 }
@@ -41,7 +39,7 @@
 }
 
 .date {
-  color: rgb(186, 186, 186);
+  color: rgb(208, 208, 208);
   font-size: 1rem;
   margin-bottom: 3rem;
   font-family: 'Poppins';
