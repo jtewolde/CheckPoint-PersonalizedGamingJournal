@@ -15,7 +15,7 @@ import classes from './Trending.module.css';
 export default function TrendingPage() {
 
   const [page, setPage] = useState(1) // start with page 1 for pagination
-  const limit = 61; // Set the limit of games on page to 60
+  const limit = 50; // Set the limit of games on page to 50
   const [total, setTotal] = useState(0);
 
   const [games, setGames] = useState<any[]>([]); // State to store games data
@@ -25,12 +25,12 @@ export default function TrendingPage() {
 
   // Fetch games data from the API
     useEffect(() => {
-      const fetchPopularGames = async () => {
+      const fetchTrendingGames = async () => {
         try {
-          const res = await fetch(`/api/igdb/populargames?limit=${limit}&page=${page}`);
+          const res = await fetch(`/api/igdb/trendingGames?limit=${limit}`);
           
           if (!res.ok) {
-            throw new Error('Failed to fetch popular games');
+            throw new Error('Failed to fetch Trending games');
           }
           const data = await res.json();
           setGames(data); // Store the games data in state
@@ -44,7 +44,7 @@ export default function TrendingPage() {
           setLoading(false); // Set loading to false after fetching
         }
       };
-      fetchPopularGames();
+      fetchTrendingGames();
     }, []);
 
   if (loading) {
@@ -65,7 +65,7 @@ export default function TrendingPage() {
 
         <div className={classes.titleLogo}>
           <TrendingUp size={40} />
-          <h1 className={classes.searchText}> Top 50 Trending Games:</h1>
+          <h1 className={classes.searchText}> Top 50 Trending Games of 2025:</h1>
         </div>
 
         <h2 className={classes.numberText}>{length} Game Results:</h2>

@@ -1,5 +1,5 @@
-
 // API Call for getting top 12 popular games to display on dashboard
+
 import { NextRequest, NextResponse } from 'next/server';
 import { redis } from '@/utils/redis';
 
@@ -47,13 +47,12 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const searchQuery = searchParams.get('query') || '';
 
-    const limit = parseInt(searchParams.get('limit') || '14', 10); // Default to 12 results per page
+    const limit = parseInt(searchParams.get('limit') || '12', 10); // Default to 12 results per page
     const page = parseInt(searchParams.get('page') || '1', 10);
-    const offset = (page - 1) * limit; // Calculate the offset for pagination
 
     const accessToken = await getAccessToken();
 
-    const cacheKey = `igdb_popular_games:${limit};${page}`;
+    const cacheKey = `igdb_trending_games:${limit};${page}`;
 
     // Try to get cached data from Redis
     const cachedData = await redis.get(cacheKey);
@@ -63,39 +62,9 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(JSON.parse(cachedData), { status: 200 });
     }
 
-    // Calculate the date range for the last 30 days
+    // Calculate the date range for the 
     const now = new Date();
-    const thirtyDaysAgo = Math.floor((now.getTime() - 45 * 24 * 60 * 60 * 1000) / 1000); // 45 days ago in seconds
-
-    // Construct the query body
-    const body = `fields game_id,value,popularity_type; sort value desc; limit ${limit}; where popularity_type = 3; offset ${offset};`
-
-    const igdbRes = await fetch(IGDB_URL, {
-      method: 'POST',
-      headers: {
-        'Client-ID': process.env.IGDB_API_CLIENT_ID!,
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'text/plain',
-      },
-      body,
-    });
-
-    if (!igdbRes.ok) {
-      const errorData = await igdbRes.json();
-      console.error("IGDB API Error:", errorData);
-      return NextResponse.json(
-        { message: 'Failed to fetch games from IGDB', error: errorData },
-        { status: igdbRes.status }
-      );
-    }
-
-    // Get game IDS from popularity primitives response
-    const popularGames = await igdbRes.json();
-    const gameIds = popularGames.map((g: any) => g.game_id).filter(Boolean);
-
-    if (gameIds.length === 0) {
-      return NextResponse.json([], { status: 200 });
-    }
+    const startOfYear = Math.floor(new Date(2025, 0, 1).getTime() / 1000); // Start of the current year in seconds
 
     // Step 2: Fetch the game details like name and cover images for those IDs
     const gamesRes = await fetch('https://api.igdb.com/v4/games', {
@@ -105,7 +74,7 @@ export async function GET(req: NextRequest) {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'text/plain',
       },
-      body: `fields id, name, cover.url, platforms.name, themes.name, age_ratings.rating_category, aggregated_rating, first_release_date; where id = (${gameIds.join(',')}) & aggregated_rating != null; sort first_release_date desc; limit ${gameIds.length};`
+      body: `fields id, name, cover.url, platforms.name, themes.name, age_ratings.rating_category, total_rating, total_rating_count, rating, rating_count, aggregated_rating_count, first_release_date; where aggregated_rating != null & total_rating > 30 & total_rating_count > 7 & first_release_date > ${startOfYear}; sort total_rating desc; limit ${limit};`
     });
 
     if (!gamesRes.ok) {
@@ -117,14 +86,13 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Get response data from the games endpoint
     const games = await gamesRes.json();
 
     // Cache the response in Redis for 10 minutes
-    await redis.set(cacheKey, JSON.stringify(games), 'EX', 600); 
+    await redis.set(cacheKey, JSON.stringify(games), 'EX', 600);
 
     return NextResponse.json(games, { status: 200 });
-
+    
   } catch (err: any) {
     console.error("Error:", err);
     return NextResponse.json(

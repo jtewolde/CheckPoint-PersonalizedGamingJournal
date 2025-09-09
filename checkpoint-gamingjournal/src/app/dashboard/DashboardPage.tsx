@@ -8,7 +8,7 @@ import { authClient } from '@/lib/auth-client';
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
 import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconBookmarkFilled, IconCheck, IconQuestionMark, IconClipboardListFilled } from '@tabler/icons-react';
-import { TrendingUp, Notebook, Gamepad } from 'lucide-react';
+import { TrendingUp, Notebook, Gamepad, Star } from 'lucide-react';
 import classes from './dashboard.module.css';
 
 export default function Dashboard() {
@@ -49,25 +49,46 @@ export default function Dashboard() {
 
   // Fetch games data from the API
   useEffect(() => {
-    const fetchPopularGames = async () => {
+    const fetchTrendingGames = async () => {
       try {
-        const res = await fetch('/api/igdb/populargames');
+        const res = await fetch('/api/igdb/trendingGames');
         
         if (!res.ok) {
           throw new Error('Failed to fetch popular games');
         }
         const data = await res.json();
         setGames(data); // Store the games data in state
-        console.log("Popular Games: ",data);
+        console.log("Trending Games: ",data);
+        
       } catch (error) {
-        console.error('Error fetching popular games:', error);
+        console.error('Error fetching trending games:', error);
       } finally {
         setLoading(false); // Set loading to false after fetching
       }
     };
-    fetchPopularGames();
+    fetchTrendingGames();
     setHasMounted(true);
   }, []);
+
+  // Function to get the most popular games from the IGDB API
+  const fetchPopularGames = async () => {
+    try {
+      const res = await fetch('/api/igdb/populargames')
+
+      if(!res.ok){
+        throw new Error('Failed to fetch popular games');
+      }
+
+      // Get the popular games data and store it in state
+      const data = await res.json();
+      setPopularGames(data);
+      console.log("Popular Games: ", data);
+
+    } catch (error) {
+      console.error('Error fetching popular games: ', error);
+    }
+
+  }
 
  // Function to get the games that the user is currently playing from their library
  const fetchPlayingGames = async () => {
@@ -142,6 +163,7 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
+    fetchPopularGames();
     fetchPlayingGames();
     fetchRecentJournalEntries();
   }, []);
@@ -260,13 +282,14 @@ export default function Dashboard() {
           
           <div className={classes.titleLogo}>
             <TrendingUp size={30} />
-            <h1 className={classes.gamesPlayingText}>Most Popular Games:</h1>
+            <h1 className={classes.gamesPlayingText}>Top Trending Games:</h1>
           </div>
 
           <a className={classes.viewMoreText} href='/search/trending' >View more</a>
         </div>
         
         {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
+
         <SimpleGrid cols={7} spacing="lg" verticalSpacing='xl' className={classes.trendingGamesGrid}>
           {games.map((game) => (
             <div key={game.id} className={classes.gameCard}>
@@ -280,6 +303,38 @@ export default function Dashboard() {
             </div>
           ))}
         </SimpleGrid>
+
+      </div>
+
+      <div className={classes.popularGames}>
+        
+          <div className={classes.popularText}>
+          
+            <div className={classes.titleLogo}>
+              <Star size={30} />
+              <h1 className={classes.gamesPlayingText}>Most Popular Games:</h1>
+            </div>
+
+            <a className={classes.viewMoreText} href='/search/trending' >View more</a>
+
+          </div>
+
+          {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
+        
+        <SimpleGrid cols={6} spacing="lg" verticalSpacing='xl' className={classes.popularGamesGrid}>
+          {popularGames.map((game) => (
+            <div key={game.id} className={classes.gameCard}>
+              <Image src={
+                game.cover ? `https:${game.cover.url.replace('t_thumb', 't_cover_big')}` : PlaceHolderImage.src } 
+                alt={game.name} 
+                className={classes.cover} 
+                onClick={() => router.push(`/games/${game.id}`)} 
+                />
+                <Text className={classes.gameName}>{game.name}</Text>
+            </div>
+          ))}
+        </SimpleGrid>
+
       </div>
 
       <div className={classes.playingGames} >

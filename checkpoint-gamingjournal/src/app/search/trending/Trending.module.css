@@ -120,13 +120,13 @@
     }
 }
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 570px) {
     .gameContainer{
         padding: 0;
     }
 
     .searchText{
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
     
 }

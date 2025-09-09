@@ -1,5 +1,7 @@
 .wrapper {
   padding: 2rem;
+  padding-left: 4rem;
+  padding-right: 4rem;
   min-height: 100vh;
   background: #121212;
   display: flex;
@@ -19,6 +21,7 @@
 
 .profileStats,
 .trendingText,
+.popularText,
 .playingText,
 .recentEntriesText{
   display: flex;
@@ -154,16 +157,9 @@
   transition: opacity 0.3s ease;
 }
 
-.gamesGrid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr); /* Default: 5 columns */
-  gap: 3rem;
-  justify-content: center;
-  align-content: center;
-  justify-items: center;
-}
-
-.trendingGamesGrid{
+.trendingGamesGrid,
+.popularGamesGrid,
+.gamesGrid{
   display: grid;
   grid-template-columns: repeat(6, 1fr); /* Default: 5 columns */
   gap: 3rem;
@@ -187,6 +183,14 @@
 
 .playingText{
   margin-top: 5rem;
+}
+
+.popularGames{
+  width: 100%;
+  max-width: 95%;
+  margin-top: 4rem;
+  padding: 1rem 0;
+  display: block;
 }
 
 .playingGames{
@@ -260,26 +264,25 @@
 }
 
 @media (max-width: 1200px) {
-  .gamesGrid {
-    grid-template-columns: repeat(4, 1fr); /* 4 columns for screens smaller than 1200px */
-  }
+  .gamesGrid,
+  .trendingGamesGrid,
+  .statusGrid,
+  .entriesGrid,
   .trendingGamesGrid{
     grid-template-columns: repeat(4, 1fr);
   }
-  .statusGrid {
-    grid-template-columns: repeat(4, 1fr); /* 4 columns for screens smaller than 1200px */
-  }
-  .entriesGrid {
-    grid-template-columns: repeat(4, 1fr); /* 4 columns for screens smaller than 1200px */
-  }
 }
-
+ 
 @media (max-width: 768px) {
-  .gamesGrid {
-    grid-template-columns: repeat(3, 1fr); /* 3 columns for screens smaller than 768px */
+
+  .wrapper{
+    padding: 2rem;
   }
-  .trendingGamesGrid{
-    grid-template-columns: repeat(3, 1fr);
+
+  .gamesGrid,
+  .popularGamesGrid,
+  .trendingGamesGrid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for screens smaller than 768px */
   }
   .entriesGrid {
     grid-template-columns: repeat(1, 1fr); /* 1 column for screens smaller than 768px */
@@ -295,8 +298,8 @@
     grid-template-columns: repeat(1, 1fr); /* 2 columns for screens smaller than 768px */
   }
 
-  .cover{
-    width: 100%;
+  .viewMoreText{
+    font-size: 1rem;
   }
 
   .gamesGrid {
@@ -304,6 +307,10 @@
   }
 
   .trendingGamesGrid{
+    grid-template-columns: repeat(2, 1fr);;
+  }
+
+  .popularGamesGrid{
     grid-template-columns: repeat(2, 1fr);
   }
     
