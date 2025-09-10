@@ -315,7 +315,7 @@ export default function Dashboard() {
               <h1 className={classes.gamesPlayingText}>Most Popular Games:</h1>
             </div>
 
-            <a className={classes.viewMoreText} href='/search/trending' >View more</a>
+            <a className={classes.viewMoreText} href='/search/popular' >View more</a>
 
           </div>
 

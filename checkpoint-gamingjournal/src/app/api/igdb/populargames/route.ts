@@ -47,9 +47,10 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const searchQuery = searchParams.get('query') || '';
 
-    const limit = parseInt(searchParams.get('limit') || '14', 10); // Default to 12 results per page
+    const limit = parseInt(searchParams.get('limit') || '12', 10); // Default to 12 results per page
+    const overFetchLimit = limit * 1.5 // Over-fetch to account for filtering
+
     const page = parseInt(searchParams.get('page') || '1', 10);
-    const offset = (page - 1) * limit; // Calculate the offset for pagination
 
     const accessToken = await getAccessToken();
 
@@ -68,7 +69,7 @@ export async function GET(req: NextRequest) {
     const thirtyDaysAgo = Math.floor((now.getTime() - 45 * 24 * 60 * 60 * 1000) / 1000); // 45 days ago in seconds
 
     // Construct the query body
-    const body = `fields game_id,value,popularity_type; sort value desc; limit ${limit}; where popularity_type = 3; offset ${offset};`
+    const body = `fields game_id,value,popularity_type; sort value desc; limit ${overFetchLimit}; where popularity_type = 3;`
 
     const igdbRes = await fetch(IGDB_URL, {
       method: 'POST',
@@ -93,6 +94,8 @@ export async function GET(req: NextRequest) {
     const popularGames = await igdbRes.json();
     const gameIds = popularGames.map((g: any) => g.game_id).filter(Boolean);
 
+    console.log("Fetched Popular Game IDs:", gameIds.length);
+
     if (gameIds.length === 0) {
       return NextResponse.json([], { status: 200 });
     }
@@ -105,7 +108,7 @@ export async function GET(req: NextRequest) {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'text/plain',
       },
-      body: `fields id, name, cover.url, platforms.name, themes.name, age_ratings.rating_category, aggregated_rating, first_release_date; where id = (${gameIds.join(',')}) & aggregated_rating != null; sort first_release_date desc; limit ${gameIds.length};`
+      body: `fields id, name, cover.url, platforms.name, themes.name, age_ratings.rating_category, aggregated_rating, first_release_date; where id = (${gameIds.join(',')}); sort total_rating desc; limit ${overFetchLimit};`
     });
 
     if (!gamesRes.ok) {
@@ -120,10 +123,15 @@ export async function GET(req: NextRequest) {
     // Get response data from the games endpoint
     const games = await gamesRes.json();
 
-    // Cache the response in Redis for 10 minutes
-    await redis.set(cacheKey, JSON.stringify(games), 'EX', 600); 
+    // Filter out games without aggregated_rating and limit to requested number
+    const finalGames = games
+      .filter((game: any) => game.aggregated_rating != null)
+      .slice(0, limit);
 
-    return NextResponse.json(games, { status: 200 });
+    // Cache the response in Redis for 10 minutes
+    await redis.set(cacheKey, JSON.stringify(finalGames), 'EX', 600); 
+
+    return NextResponse.json(finalGames, { status: 200 });
 
   } catch (err: any) {
     console.error("Error:", err);

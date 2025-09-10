@@ -1,5 +1,6 @@
 .wrapper {
-    padding: 2rem;
+    padding: 4rem;
+    padding-top: 3rem;
     background: linear-gradient(to top, #232526, #212931);
     min-height: 100vh;
   }
@@ -191,12 +192,14 @@
 
   @media screen and (max-width: 768px) {
   .wrapper {
+    padding-top: 3rem;
     padding: 1rem;
   }
 
   .title {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
   }
 
   .details {
