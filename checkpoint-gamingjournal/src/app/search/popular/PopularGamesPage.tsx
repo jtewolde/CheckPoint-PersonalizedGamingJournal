@@ -7,11 +7,11 @@ import { LoadingOverlay } from '@mantine/core';
 import { SimpleGrid } from '@mantine/core';
 
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
-import { TrendingUp } from 'lucide-react';
+import { Star } from 'lucide-react';
 
-import classes from './Trending.module.css';
+import classes from './Popular.module.css';
 
-export default function TrendingPage() {
+export default function PopularPage() {
 
   const [page, setPage] = useState(1) // start with page 1 for pagination
   const limit = 50; // Set the limit of games on page to 50
@@ -24,26 +24,25 @@ export default function TrendingPage() {
 
   // Fetch games data from the API
     useEffect(() => {
-      const fetchTrendingGames = async () => {
+      const fetchPopularGames = async () => {
         try {
-          const res = await fetch(`/api/igdb/trendingGames?limit=${limit}`);
+          const res = await fetch(`/api/igdb/populargames?limit=${limit}`);
           
           if (!res.ok) {
-            throw new Error('Failed to fetch Trending games');
+            throw new Error('Failed to fetch Popular games');
           }
           const data = await res.json();
           setGames(data); // Store the games data in state
           setLength(data.length);
           setTotal(data.total);
           console.log("Popular Games: ",data);
-          console.log("Total Games: ", data.total)
         } catch (error) {
           console.error('Error fetching popular games:', error);
         } finally {
           setLoading(false); // Set loading to false after fetching
         }
       };
-      fetchTrendingGames();
+      fetchPopularGames();
     }, []);
 
   if (loading) {
@@ -57,14 +56,13 @@ export default function TrendingPage() {
     // Calculate the games to display on the current page
     const startIndex = (page - 1) * limit;
     const endIndex = startIndex + limit;
-    const paginatedGames = games.slice(startIndex, endIndex);
 
   return (
     <div className={classes.wrapper} >
 
         <div className={classes.titleLogo}>
-          <TrendingUp size={40} />
-          <h1 className={classes.searchText}> Top 50 Trending Games of 2025:</h1>
+          <Star size={40} />
+          <h1 className={classes.searchText}> Top 50 Popular Games :</h1>
         </div>
 
         <h2 className={classes.numberText}>{length} Game Results:</h2>
@@ -86,9 +84,6 @@ export default function TrendingPage() {
             </div>
           ))}
         </SimpleGrid>
-        
-        {/* <Pagination total={Math.ceil(total/ limit)} size='lg' style={{ justifyContent: "center" }} 
-        className={classes.pagninaton} value={page} onChange={setPage} color='blue' radius="lg" /> */}
 
     </div>
   );
