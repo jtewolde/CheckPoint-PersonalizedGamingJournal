@@ -122,7 +122,7 @@ export async function GET(req: NextRequest) {
 
     // Get response data from the games endpoint
     const games = await gamesRes.json();
-
+    
     // Filter out games without aggregated_rating and limit to requested number
     const finalGames = games
       .filter((game: any) => game.aggregated_rating != null)
