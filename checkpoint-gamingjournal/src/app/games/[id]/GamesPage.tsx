@@ -6,7 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 
 import toast from 'react-hot-toast';
 
-import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text, Grid } from '@mantine/core';
+import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text, Grid, SimpleGrid } from '@mantine/core';
 import Image from 'next/image';
 
 import Carousel from 'react-multi-carousel';
@@ -460,7 +460,8 @@ export default function GameDetails() {
 
         {game.collections?.[0]?.games.length > 0 && (
           <>
-            <h2 className={classes.gameSeriesName}> Other Games in the Series:</h2>  
+            <h2 className={classes.gameSeriesName}> Other Games in the Series:</h2>
+            
             <Grid className={classes.seriesGrid}>
               {game.collections?.[0]?.games?.slice(0, 6).map((collection: any) => (
                 <Grid.Col key={collection.id} span={{ base: 6, md: 3, lg: 3}} className={classes.seriesGridItem}>
