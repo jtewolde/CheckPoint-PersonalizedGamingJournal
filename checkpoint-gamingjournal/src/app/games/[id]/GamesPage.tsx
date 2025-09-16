@@ -450,6 +450,7 @@ export default function GameDetails() {
             width={800}
             height={450}
             style={{ objectFit: 'contain', maxHeight: '90vh', width: 'auto'}}
+            loading='lazy'
             layout='responsive'
           />
         </div>
@@ -460,13 +461,17 @@ export default function GameDetails() {
 
         {game.collections?.[0]?.games.length > 0 && (
           <>
-            <h2 className={classes.gameSeriesName}> Other Games in the Series:</h2>
+
+            <div className={classes.nameButtonContainer}>
+              <h2 className={classes.gameSeriesName}> Other Games in the Series:</h2>
+              {/* <a className={classes.viewMoreText} href='/search/popular' >View more</a> */}
+            </div>
             
-            <Grid className={classes.seriesGrid}>
+            <SimpleGrid spacing='lg' verticalSpacing='lg' className={classes.seriesGrid}>
               {game.collections?.[0]?.games?.slice(0, 6).map((collection: any) => (
-                <Grid.Col key={collection.id} span={{ base: 6, md: 3, lg: 3}} className={classes.seriesGridItem}>
                   <div
                     className={classes.seriesGameCard}
+                    key={collection.id}
                     onClick={() => router.push(`/games/${collection.id}`)}
                   >
                     <img
@@ -476,14 +481,13 @@ export default function GameDetails() {
                           : PlaceHolderImage.src
                       }
                       alt={collection.name}
-                      className={classes.cover}
+                      className={classes.gameCover}
                       onClick={() => router.push(`/games/${game.id}`)}
                     />
                   </div>
-                </Grid.Col>
               ))}
-            </Grid>
-            <Button className={classes.seeMoreButton} variant='outline' color='blue' size='md' leftSection={<ArrowBigRight size={30}/>} >See More</Button>
+            </SimpleGrid>
+           
           </>
         )}
 
