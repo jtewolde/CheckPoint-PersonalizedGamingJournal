@@ -1,21 +1,25 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { useParams, useRouter } from 'next/navigation';
 
 import toast from 'react-hot-toast';
 
-import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text} from '@mantine/core';
+import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text, Grid } from '@mantine/core';
 import Image from 'next/image';
 
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+
+import useEmblaCarousel from 'embla-carousel-react'
+
 import classes from './game.module.css';
 
-import { ArrowBigLeft, ArrowBigRight ,NotebookPen, Delete } from 'lucide-react';
+import { NotebookPen, Delete, ArrowBigRight, ArrowBigLeft, X } from 'lucide-react';
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
 import { useAuth } from '@/context/Authcontext';
+
 
 export default function GameDetails() {
   const { id } = useParams(); // Get the game ID from the URL
@@ -31,13 +35,34 @@ export default function GameDetails() {
   const [status, setStatus] = useState(''); // State to handle game status
   const [opened, {open, close} ] = useDisclosure(false);
 
+  const [screenshots, setScreensShots] = useState<any[]>([]); // State to store screenshots
   const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null); // State to handle selected screenshot for modal
+  const [selectedScreenshotIndex, setSelectedScreenshotIndex] = useState(0); // State to track index of selected screenshot
 
   const [modalOpen, setModalOpen] = useState(false); // State to handle modal open/close
 
   const {isAuthenticated, setIsAuthenticated} = useAuth(); // Access global auth state
 
   const router = useRouter();
+
+  // Initialize Embla Carousel for screenshots when in full screen modal
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
+
+  // Functions to scroll the carousel with Buttons
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev()
+  }, [emblaApi])
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext()
+  }, [emblaApi])
+
+  // When emblaApi or selectedScreenshotIndex changes, scroll to the selected screenshot
+  useEffect(() => {
+    if (emblaApi && selectedScreenshotIndex !== null) {
+      emblaApi.scrollTo(selectedScreenshotIndex, true)
+    }
+  }, [emblaApi, selectedScreenshotIndex])
 
   useEffect(() => {
     const fetchIGDBGameDetails = async () => {
@@ -51,6 +76,8 @@ export default function GameDetails() {
         setGame(data); // Store the game details in state
         console.log("Game Data", data)
         setStatus(data.status);
+        setScreensShots(data.screenshots || []);
+        console.log("Screenshots", data.screenshots)
 
       } catch (error) {
         console.error('Error fetching game details:', error);
@@ -217,7 +244,6 @@ export default function GameDetails() {
     }
   };
 
-
   if (loading) {
     return <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
   }
@@ -225,22 +251,6 @@ export default function GameDetails() {
   if (!game) {
     return <div>Game not found</div>; // Show a message if the game is not found
   }
-
-  // Define responsive settings for carousel
-  const responsive = {
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 1, // Show one slide at a time
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 1, // Show one slide at a time
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 1, // Show one slide at a time
-    },
-  };
 
   // Define responsive settings for similar games carousel
   const similarGameResponsive = {
@@ -345,7 +355,7 @@ export default function GameDetails() {
         
         <div className={classes.info}>
           <p><strong>Description:</strong> {game.summary || 'No description available.'}</p>
-          <p><strong>Storyline:</strong> {game.storyline || 'No storyline provided'} </p>
+          <p><strong>Storyline:</strong> {game.storyline || 'No storyline available.'}</p>
           <p><strong>Release Date:</strong> {game.first_release_date ? new Date(game.first_release_date * 1000).toLocaleDateString() : 'Unknown'}</p>
           <p><strong>Genres:</strong> {game.genres?.map((genre: any) => genre.name).join(', ') || 'N/A'}</p>
           <p><strong>Platforms:</strong> {game.platforms?.map((platform: any) => platform.name).join(', ') || 'N/A'}</p>
@@ -404,11 +414,11 @@ export default function GameDetails() {
       <h2 className={classes.screenshotsTitle}>Screenshots: </h2>
 
       <div className={classes.screenshotGrid}>
-      
-        {game.screenshots?.map((screenshot: any, index: number) => (
+
+        {screenshots.map((screenshot: any, index: number) => (
           <div key={screenshot.id} className={classes.carouselSlide}>
             <Image
-              src={`https:${screenshot.url.replace('t_thumb', 't_screenshot_big')}`}
+              src={`https:${screenshot.url.replace('t_thumb', 't_1080p')}`}
               alt={`Screenshot of ${game.name}`}
               className={classes.screenshot}
               width={750}
@@ -416,7 +426,9 @@ export default function GameDetails() {
               loading='lazy'
               layout='responsive'
               onClick={() => {
-                setSelectedScreenshot(`https:${screenshot.url.replace('t_thumb', 't_screenshot_big')}`);
+                setSelectedScreenshot(`https:${screenshot.url.replace('t_thumb', 't_1080p')}`);
+                setSelectedScreenshotIndex(index);
+                console.log("Selected Screenshot Index:", index);
                 setModalOpen(true);
               }}
             />
@@ -425,18 +437,56 @@ export default function GameDetails() {
       </div>
 
       {selectedScreenshot && modalOpen && (
-        <div className={classes.fullScreenOverlay} onClick={() => setModalOpen(false)}>
+        <div className={classes.fullScreenOverlay}>
+
+          <div className={classes.carouselButtons}>
+            <Button className={classes.closeButton} variant='light' color='white' size='sm' onClick={() =>setModalOpen(false)}><X size={40} /></Button>
+          </div>
+
           <Image
             src={selectedScreenshot}
             alt={`Screenshot of ${game.name}`}
             className={classes.fullScreenImage}
             width={800}
             height={450}
-            style={{ objectFit: 'contain'}}
+            style={{ objectFit: 'contain', maxHeight: '90vh', width: 'auto'}}
             layout='responsive'
           />
         </div>
       )}
+
+      
+      <div className={classes.gameSeries}>
+
+        {game.collections?.[0]?.games.length > 0 && (
+          <>
+            <h2 className={classes.gameSeriesName}> Other Games in the Series:</h2>  
+            <Grid className={classes.seriesGrid}>
+              {game.collections?.[0]?.games?.slice(0, 6).map((collection: any) => (
+                <Grid.Col key={collection.id} span={{ base: 6, md: 3, lg: 3}} className={classes.seriesGridItem}>
+                  <div
+                    className={classes.seriesGameCard}
+                    onClick={() => router.push(`/games/${collection.id}`)}
+                  >
+                    <img
+                      src={
+                        collection.cover
+                          ? `https:${collection.cover.url.replace('t_thumb', 't_cover_big')}`
+                          : PlaceHolderImage.src
+                      }
+                      alt={collection.name}
+                      className={classes.cover}
+                      onClick={() => router.push(`/games/${game.id}`)}
+                    />
+                  </div>
+                </Grid.Col>
+              ))}
+            </Grid>
+            <Button className={classes.seeMoreButton} variant='outline' color='blue' size='md' leftSection={<ArrowBigRight size={30}/>} >See More</Button>
+          </>
+        )}
+
+      </div>
 
       <h2 className={classes.similarGamesName}>Similar Games: </h2>
 

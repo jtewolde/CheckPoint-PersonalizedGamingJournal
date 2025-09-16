@@ -7,8 +7,12 @@ export default function RoadmapPage() {
 
     const roadMapItems = [
         {
-            title: "Pagination on Search Results",
-            description: "Implement pagination to improve loading speed and better organize search results to enhance user experience."
+            title: "Redesign Game Details Interface",
+            description: "Improve the layout and usability of the game details page to make it more intuitive and visually appealing."
+        },
+        {
+            title: 'Photo Gallery',
+            description: "Allow users to upload and view screenshots and photos related to their gaming experiences."
         },
         { 
             title: "Achievements/Trophies Tracking System",
