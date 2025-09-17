@@ -265,11 +265,17 @@
 
 @media (max-width: 1200px) {
   .gamesGrid,
-  .trendingGamesGrid,
-  .statusGrid,
-  .entriesGrid,
+  .popularGamesGrid,
   .trendingGamesGrid{
     grid-template-columns: repeat(4, 1fr);
+  }
+
+  .entriesGrid{
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .statusGrid{
+    grid-template-columns: repeat(3, 1fr);
   }
 }
  
