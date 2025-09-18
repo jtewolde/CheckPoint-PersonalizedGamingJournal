@@ -6,7 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 
 import toast from 'react-hot-toast';
 
-import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text, Grid, SimpleGrid } from '@mantine/core';
+import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid } from '@mantine/core';
 import Image from 'next/image';
 
 import Carousel from 'react-multi-carousel';
@@ -16,7 +16,8 @@ import useEmblaCarousel from 'embla-carousel-react'
 
 import classes from './game.module.css';
 
-import { NotebookPen, Delete, ArrowBigRight, ArrowBigLeft, X } from 'lucide-react';
+import { NotebookPen, Delete, X, CalendarDays, icons } from 'lucide-react';
+import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2 } from '@tabler/icons-react';
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
 import { useAuth } from '@/context/Authcontext';
 
@@ -269,6 +270,50 @@ export default function GameDetails() {
     },
   };
 
+  // Prepare game information for display on Accordions
+  const gameInfo = [
+    {
+      label: "Description",
+      content: game.summary || 'No description available.',
+      icon: <IconFileDescription size={30}  color='white'/>
+    },
+    {
+      label: "Storyline",
+      content: game.storyline || 'No storyline available.',
+      icon: <IconBook size={30} color='white' />
+    },
+    {
+      label: "Release Date",
+      content: game.first_release_date ? new Date(game.first_release_date * 1000).toLocaleDateString() : 'Unknown',
+      icon: <CalendarDays size={30} color='white' />
+    },
+    {
+      label: "Genres",
+      content: game.genres?.map((genre: any) => genre.name).join(', ') || 'N/A',
+      icon: <IconSwords size={30} color='white' />
+    },
+    {
+      label: "Themes",
+      content: game.themes?.map((theme: any) => theme.name).join(', ') || 'N/A',
+      icon: <IconBrush size={30} color='white' />
+    },
+    {
+      label: "Game Modes",
+      content: game.game_modes?.map((mode: any) => mode.name).join(', ') || 'N/A',
+      icon: <IconUsersGroup size={30} color='white' />
+    },
+    {
+      label: "Platforms",
+      content: game.platforms?.map((platform: any) => platform.name).join(', ') || 'N/A',
+      icon: <IconBrandXbox size={30} color='white' />
+    },
+    {
+      label: "Companies Involved",
+      content: game.involved_companies?.map((involved_companies: any) => involved_companies.company.name).join(', ') || 'N/A',
+      icon: <IconDeviceGamepad2 size={30} color='white' />
+    }
+  ]
+
   return (
     <div className={classes.wrapper}>
       <h1 className={classes.title}>{game.name}</h1>
@@ -352,15 +397,31 @@ export default function GameDetails() {
 
         </div>
 
-        
-        <div className={classes.info}>
-          <p><strong>Description:</strong> {game.summary || 'No description available.'}</p>
-          <p><strong>Storyline:</strong> {game.storyline || 'No storyline available.'}</p>
-          <p><strong>Release Date:</strong> {game.first_release_date ? new Date(game.first_release_date * 1000).toLocaleDateString() : 'Unknown'}</p>
-          <p><strong>Genres:</strong> {game.genres?.map((genre: any) => genre.name).join(', ') || 'N/A'}</p>
-          <p><strong>Platforms:</strong> {game.platforms?.map((platform: any) => platform.name).join(', ') || 'N/A'}</p>
-          <p><strong>Companies Involved:</strong> {game.involved_companies?.map((involved_companies: any) => involved_companies.company.name).join(', ') || 'N/A'}</p>
+        <div className={classes.gameInfo}>
+
+          {/* <h2 className={classes.accordionTitle}>Game Information</h2> */}
+
+          <Accordion className={classes.accordion} 
+            styles={{item: {background: '#5a5b5dff', color: 'white'}, 
+              label: {color: 'white', paddingRight: '0.7rem', fontSize: '18px', fontWeight: 550}, 
+              chevron: {color: 'white'},
+              panel: {color: 'white', fontSize: '18px', }}} 
+            chevronSize={30}
+            radius='lg' 
+            variant='seperated' 
+            multiple 
+            defaultValue={['Description']}
+          >
+            {gameInfo.map((item) => (
+              <Accordion.Item key={item.label} value={item.label}>
+                <Accordion.Control icon={item.icon}>{item.label}</Accordion.Control>
+                <Accordion.Panel>{item.content}</Accordion.Panel>
+              </Accordion.Item>
+            ))}
+          </Accordion>
+
         </div>
+
       </div>
 
       <h2 className={classes.screenshotsTitle}>Ratings: </h2>
@@ -487,7 +548,6 @@ export default function GameDetails() {
                   </div>
               ))}
             </SimpleGrid>
-           
           </>
         )}
 
