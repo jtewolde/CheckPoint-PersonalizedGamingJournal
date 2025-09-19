@@ -71,7 +71,7 @@ export async function GET(req: NextRequest){
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'text/plain',
             },
-            body: `fields name, summary, storyline, genres.name, platforms.name, game_modes.name, themes.name, involved_companies.company.name, cover.url, rating, rating_count, aggregated_rating, aggregated_rating_count, version_title, screenshots.url, first_release_date, similar_games.cover.url, age_ratings.rating_cover_url, collections.games.cover.url ; where id = ${id};`,
+            body: `fields name, summary, storyline, genres.name, platforms.name, game_modes.name, themes.name, involved_companies.company.name, cover.url, rating, rating_count, aggregated_rating, aggregated_rating_count, version_title, screenshots.url, first_release_date, similar_games.cover.url, age_ratings.rating_category.rating, age_ratings.rating_category.organization.name ,collections.games.cover.url ; where id = ${id};`,
         });
 
         if(!igdbRes.ok){

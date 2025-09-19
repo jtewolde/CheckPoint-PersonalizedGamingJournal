@@ -17,7 +17,7 @@ import useEmblaCarousel from 'embla-carousel-react'
 import classes from './game.module.css';
 
 import { NotebookPen, Delete, X, CalendarDays, icons } from 'lucide-react';
-import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2 } from '@tabler/icons-react';
+import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, IconRating18Plus } from '@tabler/icons-react';
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
 import { useAuth } from '@/context/Authcontext';
 
@@ -311,7 +311,12 @@ export default function GameDetails() {
       label: "Companies Involved",
       content: game.involved_companies?.map((involved_companies: any) => involved_companies.company.name).join(', ') || 'N/A',
       icon: <IconDeviceGamepad2 size={30} color='white' />
-    }
+    },
+    // {
+    //   label: "Age Ratings",
+    //   content: game.age_ratings.rating_category?.map((age_rating: any) => ),
+    //   icon: <IconRating18Plus size={30} color='white' />
+    // }
   ]
 
   return (
@@ -402,7 +407,7 @@ export default function GameDetails() {
           {/* <h2 className={classes.accordionTitle}>Game Information</h2> */}
 
           <Accordion className={classes.accordion} 
-            styles={{item: {background: '#5a5b5dff', color: 'white'}, 
+            styles={{item: {background: '#5a5b5dff', color: 'white', borderRadius: '24px'}, 
               label: {color: 'white', paddingRight: '0.7rem', fontSize: '18px', fontWeight: 550}, 
               chevron: {color: 'white'},
               panel: {color: 'white', fontSize: '18px', }}} 
