@@ -6,7 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 
 import toast from 'react-hot-toast';
 
-import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid } from '@mantine/core';
+import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group } from '@mantine/core';
 import Image from 'next/image';
 
 import Carousel from 'react-multi-carousel';
@@ -17,10 +17,12 @@ import useEmblaCarousel from 'embla-carousel-react'
 import classes from './game.module.css';
 
 import { NotebookPen, Delete, X, CalendarDays, icons } from 'lucide-react';
-import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, IconRating18Plus } from '@tabler/icons-react';
+
+import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
+  IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
+
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
 import { useAuth } from '@/context/Authcontext';
-
 
 export default function GameDetails() {
   const { id } = useParams(); // Get the game ID from the URL
@@ -270,6 +272,26 @@ export default function GameDetails() {
     },
   };
 
+  // Function to retrieve logos for different platforms that games can be on
+  const getPlatformIcon = (platformName: string) => {
+
+    if (platformName.toLowerCase().includes("xbox")) return <IconBrandXbox size={25} />;
+
+    if (platformName.toLowerCase().includes("playstation")) return <IconIcons size={25} />;
+
+    if (platformName.toLowerCase().includes("pc") || platformName.toLowerCase().includes("windows"))
+      return <IconDevicesPc size={25} />;
+
+    if (platformName.toLowerCase().includes("nintendo")) return <IconDeviceNintendo size={25} />;
+
+    if (platformName.toLowerCase().includes("android")) return <IconBrandAndroid size={25} />;
+
+    if (platformName.toLowerCase().includes("ios") || platformName.toLowerCase().includes("mac")) 
+      return <IconBrandApple size={25} />;
+
+    return null; // fallback if no match
+  };
+
   // Prepare game information for display on Accordions
   const gameInfo = [
     {
@@ -289,22 +311,68 @@ export default function GameDetails() {
     },
     {
       label: "Genres",
-      content: game.genres?.map((genre: any) => genre.name).join(', ') || 'N/A',
+      content: game.genres ? (
+        <Group gap="xs">
+          {game.genres.map((genre: any) => (
+            <Badge key={genre.id} color="blue" radius="lg" size='xl'>
+              {genre.name}
+            </Badge>
+          ))}
+        </Group>
+      ) : (
+        "N/A"
+      ),
       icon: <IconSwords size={30} color='white' />
     },
     {
       label: "Themes",
-      content: game.themes?.map((theme: any) => theme.name).join(', ') || 'N/A',
+      content: game.themes ? (
+        <Group gap='sm'>
+          {game.themes.map((theme: any) => 
+            <Badge size='xl' className={classes.badge} key={theme.id} color='grape' radius='lg'>
+              {theme.name}
+            </Badge>
+          )}
+        </Group>
+      ) : (
+        "N/A"
+      ),
       icon: <IconBrush size={30} color='white' />
     },
     {
       label: "Game Modes",
-      content: game.game_modes?.map((mode: any) => mode.name).join(', ') || 'N/A',
+      content: game.game_modes ? (
+        <Group gap="xs">
+          {game.game_modes.map((mode: any) => (
+            <Badge className={classes.badge} key={mode.id} color="teal" radius="lg" size='xl'>
+              {mode.name}
+            </Badge>
+          ))}
+        </Group>
+      ) : (
+        "N/A"
+      ),
       icon: <IconUsersGroup size={30} color='white' />
     },
     {
       label: "Platforms",
-      content: game.platforms?.map((platform: any) => platform.name).join(', ') || 'N/A',
+      content: game.platforms ? (
+        <Group gap='sm'>
+          {game.platforms.map((platform: any) => 
+            <Badge size='xl' 
+              className={classes.badge} 
+              key={platform.id} 
+              color='cyan' 
+              radius='lg'
+              leftSection={getPlatformIcon(platform.name)}
+              >
+              {platform.name}
+            </Badge>
+          )}
+        </Group>
+      ) : (
+        "N/A"
+      ),
       icon: <IconBrandXbox size={30} color='white' />
     },
     {

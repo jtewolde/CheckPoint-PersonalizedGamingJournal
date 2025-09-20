@@ -274,6 +274,7 @@
   
   .badge{
     cursor: pointer;
+    font-family: 'Poppins';
   }
 
   @media screen and (max-width: 768px) {
