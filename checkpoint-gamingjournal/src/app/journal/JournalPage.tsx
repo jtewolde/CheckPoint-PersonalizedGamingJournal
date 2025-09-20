@@ -170,49 +170,53 @@ export default function Journal() {
 
                 </div>
 
-                <div className={classes.entriesCountWrapper}>
-                    <p className={classes.entriesCount}>{filteredEntries.length} Journal Entries found</p>
-                </div>
-                
-                <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
-                    {filteredEntries.map((entry) => (
-                        <div key={entry._id} className={classes.entryCard} >
-                            <h3 className={classes.entryGame}>{entry.gameName}</h3>
-                            <h3 className={classes.entryTitle}>{entry.title}</h3>
-                            <p className={classes.entryContent}>
-                                {entry.content.length > 150
-                                    ? `${entry.content.slice(0, 200)}...` // Truncate long content
-                                    : entry.content}
-                            </p>
-                            <p className={classes.entryDate}>{entry.displayDate}</p>
+                <div className={classes.mainSection}>
 
-                            <div className={classes.entryActions}>
-                                <Button
-                                    className={classes.viewButton}
-                                    onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}
-                                    color="blue"
-                                    radius="md"
-                                    variant="filled"
-                                    style={{ marginRight: 8 }}
-                                    rightSection={<Eye />}
-                                >
-                                    View
-                                </Button>
+                    <div className={classes.entriesCountWrapper}>
+                        <p className={classes.entriesCount}>{filteredEntries.length} Journal Entries found</p>
+                    </div>
+                    
+                    <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
+                        {filteredEntries.map((entry) => (
+                            <div key={entry._id} className={classes.entryCard} >
+                                <h3 className={classes.entryGame}>{entry.gameName}</h3>
+                                <h3 className={classes.entryTitle}>{entry.title}</h3>
+                                <p className={classes.entryContent}>
+                                    {entry.content.length > 150
+                                        ? `${entry.content.slice(0, 200)}...` // Truncate long content
+                                        : entry.content}
+                                </p>
+                                <p className={classes.entryDate}>{entry.displayDate}</p>
 
-                                <Button
-                                    className={classes.deleteButton}
-                                    onClick={() => deleteJournalEntry(entry._id, entry.gameId)}
-                                    rightSection={<DeleteIcon />}
-                                    radius='md'
-                                    variant='filled'
-                                    color='red'
-                                >
-                                    Delete
-                                </Button>
+                                <div className={classes.entryActions}>
+                                    <Button
+                                        className={classes.viewButton}
+                                        onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}
+                                        color="blue"
+                                        radius="md"
+                                        variant="filled"
+                                        style={{ marginRight: 8 }}
+                                        rightSection={<Eye />}
+                                    >
+                                        View
+                                    </Button>
+
+                                    <Button
+                                        className={classes.deleteButton}
+                                        onClick={() => deleteJournalEntry(entry._id, entry.gameId)}
+                                        rightSection={<DeleteIcon />}
+                                        radius='md'
+                                        variant='filled'
+                                        color='red'
+                                    >
+                                        Delete
+                                    </Button>
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </SimpleGrid>
+                        ))}
+                    </SimpleGrid>                    
+
+                </div>
 
                 <div className={classes.paginationWrapper}>
                     <Pagination

@@ -6,7 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 
 import toast from 'react-hot-toast';
 
-import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text, Grid, SimpleGrid } from '@mantine/core';
+import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group } from '@mantine/core';
 import Image from 'next/image';
 
 import Carousel from 'react-multi-carousel';
@@ -16,10 +16,13 @@ import useEmblaCarousel from 'embla-carousel-react'
 
 import classes from './game.module.css';
 
-import { NotebookPen, Delete, ArrowBigRight, ArrowBigLeft, X } from 'lucide-react';
+import { NotebookPen, Delete, X, CalendarDays, icons } from 'lucide-react';
+
+import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
+  IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
+
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
 import { useAuth } from '@/context/Authcontext';
-
 
 export default function GameDetails() {
   const { id } = useParams(); // Get the game ID from the URL
@@ -269,6 +272,121 @@ export default function GameDetails() {
     },
   };
 
+  // Function to retrieve logos for different platforms that games can be on
+  const getPlatformIcon = (platformName: string) => {
+
+    if (platformName.toLowerCase().includes("xbox")) return <IconBrandXbox size={25} />;
+
+    if (platformName.toLowerCase().includes("playstation")) return <IconIcons size={25} />;
+
+    if (platformName.toLowerCase().includes("pc") || platformName.toLowerCase().includes("windows"))
+      return <IconDevicesPc size={25} />;
+
+    if (platformName.toLowerCase().includes("nintendo")) return <IconDeviceNintendo size={25} />;
+
+    if (platformName.toLowerCase().includes("android")) return <IconBrandAndroid size={25} />;
+
+    if (platformName.toLowerCase().includes("ios") || platformName.toLowerCase().includes("mac")) 
+      return <IconBrandApple size={25} />;
+
+    return null; // fallback if no match
+  };
+
+  // Prepare game information for display on Accordions
+  const gameInfo = [
+    {
+      label: "Description",
+      content: game.summary || 'No description available.',
+      icon: <IconFileDescription size={30}  color='white'/>
+    },
+    {
+      label: "Storyline",
+      content: game.storyline || 'No storyline available.',
+      icon: <IconBook size={30} color='white' />
+    },
+    {
+      label: "Release Date",
+      content: game.first_release_date ? new Date(game.first_release_date * 1000).toLocaleDateString() : 'Unknown',
+      icon: <CalendarDays size={30} color='white' />
+    },
+    {
+      label: "Genres",
+      content: game.genres ? (
+        <Group gap="xs">
+          {game.genres.map((genre: any) => (
+            <Badge key={genre.id} color="blue" radius="lg" size='xl'>
+              {genre.name}
+            </Badge>
+          ))}
+        </Group>
+      ) : (
+        "N/A"
+      ),
+      icon: <IconSwords size={30} color='white' />
+    },
+    {
+      label: "Themes",
+      content: game.themes ? (
+        <Group gap='sm'>
+          {game.themes.map((theme: any) => 
+            <Badge size='xl' className={classes.badge} key={theme.id} color='grape' radius='lg'>
+              {theme.name}
+            </Badge>
+          )}
+        </Group>
+      ) : (
+        "N/A"
+      ),
+      icon: <IconBrush size={30} color='white' />
+    },
+    {
+      label: "Game Modes",
+      content: game.game_modes ? (
+        <Group gap="xs">
+          {game.game_modes.map((mode: any) => (
+            <Badge className={classes.badge} key={mode.id} color="teal" radius="lg" size='xl'>
+              {mode.name}
+            </Badge>
+          ))}
+        </Group>
+      ) : (
+        "N/A"
+      ),
+      icon: <IconUsersGroup size={30} color='white' />
+    },
+    {
+      label: "Platforms",
+      content: game.platforms ? (
+        <Group gap='sm'>
+          {game.platforms.map((platform: any) => 
+            <Badge size='xl' 
+              className={classes.badge} 
+              key={platform.id} 
+              color='cyan' 
+              radius='lg'
+              leftSection={getPlatformIcon(platform.name)}
+              >
+              {platform.name}
+            </Badge>
+          )}
+        </Group>
+      ) : (
+        "N/A"
+      ),
+      icon: <IconBrandXbox size={30} color='white' />
+    },
+    {
+      label: "Companies Involved",
+      content: game.involved_companies?.map((involved_companies: any) => involved_companies.company.name).join(', ') || 'N/A',
+      icon: <IconDeviceGamepad2 size={30} color='white' />
+    },
+    // {
+    //   label: "Age Ratings",
+    //   content: game.age_ratings.rating_category?.map((age_rating: any) => ),
+    //   icon: <IconRating18Plus size={30} color='white' />
+    // }
+  ]
+
   return (
     <div className={classes.wrapper}>
       <h1 className={classes.title}>{game.name}</h1>
@@ -352,15 +470,31 @@ export default function GameDetails() {
 
         </div>
 
-        
-        <div className={classes.info}>
-          <p><strong>Description:</strong> {game.summary || 'No description available.'}</p>
-          <p><strong>Storyline:</strong> {game.storyline || 'No storyline available.'}</p>
-          <p><strong>Release Date:</strong> {game.first_release_date ? new Date(game.first_release_date * 1000).toLocaleDateString() : 'Unknown'}</p>
-          <p><strong>Genres:</strong> {game.genres?.map((genre: any) => genre.name).join(', ') || 'N/A'}</p>
-          <p><strong>Platforms:</strong> {game.platforms?.map((platform: any) => platform.name).join(', ') || 'N/A'}</p>
-          <p><strong>Companies Involved:</strong> {game.involved_companies?.map((involved_companies: any) => involved_companies.company.name).join(', ') || 'N/A'}</p>
+        <div className={classes.gameInfo}>
+
+          {/* <h2 className={classes.accordionTitle}>Game Information</h2> */}
+
+          <Accordion className={classes.accordion} 
+            styles={{item: {background: '#5a5b5dff', color: 'white', borderRadius: '24px'}, 
+              label: {color: 'white', paddingRight: '0.7rem', fontSize: '18px', fontWeight: 550}, 
+              chevron: {color: 'white'},
+              panel: {color: 'white', fontSize: '18px', }}} 
+            chevronSize={30}
+            radius='lg' 
+            variant='seperated' 
+            multiple 
+            defaultValue={['Description']}
+          >
+            {gameInfo.map((item) => (
+              <Accordion.Item key={item.label} value={item.label}>
+                <Accordion.Control icon={item.icon}>{item.label}</Accordion.Control>
+                <Accordion.Panel>{item.content}</Accordion.Panel>
+              </Accordion.Item>
+            ))}
+          </Accordion>
+
         </div>
+
       </div>
 
       <h2 className={classes.screenshotsTitle}>Ratings: </h2>
@@ -487,7 +621,6 @@ export default function GameDetails() {
                   </div>
               ))}
             </SimpleGrid>
-           
           </>
         )}
 

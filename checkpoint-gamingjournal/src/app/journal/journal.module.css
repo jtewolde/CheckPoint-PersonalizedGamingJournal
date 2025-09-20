@@ -85,7 +85,6 @@
     align-items: center;
     gap: 1rem; /* space between buttons */
     margin-top: 1rem;
-    margin-bottom: 2rem;
     flex-wrap: wrap; /* optional: ensures it looks good on smaller screens */
 }
 
@@ -104,14 +103,16 @@
     background-color: #01e132;
 }
 
-.entriesGrid{
-    margin-bottom: 2rem;
+.mainSection{
+    display: flex;
+    flex-direction: column;
+    padding: 3rem;
 }
 
 .entryActions{
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: center;
     margin-top: 1.4rem;
     align-items: center;
     gap: 0.5rem; /* space between buttons */
@@ -144,6 +145,10 @@
 
   .entriesGrid {
     grid-template-columns: repeat(2, 1fr); /* 1 column for screens smaller than 768px */
+  }
+
+  .mainSection{
+    padding:  1rem;
   }
 
 }
