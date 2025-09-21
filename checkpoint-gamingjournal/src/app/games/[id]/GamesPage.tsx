@@ -6,7 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 
 import toast from 'react-hot-toast';
 
-import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group } from '@mantine/core';
+import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack } from '@mantine/core';
 import Image from 'next/image';
 
 import Carousel from 'react-multi-carousel';
@@ -305,8 +305,19 @@ export default function GameDetails() {
       icon: <IconBook size={30} color='white' />
     },
     {
-      label: "Release Date",
-      content: game.first_release_date ? new Date(game.first_release_date * 1000).toLocaleDateString() : 'Unknown',
+      label: "Release Dates",
+      content: game.release_dates ? (
+        <Stack gap='xs'>
+          {game.release_dates.map((release: any) => 
+            <div key={release.id} className={classes.releaseDate}>
+              <strong>{release.platform?.name} - </strong>
+              {release.human || 'N/A'}
+            </div>
+          )}
+        </Stack>
+      ) : (
+        "N/A"
+      ),
       icon: <CalendarDays size={30} color='white' />
     },
     {
@@ -365,7 +376,7 @@ export default function GameDetails() {
               color='cyan' 
               radius='lg'
               leftSection={getPlatformIcon(platform.name)}
-              >
+            >
               {platform.name}
             </Badge>
           )}
@@ -380,11 +391,23 @@ export default function GameDetails() {
       content: game.involved_companies?.map((involved_companies: any) => involved_companies.company.name).join(', ') || 'N/A',
       icon: <IconDeviceGamepad2 size={30} color='white' />
     },
-    // {
-    //   label: "Age Ratings",
-    //   content: game.age_ratings.rating_category?.map((age_rating: any) => ),
-    //   icon: <IconRating18Plus size={30} color='white' />
-    // }
+    {
+      label: "Age Ratings",
+      content: game.age_ratings ? (
+        <Group gap='sm'>
+          {game.age_ratings.filter((rating: any) => rating.rating_category.organization.name === "ESRB" || rating.rating_category.organization.name === "PEGI")
+          .map((rating: any) =>  // ESRB and PEGI ratings only
+            <div key={rating.id} className={classes.releaseDate}>
+              <strong>{rating.rating_category.organization.name || 'N/A'} - </strong>
+              {rating.rating_category.rating}
+            </div>
+          )}
+        </Group>
+      ) : (
+        "N/A"
+      ),
+      icon: <IconRating18Plus size={30} color='white' />
+    }
   ]
 
   return (
