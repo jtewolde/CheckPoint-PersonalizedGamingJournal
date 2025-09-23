@@ -31,7 +31,7 @@
     object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: 0.5px solid #232526;
+    border: 1px solid #454c50;
   }
 
   .gameCover{
@@ -120,26 +120,23 @@
 
   .carouselContainer {
     margin-bottom: 1rem;
-    padding: 1rem;
+    padding: 0.6rem;
   }
 
   .carouselSlide{
-    width: 93%;
+    width: 98.5%;
   }
 
-  .screenshotGrid{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.5rem;
-    justify-items: center;
-    align-items: center;
+  .carouselSlide :hover{
+    filter: brightness(70%)
   }
-  
+
   .screenshot {
+    width: 100%;
     object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: 1px solid #414546;
+    border: 1px solid #6c7274;
     display: block;
     margin: 0 auto;
     margin-bottom: 2rem;

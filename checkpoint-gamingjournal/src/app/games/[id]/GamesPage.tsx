@@ -12,11 +12,9 @@ import Image from 'next/image';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 
-import useEmblaCarousel from 'embla-carousel-react'
-
 import classes from './game.module.css';
 
-import { NotebookPen, Delete, X, CalendarDays, icons } from 'lucide-react';
+import { NotebookPen, Delete, X, CalendarDays} from 'lucide-react';
 
 import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
   IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
@@ -48,24 +46,14 @@ export default function GameDetails() {
 
   const router = useRouter();
 
-  // Initialize Embla Carousel for screenshots when in full screen modal
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Functions to scroll the carousel with Buttons
-  const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev()
-  }, [emblaApi])
-
-  const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext()
-  }, [emblaApi])
-
-  // When emblaApi or selectedScreenshotIndex changes, scroll to the selected screenshot
   useEffect(() => {
-    if (emblaApi && selectedScreenshotIndex !== null) {
-      emblaApi.scrollTo(selectedScreenshotIndex, true)
-    }
-  }, [emblaApi, selectedScreenshotIndex])
+    const handleResize = () => setIsMobile(window.innerWidth <= 464);
+    handleResize(); // run once on mount
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchIGDBGameDetails = async () => {
@@ -272,6 +260,23 @@ export default function GameDetails() {
     },
   };
 
+  // Define responsive settings for screenshots carousel
+  const screenshotResponsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 1, // Show three slides at a time for desktop
+      slidesToSlide: 1, // Number of slides to scroll at once
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 1, // Show one slide at a time
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1, // Show one slide at a time
+    },
+  };
+
   // Function to retrieve logos for different platforms that games can be on
   const getPlatformIcon = (platformName: string) => {
 
@@ -285,6 +290,8 @@ export default function GameDetails() {
     if (platformName.toLowerCase().includes("nintendo")) return <IconDeviceNintendo size={25} />;
 
     if (platformName.toLowerCase().includes("android")) return <IconBrandAndroid size={25} />;
+
+    if (platformName.toLowerCase().includes("google")) return <IconBrandGoogle size={25} />
 
     if (platformName.toLowerCase().includes("ios") || platformName.toLowerCase().includes("mac")) 
       return <IconBrandApple size={25} />;
@@ -572,6 +579,19 @@ export default function GameDetails() {
 
       <div className={classes.screenshotGrid}>
 
+        <Carousel
+          responsive={screenshotResponsive}
+          centerMode={!isMobile}
+          showDots
+          arrows={!modalOpen}
+          infinite={true}
+          autoPlay={false}
+          keyBoardControl={true}
+          containerClass={classes.carouselContainer}
+          itemClass={classes.carouselItem}
+          dotListClass={classes.carouselDots}
+        >
+
         {screenshots.map((screenshot: any, index: number) => (
           <div key={screenshot.id} className={classes.carouselSlide}>
             <Image
@@ -591,6 +611,9 @@ export default function GameDetails() {
             />
           </div>
         ))}
+
+        </Carousel>
+
       </div>
 
       {selectedScreenshot && modalOpen && (
