@@ -72,7 +72,7 @@ export default function SearchResults() {
               <img
                 src={
                   game.cover
-                    ? `https:${game.cover.url.replace('t_thumb', 't_cover_big')}`
+                    ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}`
                     : PlaceHolderImage.src
                 }
                 alt={game.name}
