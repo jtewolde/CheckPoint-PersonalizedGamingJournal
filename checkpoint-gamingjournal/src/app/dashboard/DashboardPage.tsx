@@ -294,7 +294,7 @@ export default function Dashboard() {
           {games.map((game) => (
             <div key={game.id} className={classes.gameCard}>
               <Image src={
-                game.cover ? `https:${game.cover.url.replace('t_thumb', 't_cover_big')}` : PlaceHolderImage.src } 
+                game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
                 alt={game.name} 
                 className={classes.cover} 
                 onClick={() => router.push(`/games/${game.id}`)} 
@@ -325,7 +325,7 @@ export default function Dashboard() {
           {popularGames.map((game) => (
             <div key={game.id} className={classes.gameCard}>
               <Image src={
-                game.cover ? `https:${game.cover.url.replace('t_thumb', 't_cover_big')}` : PlaceHolderImage.src } 
+                game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
                 alt={game.name} 
                 className={classes.cover} 
                 onClick={() => router.push(`/games/${game.id}`)} 
@@ -357,7 +357,7 @@ export default function Dashboard() {
                 {playingGames.map((game) => (
                   <div key={game._id} className={classes.gameCard}>
                     <Image src={
-                      game.coverImage ? `https:${game.coverImage.replace('t_thumb', 't_cover_big')}` : PlaceHolderImage.src } 
+                      game.coverImage ? `https:${game.coverImage.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
                       alt={game.name} 
                       className={classes.cover} 
                       onClick={() => router.push(`/games/${game.gameId}`)} 

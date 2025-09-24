@@ -6,17 +6,15 @@ import { useParams, useRouter } from 'next/navigation';
 
 import toast from 'react-hot-toast';
 
-import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group } from '@mantine/core';
+import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack } from '@mantine/core';
 import Image from 'next/image';
 
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 
-import useEmblaCarousel from 'embla-carousel-react'
-
 import classes from './game.module.css';
 
-import { NotebookPen, Delete, X, CalendarDays, icons } from 'lucide-react';
+import { NotebookPen, Delete, X, CalendarDays} from 'lucide-react';
 
 import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
   IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
@@ -48,24 +46,14 @@ export default function GameDetails() {
 
   const router = useRouter();
 
-  // Initialize Embla Carousel for screenshots when in full screen modal
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Functions to scroll the carousel with Buttons
-  const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev()
-  }, [emblaApi])
-
-  const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext()
-  }, [emblaApi])
-
-  // When emblaApi or selectedScreenshotIndex changes, scroll to the selected screenshot
   useEffect(() => {
-    if (emblaApi && selectedScreenshotIndex !== null) {
-      emblaApi.scrollTo(selectedScreenshotIndex, true)
-    }
-  }, [emblaApi, selectedScreenshotIndex])
+    const handleResize = () => setIsMobile(window.innerWidth <= 464);
+    handleResize(); // run once on mount
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchIGDBGameDetails = async () => {
@@ -272,6 +260,23 @@ export default function GameDetails() {
     },
   };
 
+  // Define responsive settings for screenshots carousel
+  const screenshotResponsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 1, // Show three slides at a time for desktop
+      slidesToSlide: 1, // Number of slides to scroll at once
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 1, // Show one slide at a time
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1, // Show one slide at a time
+    },
+  };
+
   // Function to retrieve logos for different platforms that games can be on
   const getPlatformIcon = (platformName: string) => {
 
@@ -285,6 +290,8 @@ export default function GameDetails() {
     if (platformName.toLowerCase().includes("nintendo")) return <IconDeviceNintendo size={25} />;
 
     if (platformName.toLowerCase().includes("android")) return <IconBrandAndroid size={25} />;
+
+    if (platformName.toLowerCase().includes("google")) return <IconBrandGoogle size={25} />
 
     if (platformName.toLowerCase().includes("ios") || platformName.toLowerCase().includes("mac")) 
       return <IconBrandApple size={25} />;
@@ -305,8 +312,19 @@ export default function GameDetails() {
       icon: <IconBook size={30} color='white' />
     },
     {
-      label: "Release Date",
-      content: game.first_release_date ? new Date(game.first_release_date * 1000).toLocaleDateString() : 'Unknown',
+      label: "Release Dates",
+      content: game.release_dates ? (
+        <Stack gap='xs'>
+          {game.release_dates.map((release: any) => 
+            <div key={release.id} className={classes.releaseDate}>
+              <strong>{release.platform?.name} - </strong>
+              {release.human || 'N/A'}
+            </div>
+          )}
+        </Stack>
+      ) : (
+        "N/A"
+      ),
       icon: <CalendarDays size={30} color='white' />
     },
     {
@@ -365,7 +383,7 @@ export default function GameDetails() {
               color='cyan' 
               radius='lg'
               leftSection={getPlatformIcon(platform.name)}
-              >
+            >
               {platform.name}
             </Badge>
           )}
@@ -380,11 +398,23 @@ export default function GameDetails() {
       content: game.involved_companies?.map((involved_companies: any) => involved_companies.company.name).join(', ') || 'N/A',
       icon: <IconDeviceGamepad2 size={30} color='white' />
     },
-    // {
-    //   label: "Age Ratings",
-    //   content: game.age_ratings.rating_category?.map((age_rating: any) => ),
-    //   icon: <IconRating18Plus size={30} color='white' />
-    // }
+    {
+      label: "Age Ratings",
+      content: game.age_ratings ? (
+        <Group gap='sm'>
+          {game.age_ratings.filter((rating: any) => rating.rating_category.organization.name === "ESRB" || rating.rating_category.organization.name === "PEGI")
+          .map((rating: any) =>  // ESRB and PEGI ratings only
+            <div key={rating.id} className={classes.releaseDate}>
+              <strong>{rating.rating_category.organization.name || 'N/A'} - </strong>
+              {rating.rating_category.rating}
+            </div>
+          )}
+        </Group>
+      ) : (
+        "N/A"
+      ),
+      icon: <IconRating18Plus size={30} color='white' />
+    }
   ]
 
   return (
@@ -549,6 +579,19 @@ export default function GameDetails() {
 
       <div className={classes.screenshotGrid}>
 
+        <Carousel
+          responsive={screenshotResponsive}
+          centerMode={!isMobile}
+          showDots
+          arrows={!modalOpen}
+          infinite={true}
+          autoPlay={false}
+          keyBoardControl={true}
+          containerClass={classes.carouselContainer}
+          itemClass={classes.carouselItem}
+          dotListClass={classes.carouselDots}
+        >
+
         {screenshots.map((screenshot: any, index: number) => (
           <div key={screenshot.id} className={classes.carouselSlide}>
             <Image
@@ -568,6 +611,9 @@ export default function GameDetails() {
             />
           </div>
         ))}
+
+        </Carousel>
+
       </div>
 
       {selectedScreenshot && modalOpen && (
@@ -611,7 +657,7 @@ export default function GameDetails() {
                     <img
                       src={
                         collection.cover
-                          ? `https:${collection.cover.url.replace('t_thumb', 't_cover_big')}`
+                          ? `https:${collection.cover.url.replace('t_thumb', 't_1080p')}`
                           : PlaceHolderImage.src
                       }
                       alt={collection.name}
@@ -647,7 +693,7 @@ export default function GameDetails() {
                 <img
                   src={
                     similarGame.cover
-                      ? `https:${similarGame.cover.url.replace('t_thumb', 't_cover_big')}`
+                      ? `https:${similarGame.cover.url.replace('t_thumb', 't_1080p')}`
                       : PlaceHolderImage.src
                   }
                   alt={similarGame.name}
