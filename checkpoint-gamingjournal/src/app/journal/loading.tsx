@@ -1,4 +1,3 @@
-
 "use client";
 
 import { LoadingOverlay } from "@mantine/core";
@@ -9,7 +8,8 @@ export default function Loading() {
       <LoadingOverlay
         visible
         zIndex={1000}
-        overlayProps={{ radius: "sm", blur: 2 }}
+        overlayProps={{ radius: "sm", blur: 2, color:'black' }}
+        loaderProps={{ color: 'pink', type:'oval'}}
       />
     </div>
   );

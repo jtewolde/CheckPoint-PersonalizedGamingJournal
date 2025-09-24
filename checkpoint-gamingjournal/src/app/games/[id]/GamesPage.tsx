@@ -657,7 +657,7 @@ export default function GameDetails() {
                     <img
                       src={
                         collection.cover
-                          ? `https:${collection.cover.url.replace('t_thumb', 't_cover_big')}`
+                          ? `https:${collection.cover.url.replace('t_thumb', 't_1080p')}`
                           : PlaceHolderImage.src
                       }
                       alt={collection.name}
@@ -693,7 +693,7 @@ export default function GameDetails() {
                 <img
                   src={
                     similarGame.cover
-                      ? `https:${similarGame.cover.url.replace('t_thumb', 't_cover_big')}`
+                      ? `https:${similarGame.cover.url.replace('t_thumb', 't_1080p')}`
                       : PlaceHolderImage.src
                   }
                   alt={similarGame.name}
