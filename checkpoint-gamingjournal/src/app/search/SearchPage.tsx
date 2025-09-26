@@ -17,7 +17,7 @@ export default function SearchResults() {
   const query = searchParams.get('query') || ''; // Get the search query from the URL
 
   const [page, setPage] = useState(1) // start with page 1 for pagination
-  const limit = 50; // Set the limit of games on page to 12
+  const limit = 100; // Set the limit of games on page to 12
 
   const [games, setGames] = useState<any[]>([]); // State to store games data
   const [length, setLength] = useState("")

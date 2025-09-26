@@ -1,6 +1,6 @@
 /* Wrapper for the entire search page */
 .wrapper {
-    background: linear-gradient(to top, #283048, #232526);
+    background: linear-gradient(to top, #2e313b, #232526);
     padding: 2rem; /* Add padding around the content */
     min-height: 100vh; /* Ensure the page takes up the full height */
     display: flex;
@@ -23,7 +23,7 @@
     font-weight: 600;
     color: white; /* Dark text for contrast */
     text-align: center;
-    font-family: 'Barlow';
+    font-family: 'Noto Sans';
     border-bottom: 2px solid white;
 }
 
@@ -99,9 +99,8 @@
 
 @media screen and (max-width: 1245px) {
 
-    .gameGrid {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* fewer games per row */
-        justify-items: center;
+    .gameGrid{
+        grid-template-columns: repeat(5, 1fr);
     }
 
     .gameImage {
@@ -120,11 +119,25 @@
     .numberText {
         font-size: 1.2rem;
         text-align: center;
+        align-self: flex-start;
+    }
+}
+
+@media screen and (max-width: 830px){
+    .gameGrid{
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .numberText{
         align-self: center;
     }
 }
 
 @media screen and (max-width: 580px){
+
+    .gameGrid{
+        grid-template-columns: repeat(3, 1fr);
+    }
 
     .searchText{
         font-size: 1.3rem;
@@ -141,5 +154,12 @@
 
     .mainContent{
         padding: 0
+    }
+
+}
+
+@media screen and (max-width: 440px) {
+    .gameGrid{
+        grid-template-columns: repeat(2, 1fr);
     }
 }
