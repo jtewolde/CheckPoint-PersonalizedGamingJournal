@@ -9,7 +9,7 @@ import { Footer } from "../components/Footer/Footer";
 import { Toaster } from "react-hot-toast"
 import { AuthProvider } from "@/context/Authcontext";
 
-import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
+import { ColorSchemeScript, LoadingOverlay, MantineProvider, mantineHtmlProps } from '@mantine/core';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,11 +47,19 @@ export default function RootLayout({
             theme={{
               primaryColor: 'blue',
               defaultRadius: 'md',
+              components: {
+                LoadingOverlay:{
+                  defaultProps:{
+                    overlayProps: { radius: "sm", blur: 2, backgroundColor:'black', backgroundOpacity: 1 },
+                    loaderProps: { color: "pink", type: "oval" },
+                  }
+                }
+              }
             }}
           >
 
             <Toaster
-              position='bottom-left'
+              position='top-right'
               toastOptions={{
                 duration: 5000,
                 success: {
