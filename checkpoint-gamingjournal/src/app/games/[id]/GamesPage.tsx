@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { useParams, useRouter } from 'next/navigation';
 
@@ -226,7 +226,7 @@ export default function GameDetails() {
         
       const data = await res.json();
       console.log('Game status updated:', data);
-      toast.success('Game status updated successfully!');
+      toast.success(`Game status updated to: ${newStatus}`);
       
       router.push(`/games/${game.id}`)
     } catch (error) {
