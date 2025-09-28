@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { useParams, useRouter } from 'next/navigation';
+import { notFound } from 'next/navigation';
 
 import toast from 'react-hot-toast';
 
@@ -239,8 +240,9 @@ export default function GameDetails() {
     return <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
   }
 
+  // If there is no valid game that the user selected, return the notFound page
   if (!game) {
-    return <div>Game not found</div>; // Show a message if the game is not found
+    return notFound()
   }
 
   // Define responsive settings for similar games carousel

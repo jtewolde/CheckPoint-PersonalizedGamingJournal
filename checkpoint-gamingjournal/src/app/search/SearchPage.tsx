@@ -1,11 +1,11 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { redirect, useSearchParams } from 'next/navigation';
 import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { LoadingOverlay } from '@mantine/core';
-import { Pagination, SimpleGrid, Button, Popover, Select} from '@mantine/core';
+import { SimpleGrid, Button, Popover, Select} from '@mantine/core';
 
 import { ListFilter  } from 'lucide-react';
 import PlaceHolderImage from '../../../public/no-cover-image.png';
@@ -81,7 +81,7 @@ export default function SearchResults() {
   }
 
   if (!games.length) {
-    return <div>No games found for "{query}"</div>; // Show a message if no games are found
+    redirect('/search/not-found')
   }
 
   return (
