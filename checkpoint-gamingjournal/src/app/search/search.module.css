@@ -1,6 +1,6 @@
 /* Wrapper for the entire search page */
 .wrapper {
-    background: linear-gradient(to top, #283048, #232526);
+    background: linear-gradient(to top, #2e313b, #232526);
     padding: 2rem; /* Add padding around the content */
     min-height: 100vh; /* Ensure the page takes up the full height */
     display: flex;
@@ -8,23 +8,32 @@
     align-items: center;
 }
 
+.mainContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.4rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
 /* Search results heading */
 .searchText {
     font-size: 2rem;
     font-weight: 600;
     color: white; /* Dark text for contrast */
-    margin-bottom: 1rem;
     text-align: center;
-    font-family: 'Barlow';
+    font-family: 'Noto Sans';
     border-bottom: 2px solid white;
 }
 
 /* Number of search results */
 .numberText{
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 300;
     color: rgb(208, 205, 205); /* Dark text for contrast */
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
     font-family: 'Inter';
     font-style: italic;
     text-align: center;
@@ -33,22 +42,29 @@
 
 /* Grid layout for game cards */
 .gameGrid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 16px;
-  width: 100%;
-  box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .gameContainer{
-  position: relative;
-  display: inline-block
+    position: relative;
+    display: inline-block
+}
+
+.filterButton{
+    width: 150px;
+    margin-bottom: 1.5rem;
+    font-family: 'Noto Sans';
+    border: 1px solid black;
 }
 
 .gameImage {
-  width: 100%;
-  border-radius: 8px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    border-radius: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .gameImage:hover{
@@ -82,9 +98,9 @@
 }
 
 @media screen and (max-width: 1245px) {
-    .gameGrid {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* fewer games per row */
-        justify-items: center;
+
+    .gameGrid{
+        grid-template-columns: repeat(5, 1fr);
     }
 
     .gameImage {
@@ -103,6 +119,47 @@
     .numberText {
         font-size: 1.2rem;
         text-align: center;
+        align-self: flex-start;
+    }
+}
+
+@media screen and (max-width: 830px){
+    .gameGrid{
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .numberText{
         align-self: center;
+    }
+}
+
+@media screen and (max-width: 580px){
+
+    .gameGrid{
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .searchText{
+        font-size: 1.3rem;
+    }
+
+    .numberText{
+        align-self: center;
+        font-size: 1rem;
+    }
+
+    .filterButton{
+        align-self: center;
+    }
+
+    .mainContent{
+        padding: 0
+    }
+
+}
+
+@media screen and (max-width: 440px) {
+    .gameGrid{
+        grid-template-columns: repeat(2, 1fr);
     }
 }

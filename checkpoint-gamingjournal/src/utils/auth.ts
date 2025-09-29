@@ -9,6 +9,13 @@ import db from "./db";
 export const auth = betterAuth({
     database: mongodbAdapter(db),
 
+    session: {
+        cookieCache: {
+            enabled: true,
+            maxAge: 5 * 60
+        }
+    },
+
     trustedOrigins: [
         "https://checkpoint-gaming.vercel.app",
         "https://checkpoint-gaming-qpy6bmti8-joseph-tewoldes-projects.vercel.app",

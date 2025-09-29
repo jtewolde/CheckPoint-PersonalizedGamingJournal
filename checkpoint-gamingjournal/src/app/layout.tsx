@@ -9,7 +9,7 @@ import { Footer } from "../components/Footer/Footer";
 import { Toaster } from "react-hot-toast"
 import { AuthProvider } from "@/context/Authcontext";
 
-import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
+import { ColorSchemeScript, LoadingOverlay, MantineProvider, mantineHtmlProps } from '@mantine/core';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,30 +47,46 @@ export default function RootLayout({
             theme={{
               primaryColor: 'blue',
               defaultRadius: 'md',
+              components: {
+                LoadingOverlay:{
+                  defaultProps:{
+                    overlayProps: { radius: "sm", blur: 2, backgroundColor:'black', backgroundOpacity: 1 },
+                    loaderProps: { color: "pink", type: "oval" },
+                  }
+                }
+              }
             }}
           >
 
             <Toaster
-              position='bottom-left'
+              position='top-center'
               toastOptions={{
                 duration: 5000,
                 success: {
                   style: {
-                    background: "#d9f8de",
+                    background: "#333",
+                    color: 'white',
                     fontFamily: 'Poppins',
-                    fontWeight: '610',
-                    border: '0.2px solid black',
-                    width: '400px'
+                    fontWeight: '500',
+                    borderRadius: '8px',
+                    border: '1px solid #555',
+                    textAlign: 'center',
+                    width: '100%'
                   },
+                  iconTheme: {
+                    primary: 'green',
+                    secondary: 'white'
+                  }
                 },
                 error: {
                   style: {
-                    background: '#ffd1d1',
+                    background: '#333',
+                    color: 'white',
                     fontFamily: 'Poppins',
-                    fontWeight: '610',
-                    border: '0.2px solid black',
+                    fontWeight: '500',
+                    borderRadius: '8px',
                     textAlign: 'left',
-                    width: '60%'
+                    width: '80%'
                   }
                 }  
               }}
