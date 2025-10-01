@@ -88,6 +88,8 @@ export function Header() {
               dropdown: {
                 backgroundColor: '#232526',
                 color: 'white',
+                overflowY: 'auto',
+                maxHeight: 200
               },
             }
           }
@@ -95,6 +97,7 @@ export function Header() {
           className={classes.searchBar}
           radius='lg'
           size='md'
+          withScrollArea={false}
           variant='filled'
           placeholder="Search For Games"
           rightSection={<IconSearch size={24} color='white' style={{cursor: 'pointer'}} onClick={() => router.push(`/search?query=${encodeURIComponent(searchQuery)}`)}/>}

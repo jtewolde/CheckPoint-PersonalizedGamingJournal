@@ -11,7 +11,7 @@
 .mainContent{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.4rem;
     padding-left: 2rem;
     padding-right: 2rem;
@@ -20,7 +20,7 @@
 /* Search results heading */
 .searchText {
     font-size: 2rem;
-    font-weight: 600;
+    font-weight: 450;
     color: white; /* Dark text for contrast */
     text-align: center;
     font-family: 'Noto Sans';
@@ -40,6 +40,13 @@
     align-self: flex-start;
 }
 
+.searchButtons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
 /* Grid layout for game cards */
 .gameGrid {
     display: grid;
@@ -52,6 +59,10 @@
 .gameContainer{
     position: relative;
     display: inline-block
+}
+
+.filterDropdown option :hover{
+    background-color: #ffffff;
 }
 
 .filterButton{
@@ -150,6 +161,11 @@
 
     .filterButton{
         align-self: center;
+    }
+
+    .searchButtons{
+        justify-content: center;
+        align-items: center;
     }
 
     .mainContent{
