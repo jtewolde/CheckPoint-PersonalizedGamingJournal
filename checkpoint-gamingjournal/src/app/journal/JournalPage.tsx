@@ -81,6 +81,7 @@ export default function Journal() {
     // Function to delete a journal entry
     const deleteJournalEntry = async (journalEntryId: string, gameID: string) => {
         try {
+            setLoading(true);
             const res = await fetch('/api/journal/deleteEntry', {
                 method: 'POST',
                 headers: {
@@ -99,8 +100,10 @@ export default function Journal() {
             toast.success('Journal entry deleted successfully');
 
             // Re-fetch the journal entries to update the list
+            setLoading(false);
             fetchEntries();
         } catch (error) {
+            setLoading(false);
             console.error('Error deleting journal entry:', error);
             toast.error('Error deleting journal entry');
         }
@@ -208,6 +211,7 @@ export default function Journal() {
                                         radius='md'
                                         variant='filled'
                                         color='red'
+                                        loading={loading}
                                     >
                                         Delete
                                     </Button>

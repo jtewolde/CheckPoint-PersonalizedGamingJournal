@@ -61,8 +61,21 @@
     display: inline-block
 }
 
-.filterDropdown option :hover{
-    background-color: #ffffff;
+.scrollBar {
+  &,
+  &:hover {
+    background-color: #555555;
+  }
+
+  &[data-orientation='vertical'] .thumb {
+    background-color: black;
+  }
+}
+
+.drawer title{
+    font-size: 18px;
+    color: white;
+    font-family: 'Noto Sans';
 }
 
 .filterButton{
@@ -140,6 +153,10 @@
     }
 
     .numberText{
+        align-self: center;
+    }
+
+    .filterButton{
         align-self: center;
     }
 }

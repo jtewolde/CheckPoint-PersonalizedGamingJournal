@@ -37,15 +37,17 @@ export async function GET(req: NextRequest){
 
         // Try to find by _id (ObjectId) or uuid
         let journalEntry = null;
+
         if (ObjectId.isValid(entryId)) {
-        journalEntry = await JournalEntriesCollection.findOne({ _id: new ObjectId(entryId), userId });
-        }
-        if (!journalEntry) {
-        journalEntry = await JournalEntriesCollection.findOne({ uuid: entryId, userId });
+            journalEntry = await JournalEntriesCollection.findOne({ _id: new ObjectId(entryId), userId });
         }
 
         if (!journalEntry) {
-        return NextResponse.json({ error: "Journal entry not found" }, { status: 404 });
+            journalEntry = await JournalEntriesCollection.findOne({ uuid: entryId, userId });
+        }
+
+        if (!journalEntry) {
+            return NextResponse.json({ error: "Journal entry not found" }, { status: 404 });
         }
 
         return NextResponse.json({ entry: journalEntry });

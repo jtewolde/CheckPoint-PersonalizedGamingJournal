@@ -62,8 +62,12 @@ export async function POST(req: NextRequest) {
         //Invalidate/clear the cache of the user's journal entries after deletion
         await redis.del(`user_journal_entries:${userId}`);
 
-        // Invalidate/clear the cache for the first page of journal entries
-        await redis.del(`user_journal_entries:${userId}:page:1:limit:6`);
+        // Invalidate/clear the cache for all paginated journal entries
+        // This is a simple approach; for a more efficient solution, consider tracking which pages contain the deleted entry
+        const keys = await redis.keys(`user_journal_entries:${userId}:page:*`);
+        if (keys.length > 0) {
+            await redis.del(...keys);
+        }
 
         return NextResponse.json({
             message: "Journal entry deleted successfully",
