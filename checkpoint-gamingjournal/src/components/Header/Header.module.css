@@ -64,9 +64,6 @@
   color: #ffffff;
 }
 
-.scrollBar .thumb{
-  background-color: #000000;
-}
 
 .scrollBar {
   &,

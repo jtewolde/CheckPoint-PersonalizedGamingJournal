@@ -132,8 +132,15 @@ export default function JournalForm() {
 
             <Select
               leftSection={<Gamepad2 size={30} />}
+              maxDropdownHeight={300}
               className={classes.select}
-              styles={{ wrapper: { color: '#212121'}}}
+              styles={{
+                wrapper: { color: '#212121'}, 
+                input: { color: 'white', background: '#212121'}, 
+                dropdown: { background: '#212121', color: 'whitesmoke'},
+                option: { background: '#202020'}
+              }}
+              scrollAreaProps={{ type: 'auto', scrollbarSize: 16, scrollbars: 'y', color:'black',  classNames: { scrollbar: classes.scrollBar }}}
               size="lg"
               label="Select Game"
               placeholder="Choose a game from your library"
@@ -149,9 +156,13 @@ export default function JournalForm() {
 
             <TextInput
               className={classes.textInput}
+              styles={{
+                wrapper: { color: '#212121'}, 
+                input: { color: 'white', background: '#212121'}, 
+              }}
               size="lg"
               label="Title"
-              placeholder="Enter the title of your journal entry"
+              placeholder="Enter Journal Entry Title"
               leftSection={<Captions size={30} />}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -161,9 +172,13 @@ export default function JournalForm() {
 
             <Textarea
               className={classes.textArea}
-              classNames={{ input: classes.input}}
+              classNames={{input: classes.input}}
+              styles={{
+                wrapper: { color: '#212121'}, 
+                input: { color: 'white', background: '#212121'}, 
+              }}
               label="Content"
-              placeholder="Write your journal entry here"
+              placeholder="Write Your Journal Entry Here..."
               autosize
               value={content}
               onChange={(e) => setContent(e.target.value)}

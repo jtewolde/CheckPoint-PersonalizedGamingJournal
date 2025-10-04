@@ -26,7 +26,7 @@ export default function SearchResults() {
   const [length, setLength] = useState("")
   const [loading, setLoading] = useState(true); // State to handle loading
 
-  const [sortOption, setSortOption] = useState<'first_release_date' | 'total_rating' | ''>(''); // State to sort search results from release date/total_rating
+  const [sortOption, setSortOption] = useState<'first_release_date' | 'total_rating' | 'alphabetical' | ''>('total_rating'); // State to sort search results from release date/total_rating
   const [selectedType, setSelectedType] = useState('all');
   const [selectedGenre, setSelectedGenre] = useState('all');
 
@@ -67,6 +67,9 @@ export default function SearchResults() {
     }
     if (sortOption === 'total_rating') {
       return (b.total_rating || 0) - (a.total_rating || 0);
+    }
+    if (sortOption === 'alphabetical'){
+      return a.name.localeCompare(b.name);
     }
     return 0;
   });
@@ -111,7 +114,7 @@ export default function SearchResults() {
             opened={opened}
             onClose={close}
             position='left'
-            size="20%"
+            size="300px"
             title='Sort and Filter'
             className={classes.drawer}
             styles={{
@@ -139,7 +142,6 @@ export default function SearchResults() {
               <Select
                 size='md'
                 label="Sort By:"
-                placeholder="Ex: Release Date"
                 checkIconPosition='left'
                 styles={{
                   dropdown: {
@@ -165,6 +167,7 @@ export default function SearchResults() {
                   }
                 }}
                 data={[
+                    { value: 'alphabetical', label: 'Alphabetical (A-Z)'},
                     { value: 'first_release_date', label: 'Release Date' },
                     { value: 'total_rating', label: "Total Rating"},
                 ]}
@@ -210,7 +213,9 @@ export default function SearchResults() {
                     { value: 'expansion', label: "Expansion"},
                     { value: 'standalone expansion', label:'Standalone Expansions'},
                     { value: 'remake', label: 'Remake'},
-                    { value: 'remaster', label: 'Remaster'}
+                    { value: 'remaster', label: 'Remaster'},
+                    { value: 'episode', label: 'Episode'},
+                    { value: 'update', label: 'Update'}
                 ]}
                 value={selectedType}
                 onChange={(value) => setSelectedType(value as any)}

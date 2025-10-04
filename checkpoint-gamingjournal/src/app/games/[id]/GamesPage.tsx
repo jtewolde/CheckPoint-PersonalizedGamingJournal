@@ -419,6 +419,9 @@ export default function GameDetails() {
     }
   ]
 
+  // Sort the collection games by total rating in descending order
+  const sortedCollections = game.collections?.[0]?.games.sort((a: any, b: any) => b.total_rating - a.total_rating);
+
   return (
     <div className={classes.wrapper}>
       <h1 className={classes.title}>{game.name}</h1>
@@ -650,7 +653,7 @@ export default function GameDetails() {
             </div>
             
             <SimpleGrid spacing='lg' verticalSpacing='lg' className={classes.seriesGrid}>
-              {game.collections?.[0]?.games?.slice(0, 6).map((collection: any) => (
+              {sortedCollections.slice(0, 6).map((collection: any) => (
                   <div
                     className={classes.seriesGameCard}
                     key={collection.id}

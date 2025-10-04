@@ -88,6 +88,7 @@ export function Header() {
               dropdown: {
                 backgroundColor: '#232526',
                 color: 'white',
+                borderRadius: '4px'
               },
             }
           }
