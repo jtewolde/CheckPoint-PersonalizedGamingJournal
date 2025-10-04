@@ -44,7 +44,7 @@ export default function SearchResults() {
         const data = await res.json();
         setGames(data);
         setLength(data.length);
-        console.log(data.length)
+        console.log("Game Results", data)
       } catch (error) {
         console.error('Error fetching games:', error);
       } finally {
@@ -86,8 +86,8 @@ export default function SearchResults() {
   // Filter the sorted games based on game types like Main Games, DLCs, and Expansions
   // Genres like Action, Adventure, RPG, etc.
   const processedGames = sortedGames.filter((game) =>
-    selectedType === 'all' || game.game_type.type?.toLowerCase() === selectedType &&
-    (selectedGenre === 'all' || game.genres?.some((genre: any) => genre.name.toLowerCase() === selectedGenre))
+    (selectedType === 'all' || game.game_type.type?.toLowerCase() === selectedType) &&
+    (selectedGenre === 'all' || game.genres?.some((genre: any) => genre.slug === selectedGenre))
   );
 
   // If the page is still loading, put a loading overlay
@@ -219,6 +219,65 @@ export default function SearchResults() {
                 ]}
                 value={selectedType}
                 onChange={(value) => setSelectedType(value as any)}
+                className={classes.filterDropdown}
+                mb="md"
+              />
+
+              <Select
+                size='md'
+                label="Game Genre"
+                placeholder="All Genres"
+                maxDropdownHeight={200}
+                checkIconPosition='left'
+                scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
+                styles={{
+                  dropdown: {
+                    background: '#212121',
+                    color: 'whitesmoke',
+                  },
+                  input: {
+                    background: '#212121',
+                    fontFamily: 'Noto Sans',
+                    color: 'white'
+                  },
+                  option: {
+                    background: '#212121',
+                    fontFamily: 'Noto Sans',
+                    fontSize: '16px'
+                  },
+                  label: {
+                    color: 'white',
+                    fontFamily: 'Noto Sans',
+                    fontSize: '20px',
+                    fontWeight: 300
+                  }
+                }}
+                data={[
+                    { value: 'all', label: 'All'},
+                    { value: 'adventure', label: 'Adventure' },
+                    { value: 'arcade', label: "Arcade"},
+                    { value: 'card-and-board game', label:'Card & Board Game'},
+                    { value: 'fighting', label: 'Fighting'},
+                    { value: 'hack-and-slash-beat-em-up', label: 'Hack and Slash/Beat em Up'},
+                    { value: 'indie', label: 'Indie'},
+                    { value: 'moba', label: 'MOBA'},
+                    { value: 'music', label: 'Music'},
+                    { value: 'platform', label: 'Platform'},
+                    { value: 'point-and-click', label: 'Point and Click'},
+                    { value: 'puzzle', label: 'Puzzle'},
+                    { value: 'quiz-trivia', label: 'Quiz/Trivia'},
+                    { value: 'racing', label: 'Racing'},
+                    { value: 'real-time-strategy-rts', label: 'Real Time Strategy (RTS)'},
+                    { value: 'role-playing-rpg', label: 'Role-Playing (RPG)'},
+                    { value: 'shooter', label: 'Shooter'},
+                    { value: 'simulator', label: 'Simulator'},
+                    { value: 'sport', label: 'Sports'},
+                    { value: 'strategy', label: 'Strategy'},
+                    { value: 'tactical', label: 'Tactical'},
+                    { value: 'turn-based-strategy-tbs', label: 'Turn-Based Strategy (TBS)'},       
+                ]}
+                value={selectedGenre}
+                onChange={(value) => setSelectedGenre(value as any)}
                 className={classes.filterDropdown}
                 mb="md"
               />
