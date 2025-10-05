@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useDisclosure } from '@mantine/hooks';
 
 import { LoadingOverlay } from '@mantine/core';
-import { SimpleGrid, Button, Stack, Select, Drawer} from '@mantine/core';
+import { SimpleGrid, Button, Stack, Select, MultiSelect, Drawer} from '@mantine/core';
 
 import { ListFilter } from 'lucide-react';
 import PlaceHolderImage from '../../../public/no-cover-image.png';
@@ -27,8 +27,8 @@ export default function SearchResults() {
   const [loading, setLoading] = useState(true); // State to handle loading
 
   const [sortOption, setSortOption] = useState<'first_release_date' | 'total_rating' | 'alphabetical' | ''>('total_rating'); // State to sort search results from release date/total_rating
-  const [selectedType, setSelectedType] = useState('all');
-  const [selectedGenre, setSelectedGenre] = useState('all');
+  const [selectedType, setSelectedType] = useState<string[]>(['all']);
+  const [selectedGenre, setSelectedGenre] = useState<string[]>(['all']);
 
   const router = useRouter();
 
@@ -85,11 +85,27 @@ export default function SearchResults() {
 
   // Filter the sorted games based on game types like Main Games, DLCs, and Expansions
   // Genres like Action, Adventure, RPG, etc.
-  const processedGames = sortedGames.filter((game) =>
-    (selectedType === 'all' || game.game_type.type?.toLowerCase() === selectedType) &&
-    (selectedGenre === 'all' || game.genres?.some((genre: any) => genre.slug === selectedGenre))
-  );
+  const processedGames = sortedGames.filter((game) => {
 
+    // Handle cases where game_type or genres might be undefined
+    if (!game.game_type || !game.genres) {
+      return selectedType.includes('all') && selectedGenre.includes('all');
+    }
+
+    // Convert game types and genres to lowercase for case-insensitive comparison
+    const gameType = game.game_type.type.toLowerCase();
+    const gameGenres = game.genres.map((genre: any) => genre.slug.toLowerCase());
+
+    // Check if the game matches the selected type and genre filters
+    const typeMatch = selectedType.includes('all') || (gameType && selectedType.includes(gameType));
+    // Check if any of the game's genres match the selected genres
+    const genreMatch = selectedGenre.includes('all') || gameGenres.some((genre: any) => selectedGenre.includes(genre));
+
+    return (
+      typeMatch && genreMatch
+    );
+  });
+    
   // If the page is still loading, put a loading overlay
   if (loading) {
     return <LoadingOverlay visible zIndex={1000}  overlayProps={{ radius: "sm", blur: 2 }} />
@@ -114,7 +130,7 @@ export default function SearchResults() {
             opened={opened}
             onClose={close}
             position='left'
-            size="300px"
+            size="330px"
             title='Sort and Filter'
             className={classes.drawer}
             styles={{
@@ -177,10 +193,9 @@ export default function SearchResults() {
                 mb="md"
               />
               
-              <Select
+              <MultiSelect
                 size='md'
                 label="Game Type"
-                placeholder="All Games"
                 maxDropdownHeight={200}
                 checkIconPosition='left'
                 scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
@@ -223,10 +238,9 @@ export default function SearchResults() {
                 mb="md"
               />
 
-              <Select
+              <MultiSelect
                 size='md'
                 label="Game Genre"
-                placeholder="All Genres"
                 maxDropdownHeight={200}
                 checkIconPosition='left'
                 scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
