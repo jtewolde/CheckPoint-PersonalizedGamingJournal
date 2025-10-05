@@ -47,6 +47,17 @@
   color: white;
 }
 
+.scrollBar {
+  &,
+  &:hover {
+    background-color: #555555;
+  }
+
+  &[data-orientation='vertical'] .thumb {
+    background-color: black;
+  }
+}
+
 .textInput{
   width: 100%;
   border-radius: 8px;

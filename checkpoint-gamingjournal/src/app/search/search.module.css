@@ -11,7 +11,7 @@
 .mainContent{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.4rem;
     padding-left: 2rem;
     padding-right: 2rem;
@@ -20,7 +20,7 @@
 /* Search results heading */
 .searchText {
     font-size: 2rem;
-    font-weight: 600;
+    font-weight: 450;
     color: white; /* Dark text for contrast */
     text-align: center;
     font-family: 'Noto Sans';
@@ -40,6 +40,13 @@
     align-self: flex-start;
 }
 
+.searchButtons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
 /* Grid layout for game cards */
 .gameGrid {
     display: grid;
@@ -52,6 +59,23 @@
 .gameContainer{
     position: relative;
     display: inline-block
+}
+
+.scrollBar {
+  &,
+  &:hover {
+    background-color: #555555;
+  }
+
+  &[data-orientation='vertical'] .thumb {
+    background-color: black;
+  }
+}
+
+.drawer title{
+    font-size: 18px;
+    color: white;
+    font-family: 'Noto Sans';
 }
 
 .filterButton{
@@ -76,7 +100,7 @@
 /* Game name */
 .gameName {
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 390;
     color: white;
     padding: 0.5rem;
     overflow: hidden;
@@ -131,6 +155,10 @@
     .numberText{
         align-self: center;
     }
+
+    .filterButton{
+        align-self: center;
+    }
 }
 
 @media screen and (max-width: 580px){
@@ -150,6 +178,11 @@
 
     .filterButton{
         align-self: center;
+    }
+
+    .searchButtons{
+        justify-content: center;
+        align-items: center;
     }
 
     .mainContent{

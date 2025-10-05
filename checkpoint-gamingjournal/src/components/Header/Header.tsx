@@ -88,13 +88,16 @@ export function Header() {
               dropdown: {
                 backgroundColor: '#232526',
                 color: 'white',
+                borderRadius: '4px'
               },
             }
           }
+          scrollAreaProps={{ scrollbarSize: 16, type: 'auto', scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
           comboboxProps={{ transitionProps: { transition: 'fade-down', duration: 200 } }}
           className={classes.searchBar}
           radius='lg'
           size='md'
+          maxDropdownHeight={200}
           variant='filled'
           placeholder="Search For Games"
           rightSection={<IconSearch size={24} color='white' style={{cursor: 'pointer'}} onClick={() => router.push(`/search?query=${encodeURIComponent(searchQuery)}`)}/>}
@@ -227,7 +230,7 @@ export function Header() {
                     </div>
                   </Link>
 
-                 </div>
+                </div>
 
                   <AvatarMenu />
 

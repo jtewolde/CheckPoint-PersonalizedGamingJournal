@@ -7,8 +7,8 @@ export default function RoadmapPage() {
 
     const roadMapItems = [
         {
-            title: "Redesign Game Details Interface",
-            description: "Improve the layout and usability of the game details page to make it more intuitive and visually appealing."
+            title: "Sorting and Filtering Options",
+            description: "Add more sorting and filtering options to the search page, popular games, and trending games pages to help users find games more easily."
         },
         {
             title: 'Photo Gallery',

@@ -64,6 +64,18 @@
   color: #ffffff;
 }
 
+
+.scrollBar {
+  &,
+  &:hover {
+    background-color: #555555;
+  }
+
+  &[data-orientation='vertical'] .thumb {
+    background-color: black;
+  }
+}
+
 @media screen and (max-width: 868px) {
 
   .inner{
