@@ -64,7 +64,7 @@ export default function RootLayout({
                 duration: 5000,
                 success: {
                   style: {
-                    background: "#333",
+                    background: "#2c2c2cff",
                     color: 'white',
                     fontFamily: 'Poppins',
                     fontWeight: '500',
@@ -80,7 +80,7 @@ export default function RootLayout({
                 },
                 error: {
                   style: {
-                    background: '#333',
+                    background: '#2d2d2dff',
                     color: 'white',
                     fontFamily: 'Poppins',
                     fontWeight: '500',

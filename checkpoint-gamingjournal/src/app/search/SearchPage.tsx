@@ -26,9 +26,11 @@ export default function SearchResults() {
   const [length, setLength] = useState("")
   const [loading, setLoading] = useState(true); // State to handle loading
 
+  // States to handle sorting and filtering search results
   const [sortOption, setSortOption] = useState<'first_release_date' | 'total_rating' | 'alphabetical' | ''>('total_rating'); // State to sort search results from release date/total_rating
   const [selectedType, setSelectedType] = useState<string[]>(['all']);
   const [selectedGenre, setSelectedGenre] = useState<string[]>(['all']);
+  const [selectedTheme, setSelectedTheme] = useState<string[]>(['all']);
 
   const router = useRouter();
 
@@ -88,21 +90,24 @@ export default function SearchResults() {
   const processedGames = sortedGames.filter((game) => {
 
     // Handle cases where game_type or genres might be undefined
-    if (!game.game_type || !game.genres) {
-      return selectedType.includes('all') && selectedGenre.includes('all');
+    if (!game.game_type || !game.genres || !game.themes) {
+      return selectedType.includes('all') && selectedGenre.includes('all') && selectedTheme.includes('all');
     }
 
     // Convert game types and genres to lowercase for case-insensitive comparison
     const gameType = game.game_type.type.toLowerCase();
     const gameGenres = game.genres.map((genre: any) => genre.slug.toLowerCase());
+    const gameThemes = game.themes.map((theme: any) => theme.slug.toLowerCase());
 
     // Check if the game matches the selected type and genre filters
     const typeMatch = selectedType.includes('all') || (gameType && selectedType.includes(gameType));
     // Check if any of the game's genres match the selected genres
     const genreMatch = selectedGenre.includes('all') || gameGenres.some((genre: any) => selectedGenre.includes(genre));
+    // Check if any of the game's themes match the selected themes
+    const themeMatch = selectedTheme.includes('all') || gameThemes.some((theme: any) => selectedTheme.includes(theme));
 
     return (
-      typeMatch && genreMatch
+      typeMatch && genreMatch && themeMatch
     );
   });
     
@@ -124,7 +129,7 @@ export default function SearchResults() {
 
           <h2 className={classes.numberText}>{processedGames.length} Game Results:</h2>
 
-          <Button className={classes.filterButton} size='lg' radius='md' color='blue' leftSection={<ListFilter size={30} />} onClick={toggle}>Filters</Button>
+          <Button className={classes.filterButton} size='lg' radius='md' color='#64A0ff' leftSection={<ListFilter size={30} />} onClick={toggle}>Filters</Button>
 
           <Drawer
             opened={opened}
@@ -219,6 +224,12 @@ export default function SearchResults() {
                     fontFamily: 'Noto Sans',
                     fontSize: '20px',
                     fontWeight: 300
+                  },
+                  pill: {
+                    backgroundColor: '#64A0ff',
+                    fontWeight: 500,
+                    fontFamily: 'Noto Sans',
+                    color: 'black'
                   }
                 }}
                 data={[
@@ -234,7 +245,7 @@ export default function SearchResults() {
                 ]}
                 value={selectedType}
                 onChange={(value) => setSelectedType(value as any)}
-                className={classes.filterDropdown}
+                className={classes.filterSelect}
                 mb="md"
               />
 
@@ -264,6 +275,12 @@ export default function SearchResults() {
                     fontFamily: 'Noto Sans',
                     fontSize: '20px',
                     fontWeight: 300
+                  },
+                  pill: {
+                    backgroundColor: '#64A0ff',
+                    fontWeight: 500,
+                    fontFamily: 'Noto Sans',
+                    color: 'black'
                   }
                 }}
                 data={[
@@ -292,7 +309,71 @@ export default function SearchResults() {
                 ]}
                 value={selectedGenre}
                 onChange={(value) => setSelectedGenre(value as any)}
-                className={classes.filterDropdown}
+                className={classes.filterSelect}
+                mb="md"
+              />
+
+              <MultiSelect
+                size='md'
+                label="Game Theme"
+                maxDropdownHeight={200}
+                checkIconPosition='left'
+                scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
+                styles={{
+                  dropdown: {
+                    background: '#212121',
+                    color: 'whitesmoke',
+                  },
+                  input: {
+                    background: '#212121',
+                    fontFamily: 'Noto Sans',
+                    color: 'white'
+                  },
+                  option: {
+                    background: '#212121',
+                    fontFamily: 'Noto Sans',
+                    fontSize: '16px'
+                  },
+                  label: {
+                    color: 'white',
+                    fontFamily: 'Noto Sans',
+                    fontSize: '20px',
+                    fontWeight: 300
+                  },
+                  pill: {
+                    backgroundColor: '#64A0ff',
+                    fontWeight: 500,
+                    fontFamily: 'Noto Sans',
+                    color: 'black'
+                  }
+                }}
+                data={[
+                    { value: 'all', label: 'All'},
+                    { value: 'action', label: 'Action' },
+                    { value: 'adventure', label: 'Adventure' },
+                    { value: 'business', label: 'Business' },
+                    { value: 'comedy', label: 'Comedy' },
+                    { value: 'educational', label: 'Educational' },
+                    { value: 'erotic', label: 'Erotic' },
+                    { value: 'fantasy', label: 'Fantasy' },
+                    { value: 'historical', label: 'Historical' },
+                    { value: 'horror', label: 'Horror' },
+                    { value: 'kids', label: 'Kids' },
+                    { value: 'mystery', label: 'Mystery' },
+                    { value: 'non-fiction', label: 'Non-Fiction' },
+                    { value: 'open-world', label: 'Open-World' },
+                    { value: 'party', label: 'Party' },
+                    { value: 'romance', label: 'Romance' },
+                    { value: 'sandbox', label: 'Sandbox' },
+                    { value: 'science-fiction', label: 'Science-Fiction' },
+                    { value: 'stealth', label: 'Stealth' },
+                    { value: 'survival', label: 'Survival' },
+                    { value: 'thriller', label: 'Thriller' },
+                    { value: 'warfare', label: 'Warfare' }
+                ]}
+                value={selectedTheme}
+                onChange={(value) => setSelectedTheme(value as any)}
+                className={classes.filterSelect}
                 mb="md"
               />
 

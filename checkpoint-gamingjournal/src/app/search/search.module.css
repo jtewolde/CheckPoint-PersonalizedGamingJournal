@@ -85,6 +85,10 @@
     border: 1px solid black;
 }
 
+.filterSelect pill{
+    background-color: blue;
+}
+
 .gameImage {
     width: 100%;
     border-radius: 8px;
