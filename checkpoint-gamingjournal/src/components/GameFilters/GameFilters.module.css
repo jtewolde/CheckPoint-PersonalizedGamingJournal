@@ -1,0 +1,13 @@
+
+.filterButton{
+    width: 150px;
+    margin-bottom: 1.5rem;
+    font-family: 'Noto Sans';
+    border: 1px solid black;
+}
+
+@media (max-width: 830px) {
+    .filterButton {
+        align-self: center;
+    }
+}

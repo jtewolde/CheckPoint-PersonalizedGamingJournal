@@ -4,6 +4,7 @@ import { redirect, useSearchParams } from 'next/navigation';
 import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDisclosure } from '@mantine/hooks';
+import GameFilters from '@/components/GameFilters/GameFilters';
 
 import { LoadingOverlay } from '@mantine/core';
 import { SimpleGrid, Button, Stack, Select, MultiSelect, Drawer} from '@mantine/core';
@@ -31,6 +32,7 @@ export default function SearchResults() {
   const [selectedType, setSelectedType] = useState<string[]>(['all']);
   const [selectedGenre, setSelectedGenre] = useState<string[]>(['all']);
   const [selectedTheme, setSelectedTheme] = useState<string[]>(['all']);
+  const [selectedMode, setSelectedMode] = useState<string[]>(['all']);
 
   const router = useRouter();
 
@@ -90,14 +92,15 @@ export default function SearchResults() {
   const processedGames = sortedGames.filter((game) => {
 
     // Handle cases where game_type or genres might be undefined
-    if (!game.game_type || !game.genres || !game.themes) {
-      return selectedType.includes('all') && selectedGenre.includes('all') && selectedTheme.includes('all');
+    if (!game.game_type || !game.genres || !game.themes || !game.game_modes) {
+      return selectedType.includes('all') && selectedGenre.includes('all') && selectedTheme.includes('all') && selectedMode.includes('all')
     }
 
     // Convert game types and genres to lowercase for case-insensitive comparison
     const gameType = game.game_type.type.toLowerCase();
     const gameGenres = game.genres.map((genre: any) => genre.slug.toLowerCase());
     const gameThemes = game.themes.map((theme: any) => theme.slug.toLowerCase());
+    const gameModes = game.game_modes.map((mode: any) => mode.slug.toLowerCase());
 
     // Check if the game matches the selected type and genre filters
     const typeMatch = selectedType.includes('all') || (gameType && selectedType.includes(gameType));
@@ -105,9 +108,11 @@ export default function SearchResults() {
     const genreMatch = selectedGenre.includes('all') || gameGenres.some((genre: any) => selectedGenre.includes(genre));
     // Check if any of the game's themes match the selected themes
     const themeMatch = selectedTheme.includes('all') || gameThemes.some((theme: any) => selectedTheme.includes(theme));
+    // Check if any of the game's modes match the selected modes
+    const modeMatch = selectedMode.includes('all') || gameModes.some((mode: any) => selectedMode.includes(mode));
 
     return (
-      typeMatch && genreMatch && themeMatch
+      typeMatch && genreMatch && themeMatch && modeMatch
     );
   });
     
@@ -129,258 +134,19 @@ export default function SearchResults() {
 
           <h2 className={classes.numberText}>{processedGames.length} Game Results:</h2>
 
-          <Button className={classes.filterButton} size='lg' radius='md' color='#64A0ff' leftSection={<ListFilter size={30} />} onClick={toggle}>Filters</Button>
-
-          <Drawer
-            opened={opened}
-            onClose={close}
-            position='left'
-            size="330px"
-            title='Sort and Filter'
-            className={classes.drawer}
-            styles={{
-              content: {
-                backgroundColor: '#252525ff'
-              },
-              header: {
-                backgroundColor: '#252525ff',
-                borderBottom: '1px solid gray'
-              },
-              title: {
-                fontSize: '24px',
-                color: 'white',
-                fontFamily: 'Noto Sans',
-                fontWeight: 300
-              },
-              close: {
-                color: 'white'
-              }
-            }}
-          >
-
-            <Stack className={classes.drawerFilters} gap='lg' justify='center' mt={20}>
-
-              <Select
-                size='md'
-                label="Sort By:"
-                checkIconPosition='left'
-                styles={{
-                  dropdown: {
-                    background: '#212121',
-                    color: 'whitesmoke'
-                  },
-                  input: {
-                    background: '#212121',
-                    fontFamily: 'Noto Sans',
-                    color: 'white'
-                  },
-                  option: {
-                    background: '#212121',
-                    fontFamily: 'Noto Sans',
-                    fontSize: '16px',
-                    fontWeight: 330
-                  },
-                  label: {
-                    fontFamily: 'Noto Sans',
-                    color: 'white',
-                    fontSize: '20px',
-                    fontWeight: 300
-                  }
-                }}
-                data={[
-                    { value: 'alphabetical', label: 'Alphabetical (A-Z)'},
-                    { value: 'first_release_date', label: 'Release Date' },
-                    { value: 'total_rating', label: "Total Rating"},
-                ]}
-                value={sortOption}
-                onChange={(value) => setSortOption(value as any)}
-                className={classes.filterDropdown}
-                mb="md"
-              />
-              
-              <MultiSelect
-                size='md'
-                label="Game Type"
-                maxDropdownHeight={200}
-                checkIconPosition='left'
-                scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
-                styles={{
-                  dropdown: {
-                    background: '#212121',
-                    color: 'whitesmoke',
-                  },
-                  input: {
-                    background: '#212121',
-                    fontFamily: 'Noto Sans',
-                    color: 'white'
-                  },
-                  option: {
-                    background: '#212121',
-                    fontFamily: 'Noto Sans',
-                    fontSize: '16px'
-                  },
-                  label: {
-                    color: 'white',
-                    fontFamily: 'Noto Sans',
-                    fontSize: '20px',
-                    fontWeight: 300
-                  },
-                  pill: {
-                    backgroundColor: '#64A0ff',
-                    fontWeight: 500,
-                    fontFamily: 'Noto Sans',
-                    color: 'black'
-                  }
-                }}
-                data={[
-                    { value: 'all', label: 'All'},
-                    { value: 'main game', label: 'Main Game' },
-                    { value: 'dlc', label: "DLC"},
-                    { value: 'expansion', label: "Expansion"},
-                    { value: 'standalone expansion', label:'Standalone Expansions'},
-                    { value: 'remake', label: 'Remake'},
-                    { value: 'remaster', label: 'Remaster'},
-                    { value: 'episode', label: 'Episode'},
-                    { value: 'update', label: 'Update'}
-                ]}
-                value={selectedType}
-                onChange={(value) => setSelectedType(value as any)}
-                className={classes.filterSelect}
-                mb="md"
-              />
-
-              <MultiSelect
-                size='md'
-                label="Game Genre"
-                maxDropdownHeight={200}
-                checkIconPosition='left'
-                scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
-                styles={{
-                  dropdown: {
-                    background: '#212121',
-                    color: 'whitesmoke',
-                  },
-                  input: {
-                    background: '#212121',
-                    fontFamily: 'Noto Sans',
-                    color: 'white'
-                  },
-                  option: {
-                    background: '#212121',
-                    fontFamily: 'Noto Sans',
-                    fontSize: '16px'
-                  },
-                  label: {
-                    color: 'white',
-                    fontFamily: 'Noto Sans',
-                    fontSize: '20px',
-                    fontWeight: 300
-                  },
-                  pill: {
-                    backgroundColor: '#64A0ff',
-                    fontWeight: 500,
-                    fontFamily: 'Noto Sans',
-                    color: 'black'
-                  }
-                }}
-                data={[
-                    { value: 'all', label: 'All'},
-                    { value: 'adventure', label: 'Adventure' },
-                    { value: 'arcade', label: "Arcade"},
-                    { value: 'card-and-board game', label:'Card & Board Game'},
-                    { value: 'fighting', label: 'Fighting'},
-                    { value: 'hack-and-slash-beat-em-up', label: 'Hack and Slash/Beat em Up'},
-                    { value: 'indie', label: 'Indie'},
-                    { value: 'moba', label: 'MOBA'},
-                    { value: 'music', label: 'Music'},
-                    { value: 'platform', label: 'Platform'},
-                    { value: 'point-and-click', label: 'Point and Click'},
-                    { value: 'puzzle', label: 'Puzzle'},
-                    { value: 'quiz-trivia', label: 'Quiz/Trivia'},
-                    { value: 'racing', label: 'Racing'},
-                    { value: 'real-time-strategy-rts', label: 'Real Time Strategy (RTS)'},
-                    { value: 'role-playing-rpg', label: 'Role-Playing (RPG)'},
-                    { value: 'shooter', label: 'Shooter'},
-                    { value: 'simulator', label: 'Simulator'},
-                    { value: 'sport', label: 'Sports'},
-                    { value: 'strategy', label: 'Strategy'},
-                    { value: 'tactical', label: 'Tactical'},
-                    { value: 'turn-based-strategy-tbs', label: 'Turn-Based Strategy (TBS)'},       
-                ]}
-                value={selectedGenre}
-                onChange={(value) => setSelectedGenre(value as any)}
-                className={classes.filterSelect}
-                mb="md"
-              />
-
-              <MultiSelect
-                size='md'
-                label="Game Theme"
-                maxDropdownHeight={200}
-                checkIconPosition='left'
-                scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
-                styles={{
-                  dropdown: {
-                    background: '#212121',
-                    color: 'whitesmoke',
-                  },
-                  input: {
-                    background: '#212121',
-                    fontFamily: 'Noto Sans',
-                    color: 'white'
-                  },
-                  option: {
-                    background: '#212121',
-                    fontFamily: 'Noto Sans',
-                    fontSize: '16px'
-                  },
-                  label: {
-                    color: 'white',
-                    fontFamily: 'Noto Sans',
-                    fontSize: '20px',
-                    fontWeight: 300
-                  },
-                  pill: {
-                    backgroundColor: '#64A0ff',
-                    fontWeight: 500,
-                    fontFamily: 'Noto Sans',
-                    color: 'black'
-                  }
-                }}
-                data={[
-                    { value: 'all', label: 'All'},
-                    { value: 'action', label: 'Action' },
-                    { value: 'adventure', label: 'Adventure' },
-                    { value: 'business', label: 'Business' },
-                    { value: 'comedy', label: 'Comedy' },
-                    { value: 'educational', label: 'Educational' },
-                    { value: 'erotic', label: 'Erotic' },
-                    { value: 'fantasy', label: 'Fantasy' },
-                    { value: 'historical', label: 'Historical' },
-                    { value: 'horror', label: 'Horror' },
-                    { value: 'kids', label: 'Kids' },
-                    { value: 'mystery', label: 'Mystery' },
-                    { value: 'non-fiction', label: 'Non-Fiction' },
-                    { value: 'open-world', label: 'Open-World' },
-                    { value: 'party', label: 'Party' },
-                    { value: 'romance', label: 'Romance' },
-                    { value: 'sandbox', label: 'Sandbox' },
-                    { value: 'science-fiction', label: 'Science-Fiction' },
-                    { value: 'stealth', label: 'Stealth' },
-                    { value: 'survival', label: 'Survival' },
-                    { value: 'thriller', label: 'Thriller' },
-                    { value: 'warfare', label: 'Warfare' }
-                ]}
-                value={selectedTheme}
-                onChange={(value) => setSelectedTheme(value as any)}
-                className={classes.filterSelect}
-                mb="md"
-              />
-
-            </Stack>
-
-          </Drawer>
-
+          <GameFilters
+            sortOption={sortOption}
+            selectedType={selectedType}
+            selectedGenres={selectedGenre}
+            selectedThemes={selectedTheme}
+            selectedModes={selectedMode}
+            onSortChange={(v) => setSortOption(v as any)}
+            onTypeChange={(v) => setSelectedType(v as any)}
+            onGenresChange={(v) => setSelectedGenre(v as any)}
+            onThemesChange={(v) => setSelectedTheme(v as any)}
+            onModesChange={(v) => setSelectedMode(v as any)}
+          />
+            
           <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>
             {processedGames.map((game) => (
               <div className={classes.gameContainer} key={game.id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game.id}`) }} >
