@@ -40,7 +40,7 @@ export function Header() {
   const handleSearch = async (query: string) => {
     setSearchQuery(query);
   
-    if (query.trim() === '') {
+    if (query.trim().length < 3) {
       setSearchResults([]); // Clear results if the query is empty
       return;
     }
@@ -95,11 +95,11 @@ export function Header() {
           scrollAreaProps={{ scrollbarSize: 16, type: 'auto', scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
           comboboxProps={{ transitionProps: { transition: 'fade-down', duration: 200 } }}
           className={classes.searchBar}
-          radius='lg'
-          size='md'
+          radius='md'
+          size='lg'
           maxDropdownHeight={200}
           variant='filled'
-          placeholder="Search For Games"
+          placeholder="Search For Games..."
           rightSection={<IconSearch size={24} color='white' style={{cursor: 'pointer'}} onClick={() => router.push(`/search?query=${encodeURIComponent(searchQuery)}`)}/>}
           value={searchQuery}
           onChange={handleSearch} // Update the search query state

@@ -7,7 +7,7 @@ import { notFound } from 'next/navigation';
 
 import toast from 'react-hot-toast';
 
-import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack } from '@mantine/core';
+import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, Overlay, BackgroundImage } from '@mantine/core';
 import Image from 'next/image';
 
 import Carousel from 'react-multi-carousel';
@@ -422,293 +422,311 @@ export default function GameDetails() {
   // Sort the collection games by total rating in descending order
   const sortedCollections = game.collections?.[0]?.games.sort((a: any, b: any) => b.total_rating - a.total_rating);
 
+  // Determine the background image (first screenshot if available)
+  const backgroundPhoto = game.screenshots && game.screenshots.length > 0
+  ? `https:${game.screenshots[0].url.replace('t_thumb', 't_1080p')}`
+  : PlaceHolderImage.src;
+
   return (
-    <div className={classes.wrapper}>
-      <h1 className={classes.title}>{game.name}</h1>
-      <div className={classes.details}>
-        <div className={classes.media}>
-          <img
-            src={
-              game.cover
-                ? `https:${game.cover.url.replace('t_thumb', 't_cover_big')}`
-                : PlaceHolderImage.src
-            }
-            alt={game.name}
-            className={classes.cover}
-          />
 
-        {isAuthenticated ? (
-          isGameInLibrary ? (
-            <>
-              <Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>
-                {libraryGame?.status || 'No Status Given'}
-              </Badge>
-              <Modal opened={opened} onClose={close} title="Change Game Status">
-                <Select
-                  className={classes.statusSelect}
-                  value={status}
-                  onChange={(value) => {
-                    setStatus(value || '');
-                    handleUpdateStatus(value || '');
-                    close();
-                  }}
-                  data={[
-                    { value: 'Playing', label: 'Playing' },
-                    { value: 'Completed', label: 'Completed' },
-                    { value: 'On Hold', label: 'On Hold' },
-                    { value: 'Dropped', label: 'Dropped' },
-                    { value: 'Plan to Play', label: 'Plan to Play' },
-                  ]}
-                  placeholder="Select game status"
-                />
-              </Modal>
-              <Button
-                variant="filled"
-                color="#d8070b"
-                size="md"
-                radius="xl"
-                className={classes.button}
-                rightSection={<Delete />}
-                onClick={handleRemoveFromLibrary}
-                loading={addingToLibrary}
-              >
-                Remove from your Library!
-              </Button>
-            </>
-          ) : (
-            <Button
-              variant="filled"
-              color="#2bdd66"
-              size="lg"
-              radius="xl"
-              className={classes.button}
-              rightSection={<NotebookPen />}
-              onClick={handleAddToLibrary}
-              loading={addingToLibrary}
-            >
-              Add to your Library!
-            </Button>
-          )
-        ) : (
-          <Button
-            variant="filled"
-            color="#2bdd66"
-            size="lg"
-            radius="xl"
-            className={classes.button}
-            rightSection={<NotebookPen />}
-            onClick={() => router.push('/auth/signup')}
-          >
-            Create an account use CheckPoint!
-          </Button>
-        )}
+    <div className={classes.background} style={{ backgroundImage: `url(${backgroundPhoto})` }}>
 
-        </div>
+      <div className={classes.backgroundOverlay}>
 
-        <div className={classes.gameInfo}>
+        <div className={classes.wrapper}>
 
-          {/* <h2 className={classes.accordionTitle}>Game Information</h2> */}
+          <h1 className={classes.title}>{game.name}</h1>
 
-          <Accordion className={classes.accordion} 
-            styles={{item: {background: '#5a5b5dff', color: 'white', borderRadius: '24px'}, 
-              label: {color: 'white', paddingRight: '0.7rem', fontSize: '18px', fontWeight: 550}, 
-              chevron: {color: 'white'},
-              panel: {color: 'white', fontSize: '18px', }}} 
-            chevronSize={30}
-            radius='lg' 
-            variant='seperated' 
-            multiple 
-            defaultValue={['Description']}
-          >
-            {gameInfo.map((item) => (
-              <Accordion.Item key={item.label} value={item.label}>
-                <Accordion.Control icon={item.icon}>{item.label}</Accordion.Control>
-                <Accordion.Panel>{item.content}</Accordion.Panel>
-              </Accordion.Item>
-            ))}
-          </Accordion>
+          <div className={classes.details}>
 
-        </div>
+            <div className={classes.media}>
+              
+              <img
+                src={
+                  game.cover
+                    ? `https:${game.cover.url.replace('t_thumb', 't_720p')}`
+                    : PlaceHolderImage.src
+                }
+                alt={game.name}
+                className={classes.cover}
+              />
 
-      </div>
+              {isAuthenticated ? (
+                isGameInLibrary ? (
+                  <>
+                    <Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>
+                      {libraryGame?.status || 'No Status Given'}
+                    </Badge>
+                    <Modal opened={opened} onClose={close} title="Change Game Status">
+                      <Select
+                        className={classes.statusSelect}
+                        value={status}
+                        onChange={(value) => {
+                          setStatus(value || '');
+                          handleUpdateStatus(value || '');
+                          close();
+                        }}
+                        data={[
+                          { value: 'Playing', label: 'Playing' },
+                          { value: 'Completed', label: 'Completed' },
+                          { value: 'On Hold', label: 'On Hold' },
+                          { value: 'Dropped', label: 'Dropped' },
+                          { value: 'Plan to Play', label: 'Plan to Play' },
+                        ]}
+                        placeholder="Select game status"
+                      />
+                    </Modal>
+                    <Button
+                      variant="filled"
+                      color="#d8070b"
+                      size="md"
+                      radius="xl"
+                      className={classes.button}
+                      rightSection={<Delete />}
+                      onClick={handleRemoveFromLibrary}
+                      loading={addingToLibrary}
+                    >
+                      Remove from your Library!
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    variant="filled"
+                    color="#2bdd66"
+                    size="lg"
+                    radius="xl"
+                    className={classes.button}
+                    rightSection={<NotebookPen />}
+                    onClick={handleAddToLibrary}
+                    loading={addingToLibrary}
+                  >
+                    Add to your Library!
+                  </Button>
+                )
+              ) : (
+                <Button
+                  variant="filled"
+                  color="#2bdd66"
+                  size="lg"
+                  radius="xl"
+                  className={classes.button}
+                  rightSection={<NotebookPen />}
+                  onClick={() => router.push('/auth/signup')}
+                >
+                  Create an account use CheckPoint!
+                </Button>
+              )}
 
-      <h2 className={classes.screenshotsTitle}>Ratings: </h2>
-
-      <div className={classes.ratings}>
-
-        <div className={classes.igdbRating}>
-
-            <RingProgress
-              size={300}
-              thickness={18}
-              sections={[
-                { value: game.rating || 0, color: 'blue' },
-                { value: 100 - (game.rating || 0), color: 'gray' },
-              ]}
-              label={
-                <Text size="xl" fw={600} c='white' className={classes.ratingLabel}>
-                  {game.rating ? `${Math.round(game.rating)}%` : 'N/A'}
-                </Text>
-              }
-            />
-            <Text className={classes.ratingText} size="md" c='white'>
-              {game.rating_count ? `${game.rating_count} average user ratings from IGDB` : 'No ratings available'}
-            </Text>
-
-          </div>
-
-          <div className={classes.aggregatedRating}>
-
-            <RingProgress
-              size={300}
-              thickness={18}
-              sections={[
-                { value: game.aggregated_rating || 0, color: 'red' },
-                { value: 100 - (game.aggregated_rating || 0), color: 'gray' },
-              ]}
-              label={
-                <Text size="xl" fw={600} c='white' className={classes.ratingLabel}>
-                  {game.aggregated_rating ? `${Math.round(game.aggregated_rating)}%` : 'N/A'}
-                </Text>
-              }
-            />
-            <Text className={classes.ratingText} size="md" c='white'>
-              {game.aggregated_rating_count ? `${game.aggregated_rating_count} ratings from external critics` : 'No ratings available'}
-            </Text>
-
-          </div>
-
-      </div>
-
-      <h2 className={classes.screenshotsTitle}>Screenshots: </h2>
-
-      <div className={classes.screenshotGrid}>
-
-        <Carousel
-          responsive={screenshotResponsive}
-          centerMode={!isMobile}
-          showDots
-          arrows={!modalOpen}
-          infinite={true}
-          autoPlay={false}
-          keyBoardControl={true}
-          containerClass={classes.carouselContainer}
-          itemClass={classes.carouselItem}
-          dotListClass={classes.carouselDots}
-        >
-
-        {screenshots.map((screenshot: any, index: number) => (
-          <div key={screenshot.id} className={classes.carouselSlide}>
-            <Image
-              src={`https:${screenshot.url.replace('t_thumb', 't_1080p')}`}
-              alt={`Screenshot of ${game.name}`}
-              className={classes.screenshot}
-              width={750}
-              height={400}
-              loading='lazy'
-              layout='responsive'
-              onClick={() => {
-                setSelectedScreenshot(`https:${screenshot.url.replace('t_thumb', 't_1080p')}`);
-                setSelectedScreenshotIndex(index);
-                console.log("Selected Screenshot Index:", index);
-                setModalOpen(true);
-              }}
-            />
-          </div>
-        ))}
-
-        </Carousel>
-
-      </div>
-
-      {selectedScreenshot && modalOpen && (
-        <div className={classes.fullScreenOverlay}>
-
-          <div className={classes.carouselButtons}>
-            <Button className={classes.closeButton} variant='light' color='white' size='sm' onClick={() =>setModalOpen(false)}><X size={40} /></Button>
-          </div>
-
-          <Image
-            src={selectedScreenshot}
-            alt={`Screenshot of ${game.name}`}
-            className={classes.fullScreenImage}
-            width={800}
-            height={450}
-            style={{ objectFit: 'contain', maxHeight: '90vh', width: 'auto'}}
-            loading='lazy'
-            layout='responsive'
-          />
-        </div>
-      )}
-
-      
-      <div className={classes.gameSeries}>
-
-        {game.collections?.[0]?.games.length > 0 && (
-          <>
-
-            <div className={classes.nameButtonContainer}>
-              <h2 className={classes.gameSeriesName}> Other Games in the Series:</h2>
-              {/* <a className={classes.viewMoreText} href='/search/popular' >View more</a> */}
             </div>
-            
-            <SimpleGrid spacing='lg' verticalSpacing='lg' className={classes.seriesGrid}>
-              {sortedCollections.slice(0, 6).map((collection: any) => (
+
+            <div className={classes.gameInfo}>
+
+              {/* <h2 className={classes.accordionTitle}>Game Information</h2> */}
+
+              <Accordion className={classes.accordion} 
+                styles={{item: {background: '#292828ff', color: 'white', border: '0.5px solid lightgrey'}, 
+                  label: {color: 'white', paddingRight: '0.7rem', fontSize: '18px', fontWeight: 550}, 
+                  chevron: {color: 'white'},
+                  panel: {color: 'white', fontSize: '18px', }}} 
+                
+                radius='md' 
+                variant='filled' 
+                multiple 
+                defaultValue={['Description']}
+              >
+                {gameInfo.map((item) => (
+                  <Accordion.Item key={item.label} value={item.label}>
+                    <Accordion.Control icon={item.icon}>{item.label}</Accordion.Control>
+                    <Accordion.Panel>{item.content}</Accordion.Panel>
+                  </Accordion.Item>
+                ))}
+              </Accordion>
+
+            </div>
+
+          </div>
+
+          <h2 className={classes.screenshotsTitle}>Ratings: </h2>
+
+          <div className={classes.ratings}>
+
+            <div className={classes.igdbRating}>
+
+                <RingProgress
+                  size={300}
+                  thickness={18}
+                  sections={[
+                    { value: game.rating || 0, color: 'blue' },
+                    { value: 100 - (game.rating || 0), color: 'gray' },
+                  ]}
+                  label={
+                    <Text size="xl" fw={600} c='white' className={classes.ratingLabel}>
+                      {game.rating ? `${Math.round(game.rating)}%` : 'N/A'}
+                    </Text>
+                  }
+                />
+                <Text className={classes.ratingText} size="md" c='white'>
+                  {game.rating_count ? `${game.rating_count} average user ratings from IGDB` : 'No ratings available'}
+                </Text>
+
+              </div>
+
+              <div className={classes.aggregatedRating}>
+
+                <RingProgress
+                  size={300}
+                  thickness={18}
+                  sections={[
+                    { value: game.aggregated_rating || 0, color: 'red' },
+                    { value: 100 - (game.aggregated_rating || 0), color: 'gray' },
+                  ]}
+                  label={
+                    <Text size="xl" fw={600} c='white' className={classes.ratingLabel}>
+                      {game.aggregated_rating ? `${Math.round(game.aggregated_rating)}%` : 'N/A'}
+                    </Text>
+                  }
+                />
+                <Text className={classes.ratingText} size="md" c='white'>
+                  {game.aggregated_rating_count ? `${game.aggregated_rating_count} ratings from external critics` : 'No ratings available'}
+                </Text>
+
+              </div>
+
+          </div>
+
+          <h2 className={classes.screenshotsTitle}>Screenshots: </h2>
+
+          <div className={classes.screenshotGrid}>
+
+            <Carousel
+              responsive={screenshotResponsive}
+              centerMode={!isMobile}
+              showDots
+              arrows={!modalOpen}
+              infinite={true}
+              autoPlay={false}
+              keyBoardControl={true}
+              containerClass={classes.carouselContainer}
+              itemClass={classes.carouselItem}
+              dotListClass={classes.carouselDots}
+            >
+
+            {screenshots.map((screenshot: any, index: number) => (
+              <div key={screenshot.id} className={classes.carouselSlide}>
+                <Image
+                  src={`https:${screenshot.url.replace('t_thumb', 't_1080p')}`}
+                  alt={`Screenshot of ${game.name}`}
+                  className={classes.screenshot}
+                  width={750}
+                  height={400}
+                  loading='lazy'
+                  layout='responsive'
+                  onClick={() => {
+                    setSelectedScreenshot(`https:${screenshot.url.replace('t_thumb', 't_1080p')}`);
+                    setSelectedScreenshotIndex(index);
+                    console.log("Selected Screenshot Index:", index);
+                    setModalOpen(true);
+                  }}
+                />
+              </div>
+            ))}
+
+            </Carousel>
+
+          </div>
+
+          {selectedScreenshot && modalOpen && (
+            <div className={classes.fullScreenOverlay}>
+
+              <div className={classes.carouselButtons}>
+                <Button className={classes.closeButton} variant='light' color='white' size='sm' onClick={() =>setModalOpen(false)}><X size={40} /></Button>
+              </div>
+
+              <Image
+                src={selectedScreenshot}
+                alt={`Screenshot of ${game.name}`}
+                className={classes.fullScreenImage}
+                width={800}
+                height={450}
+                style={{ objectFit: 'contain', maxHeight: '90vh', width: 'auto'}}
+                loading='lazy'
+                layout='responsive'
+              />
+            </div>
+          )}
+
+          
+          <div className={classes.gameSeries}>
+
+            {game.collections?.[0]?.games.length > 0 && (
+              <>
+
+                <div className={classes.nameButtonContainer}>
+                  <h2 className={classes.gameSeriesName}> Other Games in the Series:</h2>
+                  {/* <a className={classes.viewMoreText} href='/search/popular' >View more</a> */}
+                </div>
+                
+                <SimpleGrid spacing='lg' verticalSpacing='lg' className={classes.seriesGrid}>
+                  {sortedCollections.slice(0, 6).map((collection: any) => (
+                      <div
+                        className={classes.seriesGameCard}
+                        key={collection.id}
+                        onClick={() => router.push(`/games/${collection.id}`)}
+                      >
+                        <img
+                          src={
+                            collection.cover
+                              ? `https:${collection.cover.url.replace('t_thumb', 't_1080p')}`
+                              : PlaceHolderImage.src
+                          }
+                          alt={collection.name}
+                          className={classes.gameCover}
+                          onClick={() => router.push(`/games/${game.id}`)}
+                        />
+                      </div>
+                  ))}
+                </SimpleGrid>
+              </>
+            )}
+
+          </div>
+
+          <h2 className={classes.similarGamesName}>Similar Games: </h2>
+
+          <div className={classes.similarGames}>
+            <Carousel
+              responsive={similarGameResponsive}
+              infinite={true}
+              autoPlay={false}
+              keyBoardControl={true}
+              containerClass={classes.carouselContainer}
+              itemClass={classes.carouselItem}
+            >
+              {game.similar_games?.map((similarGame: any) => {
+                return (
                   <div
-                    className={classes.seriesGameCard}
-                    key={collection.id}
-                    onClick={() => router.push(`/games/${collection.id}`)}
+                    key={similarGame.id}
+                    className={classes.similarGameSlide}
+                    onClick={() => router.push(`/games/${similarGame.id}`)} // Navigate to the similar game's details page
                   >
                     <img
                       src={
-                        collection.cover
-                          ? `https:${collection.cover.url.replace('t_thumb', 't_1080p')}`
+                        similarGame.cover
+                          ? `https:${similarGame.cover.url.replace('t_thumb', 't_1080p')}`
                           : PlaceHolderImage.src
                       }
-                      alt={collection.name}
-                      className={classes.gameCover}
-                      onClick={() => router.push(`/games/${game.id}`)}
+                      alt={similarGame.name}
+                      className={classes.similarGameCover}
                     />
+                    <p className={classes.similarGameName}>{similarGame.name}</p>
                   </div>
-              ))}
-            </SimpleGrid>
-          </>
-        )}
+                );
+              })}
+            </Carousel>
+          </div>
 
-      </div>
+        </div>
 
-      <h2 className={classes.similarGamesName}>Similar Games: </h2>
-
-      <div className={classes.similarGames}>
-        <Carousel
-          responsive={similarGameResponsive}
-          infinite={true}
-          autoPlay={false}
-          keyBoardControl={true}
-          containerClass={classes.carouselContainer}
-          itemClass={classes.carouselItem}
-        >
-          {game.similar_games?.map((similarGame: any) => {
-            return (
-              <div
-                key={similarGame.id}
-                className={classes.similarGameSlide}
-                onClick={() => router.push(`/games/${similarGame.id}`)} // Navigate to the similar game's details page
-              >
-                <img
-                  src={
-                    similarGame.cover
-                      ? `https:${similarGame.cover.url.replace('t_thumb', 't_1080p')}`
-                      : PlaceHolderImage.src
-                  }
-                  alt={similarGame.name}
-                  className={classes.similarGameCover}
-                />
-                <p className={classes.similarGameName}>{similarGame.name}</p>
-              </div>
-            );
-          })}
-        </Carousel>
       </div>
 
     </div>
