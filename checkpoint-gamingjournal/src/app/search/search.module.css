@@ -21,9 +21,15 @@
 .searchText {
     font-size: 2rem;
     font-weight: 450;
-    color: white; /* Dark text for contrast */
+    color: rgb(227, 227, 229); /* Dark text for contrast */
     text-align: center;
     font-family: 'Noto Sans';
+}
+
+.highlight {
+    color: white;
+    font-size: 2.2rem;
+    font-weight: 700;
     border-bottom: 2px solid white;
 }
 
@@ -100,7 +106,7 @@
 /* Game name */
 .gameName {
     font-size: 1rem;
-    font-weight: 390;
+    font-weight: 450;
     color: white;
     padding: 0.5rem;
     overflow: hidden;
@@ -169,6 +175,10 @@
 
     .searchText{
         font-size: 1.3rem;
+    }
+
+    .highlight{
+        font-size: 1.4rem;
     }
 
     .numberText{
