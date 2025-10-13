@@ -27,7 +27,7 @@
 }
 
 .mobileLogo{
-  width: 60px;
+  width: 90px;
   height: auto;
   object-fit: contain;
   margin-top: 0.1rem;
@@ -120,7 +120,7 @@
   }
 
   .mobileLogo{
-    margin-left: 0;
+    margin-left: -1rem;
     
   }
 
@@ -131,7 +131,7 @@
 
   .searchBar {
     width: 30rem;
-    margin-left: -1.5rem;
+    margin-left: -3rem;
     margin-right: -3rem;
     justify-self: center;
   }

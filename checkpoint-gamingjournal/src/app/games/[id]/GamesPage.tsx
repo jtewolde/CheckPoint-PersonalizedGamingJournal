@@ -424,7 +424,7 @@ export default function GameDetails() {
 
   // Determine the background image (first screenshot if available)
   const backgroundPhoto = game.screenshots && game.screenshots.length > 0
-  ? `https:${game.screenshots[0].url.replace('t_thumb', 't_1080p')}`
+  ? `https:${game.screenshots[2].url.replace('t_thumb', 't_1080p')}`
   : PlaceHolderImage.src;
 
   return (
@@ -435,11 +435,11 @@ export default function GameDetails() {
 
         <div className={classes.wrapper}>
 
-          <h1 className={classes.title}>{game.name}</h1>
-
           <div className={classes.details}>
 
             <div className={classes.media}>
+
+              <h1 className={classes.title}>{game.name}</h1>
               
               <img
                 src={
@@ -513,7 +513,7 @@ export default function GameDetails() {
                   rightSection={<NotebookPen />}
                   onClick={() => router.push('/auth/signup')}
                 >
-                  Create an account use CheckPoint!
+                  Create an account!
                 </Button>
               )}
 
