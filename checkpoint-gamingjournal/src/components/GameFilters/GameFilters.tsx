@@ -4,6 +4,7 @@ import { MultiSelect, Select, Drawer, Stack, Button } from "@mantine/core";4
 import { useDisclosure } from "@mantine/hooks";
 import { ListFilter } from "lucide-react";
 import classes from './GameFilters.module.css';
+import { validate } from "uuid";
 
 // Define the props for the GameFilter component
 interface GameFilterProps {
@@ -12,11 +13,13 @@ interface GameFilterProps {
     selectedGenres: string[];
     selectedModes: string[];
     selectedThemes: string[];
+    selectedPlatforms: string[];
     onSortChange: (value: string | null) => void;
     onTypeChange: (values: string[]) => void;
     onGenresChange: (values: string[]) => void;
     onModesChange: (values: string[]) => void;
     onThemesChange: (values: string[]) => void;
+    onPlatformsChange: (values: string[]) => void;
 }
 
 // Create the GameFilter component with the defined props to handle game filtering/sorting
@@ -26,11 +29,13 @@ export default function GameFilters({
     selectedGenres,
     selectedModes,
     selectedThemes,
+    selectedPlatforms,
     onSortChange,
     onTypeChange,
     onGenresChange,
     onModesChange,
-    onThemesChange
+    onThemesChange,
+    onPlatformsChange
 } : GameFilterProps) {
 
     const [opened, { toggle, close }] = useDisclosure(false);
@@ -69,7 +74,7 @@ export default function GameFilters({
                 }}
             >
 
-                <Stack className={classes.drawerFilters} gap='lg' justify='center' mt={20}>
+                <Stack className={classes.drawerFilters} gap='md' justify='center' mt={20}>
 
                     {/* Sort By Dropdown */}
                     <Select
@@ -113,7 +118,7 @@ export default function GameFilters({
                     {/* Filter by Game Type with MultiSelect */}
                     <MultiSelect
                         size='md'
-                        label="Game Type"
+                        label="Game Types"
                         maxDropdownHeight={200}
                         checkIconPosition='left'
                         scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
@@ -165,7 +170,7 @@ export default function GameFilters({
                     {/* Filter by Game Genres with MultiSelect */}
                     <MultiSelect
                         size='md'
-                        label="Game Genre"
+                        label="Genres"
                         maxDropdownHeight={200}
                         checkIconPosition='left'
                         scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
@@ -230,7 +235,7 @@ export default function GameFilters({
                     {/* Filter by Game Themes with MultiSelect */}
                     <MultiSelect
                         size='md'
-                        label="Game Theme"
+                        label="Themes"
                         maxDropdownHeight={200}
                         checkIconPosition='left'
                         scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
@@ -338,6 +343,73 @@ export default function GameFilters({
                         ]}
                         value={selectedModes}
                         onChange={onModesChange}
+                        className={classes.filterSelect}
+                        mb="md"
+                    />
+
+                    {/* Filter by Platforms with MultiSelect */}
+                    <MultiSelect
+                        size='md'
+                        label="Platforms"
+                        maxDropdownHeight={200}
+                        checkIconPosition='left'
+                        scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
+                        styles={{
+                        dropdown: {
+                            background: '#212121',
+                            color: 'whitesmoke',
+                        },
+                        input: {
+                            background: '#212121',
+                            fontFamily: 'Noto Sans',
+                            color: 'white'
+                        },
+                        option: {
+                            background: '#212121',
+                            fontFamily: 'Noto Sans',
+                            fontSize: '16px'
+                        },
+                        label: {
+                            color: 'white',
+                            fontFamily: 'Noto Sans',
+                            fontSize: '20px',
+                            fontWeight: 300
+                        },
+                        pill: {
+                            backgroundColor: '#64A0ff',
+                            fontWeight: 500,
+                            fontFamily: 'Noto Sans',
+                            color: 'black'
+                        }
+                        }}
+                        data={[
+                            { value: 'all', label: 'All'},
+                            { value: 'ps5', label: 'PlayStation 5' },
+                            { value: 'series-x-s', label: 'Xbox Series X/S'},
+                            { value: 'win', label: 'PC (Windows)' },
+                            { value: 'switch-2', label: 'Nintendo Switch 2' },
+                            { value: 'mac', label: 'Mac' },
+                            { value: 'linux', label: 'Linux' },
+                            { value: 'ps4', label: 'PlayStation 4' },
+                            { value: 'xboxone', label: 'Xbox One' },
+                            { value: 'switch', label: 'Nintendo Switch' },
+                            { value: 'android', label: 'Android' },
+                            { value: 'ios', label: 'IOS'},
+                            { value: 'psvita', label: 'PlayStation Vita' },
+                            { value: 'psp', label: 'PlayStation Portable'},
+                            { value: '3ds', label: 'Nintendo 3DS'},
+                            { value: 'ps3', label: 'PlayStation 3' },
+                            { value: 'xbox360', label: 'Xbox 360' },
+                            { value: 'wii', label: 'Wii'},
+                            { value: 'wiiu', label: 'Wii U'},
+                            { value: 'ds', label: 'Nintendo DS'},
+                            { value: 'nes', label: 'NES'},
+                            { value: 'ngc', label: 'GameCube'},
+                            { value: 'n64', label: 'Nintendo 64'},
+                            { value: 'snes', label: 'SNES'}
+                        ]}
+                        value={selectedPlatforms}
+                        onChange={onPlatformsChange}
                         className={classes.filterSelect}
                         mb="md"
                     />
