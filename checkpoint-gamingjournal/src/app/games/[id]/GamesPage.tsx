@@ -424,7 +424,7 @@ export default function GameDetails() {
 
   // Determine the background image (first screenshot if available)
   const backgroundPhoto = game.screenshots && game.screenshots.length > 0
-  ? `https:${game.screenshots[2].url.replace('t_thumb', 't_1080p')}`
+  ? `https:${game.screenshots[2].url.replace('t_thumb', 't_720p')}`
   : PlaceHolderImage.src;
 
   return (
@@ -444,7 +444,7 @@ export default function GameDetails() {
               <img
                 src={
                   game.cover
-                    ? `https:${game.cover.url.replace('t_thumb', 't_720p')}`
+                    ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}`
                     : PlaceHolderImage.src
                 }
                 alt={game.name}
@@ -521,7 +521,7 @@ export default function GameDetails() {
 
             <div className={classes.gameInfo}>
 
-              {/* <h2 className={classes.accordionTitle}>Game Information</h2> */}
+              <h2 className={classes.accordionTitle}>Game Details: </h2>
 
               <Accordion className={classes.accordion} 
                 styles={{item: {background: '#292828ff', color: 'white', border: '0.5px solid lightgrey'}, 

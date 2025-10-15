@@ -17,7 +17,7 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.6) 0%, #18181b 50%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 10%, #18181b 50%);
 }
 
 .wrapper {
@@ -32,11 +32,11 @@
 .title {
   font-size: 2.5rem;
   font-weight: bold;
-  text-align: center;
+  text-align: left;
   font-family: 'Inter';
   color: white;
-  border-bottom: 2px solid white;
   justify-self: center;
+  border-bottom: 2px solid #f0f0f0;
 }
 
 .details {
@@ -51,7 +51,7 @@
 }
 
 .cover {
-  width: 70%;
+  width: 60%;
   object-fit: cover;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -72,17 +72,19 @@
 }
 
 .gameInfo{
-  margin-top: 8rem;
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding-left: -4rem;
+  padding-right: 4rem;
   width: 60%;
   margin-bottom: 3rem;
 }
 
 .button{
-  width: 270px;
+  width: 290px;
   align-items: center;
   font-family: 'Poppins';
   font-weight: 400;
@@ -90,7 +92,7 @@
 
 .accordionTitle{
   font-size: 1.8rem;
-  font-weight: 600;
+  font-weight: 300;
   margin-bottom: 1rem;
   margin-top: 1rem;
   font-family: 'Poppins';
@@ -146,7 +148,7 @@
 
 .screenshotsTitle {
   font-size: 1.8rem;
-  font-weight: 600;
+  font-weight: 300;
   margin-bottom: 2rem;
   font-family: 'Poppins';
   color: white;
@@ -273,7 +275,7 @@
 .similarGamesName,
 .gameSeriesName{
   font-size: 1.8rem;
-  font-weight: 600;
+  font-weight: 300;
   margin-bottom: 1rem;
   margin-top: 3rem;
   font-family: 'Poppins';
@@ -309,7 +311,7 @@
   }
 
   .title {
-    font-size: 1.7rem;
+    font-size: 2rem;
     margin-top: 1rem;
     margin-bottom: 0.5rem;
   }
@@ -324,6 +326,7 @@
   .gameInfo{
     width: 100%;
     margin-top: 1rem;
+    padding: 0;
   }
 
   .accordion{
@@ -386,6 +389,10 @@
 
   .seriesGrid{
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .title{
+    border-bottom: none;
   }
 
   .gameSeriesName{
