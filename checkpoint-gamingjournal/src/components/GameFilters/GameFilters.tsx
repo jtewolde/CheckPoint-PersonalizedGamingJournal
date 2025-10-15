@@ -144,7 +144,7 @@ export default function GameFilters({
                             fontWeight: 300
                         },
                         pill: {
-                            backgroundColor: '#64A0ff',
+                            backgroundColor: '#b6becaff',
                             fontWeight: 500,
                             fontFamily: 'Noto Sans',
                             color: 'black'
@@ -196,7 +196,7 @@ export default function GameFilters({
                             fontWeight: 300
                         },
                         pill: {
-                            backgroundColor: '#64A0ff',
+                            backgroundColor: '#b6becaff',
                             fontWeight: 500,
                             fontFamily: 'Noto Sans',
                             color: 'black'
@@ -261,7 +261,7 @@ export default function GameFilters({
                             fontWeight: 300
                         },
                         pill: {
-                            backgroundColor: '#64A0ff',
+                            backgroundColor: '#b6becaff',
                             fontWeight: 500,
                             fontFamily: 'Noto Sans',
                             color: 'black'
@@ -326,7 +326,7 @@ export default function GameFilters({
                             fontWeight: 300
                         },
                         pill: {
-                            backgroundColor: '#64A0ff',
+                            backgroundColor: '#b6becaff',
                             fontWeight: 500,
                             fontFamily: 'Noto Sans',
                             color: 'black'
@@ -376,7 +376,7 @@ export default function GameFilters({
                             fontWeight: 300
                         },
                         pill: {
-                            backgroundColor: '#64A0ff',
+                            backgroundColor: '#b6becaff',
                             fontWeight: 500,
                             fontFamily: 'Noto Sans',
                             color: 'black'

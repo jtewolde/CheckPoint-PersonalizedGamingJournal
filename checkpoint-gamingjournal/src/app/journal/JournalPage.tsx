@@ -6,11 +6,10 @@ import { authClient } from '@/lib/auth-client';
 
 import classes from './journal.module.css';
 
-import { Table, Button, LoadingOverlay, Overlay, Popover, Select, SimpleGrid, Pagination } from '@mantine/core';
+import { Button, LoadingOverlay, Popover, Select, SimpleGrid, Pagination } from '@mantine/core';
 
 import toast from 'react-hot-toast';
 import { FilePlus, DeleteIcon, Eye, ListFilter } from 'lucide-react';
-
 
 export default function Journal() {
     // State variables for the journal entries
@@ -114,42 +113,37 @@ export default function Journal() {
     }
 
     return (
-        <div className={classes.container}>
+        <div className={classes.background}>
 
-            <Overlay
-                gradient="linear-gradient(180deg,rgb(67, 67, 67) 30%,rgb(94, 94, 94) 90%)"
-                opacity={0.5}
-                zIndex={0}
-            />
+            <div className={classes.backgroundOverlay}>
 
-            <div className={classes.journalWrapper}>
+                <div className={classes.journalWrapper}>
 
+                    <div className={classes.journalHeader}>
 
-                <div className={classes.journalHeader}>
+                        <h2 className={classes.journalTitle}>Your Journal Entries</h2>
 
-                    <h2 className={classes.journalTitle}>Your Journal Entries</h2>
+                        <div className={classes.buttonGroup} >
 
-                    <div className={classes.buttonGroup} >
+                            <Button
+                            variant='filled'
+                            color='lime'
+                            size='md'
+                            radius= 'lg'
+                            className={classes.addButton}
+                            onClick={() => router.push('/journalForm')}
+                            rightSection={<FilePlus />}
+                            >
+                                Add Journal Entry
+                            </Button>
 
-                        <Button
-                        variant='filled'
-                        color='lime'
-                        size='md'
-                        radius= 'lg'
-                        className={classes.addButton}
-                        onClick={() => router.push('/journalForm')}
-                        rightSection={<FilePlus />}
-                        >
-                            Add Journal Entry
-                        </Button>
+                            <Popover width={300} position='bottom' withArrow shadow='lg'>
+                                <Popover.Target>
+                                    <Button className={classes.filterButton} size='md' color='#854bcb' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Name</Button>
+                                </Popover.Target>
 
-                        <Popover width={300} position='bottom' withArrow shadow='lg'>
-                            <Popover.Target>
-                                <Button className={classes.filterButton} size='md' color='#854bcb' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Name</Button>
-                            </Popover.Target>
-
-                            <Popover.Dropdown>
-                                <Select
+                                <Popover.Dropdown>
+                                    <Select
                                     label="Choose a game to filter your journal by"
                                     placeholder="Filter by Game"
                                     checkIconPosition='right'
@@ -164,75 +158,78 @@ export default function Journal() {
                                     onChange={(value) => setGameName(value || 'all')}
                                     className={classes.filterDropdown}
                                     mb="md"
-                                />
-                            </Popover.Dropdown>
+                                    />
+                                </Popover.Dropdown>
 
-                        </Popover>
+                            </Popover>
+
+                        </div>
 
                     </div>
 
-                </div>
+                    <div className={classes.mainSection}>
 
-                <div className={classes.mainSection}>
+                        <div className={classes.entriesCountWrapper}>
+                            <p className={classes.entriesCount}>{totalEntries} Total Journal Entries: </p>
+                        </div>
+                        
+                        <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
+                            {filteredEntries.map((entry) => (
+                                <div key={entry._id} className={classes.entryCard} >
+                                    <h3 className={classes.entryGame}>{entry.gameName}</h3>
+                                    <h3 className={classes.entryTitle}>{entry.title}</h3>
+                                    <p className={classes.entryContent}>
+                                        {entry.content.length > 150
+                                            ? `${entry.content.slice(0, 200)}...` // Truncate long content
+                                            : entry.content}
+                                    </p>
+                                    <p className={classes.entryDate}>{entry.displayDate}</p>
 
-                    <div className={classes.entriesCountWrapper}>
-                        <p className={classes.entriesCount}>{filteredEntries.length} Journal Entries found</p>
-                    </div>
-                    
-                    <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
-                        {filteredEntries.map((entry) => (
-                            <div key={entry._id} className={classes.entryCard} >
-                                <h3 className={classes.entryGame}>{entry.gameName}</h3>
-                                <h3 className={classes.entryTitle}>{entry.title}</h3>
-                                <p className={classes.entryContent}>
-                                    {entry.content.length > 150
-                                        ? `${entry.content.slice(0, 200)}...` // Truncate long content
-                                        : entry.content}
-                                </p>
-                                <p className={classes.entryDate}>{entry.displayDate}</p>
+                                    <div className={classes.entryActions}>
+                                        <Button
+                                            className={classes.viewButton}
+                                            onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}
+                                            color="blue"
+                                            radius="md"
+                                            variant="filled"
+                                            style={{ marginRight: 8 }}
+                                            rightSection={<Eye />}
+                                        >
+                                            View
+                                        </Button>
 
-                                <div className={classes.entryActions}>
-                                    <Button
-                                        className={classes.viewButton}
-                                        onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}
-                                        color="blue"
-                                        radius="md"
-                                        variant="filled"
-                                        style={{ marginRight: 8 }}
-                                        rightSection={<Eye />}
-                                    >
-                                        View
-                                    </Button>
-
-                                    <Button
-                                        className={classes.deleteButton}
-                                        onClick={() => deleteJournalEntry(entry._id, entry.gameId)}
-                                        rightSection={<DeleteIcon />}
-                                        radius='md'
-                                        variant='filled'
-                                        color='red'
-                                        loading={loading}
-                                    >
-                                        Delete
-                                    </Button>
+                                        <Button
+                                            className={classes.deleteButton}
+                                            onClick={() => deleteJournalEntry(entry._id, entry.gameId)}
+                                            rightSection={<DeleteIcon />}
+                                            radius='md'
+                                            variant='filled'
+                                            color='red'
+                                            loading={loading}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                    </SimpleGrid>                    
+                            ))}
+                        </SimpleGrid>                    
 
-                </div>
+                    </div>
 
-                <div className={classes.paginationWrapper}>
-                    <Pagination
-                        size='lg'
-                        radius='lg'
-                        total={totalPages}
-                        value={page}
-                        onChange={setPage}
-                    />
+                    <div className={classes.paginationWrapper}>
+                        <Pagination
+                            size='lg'
+                            radius='lg'
+                            total={totalPages}
+                            value={page}
+                            onChange={setPage}
+                        />
+                    </div>
+
                 </div>
 
             </div>
+
         </div>
     );
 }
