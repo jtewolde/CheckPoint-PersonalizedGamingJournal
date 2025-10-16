@@ -17,15 +17,18 @@
     z-index: 1;
     pointer-events: none;
     /* Fade from transparent to dark */
-    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.5) 80%, #18181b 100%);
+    background: linear-gradient(to top, rgba(20, 20, 20, 0.5) 30%, #18181b 90%);
 }
 
 .journalWrapper{
+    display: flex;
+    flex-direction: column;
     flex: 1;
     position: relative;
     z-index: 1;
     border-radius: 16px; /* Rounded corners */
     pointer-events: auto;
+    justify-content: space-between;
 }
 
 .journalHeader{
@@ -122,6 +125,7 @@
     display: flex;
     flex-direction: column;
     padding: 3rem;
+    flex: 1;
 }
 
 .entryActions{

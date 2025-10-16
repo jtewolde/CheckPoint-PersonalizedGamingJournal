@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
 
         // Remove the journal entry ID from the game's journalEntries field
         const gameResult = await GameCollection.updateOne(
-            { _id: gameID }, // Query as a string
+            { gameId: gameID, userId: userId }, // Query as a string
             { $pull: { journalEntries: journalEntry.uuid } }
         );
 

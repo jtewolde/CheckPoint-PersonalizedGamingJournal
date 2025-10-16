@@ -171,7 +171,7 @@ export default function signInPage(){
             </Anchor>
 
             {/* Forgot Password Modal */}
-            <Modal opened={opened} onClose={close} centered styles={{content: {backgroundColor: '#0c0d21'}, header: {backgroundColor: '#0c0d21'}, close: {color: 'white'}}}>
+            <Modal opened={opened} onClose={close} centered styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid white'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
 
               <Group className={classes.modalText} mb={20} ta='center'>
                 <Title className={classes.modalTitle} ta="center" c='white'>
@@ -191,10 +191,11 @@ export default function signInPage(){
                     color: 'white'
                   },
                   label: {
-                    color: 'white'
+                    color: 'white',
+                    fontFamily: 'Noto Sans'
                   }
                 }}
-                label="Email address" 
+                label="Email Address" 
                 placeholder="Enter Your Email" 
                 leftSection={<Mail size={20} />}
                 size="md" 
