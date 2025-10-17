@@ -4,8 +4,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Burger, Group, Drawer, Autocomplete, Image, Button } from '@mantine/core';
 import { useDisclosure, useMediaQuery} from '@mantine/hooks';
 
-import CheckPointLogo from '../../../public/CheckPointBlackLogo.png';
-import CheckPointMobileLogo from '../../../public/CheckPointMobileBlackLogo.png';
+import CheckPointLogo from '../../../public/DesktopLogo.png';
+import CheckPointMobileLogo from '../../../public/MobileCheckPointLogo.png';
 
 import classes from './Header.module.css';
 import Link from 'next/link';
@@ -100,7 +100,7 @@ export function Header() {
           maxDropdownHeight={200}
           variant='filled'
           placeholder="Search For Games..."
-          rightSection={<IconSearch size={24} color='white' style={{cursor: 'pointer'}} onClick={() => router.push(`/search?query=${encodeURIComponent(searchQuery)}`)}/>}
+          rightSection={<IconSearch size={28} color='lightgrey' style={{cursor: 'pointer'}} onClick={() => router.push(`/search?query=${encodeURIComponent(searchQuery)}`)}/>}
           value={searchQuery}
           onChange={handleSearch} // Update the search query state
           onKeyDown={(e) => {

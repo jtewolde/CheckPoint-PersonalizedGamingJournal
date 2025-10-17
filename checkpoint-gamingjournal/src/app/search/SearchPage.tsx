@@ -7,9 +7,8 @@ import { useDisclosure } from '@mantine/hooks';
 import GameFilters from '@/components/GameFilters/GameFilters';
 
 import { LoadingOverlay } from '@mantine/core';
-import { SimpleGrid, Button, Stack, Select, MultiSelect, Drawer} from '@mantine/core';
+import { SimpleGrid } from '@mantine/core';
 
-import { ListFilter } from 'lucide-react';
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 import classes from './search.module.css';
@@ -33,6 +32,7 @@ export default function SearchResults() {
   const [selectedGenre, setSelectedGenre] = useState<string[]>(['all']);
   const [selectedTheme, setSelectedTheme] = useState<string[]>(['all']);
   const [selectedMode, setSelectedMode] = useState<string[]>(['all']);
+  const [selectedPlatform, setSelectedPlatform] = useState<string[]>(['all']);
 
   const router = useRouter();
 
@@ -92,15 +92,16 @@ export default function SearchResults() {
   const processedGames = sortedGames.filter((game) => {
 
     // Handle cases where game_type or genres might be undefined
-    if (!game.game_type || !game.genres || !game.themes || !game.game_modes) {
-      return selectedType.includes('all') && selectedGenre.includes('all') && selectedTheme.includes('all') && selectedMode.includes('all')
+    if (!game.game_type || !game.genres || !game.themes || !game.game_modes || !game.platforms) {
+      return selectedType.includes('all') && selectedGenre.includes('all') && selectedTheme.includes('all') && selectedMode.includes('all') && selectedPlatform.includes('all')
     }
 
-    // Convert game types and genres to lowercase for case-insensitive comparison
+    // Convert game types, genres, and platforms to lowercase for case-insensitive comparison
     const gameType = game.game_type.type.toLowerCase();
     const gameGenres = game.genres.map((genre: any) => genre.slug.toLowerCase());
     const gameThemes = game.themes.map((theme: any) => theme.slug.toLowerCase());
     const gameModes = game.game_modes.map((mode: any) => mode.slug.toLowerCase());
+    const platforms = game.platforms.map((platform : any) => platform.slug.toLowerCase());
 
     // Check if the game matches the selected type and genre filters
     const typeMatch = selectedType.includes('all') || (gameType && selectedType.includes(gameType));
@@ -110,9 +111,11 @@ export default function SearchResults() {
     const themeMatch = selectedTheme.includes('all') || gameThemes.some((theme: any) => selectedTheme.includes(theme));
     // Check if any of the game's modes match the selected modes
     const modeMatch = selectedMode.includes('all') || gameModes.some((mode: any) => selectedMode.includes(mode));
+    // Check if any of the game's platforms that it was released on matches
+    const platformMatch = selectedPlatform.includes('all') || platforms.some((platform: any) => selectedPlatform.includes(platform));
 
     return (
-      typeMatch && genreMatch && themeMatch && modeMatch
+      typeMatch && genreMatch && themeMatch && modeMatch && platformMatch
     );
   });
     
@@ -140,11 +143,13 @@ export default function SearchResults() {
             selectedGenres={selectedGenre}
             selectedThemes={selectedTheme}
             selectedModes={selectedMode}
+            selectedPlatforms={selectedPlatform}
             onSortChange={(v) => setSortOption(v as any)}
             onTypeChange={(v) => setSelectedType(v as any)}
             onGenresChange={(v) => setSelectedGenre(v as any)}
             onThemesChange={(v) => setSelectedTheme(v as any)}
             onModesChange={(v) => setSelectedMode(v as any)}
+            onPlatformsChange={(v) => setSelectedPlatform(v as any)}
           />
             
           <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>

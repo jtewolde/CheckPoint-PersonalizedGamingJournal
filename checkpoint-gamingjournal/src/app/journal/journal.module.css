@@ -1,17 +1,34 @@
-.container {
-    min-height: 100vh;
+.background {
     display: flex;
     flex-direction: column;
-    padding: 20px;
     position: relative;
-    background-color: #1d1e30;
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center top;
+    background-image: url('../../../public/JournalBackground.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    z-index: 0;
+}
+
+.backgroundOverlay{
+    position: relative;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    /* Fade from transparent to dark */
+    background: linear-gradient(to top, rgba(20, 20, 20, 0.5) 30%, #18181b 90%);
 }
 
 .journalWrapper{
+    display: flex;
+    flex-direction: column;
     flex: 1;
     position: relative;
     z-index: 1;
     border-radius: 16px; /* Rounded corners */
+    pointer-events: auto;
+    justify-content: space-between;
 }
 
 .journalHeader{
@@ -19,7 +36,7 @@
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-    margin-top: 1rem;
+    margin-top: 3rem;
 }
 
 .journalTitle{
@@ -34,13 +51,14 @@
 }
 
 .entriesCount{
-  font-weight: 200;
-  font-family: 'Noto Sans';
-  font-size: 24px;
-  color: rgb(208, 205, 205); /* Dark text for contrast */
-  margin-bottom: 1rem;
-  text-align: left;
-  justify-self: left;
+    font-weight: 400;
+    font-family: 'Poppins';
+    font-size: 24px;
+    color: #ffffff; /* Dark text for contrast */
+    margin-bottom: 1rem;
+    text-align: left;
+    justify-self: left;
+    border-bottom: 2px solid #bababa;
 }
 
 .entryCard {
@@ -90,23 +108,24 @@
 
 .addButton,
 .filterButton {
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  z-index: 1;
-  margin-bottom: 1rem;;
-  font-family: 'Noto Sans';
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 1;
+    margin-bottom: 1rem;;
+    font-family: 'Poppins';
 }
 
 .addButton:hover {
-    background-color: #01e132;
+    background-color: #059624;
 }
 
 .mainSection{
     display: flex;
     flex-direction: column;
     padding: 3rem;
+    flex: 1;
 }
 
 .entryActions{
@@ -138,8 +157,8 @@
 .paginationWrapper{
     display: flex;
     justify-content: center;
+    margin-bottom: 1rem;
 }
-
 
 @media (max-width: 768px) {
 

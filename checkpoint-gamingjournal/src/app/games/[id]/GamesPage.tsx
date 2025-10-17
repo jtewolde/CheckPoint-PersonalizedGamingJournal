@@ -424,7 +424,7 @@ export default function GameDetails() {
 
   // Determine the background image (first screenshot if available)
   const backgroundPhoto = game.screenshots && game.screenshots.length > 0
-  ? `https:${game.screenshots[0].url.replace('t_thumb', 't_1080p')}`
+  ? `https:${game.screenshots[2].url.replace('t_thumb', 't_720p')}`
   : PlaceHolderImage.src;
 
   return (
@@ -435,16 +435,16 @@ export default function GameDetails() {
 
         <div className={classes.wrapper}>
 
-          <h1 className={classes.title}>{game.name}</h1>
-
           <div className={classes.details}>
 
             <div className={classes.media}>
+
+              <h1 className={classes.title}>{game.name}</h1>
               
               <img
                 src={
                   game.cover
-                    ? `https:${game.cover.url.replace('t_thumb', 't_720p')}`
+                    ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}`
                     : PlaceHolderImage.src
                 }
                 alt={game.name}
@@ -457,9 +457,17 @@ export default function GameDetails() {
                     <Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>
                       {libraryGame?.status || 'No Status Given'}
                     </Badge>
-                    <Modal opened={opened} onClose={close} title="Change Game Status">
+
+                    <Modal opened={opened} onClose={close} title="Change Game Status:" styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #424242', color: 'white', fontFamily: 'Noto Sans'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
                       <Select
                         className={classes.statusSelect}
+                        size='md'
+                        styles={{
+                            wrapper: { color: '#212121'}, 
+                            input: { color: 'white', background: '#212121'}, 
+                            dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
+                            option: { background: '#202020'}
+                        }}
                         value={status}
                         onChange={(value) => {
                           setStatus(value || '');
@@ -513,7 +521,7 @@ export default function GameDetails() {
                   rightSection={<NotebookPen />}
                   onClick={() => router.push('/auth/signup')}
                 >
-                  Create an account use CheckPoint!
+                  Create an account!
                 </Button>
               )}
 
@@ -521,7 +529,7 @@ export default function GameDetails() {
 
             <div className={classes.gameInfo}>
 
-              {/* <h2 className={classes.accordionTitle}>Game Information</h2> */}
+              <h2 className={classes.accordionTitle}>Game Details: </h2>
 
               <Accordion className={classes.accordion} 
                 styles={{item: {background: '#292828ff', color: 'white', border: '0.5px solid lightgrey'}, 

@@ -1,10 +1,10 @@
 .header {
   height: 69px;
-  background-color: #3b3b3b;
+  background-color: #2e2e2e;
   display: flex; /* Ensure flexbox is applied */
   justify-content: center;
   align-items: center;
-  border-bottom: 2px solid black;
+  border-bottom: 1px solid rgb(80, 80, 80);
   padding: 0
 }
 
@@ -21,13 +21,13 @@
   width: 170px;
   height: auto;
   object-fit: contain;
-  margin-top: 0.8rem;
+  margin-top: 0.5rem;
   justify-self: flex-start;
   justify-content: flex-start;
 }
 
 .mobileLogo{
-  width: 60px;
+  width: 90px;
   height: auto;
   object-fit: contain;
   margin-top: 0.1rem;
@@ -120,7 +120,7 @@
   }
 
   .mobileLogo{
-    margin-left: 0;
+    margin-left: -1rem;
     
   }
 
@@ -131,7 +131,7 @@
 
   .searchBar {
     width: 30rem;
-    margin-left: -1.5rem;
+    margin-left: -3rem;
     margin-right: -3rem;
     justify-self: center;
   }

@@ -17,12 +17,12 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.6) 0%, #18181b 50%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 10%, #18181b 50%);
 }
 
 .wrapper {
   padding: 2rem;
-  padding-top: 3rem;
+  padding-top: 1rem;
   z-index: 3;
   position: relative;
   background: transparent;
@@ -32,13 +32,11 @@
 .title {
   font-size: 2.5rem;
   font-weight: bold;
-  margin-bottom: 3rem;
-  text-align: center;
-  font-family: 'Poppins';
+  text-align: left;
+  font-family: 'Inter';
   color: white;
-  border-bottom: 2px solid white;
-  display: block;
   justify-self: center;
+  border-bottom: 2px solid #f0f0f0;
 }
 
 .details {
@@ -53,11 +51,11 @@
 }
 
 .cover {
-  width: 80%;
+  width: 60%;
   object-fit: cover;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid #454c50;
+  border: 1px solid #6f7579;
 }
 
 .gameCover{
@@ -74,17 +72,27 @@
 }
 
 .gameInfo{
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  padding-left: -4rem;
+  padding-right: 4rem;
+  width: 60%;
   margin-bottom: 3rem;
+}
+
+.button{
+  width: 290px;
+  align-items: center;
+  font-family: 'Poppins';
+  font-weight: 400;
 }
 
 .accordionTitle{
   font-size: 1.8rem;
-  font-weight: 600;
+  font-weight: 300;
   margin-bottom: 1rem;
   margin-top: 1rem;
   font-family: 'Poppins';
@@ -140,7 +148,7 @@
 
 .screenshotsTitle {
   font-size: 1.8rem;
-  font-weight: 600;
+  font-weight: 300;
   margin-bottom: 2rem;
   font-family: 'Poppins';
   color: white;
@@ -211,14 +219,6 @@
   align-items: center;
 }
 
-.button{
-  align-items: center;
-  font-family: 'Poppins';
-  font-weight: 400;
-  margin-top: -0.5rem;
-  position: relative;
-}
-
 .gameSeries{
   display: flex;
   flex-direction: column;
@@ -275,7 +275,7 @@
 .similarGamesName,
 .gameSeriesName{
   font-size: 1.8rem;
-  font-weight: 600;
+  font-weight: 300;
   margin-bottom: 1rem;
   margin-top: 3rem;
   font-family: 'Poppins';
@@ -305,84 +305,94 @@
 }
 
 @media screen and (max-width: 768px) {
-.wrapper {
-  padding-top: 3rem;
-  padding: 1rem;
-}
+  .wrapper {
+    padding-top: 3rem;
+    padding: 0.4rem;
+  }
 
-.title {
-  font-size: 1.7rem;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-}
+  .title {
+    font-size: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
 
-.details {
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 3rem;
-  padding: 1rem;
-}
+  .details {
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+  }
 
-.accordion{
-  margin-top: 1.5rem;
-}
+  .gameInfo{
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0;
+  }
 
-.cover {
-  width: 100%;
-  height: auto;
-}
+  .accordion{
+    margin-top: 1.5rem;
+  }
 
-.button{
-  width: 50%;
-}
+  .cover {
+    width: 80%;
+    height: auto;
+  }
 
-.info p {
-  font-size: 0.95rem;
-}
+  .button{
+    width: 10%;
+  }
 
-.ratings {
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 7rem;
-}
+  .info p {
+    font-size: 0.95rem;
+  }
 
-.carouselSlide{
-  width: 100%;
-}
+  .ratings {
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 7rem;
+  }
 
-.screenshot {
-  width: 100%;
-  height: auto;
-  margin-bottom: 3rem;
-}
+  .carouselSlide{
+    width: 100%;
+  }
 
-.seriesGrid{
-  grid-template-columns: repeat(3, 1fr);
-}
+  .screenshot {
+    width: 100%;
+    height: auto;
+    margin-bottom: 3rem;
+  }
 
-.modalScreenshot{
-  width: 200%;
-}
+  .seriesGrid{
+    grid-template-columns: repeat(3, 1fr);
+  }
 
-.similarGamesName {
-  margin-top: 2rem;
-}
+  .modalScreenshot{
+    width: 200%;
+  }
 
-.similarGameCover {
-  width: 100%;
-  height: auto;
-}
+  .similarGamesName {
+    margin-top: 2rem;
+  }
 
-.button {
-  width: 100%;
-  text-align: center;
-}
+  .similarGameCover {
+    width: 100%;
+    height: auto;
+  }
+
+  .button {
+    width: 100%;
+    text-align: center;
+  }
 }
 
 @media screen and (max-width: 440px) {
 
   .seriesGrid{
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .title{
+    border-bottom: none;
   }
 
   .gameSeriesName{

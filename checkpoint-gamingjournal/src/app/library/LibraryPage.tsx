@@ -82,10 +82,16 @@ export default function Library(){
                     <Button className={classes.filterButton} size='md' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Status</Button>
                 </Popover.Target>
 
-                <Popover.Dropdown>
+                <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>
                     <Select
                         label="Choose a status to filter your library by"
                         placeholder="Filter by status"
+                        styles={{
+                            wrapper: { color: '#212121'}, 
+                            input: { color: 'white', background: '#212121'}, 
+                            dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
+                            option: { background: '#202020'}
+                        }}
                         checkIconPosition='left'
                         data={[
                             { value: 'all', label: 'All' },

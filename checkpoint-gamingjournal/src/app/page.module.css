@@ -81,6 +81,7 @@
   @media (max-width: $mantine-breakpoint-sm) {
     width: 80%;
   }
+  font-family: 'Poppins';
 }
 
 .FeatureSection{
