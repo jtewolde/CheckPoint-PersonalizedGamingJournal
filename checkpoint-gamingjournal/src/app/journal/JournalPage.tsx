@@ -68,15 +68,6 @@ export default function Journal() {
         fetchEntries(page);
     }, [page]);
 
-    // Get unique game names from entries for the dropdown
-    const gameNames = Array.from(new Set(entries.map(entry => entry.gameName)));
-
-    // Derived Filtered List
-    const filteredEntries = entries.filter(
-    (entry) => gameName === 'all' || entry.gameName === gameName
-    )
-    .slice()
-
     // Function to delete a journal entry
     const deleteJournalEntry = async (journalEntryId: string, gameID: string) => {
         try {
@@ -108,9 +99,52 @@ export default function Journal() {
         }
     };
 
+    // Function to delete all journal entries of a selected game
+    const deleteEntriesByGame = async(gameID: string) => {
+        try{
+            // Set loading state to true to display overlay
+            setLoading(true)
+
+            // Call deleteEntriesByGame API Route
+            const res = await fetch('/api/journal/deleteEntriesByGame', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('bearer_token')}`,
+                },
+                body: JSON.stringify({ gameID }),
+            });
+
+            // Retrieve JSON response for deletion and check for errors
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || 'Failed to delete journal entries');
+            }
+
+            console.log(`All Journal Entries for ${gameName} deleted successfully!`)
+            toast.success(`All Journal Entries for ${gameName} deleted successfully!`)
+
+            setLoading(false)
+            fetchEntries();
+
+        } catch(error) {
+            setLoading(false);
+            console.error('Error deleting journal entries:', error);
+            toast.error('Error deleting journal entries');
+        }
+    }
+
+    // If the loading state is true, display the loading overlay on screen
     if (loading) {
         return <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
     }
+
+    // Get unique game names from entries for the dropdown
+    const gameNames = Array.from(new Set(entries.map(entry => entry.gameName)));
+
+    // Derived Filtered List
+    const filteredEntries = entries.filter(
+    (entry) => gameName === 'all' || entry.gameName === gameName).slice()
 
     return (
         <div className={classes.background}>
@@ -140,15 +174,22 @@ export default function Journal() {
                         >
                             Add Journal Entry
                         </Button>
+                        
 
                         <Popover width={300} position='bottom' withArrow shadow='lg'>
                             <Popover.Target>
                                 <Button className={classes.filterButton} size='md' color='#854bcb' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Name</Button>
                             </Popover.Target>
 
-                            <Popover.Dropdown>
+                            <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>
                                 <Select
-                                label="Choose a game to filter your journal by"
+                                styles={{
+                                    wrapper: { color: '#212121'}, 
+                                    input: { color: 'white', background: '#212121'}, 
+                                    dropdown: { background: '#212121', color: 'whitesmoke'},
+                                    option: { background: '#202020'}
+                                }}
+                                label="Choose a game to filter your journal by:"
                                 placeholder="Filter by Game"
                                 checkIconPosition='right'
                                 data={[

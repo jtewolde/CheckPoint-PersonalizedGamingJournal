@@ -457,9 +457,17 @@ export default function GameDetails() {
                     <Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>
                       {libraryGame?.status || 'No Status Given'}
                     </Badge>
-                    <Modal opened={opened} onClose={close} title="Change Game Status">
+
+                    <Modal opened={opened} onClose={close} title="Change Game Status:" styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #424242', color: 'white', fontFamily: 'Noto Sans'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
                       <Select
                         className={classes.statusSelect}
+                        size='md'
+                        styles={{
+                            wrapper: { color: '#212121'}, 
+                            input: { color: 'white', background: '#212121'}, 
+                            dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
+                            option: { background: '#202020'}
+                        }}
                         value={status}
                         onChange={(value) => {
                           setStatus(value || '');
