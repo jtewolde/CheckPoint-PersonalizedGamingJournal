@@ -33,7 +33,7 @@ const verifyEmail = (props: verifyEmailProps) => {
 
               <Container style={container}>
 
-                <Img src="https://uh2u77zswq.ufs.sh/f/w1tMu8eAipZ2ftykWHdiSkirqVu906aPsGDnUe1WJwmHZ4gB" style={logo} alt="CheckPoint" width={260} height={90}/>
+                <Img src="https://uh2u77zswq.ufs.sh/f/w1tMu8eAipZ2e0vDbpaMUEKRO6IyHxzvVLhwGlS8stTYqAng" style={logo} alt="CheckPoint" width={260} height={90}/>
 
                 <Section style={textSection}>
 
@@ -79,41 +79,51 @@ const main = {
   padding: '10px 0'
 }
 
-const container = {
-  backgroundColor: 'white',
+const container: React.CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  backgroundColor: '#212121',
   border: '1px solid black',
   padding: '45px'
 }
 
 const textSection = {
+  display: 'flex',
+  justifyContent: 'center',
   padding: '0 20px',
-  backgroundColor: '#f0f0f0',
+  backgroundColor: '#464646ff',
   borderRadius: '8px',
-  marginTop: '30px'
+  marginTop: '30px',
+  color: 'white',
+  border: '1px solid #525252ff'
 }
 
 const title = {
-  fontSize: '24px',
+  fontSize: '28px',
+  justifySelf: 'center',
+  borderBottom: '3px solid white',
   fontFamily: "'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
   fontWeight: 'bold',
   marginTop: '20px',
-  marginBottom: '25px',
+  marginBottom: '40px'
 }
 
 const text = {
   fontSize: '16px',
   fontFamily: "'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
   fontWeight: '400',
-  color: 'black',
+  color: 'white',
   lineHeight: '25px'
 }
 
 const logo = {
-  margin: '0 auto'
+  margin: '0 auto',
+  height: '100px'
 }
 
 const button = {
-  backgroundColor: '#0a259c',
+  backgroundColor: '#127fc8ff',
   borderRadius: '4px',
   color: 'white',
   fontFamily: "'Open Sans', 'Helvetica Neue', Arial",
