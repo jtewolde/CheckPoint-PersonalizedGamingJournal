@@ -40,7 +40,7 @@ export default function Home() {
     <div className= {classes.hero}>
       <Overlay
         gradient="linear-gradient(180deg, #1f1c2c 10%,rgb(47, 45, 58) 20%)"
-        opacity={0.05}
+        opacity={0.40}
         zIndex={0}
       />
 

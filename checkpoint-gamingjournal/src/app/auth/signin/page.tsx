@@ -144,10 +144,10 @@ export default function signInPage(){
       <div className={classes.wrapper}>
         <Paper className={classes.form} radius={0} p={30}>
           <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
-            Welcome to CheckPoint! 
+            Welcome Back!
           </Title>
 
-          <Text ta='center' c='white' mt='lg'>
+          <Text ta='center' c='white' mt='sm' fw={500} size='lg'>
             Sign in with 
           </Text>
 

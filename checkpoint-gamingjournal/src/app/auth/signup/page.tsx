@@ -1,6 +1,6 @@
 'use client'
 
-import { Anchor, Button, Paper, PasswordInput, Text, TextInput, Title, Group, Divider} from '@mantine/core';
+import { Anchor, Button, Paper, PasswordInput, Text, TextInput, Title, Group, Divider, Overlay} from '@mantine/core';
 import toast from 'react-hot-toast';
 
 import { useState, useEffect } from 'react';
@@ -108,8 +108,8 @@ export default function signInPage(){
             Welcome to CheckPoint! 
           </Title>
 
-          <Text ta='center' c='white' mt='lg'>
-            Sign up by using
+          <Text ta='center' c='white' mt='lg' size='lg'>
+            Register by using
           </Text>
 
           <Group grow mb="md" mt="md">
@@ -119,10 +119,10 @@ export default function signInPage(){
 
           <Divider styles={{label: {color: 'white'}}} label="Or continue with email" labelPosition="center" color='white' my="lg"  />
           
-          <TextInput className={classes.usernameInput} label="Username" placeholder='Your username' required size='md' leftSection={<CircleUser size={20} />} mt='md' value={name} onChange={(e) => setName(e.currentTarget.value)} />
-          <TextInput className={classes.emailInput} label="Email address" placeholder="hello@gmail.com" required size="md" leftSection={<Mail size={20} />} mt="md" value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error}/>
-          <PasswordInput className={classes.passwordInput} label="Password" placeholder="Your password" required leftSection={<Lock size={20} />} mt="md" size="md" value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={passwordError}/>
-          <PasswordInput className={classes.passwordInput} label="Confirm Password" placeholder="Confirm password" required leftSection={<Lock size={20} />} mt="md" size="md" value={confirmPassword} onChange={(e) => setConfirmPassword(e.currentTarget.value)} error={passwordError}/>
+          <TextInput className={classes.usernameInput} label="Username" placeholder='Jin_Sakai' required size='md' leftSection={<CircleUser size={20} />} mt='md' value={name} onChange={(e) => setName(e.currentTarget.value)} />
+          <TextInput className={classes.emailInput} label="Email Address" placeholder="JSakai@gmail.com" required size="md" leftSection={<Mail size={20} />} mt="md" value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error}/>
+          <PasswordInput className={classes.passwordInput} label="Password" placeholder="Your Password" required leftSection={<Lock size={20} />} mt="md" size="md" value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={passwordError}/>
+          <PasswordInput className={classes.passwordInput} label="Confirm Password" placeholder="Confim Password" required leftSection={<Lock size={20} />} mt="md" size="md" value={confirmPassword} onChange={(e) => setConfirmPassword(e.currentTarget.value)} error={passwordError}/>
           <Button fullWidth mt="xl" size="md" loading={loading} rightSection={<UserRoundPlus size={25} />} onClick={handleEmailSignUp}>
             Register Account
           </Button>
