@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
         const userId = session.user.id; // Extract userId from the session
 
         // Step 1: Verify that the user has the game in their library
-        const game = await GameCollection.findOne({_id: gameID, userId})
+        const game = await GameCollection.findOne({gameId: gameID, userId})
         if (!game) {
             return NextResponse.json(
                 { error: "Game not found or owned by the user" },

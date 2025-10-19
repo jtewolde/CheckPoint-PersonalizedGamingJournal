@@ -2,23 +2,33 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useDisclosure } from '@mantine/hooks';
 import { authClient } from '@/lib/auth-client';
 
 import classes from './journal.module.css';
 
-import { Button, LoadingOverlay, Popover, Select, SimpleGrid, Pagination, Overlay } from '@mantine/core';
+import { Button, LoadingOverlay, Popover, Select, SimpleGrid, Pagination, Overlay, Modal, Group, Title, Text, Checkbox } from '@mantine/core';
 
 import toast from 'react-hot-toast';
-import { FilePlus, DeleteIcon, Eye, ListFilter } from 'lucide-react';
+import { FilePlus, DeleteIcon, Eye, ListFilter, Trash2 } from 'lucide-react';
 
 export default function Journal() {
     // State variables for the journal entries
     const [entries, setEntries] = useState<any[]>([]);
     const [totalEntries, setTotalEntries] = useState(0);
+
     const [loading, setLoading] = useState(true);
+    const [checked, setChecked] = useState(false);
+    const [error, setError] = useState('')
+
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+
     const [gameName, setGameName] = useState('all')
+    const [selectedGame, setSelectedGame] = useState('');
+
+    const [opened, {open, close}] = useDisclosure(false);
+
     const router = useRouter();
 
     // Check if the user is authenticated, if not redirect to auth page
@@ -105,8 +115,13 @@ export default function Journal() {
             // Set loading state to true to display overlay
             setLoading(true)
 
+            if(!selectedGame){
+                setError("Please select a game")
+                return
+            }
+
             // Call deleteEntriesByGame API Route
-            const res = await fetch('/api/journal/deleteEntriesByGame', {
+            const res = await fetch('/api/journal/deleteEntriesbyGame', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -125,7 +140,7 @@ export default function Journal() {
             toast.success(`All Journal Entries for ${gameName} deleted successfully!`)
 
             setLoading(false)
-            fetchEntries();
+            await fetchEntries();
 
         } catch(error) {
             setLoading(false);
@@ -145,6 +160,9 @@ export default function Journal() {
     // Derived Filtered List
     const filteredEntries = entries.filter(
     (entry) => gameName === 'all' || entry.gameName === gameName).slice()
+
+    // Find the selected game's object in the journal entries to get the gameID
+    const selectedGameObject = entries.find(e => e.gameName === selectedGame);
 
     return (
         <div className={classes.background}>
@@ -172,7 +190,7 @@ export default function Journal() {
                         onClick={() => router.push('/journalForm')}
                         rightSection={<FilePlus />}
                         >
-                            Add Journal Entry
+                            Add New Entry
                         </Button>
                         
 
@@ -208,9 +226,95 @@ export default function Journal() {
 
                         </Popover>
 
+                        <Button
+                        variant='filled'
+                        color='#e01515ff'
+                        size='md'
+                        radius= 'lg'
+                        className={classes.deleteEntriesButton}
+                        onClick={open}
+                        rightSection={<Trash2 />}
+                        >
+                            Delete
+                        </Button>
+
                     </div>
 
                 </div>
+
+                {/* Delete Entries By Game Modal */}
+                <Modal opened={opened} onClose={close} centered styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #545454ff'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
+
+                    <Group className={classes.modalText} mb={20} ta='left'>
+                        <Title className={classes.modalTitle} order={3} ta='center'>
+                            Delete All Entries of a Game
+                        </Title>
+
+                        <Text c="white" fz="md" ta="center" mb={10}>
+                            This will permanently delete <b>all</b> journal entries assoicated with the selected game.
+                            This action cannot be undone.
+                        </Text>
+
+                        <Select
+                        label="Select Game"
+                        size='lg'
+                        width={200}
+                        placeholder="Choose a game to delete its entries"
+                        data={gameNames.map((game) => ({ value: game, label: game }))}
+                        value={selectedGame}
+                        onChange={(value) => setSelectedGame(value || '')}
+                        styles={{
+                            input: { backgroundColor: '#212121', color: 'white' },
+                            dropdown: { backgroundColor: '#2c2c2fff', color: 'white' },
+                            label: { fontFamily: 'Noto Sans', color: 'white', fontSize: '18px'},
+                            option: { background: '#212121'}
+                        }}
+                        mb="lg"
+                        error={error}
+                        />
+
+                        <Checkbox radius='md' color='blue' c='white' size='md' label='I understand that I am permanently deleting my journal entries for this game' checked={checked} error={error} onChange={(event) => setChecked(event.currentTarget.checked)} />
+            
+                        <Button
+                        className={classes.deleteEntriesButton}
+                        color="#d8070b"
+                        size="md"
+                        mt={15}
+                        radius="lg"
+                        variant="filled"
+                        rightSection={<Trash2 />}
+                        disabled={!checked || !selectedGame}
+                        loading={loading}
+                        onClick={async () => {
+                            if (!selectedGame) {
+                                setError('Please select a game');
+                                return;
+                            }
+
+                            if (!checked) {
+                                setError('Please confirm before deleting');
+                                return;
+                            }
+
+                            if (!selectedGameObject) {
+                                toast.error('Invalid game selection');
+                                return;
+                            }
+
+                            console.log("Game Id", selectedGameObject.gameId)
+
+                            await deleteEntriesByGame(selectedGameObject.gameId); // ✅ Call your helper function
+                            setChecked(false);
+                            setSelectedGame('');
+                            close(); // ✅ Close modal
+                        }}
+                        >
+                        Delete Entries
+                        </Button>
+
+                    </Group>
+
+                </Modal>
 
                 <div className={classes.mainSection}>
 
