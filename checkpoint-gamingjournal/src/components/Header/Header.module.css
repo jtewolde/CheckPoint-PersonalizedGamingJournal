@@ -177,7 +177,7 @@
   display: flex;
   flex-direction: column;
   align-items: center; /* Center horizontally */
-  justify-content: center;
+  justify-content: flex-start;
   gap: 20px;
   text-align: center;
 }
@@ -278,27 +278,27 @@
 }
 
 .drawer{
-  color: #DDE0E0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .mobileLinksContainer{
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 9px;
   padding: 1rem;
 }
 
 .guestMobileLinksContainer{
-  margin-top: 6rem;
   display: flex;
   flex-direction: column;
-  justify-items: center;
-  align-self: center;
-  align-items: center;
-  justify-content: center;
-  gap: 50px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 20px;
   padding: 1rem;
 }
 
@@ -309,16 +309,17 @@
   padding: 8px 12px;
   border-radius: var(--mantine-radius-sm);
   text-decoration: none;
-  color: white;
+  color: rgb(227, 227, 227);
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 340;
   font-family: 'Poppins';
   transition: background-color 0.3s, color 0.3s;
 }
 
 .link:hover {
   background-color: rgba(226, 223, 223, 0.1);
-  border-bottom: 2px solid black;
+  color: white;
+  border-bottom: 3px solid rgb(255, 255, 255);
   border-radius: 0;
   font-weight: bold;
 }
@@ -342,9 +343,9 @@
 }
 
 .active {
-  border-bottom: 2px solid rgb(255, 255, 255);
+  border-bottom: 4px solid rgb(255, 255, 255);
   color: rgb(255, 255, 255);
-  font-weight: bolder;
+  font-weight: 700;
 }
 
 .guestActive {

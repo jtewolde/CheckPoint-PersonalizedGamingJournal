@@ -27,6 +27,13 @@ export function Header() {
   const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
   const isMobile = useMediaQuery('(max-width: 510px)');
 
+  // Drawer height for different conditions
+  const drawerSize = (() => {
+    if (isMobile && isAuthenticated) return '400px'; // smaller when logged in on mobile
+    if (isMobile && !isAuthenticated) return '270px'; // larger when guest on mobile
+    return '300px'; // default for desktop
+  })();
+
   // Function to handle clicking the logo and redirecting user to dashboard or homepage based on authenication
   const handleLogoClick = async () => {
     if(isAuthenticated){
@@ -157,17 +164,26 @@ export function Header() {
             ) : (
               <>
                 <div className={classes.guestLinks}>
-                  <Button variant='outline' color='black' rightSection={<House size={20} />} size='md' radius='md' className={`${classes.homeButton} ${pathname === '/' ? classes.guestActive : ''}`} onClick={() => router.push('/')}>
-                    Home
-                  </Button>
+                  <Link href="/" className={`${classes.link} ${pathname === '/' ? classes.active : ''}`}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <House size={20} style={{ marginBottom: 2 }} />
+                      Home
+                    </div>
+                  </Link>
 
-                  <Button variant='outline' color='black' rightSection={<LogIn size={20} />}size='md' radius='md' className={`${classes.signInButton} ${pathname === '/auth/signin' ? classes.guestActive : ''}`} onClick={() => router.push('/auth/signin')}>
-                    Sign In 
-                  </Button>
+                  <Link href="/auth/signin" className={`${classes.link} ${pathname === '/auth/signin' ? classes.active : ''}`}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <LogIn size={20} style={{ marginBottom: 2 }} />
+                      Sign In
+                    </div>
+                  </Link>
 
-                  <Button variant='outline' color='black' rightSection={<UserRoundPlus size={20} />} size='md' radius='md' className={`${classes.signUpButton} ${pathname === '/auth/signup' ? classes.guestActive : ''}`} onClick={() => router.push('/auth/signup')}>
-                    Register 
-                  </Button>
+                  <Link href="/auth/signup" className={`${classes.link} ${pathname === '/auth/signup' ? classes.active : ''}`}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <UserRoundPlus size={20} style={{ marginBottom: 2 }} />
+                      Register
+                    </div>
+                  </Link>
                 </div>
               </>
             )}
@@ -180,15 +196,16 @@ export function Header() {
         <Drawer
           opened={opened}
           onClose={close}
-          position='right'
-          size="60%"
+          position='top'
+          size={drawerSize}
           className={classes.drawer}
           styles={{
             content: {
-              backgroundColor: '#3b3b3b'
+              backgroundColor: '#202020ff',
+              borderBottom: '2px solid grey'
             },
             header: {
-              backgroundColor: '#3b3b3b'
+              backgroundColor: '#202020ff'
             },
             close: {
               color: 'white'
@@ -197,34 +214,33 @@ export function Header() {
         >
           <div className={classes.linkSpacing}>
 
-            
             {isAuthenticated ? (
               <>
                 <div className={classes.mobileLinksContainer} >
 
                   <Link href="/dashboard" className={`${classes.link} ${pathname === '/dashboard' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
                       <LayoutDashboard size={20} style={{ marginBottom: 2 }} />
                       Dashboard
                     </div>
                   </Link>
 
                   <Link href="/library" className={`${classes.link} ${pathname === '/library' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
                       <Library size={20} style={{ marginBottom: 2 }} />
                       Library
                     </div>
                   </Link>
 
                   <Link href="/journal" className={`${classes.link} ${pathname === '/journal' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
                       <Notebook size={20} style={{ marginBottom: 2 }} />
                       Journal
                     </div>
                   </Link>
 
                   <Link href="/chat" className={`${classes.link} ${pathname === '/chat' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
                       <BotMessageSquare size={20} style={{ marginBottom: 2 }} />
                       Chat
                     </div>
@@ -238,17 +254,26 @@ export function Header() {
             ) : (
               <>
                 <div className={classes.guestMobileLinksContainer} >
-                  <Button variant='outline' color='black' rightSection={<House size={20} />} size='lg' radius='md' className={`${classes.homeButton} ${pathname === '/' ? classes.guestActive : ''}`} onClick={() => router.push('/')}>
-                    Home
-                  </Button>
+                  <Link href="/" className={`${classes.link} ${pathname === '/' ? classes.active : ''}`}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '20px' }}>
+                      <House size={20} style={{ marginBottom: 2 }} />
+                      Home
+                    </div>
+                  </Link>
 
-                  <Button variant='outline' color='black' rightSection={<LogIn size={20} />}size='lg' radius='md' className={`${classes.signInButton} ${pathname === '/auth/signin' ? classes.guestActive : ''}`} onClick={() => router.push('/auth/signin')}>
-                    Sign In 
-                  </Button>
+                  <Link href="/auth/signin" className={`${classes.link} ${pathname === '/auth/signin' ? classes.active : ''}`}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '20px' }}>
+                      <LogIn size={20} style={{ marginBottom: 2 }} />
+                      Sign In
+                    </div>
+                  </Link>
 
-                  <Button variant='outline' color='black' rightSection={<UserRoundPlus size={20} />} size='lg' radius='md' className={`${classes.signUpButton} ${pathname === '/auth/signup' ? classes.guestActive : ''}`} onClick={() => router.push('/auth/signup')}>
-                    Register 
-                  </Button>
+                  <Link href="/auth/signup" className={`${classes.link} ${pathname === '/auth/signup' ? classes.active : ''}`}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '20px' }}>
+                      <UserRoundPlus size={20} style={{ marginBottom: 2 }} />
+                      Register
+                    </div>
+                  </Link>
                 </div>
               </>
             )}
