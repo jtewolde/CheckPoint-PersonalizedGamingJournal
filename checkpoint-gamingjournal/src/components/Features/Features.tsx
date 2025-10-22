@@ -11,14 +11,14 @@ export const featuresData = [
         icon: <Pin size={50} color='white' />,
         title: 'Track Your Game Progress',
         description: 'Log milestones, achievements, and story progress, see an overview of your gaming journey.',
-        iconColor: 'blue'
+        iconColor: 'pink'
     },
     
     {
         icon: <Notebook size={50} color='white'/>,
         title: 'Personalized Journal',
         description: 'Write session recaps, strategies, and personal notes to document your gaming journey.',
-        iconColor: 'pink'
+        iconColor: 'blue'
     },
 
     {

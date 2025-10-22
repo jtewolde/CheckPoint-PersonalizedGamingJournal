@@ -50,7 +50,6 @@
     background-color: #292626;
     border-radius: 16px;
     border: 2px solid #3f3f3f;
-    width: 460px; /* Keeps feature width manageable */
 }
 
 .feature:hover {
@@ -80,7 +79,7 @@
     width: 100vw; /* take full screen width */
     justify-content: center;
     padding-left: 4rem;
-    padding-right: 1rem;
+    padding-right: 3rem;
     gap: 2.4rem;
     box-sizing: border-box;
 }
@@ -99,4 +98,23 @@
     margin-top: var(--mantine-spacing-md);
 }
 
-@media (max-width: )
+@media (max-width: 768px) {
+
+  .featuresGrid {
+    grid-template-columns: repeat(2, 1fr); /* 1 column for screens smaller than 768px */
+  }
+
+  .featureWidthSection{
+    padding: 1rem;
+  }
+
+}
+
+@media (max-width: 540px) {
+
+  .featuresGrid {
+    grid-template-columns: repeat(1, 1fr); /* 1 column for screens smaller than 768px */
+    gap: 1.5rem;
+  }
+
+}

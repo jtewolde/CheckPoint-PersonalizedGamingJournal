@@ -1,28 +1,28 @@
 .hero {
-  background:
-    linear-gradient(transparent, #1b1b1b 20%),
-    url('/Expedition33Wallpaper.jpg') top center no-repeat;
-
-  background-size: auto;
-  background-position: center top;
-  position: relative;
-  min-height: 100vh; /* This ensures the hero fills the full screen */
-  max-width: 100%;
+  background: url('/Expedition33Wallpaper.jpg') top center no-repeat;
   display: flex;
   flex-direction: column;
   align-items: center; /* Centers content vertically */
   justify-content: center; /* Centers content horizontally */
-  z-index: 1;
-  padding-top: 9rem;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  position: relative;
+  min-height: 100vh; /* This ensures the hero fills the full screen */
+  max-width: 100%;
+  z-index: 0;
 }
 
-/* Responsive: keep the background image and gradient the same on mobile */
-@media (max-width: 500px) {
-  .hero {
-    background:
-    linear-gradient(transparent, #1b1b1b 16%),
-    url('/Expedition33Wallpaper.jpg') top center no-repeat;
-  }
+.backgroundOverlay{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  /* Fade from transparent to dark */
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 10%, #18181b 50%);
 }
 
 .container {
@@ -30,7 +30,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0;
+  padding-top: 10rem;
   width: 100%;
   z-index: 1;
   position: relative;
