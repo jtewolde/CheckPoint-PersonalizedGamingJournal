@@ -5,7 +5,7 @@
     min-height: 100vh;
     background-size: cover;
     background-position: center top;
-    background-image: url('../../../public/JournalBackground.jpg');
+    background-image: url('/JournalBackground.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     z-index: 0;
@@ -17,7 +17,7 @@
     z-index: 1;
     pointer-events: none;
     /* Fade from transparent to dark */
-    background: linear-gradient(to top, rgba(20, 20, 20, 0.5) 30%, #18181b 90%);
+    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.6) 60%, #18181b 90%);
 }
 
 .journalWrapper{

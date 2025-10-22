@@ -167,212 +167,210 @@ export default function Journal() {
     return (
         <div className={classes.background}>
 
-            <Overlay
-                gradient="linear-gradient(180deg,rgba(37, 37, 37, 1) 30%,rgba(53, 53, 53, 1) 90%)"
-                opacity={0.60}
-                zIndex={0}
-            />
+            <div className={classes.backgroundOverlay}>
 
-            <div className={classes.journalWrapper}>
+                <div className={classes.journalWrapper}>
 
-                <div className={classes.journalHeader}>
+                    <div className={classes.journalHeader}>
 
-                    <h2 className={classes.journalTitle}>Your Journal Entries</h2>
+                        <h2 className={classes.journalTitle}>Your Journal Entries</h2>
 
-                    <div className={classes.buttonGroup} >
+                        <div className={classes.buttonGroup} >
 
-                        <Button
-                        variant='filled'
-                        color='lime'
-                        size='md'
-                        radius= 'lg'
-                        className={classes.addButton}
-                        onClick={() => router.push('/journalForm')}
-                        rightSection={<FilePlus />}
-                        >
-                            Add New Entry
-                        </Button>
+                            <Button
+                            variant='filled'
+                            color='lime'
+                            size='md'
+                            radius= 'lg'
+                            className={classes.addButton}
+                            onClick={() => router.push('/journalForm')}
+                            rightSection={<FilePlus />}
+                            >
+                                Add New Entry
+                            </Button>
+                            
+
+                            <Popover width={300} position='bottom' withArrow shadow='lg'>
+                                <Popover.Target>
+                                    <Button className={classes.filterButton} size='md' color='#854bcb' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Name</Button>
+                                </Popover.Target>
+
+                                <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>
+                                    <Select
+                                    styles={{
+                                        wrapper: { color: '#212121'}, 
+                                        input: { color: 'white', background: '#212121'}, 
+                                        dropdown: { background: '#212121', color: 'whitesmoke'},
+                                        option: { background: '#202020'}
+                                    }}
+                                    label="Choose a game to filter your journal by:"
+                                    placeholder="Filter by Game"
+                                    checkIconPosition='right'
+                                    data={[
+                                        { value: 'all', label: 'All Games' },
+                                        ...gameNames.map((gameName) => ({
+                                            value: gameName,
+                                            label: gameName
+                                        }))
+                                    ]}
+                                    value={gameName}
+                                    onChange={(value) => setGameName(value || 'all')}
+                                    className={classes.filterDropdown}
+                                    mb="md"
+                                    />
+                                </Popover.Dropdown>
+
+                            </Popover>
+
+                            <Button
+                            variant='filled'
+                            color='#e01515ff'
+                            size='md'
+                            radius= 'lg'
+                            className={classes.deleteEntriesButton}
+                            onClick={open}
+                            rightSection={<Trash2 />}
+                            >
+                                Delete
+                            </Button>
+
+                        </div>
+
+                    </div>
+
+                    {/* Delete Entries By Game Modal */}
+                    <Modal opened={opened} onClose={close} centered styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #545454ff'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
+
+                        <Group className={classes.modalText} mb={20} ta='left'>
+                            <Title className={classes.modalTitle} order={3} ta='center'>
+                                Delete All Entries of a Game
+                            </Title>
+
+                            <Text c="white" fz="md" ta="center" mb={10}>
+                                This will permanently delete <b>all</b> journal entries assoicated with the selected game.
+                                This action cannot be undone.
+                            </Text>
+
+                            <Select
+                            label="Select Game"
+                            size='lg'
+                            width={200}
+                            placeholder="Choose a game to delete its entries"
+                            data={gameNames.map((game) => ({ value: game, label: game }))}
+                            value={selectedGame}
+                            onChange={(value) => setSelectedGame(value || '')}
+                            styles={{
+                                input: { backgroundColor: '#212121', color: 'white' },
+                                dropdown: { backgroundColor: '#2c2c2fff', color: 'white' },
+                                label: { fontFamily: 'Noto Sans', color: 'white', fontSize: '18px'},
+                                option: { background: '#212121'}
+                            }}
+                            mb="lg"
+                            error={error}
+                            />
+
+                            <Checkbox radius='md' color='blue' c='white' size='md' label='I understand that I am permanently deleting my journal entries for this game' checked={checked} error={error} onChange={(event) => setChecked(event.currentTarget.checked)} />
+                
+                            <Button
+                            className={classes.deleteEntriesButton}
+                            color="#d8070b"
+                            size="md"
+                            mt={15}
+                            radius="lg"
+                            variant="filled"
+                            rightSection={<Trash2 />}
+                            disabled={!checked || !selectedGame}
+                            loading={loading}
+                            onClick={async () => {
+                                if (!selectedGame) {
+                                    setError('Please select a game');
+                                    return;
+                                }
+
+                                if (!checked) {
+                                    setError('Please confirm before deleting');
+                                    return;
+                                }
+
+                                if (!selectedGameObject) {
+                                    toast.error('Invalid game selection');
+                                    return;
+                                }
+
+                                console.log("Game Id", selectedGameObject.gameId)
+
+                                await deleteEntriesByGame(selectedGameObject.gameId); // ✅ Call your helper function
+                                setChecked(false);
+                                setSelectedGame('');
+                                close(); // ✅ Close modal
+                            }}
+                            >
+                            Delete Entries
+                            </Button>
+
+                        </Group>
+
+                    </Modal>
+
+                    <div className={classes.mainSection}>
+
+                        <div className={classes.entriesCountWrapper}>
+                            <p className={classes.entriesCount}>{totalEntries} Total Journal Entries: </p>
+                        </div>
                         
+                        <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
+                            {filteredEntries.map((entry) => (
+                                <div key={entry._id} className={classes.entryCard} >
+                                    <h3 className={classes.entryGame}>{entry.gameName}</h3>
+                                    <h3 className={classes.entryTitle}>{entry.title}</h3>
+                                    <p className={classes.entryContent}>
+                                        {entry.content.length > 150
+                                            ? `${entry.content.slice(0, 200)}...` // Truncate long content
+                                            : entry.content}
+                                    </p>
+                                    <p className={classes.entryDate}>{entry.displayDate}</p>
 
-                        <Popover width={300} position='bottom' withArrow shadow='lg'>
-                            <Popover.Target>
-                                <Button className={classes.filterButton} size='md' color='#854bcb' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Name</Button>
-                            </Popover.Target>
+                                    <div className={classes.entryActions}>
+                                        <Button
+                                            className={classes.viewButton}
+                                            onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}
+                                            color="blue"
+                                            radius="md"
+                                            variant="filled"
+                                            style={{ marginRight: 8 }}
+                                            rightSection={<Eye />}
+                                        >
+                                            View
+                                        </Button>
 
-                            <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>
-                                <Select
-                                styles={{
-                                    wrapper: { color: '#212121'}, 
-                                    input: { color: 'white', background: '#212121'}, 
-                                    dropdown: { background: '#212121', color: 'whitesmoke'},
-                                    option: { background: '#202020'}
-                                }}
-                                label="Choose a game to filter your journal by:"
-                                placeholder="Filter by Game"
-                                checkIconPosition='right'
-                                data={[
-                                    { value: 'all', label: 'All Games' },
-                                    ...gameNames.map((gameName) => ({
-                                        value: gameName,
-                                        label: gameName
-                                    }))
-                                ]}
-                                value={gameName}
-                                onChange={(value) => setGameName(value || 'all')}
-                                className={classes.filterDropdown}
-                                mb="md"
-                                />
-                            </Popover.Dropdown>
-
-                        </Popover>
-
-                        <Button
-                        variant='filled'
-                        color='#e01515ff'
-                        size='md'
-                        radius= 'lg'
-                        className={classes.deleteEntriesButton}
-                        onClick={open}
-                        rightSection={<Trash2 />}
-                        >
-                            Delete
-                        </Button>
-
-                    </div>
-
-                </div>
-
-                {/* Delete Entries By Game Modal */}
-                <Modal opened={opened} onClose={close} centered styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #545454ff'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
-
-                    <Group className={classes.modalText} mb={20} ta='left'>
-                        <Title className={classes.modalTitle} order={3} ta='center'>
-                            Delete All Entries of a Game
-                        </Title>
-
-                        <Text c="white" fz="md" ta="center" mb={10}>
-                            This will permanently delete <b>all</b> journal entries assoicated with the selected game.
-                            This action cannot be undone.
-                        </Text>
-
-                        <Select
-                        label="Select Game"
-                        size='lg'
-                        width={200}
-                        placeholder="Choose a game to delete its entries"
-                        data={gameNames.map((game) => ({ value: game, label: game }))}
-                        value={selectedGame}
-                        onChange={(value) => setSelectedGame(value || '')}
-                        styles={{
-                            input: { backgroundColor: '#212121', color: 'white' },
-                            dropdown: { backgroundColor: '#2c2c2fff', color: 'white' },
-                            label: { fontFamily: 'Noto Sans', color: 'white', fontSize: '18px'},
-                            option: { background: '#212121'}
-                        }}
-                        mb="lg"
-                        error={error}
-                        />
-
-                        <Checkbox radius='md' color='blue' c='white' size='md' label='I understand that I am permanently deleting my journal entries for this game' checked={checked} error={error} onChange={(event) => setChecked(event.currentTarget.checked)} />
-            
-                        <Button
-                        className={classes.deleteEntriesButton}
-                        color="#d8070b"
-                        size="md"
-                        mt={15}
-                        radius="lg"
-                        variant="filled"
-                        rightSection={<Trash2 />}
-                        disabled={!checked || !selectedGame}
-                        loading={loading}
-                        onClick={async () => {
-                            if (!selectedGame) {
-                                setError('Please select a game');
-                                return;
-                            }
-
-                            if (!checked) {
-                                setError('Please confirm before deleting');
-                                return;
-                            }
-
-                            if (!selectedGameObject) {
-                                toast.error('Invalid game selection');
-                                return;
-                            }
-
-                            console.log("Game Id", selectedGameObject.gameId)
-
-                            await deleteEntriesByGame(selectedGameObject.gameId); // ✅ Call your helper function
-                            setChecked(false);
-                            setSelectedGame('');
-                            close(); // ✅ Close modal
-                        }}
-                        >
-                        Delete Entries
-                        </Button>
-
-                    </Group>
-
-                </Modal>
-
-                <div className={classes.mainSection}>
-
-                    <div className={classes.entriesCountWrapper}>
-                        <p className={classes.entriesCount}>{totalEntries} Total Journal Entries: </p>
-                    </div>
-                    
-                    <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
-                        {filteredEntries.map((entry) => (
-                            <div key={entry._id} className={classes.entryCard} >
-                                <h3 className={classes.entryGame}>{entry.gameName}</h3>
-                                <h3 className={classes.entryTitle}>{entry.title}</h3>
-                                <p className={classes.entryContent}>
-                                    {entry.content.length > 150
-                                        ? `${entry.content.slice(0, 200)}...` // Truncate long content
-                                        : entry.content}
-                                </p>
-                                <p className={classes.entryDate}>{entry.displayDate}</p>
-
-                                <div className={classes.entryActions}>
-                                    <Button
-                                        className={classes.viewButton}
-                                        onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}
-                                        color="blue"
-                                        radius="md"
-                                        variant="filled"
-                                        style={{ marginRight: 8 }}
-                                        rightSection={<Eye />}
-                                    >
-                                        View
-                                    </Button>
-
-                                    <Button
-                                        className={classes.deleteButton}
-                                        onClick={() => deleteJournalEntry(entry._id, entry.gameId)}
-                                        rightSection={<DeleteIcon />}
-                                        radius='md'
-                                        variant='filled'
-                                        color='red'
-                                        loading={loading}
-                                    >
-                                        Delete
-                                    </Button>
+                                        <Button
+                                            className={classes.deleteButton}
+                                            onClick={() => deleteJournalEntry(entry._id, entry.gameId)}
+                                            rightSection={<DeleteIcon />}
+                                            radius='md'
+                                            variant='filled'
+                                            color='red'
+                                            loading={loading}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                    </SimpleGrid>                    
+                            ))}
+                        </SimpleGrid>                    
 
-                </div>
+                    </div>
 
-                <div className={classes.paginationWrapper}>
-                    <Pagination
-                        size='lg'
-                        radius='lg'
-                        total={totalPages}
-                        value={page}
-                        onChange={setPage}
-                    />
+                    <div className={classes.paginationWrapper}>
+                        <Pagination
+                            size='lg'
+                            radius='lg'
+                            total={totalPages}
+                            value={page}
+                            onChange={setPage}
+                        />
+                    </div>
+
                 </div>
 
             </div>

@@ -6,6 +6,17 @@
     border: 1px solid black;
 }
 
+.scrollBar {
+  &,
+  &:hover {
+    background-color: #777575;
+  }
+
+  &[data-orientation='vertical'] .thumb {
+    background-color: black;
+  }
+}
+
 @media (max-width: 830px) {
     .filterButton {
         align-self: center;
