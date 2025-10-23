@@ -51,7 +51,7 @@ export default function RootLayout({
                 LoadingOverlay:{
                   defaultProps:{
                     overlayProps: { radius: "sm", blur: 2, backgroundColor:'black', backgroundOpacity: 1 },
-                    loaderProps: { color: "pink", type: "oval" },
+                    loaderProps: { color: "pink", type: 'bars' },
                   }
                 }
               }

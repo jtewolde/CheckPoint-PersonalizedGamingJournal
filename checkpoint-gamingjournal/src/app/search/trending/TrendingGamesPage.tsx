@@ -135,7 +135,7 @@ export default function TrendingPage() {
 
         <div className={classes.titleLogo}>
           <TrendingUp size={40} />
-          <h1 className={classes.searchText}> Top 50 Trending Games of 2025:</h1>
+          <h1 className={classes.searchText}> Top 75 Trending Games of 2025:</h1>
         </div>
 
         <div className={classes.mainContent}>
@@ -178,8 +178,7 @@ export default function TrendingPage() {
           className={classes.pagninaton} value={page} onChange={setPage} color='blue' radius="lg" /> */}
 
         </div>
-
-
+        
     </div>
   );
 }
