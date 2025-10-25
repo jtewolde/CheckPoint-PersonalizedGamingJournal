@@ -2,13 +2,20 @@
 .wrapper {
     background: linear-gradient(to top, #2d313e, #232526);
     padding: 2rem; /* Add padding around the content */
-    padding-left: 4rem;
-    padding-right: 4rem;
     min-height: 100vh; /* Ensure the page takes up the full height */
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+}
+
+.mainContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0.4rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
 }
 
 /* Search results heading */
@@ -22,44 +29,44 @@
 }
 
 .titleLogo{
-  display: flex;
-  flex-direction: row;
-  gap: 0.8rem;
-  color: white;
-  border-bottom: 2px solid #ffffff;
+    display: flex;
+    flex-direction: row;
+    gap: 0.8rem;
+    color: white;
+    border-bottom: 2px solid #ffffff;
 }
 
 /* Number of search results */
 .numberText{
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 300;
     color: rgb(208, 205, 205); /* Dark text for contrast */
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
     font-family: 'Inter';
     font-style: italic;
     text-align: center;
     align-self: flex-start;
-    margin-top: 1rem;
 }
 
 /* Grid layout for game cards */
 .gameGrid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 16px;
-  width: 100%;
-  box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .gameContainer{
-  position: relative;
-  display: inline-block
+    position: relative;
+    display: inline-block
 }
 
 .gameImage {
-  width: 79%;
-  border-radius: 8px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 90%;
+    border-radius: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .gameImage:hover{
@@ -75,7 +82,7 @@
     color: white;
     padding: 0.5rem;
     overflow: hidden;
-    font-family: 'Inter';
+    font-family: 'Noto Sans';
 }
 
 /* Pagination */
@@ -119,8 +126,16 @@
 }
 
 @media screen and (max-width: 570px) {
-    .gameGrid{
+    .gameContainer{
         padding: 0;
+    }
+
+    .mainContent{
+        padding: 0;
+    }
+
+    .gameImage{
+        width: 100%;
     }
 
     .searchText{

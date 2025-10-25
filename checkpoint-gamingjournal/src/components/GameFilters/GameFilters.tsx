@@ -335,7 +335,7 @@ export default function GameFilters({
                         data={[
                             { value: 'all', label: 'All'},
                             { value: 'single-player', label: 'Single Player' },
-                            { value: 'multi-player', label: 'Multi Player' },
+                            { value: 'multiplayer', label: 'Multiplayer' },
                             { value: 'co-operative', label: 'Co-operative' },
                             { value: 'battle-royale', label: 'Battle Royale' },
                             { value: 'split-screen', label: 'Split Screen' },
