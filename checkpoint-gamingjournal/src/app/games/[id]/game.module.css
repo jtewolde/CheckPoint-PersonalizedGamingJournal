@@ -30,13 +30,24 @@
 }
   
 .title {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: bold;
   text-align: left;
   font-family: 'Inter';
   color: white;
   justify-self: center;
   border-bottom: 2px solid #f0f0f0;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.titleType{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 5rem;
+  gap: 1rem;
 }
 
 .details {
@@ -44,15 +55,26 @@
   flex-direction: row;
   align-items: flex-start;
   justify-content: center;
-  margin-top: 2rem;
   margin-bottom: 2rem;
+  padding-left: 5rem;
+  padding-right: 5rem;
   font-family: 'Noto Sans';
   color: whitesmoke;
+  gap: 4rem;
+}
+
+.leftSection{
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1rem;
 }
 
 .cover {
-  width: 60%;
-  object-fit: cover;
+  width: 450px;
+  object-fit: contain;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border: 1px solid #6f7579;
@@ -67,20 +89,26 @@
 .media {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: center;
   gap: 2rem; /* space between image and button */
 }
 
-.gameInfo{
-  margin-top: 2rem;
+.rightSection{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-left: -4rem;
-  padding-right: 4rem;
   width: 60%;
   margin-bottom: 3rem;
+}
+
+.buttonContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }
 
 .button{
@@ -304,6 +332,12 @@
   font-family: 'Poppins';
 }
 
+@media screen and (max-width: 1000px){
+  .cover{
+    width: 360px
+  }
+}
+
 @media screen and (max-width: 768px) {
   .wrapper {
     padding-top: 3rem;
@@ -316,11 +350,29 @@
     margin-bottom: 0.5rem;
   }
 
+  .titleType{
+    align-items: center;
+    padding: 0;
+  }
+
   .details {
     flex-direction: column;
+    align-items: center;
     gap: 1rem;
     margin-bottom: 1rem;
-    padding: 1rem;
+    padding: 0;
+  }
+
+  .leftSection{
+    align-items: center;
+  }
+
+  .media{
+    align-items: center;
+  }
+
+  .rightSection{
+    width: 80%;
   }
 
   .gameInfo{

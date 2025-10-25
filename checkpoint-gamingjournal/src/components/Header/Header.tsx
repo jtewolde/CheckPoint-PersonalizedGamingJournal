@@ -106,7 +106,7 @@ export function Header() {
           size='lg'
           maxDropdownHeight={200}
           variant='filled'
-          placeholder="Search For Games..."
+          placeholder="Search For Games"
           rightSection={<IconSearch size={28} color='lightgrey' style={{cursor: 'pointer'}} onClick={() => router.push(`/search?query=${encodeURIComponent(searchQuery)}`)}/>}
           value={searchQuery}
           onChange={handleSearch} // Update the search query state

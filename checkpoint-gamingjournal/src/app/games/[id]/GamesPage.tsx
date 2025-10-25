@@ -435,68 +435,90 @@ export default function GameDetails() {
 
         <div className={classes.wrapper}>
 
+          <div className={classes.titleType}>
+
+            <h1 className={classes.title}>{game.name}</h1>
+
+            <Badge color='gray' size='lg' radius='lg' c='white'>{game.game_type.type}</Badge>
+
+          </div>
+
           <div className={classes.details}>
 
-            <div className={classes.media}>
+            <div className={classes.leftSection}>
 
-              <h1 className={classes.title}>{game.name}</h1>
-              
-              <img
-                src={
-                  game.cover
-                    ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}`
-                    : PlaceHolderImage.src
-                }
-                alt={game.name}
-                className={classes.cover}
-              />
+              <div className={classes.media}>
+                
+                <img
+                  src={
+                    game.cover
+                      ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}`
+                      : PlaceHolderImage.src
+                  }
+                  alt={game.name}
+                  className={classes.cover}
+                />
 
-              {isAuthenticated ? (
-                isGameInLibrary ? (
-                  <>
-                    <Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>
-                      {libraryGame?.status || 'No Status Given'}
-                    </Badge>
+                {isAuthenticated ? (
+                  isGameInLibrary ? (
+                    <div className={classes.buttonContainer}>
+                      <Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>
+                        {libraryGame?.status || 'No Status Given'}
+                      </Badge>
 
-                    <Modal opened={opened} onClose={close} title="Change Game Status:" styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #424242', color: 'white', fontFamily: 'Noto Sans'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
-                      <Select
-                        className={classes.statusSelect}
-                        size='md'
-                        styles={{
-                            wrapper: { color: '#212121'}, 
-                            input: { color: 'white', background: '#212121'}, 
-                            dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
-                            option: { background: '#202020'}
-                        }}
-                        value={status}
-                        onChange={(value) => {
-                          setStatus(value || '');
-                          handleUpdateStatus(value || '');
-                          close();
-                        }}
-                        data={[
-                          { value: 'Playing', label: 'Playing' },
-                          { value: 'Completed', label: 'Completed' },
-                          { value: 'On Hold', label: 'On Hold' },
-                          { value: 'Dropped', label: 'Dropped' },
-                          { value: 'Plan to Play', label: 'Plan to Play' },
-                        ]}
-                        placeholder="Select game status"
-                      />
-                    </Modal>
+                      <Modal opened={opened} onClose={close} title="Change Game Status:" styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #424242', color: 'white', fontFamily: 'Noto Sans'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
+                        <Select
+                          className={classes.statusSelect}
+                          size='md'
+                          styles={{
+                              wrapper: { color: '#212121'}, 
+                              input: { color: 'white', background: '#212121'}, 
+                              dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
+                              option: { background: '#202020'}
+                          }}
+                          value={status}
+                          onChange={(value) => {
+                            setStatus(value || '');
+                            handleUpdateStatus(value || '');
+                            close();
+                          }}
+                          data={[
+                            { value: 'Playing', label: 'Playing' },
+                            { value: 'Completed', label: 'Completed' },
+                            { value: 'On Hold', label: 'On Hold' },
+                            { value: 'Dropped', label: 'Dropped' },
+                            { value: 'Plan to Play', label: 'Plan to Play' },
+                          ]}
+                          placeholder="Select game status"
+                        />
+                      </Modal>
+                      <Button
+                        variant="filled"
+                        color="#d8070b"
+                        size="md"
+                        radius="xl"
+                        className={classes.button}
+                        rightSection={<Delete />}
+                        onClick={handleRemoveFromLibrary}
+                        loading={addingToLibrary}
+                      >
+                        Remove from your Library!
+                      </Button>
+                    </div>
+                  ) : (
                     <Button
                       variant="filled"
-                      color="#d8070b"
-                      size="md"
+                      color="#2bdd66"
+                      size="lg"
                       radius="xl"
                       className={classes.button}
-                      rightSection={<Delete />}
-                      onClick={handleRemoveFromLibrary}
+                      rightSection={<NotebookPen />}
+                      onClick={handleAddToLibrary}
                       loading={addingToLibrary}
                     >
-                      Remove from your Library!
+                      Add to your Library!
                     </Button>
-                  </>
+                  )
                 ) : (
                   <Button
                     variant="filled"
@@ -505,29 +527,17 @@ export default function GameDetails() {
                     radius="xl"
                     className={classes.button}
                     rightSection={<NotebookPen />}
-                    onClick={handleAddToLibrary}
-                    loading={addingToLibrary}
+                    onClick={() => router.push('/auth/signup')}
                   >
-                    Add to your Library!
+                    Create an account!
                   </Button>
-                )
-              ) : (
-                <Button
-                  variant="filled"
-                  color="#2bdd66"
-                  size="lg"
-                  radius="xl"
-                  className={classes.button}
-                  rightSection={<NotebookPen />}
-                  onClick={() => router.push('/auth/signup')}
-                >
-                  Create an account!
-                </Button>
-              )}
+                )}
+
+              </div>
 
             </div>
 
-            <div className={classes.gameInfo}>
+            <div className={classes.rightSection}>
 
               <h2 className={classes.accordionTitle}>Game Details: </h2>
 

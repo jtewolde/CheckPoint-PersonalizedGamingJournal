@@ -130,6 +130,14 @@
         padding: 0;
     }
 
+    .mainContent{
+        padding: 0;
+    }
+
+    .gameImage{
+        width: 100%;
+    }
+
     .searchText{
         font-size: 1.3rem;
     }
