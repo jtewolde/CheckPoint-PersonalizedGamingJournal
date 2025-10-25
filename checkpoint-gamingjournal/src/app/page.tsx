@@ -64,7 +64,7 @@ export default function Home() {
 
 
           <Button variant="filled" color='#d1b053ff' size="xl" radius="xl" className={classes.control} rightSection={<UserRoundPlus />} onClick={handleClick}>
-            Create an account now!
+            Create an account!
           </Button>
 
           <div className={classes.FeatureSection}>

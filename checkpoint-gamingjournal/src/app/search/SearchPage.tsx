@@ -131,7 +131,7 @@ export default function SearchResults() {
 
   return (
     <div className={classes.wrapper} >
-      <h1 className={classes.searchText}>Search Results for <span className={classes.highlight}>{query}</span> </h1>
+      <h1 className={classes.TitleText}>Search Results for <span className={classes.highlight}>{query}</span> </h1>
 
         <div className={classes.mainContent}>
 

@@ -65,7 +65,7 @@
 
 .statusGrid {
   display: grid;
-  padding: 1rem;
+  padding: 0.5rem;
   grid-template-columns: repeat(6, 1fr);
   gap: 1rem;
 }
@@ -162,7 +162,7 @@
 .gamesGrid{
   display: grid;
   grid-template-columns: repeat(6, 1fr); /* Default: 5 columns */
-  gap: 3rem;
+  gap: 2.4rem;
   justify-content: center;
   align-content: center;
   align-items: center;
@@ -219,6 +219,11 @@
   padding: 1rem;
   border-radius: 8px;
   margin-top: -1rem;
+}
+
+.entriesGrid{
+  gap: 1rem;
+  padding: 0;
 }
 
 .entryCard {

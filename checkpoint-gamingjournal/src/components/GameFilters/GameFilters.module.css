@@ -17,8 +17,3 @@
   }
 }
 
-@media (max-width: 830px) {
-    .filterButton {
-        align-self: center;
-    }
-}
