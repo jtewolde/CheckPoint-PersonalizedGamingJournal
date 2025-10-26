@@ -1,12 +1,27 @@
 /* Wrapper for the entire search page */
 .wrapper {
-    background: linear-gradient(to top, #2d313e, #232526);
-    padding: 1.8rem; /* Add padding around the content */
+    background: url('/Expedition33.jpg') top center no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    position: relative;
     min-height: 100vh; /* Ensure the page takes up the full height */
+    min-width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem
+    gap: 0.5rem;
+    z-index: 0;
+}
+
+.backgroundOverlay{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    /* Fade from transparent to dark */
+    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 10%, #18181b 50%);
 }
 
 .mainContent{
@@ -14,35 +29,44 @@
     flex-direction: column;
     justify-content: flex-start;
     gap: 0.4rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding: 2rem;
+    z-index: 1;
 }
 
 /* Search results heading */
-.searchText {
+.titleText {
     font-size: 2rem;
     font-weight: 600;
     color: white; /* Dark text for contrast */
     margin-bottom: 0.1rem;
-    text-align: center;
+    text-align: left;
     font-family: 'Barlow';
+    margin: 0;
+    text-decoration: none;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
 .titleDescriptionSection{
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    padding-left: 2rem;
-    padding-right: 2rem;
 }
 
 .titleLogo{
     display: flex;
-    flex-direction: row;
-    gap: 0.8rem;
+    align-items: center;
+    gap: 1rem;
     color: white;
-    border-bottom: 2px solid #ffffff;
+    width: 100%;
+    padding: 1.2rem 1.5rem;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 16px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .description {
@@ -50,12 +74,11 @@
     font-weight: 400;
     text-align: left;
     font-family: 'Poppins';
+    max-width: 900px;
 
     @media (max-width: $mantine-breakpoint-sm) {
         max-width: 100%;
         font-size: 18px;
-        padding-left: 30px;
-        padding-right: 30px;
     }
 }
 
@@ -188,8 +211,12 @@
         width: 100%;
     }
 
-    .searchText{
-        font-size: 1.3rem;
+    .titleText{
+        font-size: 1.5rem;
+    }
+
+    .titleLogo{
+        padding: 0.3rem;
     }
     
 }

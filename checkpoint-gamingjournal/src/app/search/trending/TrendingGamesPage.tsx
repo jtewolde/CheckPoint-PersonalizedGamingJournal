@@ -5,10 +5,10 @@ import { useRouter, redirect } from 'next/navigation';
 
 import GameFilters from '@/components/GameFilters/GameFilters';
 
-import { LoadingOverlay, Text, SimpleGrid } from '@mantine/core';
+import { LoadingOverlay, Text, SimpleGrid, ThemeIcon } from '@mantine/core';
 
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
-import { TrendingUp } from 'lucide-react';
+import { TrendingUp, Flame } from 'lucide-react';
 
 import classes from './Trending.module.css';
 
@@ -132,60 +132,66 @@ export default function TrendingPage() {
   return (
     <div className={classes.wrapper}>
 
-      <div className={classes.titleDescriptionSection}>
+      <div className={classes.backgroundOverlay}>
 
-        <div className={classes.titleLogo}>
-          <TrendingUp size={40} />
-          <h1 className={classes.searchText}> Top 75 Trending Games of 2025:</h1>
-        </div>
+        <div className={classes.mainContent}>
 
-        <Text className={classes.description} size="xl" mt="xl">
-          Stay ahead of the curve with the hottest games everyone’s talking about this year. 
-          From new releases making waves to returning favorites seeing a surge in players 
-          — discover what’s trending across the gaming world in 2025.
-        </Text>
+          <div className={classes.titleDescriptionSection}>
 
-      </div>
-
-      <div className={classes.mainContent}>
-
-        <h2 className={classes.numberText}>{processedGames.length} Game Results:</h2>
-
-        <GameFilters
-          sortOption={sortOption}
-          selectedType={selectedType}
-          selectedGenres={selectedGenre}
-          selectedThemes={selectedTheme}
-          selectedModes={selectedMode}
-          selectedPlatforms={selectedPlatform}
-          onSortChange={(v) => setSortOption(v as any)}
-          onTypeChange={(v) => setSelectedType(v as any)}
-          onGenresChange={(v) => setSelectedGenre(v as any)}
-          onThemesChange={(v) => setSelectedTheme(v as any)}
-          onModesChange={(v) => setSelectedMode(v as any)}
-          onPlatformsChange={(v) => setSelectedPlatform(v as any)}
-        />
-
-        <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>
-          {processedGames.map((game) => (
-            <div className={classes.gameContainer} key={game.id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game.id}`) }} >
-              <img
-                src={
-                  game.cover
-                    ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}`
-                    : PlaceHolderImage.src
-                }
-                alt={game.name}
-                className={classes.gameImage}
-              />
-              
+            <div className={classes.titleLogo}>
+              <ThemeIcon variant='gradient' gradient={{ from: 'red', to: 'yellow', deg: 90}} size={50}>
+                <Flame size={40} color='white'/> 
+              </ThemeIcon>
+              <h1 className={classes.titleText}> Top 75 Trending Games of 2025:</h1>
             </div>
-          ))}
-        </SimpleGrid>
-        
-        {/* <Pagination total={Math.ceil(total/ limit)} size='lg' style={{ justifyContent: "center" }} 
-        className={classes.pagninaton} value={page} onChange={setPage} color='blue' radius="lg" /> */}
 
+            <Text className={classes.description} size="xl" mt="xl">
+              Stay ahead of the curve with the hottest games everyone’s talking about this year.
+              From new releases making waves to returning favorites seeing a surge in players 
+              — discover what’s trending across the gaming world in 2025.
+            </Text>
+
+          </div>
+
+          <h2 className={classes.numberText}>{processedGames.length} Game Results:</h2>
+
+          <GameFilters
+            sortOption={sortOption}
+            selectedType={selectedType}
+            selectedGenres={selectedGenre}
+            selectedThemes={selectedTheme}
+            selectedModes={selectedMode}
+            selectedPlatforms={selectedPlatform}
+            onSortChange={(v) => setSortOption(v as any)}
+            onTypeChange={(v) => setSelectedType(v as any)}
+            onGenresChange={(v) => setSelectedGenre(v as any)}
+            onThemesChange={(v) => setSelectedTheme(v as any)}
+            onModesChange={(v) => setSelectedMode(v as any)}
+            onPlatformsChange={(v) => setSelectedPlatform(v as any)}
+          />
+
+          <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>
+            {processedGames.map((game) => (
+              <div className={classes.gameContainer} key={game.id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game.id}`) }} >
+                <img
+                  src={
+                    game.cover
+                      ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}`
+                      : PlaceHolderImage.src
+                  }
+                  alt={game.name}
+                  className={classes.gameImage}
+                />
+                
+              </div>
+            ))}
+          </SimpleGrid>
+          
+          {/* <Pagination total={Math.ceil(total/ limit)} size='lg' style={{ justifyContent: "center" }} 
+          className={classes.pagninaton} value={page} onChange={setPage} color='blue' radius="lg" /> */}
+
+        </div>
+        
       </div>
         
     </div>
