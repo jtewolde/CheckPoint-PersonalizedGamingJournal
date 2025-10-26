@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { useRouter, redirect } from 'next/navigation';
 import GameFilters from '@/components/GameFilters/GameFilters';
 
-import { LoadingOverlay } from '@mantine/core';
+import { LoadingOverlay, ThemeIcon, Text } from '@mantine/core';
 import { SimpleGrid } from '@mantine/core';
 
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
@@ -126,12 +126,27 @@ export default function PopularPage() {
   return (
     <div className={classes.wrapper} >
 
-        <div className={classes.titleLogo}>
-          <Star size={40} />
-          <h1 className={classes.searchText}> Top 75 Popular Games:</h1>
-        </div>
+      <div className={classes.backgroundOverlay}>
 
         <div className={classes.mainContent}>
+
+          <div className={classes.titleDescriptionSection}>
+
+            <div className={classes.titleLogo}>
+              <ThemeIcon size={50} gradient={{ from: 'yellow', to: 'blue', deg: 90}} radius='md'>
+                <Star size={40} />
+              </ThemeIcon>
+              
+              <h1 className={classes.titleText}> Top 75 Popular Games:</h1>
+            </div>
+
+            <Text className={classes.description} size="xl" mt="xl">
+              Explore the most popular games that define today’s gaming scene. 
+              From timeless hits to modern blockbusters, 
+              these are the titles players around the world can’t stop playing and talking about.
+            </Text>
+
+          </div>
 
           <h2 className={classes.numberText}>{processedGames.length} Game Results:</h2>
 
@@ -153,7 +168,6 @@ export default function PopularPage() {
           <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>
             {processedGames.map((game) => (
               <div className={classes.gameContainer} key={game.id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game.id}`) }} >
-                
                 <img
                   src={
                     game.cover
@@ -163,12 +177,13 @@ export default function PopularPage() {
                   alt={game.name}
                   className={classes.gameImage}
                 />
-                
               </div>
             ))}
           </SimpleGrid>
           
         </div>
+
+      </div>
 
     </div>
   );

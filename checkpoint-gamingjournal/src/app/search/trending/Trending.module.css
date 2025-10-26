@@ -31,6 +31,7 @@
     gap: 0.4rem;
     padding: 2rem;
     z-index: 1;
+    pointer-events: auto;
 }
 
 /* Search results heading */

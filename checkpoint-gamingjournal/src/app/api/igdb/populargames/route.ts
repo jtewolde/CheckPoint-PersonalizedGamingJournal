@@ -73,7 +73,7 @@ export async function GET(req: NextRequest) {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'text/plain',
       },
-      body: `fields name, summary, genres, genres.slug, cover.url, version_title, game_type.type, game_modes.slug, themes.slug, platforms.slug, first_release_date, total_rating; where aggregated_rating != null & total_rating > 30 & total_rating_count > 30 & game_type.type != ("Bundle", "Remaster", "DLC", "Expanded Game"); sort total_rating desc; limit ${limit};`
+      body: `fields name, summary, genres, genres.slug, cover.url, version_title, game_type.type, game_modes.slug, themes.slug, platforms.slug, first_release_date, total_rating; where aggregated_rating != null & total_rating > 30 & total_rating_count > 300 & game_type.type != ("Bundle", "Remaster", "DLC", "Expanded Game"); sort total_rating desc; limit ${limit};`
     });
 
     if (!gamesRes.ok) {
