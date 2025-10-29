@@ -136,8 +136,8 @@ export default function Journal() {
                 throw new Error(data.error || 'Failed to delete journal entries');
             }
 
-            console.log(`All Journal Entries for ${gameName} deleted successfully!`)
-            toast.success(`All Journal Entries for ${gameName} deleted successfully!`)
+            console.log(`All Journal Entries for ${selectedGame} deleted successfully!`)
+            toast.success(`All Journal Entries for ${selectedGame} deleted successfully!`)
 
             setLoading(false)
             await fetchEntries();
