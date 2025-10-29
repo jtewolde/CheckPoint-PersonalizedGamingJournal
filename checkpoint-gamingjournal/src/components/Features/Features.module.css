@@ -43,8 +43,8 @@
 .feature {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
+    align-items: center;
+    text-align: center;
     padding: 1rem;
     color: white;
     background-color: #292626;
@@ -85,15 +85,15 @@
 }
 
 .featureTitle{
-    font-weight: 700;
+    font-weight: 600;
     font-size: 21px;
     margin-top: 1rem;
-    font-family: 'Inter';
+    font-family: 'Poppins';
 }
 
 .featureDescription {
     font-size: 16px;
-    font-family: 'Poppins';
+    font-family: 'Noto Sans';
     color: rgb(214, 213, 213);
     margin-top: var(--mantine-spacing-md);
 }
