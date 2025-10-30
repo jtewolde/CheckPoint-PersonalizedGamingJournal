@@ -294,15 +294,14 @@ export default function Dashboard() {
 
         <SimpleGrid cols={7} spacing="lg" verticalSpacing='xl' className={classes.trendingGamesGrid}>
           {games.map((game) => (
-            <div key={game.id} className={classes.gameCard}>
+            <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
 
               <div className={classes.imageWrapper}>
 
                 <Image src={
                 game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
                 alt={game.name} 
-                className={classes.cover} 
-                onClick={() => router.push(`/games/${game.id}`)} 
+                className={classes.cover}  
                 />
 
                 <div className={classes.overlay}>
@@ -336,7 +335,7 @@ export default function Dashboard() {
         
         <SimpleGrid cols={6} spacing="lg" verticalSpacing='xl' className={classes.popularGamesGrid}>
           {popularGames.map((game) => (
-            <div key={game.id} className={classes.gameCard}>
+            <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
 
               <div className={classes.imageWrapper}>
 

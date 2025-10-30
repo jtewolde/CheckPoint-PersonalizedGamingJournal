@@ -22,7 +22,7 @@
 
 .wrapper {
   padding: 2rem;
-  padding-top: 1rem;
+  padding-top: 2rem;
   z-index: 3;
   position: relative;
   background: transparent;
@@ -56,11 +56,10 @@
   align-items: flex-start;
   justify-content: center;
   margin-bottom: 2rem;
-  padding-left: 5rem;
-  padding-right: 5rem;
+  padding-left: 2rem;
   font-family: 'Noto Sans';
   color: whitesmoke;
-  gap: 4rem;
+  gap: 7rem;
 }
 
 .leftSection{
@@ -73,7 +72,7 @@
 }
 
 .cover {
-  width: 450px;
+  width: 350px;
   object-fit: contain;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -112,7 +111,7 @@
 }
 
 .button{
-  width: 290px;
+  width: auto;
   align-items: center;
   font-family: 'Poppins';
   font-weight: 400;
@@ -367,6 +366,10 @@
     align-items: center;
   }
 
+  .rightSection{
+    margin-top: 4rem;
+  }
+
   .media{
     align-items: center;
   }
@@ -386,12 +389,12 @@
   }
 
   .cover {
-    width: 80%;
+    width: 330px;
     height: auto;
   }
 
   .button{
-    width: 10%;
+    width: 20px;
   }
 
   .info p {
@@ -451,7 +454,7 @@
   }
 
   .cover{
-    width: 96%;
+    width: 80%;
   }
 
   .gameSeriesName{
