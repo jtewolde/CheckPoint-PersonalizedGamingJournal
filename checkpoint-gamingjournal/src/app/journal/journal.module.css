@@ -176,7 +176,7 @@
 .paginationWrapper{
     display: flex;
     justify-content: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1.4rem;
 }
 
 @media (max-width: 768px) {
@@ -196,6 +196,7 @@
     .buttonGroup{
         flex-direction: column;
         gap: 8px;
+        margin-bottom: 1.5rem;
     }
 }
 

@@ -46,7 +46,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding-left: 5rem;
+  padding-left: 3rem;
   gap: 1rem;
 }
 
@@ -333,7 +333,11 @@
 
 @media screen and (max-width: 1000px){
   .cover{
-    width: 360px
+    width: 330px
+  }
+
+  .titleType{
+    padding-left: 2rem;
   }
 }
 
