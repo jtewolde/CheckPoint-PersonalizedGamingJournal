@@ -32,6 +32,7 @@
   width: 100%;
   z-index: 1;
   position: relative;
+  pointer-events: auto;
 }
 
 @media (max-width: $mantine-breakpoint-sm) {

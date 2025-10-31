@@ -64,7 +64,7 @@ export default function RootLayout({
                 duration: 5000,
                 success: {
                   style: {
-                    background: "#2c2c2cff",
+                    background: "#222121ff",
                     color: 'white',
                     fontFamily: 'Poppins',
                     fontWeight: '500',
