@@ -5,7 +5,7 @@
     min-height: 100vh;
     background-size: cover;
     background-position: center top;
-    background-image: url('/JournalBackground.jpg');
+    background-image: url('/ContactBackground.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     z-index: 0;
@@ -36,20 +36,50 @@
 .journalHeader{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.5rem;
     margin-top: 3rem;
+    padding-left: 3rem;
 }
 
 .journalTitle{
-    display: block;
-    justify-self: center;
-    font-size: 2.2rem;
-    font-weight: bold;
-    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    color: white; /* Dark text for contrast */
+    margin-bottom: 0.1rem;
+    text-align: left;
+    font-family: 'Barlow';
+    margin: 0;
+    text-decoration: none;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.titleLogo{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     color: white;
+    width: 100%;
+    padding: 1.2rem 1.5rem;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 16px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.description {
+    color: var(--mantine-color-white);
+    font-weight: 400;
+    text-align: left;
     font-family: 'Poppins';
-    border-bottom: 3px solid white;
+    max-width: 900px;
+
+    @media (max-width: $mantine-breakpoint-sm) {
+        max-width: 100%;
+        font-size: 18px;
+    }
 }
 
 .entriesCount{
@@ -128,7 +158,11 @@
 .mainSection{
     display: flex;
     flex-direction: column;
-    padding: 3rem;
+    justify-content: center;
+    padding-top: 2rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    padding-bottom: 1rem;
     flex: 1;
 }
 
@@ -193,10 +227,21 @@
 
 @media (max-width: 570px){
 
+    .journalHeader{
+        padding-left: 1rem;
+        align-items: flex-start;
+    }
+
+    .journalTitle{
+        font-size: 1.6rem;
+        border-bottom: 0;
+    }
+
     .buttonGroup{
         flex-direction: column;
         gap: 8px;
         margin-bottom: 1.5rem;
+        align-items: flex-start;
     }
 }
 
