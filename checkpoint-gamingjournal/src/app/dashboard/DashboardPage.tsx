@@ -249,7 +249,7 @@ export default function Dashboard() {
 
           <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
-             <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
+            <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
               <div className={classes.statusLogoCenter} >
                 <IconQuestionMark size={60} color='#fc8a08' className={classes.statusLogo}/>
               </div>
@@ -294,14 +294,24 @@ export default function Dashboard() {
 
         <SimpleGrid cols={7} spacing="lg" verticalSpacing='xl' className={classes.trendingGamesGrid}>
           {games.map((game) => (
-            <div key={game.id} className={classes.gameCard}>
-              <Image src={
+            <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
+
+              <div className={classes.imageWrapper}>
+
+                <Image src={
                 game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
                 alt={game.name} 
-                className={classes.cover} 
-                onClick={() => router.push(`/games/${game.id}`)} 
+                className={classes.cover}  
                 />
-                <Text className={classes.gameName}>{game.name}</Text>
+
+                <div className={classes.overlay}>
+
+                  <Text className={classes.gameName}>{game.name}</Text>
+
+                </div>
+
+              </div>
+
             </div>
           ))}
         </SimpleGrid>
@@ -325,14 +335,25 @@ export default function Dashboard() {
         
         <SimpleGrid cols={6} spacing="lg" verticalSpacing='xl' className={classes.popularGamesGrid}>
           {popularGames.map((game) => (
-            <div key={game.id} className={classes.gameCard}>
-              <Image src={
+            <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
+
+              <div className={classes.imageWrapper}>
+
+                <Image src={
                 game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
                 alt={game.name} 
                 className={classes.cover} 
                 onClick={() => router.push(`/games/${game.id}`)} 
                 />
-                <Text className={classes.gameName}>{game.name}</Text>
+
+                <div className={classes.overlay}>
+
+                  <Text className={classes.gameName}>{game.name}</Text>
+
+                </div>
+
+              </div>
+
             </div>
           ))}
         </SimpleGrid>

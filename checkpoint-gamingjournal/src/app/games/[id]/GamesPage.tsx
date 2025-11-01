@@ -506,18 +506,20 @@ export default function GameDetails() {
                       </Button>
                     </div>
                   ) : (
-                    <Button
-                      variant="filled"
-                      color="#2bdd66"
-                      size="lg"
-                      radius="xl"
-                      className={classes.button}
-                      rightSection={<NotebookPen />}
-                      onClick={handleAddToLibrary}
-                      loading={addingToLibrary}
-                    >
-                      Add to your Library!
-                    </Button>
+                    <div className={classes.buttonContainer}>
+                      <Button
+                        variant="filled"
+                        color="#2bdd66"
+                        size="lg"
+                        radius="xl"
+                        className={classes.button}
+                        rightSection={<NotebookPen />}
+                        onClick={handleAddToLibrary}
+                        loading={addingToLibrary}
+                      >
+                        Add to your Library!
+                      </Button>
+                    </div>
                   )
                 ) : (
                   <Button

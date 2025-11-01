@@ -18,17 +18,19 @@
 }
 
 /* Search results heading */
-.searchText {
+.TitleText {
     font-size: 2rem;
     font-weight: 450;
     color: rgb(227, 227, 229); /* Dark text for contrast */
-    text-align: center;
+    text-align: left;
+    align-self: flex-start;
     font-family: 'Noto Sans';
+    padding-left: 2rem;
 }
 
 .highlight {
     color: white;
-    font-size: 2.2rem;
+    font-size: 2.1rem;
     font-weight: 700;
     border-bottom: 2px solid white;
 }
@@ -154,12 +156,17 @@
 }
 
 @media screen and (max-width: 830px){
-    .gameGrid{
-        grid-template-columns: repeat(4, 1fr);
+
+    .TitleText{
+        font-size: 1.4rem;
     }
 
-    .numberText{
-        align-self: center;
+    .highlight{
+        font-size: 1.5rem;
+    }
+
+    .gameGrid{
+        grid-template-columns: repeat(4, 1fr);
     }
 
     .filterButton{
@@ -173,8 +180,9 @@
         grid-template-columns: repeat(3, 1fr);
     }
 
-    .searchText{
+    .TitleText{
         font-size: 1.3rem;
+        padding: 0;
     }
 
     .highlight{
@@ -182,7 +190,6 @@
     }
 
     .numberText{
-        align-self: center;
         font-size: 1rem;
     }
 

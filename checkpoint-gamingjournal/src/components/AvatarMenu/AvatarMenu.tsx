@@ -15,7 +15,7 @@ export default function AvatarMenu(){
 
 
       // 🧠 Fetch session info on mount
-      useEffect(() => {
+    useEffect(() => {
         const fetchSession = async () => {
             const session = await authClient.getSession(); // Get current session
             if (session?.data?.user) {
@@ -28,7 +28,6 @@ export default function AvatarMenu(){
 
         fetchSession();
     }, []);
-      
 
     // Function to handle sign out for authenticated users
     const handleSignOut = async () => {
@@ -53,7 +52,7 @@ export default function AvatarMenu(){
             <Menu.Dropdown styles={{
                 dropdown: {
                     backgroundColor: '#232526',
-                    border: '1px solid black',
+                    border: '1px solid #464646ff',
                     fontFamily: 'Poppins',
                     fontWeight: 690,
                 }

@@ -48,7 +48,7 @@ export default function Questions() {
     ));
 
     return (
-        <Accordion className={classes.accordion} styles={{item: {background: '#55575aff', color: 'white'}, label: {color: 'white', paddingRight: '0.7rem'}, chevron: {color: 'white'}}} variant='filled' radius='lg'>
+        <Accordion variant='filled' radius='md' className={classes.accordion} styles={{item: {background: '#39393aff', color: 'white', border: '0.5px solid #999999ff'}, label: {color: 'white', paddingRight: '0.7rem'}, chevron: {color: 'white'}}}>
             {items}
         </Accordion>
     );

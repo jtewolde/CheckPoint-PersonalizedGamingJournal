@@ -5,13 +5,11 @@
   align-items: center; /* Centers content vertically */
   justify-content: center; /* Centers content horizontally */
   background-size: cover;
-  background-position: center top;
-  background-repeat: no-repeat;
   background-attachment: fixed;
   position: relative;
   min-height: 100vh; /* This ensures the hero fills the full screen */
   max-width: 100%;
-  z-index: 0;
+
 }
 
 .backgroundOverlay{
@@ -34,6 +32,7 @@
   width: 100%;
   z-index: 1;
   position: relative;
+  pointer-events: auto;
 }
 
 @media (max-width: $mantine-breakpoint-sm) {
@@ -207,7 +206,7 @@
 
 @media (max-width: 500px) {
   .image{
-    width: 100%;
+    width: 120%;
     height: auto;
   }
 

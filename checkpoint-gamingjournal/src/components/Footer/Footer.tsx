@@ -3,7 +3,6 @@ import { Mail } from "lucide-react";
 import { IconBrandLinkedin, IconBrandGithub } from "@tabler/icons-react";
 import { ActionIcon, Group, Text } from "@mantine/core";
 import Link from "next/link";
-import Image from "next/image";
 import classes from './Footer.module.css';
 
 export function Footer() {

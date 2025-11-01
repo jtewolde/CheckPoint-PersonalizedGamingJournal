@@ -7,10 +7,10 @@ import { authClient } from '@/lib/auth-client';
 
 import classes from './journal.module.css';
 
-import { Button, LoadingOverlay, Popover, Select, SimpleGrid, Pagination, Overlay, Modal, Group, Title, Text, Checkbox } from '@mantine/core';
+import { Button, LoadingOverlay, Popover, Select, SimpleGrid, Pagination, ThemeIcon, Modal, Group, Title, Text, Checkbox } from '@mantine/core';
 
 import toast from 'react-hot-toast';
-import { FilePlus, DeleteIcon, Eye, ListFilter, Trash2 } from 'lucide-react';
+import { FilePlus, DeleteIcon, Eye, ListFilter, Trash2, Notebook } from 'lucide-react';
 
 export default function Journal() {
     // State variables for the journal entries
@@ -136,8 +136,8 @@ export default function Journal() {
                 throw new Error(data.error || 'Failed to delete journal entries');
             }
 
-            console.log(`All Journal Entries for ${gameName} deleted successfully!`)
-            toast.success(`All Journal Entries for ${gameName} deleted successfully!`)
+            console.log(`All Journal Entries for ${selectedGame} deleted successfully!`)
+            toast.success(`All Journal Entries for ${selectedGame} deleted successfully!`)
 
             setLoading(false)
             await fetchEntries();
@@ -173,26 +173,39 @@ export default function Journal() {
 
                     <div className={classes.journalHeader}>
 
-                        <h2 className={classes.journalTitle}>Your Journal Entries</h2>
+                        <div className={classes.titleLogo}>
+
+                            <ThemeIcon size={50} variant='gradient' gradient={{ from: 'green', to: 'purple', deg: 20}} radius='md'>
+                                <Notebook size={40} />
+                            </ThemeIcon>
+
+                            <h2 className={classes.journalTitle}>Your Journal Entries</h2>
+
+                        </div>
+
+                        <Text className={classes.description} size="xl" mt="xl">
+                            Reflect on your gaming journey by managing your journal entries here. <br />
+                            Add new entries, filter by game, or delete past reflections to keep your journal up to date!
+                        </Text>
 
                         <div className={classes.buttonGroup} >
 
                             <Button
                             variant='filled'
-                            color='lime'
+                            color='green'
                             size='md'
-                            radius= 'lg'
+                            radius= 'md'
                             className={classes.addButton}
                             onClick={() => router.push('/journalForm')}
                             rightSection={<FilePlus />}
                             >
-                                Add New Entry
+                                Add Entry
                             </Button>
                             
 
                             <Popover width={300} position='bottom' withArrow shadow='lg'>
                                 <Popover.Target>
-                                    <Button className={classes.filterButton} size='md' color='#854bcb' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Name</Button>
+                                    <Button className={classes.filterButton} size='md' color='#854bcb' radius='md' variant="filled" rightSection={<ListFilter />}>Filter By Name</Button>
                                 </Popover.Target>
 
                                 <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>
@@ -226,12 +239,12 @@ export default function Journal() {
                             variant='filled'
                             color='#e01515ff'
                             size='md'
-                            radius= 'lg'
+                            radius= 'md'
                             className={classes.deleteEntriesButton}
                             onClick={open}
                             rightSection={<Trash2 />}
                             >
-                                Delete
+                                Delete All
                             </Button>
 
                         </div>
@@ -349,7 +362,7 @@ export default function Journal() {
                                             rightSection={<DeleteIcon />}
                                             radius='md'
                                             variant='filled'
-                                            color='red'
+                                            color='#e01515ff'
                                             loading={loading}
                                         >
                                             Delete
