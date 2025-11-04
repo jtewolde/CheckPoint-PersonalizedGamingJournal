@@ -97,6 +97,7 @@
   color: #ffffff;
   font-family: 'Poppins';
   text-decoration: underline;
+  text-underline-offset: 2px;
   text-align: center;
 }
 

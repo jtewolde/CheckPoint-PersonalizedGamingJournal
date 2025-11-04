@@ -9,7 +9,7 @@ export default function Loading() {
         visible
         zIndex={1000}
         overlayProps={{ radius: "sm", blur: 2, color:'black' }}
-        loaderProps={{ color: 'pink', type:'oval'}}
+        loaderProps={{ color: 'pink', type:'bars'}}
       />
     </div>
   );
