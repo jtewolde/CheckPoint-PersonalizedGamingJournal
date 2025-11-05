@@ -8,7 +8,7 @@ import { authClient } from '@/lib/auth-client';
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
 import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconBookmarkFilled, IconCheck, IconQuestionMark, IconClipboardListFilled } from '@tabler/icons-react';
-import { TrendingUp, Notebook, Gamepad, Star, ArrowBigRight } from 'lucide-react';
+import { TrendingUp, Notebook, Gamepad, Star, CircleUserRound } from 'lucide-react';
 import classes from './dashboard.module.css';
 
 export default function Dashboard() {
@@ -179,7 +179,12 @@ export default function Dashboard() {
       <div className={classes.statCards}>
 
         <div className={classes.profileStats}>
-          <p className={classes.titleLogo}>Profile Stats: </p>
+
+          <div className={classes.titleLogo}>
+            <ThemeIcon size={50} radius='md' variant='filled' color='cyan'> <CircleUserRound size={40} /> </ThemeIcon>
+            <p className={classes.profileTitle}>Profile Stats: </p>
+          </div>
+          
         </div>
 
         <SimpleGrid cols={6} spacing="lg" className={classes.statusGrid}>

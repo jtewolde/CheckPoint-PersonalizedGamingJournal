@@ -42,6 +42,7 @@
 .titleLogo{
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 0.8rem;
@@ -60,8 +61,15 @@
   font-weight: 600;
 }
 
-.gamesPlayingText{
-  font-size: 100%;
+.gamesPlayingText,
+.profileTitle{
+  font-family: 'Inter';
+  font-weight: 800;
+  color: #f4f4f4;
+  line-height: 1.2;
+  /* Responsive font size: min 1.2rem, scales with viewport width, max 2rem */
+  font-size: clamp(1.2rem, 2vw + 0.5rem, 2rem);
+  text-wrap: balance;
 }
 
 .statCards {
