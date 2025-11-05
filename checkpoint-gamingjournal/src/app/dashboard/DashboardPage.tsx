@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
-import { LoadingOverlay, SimpleGrid, Image, Paper, SemiCircleProgress, Text } from '@mantine/core';
+import { LoadingOverlay, SimpleGrid, Image, Paper, SemiCircleProgress, Text, ThemeIcon } from '@mantine/core';
 import { authClient } from '@/lib/auth-client';
 
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
 import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconBookmarkFilled, IconCheck, IconQuestionMark, IconClipboardListFilled } from '@tabler/icons-react';
-import { TrendingUp, Notebook, Gamepad, Star } from 'lucide-react';
+import { TrendingUp, Notebook, Gamepad, Star, ArrowBigRight } from 'lucide-react';
 import classes from './dashboard.module.css';
 
 export default function Dashboard() {
@@ -91,49 +91,49 @@ export default function Dashboard() {
   }
 
  // Function to get the games that the user is currently playing from their library
- const fetchPlayingGames = async () => {
-  try {
-    const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
-    const res = await fetch('/api/user/getLibrary', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  const fetchPlayingGames = async () => {
+    try {
+      const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
+      const res = await fetch('/api/user/getLibrary', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    if (!res.ok) {
-      throw new Error('Failed to fetch user library');
+      if (!res.ok) {
+        throw new Error('Failed to fetch user library');
+      }
+
+      const data = await res.json();
+      const playingGames = data.games.filter((game: any) => game.status === 'Playing').slice(0,6) // Filter games that are currently being played with the first 6 games
+
+      setPlayingGames(playingGames); // Store the playing games in state
+
+      const totalGames = data.games.length // Store total number of games
+      
+      const planToPlay = data.games.filter((game: any) => game.status === 'Plan to Play').length;
+      const playing = data.games.filter((game: any) => game.status === 'Playing').length;
+      const completed = data.games.filter((game: any) => game.status === 'Completed').length;
+      const noStatus = data.games.filter((game: any) => game.status === 'No Status Given').length;
+      const onHold = data.games.filter((game: any) => game.status === 'On Hold').length;
+
+      // Get the completation Rate of the user's completed games compared to total games in their library
+      const completationRate = Math.round((completed / totalGames) * 100) 
+
+      setPlanToPlayLength(planToPlay);
+      setPlayGamesLength(playing);
+      setCompletedLength(completed);
+      setNoStatusLength(noStatus);
+      setOnHoldLength(onHold);
+      setNumOfGames(totalGames);
+      setCompletedPercentage(completationRate);
+
+    } catch (error) {
+      console.error('Error fetching playing games: ', error);
     }
-
-    const data = await res.json();
-    const playingGames = data.games.filter((game: any) => game.status === 'Playing').slice(0,6) // Filter games that are currently being played with the first 6 games
-
-    setPlayingGames(playingGames); // Store the playing games in state
-
-    const totalGames = data.games.length // Store total number of games
-    
-    const planToPlay = data.games.filter((game: any) => game.status === 'Plan to Play').length;
-    const playing = data.games.filter((game: any) => game.status === 'Playing').length;
-    const completed = data.games.filter((game: any) => game.status === 'Completed').length;
-    const noStatus = data.games.filter((game: any) => game.status === 'No Status Given').length;
-    const onHold = data.games.filter((game: any) => game.status === 'On Hold').length;
-
-    // Get the completation Rate of the user's completed games compared to total games in their library
-    const completationRate = Math.round((completed / totalGames) * 100) 
-
-    setPlanToPlayLength(planToPlay);
-    setPlayGamesLength(playing);
-    setCompletedLength(completed);
-    setNoStatusLength(noStatus);
-    setOnHoldLength(onHold);
-    setNumOfGames(totalGames);
-    setCompletedPercentage(completationRate);
-
-  } catch (error) {
-    console.error('Error fetching playing games: ', error);
-  }
-};
+  };
 
   // Use API call to fetch most recent journal entries
   const fetchRecentJournalEntries = async () => {
@@ -283,11 +283,11 @@ export default function Dashboard() {
         <div className={classes.trendingText}>
           
           <div className={classes.titleLogo}>
-            <TrendingUp size={30} />
+            <ThemeIcon size={40} radius='md' variant='filled' color='rgba(215, 53, 16, 0.99)'> <TrendingUp size={30} /> </ThemeIcon>
             <h1 className={classes.gamesPlayingText}>Top Trending Games:</h1>
           </div>
 
-          <a className={classes.viewMoreText} href='/search/trending' >View more</a>
+          <a className={classes.viewMoreText} href='/search/trending'> View More </a>
         </div>
         
         {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
@@ -323,11 +323,11 @@ export default function Dashboard() {
           <div className={classes.popularText}>
           
             <div className={classes.titleLogo}>
-              <Star size={30} />
+              <ThemeIcon size={40} radius='md' variant='filled' color='rgba(240, 201, 30, 0.99)'> <Star size={30} /> </ThemeIcon>
               <h1 className={classes.gamesPlayingText}>Most Popular Games:</h1>
             </div>
 
-            <a className={classes.viewMoreText} href='/search/popular' >View more</a>
+            <a className={classes.viewMoreText} href='/search/popular'> View More </a>
 
           </div>
 
@@ -365,8 +365,8 @@ export default function Dashboard() {
         <div className={classes.playingText}>
 
           <div className={classes.titleLogo}>
-            <Gamepad size={30} /> 
-            <h1 className={classes.gamesPlayingText}>Games That You're playing:</h1>
+            <ThemeIcon size={50} radius='md' variant='filled' color='pink'> <Gamepad size={40} /> </ThemeIcon>
+            <h1 className={classes.gamesPlayingText}>Games That You're playing</h1>
           </div>
           
         </div>

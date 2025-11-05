@@ -27,9 +27,12 @@
   display: flex;
   flex-direction: row;
   gap: 0.4rem;
-  font-size: 1.5rem;
   font-weight: 800;
   margin-bottom: 1.2rem;
+  background-color: #272727;
+  border-radius: 8px;
+  border: 1px solid #494949;
+  padding: 0.4rem 0.8rem;
   align-items: flex-end;
   justify-content: space-between;
   font-family: 'Inter';
@@ -39,14 +42,16 @@
 .titleLogo{
   display: flex;
   flex-direction: row;
-  gap: 0.4rem;
-  border-bottom: 1px solid #c5c5c5;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
 }
 
 .viewMoreText{
   justify-self: flex-end;
-  font-size: 1.2rem;
+  align-self: center;
   color: #a7a7a7;
+  font-size: 100%;
   font-weight: 500;
 }
 
@@ -56,11 +61,13 @@
 }
 
 .gamesPlayingText{
-  font-size: 1.5rem;
+  font-size: 100%;
 }
 
 .statCards {
   margin-bottom: 5rem;
+  width: 100%;
+  max-width: 98%;
 }
 
 .statusGrid {
@@ -123,7 +130,7 @@
 
 .trendingGames {
   width: 100%;
-  max-width: 95%; /* Add a max width to prevent it from stretching too wide */
+  max-width: 98%; /* Add a max width to prevent it from stretching too wide */
   display: block;
   margin: 0;
   padding: 1rem 0;
@@ -332,10 +339,6 @@
     grid-template-columns: repeat(1, 1fr); /* 2 columns for screens smaller than 768px */
   }
 
-  .viewMoreText{
-    font-size: 1rem;
-  }
-
   .gamesGrid {
     grid-template-columns: repeat(2, 1fr); /* 2 columns for screens smaller than 480px */
   }
@@ -357,13 +360,17 @@
     font-size: 1.2rem;
     margin-top: 1.5rem;
   }
+
+  .viewMoreText{
+    font-size: 79%;
+  }
   
   .trendingText,
   .playingText,
   .recentEntriesText,
   .gamesPlayingText{
-    text-align: center;
-    font-size: 1.1rem;
+    text-align: left;
+    font-size: 100%;
   }
   
 }
