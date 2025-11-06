@@ -8,7 +8,7 @@ import { authClient } from '@/lib/auth-client';
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
 import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconBookmarkFilled, IconCheck, IconQuestionMark, IconClipboardListFilled } from '@tabler/icons-react';
-import { TrendingUp, Notebook, Gamepad, Star, CircleUserRound } from 'lucide-react';
+import { Flame, Notebook, Gamepad, Star, CircleUserRound } from 'lucide-react';
 import classes from './dashboard.module.css';
 
 export default function Dashboard() {
@@ -181,7 +181,7 @@ export default function Dashboard() {
         <div className={classes.profileStats}>
 
           <div className={classes.titleLogo}>
-            <ThemeIcon size={50} radius='md' variant='filled' color='cyan'> <CircleUserRound size={40} /> </ThemeIcon>
+            <ThemeIcon size={50} radius='md' variant='gradient' color='cyan'> <CircleUserRound size={40} /> </ThemeIcon>
             <p className={classes.profileTitle}>Profile Stats: </p>
           </div>
           
@@ -288,8 +288,12 @@ export default function Dashboard() {
         <div className={classes.trendingText}>
           
           <div className={classes.titleLogo}>
-            <ThemeIcon size={40} radius='md' variant='filled' color='rgba(215, 53, 16, 0.99)'> <TrendingUp size={30} /> </ThemeIcon>
+            <ThemeIcon variant='gradient' gradient={{ from: 'red', to: 'orange', deg: 90}} size={40}>
+                <Flame size={30} color='white'/> 
+              </ThemeIcon>
+
             <h1 className={classes.gamesPlayingText}>Top Trending Games:</h1>
+
           </div>
 
           <a className={classes.viewMoreText} href='/search/trending'> View More </a>
@@ -328,7 +332,9 @@ export default function Dashboard() {
           <div className={classes.popularText}>
           
             <div className={classes.titleLogo}>
-              <ThemeIcon size={40} radius='md' variant='filled' color='rgba(240, 201, 30, 0.99)'> <Star size={30} /> </ThemeIcon>
+              <ThemeIcon size={50} variant='gradient' gradient={{ from: 'yellow', to: 'gold', deg: 20}} radius='md'>
+                <Star size={40} />
+              </ThemeIcon>
               <h1 className={classes.gamesPlayingText}>Most Popular Games:</h1>
             </div>
 
@@ -370,7 +376,7 @@ export default function Dashboard() {
         <div className={classes.playingText}>
 
           <div className={classes.titleLogo}>
-            <ThemeIcon size={50} radius='md' variant='filled' color='pink'> <Gamepad size={40} /> </ThemeIcon>
+            <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: 'purple', to: 'pink', deg: 40}}> <Gamepad size={40} /> </ThemeIcon>
             <h1 className={classes.gamesPlayingText}>Games That You're playing</h1>
           </div>
           
@@ -402,7 +408,7 @@ export default function Dashboard() {
         <div className={classes.recentEntriesText}>
           
           <div className={classes.titleLogo}>
-            <Notebook size={30} />
+            <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: 'teal', to: 'blue', deg: 60}}> <Notebook size={40} /> </ThemeIcon>
             <h1 className={classes.gamesPlayingText}>Recent Journal Entries:</h1>
           </div>
 

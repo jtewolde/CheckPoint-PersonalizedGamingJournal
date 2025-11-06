@@ -42,7 +42,6 @@
 .titleLogo{
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 0.8rem;
@@ -224,7 +223,7 @@
 
 .popularGames{
   width: 100%;
-  max-width: 95%;
+  max-width: 98%;
   margin-top: 4rem;
   padding: 1rem 0;
   display: block;
