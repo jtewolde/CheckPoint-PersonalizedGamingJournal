@@ -2,6 +2,7 @@
   padding: 2rem;
   padding-left: 4rem;
   padding-right: 4rem;
+  padding-top: 3rem;
   min-height: 100vh;
   background: #121212;
   display: flex;
@@ -10,13 +11,12 @@
 }
 
 .welcomeText{
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 900;
-  margin-bottom: 1.0rem;
   align-self: center;
-  font-family: 'Inter';
+  font-family: 'Barlow';
   color: #f4f4f4;
-  margin-bottom: 2rem;
+  margin-bottom: 7rem;
 }
 
 .profileStats,
@@ -53,6 +53,7 @@
   color: #a7a7a7;
   font-size: 100%;
   font-weight: 500;
+  font-family: 'Poppins';
 }
 
 .viewMoreText:hover{
@@ -231,7 +232,7 @@
 
 .playingGames{
   width: 100%;
-  max-width: 95%;
+  max-width: 98%;
   margin-top: -1rem;
   padding: 1rem 0;
   display: block;
