@@ -171,269 +171,277 @@ export default function Dashboard() {
 
   return (
 
+    <div className={classes.background}>
 
-    <div className={classes.wrapper}>
+      <div className={classes.backgroundOverlay}>
 
-      <h1 className={classes.welcomeText}> Welcome back, {userName}! </h1>
+        <div className={classes.wrapper}>
 
-      <div className={classes.statCards}>
+          <h1 className={classes.welcomeText}> Welcome back, {userName}! </h1>
 
-        <div className={classes.profileStats}>
+          <div className={classes.statCards}>
 
-          <div className={classes.titleLogo}>
-            <ThemeIcon size={50} radius='md' variant='gradient' color='cyan'> <CircleUserRound size={40} /> </ThemeIcon>
-            <p className={classes.profileTitle}>Profile Stats: </p>
-          </div>
-          
-        </div>
+            <div className={classes.profileStats}>
 
-        <SimpleGrid cols={6} spacing="lg" className={classes.statusGrid}>
-
-          <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-            <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-
-              <div className={classes.statusLogoCenter} >
-                <IconClipboardListFilled size={60} color='#f018e8' className={classes.statusLogo}/>
+              <div className={classes.titleLogo}>
+                <ThemeIcon size={50} radius='md' variant='gradient' color='cyan'> <CircleUserRound size={40} /> </ThemeIcon>
+                <p className={classes.profileTitle}>Profile Stats: </p>
               </div>
               
-              <h3 className={classes.statusTitle}>Progress Summary</h3>
-              <p className={classes.statusTotalCount}>Total Games: {numOfGames}</p>
-
-              <SemiCircleProgress className={classes.statusProgress} value={completedPercentage} filledSegmentColor='#f018e8' size={170} thickness={15} 
-                label={<Text c='#f018e8' component='span' size='lg' fw={600}>{completedPercentage || '0'}% Completed</Text>}>
-              </SemiCircleProgress>
-
-            </Suspense>
-
-          </Paper>
-
-          <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-            <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-
-              <div className={classes.statusLogoCenter} >
-                <IconDeviceGamepad3Filled size={60} color="blue" />
-              </div>
-
-              <h3 className={classes.statusTitle}>Playing</h3>
-              <p className={classes.statusCount}>{playGamesLength}</p>
-
-            </Suspense>
-
-          </Paper>
-
-          <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-            <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-
-              <div className={classes.statusLogoCenter} >
-                <IconBookmarkFilled size={60} color="green" className={classes.statusLogo}/>
-              </div>
-
-              <h3 className={classes.statusTitle}>Plan to Play</h3>
-              <p className={classes.statusCount}>{planToPlayLength}</p>
-
-            </Suspense>
-
-          </Paper>
-
-          <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-            <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-
-              <div className={classes.statusLogoCenter} >
-                <IconCheck size={60} color="purple" className={classes.statusLogo}/>
-              </div>
-
-              <h3 className={classes.statusTitle}>Completed</h3>
-              <p className={classes.statusCount}>{completedLength}</p>
-            </Suspense>
-
-          </Paper>
-
-          <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-            <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-              <div className={classes.statusLogoCenter} >
-                <IconQuestionMark size={60} color='#fc8a08' className={classes.statusLogo}/>
-              </div>
-              <h3 className={classes.statusTitle}>No Status</h3>
-              <p className={classes.statusCount}>{noStatusLength}</p>
-            </Suspense>
-
-          </Paper>
-
-          <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-            <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-
-              <div className={classes.statusLogoCenter} >
-                <IconPlayerPauseFilled size={60} color="red" className={classes.statusLogo}/>
-              </div>
-
-              <h3 className={classes.statusTitle}>On Hold</h3>
-              <p className={classes.statusCount}>{onHoldLength}</p>
-              
-            </Suspense>
-
-          </Paper>
-
-        </SimpleGrid>
-
-      </div>
-
-      <div className={classes.trendingGames}>
-
-        <div className={classes.trendingText}>
-          
-          <div className={classes.titleLogo}>
-            <ThemeIcon variant='gradient' gradient={{ from: 'red', to: 'orange', deg: 90}} size={40}>
-                <Flame size={30} color='white'/> 
-              </ThemeIcon>
-
-            <h1 className={classes.gamesPlayingText}>Top Trending Games:</h1>
-
-          </div>
-
-          <a className={classes.viewMoreText} href='/search/trending'> View More </a>
-        </div>
-        
-        {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
-
-        <SimpleGrid cols={7} spacing="lg" verticalSpacing='xl' className={classes.trendingGamesGrid}>
-          {games.map((game) => (
-            <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
-
-              <div className={classes.imageWrapper}>
-
-                <Image src={
-                game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
-                alt={game.name} 
-                className={classes.cover}  
-                />
-
-                <div className={classes.overlay}>
-
-                  <Text className={classes.gameName}>{game.name}</Text>
-
-                </div>
-
-              </div>
-
-            </div>
-          ))}
-        </SimpleGrid>
-
-      </div>
-
-      <div className={classes.popularGames}>
-        
-          <div className={classes.popularText}>
-          
-            <div className={classes.titleLogo}>
-              <ThemeIcon size={50} variant='gradient' gradient={{ from: 'yellow', to: 'gold', deg: 20}} radius='md'>
-                <Star size={40} />
-              </ThemeIcon>
-              <h1 className={classes.gamesPlayingText}>Most Popular Games:</h1>
             </div>
 
-            <a className={classes.viewMoreText} href='/search/popular'> View More </a>
+            <SimpleGrid cols={6} spacing="lg" className={classes.statusGrid}>
 
-          </div>
+              <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
-          {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
-        
-        <SimpleGrid cols={6} spacing="lg" verticalSpacing='xl' className={classes.popularGamesGrid}>
-          {popularGames.map((game) => (
-            <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
+                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
 
-              <div className={classes.imageWrapper}>
-
-                <Image src={
-                game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
-                alt={game.name} 
-                className={classes.cover} 
-                onClick={() => router.push(`/games/${game.id}`)} 
-                />
-
-                <div className={classes.overlay}>
-
-                  <Text className={classes.gameName}>{game.name}</Text>
-
-                </div>
-
-              </div>
-
-            </div>
-          ))}
-        </SimpleGrid>
-
-      </div>
-
-      <div className={classes.playingGames} >
-
-        <div className={classes.playingText}>
-
-          <div className={classes.titleLogo}>
-            <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: 'purple', to: 'pink', deg: 40}}> <Gamepad size={40} /> </ThemeIcon>
-            <h1 className={classes.gamesPlayingText}>Games That You're playing</h1>
-          </div>
-          
-        </div>
-
-        {playingGames.length === 0 ? (
-              <p className={classes.noEntriesText}>You have no games that have the 'Playing' status.</p>
-          ) : (
-            <>
-              {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
-              <SimpleGrid cols={5} spacing="lg" className={classes.gamesGrid}>
-                {playingGames.map((game) => (
-                  <div key={game._id} className={classes.gameCard}>
-                    <Image src={
-                      game.coverImage ? `https:${game.coverImage.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
-                      alt={game.name} 
-                      className={classes.cover} 
-                      onClick={() => router.push(`/games/${game.gameId}`)} 
-                      />
+                  <div className={classes.statusLogoCenter} >
+                    <IconClipboardListFilled size={60} color='#f018e8' className={classes.statusLogo}/>
                   </div>
-                ))}
-              </SimpleGrid>
-            </>
-          )}
-      </div>
+                  
+                  <h3 className={classes.statusTitle}>Progress Summary</h3>
+                  <p className={classes.statusTotalCount}>Total Games: {numOfGames}</p>
 
-      <div className={classes.recentEntries}>
+                  <SemiCircleProgress className={classes.statusProgress} value={completedPercentage} filledSegmentColor='#f018e8' size={170} thickness={15} 
+                    label={<Text c='#f018e8' component='span' size='lg' fw={600}>{completedPercentage || '0'}% Completed</Text>}>
+                  </SemiCircleProgress>
 
-        <div className={classes.recentEntriesText}>
-          
-          <div className={classes.titleLogo}>
-            <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: 'teal', to: 'blue', deg: 60}}> <Notebook size={40} /> </ThemeIcon>
-            <h1 className={classes.gamesPlayingText}>Recent Journal Entries:</h1>
+                </Suspense>
+
+              </Paper>
+
+              <Paper shadow="md" radius="lg" className={classes.statusCard}>
+
+                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
+
+                  <div className={classes.statusLogoCenter} >
+                    <IconDeviceGamepad3Filled size={60} color="blue" />
+                  </div>
+
+                  <h3 className={classes.statusTitle}>Playing</h3>
+                  <p className={classes.statusCount}>{playGamesLength}</p>
+
+                </Suspense>
+
+              </Paper>
+
+              <Paper shadow="md" radius="lg" className={classes.statusCard}>
+
+                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
+
+                  <div className={classes.statusLogoCenter} >
+                    <IconBookmarkFilled size={60} color="green" className={classes.statusLogo}/>
+                  </div>
+
+                  <h3 className={classes.statusTitle}>Plan to Play</h3>
+                  <p className={classes.statusCount}>{planToPlayLength}</p>
+
+                </Suspense>
+
+              </Paper>
+
+              <Paper shadow="md" radius="lg" className={classes.statusCard}>
+
+                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
+
+                  <div className={classes.statusLogoCenter} >
+                    <IconCheck size={60} color="purple" className={classes.statusLogo}/>
+                  </div>
+
+                  <h3 className={classes.statusTitle}>Completed</h3>
+                  <p className={classes.statusCount}>{completedLength}</p>
+                </Suspense>
+
+              </Paper>
+
+              <Paper shadow="md" radius="lg" className={classes.statusCard}>
+
+                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
+                  <div className={classes.statusLogoCenter} >
+                    <IconQuestionMark size={60} color='#fc8a08' className={classes.statusLogo}/>
+                  </div>
+                  <h3 className={classes.statusTitle}>No Status</h3>
+                  <p className={classes.statusCount}>{noStatusLength}</p>
+                </Suspense>
+
+              </Paper>
+
+              <Paper shadow="md" radius="lg" className={classes.statusCard}>
+
+                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
+
+                  <div className={classes.statusLogoCenter} >
+                    <IconPlayerPauseFilled size={60} color="red" className={classes.statusLogo}/>
+                  </div>
+
+                  <h3 className={classes.statusTitle}>On Hold</h3>
+                  <p className={classes.statusCount}>{onHoldLength}</p>
+                  
+                </Suspense>
+
+              </Paper>
+
+            </SimpleGrid>
+
+          </div>
+
+          <div className={classes.trendingGames}>
+
+            <div className={classes.trendingText}>
+              
+              <div className={classes.titleLogo}>
+                <ThemeIcon variant='gradient' gradient={{ from: 'red', to: 'orange', deg: 90}} size={40}>
+                    <Flame size={30} color='white'/> 
+                  </ThemeIcon>
+
+                <h1 className={classes.gamesPlayingText}>Top Trending Games:</h1>
+
+              </div>
+
+              <a className={classes.viewMoreText} href='/search/trending'> View More </a>
+            </div>
+            
+            {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
+
+            <SimpleGrid cols={7} spacing="lg" verticalSpacing='xl' className={classes.trendingGamesGrid}>
+              {games.map((game) => (
+                <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
+
+                  <div className={classes.imageWrapper}>
+
+                    <Image src={
+                    game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
+                    alt={game.name} 
+                    className={classes.cover}  
+                    />
+
+                    <div className={classes.overlay}>
+
+                      <Text className={classes.gameName}>{game.name}</Text>
+
+                    </div>
+
+                  </div>
+
+                </div>
+              ))}
+            </SimpleGrid>
+
+          </div>
+
+          <div className={classes.popularGames}>
+            
+              <div className={classes.popularText}>
+              
+                <div className={classes.titleLogo}>
+                  <ThemeIcon size={50} variant='gradient' gradient={{ from: 'yellow', to: 'gold', deg: 20}} radius='md'>
+                    <Star size={40} />
+                  </ThemeIcon>
+                  <h1 className={classes.gamesPlayingText}>Most Popular Games:</h1>
+                </div>
+
+                <a className={classes.viewMoreText} href='/search/popular'> View More </a>
+
+              </div>
+
+              {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
+            
+            <SimpleGrid cols={6} spacing="lg" verticalSpacing='xl' className={classes.popularGamesGrid}>
+              {popularGames.map((game) => (
+                <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
+
+                  <div className={classes.imageWrapper}>
+
+                    <Image src={
+                    game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
+                    alt={game.name} 
+                    className={classes.cover} 
+                    onClick={() => router.push(`/games/${game.id}`)} 
+                    />
+
+                    <div className={classes.overlay}>
+
+                      <Text className={classes.gameName}>{game.name}</Text>
+
+                    </div>
+
+                  </div>
+
+                </div>
+              ))}
+            </SimpleGrid>
+
+          </div>
+
+          <div className={classes.playingGames} >
+
+            <div className={classes.playingText}>
+
+              <div className={classes.titleLogo}>
+                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: 'purple', to: 'pink', deg: 40}}> <Gamepad size={40} /> </ThemeIcon>
+                <h1 className={classes.gamesPlayingText}>Games That You're playing:</h1>
+              </div>
+              
+            </div>
+
+            {playingGames.length === 0 ? (
+                  <p className={classes.noEntriesText}>You have no games that have the 'Playing' status.</p>
+              ) : (
+                <>
+                  {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
+                  <SimpleGrid cols={5} spacing="lg" className={classes.gamesGrid}>
+                    {playingGames.map((game) => (
+                      <div key={game._id} className={classes.gameCard}>
+                        <Image src={
+                          game.coverImage ? `https:${game.coverImage.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
+                          alt={game.name} 
+                          className={classes.cover} 
+                          onClick={() => router.push(`/games/${game.gameId}`)} 
+                          />
+                      </div>
+                    ))}
+                  </SimpleGrid>
+                </>
+              )}
+          </div>
+
+          <div className={classes.recentEntries}>
+
+            <div className={classes.recentEntriesText}>
+              
+              <div className={classes.titleLogo}>
+                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: 'teal', to: 'blue', deg: 60}}> <Notebook size={40} /> </ThemeIcon>
+                <h1 className={classes.gamesPlayingText}>Recent Journal Entries:</h1>
+              </div>
+
+            </div>
+
+              {recentEntries.length === 0 ? (
+                  <p className={classes.noEntriesText}>No recent journal entries found.</p>
+              ) : (
+                  <SimpleGrid cols={4} spacing="lg" className={classes.entriesGrid}>
+                      {recentEntries.map((entry) => (
+                          <div key={entry._id} className={classes.entryCard} onClick={() => router.push('/journal')}>
+                              <h3 className={classes.entryGame}>{entry.gameName}</h3>
+                              <h3 className={classes.entryTitle}>{entry.title}</h3>
+                              <p className={classes.entryContent}>
+                                  {entry.content.length > 150
+                                      ? `${entry.content.slice(0, 150)}...` // Truncate long content
+                                      : entry.content}
+                              </p>
+                              <p className={classes.entryDate}>{entry.displayDate}</p>
+                          </div>
+                      ))}
+                  </SimpleGrid>
+              )}
           </div>
 
         </div>
 
-          {recentEntries.length === 0 ? (
-              <p className={classes.noEntriesText}>No recent journal entries found.</p>
-          ) : (
-              <SimpleGrid cols={4} spacing="lg" className={classes.entriesGrid}>
-                  {recentEntries.map((entry) => (
-                      <div key={entry._id} className={classes.entryCard} onClick={() => router.push('/journal')}>
-                          <h3 className={classes.entryGame}>{entry.gameName}</h3>
-                          <h3 className={classes.entryTitle}>{entry.title}</h3>
-                          <p className={classes.entryContent}>
-                              {entry.content.length > 150
-                                  ? `${entry.content.slice(0, 150)}...` // Truncate long content
-                                  : entry.content}
-                          </p>
-                          <p className={classes.entryDate}>{entry.displayDate}</p>
-                      </div>
-                  ))}
-              </SimpleGrid>
-          )}
       </div>
 
     </div>
+
   );
 }
