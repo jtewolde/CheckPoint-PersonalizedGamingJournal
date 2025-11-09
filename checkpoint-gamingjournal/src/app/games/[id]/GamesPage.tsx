@@ -49,6 +49,7 @@ export default function GameDetails() {
 
   const [isMobile, setIsMobile] = useState(false);
 
+  // Detect screen size for responsive design for screenshot carousel
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 464);
     handleResize(); // run once on mount
@@ -56,6 +57,7 @@ export default function GameDetails() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Fetch game details from IGDB API when component mounts or ID changes
   useEffect(() => {
     const fetchIGDBGameDetails = async () => {
       try {
@@ -254,7 +256,7 @@ export default function GameDetails() {
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
-      items: 2, // Show one slide at a time
+      items: 2, // Show two slides at a time for tablet
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },

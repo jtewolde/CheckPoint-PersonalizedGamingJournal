@@ -175,8 +175,8 @@ export default function Journal() {
 
                         <div className={classes.titleLogo}>
 
-                            <ThemeIcon size={50} variant='gradient' gradient={{ from: 'green', to: 'purple', deg: 20}} radius='md'>
-                                <Notebook size={40} />
+                            <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: 'teal', to: 'blue', deg: 60}}> 
+                                <Notebook size={40} /> 
                             </ThemeIcon>
 
                             <h2 className={classes.journalTitle}>Your Journal Entries</h2>

@@ -9,6 +9,8 @@ import { Footer } from "../components/Footer/Footer";
 import { Toaster } from "react-hot-toast"
 import { AuthProvider } from "@/context/Authcontext";
 
+import { Suspense } from "react";
+
 import { ColorSchemeScript, LoadingOverlay, MantineProvider, mantineHtmlProps } from '@mantine/core';
 
 const geistSans = Geist({
@@ -47,14 +49,6 @@ export default function RootLayout({
             theme={{
               primaryColor: 'blue',
               defaultRadius: 'md',
-              components: {
-                LoadingOverlay:{
-                  defaultProps:{
-                    overlayProps: { radius: "sm", blur: 2, backgroundColor:'black', backgroundOpacity: 1 },
-                    loaderProps: { color: "pink", type: 'bars' },
-                  }
-                }
-              }
             }}
           >
 
@@ -93,8 +87,30 @@ export default function RootLayout({
             />
 
             <Header />
-            <main className="main-content">{children}</main>
+
+              <main className="main-content">
+                <Suspense
+                  fallback={
+                    <LoadingOverlay
+                      visible
+                      overlayProps={{
+                        color: "#000",
+                        backgroundOpacity: 0.85,
+                        blur: 2,
+                      }}
+                      loaderProps={{ color: "pink", type: "bars" }}
+                      zIndex={1000}
+                    />
+                  }
+                >
+                  {children}
+                
+                </Suspense>
+
+              </main>
+
             <Footer />
+              
           </MantineProvider>
         </AuthProvider>
       </body>
