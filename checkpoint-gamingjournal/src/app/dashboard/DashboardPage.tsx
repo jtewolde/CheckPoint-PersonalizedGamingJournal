@@ -8,7 +8,7 @@ import { authClient } from '@/lib/auth-client';
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
 import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconBookmarkFilled, IconCheck, IconQuestionMark, IconClipboardListFilled } from '@tabler/icons-react';
-import { Flame, Notebook, Gamepad, Star, CircleUserRound } from 'lucide-react';
+import { Flame, Notebook, Gamepad, Star, CircleUserRound, CircleArrowRight } from 'lucide-react';
 import classes from './dashboard.module.css';
 
 export default function Dashboard() {
@@ -288,7 +288,7 @@ export default function Dashboard() {
 
           <div className={classes.trendingGames}>
 
-            <div className={classes.trendingText}>
+            <div className={classes.trendingSection}>
               
               <div className={classes.titleLogo}>
                 <ThemeIcon variant='gradient' gradient={{ from: 'red', to: 'orange', deg: 90}} size={40}>
@@ -299,7 +299,8 @@ export default function Dashboard() {
 
               </div>
 
-              <a className={classes.viewMoreText} href='/search/trending'> View More </a>
+              <a className={classes.viewMoreIcon} href='/search/trending'> <CircleArrowRight size={35} /> </a>
+
             </div>
             
             {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
@@ -332,7 +333,7 @@ export default function Dashboard() {
 
           <div className={classes.popularGames}>
             
-              <div className={classes.popularText}>
+              <div className={classes.popularSection}>
               
                 <div className={classes.titleLogo}>
                   <ThemeIcon size={50} variant='gradient' gradient={{ from: 'yellow', to: 'gold', deg: 20}} radius='md'>
@@ -341,7 +342,7 @@ export default function Dashboard() {
                   <h1 className={classes.gamesPlayingText}>Most Popular Games:</h1>
                 </div>
 
-                <a className={classes.viewMoreText} href='/search/popular'> View More </a>
+                <a className={classes.viewMoreIcon} href='/search/popular'><CircleArrowRight size={35} /></a>
 
               </div>
 
@@ -376,12 +377,14 @@ export default function Dashboard() {
 
           <div className={classes.playingGames} >
 
-            <div className={classes.playingText}>
+            <div className={classes.playingSection}>
 
               <div className={classes.titleLogo}>
                 <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: 'purple', to: 'pink', deg: 40}}> <Gamepad size={40} /> </ThemeIcon>
                 <h1 className={classes.gamesPlayingText}>Games That You're playing:</h1>
               </div>
+
+              <a className={classes.viewMoreText} href='/library'> <CircleArrowRight size={35} /> </a>
               
             </div>
 
@@ -408,12 +411,14 @@ export default function Dashboard() {
 
           <div className={classes.recentEntries}>
 
-            <div className={classes.recentEntriesText}>
+            <div className={classes.recentEntriesSection}>
               
               <div className={classes.titleLogo}>
                 <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: 'teal', to: 'blue', deg: 60}}> <Notebook size={40} /> </ThemeIcon>
                 <h1 className={classes.gamesPlayingText}>Recent Journal Entries:</h1>
               </div>
+
+              <a className={classes.viewMoreIcon} href='/journal'> <CircleArrowRight size={35} /> </a>
 
             </div>
 
@@ -422,7 +427,7 @@ export default function Dashboard() {
               ) : (
                   <SimpleGrid cols={4} spacing="lg" className={classes.entriesGrid}>
                       {recentEntries.map((entry) => (
-                          <div key={entry._id} className={classes.entryCard} onClick={() => router.push('/journal')}>
+                          <div key={entry._id} className={classes.entryCard} onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}>
                               <h3 className={classes.entryGame}>{entry.gameName}</h3>
                               <h3 className={classes.entryTitle}>{entry.title}</h3>
                               <p className={classes.entryContent}>
