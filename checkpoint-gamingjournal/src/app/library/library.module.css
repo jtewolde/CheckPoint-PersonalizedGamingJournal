@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     padding: 2rem;
-    background: linear-gradient(to top, #393939, #434343);
+    background: linear-gradient(to top, #393939, #222121);
     min-height: 100vh; 
 }
 
