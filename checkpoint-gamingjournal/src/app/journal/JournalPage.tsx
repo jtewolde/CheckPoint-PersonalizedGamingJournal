@@ -175,7 +175,7 @@ export default function Journal() {
 
                         <div className={classes.titleLogo}>
 
-                            <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: 'teal', to: 'blue', deg: 60}}> 
+                            <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: '#DCE35B', to: '#45B649', deg: 60}}> 
                                 <Notebook size={40} /> 
                             </ThemeIcon>
 

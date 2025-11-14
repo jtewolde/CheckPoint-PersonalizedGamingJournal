@@ -184,7 +184,7 @@ export default function Dashboard() {
             <div className={classes.profileStats}>
 
               <div className={classes.titleLogo}>
-                <ThemeIcon size={50} radius='md' variant='gradient' color='cyan'> <CircleUserRound size={40} /> </ThemeIcon>
+                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: '#56CCF2', to: '#2F80ED', deg: 30}}> <CircleUserRound size={40} /> </ThemeIcon>
                 <p className={classes.profileTitle}>Profile Stats: </p>
               </div>
               
@@ -291,7 +291,7 @@ export default function Dashboard() {
             <div className={classes.trendingSection}>
               
               <div className={classes.titleLogo}>
-                <ThemeIcon variant='gradient' gradient={{ from: 'red', to: 'orange', deg: 90}} size={40}>
+                <ThemeIcon variant='gradient' gradient={{ from: '#c21500', to: '#ffc500', deg: 90}} size={40}>
                     <Flame size={30} color='white'/> 
                   </ThemeIcon>
 
@@ -336,10 +336,13 @@ export default function Dashboard() {
               <div className={classes.popularSection}>
               
                 <div className={classes.titleLogo}>
-                  <ThemeIcon size={50} variant='gradient' gradient={{ from: 'yellow', to: 'gold', deg: 20}} radius='md'>
+
+                  <ThemeIcon size={50} variant='gradient' gradient={{ from: '#f7971e', to: '#ffd200', deg: 20}} radius='md'>
                     <Star size={40} />
                   </ThemeIcon>
+
                   <h1 className={classes.gamesPlayingText}>Most Popular Games:</h1>
+                  
                 </div>
 
                 <a className={classes.viewMoreIcon} href='/search/popular'><CircleArrowRight size={35} /></a>
@@ -380,7 +383,7 @@ export default function Dashboard() {
             <div className={classes.playingSection}>
 
               <div className={classes.titleLogo}>
-                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: 'purple', to: 'pink', deg: 40}}> <Gamepad size={40} /> </ThemeIcon>
+                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: '#e96443', to: '#904e95', deg: 90}}> <Gamepad size={40} /> </ThemeIcon>
                 <h1 className={classes.gamesPlayingText}>Games That You're playing:</h1>
               </div>
 
@@ -414,8 +417,11 @@ export default function Dashboard() {
             <div className={classes.recentEntriesSection}>
               
               <div className={classes.titleLogo}>
-                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: 'teal', to: 'blue', deg: 60}}> <Notebook size={40} /> </ThemeIcon>
+
+                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: '#DCE35B', to: '#45B649', deg: 60}}> <Notebook size={40} /> </ThemeIcon>
+                
                 <h1 className={classes.gamesPlayingText}>Recent Journal Entries:</h1>
+
               </div>
 
               <a className={classes.viewMoreIcon} href='/journal'> <CircleArrowRight size={35} /> </a>

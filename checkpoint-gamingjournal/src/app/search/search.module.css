@@ -17,6 +17,20 @@
     padding-right: 2rem;
 }
 
+.titleLogoSection{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: white;
+    width: 100%;
+    padding: 1.2rem 1.5rem;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 16px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
 /* Search results heading */
 .TitleText {
     font-size: 2rem;

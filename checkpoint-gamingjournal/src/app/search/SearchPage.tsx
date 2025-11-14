@@ -6,8 +6,9 @@ import { useRouter } from 'next/navigation';
 import { useDisclosure } from '@mantine/hooks';
 import GameFilters from '@/components/GameFilters/GameFilters';
 
-import { LoadingOverlay } from '@mantine/core';
-import { SimpleGrid } from '@mantine/core';
+import { LoadingOverlay, SimpleGrid, ThemeIcon } from '@mantine/core';
+
+import { Search } from 'lucide-react';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
@@ -131,7 +132,16 @@ export default function SearchResults() {
 
   return (
     <div className={classes.wrapper} >
-      <h1 className={classes.TitleText}>Search Results for <span className={classes.highlight}>{query}</span> </h1>
+
+      <div className={classes.titleLogoSection}>
+
+        <ThemeIcon variant='gradient' gradient={{ from: 'red', to: 'yellow', deg: 90}} size={50}>
+          <Search size={40} color='white'/> 
+        </ThemeIcon>
+
+        <h1 className={classes.TitleText}>Search Results for <span className={classes.highlight}>{query}</span> </h1>
+
+      </div>
 
         <div className={classes.mainContent}>
 

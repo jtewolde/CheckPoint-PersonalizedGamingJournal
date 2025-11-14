@@ -139,10 +139,13 @@ export default function TrendingPage() {
           <div className={classes.titleDescriptionSection}>
 
             <div className={classes.titleLogo}>
-              <ThemeIcon variant='gradient' gradient={{ from: 'red', to: 'yellow', deg: 90}} size={50}>
-                <Flame size={40} color='white'/> 
+              
+              <ThemeIcon variant='gradient' gradient={{ from: '#c21500', to: '#ffc500', deg: 90}} size={40}>
+                <Flame size={30} color='white'/> 
               </ThemeIcon>
+
               <h1 className={classes.titleText}> Top 75 Trending Games of 2025:</h1>
+
             </div>
 
             <Text className={classes.description} size="xl" mt="xl">
