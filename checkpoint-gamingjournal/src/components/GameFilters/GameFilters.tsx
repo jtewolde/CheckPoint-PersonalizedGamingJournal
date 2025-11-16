@@ -44,7 +44,7 @@ export default function GameFilters({
 
         <>
         
-            <Button className={classes.filterButton} size='lg' radius='md' color='#64A0ff' leftSection={<ListFilter size={30} />} onClick={toggle}>Filters</Button>
+            <Button className={classes.filterButton} size='lg' radius='md' color='#828997ff' leftSection={<ListFilter size={30} />} onClick={toggle}>Filters</Button>
 
             {/* Drawer component to hold the filter options, slides in from left */}
             <Drawer

@@ -167,6 +167,8 @@ export default function Journal() {
     return (
         <div className={classes.background}>
 
+            {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2, color: 'blue' }} />}
+
             <div className={classes.backgroundOverlay}>
 
                 <div className={classes.journalWrapper}>

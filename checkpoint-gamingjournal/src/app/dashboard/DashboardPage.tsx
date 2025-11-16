@@ -173,6 +173,8 @@ export default function Dashboard() {
 
     <div className={classes.background}>
 
+      {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2, color: 'black' }} />}
+
       <div className={classes.backgroundOverlay}>
 
         <div className={classes.wrapper}>
