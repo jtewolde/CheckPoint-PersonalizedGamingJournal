@@ -2,15 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { authClient } from '@/lib/auth-client';
+import { authClient } from '@/lib/auth-client'
+import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
+
+import { SimpleGrid, Badge, Image, Select, Popover, Button, ThemeIcon } from '@mantine/core';
+import { LibraryBig, ListFilter } from 'lucide-react';
+import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 import classes from './library.module.css';
-
-import { ListFilter } from 'lucide-react';
-
-import { LoadingOverlay, SimpleGrid, Badge, Image, Select, Popover, Button, ThemeIcon } from '@mantine/core';
-import { LibraryBig } from 'lucide-react';
-import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 export default function Library(){
     const [page, setPage] = useState(1);
@@ -73,7 +72,7 @@ export default function Library(){
     return(
         <div className={classes.wrapper}>
 
-            {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2, color: 'blue' }} />}
+            {loading && <GlobalLoader visible={loading} />}
 
             <div className={classes.libraryHeader}>
 

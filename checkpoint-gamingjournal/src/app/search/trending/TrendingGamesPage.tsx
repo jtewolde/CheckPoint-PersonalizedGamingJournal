@@ -6,9 +6,10 @@ import { useRouter, redirect } from 'next/navigation';
 import GameFilters from '@/components/GameFilters/GameFilters';
 
 import { LoadingOverlay, Text, SimpleGrid, ThemeIcon } from '@mantine/core';
+import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
-import { TrendingUp, Flame } from 'lucide-react';
+import { Flame } from 'lucide-react';
 
 import classes from './Trending.module.css';
 
@@ -116,7 +117,7 @@ export default function TrendingPage() {
 
   // If the page is still loading, put a loading overlay
   if (loading) {
-    return <LoadingOverlay visible zIndex={1000}  overlayProps={{ radius: "sm", blur: 2 }} />
+    return <GlobalLoader visible={loading} />
   }
 
   // If there are no search results for search input, redirect to not found page

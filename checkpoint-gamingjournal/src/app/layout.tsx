@@ -9,6 +9,8 @@ import { Footer } from "../components/Footer/Footer";
 import { Toaster } from "react-hot-toast"
 import { AuthProvider } from "@/context/Authcontext";
 
+import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
+
 import { Suspense } from "react";
 
 import { ColorSchemeScript, LoadingOverlay, MantineProvider, mantineHtmlProps } from '@mantine/core';
@@ -91,15 +93,8 @@ export default function RootLayout({
               <main className="main-content">
                 <Suspense
                   fallback={
-                    <LoadingOverlay
+                    <GlobalLoader
                       visible
-                      overlayProps={{
-                        color: "#000",
-                        backgroundOpacity: 0.85,
-                        blur: 2,
-                      }}
-                      loaderProps={{ color: "pink", type: "bars" }}
-                      zIndex={1000}
                     />
                   }
                 >

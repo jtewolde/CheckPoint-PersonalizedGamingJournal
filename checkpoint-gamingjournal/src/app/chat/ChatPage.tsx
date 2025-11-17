@@ -4,12 +4,13 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation';
 import { useChat } from '@ai-sdk/react'
 import { Textarea, Button, Loader, Avatar } from '@mantine/core';
+import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 
-import { SendIcon, MessageCircleQuestion, MessageSquare, Earth, Gamepad2, Hourglass, Users} from 'lucide-react';
+import { SendIcon, MessageCircleQuestion, Earth, Gamepad2, Hourglass, Users} from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
 
 import classes from './chat.module.css';

@@ -1,15 +1,12 @@
 "use client";
 
-import { LoadingOverlay } from "@mantine/core";
+import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
 
 export default function Loading() {
   return (
     <div style={{ position: "relative", height: "100vh" }}>
-      <LoadingOverlay
+      <GlobalLoader
         visible
-        zIndex={1000}
-        overlayProps={{ radius: "sm", blur: 2, color:'black' }}
-        loaderProps={{ color: 'pink', type:'oval'}}
       />
     </div>
   );

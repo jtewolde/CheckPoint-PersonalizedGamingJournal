@@ -5,6 +5,7 @@ import { useRouter, redirect } from 'next/navigation';
 import GameFilters from '@/components/GameFilters/GameFilters';
 
 import { LoadingOverlay, ThemeIcon, Text } from '@mantine/core';
+import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 import { SimpleGrid } from '@mantine/core';
 
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
@@ -115,7 +116,7 @@ export default function PopularPage() {
 
   // If the page is still loading, put a loading overlay
   if (loading) {
-    return <LoadingOverlay visible zIndex={1000}  overlayProps={{ radius: "sm", blur: 2 }} />
+    return <GlobalLoader visible={loading} />
   }
 
   // If there are no popular games results, redirect the user to the not-found page

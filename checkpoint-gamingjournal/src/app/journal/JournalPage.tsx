@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDisclosure } from '@mantine/hooks';
 import { authClient } from '@/lib/auth-client';
-
-import classes from './journal.module.css';
+import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
 import { Button, LoadingOverlay, Popover, Select, SimpleGrid, Pagination, ThemeIcon, Modal, Group, Title, Text, Checkbox } from '@mantine/core';
 
 import toast from 'react-hot-toast';
 import { FilePlus, DeleteIcon, Eye, ListFilter, Trash2, Notebook } from 'lucide-react';
+
+import classes from './journal.module.css';
 
 export default function Journal() {
     // State variables for the journal entries
@@ -149,11 +150,6 @@ export default function Journal() {
         }
     }
 
-    // If the loading state is true, display the loading overlay on screen
-    if (loading) {
-        return <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
-    }
-
     // Get unique game names from entries for the dropdown
     const gameNames = Array.from(new Set(entries.map(entry => entry.gameName)));
 
@@ -164,10 +160,15 @@ export default function Journal() {
     // Find the selected game's object in the journal entries to get the gameID
     const selectedGameObject = entries.find(e => e.gameName === selectedGame);
 
+     // If the loading state is true, display the loading overlay on screen
+    if (loading) {
+        return <GlobalLoader visible={loading} />;
+    }
+
     return (
         <div className={classes.background}>
 
-            {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2, color: 'blue' }} />}
+            {loading && <GlobalLoader visible={loading} />}
 
             <div className={classes.backgroundOverlay}>
 

@@ -3,6 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoadingOverlay, SimpleGrid, Image, Paper, SemiCircleProgress, Text, ThemeIcon } from '@mantine/core';
+import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 import { authClient } from '@/lib/auth-client';
 
 import PlaceHolderImage from "../../../public/no-cover-image.png"
@@ -173,7 +174,7 @@ export default function Dashboard() {
 
     <div className={classes.background}>
 
-      {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2, color: 'black' }} />}
+      {loading && <GlobalLoader visible={loading} />}
 
       <div className={classes.backgroundOverlay}>
 
