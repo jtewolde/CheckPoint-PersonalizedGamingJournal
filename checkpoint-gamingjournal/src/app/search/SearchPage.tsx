@@ -6,12 +6,14 @@ import { useRouter } from 'next/navigation';
 import { useDisclosure } from '@mantine/hooks';
 import GameFilters from '@/components/GameFilters/GameFilters';
 
-import { LoadingOverlay } from '@mantine/core';
-import { SimpleGrid } from '@mantine/core';
+import { LoadingOverlay, SimpleGrid, ThemeIcon } from '@mantine/core';
+
+import { Search } from 'lucide-react';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 import classes from './search.module.css';
+import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
 export default function SearchResults() {
   const searchParams = useSearchParams();
@@ -121,7 +123,7 @@ export default function SearchResults() {
     
   // If the page is still loading, put a loading overlay
   if (loading) {
-    return <LoadingOverlay visible zIndex={1000}  overlayProps={{ radius: "sm", blur: 2 }} />
+    return <GlobalLoader visible={loading} />
   }
 
   // If there are no search results for search input, redirect to not found page
@@ -131,7 +133,16 @@ export default function SearchResults() {
 
   return (
     <div className={classes.wrapper} >
-      <h1 className={classes.TitleText}>Search Results for <span className={classes.highlight}>{query}</span> </h1>
+
+      <div className={classes.titleLogoSection}>
+
+        <ThemeIcon variant='gradient' gradient={{ from: 'red', to: 'yellow', deg: 90}} size={50}>
+          <Search size={40} color='white'/> 
+        </ThemeIcon>
+
+        <h1 className={classes.TitleText}>Search Results for: <span className={classes.highlight}>{query}</span> </h1>
+
+      </div>
 
         <div className={classes.mainContent}>
 

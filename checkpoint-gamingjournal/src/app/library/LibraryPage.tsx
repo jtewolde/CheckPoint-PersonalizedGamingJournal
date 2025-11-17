@@ -2,15 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { authClient } from '@/lib/auth-client';
-import { Metadata } from 'next';
+import { authClient } from '@/lib/auth-client'
+import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
+
+import { SimpleGrid, Badge, Image, Select, Popover, Button, ThemeIcon } from '@mantine/core';
+import { LibraryBig, ListFilter } from 'lucide-react';
+import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 import classes from './library.module.css';
-
-import { ListFilter } from 'lucide-react';
-
-import { LoadingOverlay, SimpleGrid, Badge, Image, Select, Popover, Button } from '@mantine/core';
-import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 export default function Library(){
     const [page, setPage] = useState(1);
@@ -72,14 +71,29 @@ export default function Library(){
 
     return(
         <div className={classes.wrapper}>
-            {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
 
-            <p className={classes.subTitle}> You have {totalGames} games in your library. </p>
+            {loading && <GlobalLoader visible={loading} />}
+
+            <div className={classes.libraryHeader}>
+
+                <div className={classes.titleLogo}>
+
+                    <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: '#e96443', to: '#904e95', deg: 90}}> 
+                        <LibraryBig size={40} /> 
+                    </ThemeIcon>
+
+                    <h2 className={classes.title}>Your Library</h2>
+
+                </div>
+
+            </div>
+
+            <p className={classes.subTitle}> You have <b color='white'>{totalGames} games</b> in your library. </p>
 
             {/* Status Filter Dropdown */}
             <Popover width={300} position='bottom-end' withArrow shadow='lg'>
                 <Popover.Target>
-                    <Button className={classes.filterButton} size='md' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Status</Button>
+                    <Button className={classes.filterButton} size='md' radius='lg' variant='gradient' gradient={{from: '#e96443', to: '#904e95', deg: 90}} rightSection={<ListFilter />}>Filter By Status</Button>
                 </Popover.Target>
 
                 <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>

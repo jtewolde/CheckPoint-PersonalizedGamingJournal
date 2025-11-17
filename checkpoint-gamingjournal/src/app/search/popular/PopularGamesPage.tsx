@@ -5,6 +5,7 @@ import { useRouter, redirect } from 'next/navigation';
 import GameFilters from '@/components/GameFilters/GameFilters';
 
 import { LoadingOverlay, ThemeIcon, Text } from '@mantine/core';
+import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 import { SimpleGrid } from '@mantine/core';
 
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
@@ -115,7 +116,7 @@ export default function PopularPage() {
 
   // If the page is still loading, put a loading overlay
   if (loading) {
-    return <LoadingOverlay visible zIndex={1000}  overlayProps={{ radius: "sm", blur: 2 }} />
+    return <GlobalLoader visible={loading} />
   }
 
   // If there are no popular games results, redirect the user to the not-found page
@@ -133,11 +134,13 @@ export default function PopularPage() {
           <div className={classes.titleDescriptionSection}>
 
             <div className={classes.titleLogo}>
-              <ThemeIcon size={50} variant='gradient' gradient={{ from: 'yellow', to: 'blue', deg: 20}} radius='md'>
+              
+              <ThemeIcon size={50} variant='gradient' gradient={{ from: '#f7971e', to: '#ffd200', deg: 20}} radius='md'>
                 <Star size={40} />
               </ThemeIcon>
               
               <h1 className={classes.titleText}> Top 75 Popular Games:</h1>
+
             </div>
 
             <Text className={classes.description} size="xl" mt="xl">

@@ -3,12 +3,13 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoadingOverlay, SimpleGrid, Image, Paper, SemiCircleProgress, Text, ThemeIcon } from '@mantine/core';
+import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 import { authClient } from '@/lib/auth-client';
 
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
 import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconBookmarkFilled, IconCheck, IconQuestionMark, IconClipboardListFilled } from '@tabler/icons-react';
-import { Flame, Notebook, Gamepad, Star, CircleUserRound } from 'lucide-react';
+import { Flame, Notebook, Gamepad, Star, CircleUserRound, CircleArrowRight } from 'lucide-react';
 import classes from './dashboard.module.css';
 
 export default function Dashboard() {
@@ -168,10 +169,16 @@ export default function Dashboard() {
     fetchRecentJournalEntries();
   }, []);
 
+  // If loading into the dashboard page, display global Loader
+  if (loading){
+    return <GlobalLoader visible={loading} />
+  }
 
   return (
 
     <div className={classes.background}>
+
+      {loading && <GlobalLoader visible={loading} />}
 
       <div className={classes.backgroundOverlay}>
 
@@ -184,7 +191,7 @@ export default function Dashboard() {
             <div className={classes.profileStats}>
 
               <div className={classes.titleLogo}>
-                <ThemeIcon size={50} radius='md' variant='gradient' color='cyan'> <CircleUserRound size={40} /> </ThemeIcon>
+                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: '#56CCF2', to: '#2F80ED', deg: 30}}> <CircleUserRound size={40} /> </ThemeIcon>
                 <p className={classes.profileTitle}>Profile Stats: </p>
               </div>
               
@@ -288,10 +295,10 @@ export default function Dashboard() {
 
           <div className={classes.trendingGames}>
 
-            <div className={classes.trendingText}>
+            <div className={classes.trendingSection}>
               
               <div className={classes.titleLogo}>
-                <ThemeIcon variant='gradient' gradient={{ from: 'red', to: 'orange', deg: 90}} size={40}>
+                <ThemeIcon variant='gradient' gradient={{ from: '#c21500', to: '#ffc500', deg: 90}} size={40}>
                     <Flame size={30} color='white'/> 
                   </ThemeIcon>
 
@@ -299,7 +306,8 @@ export default function Dashboard() {
 
               </div>
 
-              <a className={classes.viewMoreText} href='/search/trending'> View More </a>
+              <a className={classes.viewMoreIcon} href='/search/trending'> <CircleArrowRight size={35} /> </a>
+
             </div>
             
             {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
@@ -332,16 +340,19 @@ export default function Dashboard() {
 
           <div className={classes.popularGames}>
             
-              <div className={classes.popularText}>
+              <div className={classes.popularSection}>
               
                 <div className={classes.titleLogo}>
-                  <ThemeIcon size={50} variant='gradient' gradient={{ from: 'yellow', to: 'gold', deg: 20}} radius='md'>
+
+                  <ThemeIcon size={50} variant='gradient' gradient={{ from: '#f7971e', to: '#ffd200', deg: 20}} radius='md'>
                     <Star size={40} />
                   </ThemeIcon>
+
                   <h1 className={classes.gamesPlayingText}>Most Popular Games:</h1>
+                  
                 </div>
 
-                <a className={classes.viewMoreText} href='/search/popular'> View More </a>
+                <a className={classes.viewMoreIcon} href='/search/popular'><CircleArrowRight size={35} /></a>
 
               </div>
 
@@ -376,12 +387,14 @@ export default function Dashboard() {
 
           <div className={classes.playingGames} >
 
-            <div className={classes.playingText}>
+            <div className={classes.playingSection}>
 
               <div className={classes.titleLogo}>
-                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: 'purple', to: 'pink', deg: 40}}> <Gamepad size={40} /> </ThemeIcon>
+                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: '#e96443', to: '#904e95', deg: 90}}> <Gamepad size={40} /> </ThemeIcon>
                 <h1 className={classes.gamesPlayingText}>Games That You're playing:</h1>
               </div>
+
+              <a className={classes.viewMoreText} href='/library'> <CircleArrowRight size={35} /> </a>
               
             </div>
 
@@ -408,12 +421,17 @@ export default function Dashboard() {
 
           <div className={classes.recentEntries}>
 
-            <div className={classes.recentEntriesText}>
+            <div className={classes.recentEntriesSection}>
               
               <div className={classes.titleLogo}>
-                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: 'teal', to: 'blue', deg: 60}}> <Notebook size={40} /> </ThemeIcon>
+
+                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: '#DCE35B', to: '#45B649', deg: 60}}> <Notebook size={40} /> </ThemeIcon>
+                
                 <h1 className={classes.gamesPlayingText}>Recent Journal Entries:</h1>
+
               </div>
+
+              <a className={classes.viewMoreIcon} href='/journal'> <CircleArrowRight size={35} /> </a>
 
             </div>
 
@@ -422,7 +440,7 @@ export default function Dashboard() {
               ) : (
                   <SimpleGrid cols={4} spacing="lg" className={classes.entriesGrid}>
                       {recentEntries.map((entry) => (
-                          <div key={entry._id} className={classes.entryCard} onClick={() => router.push('/journal')}>
+                          <div key={entry._id} className={classes.entryCard} onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}>
                               <h3 className={classes.entryGame}>{entry.gameName}</h3>
                               <h3 className={classes.entryTitle}>{entry.title}</h3>
                               <p className={classes.entryContent}>

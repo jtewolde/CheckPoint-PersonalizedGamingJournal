@@ -5,6 +5,8 @@ import { useDisclosure } from '@mantine/hooks';
 import { useParams, useRouter } from 'next/navigation';
 import { notFound } from 'next/navigation';
 
+import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
+
 import toast from 'react-hot-toast';
 
 import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, Overlay, BackgroundImage } from '@mantine/core';
@@ -239,7 +241,7 @@ export default function GameDetails() {
   };
 
   if (loading) {
-    return <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
+    return <GlobalLoader visible={loading} />;
   }
 
   // If there is no valid game that the user selected, return the notFound page
