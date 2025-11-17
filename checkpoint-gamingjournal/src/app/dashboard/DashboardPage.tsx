@@ -169,6 +169,10 @@ export default function Dashboard() {
     fetchRecentJournalEntries();
   }, []);
 
+  // If loading into the dashboard page, display global Loader
+  if (loading){
+    return <GlobalLoader visible={loading} />
+  }
 
   return (
 

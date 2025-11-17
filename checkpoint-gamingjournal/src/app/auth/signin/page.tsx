@@ -140,96 +140,96 @@ export default function signInPage(){
       
     }
 
-    return(
-      <div className={classes.wrapper}>
-        <Paper className={classes.form} radius={0} p={30}>
-          <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
-            Welcome Back!
-          </Title>
+  return(
+    <div className={classes.wrapper}>
+      <Paper className={classes.form} radius={0} p={30}>
+        <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
+          Welcome Back!
+        </Title>
 
-          <Text ta='center' c='white' mt='sm' fw={500} size='lg'>
-            Sign in with 
-          </Text>
+        <Text ta='center' c='white' mt='sm' fw={500} size='lg'>
+          Sign in with 
+        </Text>
 
-            <Group grow mb="md" mt="md">
-                <GoogleButton radius="xl" onClick={handleGoogleSignIn}>Google</GoogleButton>
-                <DiscordButton radius='xl' onClick={handleDiscordSignIn}>Discord </DiscordButton>
-            </Group>
-
-            <Divider styles={{label: {color: 'white'}}} label="Or continue with email" labelPosition="center" color='white' my="lg"  />
-
-          <TextInput className={classes.emailInput} label="Email Address" placeholder="Your Email" size="md" leftSection={<Mail size={20} />} required mt="md" mb='md' value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error} />
-
-          <Group justify='space-between' mb={1}>
-
-            <Text className={classes.passwordLabel} component='label' c='white' htmlFor='password' size='md' fw={600}>
-              Password
-            </Text>
-
-            <Anchor size='sm' pt={2} onClick={open} fw={500}>
-              Forgot your password?
-            </Anchor>
-
-            {/* Forgot Password Modal */}
-            <Modal opened={opened} onClose={close} centered styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid white'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
-
-              <Group className={classes.modalText} mb={20} ta='center'>
-                <Title className={classes.modalTitle} ta="center" c='white'>
-                  Forgot your password?
-                </Title>
-
-                <Text c='whitesmoke' fz="md" ta="center" mb={10}>
-                  Enter your email to get a reset link
-                </Text>
-
-              </Group>
-              
-              <TextInput 
-                styles={{
-                  input:{
-                    backgroundColor: '#232526',
-                    color: 'white'
-                  },
-                  label: {
-                    color: 'white',
-                    fontFamily: 'Noto Sans'
-                  }
-                }}
-                label="Email Address" 
-                placeholder="Enter Your Email" 
-                leftSection={<Mail size={20} />}
-                size="md" 
-                required mt="sm" 
-                mb='sm' value={resetEmail} 
-                onChange={(e) => setResetEmail(e.currentTarget.value)} 
-                error={modalError} 
-              />
-
-              <Flex justify='center' >
-                <Button className={classes.modalButton} variant='filled' color='blue' radius='md' size='md' loading={loading} disabled={!resetEmail}onClick={handleForgotPassword} >
-                  Send Reset Link
-                </Button>
-              </Flex>
-
-            </Modal>
-
+          <Group grow mb="md" mt="md">
+              <GoogleButton radius="xl" onClick={handleGoogleSignIn}>Google</GoogleButton>
+              <DiscordButton radius='xl' onClick={handleDiscordSignIn}>Discord </DiscordButton>
           </Group>
 
-          <PasswordInput className={classes.passwordInput} placeholder="Your Password" id='password' size="md" leftSection={<Lock size={20} />} required value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={error} />
+          <Divider styles={{label: {color: 'white'}}} label="Or continue with email" labelPosition="center" color='white' my="lg"  />
 
-          <Button fullWidth mt="xl" size="md" loading={loading} rightSection={<LogIn size={25} />} onClick={handleEmailLogin}>
-            Login
-          </Button>
+        <TextInput className={classes.emailInput} label="Email Address" placeholder="Your Email" size="md" leftSection={<Mail size={20} />} required mt="md" mb='md' value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error} />
 
-          <Text c='white' ta="center" mt="md">
-            Don&apos;t have an account?{' '}
-            <Anchor<'a'> href="/auth/signup" fw={700} onClick={() => router.push('/auth/signup')}>
-              Register
-            </Anchor>
+        <Group justify='space-between' mb={1}>
 
+          <Text className={classes.passwordLabel} component='label' c='white' htmlFor='password' size='md' fw={600}>
+            Password
           </Text>
 
-        </Paper>
-    </div>
-    )
+          <Anchor size='sm' pt={2} onClick={open} fw={500}>
+            Forgot your password?
+          </Anchor>
+
+          {/* Forgot Password Modal */}
+          <Modal opened={opened} onClose={close} centered styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid white'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
+
+            <Group className={classes.modalText} mb={20} ta='center'>
+              <Title className={classes.modalTitle} ta="center" c='white'>
+                Forgot your password?
+              </Title>
+
+              <Text c='whitesmoke' fz="md" ta="center" mb={10}>
+                Enter your email to get a reset link
+              </Text>
+
+            </Group>
+            
+            <TextInput 
+              styles={{
+                input:{
+                  backgroundColor: '#232526',
+                  color: 'white'
+                },
+                label: {
+                  color: 'white',
+                  fontFamily: 'Noto Sans'
+                }
+              }}
+              label="Email Address" 
+              placeholder="Enter Your Email" 
+              leftSection={<Mail size={20} />}
+              size="md" 
+              required mt="sm" 
+              mb='sm' value={resetEmail} 
+              onChange={(e) => setResetEmail(e.currentTarget.value)} 
+              error={modalError} 
+            />
+
+            <Flex justify='center' >
+              <Button className={classes.modalButton} variant='filled' color='blue' radius='md' size='md' loading={loading} disabled={!resetEmail}onClick={handleForgotPassword} >
+                Send Reset Link
+              </Button>
+            </Flex>
+
+          </Modal>
+
+        </Group>
+
+        <PasswordInput className={classes.passwordInput} placeholder="Your Password" id='password' size="md" leftSection={<Lock size={20} />} required value={password} onChange={(e) => setPassword(e.currentTarget.value)} error={error} />
+
+        <Button fullWidth mt="xl" size="md" loading={loading} rightSection={<LogIn size={25} />} onClick={handleEmailLogin}>
+          Login
+        </Button>
+
+        <Text c='white' ta="center" mt="md">
+          Don&apos;t have an account?{' '}
+          <Anchor<'a'> href="/auth/signup" fw={700} onClick={() => router.push('/auth/signup')}>
+            Register
+          </Anchor>
+
+        </Text>
+
+      </Paper>
+  </div>
+  )
 }

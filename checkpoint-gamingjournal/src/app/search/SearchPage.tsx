@@ -13,6 +13,7 @@ import { Search } from 'lucide-react';
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 import classes from './search.module.css';
+import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
 export default function SearchResults() {
   const searchParams = useSearchParams();
@@ -122,7 +123,7 @@ export default function SearchResults() {
     
   // If the page is still loading, put a loading overlay
   if (loading) {
-    return <LoadingOverlay visible zIndex={1000}  overlayProps={{ radius: "sm", blur: 2 }} />
+    return <GlobalLoader visible={loading} />
   }
 
   // If there are no search results for search input, redirect to not found page

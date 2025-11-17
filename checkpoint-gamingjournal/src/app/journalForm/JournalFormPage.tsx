@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { Send, Gamepad2, Captions, MessageSquareText } from "lucide-react";
 
 import classes from './journalForm.module.css';
+import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
 
 
 export default function JournalForm() {
@@ -113,6 +114,10 @@ export default function JournalForm() {
     }
   };
 
+  // If loading into the journal form page, display the global loader
+  if(loading){
+    return <GlobalLoader visible={loading} />
+  }
 
   return (
 

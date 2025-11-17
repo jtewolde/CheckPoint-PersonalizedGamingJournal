@@ -10,7 +10,7 @@ export default function GlobalLoader({ visible }: { visible: boolean }) {
             overlayProps={{
                 radius: "sm",
                 blur: 2,
-                backgroundOpacity: 0.7,
+                backgroundOpacity: 1,
                 color: "#282828ff" // consistent dark background
             }}
             loaderProps={{
