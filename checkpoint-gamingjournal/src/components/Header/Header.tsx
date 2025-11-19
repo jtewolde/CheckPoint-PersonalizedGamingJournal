@@ -123,6 +123,7 @@ export function Header() {
             event.preventDefault();
             const inputValue = (event.target as HTMLInputElement).value;
             router.push(`/search?query=${encodeURIComponent(inputValue)}`); // Navigate to the search results page
+            setSearchQuery(''); // Clear search input after submission
           }}
         />
 

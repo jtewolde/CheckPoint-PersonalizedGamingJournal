@@ -132,7 +132,7 @@ export default function SearchResults() {
   }
 
   return (
-    <div className={classes.wrapper} >
+    <div className={classes.wrapper}>
 
       <div className={classes.titleLogoSection}>
 
@@ -140,49 +140,49 @@ export default function SearchResults() {
           <Search size={40} color='white'/> 
         </ThemeIcon>
 
-        <h1 className={classes.TitleText}>Search Results for: <span className={classes.highlight}>{query}</span> </h1>
+      <h1 className={classes.TitleText}>Search Results for: <span className={classes.highlight}>{query}</span> </h1>
 
       </div>
 
-        <div className={classes.mainContent}>
+      <div className={classes.mainContent}>
 
-          <h2 className={classes.numberText}>{processedGames.length} Game Results:</h2>
+        <h2 className={classes.numberText}>{processedGames.length} Game Results:</h2>
 
-          <GameFilters
-            sortOption={sortOption}
-            selectedType={selectedType}
-            selectedGenres={selectedGenre}
-            selectedThemes={selectedTheme}
-            selectedModes={selectedMode}
-            selectedPlatforms={selectedPlatform}
-            onSortChange={(v) => setSortOption(v as any)}
-            onTypeChange={(v) => setSelectedType(v as any)}
-            onGenresChange={(v) => setSelectedGenre(v as any)}
-            onThemesChange={(v) => setSelectedTheme(v as any)}
-            onModesChange={(v) => setSelectedMode(v as any)}
-            onPlatformsChange={(v) => setSelectedPlatform(v as any)}
-          />
-            
-          <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>
-            {processedGames.map((game) => (
-              <div className={classes.gameContainer} key={game.id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game.id}`) }} >
-                <img
-                  src={
-                    game.cover
-                      ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}`
-                      : PlaceHolderImage.src
-                  }
-                  alt={game.name}
-                  className={classes.gameImage}
-                />
-                <p className={classes.gameName}>{game.name} </p>
-                
-              </div>
-            ))}
-          </SimpleGrid>
+        <GameFilters
+          sortOption={sortOption}
+          selectedType={selectedType}
+          selectedGenres={selectedGenre}
+          selectedThemes={selectedTheme}
+          selectedModes={selectedMode}
+          selectedPlatforms={selectedPlatform}
+          onSortChange={(v) => setSortOption(v as any)}
+          onTypeChange={(v) => setSelectedType(v as any)}
+          onGenresChange={(v) => setSelectedGenre(v as any)}
+          onThemesChange={(v) => setSelectedTheme(v as any)}
+          onModesChange={(v) => setSelectedMode(v as any)}
+          onPlatformsChange={(v) => setSelectedPlatform(v as any)}
+        />
+          
+        <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>
+          {processedGames.map((game) => (
+            <div className={classes.gameContainer} key={game.id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game.id}`) }} >
+              <img
+                src={
+                  game.cover
+                    ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}`
+                    : PlaceHolderImage.src
+                }
+                alt={game.name}
+                className={classes.gameImage}
+              />
+              <p className={classes.gameName}>{game.name} </p>
+              
+            </div>
+          ))}
+        </SimpleGrid>
 
-        </div>
-        
+      </div>
+
     </div>
   );
 }
