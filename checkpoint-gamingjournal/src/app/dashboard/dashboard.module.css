@@ -1,5 +1,5 @@
 .background{
-  background: url('/Ghost.jpg') top center no-repeat;
+  background: url('/HelldiversBackground.jpg') top center no-repeat;
   background-size: cover;
   background-attachment: fixed;
   position: relative;
@@ -20,7 +20,7 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 20%, #18181b 25%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 15%, #18181b 25%);
 }
 
 .wrapper {
@@ -36,13 +36,56 @@
   pointer-events: auto;
 }
 
+.dashboardHeader{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 800px;
+  gap: 0.4rem;
+}
+
+.dashboardTitleWrapper{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1rem;
+  color: white;
+  width: 300px;
+  padding: 1.2rem 1.5rem;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
 .welcomeText{
-  font-size: 2.7rem;
-  font-weight: 800;
-  align-self: center;
-  font-family: 'Barlow';
+  font-size: 1.4rem;
+  font-weight: 300;
+  text-align: left;
+  font-family: 'Inter';
   color: #ffffff;
   margin-top: 1rem;
+  width: auto;
+}
+
+.username{
+  font-weight: 700;
+}
+
+.dashboardTitle{
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white; /* Dark text for contrast */
+  margin-bottom: 0.1rem;
+  text-align: left;
+  font-family: 'Inter';
+  text-decoration: underline;
+  text-underline-offset: 9px;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
 .profileStats,
@@ -353,6 +396,10 @@
     padding: 2rem;
   }
 
+  .dashboardHeader{
+    width: auto;
+  }
+
   .gamesGrid,
   .popularGamesGrid,
   .trendingGamesGrid {
@@ -382,11 +429,6 @@
 
   .popularGamesGrid{
     grid-template-columns: repeat(2, 1fr);
-  }
-    
-  .welcomeText{
-    text-align: center;
-    font-size: 2.4rem;
   }
 
   .profileStats{

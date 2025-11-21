@@ -9,7 +9,7 @@ import { authClient } from '@/lib/auth-client';
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
 import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconBookmarkFilled, IconCheck, IconQuestionMark, IconClipboardListFilled } from '@tabler/icons-react';
-import { Flame, Notebook, Gamepad, Star, CircleUserRound, CircleArrowRight } from 'lucide-react';
+import { Flame, Notebook, Gamepad, Star, CircleUserRound, CircleArrowRight, LayoutDashboard } from 'lucide-react';
 import classes from './dashboard.module.css';
 
 export default function Dashboard() {
@@ -184,7 +184,22 @@ export default function Dashboard() {
 
         <div className={classes.wrapper}>
 
-          <h1 className={classes.welcomeText}> Welcome back, {userName}! </h1>
+          <div className={classes.dashboardHeader}>
+            
+            <div className={classes.dashboardTitleWrapper}>
+              <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: '#1F1C2C', to: '#928DAB', deg: 60}}> 
+                  <LayoutDashboard size={40} /> 
+              </ThemeIcon>
+
+              <h2 className={classes.dashboardTitle}>Dashboard</h2>
+            </div>
+
+            <p className={classes.welcomeText}>
+              Welcome back, <b className={classes.username}>{userName}! </b> 
+              Here’s a quick look at your gaming journey, trending/popular games, 
+              most recent journal entries you have!</p>
+          
+          </div>
 
           <div className={classes.statCards}>
 
