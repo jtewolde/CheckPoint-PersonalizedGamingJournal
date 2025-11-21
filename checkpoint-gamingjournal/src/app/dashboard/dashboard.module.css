@@ -20,7 +20,7 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 15%, #18181b 25%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.6) 15%, #18181b 25%);
 }
 
 .wrapper {
@@ -41,7 +41,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  width: 800px;
+  width: 600px;
   gap: 0.4rem;
 }
 
@@ -52,7 +52,7 @@
   justify-content: center;
   gap: 1rem;
   color: white;
-  width: 300px;
+  width: 330px;
   padding: 1.2rem 1.5rem;
   background: rgba(0, 0, 0, 0.45);
   border-radius: 16px;
@@ -62,17 +62,24 @@
 }
 
 .welcomeText{
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 300;
   text-align: left;
   font-family: 'Inter';
-  color: #ffffff;
+  color: #f5eded;
   margin-top: 1rem;
   width: auto;
 }
 
 .username{
+  font-weight: 500;
+}
+
+.username:hover{
   font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .dashboardTitle{
@@ -396,7 +403,17 @@
     padding: 2rem;
   }
 
+  .welcomeText{
+    text-align: center;
+  }
+
   .dashboardHeader{
+    align-items: center;
+    text-align: center;
+    width: auto;
+  }
+
+  .dashboardTitleWrapper{
     width: auto;
   }
 

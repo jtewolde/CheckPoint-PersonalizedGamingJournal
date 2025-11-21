@@ -60,7 +60,7 @@
     align-items: center;
     gap: 1rem;
     color: white;
-    width: 100%;
+    width: 500px;
     padding: 1.2rem 1.5rem;
     background: rgba(0, 0, 0, 0.4);
     border-radius: 16px;
@@ -229,6 +229,10 @@
 
 @media (max-width: 570px){
 
+    .titleLogo{
+        width: auto;
+    }
+
     .journalHeader{
         padding-left: 1rem;
         align-items: flex-start;
@@ -249,8 +253,8 @@
 
 @media (max-width: 500px) {
 
-  .entriesGrid {
-    grid-template-columns: repeat(1, 1fr); /* 1 column for screens smaller than 768px */
-  }
+    .entriesGrid {
+        grid-template-columns: repeat(1, 1fr); /* 1 column for screens smaller than 768px */
+    }
 
 }

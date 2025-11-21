@@ -11,6 +11,7 @@ import PlaceHolderImage from "../../../public/no-cover-image.png"
 import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconBookmarkFilled, IconCheck, IconQuestionMark, IconClipboardListFilled } from '@tabler/icons-react';
 import { Flame, Notebook, Gamepad, Star, CircleUserRound, CircleArrowRight, LayoutDashboard } from 'lucide-react';
 import classes from './dashboard.module.css';
+import AvatarMenu from '@/components/AvatarMenu/AvatarMenu';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -194,10 +195,9 @@ export default function Dashboard() {
               <h2 className={classes.dashboardTitle}>Dashboard</h2>
             </div>
 
-            <p className={classes.welcomeText}>
-              Welcome back, <b className={classes.username}>{userName}! </b> 
-              Here’s a quick look at your gaming journey, trending/popular games, 
-              most recent journal entries you have!</p>
+            <p className={classes.welcomeText}> Welcome back, <span className={classes.username} onClick={() => router.push('/settings/profile')}>{userName}!</span>
+              <br />Here's a summary of your gaming journey so far.
+            </p>
           
           </div>
 
