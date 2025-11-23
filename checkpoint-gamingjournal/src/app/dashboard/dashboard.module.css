@@ -20,7 +20,7 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.6) 15%, #18181b 25%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.6) 0%, #18181b 25%);
 }
 
 .wrapper {
@@ -73,6 +73,7 @@
 
 .username{
   font-weight: 500;
+  color: #f5eded;
 }
 
 .username:hover{
