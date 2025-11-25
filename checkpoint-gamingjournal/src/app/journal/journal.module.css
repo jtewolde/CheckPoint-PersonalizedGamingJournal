@@ -36,9 +36,10 @@
 .journalHeader {
     display: flex;
     flex-direction: column;
-    align-items: center; /* center by default (mobile-first) */
-    text-align: center;
-    padding: 3rem 1.5rem 1rem;
+    align-items: flex-start; /* center by default (mobile-first) */
+    text-align: left;
+    padding: 3rem 3.3rem 1rem;
+    gap: 1rem;
     width: 100%;
 }
 
@@ -63,7 +64,7 @@
     color: white;
     width: auto;
     padding: 1.2rem 1.5rem;
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0.45);
     border-radius: 16px;
     backdrop-filter: blur(6px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -73,10 +74,23 @@
 .description {
     font-size: 1.5rem;
     font-weight: 300;
-    color: rgb(208, 205, 205); /* Dark text for contrast */
+    color: rgb(235, 232, 232); /* Dark text for contrast */
     font-family: 'Inter';
     font-style: italic;
     width: 600px;
+}
+
+.descriptionList{
+    margin-top: 1rem;
+    color: rgb(235, 232, 232); /* Dark text for contrast */
+    font-weight: 300;
+    font-family: 'Inter';
+    font-size: 1.2rem;
+    font-style: italic;
+}
+
+.bold{
+    font-weight: 600;
 }
 
 .entriesCount{
@@ -132,7 +146,7 @@
     justify-content: center;
     align-items: center;
     gap: 1rem; /* space between buttons */
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     flex-wrap: wrap; /* optional: ensures it looks good on smaller screens */
 }
 
@@ -144,7 +158,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     z-index: 1;
-    margin-bottom: 1rem;;
+    margin-bottom: 1rem;
     font-family: 'Poppins';
 }
 
@@ -156,7 +170,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-top: 2rem;
+    padding-top: 1rem;
     padding-left: 3rem;
     padding-right: 3rem;
     padding-bottom: 1rem;
@@ -233,17 +247,16 @@
 
     .description{
         max-width: 100%;
-        font-size: 1.2rem;
+        font-size: 1.4rem;
     }
 
     .journalHeader{
-        padding-left: 1rem;
         align-items: center;
     }
 
     .journalTitle{
-        font-size: 1.6rem;
-        border-bottom: 0;
+        font-size: 1.8rem;
+        text-decoration: none;
     }
 
     .description{
@@ -252,7 +265,7 @@
     }
 
     .buttonGroup{
-        flex-direction: column;
+        flex-direction: row;
         gap: 8px;
         margin-bottom: 1.5rem;
         align-items: flex-start;
