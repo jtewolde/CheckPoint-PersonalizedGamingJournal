@@ -188,8 +188,8 @@ export default function Dashboard() {
           <div className={classes.dashboardHeader}>
             
             <div className={classes.dashboardTitleWrapper}>
-              <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: '#1F1C2C', to: '#928DAB', deg: 60}}> 
-                  <LayoutDashboard size={40} /> 
+              <ThemeIcon size={60} radius='md' variant='gradient' gradient={{ from: '#1F1C2C', to: '#928DAB', deg: 60}}> 
+                  <LayoutDashboard size={50} /> 
               </ThemeIcon>
 
               <h2 className={classes.dashboardTitle}>Dashboard</h2>
@@ -379,11 +379,12 @@ export default function Dashboard() {
 
                   <div className={classes.imageWrapper}>
 
-                    <Image src={
-                    game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
-                    alt={game.name} 
-                    className={classes.cover} 
-                    onClick={() => router.push(`/games/${game.id}`)} 
+                    <Image 
+                      src={
+                        game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
+                      alt={game.name} 
+                      className={classes.cover} 
+                      onClick={() => router.push(`/games/${game.id}`)} 
                     />
 
                     <div className={classes.overlay}>

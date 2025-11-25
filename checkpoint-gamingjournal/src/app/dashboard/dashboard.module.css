@@ -54,7 +54,7 @@
   color: white;
   width: auto;
   padding: 1.2rem 1.5rem;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 16px;
   backdrop-filter: blur(6px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -85,11 +85,11 @@
 
 .dashboardTitle{
   font-size: 2.5rem;
-  font-weight: 800;
+  font-weight: 600;
   color: white; /* Dark text for contrast */
   margin-bottom: 0.1rem;
   text-align: left;
-  font-family: 'Inter';
+  font-family: 'Barlow';
   text-decoration: underline;
   text-underline-offset: 9px;
   letter-spacing: 1px;

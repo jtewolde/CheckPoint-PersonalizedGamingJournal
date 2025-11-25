@@ -32,6 +32,14 @@
 }
 
 .titleLogoSection{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.titleLogo{
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -92,20 +100,22 @@
     box-sizing: border-box;
 }
 
-.gameContainer{
+.gameCard{
     position: relative;
-    display: inline-block
+    cursor: pointer;
+    border-radius: 8px;
+    width: 100%;
 }
 
 .scrollBar {
-  &,
-  &:hover {
-    background-color: #555555;
-  }
+    &,
+    &:hover {
+        background-color: #555555;
+    }
 
-  &[data-orientation='vertical'] .thumb {
-    background-color: black;
-  }
+    &[data-orientation='vertical'] .thumb {
+        background-color: black;
+    }
 }
 
 .drawer title{

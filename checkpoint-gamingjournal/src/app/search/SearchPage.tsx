@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useDisclosure } from '@mantine/hooks';
 import GameFilters from '@/components/GameFilters/GameFilters';
 
-import { LoadingOverlay, SimpleGrid, ThemeIcon } from '@mantine/core';
+import { SimpleGrid, ThemeIcon, Text } from '@mantine/core';
 
 import { Search } from 'lucide-react';
 
@@ -134,17 +134,21 @@ export default function SearchResults() {
   return (
     <div className={classes.wrapper}>
 
-      <div className={classes.titleLogoSection}>
-
-        <ThemeIcon variant='gradient' gradient={{ from: 'red', to: 'yellow', deg: 90}} size={50}>
-          <Search size={40} color='white'/> 
-        </ThemeIcon>
-
-        <h1 className={classes.TitleText}>Search Results for: <span className={classes.highlight}>{query}</span> </h1>
-
-      </div>
-
       <div className={classes.mainContent}>
+
+        <div className={classes.titleLogoSection}>
+
+          <div className={classes.titleLogo}>
+
+            <ThemeIcon variant='gradient' gradient={{ from: 'red', to: 'yellow', deg: 90}} size={50}>
+              <Search size={40} color='white'/> 
+            </ThemeIcon>
+
+            <h1 className={classes.TitleText}>Search Results for: <span className={classes.highlight}>{query}</span> </h1>
+
+          </div>
+
+        </div>
 
         <h2 className={classes.numberText}>{processedGames.length} Game Results:</h2>
 
@@ -165,7 +169,7 @@ export default function SearchResults() {
           
         <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>
           {processedGames.map((game) => (
-            <div className={classes.gameContainer} key={game.id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game.id}`) }} >
+            <div className={classes.gameCard} key={game.id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game.id}`) }} >
               <img
                 src={
                   game.cover
@@ -175,7 +179,7 @@ export default function SearchResults() {
                 alt={game.name}
                 className={classes.gameImage}
               />
-              <p className={classes.gameName}>{game.name} </p>
+              <Text className={classes.gameName}>{game.name} </Text>
               
             </div>
           ))}

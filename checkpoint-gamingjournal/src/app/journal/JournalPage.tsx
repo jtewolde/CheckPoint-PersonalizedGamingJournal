@@ -187,7 +187,7 @@ export default function Journal() {
                         </div>
 
                         <Text className={classes.description} size="xl" mt="xl">
-                            Reflect on your gaming journey by managing your journal entries here. <br />
+                            Reflect on your gaming journey by managing your journal entries here.
                             Add new entries, filter by game, or delete past reflections to keep your journal up to date!
                         </Text>
 
@@ -196,8 +196,8 @@ export default function Journal() {
                             <Button
                             variant='filled'
                             color='green'
-                            size='md'
-                            radius= 'md'
+                            size='lg'
+                            radius= 'lg'
                             className={classes.addButton}
                             onClick={() => router.push('/journalForm')}
                             rightSection={<FilePlus />}
@@ -208,7 +208,7 @@ export default function Journal() {
 
                             <Popover width={300} position='bottom' withArrow shadow='lg'>
                                 <Popover.Target>
-                                    <Button className={classes.filterButton} size='md' color='#854bcb' radius='md' variant="filled" rightSection={<ListFilter />}>Filter By Name</Button>
+                                    <Button className={classes.filterButton} size='lg' color='#854bcb' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Name</Button>
                                 </Popover.Target>
 
                                 <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>
@@ -241,8 +241,8 @@ export default function Journal() {
                             <Button
                             variant='filled'
                             color='#e01515ff'
-                            size='md'
-                            radius= 'md'
+                            size='lg'
+                            radius= 'lg'
                             className={classes.deleteEntriesButton}
                             onClick={open}
                             rightSection={<Trash2 />}
