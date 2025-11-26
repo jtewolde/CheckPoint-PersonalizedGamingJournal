@@ -21,7 +21,7 @@
     z-index: 1;
     pointer-events: none;
     /* Fade from transparent to dark */
-    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 10%, #18181b 25%);
+    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 0%, #18181b 25%);
 }
 
 .mainContent{
@@ -61,7 +61,7 @@
     align-items: center;
     gap: 1rem;
     color: white;
-    width: 100%;
+    width: auto;
     padding: 1.2rem 1.5rem;
     background: rgba(0, 0, 0, 0.4);
     border-radius: 16px;

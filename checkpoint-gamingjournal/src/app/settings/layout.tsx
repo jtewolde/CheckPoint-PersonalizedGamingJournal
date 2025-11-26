@@ -21,6 +21,7 @@ export default function SettingsLayout({ children }: { children: ReactNode}) {
 
     const [opened, { toggle }] = useDisclosure();
     const [isMobile, setIsMobile] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     return (
         <Flex direction={{ base: 'column', sm: 'row' }} style={{ minHeight: 'calc(100vh - 100px)' }}>

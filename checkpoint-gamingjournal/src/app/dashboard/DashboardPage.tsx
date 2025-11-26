@@ -9,8 +9,9 @@ import { authClient } from '@/lib/auth-client';
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
 import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconBookmarkFilled, IconCheck, IconQuestionMark, IconClipboardListFilled } from '@tabler/icons-react';
-import { Flame, Notebook, Gamepad, Star, CircleUserRound, CircleArrowRight } from 'lucide-react';
+import { Flame, Notebook, Gamepad, Star, CircleUserRound, CircleArrowRight, LayoutDashboard } from 'lucide-react';
 import classes from './dashboard.module.css';
+import AvatarMenu from '@/components/AvatarMenu/AvatarMenu';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -184,7 +185,21 @@ export default function Dashboard() {
 
         <div className={classes.wrapper}>
 
-          <h1 className={classes.welcomeText}> Welcome back, {userName}! </h1>
+          <div className={classes.dashboardHeader}>
+            
+            <div className={classes.dashboardTitleWrapper}>
+              <ThemeIcon size={60} radius='md' variant='gradient' gradient={{ from: '#1F1C2C', to: '#928DAB', deg: 60}}> 
+                  <LayoutDashboard size={50} /> 
+              </ThemeIcon>
+
+              <h2 className={classes.dashboardTitle}>Dashboard</h2>
+            </div>
+
+            <p className={classes.welcomeText}> Welcome back, <span className={classes.username} onClick={() => router.push('/settings/profile')}>{userName}!</span>
+              <br />Here's a summary of your gaming journey so far.
+            </p>
+          
+          </div>
 
           <div className={classes.statCards}>
 
@@ -364,11 +379,12 @@ export default function Dashboard() {
 
                   <div className={classes.imageWrapper}>
 
-                    <Image src={
-                    game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
-                    alt={game.name} 
-                    className={classes.cover} 
-                    onClick={() => router.push(`/games/${game.id}`)} 
+                    <Image 
+                      src={
+                        game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
+                      alt={game.name} 
+                      className={classes.cover} 
+                      onClick={() => router.push(`/games/${game.id}`)} 
                     />
 
                     <div className={classes.overlay}>

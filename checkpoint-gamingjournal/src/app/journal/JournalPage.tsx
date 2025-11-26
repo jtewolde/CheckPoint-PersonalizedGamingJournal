@@ -6,7 +6,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { authClient } from '@/lib/auth-client';
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
-import { Button, LoadingOverlay, Popover, Select, SimpleGrid, Pagination, ThemeIcon, Modal, Group, Title, Text, Checkbox } from '@mantine/core';
+import { Button, List, Popover, Select, SimpleGrid, Pagination, ThemeIcon, Modal, Group, Title, Text, Checkbox } from '@mantine/core';
 
 import toast from 'react-hot-toast';
 import { FilePlus, DeleteIcon, Eye, ListFilter, Trash2, Notebook } from 'lucide-react';
@@ -187,17 +187,48 @@ export default function Journal() {
                         </div>
 
                         <Text className={classes.description} size="xl" mt="xl">
-                            Reflect on your gaming journey by managing your journal entries here. <br />
-                            Add new entries, filter by game, or delete past reflections to keep your journal up to date!
+                            Reflect on your gaming journey by managing your journal entries here. Here you can:
                         </Text>
+
+                        <List className={classes.descriptionList} spacing='sm' size='md' withPadding>
+                            <List.Item
+                                icon={
+                                    <ThemeIcon size={30} radius="xl" variant='outline' color='#45B649'>
+                                        <FilePlus size={16} />
+                                    </ThemeIcon>
+                                }
+                            >
+                                <span className={classes.bold}>Add</span> new journal entries to document your gaming experiences.
+                            </List.Item>
+
+                            <List.Item
+                                icon={
+                                    <ThemeIcon size={30} radius="xl" variant="outline" color='#8b2ad4ff'>
+                                        <ListFilter size={16} />
+                                    </ThemeIcon>
+                                }
+                            >
+                                <span className={classes.bold}>Filter</span> entries by game to easily find specific reflections.
+                            </List.Item>
+
+                            <List.Item
+                                icon={
+                                    <ThemeIcon size={30} radius="xl" variant="outline" color='#d31919ff'>
+                                        <Trash2 size={16} />
+                                    </ThemeIcon>
+                                }
+                            >
+                                <span className={classes.bold}>Delete</span> individual entries or all entries for a specific game to keep your journal organized.
+                            </List.Item>
+                        </List>
 
                         <div className={classes.buttonGroup} >
 
                             <Button
                             variant='filled'
                             color='green'
-                            size='md'
-                            radius= 'md'
+                            size='lg'
+                            radius= 'lg'
                             className={classes.addButton}
                             onClick={() => router.push('/journalForm')}
                             rightSection={<FilePlus />}
@@ -208,7 +239,7 @@ export default function Journal() {
 
                             <Popover width={300} position='bottom' withArrow shadow='lg'>
                                 <Popover.Target>
-                                    <Button className={classes.filterButton} size='md' color='#854bcb' radius='md' variant="filled" rightSection={<ListFilter />}>Filter By Name</Button>
+                                    <Button className={classes.filterButton} size='lg' color='#854bcb' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Name</Button>
                                 </Popover.Target>
 
                                 <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>
@@ -241,8 +272,8 @@ export default function Journal() {
                             <Button
                             variant='filled'
                             color='#e01515ff'
-                            size='md'
-                            radius= 'md'
+                            size='lg'
+                            radius= 'lg'
                             className={classes.deleteEntriesButton}
                             onClick={open}
                             rightSection={<Trash2 />}

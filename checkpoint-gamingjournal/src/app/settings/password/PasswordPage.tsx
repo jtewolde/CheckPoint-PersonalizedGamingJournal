@@ -79,11 +79,11 @@ export default function PasswordPage(){
             
             <Title order={1} className={classes.title}>Change Password</Title>
 
-            <PasswordInput className={classes.passwordInput} label="Current Password" placeholder="Current password" leftSection={<Lock size={20} />} mt="md" size="lg" value={currentPassword} onChange={(e) => setCurrentPassword(e.currentTarget.value)} error={passwordError}/>
+            <PasswordInput className={classes.passwordInput} label="Current Password" placeholder="Current Password" leftSection={<Lock size={20} />} mt="md" size="lg" value={currentPassword} onChange={(e) => setCurrentPassword(e.currentTarget.value)} error={passwordError}/>
 
-            <PasswordInput className={classes.passwordInput} label="Password" placeholder="Your password" leftSection={<Lock size={20} />} mt="md" size="lg" value={newPassword} onChange={(e) => setNewPassword(e.currentTarget.value)} error={passwordError}/>
+            <PasswordInput className={classes.passwordInput} label="Password" placeholder="Your Password" leftSection={<Lock size={20} />} mt="md" size="lg" value={newPassword} onChange={(e) => setNewPassword(e.currentTarget.value)} error={passwordError}/>
 
-            <PasswordInput className={classes.passwordInput} label="Confirm Password" placeholder="Confirm password" leftSection={<Lock size={20} />} mt="md" size="lg" value={confirmPassword} onChange={(e) => setConfirmPassword(e.currentTarget.value)} error={passwordError}/>
+            <PasswordInput className={classes.passwordInput} label="Confirm Password" placeholder="Confirm Password" leftSection={<Lock size={20} />} mt="md" size="lg" value={confirmPassword} onChange={(e) => setConfirmPassword(e.currentTarget.value)} error={passwordError}/>
 
             <Button className={classes.changeButton} radius='md' color='grape' rightSection={<Save size={20} />} mt="xl" size="md" loading={loading} disabled={!currentPassword || !newPassword || !confirmPassword} onClick={handleChangePassword}>
                 Save Changes

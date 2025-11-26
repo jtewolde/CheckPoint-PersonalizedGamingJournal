@@ -19,7 +19,7 @@
     z-index: 1;
     pointer-events: none;
     /* Fade from transparent to dark */
-    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.75) 60%, #18181b 90%);
+    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.55) 0%, #18181b 40%);
 }
 
 .journalWrapper{
@@ -33,24 +33,26 @@
     justify-content: space-between;
 }
 
-.journalHeader{
+.journalHeader {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-    margin-top: 3rem;
-    padding-left: 3rem;
+    align-items: flex-start; /* center by default (mobile-first) */
+    text-align: left;
+    padding: 3rem 3.3rem 1rem;
+    gap: 1rem;
+    width: 100%;
 }
 
 .journalTitle{
     font-size: 2rem;
-    font-weight: 600;
+    font-weight: 700;
     color: white; /* Dark text for contrast */
     margin-bottom: 0.1rem;
     text-align: left;
     font-family: 'Barlow';
     margin: 0;
-    text-decoration: none;
+    text-decoration: underline;
+    text-underline-offset: 10px;
     letter-spacing: 1px;
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
@@ -60,9 +62,9 @@
     align-items: center;
     gap: 1rem;
     color: white;
-    width: 100%;
+    width: auto;
     padding: 1.2rem 1.5rem;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.45);
     border-radius: 16px;
     backdrop-filter: blur(6px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -70,16 +72,25 @@
 }
 
 .description {
-    color: var(--mantine-color-white);
-    font-weight: 400;
-    text-align: left;
-    font-family: 'Poppins';
-    max-width: 900px;
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: rgb(235, 232, 232); /* Dark text for contrast */
+    font-family: 'Inter';
+    font-style: italic;
+    width: 600px;
+}
 
-    @media (max-width: $mantine-breakpoint-sm) {
-        max-width: 100%;
-        font-size: 18px;
-    }
+.descriptionList{
+    margin-top: 1rem;
+    color: rgb(235, 232, 232); /* Dark text for contrast */
+    font-weight: 300;
+    font-family: 'Inter';
+    font-size: 1.2rem;
+    font-style: italic;
+}
+
+.bold{
+    font-weight: 600;
 }
 
 .entriesCount{
@@ -135,7 +146,7 @@
     justify-content: center;
     align-items: center;
     gap: 1rem; /* space between buttons */
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     flex-wrap: wrap; /* optional: ensures it looks good on smaller screens */
 }
 
@@ -147,7 +158,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     z-index: 1;
-    margin-bottom: 1rem;;
+    margin-bottom: 1rem;
     font-family: 'Poppins';
 }
 
@@ -159,7 +170,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-top: 2rem;
+    padding-top: 1rem;
     padding-left: 3rem;
     padding-right: 3rem;
     padding-bottom: 1rem;
@@ -212,45 +223,64 @@
 .paginationWrapper{
     display: flex;
     justify-content: center;
+    margin-top: 1.4rem;
     margin-bottom: 1.4rem;
 }
 
 @media (max-width: 768px) {
 
-  .entriesGrid {
-    grid-template-columns: repeat(2, 1fr); /* 1 column for screens smaller than 768px */
-  }
+    .entriesGrid {
+        grid-template-columns: repeat(2, 1fr); /* 1 column for screens smaller than 768px */
+    }
 
-  .mainSection{
-    padding:  1rem;
-  }
+    .mainSection{
+        padding:  1rem;
+    }
 
 }
 
-@media (max-width: 570px){
+@media (max-width: 600px){
+
+    .titleLogo{
+        width: auto;
+    }
+
+    .description{
+        max-width: 100%;
+        font-size: 1.4rem;
+    }
 
     .journalHeader{
-        padding-left: 1rem;
-        align-items: flex-start;
+        align-items: center;
     }
 
     .journalTitle{
-        font-size: 1.6rem;
-        border-bottom: 0;
+        font-size: 1.8rem;
+        text-decoration: none;
+    }
+
+    .description{
+        justify-content: center;
+        text-align: center;
     }
 
     .buttonGroup{
-        flex-direction: column;
+        flex-direction: row;
         gap: 8px;
         margin-bottom: 1.5rem;
         align-items: flex-start;
+        align-self: center;
     }
 }
 
 @media (max-width: 500px) {
 
-  .entriesGrid {
-    grid-template-columns: repeat(1, 1fr); /* 1 column for screens smaller than 768px */
-  }
+    .journalTitle{
+        font-size: 1.4rem;
+    }
+
+    .entriesGrid {
+        grid-template-columns: repeat(1, 1fr); /* 1 column for screens smaller than 768px */
+    }
 
 }

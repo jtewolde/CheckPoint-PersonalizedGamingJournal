@@ -2,10 +2,23 @@
 .wrapper {
     background: linear-gradient(to top, #2e313b, #232526);
     padding: 2rem; /* Add padding around the content */
+    position: relative;
     min-height: 100vh; /* Ensure the page takes up the full height */
+    min-width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.backgroundOverlay{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    /* Fade from transparent to dark */
+    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 10%, #18181b 25%);
 }
 
 .mainContent{
@@ -15,14 +28,23 @@
     gap: 0.4rem;
     padding-left: 1.2rem;
     padding-right: 2rem;
+    pointer-events: auto;
 }
 
 .titleLogoSection{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.titleLogo{
     display: flex;
     align-items: center;
     gap: 1rem;
     color: white;
-    width: 100%;
+    width: auto;
     padding: 1.2rem 1.5rem;
     background: rgba(0, 0, 0, 0.4);
     border-radius: 16px;
@@ -78,20 +100,22 @@
     box-sizing: border-box;
 }
 
-.gameContainer{
+.gameCard{
     position: relative;
-    display: inline-block
+    cursor: pointer;
+    border-radius: 8px;
+    width: 100%;
 }
 
 .scrollBar {
-  &,
-  &:hover {
-    background-color: #555555;
-  }
+    &,
+    &:hover {
+        background-color: #555555;
+    }
 
-  &[data-orientation='vertical'] .thumb {
-    background-color: black;
-  }
+    &[data-orientation='vertical'] .thumb {
+        background-color: black;
+    }
 }
 
 .drawer title{

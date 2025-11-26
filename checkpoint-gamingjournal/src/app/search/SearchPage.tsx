@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useDisclosure } from '@mantine/hooks';
 import GameFilters from '@/components/GameFilters/GameFilters';
 
-import { LoadingOverlay, SimpleGrid, ThemeIcon } from '@mantine/core';
+import { SimpleGrid, ThemeIcon, Text } from '@mantine/core';
 
 import { Search } from 'lucide-react';
 
@@ -132,57 +132,61 @@ export default function SearchResults() {
   }
 
   return (
-    <div className={classes.wrapper} >
+    <div className={classes.wrapper}>
 
-      <div className={classes.titleLogoSection}>
+      <div className={classes.mainContent}>
 
-        <ThemeIcon variant='gradient' gradient={{ from: 'red', to: 'yellow', deg: 90}} size={50}>
-          <Search size={40} color='white'/> 
-        </ThemeIcon>
+        <div className={classes.titleLogoSection}>
 
-        <h1 className={classes.TitleText}>Search Results for: <span className={classes.highlight}>{query}</span> </h1>
+          <div className={classes.titleLogo}>
+
+            <ThemeIcon variant='gradient' gradient={{ from: 'red', to: 'yellow', deg: 90}} size={50}>
+              <Search size={40} color='white'/> 
+            </ThemeIcon>
+
+            <h1 className={classes.TitleText}>Search Results for: <span className={classes.highlight}>{query}</span> </h1>
+
+          </div>
+
+        </div>
+
+        <h2 className={classes.numberText}>{processedGames.length} Game Results:</h2>
+
+        <GameFilters
+          sortOption={sortOption}
+          selectedType={selectedType}
+          selectedGenres={selectedGenre}
+          selectedThemes={selectedTheme}
+          selectedModes={selectedMode}
+          selectedPlatforms={selectedPlatform}
+          onSortChange={(v) => setSortOption(v as any)}
+          onTypeChange={(v) => setSelectedType(v as any)}
+          onGenresChange={(v) => setSelectedGenre(v as any)}
+          onThemesChange={(v) => setSelectedTheme(v as any)}
+          onModesChange={(v) => setSelectedMode(v as any)}
+          onPlatformsChange={(v) => setSelectedPlatform(v as any)}
+        />
+          
+        <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>
+          {processedGames.map((game) => (
+            <div className={classes.gameCard} key={game.id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game.id}`) }} >
+              <img
+                src={
+                  game.cover
+                    ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}`
+                    : PlaceHolderImage.src
+                }
+                alt={game.name}
+                className={classes.gameImage}
+              />
+              <Text className={classes.gameName}>{game.name} </Text>
+              
+            </div>
+          ))}
+        </SimpleGrid>
 
       </div>
 
-        <div className={classes.mainContent}>
-
-          <h2 className={classes.numberText}>{processedGames.length} Game Results:</h2>
-
-          <GameFilters
-            sortOption={sortOption}
-            selectedType={selectedType}
-            selectedGenres={selectedGenre}
-            selectedThemes={selectedTheme}
-            selectedModes={selectedMode}
-            selectedPlatforms={selectedPlatform}
-            onSortChange={(v) => setSortOption(v as any)}
-            onTypeChange={(v) => setSelectedType(v as any)}
-            onGenresChange={(v) => setSelectedGenre(v as any)}
-            onThemesChange={(v) => setSelectedTheme(v as any)}
-            onModesChange={(v) => setSelectedMode(v as any)}
-            onPlatformsChange={(v) => setSelectedPlatform(v as any)}
-          />
-            
-          <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>
-            {processedGames.map((game) => (
-              <div className={classes.gameContainer} key={game.id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game.id}`) }} >
-                <img
-                  src={
-                    game.cover
-                      ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}`
-                      : PlaceHolderImage.src
-                  }
-                  alt={game.name}
-                  className={classes.gameImage}
-                />
-                <p className={classes.gameName}>{game.name} </p>
-                
-              </div>
-            ))}
-          </SimpleGrid>
-
-        </div>
-        
     </div>
   );
 }

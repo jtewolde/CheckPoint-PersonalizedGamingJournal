@@ -1,10 +1,38 @@
+
+.background {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center -40%;
+  background-image: url('/ArcRaiders.jpg');
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  z-index: 0;
+}
+
+.overlay{
+  position: relative;
+  height: 100%;
+  width: 100%;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  /* Fade from transparent to dark */
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.45) 0%, #18181b 35%);
+}
+
 .wrapper{
   display: flex;
   flex-direction: column;
   padding: 2rem;
-  background: linear-gradient(to bottom, #393939, #222121);
-  min-height: 100vh;
   gap: 1rem;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+  justify-content: space-between;
 }
 
 .libraryHeader{
@@ -19,7 +47,7 @@
   align-items: center;
   gap: 1rem;
   color: white;
-  width: 100%;
+  width: 330px;
   padding: 1.2rem 1.5rem;
   background: rgba(0, 0, 0, 0.4);
   border-radius: 16px;
@@ -35,8 +63,9 @@
   margin-bottom: 0.1rem;
   text-align: left;
   font-family: 'Barlow';
+  text-decoration: underline;
+  text-underline-offset: 10px;
   margin: 0;
-  text-decoration: none;
   letter-spacing: 1px;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
@@ -47,6 +76,12 @@
   color: rgb(208, 205, 205); /* Dark text for contrast */
   font-family: 'Inter';
   font-style: italic;
+}
+
+.totalGames{
+  font-weight: 400;
+  color: white;
+  font-family: 'Inter';
 }
 
 .filterButton{
@@ -74,15 +109,15 @@
 }
 
 .image{
-    width: 90%;
-    height: auto;
-    cursor: pointer;
+  width: 94%;
+  height: auto;
+  cursor: pointer;
 }
 
 .image:hover{
-    transform: translateY(-5px); /* Slight lift on hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
-    cursor: pointer;
+  transform: translateY(-5px); /* Slight lift on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+  cursor: pointer;
 }
 
 .badge {
@@ -111,8 +146,9 @@
 }
 
 @media (max-width: 768px) {
+
   .responsiveGrid {
-    grid-template-columns: repeat(2, 1fr); /* 3 columns for screens smaller than 768px */
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for screens smaller than 768px */
   }
 }
 
@@ -125,10 +161,24 @@
     font-size: 1.3rem;
   }
 
+  .overlay{
+    background: linear-gradient(to bottom, rgba(20, 20, 20, 1) 0%, #18181b 50%);
+  }
+
 }
 
-@media (max-width: 320px) {
+@media (max-width: 390px) {
   .responsiveGrid {
     grid-template-columns: repeat(1, 1fr); /* 1 column for screens smaller than 320px */
   }
+
+  .titleLogo{
+    width: auto;
+    font-size: 1.4rem;
+  }
+
+  .image{
+    width: 100%;
+  }
+  
 }

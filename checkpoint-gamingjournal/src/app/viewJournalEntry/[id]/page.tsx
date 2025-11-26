@@ -1,8 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams, useRouter} from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Text, LoadingOverlay, Button } from '@mantine/core';
+
+import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
 import { ArrowLeft } from 'lucide-react';
 import classes from './viewJournal.module.css';
@@ -13,6 +15,7 @@ export default function ViewJournalEntry() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  // Fetch the data for the specific journal entry
   useEffect(() => {
     const fetchEntry = async () => {
       try {
@@ -35,12 +38,10 @@ export default function ViewJournalEntry() {
     if (id) fetchEntry();
   }, [id]);
 
-    if (loading) {
-    return <LoadingOverlay visible zIndex={1000}  overlayProps={{ radius: "sm", blur: 2 }} />
+  // Render Global Loader while fetching journal entry data
+  if (loading) {
+    return <GlobalLoader visible={loading} />;
   }
-
-  if (!entry) return
-   <Text color="red">Entry not found.</Text>;
 
   return (
 
