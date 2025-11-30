@@ -1,0 +1,26 @@
+
+.trendingSection{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.sectionTitle{
+    font-size: 2.5rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    font-family: 'Poppins';
+    color: white;
+}
+
+.gameCard{
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    padding: 1rem;
+    margin: 0.5rem;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+}

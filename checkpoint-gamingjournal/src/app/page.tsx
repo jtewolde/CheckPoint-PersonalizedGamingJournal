@@ -1,28 +1,26 @@
 'use client'
 
-import { Button, Container, Text, Title } from '@mantine/core';
-import { Transition } from '@mantine/core';
+import { Button, Container, Text, Title, Transition } from '@mantine/core';
+import Image from 'next/image';
 
 import { UserRoundPlus } from 'lucide-react';
 import { FeaturesGrid } from '../components/Features/Features';
 
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { useAuth } from '@/context/Authcontext';
 
 import classes from './page.module.css';
 
 import Questions from '@/components/FrequentQuestions/FrequentQuestions';
-
-import { useAuth } from '@/context/Authcontext';
-
-import CheckPointLogo from '../../public/MobileCheckPointLogo.png';
+import TrendingGamesSection from '@/components/TrendingGamesSection/TrendingGamesSection';
 
 export default function Home() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const { isAuthenticated, setIsAuthenticated } = useAuth();
 
+  // Redirect to dashboard if user is autheenticated
   useEffect(() => {
     setMounted(true);
 
@@ -32,11 +30,10 @@ export default function Home() {
 
   }, [isAuthenticated, router]);
 
-
+  // Handle Create Account Button click to go to signup
   const handleClick = () => {
     router.push('/auth/signup');
   }
-
 
   return (
     <div className= {classes.hero}>
@@ -76,12 +73,19 @@ export default function Home() {
                     ensures you always pick up right where you left off.
                   </Text>
                 )}
+
               </Transition>
 
-              <Button variant="filled" color='#d4b349ff' size="xl" radius="lg" className={classes.createAccountButton} rightSection={<UserRoundPlus />} onClick={handleClick}>
-                Create an account!
-              </Button>
+              <div className={classes.buttonContainer}>
+                <Button  className={classes.createAccountButton} variant="filled" color='#d4b349ff' size="xl" radius="lg" rightSection={<UserRoundPlus />} onClick={handleClick}>
+                  Create an account!
+                </Button>
+              </div>
+              
+            </div>
 
+            <div className={classes.rightSideHeader}>
+              <TrendingGamesSection />
             </div>
 
           </div>
