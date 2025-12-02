@@ -1,26 +1,48 @@
 
-.trendingSection{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.trendingSection {
+    width: 100%;
+    max-width: 500px;
     justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    z-index: 10;
 }
 
 .sectionTitle{
     font-size: 2.5rem;
-    font-weight: 400;
+    font-weight: 900;
     margin-bottom: 1rem;
-    font-family: 'Poppins';
+    font-family: 'Barlow';
     color: white;
+    text-align: center;
 }
 
 .gameCard{
-    background-color: #1e1e1e;
-    border-radius: 10px;
-    padding: 1rem;
-    margin: 0.5rem;
-    width: 200px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s;
+    background-color: #2b2a2a;
+    border: 1px solid #585757;
+    width: 340px;
+    margin: 0 auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: block;
+    cursor: pointer;
+}
+
+.gameCard:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+.gameImage{
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.gameTitle{
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: white;
+    font-family: 'Inter';
+    cursor: default;
 }
