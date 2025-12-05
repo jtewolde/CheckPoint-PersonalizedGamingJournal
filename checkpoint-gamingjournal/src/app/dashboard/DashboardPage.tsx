@@ -188,16 +188,20 @@ export default function Dashboard() {
           <div className={classes.dashboardHeader}>
             
             <div className={classes.dashboardTitleWrapper}>
-              <ThemeIcon size={60} radius='md' variant='gradient' gradient={{ from: '#1F1C2C', to: '#928DAB', deg: 60}}> 
-                  <LayoutDashboard size={50} /> 
-              </ThemeIcon>
-
               <h2 className={classes.dashboardTitle}>Dashboard</h2>
             </div>
 
-            <p className={classes.welcomeText}> Welcome back, <span className={classes.username} onClick={() => router.push('/settings/profile')}>{userName}!</span>
-              <br />Here's a summary of your gaming journey so far.
-            </p>
+            <div className={classes.heroTextContainer}>
+
+              <p className={classes.welcomeText}> Welcome back, <span className={classes.username} onClick={() => router.push('/settings/profile')}>{userName}! </span> </p>
+              
+              <p className={classes.welcomeText}> 
+                Your gaming story is always evolving. 
+                Log your latest sessions, revisit past entries, and discover new games to add to your journey. 
+                Explore what’s trending and let Checkpoint guide you toward your next great playthrough.
+              </p>
+
+            </div>
           
           </div>
 
@@ -207,7 +211,7 @@ export default function Dashboard() {
 
               <div className={classes.titleLogo}>
                 <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: '#56CCF2', to: '#2F80ED', deg: 30}}> <CircleUserRound size={40} /> </ThemeIcon>
-                <p className={classes.profileTitle}>Profile Stats: </p>
+                <p className={classes.profileTitle}>Profile Stats</p>
               </div>
               
             </div>
@@ -317,7 +321,7 @@ export default function Dashboard() {
                     <Flame size={30} color='white'/> 
                   </ThemeIcon>
 
-                <h1 className={classes.gamesPlayingText}>Top Trending Games:</h1>
+                <h1 className={classes.gamesPlayingText}>Trending Games</h1>
 
               </div>
 
@@ -363,8 +367,7 @@ export default function Dashboard() {
                     <Star size={40} />
                   </ThemeIcon>
 
-                  <h1 className={classes.gamesPlayingText}>Most Popular Games:</h1>
-                  
+                  <h1 className={classes.gamesPlayingText}>Popular Games</h1>
                 </div>
 
                 <a className={classes.viewMoreIcon} href='/search/popular'><CircleArrowRight size={35} /></a>
@@ -407,7 +410,7 @@ export default function Dashboard() {
 
               <div className={classes.titleLogo}>
                 <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: '#e96443', to: '#904e95', deg: 90}}> <Gamepad size={40} /> </ThemeIcon>
-                <h1 className={classes.gamesPlayingText}>Games That You're playing:</h1>
+                <h1 className={classes.gamesPlayingText}> Games You're Playing </h1>
               </div>
 
               <a className={classes.viewMoreText} href='/library'> <CircleArrowRight size={35} /> </a>

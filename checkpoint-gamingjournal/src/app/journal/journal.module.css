@@ -275,6 +275,14 @@
 
 @media (max-width: 500px) {
 
+    .journalHeader{
+        padding: 2rem 1.5rem 1rem
+    }
+
+    .titleLogo{
+        width: 100%;
+    }
+
     .journalTitle{
         font-size: 1.4rem;
     }

@@ -20,19 +20,19 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.6) 0%, #18181b 25%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.65) 0%, #18181b 20%);
 }
 
 .wrapper {
   padding: 2rem;
-  padding-left: 4rem;
-  padding-right: 4rem;
+  padding-left: 7rem;
+  padding-right: 7rem;
   padding-top: 3rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   z-index: 0;
-  gap: 4rem;
+  gap: 3rem;
   pointer-events: auto;
 }
 
@@ -53,12 +53,6 @@
   gap: 1rem;
   color: white;
   width: auto;
-  padding: 1.2rem 1.5rem;
-  background: rgba(0, 0, 0, 0.15);
-  border-radius: 16px;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .welcomeText{
@@ -66,7 +60,7 @@
   font-weight: 300;
   text-align: left;
   font-family: 'Inter';
-  color: #f5eded;
+  color: #ffffff;
   margin-top: 1rem;
   width: auto;
 }
@@ -84,16 +78,16 @@
 }
 
 .dashboardTitle{
-  font-size: 2.5rem;
-  font-weight: 600;
+  font-size: 4rem;
+  font-weight: 700;
   color: white; /* Dark text for contrast */
   margin-bottom: 0.1rem;
   text-align: left;
   font-family: 'Barlow';
-  text-decoration: underline;
-  text-underline-offset: 9px;
   letter-spacing: 1px;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  text-decoration: underline;
+  text-underline-offset: 8px;
 }
 
 .profileStats,
@@ -146,7 +140,7 @@
   color: #f4f4f4;
   line-height: 1.2;
   /* Responsive font size: min 1.2rem, scales with viewport width, max 2rem */
-  font-size: clamp(1.4rem, 2vw + 0.5rem, 4rem);
+  font-size: clamp(1.8rem, 2vw + 0.5rem, 4rem);
   text-wrap: balance;
 }
 
@@ -405,12 +399,12 @@
   }
 
   .welcomeText{
-    text-align: center;
+    text-align: left;
   }
 
   .dashboardHeader{
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
     width: auto;
   }
 
@@ -433,6 +427,19 @@
 
 
 @media (max-width: 480px) {
+
+  .background{
+    background-color: #424242;
+  }
+
+  .backgroundOverlay{
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .welcomeText{
+    font-size: 1.25rem;
+  }
+
   .statusGrid {
     grid-template-columns: repeat(1, 1fr); /* 2 columns for screens smaller than 768px */
   }

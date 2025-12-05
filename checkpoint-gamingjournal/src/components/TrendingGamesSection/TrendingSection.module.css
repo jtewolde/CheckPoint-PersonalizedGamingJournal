@@ -7,10 +7,19 @@
     z-index: 10;
 }
 
+.trendingLogo{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+}
+
 .sectionTitle{
     font-size: 2.5rem;
-    font-weight: 900;
-    margin-bottom: 2rem;
+    font-weight: 500;
     font-family: 'Barlow';
     color: white;
     text-align: center;
@@ -37,7 +46,7 @@
 }
 
 .gameCard:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
     transition: transform 0.3s ease;
 }
 
@@ -64,7 +73,6 @@
     color: white;
     font-family: 'Inter';
     cursor: default;
-    padding-left: 0.5rem;
 }
 
 .gameRating, .gameDate{

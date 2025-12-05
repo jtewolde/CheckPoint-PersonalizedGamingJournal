@@ -2,18 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Badge, Group } from "@mantine/core";
+import { Badge } from "@mantine/core";
 
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-
-import GlobalLoader from "../GlobalLoader/GlobalLoader";
 
 import classes from './TrendingSection.module.css';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
-import { IconBrandXbox, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
+import { CircleArrowRight, ChevronRight } from "lucide-react";
 
 export default function TrendingGamesSection() {
     // States to hold trending games data and loading status
@@ -53,32 +51,14 @@ export default function TrendingGamesSection() {
         },
     }
 
-    // Function to retrieve logos for different platforms that games can be on
-    const getPlatformIcon = (platformName: string) => {
-
-        if (platformName.toLowerCase().includes("xbox")) return <IconBrandXbox size={20} />;
-
-        if (platformName.toLowerCase().includes("playstation")) return <IconIcons size={20} />;
-
-        if (platformName.toLowerCase().includes("pc") || platformName.toLowerCase().includes("windows"))
-            return <IconDevicesPc size={20} />;
-
-        if (platformName.toLowerCase().includes("nintendo")) return <IconDeviceNintendo size={20} />;
-
-        if (platformName.toLowerCase().includes("android")) return <IconBrandAndroid size={20} />;
-
-        if (platformName.toLowerCase().includes("google")) return <IconBrandGoogle size={20} />
-
-        if (platformName.toLowerCase().includes("ios") || platformName.toLowerCase().includes("mac")) 
-            return <IconBrandApple size={20} />;
-
-        return null; // fallback if no match
-    
-    };
-
     return (
         <div className={classes.trendingSection}>
-            <h2 className={classes.sectionTitle}>Trending Games</h2>
+
+            <div className={classes.trendingLogo}>
+                <h2 className={classes.sectionTitle}>Trending</h2>
+                <a className={classes.viewMoreIcon} href='/search/trending'> <ChevronRight size={45} color="white"/> </a>
+            </div>
+            
 
             <Carousel
             arrows={false}
@@ -103,9 +83,8 @@ export default function TrendingGamesSection() {
                         />
 
                         <div className={classes.gameInfo}>
+                            <Badge color='green' size='sm' radius='sm' c='white'>{game.game_type.type}</Badge>
                             <h3 className={classes.gameTitle}>{game.name}</h3>
-                            <p className={classes.gameRating}> <span className={classes.ratingLabel}>Rating:</span> {game.total_rating ? game.total_rating.toFixed(1) : 'N/A'}</p>
-                            <p className={classes.gameDate}> <span className={classes.releaseLabel}>Released:</span> {game.first_release_date ? new Date(game.first_release_date * 1000).toLocaleDateString() : 'N/A'}</p>
                         </div>
                         
                     </div>
