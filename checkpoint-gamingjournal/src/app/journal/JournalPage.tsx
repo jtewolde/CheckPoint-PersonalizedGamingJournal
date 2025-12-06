@@ -177,13 +177,7 @@ export default function Journal() {
                     <div className={classes.journalHeader}>
 
                         <div className={classes.titleLogo}>
-
-                            <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: '#DCE35B', to: '#45B649', deg: 60}}> 
-                                <Notebook size={40} /> 
-                            </ThemeIcon>
-
-                            <h2 className={classes.journalTitle}>Your Journal Entries</h2>
-
+                            <h2 className={classes.journalTitle}>Your Journal</h2>
                         </div>
 
                         <Text className={classes.description} size="xl" mt="xl">
@@ -193,7 +187,7 @@ export default function Journal() {
                         <List className={classes.descriptionList} spacing='sm' size='md' withPadding>
                             <List.Item
                                 icon={
-                                    <ThemeIcon size={30} radius="xl" variant='outline' color='#45B649'>
+                                    <ThemeIcon size={30} radius="xl" variant='filled' color='#45B649'>
                                         <FilePlus size={16} />
                                     </ThemeIcon>
                                 }
@@ -203,7 +197,7 @@ export default function Journal() {
 
                             <List.Item
                                 icon={
-                                    <ThemeIcon size={30} radius="xl" variant="outline" color='#8b2ad4ff'>
+                                    <ThemeIcon size={30} radius="xl" variant="filled" color='#8b2ad4ff'>
                                         <ListFilter size={16} />
                                     </ThemeIcon>
                                 }
@@ -213,7 +207,7 @@ export default function Journal() {
 
                             <List.Item
                                 icon={
-                                    <ThemeIcon size={30} radius="xl" variant="outline" color='#d31919ff'>
+                                    <ThemeIcon size={30} radius="xl" variant="filled" color='#d31919ff'>
                                         <Trash2 size={16} />
                                     </ThemeIcon>
                                 }
@@ -221,67 +215,6 @@ export default function Journal() {
                                 <span className={classes.bold}>Delete</span> individual entries or all entries for a specific game to keep your journal organized.
                             </List.Item>
                         </List>
-
-                        <div className={classes.buttonGroup} >
-
-                            <Button
-                            variant='filled'
-                            color='green'
-                            size='lg'
-                            radius= 'lg'
-                            className={classes.addButton}
-                            onClick={() => router.push('/journalForm')}
-                            rightSection={<FilePlus />}
-                            >
-                                Add Entry
-                            </Button>
-                            
-
-                            <Popover width={300} position='bottom' withArrow shadow='lg'>
-                                <Popover.Target>
-                                    <Button className={classes.filterButton} size='lg' color='#854bcb' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter By Name</Button>
-                                </Popover.Target>
-
-                                <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>
-                                    <Select
-                                    styles={{
-                                        wrapper: { color: '#212121'}, 
-                                        input: { color: 'white', background: '#212121'}, 
-                                        dropdown: { background: '#212121', color: 'whitesmoke'},
-                                        option: { background: '#202020'}
-                                    }}
-                                    label="Choose a game to filter your journal by:"
-                                    placeholder="Filter by Game"
-                                    checkIconPosition='right'
-                                    data={[
-                                        { value: 'all', label: 'All Games' },
-                                        ...gameNames.map((gameName) => ({
-                                            value: gameName,
-                                            label: gameName
-                                        }))
-                                    ]}
-                                    value={gameName}
-                                    onChange={(value) => setGameName(value || 'all')}
-                                    className={classes.filterDropdown}
-                                    mb="md"
-                                    />
-                                </Popover.Dropdown>
-
-                            </Popover>
-
-                            <Button
-                            variant='filled'
-                            color='#e01515ff'
-                            size='lg'
-                            radius= 'lg'
-                            className={classes.deleteEntriesButton}
-                            onClick={open}
-                            rightSection={<Trash2 />}
-                            >
-                                Delete All
-                            </Button>
-
-                        </div>
 
                     </div>
 
@@ -361,8 +294,65 @@ export default function Journal() {
 
                     <div className={classes.mainSection}>
 
-                        <div className={classes.entriesCountWrapper}>
-                            <p className={classes.entriesCount}>{totalEntries} Total Journal Entries: </p>
+                        <div className={classes.buttonGroup} >
+
+                            <Button
+                            variant='filled'
+                            color='green'
+                            size='md'
+                            radius= 'lg'
+                            className={classes.addButton}
+                            onClick={() => router.push('/journalForm')}
+                            rightSection={<FilePlus />}
+                            >
+                                Add Entry
+                            </Button>
+                            
+
+                            <Popover width={300} position='bottom' withArrow shadow='lg'>
+                                <Popover.Target>
+                                    <Button className={classes.filterButton} size='md' color='#854bcb' radius='lg' variant="filled" rightSection={<ListFilter />}>Filter</Button>
+                                </Popover.Target>
+
+                                <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>
+                                    <Select
+                                    styles={{
+                                        wrapper: { color: '#212121'}, 
+                                        input: { color: 'white', background: '#212121'}, 
+                                        dropdown: { background: '#212121', color: 'whitesmoke'},
+                                        option: { background: '#202020'}
+                                    }}
+                                    label="Choose a game to filter your journal by:"
+                                    placeholder="Filter by Game"
+                                    checkIconPosition='right'
+                                    data={[
+                                        { value: 'all', label: 'All Games' },
+                                        ...gameNames.map((gameName) => ({
+                                            value: gameName,
+                                            label: gameName
+                                        }))
+                                    ]}
+                                    value={gameName}
+                                    onChange={(value) => setGameName(value || 'all')}
+                                    className={classes.filterDropdown}
+                                    mb="md"
+                                    />
+                                </Popover.Dropdown>
+
+                            </Popover>
+
+                            <Button
+                            variant='filled'
+                            color='#e01515ff'
+                            size='md'
+                            radius= 'lg'
+                            className={classes.deleteEntriesButton}
+                            onClick={open}
+                            rightSection={<Trash2 />}
+                            >
+                                Delete All
+                            </Button>
+
                         </div>
                         
                         <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>

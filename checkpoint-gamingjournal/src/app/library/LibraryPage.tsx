@@ -83,10 +83,6 @@ export default function Library(){
 
                     <div className={classes.titleLogo}>
 
-                        <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: '#e96443', to: '#904e95', deg: 90}}> 
-                            <LibraryBig size={40} /> 
-                        </ThemeIcon>
-
                         <h2 className={classes.title}>Your Library</h2>
 
                     </div>
