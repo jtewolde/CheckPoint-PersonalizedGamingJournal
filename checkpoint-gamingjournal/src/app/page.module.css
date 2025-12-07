@@ -184,6 +184,7 @@
   text-align: center;
   margin-top: 1rem; /* Space between image and text */
   max-width: 800px; /* Limit width for better readability */
+  font-family: 'Inter';
 }
 
 .gameDetailsSection,
