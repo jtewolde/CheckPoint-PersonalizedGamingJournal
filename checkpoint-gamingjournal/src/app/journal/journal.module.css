@@ -70,7 +70,7 @@
 }
 
 .description {
-    font-size: 1.5rem;
+    font-size: 20px;
     font-weight: 300;
     color: rgb(235, 232, 232); /* Dark text for contrast */
     font-family: 'Inter';
@@ -83,7 +83,7 @@
     color: rgb(235, 232, 232); /* Dark text for contrast */
     font-weight: 300;
     font-family: 'Inter';
-    font-size: 1.2rem;
+    font-size: 18px;
     font-style: italic;
 }
 
@@ -145,7 +145,7 @@
     justify-content: flex-start;
     align-items: flex-start;
     gap: 1rem; /* space between buttons */
-    margin-top: 3rem;
+    margin-top: 0rem;
     flex-wrap: wrap; /* optional: ensures it looks good on smaller screens */
 }
 
@@ -168,8 +168,9 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-left: 3rem;
-    padding-right: 3rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-top: 1rem;
     flex: 1;
 }
 

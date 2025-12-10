@@ -1,5 +1,5 @@
 .background{
-  background: url('/HelldiversBackground.jpg') top center no-repeat;
+  background: url('/AssassinCreedIIBackground.jpg') top center no-repeat;
   background-size: cover;
   background-attachment: fixed;
   position: relative;
@@ -20,13 +20,13 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.65) 0%, #18181b 20%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.60) 0%, #18181b 25%);
 }
 
 .wrapper {
-  padding: 2rem;
-  padding-left: 10rem;
-  padding-right: 10rem;
+  padding-bottom: 2rem;
+  padding-left: 8rem;
+  padding-right: 8rem;
   padding-top: 3rem;
   display: flex;
   flex-direction: column;
@@ -56,7 +56,7 @@
 }
 
 .welcomeText{
-  font-size: 1.5rem;
+  font-size: 20px;
   font-weight: 300;
   text-align: left;
   font-family: 'Inter';
@@ -242,7 +242,7 @@
 .cover {
   width: 100%;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 16px;
   cursor: pointer;
   border: 0.5 solid rgb(74, 74, 74);
 }

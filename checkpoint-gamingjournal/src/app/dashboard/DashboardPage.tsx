@@ -111,6 +111,7 @@ export default function Dashboard() {
       const data = await res.json();
       const playingGames = data.games.filter((game: any) => game.status === 'Playing').slice(0,6) // Filter games that are currently being played with the first 6 games
 
+      console.log("Playing Games: ", playingGames);
       setPlayingGames(playingGames); // Store the playing games in state
 
       const totalGames = data.games.length // Store total number of games
@@ -378,6 +379,7 @@ export default function Dashboard() {
             
             <SimpleGrid cols={6} spacing="lg" verticalSpacing='xl' className={classes.popularGamesGrid}>
               {popularGames.map((game) => (
+
                 <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
 
                   <div className={classes.imageWrapper}>
@@ -424,13 +426,25 @@ export default function Dashboard() {
                   {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
                   <SimpleGrid cols={5} spacing="lg" className={classes.gamesGrid}>
                     {playingGames.map((game) => (
-                      <div key={game._id} className={classes.gameCard}>
-                        <Image src={
-                          game.coverImage ? `https:${game.coverImage.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
-                          alt={game.name} 
-                          className={classes.cover} 
-                          onClick={() => router.push(`/games/${game.gameId}`)} 
+                      <div key={game._id} className={classes.gameCard} onClick={() => router.push(`/games/${game.gameId}`)} >
+
+                        <div className={classes.imageWrapper}>
+
+                          <Image 
+                            src={
+                            game.coverImage ? `https:${game.coverImage.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
+                            alt={game.name} 
+                            className={classes.cover} 
                           />
+
+                          <div className={classes.overlay}>
+
+                            <Text className={classes.gameName}>{game.title}</Text>
+
+                          </div>
+
+                        </div>
+
                       </div>
                     ))}
                   </SimpleGrid>

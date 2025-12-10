@@ -19,7 +19,7 @@
 
 .sectionTitle{
     font-size: 2.5rem;
-    font-weight: 500;
+    font-weight: 800;
     font-family: 'Barlow';
     color: white;
     text-align: center;
@@ -68,7 +68,7 @@
 }
 
 .gameTitle{
-    font-size: 1.4rem;
+    font-size: 24px;
     font-weight: 800;
     color: white;
     font-family: 'Inter';

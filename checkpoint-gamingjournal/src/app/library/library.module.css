@@ -20,7 +20,7 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.45) 0%, #18181b 35%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.45) 0%, #18181b 38%);
 }
 
 .wrapper{
@@ -28,8 +28,8 @@
   flex-direction: column;
   padding-top: 1rem;
   padding-bottom: 1rem;
-  padding-left: 10rem;
-  padding-right: 10rem;
+  padding-left: 6rem;
+  padding-right: 6rem;
   gap: 1rem;
   flex: 1;
   position: relative;
@@ -69,7 +69,7 @@
 }
 
 .subTitle{
-  font-size: 1.5rem;
+  font-size: 20px;
   font-weight: 200;
   color: rgb(208, 205, 205); /* Dark text for contrast */
   font-family: 'Inter';
@@ -107,7 +107,7 @@
 }
 
 .image{
-  width: 94%;
+  width: 100%;
   height: auto;
   cursor: pointer;
 }

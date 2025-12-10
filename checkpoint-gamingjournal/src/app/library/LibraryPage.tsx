@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth-client'
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
-import { SimpleGrid, Badge, Image, Select, Popover, Button, ThemeIcon } from '@mantine/core';
-import { LibraryBig, ListFilter } from 'lucide-react';
+import { SimpleGrid, Badge, Image, Select, Popover, Button } from '@mantine/core';
+import { ListFilter } from 'lucide-react';
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 import classes from './library.module.css';
@@ -34,6 +34,7 @@ export default function Library(){
 
     }, [router]);
 
+    // Fetch User's Game Library
     useEffect(() => {
         const fetchUserGames = async () => {
             setLoading(true);
@@ -113,9 +114,9 @@ export default function Library(){
                             data={[
                                 { value: 'all', label: 'All' },
                                 { value: 'plan to play', label: "Plan to Play"},
-                                { value: 'playing', label: 'Playing' },
-                                { value: 'completed', label: 'Completed' },
-                                { value: 'on hold', label: 'On Hold' },
+                                { value: 'playing', label: 'Playing'},
+                                { value: 'completed', label: 'Completed'},
+                                { value: 'on hold', label: 'On Hold'},
                                 { value: 'dropped', label: "Dropped"}
                             ]}
                             value={selectedStatus}

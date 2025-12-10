@@ -56,7 +56,7 @@ export default function TrendingGamesSection() {
 
             <div className={classes.trendingLogo}>
                 <h2 className={classes.sectionTitle}>Trending</h2>
-                <a className={classes.viewMoreIcon} href='/search/trending'> <ChevronRight size={45} color="white"/> </a>
+                {/* <a className={classes.viewMoreIcon} href='/search/trending'> <ChevronRight size={45} color="white"/> </a> */}
             </div>
             
 
@@ -85,6 +85,7 @@ export default function TrendingGamesSection() {
                         <div className={classes.gameInfo}>
                             <Badge color='green' size='sm' radius='sm' c='white'>{game.game_type.type}</Badge>
                             <h3 className={classes.gameTitle}>{game.name}</h3>
+                            <p className={classes.gameDate}>{game.release_dates?.[0]?.human}</p>
                         </div>
                         
                     </div>
