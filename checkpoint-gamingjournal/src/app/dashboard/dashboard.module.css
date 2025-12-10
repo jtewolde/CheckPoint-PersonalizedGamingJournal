@@ -1,5 +1,5 @@
 .background{
-  background: url('/HelldiversBackground.jpg') top center no-repeat;
+  background: url('/AssassinCreedIIBackground.jpg') top center no-repeat;
   background-size: cover;
   background-attachment: fixed;
   position: relative;
@@ -20,19 +20,19 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.6) 0%, #18181b 25%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.60) 0%, #18181b 25%);
 }
 
 .wrapper {
-  padding: 2rem;
-  padding-left: 4rem;
-  padding-right: 4rem;
+  padding-bottom: 2rem;
+  padding-left: 8rem;
+  padding-right: 8rem;
   padding-top: 3rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   z-index: 0;
-  gap: 4rem;
+  gap: 3rem;
   pointer-events: auto;
 }
 
@@ -53,27 +53,22 @@
   gap: 1rem;
   color: white;
   width: auto;
-  padding: 1.2rem 1.5rem;
-  background: rgba(0, 0, 0, 0.15);
-  border-radius: 16px;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .welcomeText{
-  font-size: 1.5rem;
+  font-size: 20px;
   font-weight: 300;
   text-align: left;
   font-family: 'Inter';
-  color: #f5eded;
+  font-style: italic;
+  color: #ffffff;
   margin-top: 1rem;
   width: auto;
 }
 
 .username{
   font-weight: 500;
-  color: #f5eded;
+  color: #ffffff;
 }
 
 .username:hover{
@@ -84,16 +79,16 @@
 }
 
 .dashboardTitle{
-  font-size: 2.5rem;
-  font-weight: 600;
+  font-size: 3rem;
+  font-weight: 700;
   color: white; /* Dark text for contrast */
   margin-bottom: 0.1rem;
   text-align: left;
   font-family: 'Barlow';
-  text-decoration: underline;
-  text-underline-offset: 9px;
   letter-spacing: 1px;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  text-decoration: underline;
+  text-underline-offset: 8px;
 }
 
 .profileStats,
@@ -146,7 +141,7 @@
   color: #f4f4f4;
   line-height: 1.2;
   /* Responsive font size: min 1.2rem, scales with viewport width, max 2rem */
-  font-size: clamp(1.4rem, 2vw + 0.5rem, 4rem);
+  font-size: clamp(1.8rem, 2vw + 0.5rem, 4rem);
   text-wrap: balance;
 }
 
@@ -247,7 +242,7 @@
 .cover {
   width: 100%;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 16px;
   cursor: pointer;
   border: 0.5 solid rgb(74, 74, 74);
 }
@@ -364,8 +359,9 @@
 
 .entryTitle {
   font-size: 1rem;
+  font-style: italic;
   color: white;
-  font-weight: 700;
+  font-weight: 400;
   margin-bottom: 0.5rem;
   font-family: 'Poppins';
 }
@@ -382,7 +378,20 @@
   color: #c5c5c5;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1920px){
+  .wrapper{
+    padding-left: 8rem;
+    padding-right: 8rem;
+  }
+}
+
+@media (max-width: 1248px) {
+
+  .wrapper{
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+
   .gamesGrid,
   .popularGamesGrid,
   .trendingGamesGrid{
@@ -405,12 +414,12 @@
   }
 
   .welcomeText{
-    text-align: center;
+    text-align: left;
   }
 
   .dashboardHeader{
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
     width: auto;
   }
 
@@ -433,6 +442,15 @@
 
 
 @media (max-width: 480px) {
+
+  .backgroundOverlay{
+    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 0%, #18181b 60%);
+  }
+
+  .welcomeText{
+    font-size: 1.25rem;
+  }
+
   .statusGrid {
     grid-template-columns: repeat(1, 1fr); /* 2 columns for screens smaller than 768px */
   }

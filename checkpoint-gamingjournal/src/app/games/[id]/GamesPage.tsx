@@ -9,7 +9,7 @@ import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
 import toast from 'react-hot-toast';
 
-import { LoadingOverlay, Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, Overlay, BackgroundImage } from '@mantine/core';
+import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack } from '@mantine/core';
 import Image from 'next/image';
 
 import Carousel from 'react-multi-carousel';

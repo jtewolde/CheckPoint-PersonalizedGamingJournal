@@ -1,0 +1,90 @@
+
+.trendingSection {
+    width: 100%;
+    max-width: 500px;
+    justify-content: flex-end;
+    align-items: center;
+    z-index: 10;
+}
+
+.trendingLogo{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+}
+
+.sectionTitle{
+    font-size: 2.5rem;
+    font-weight: 800;
+    font-family: 'Barlow';
+    color: white;
+    text-align: center;
+}
+
+.carousel{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.gameCard{
+    background-color: #1c1c1c;
+    border: 1px solid #585757;
+    width: 340px;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    align-self: center;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+}
+
+.gameCard:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+}
+
+.gameImage{
+    width: 340px;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #585757;
+    border-radius: 8px 8px 0 0;
+}
+
+.gameInfo{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0.5rem;
+    gap: 4px;
+    width: 100%;
+}
+
+.gameTitle{
+    font-size: 24px;
+    font-weight: 800;
+    color: white;
+    font-family: 'Inter';
+    cursor: default;
+}
+
+.gameRating, .gameDate{
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgb(222, 221, 221);
+    font-family: 'Barlow';
+    cursor: default;
+    padding: 0 0.5rem 0.5rem 0.5rem;
+}
+
+.ratingLabel, .releaseLabel{
+    font-weight: 700;
+    color: white;
+}

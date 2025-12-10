@@ -12,7 +12,7 @@ const authRoutes = [
 // Routes that require authentication
 const loggedInRoutes = [
   "/dashboard",
-  "/my-games",
+  "/library",
   "/journal",
   "/stats",
   "/profile",
@@ -62,7 +62,7 @@ export const config = {
   runtime: "nodejs",
   matcher: [
     "/dashboard/:path*",
-    "/my-games/:path*",
+    "/library/:path*",
     "/journal/:path*",
     "/stats/:path*",
     "/profile/:path*",

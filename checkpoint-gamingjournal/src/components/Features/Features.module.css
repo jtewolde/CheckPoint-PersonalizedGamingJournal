@@ -12,7 +12,7 @@
 
 .title {
     font-family: 'Inter';
-    font-size: 36px;
+    font-size: 40px;
     font-weight: 900;
     margin-bottom: var(--mantine-spacing-md);
     text-align: center;
@@ -20,7 +20,7 @@
     padding: 0.5rem;
   
     @media (max-width: $mantine-breakpoint-sm) {
-      font-size: 28px;
+      font-size: 36px;
       text-align: center;
     }
 }

@@ -28,8 +28,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  padding-top: 10rem;
+  padding-top: 5rem;
   width: 100%;
   z-index: 1;
   position: relative;
@@ -42,17 +41,43 @@
   }
 }
 
+.landingPageHeader{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-left: 0rem;
+  gap: 10rem;
+}
+
+.leftSectionHeader{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  align-self: flex-start;
+}
+
+.titleContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
 .title {
   color: var(--mantine-color-white);
   font-family: 'Inter';
   font-size: 65px;
   font-weight: 900;
   line-height: 1.1;
-  text-align: center;
-  padding: .5rem;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 14px;
 
   @media (max-width: $mantine-breakpoint-sm) {
-    font-size: 40px;
+    font-size: 44px;
     line-height: 1.2;
   }
 
@@ -62,11 +87,18 @@
   }
 }
 
+.subtitle{
+  color: rgb(234, 232, 232);
+  font-family: 'Inter';
+  font-size: 28px;
+  font-weight: 700;
+}
+
 .description {
   color: var(--mantine-color-white);
   max-width: 600px;
-  font-weight: 400;
-  text-align: center;
+  font-weight: 300;
+  text-align: left;
   font-family: 'Poppins';
 
   @media (max-width: $mantine-breakpoint-sm) {
@@ -77,16 +109,17 @@
   }
 }
 
+.buttonContainer{
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+}
+
 .createAccountButton {
   margin-top: calc(var(--mantine-spacing-xl) * 1.5);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border: 1px solid #6b6b6b;
-
-  @media (max-width: $mantine-breakpoint-sm) {
-    width: 80%;
-  }
   font-family: 'Poppins';
-  font-weight: 600;
+  border: 1px solid #6b6b6b;
 }
 
 .FeatureSection{
@@ -151,6 +184,7 @@
   text-align: center;
   margin-top: 1rem; /* Space between image and text */
   max-width: 800px; /* Limit width for better readability */
+  font-family: 'Inter';
 }
 
 .gameDetailsSection,
@@ -208,7 +242,49 @@
   }
 }
 
+@media (max-width: 768px) {
+
+  .container{
+    padding-top: 10rem;
+  }
+
+  .landingPageHeader{
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .leftSectionHeader{
+    align-items: center;
+    text-align: center;
+  }
+
+  .buttonContainer{
+    justify-content: center;
+  }
+
+  .titleContainer{
+    align-items: center;
+    text-align: center;
+  }
+
+  .description{
+    text-align: center;
+  }
+
+}
+
 @media (max-width: 500px) {
+
+  .title {
+    font-size: 49px;
+    line-height: 1.2;
+  }
+
+  .subtitle{
+    font-size: 24px;
+  }
+
   .image{
     width: 120%;
     height: auto;

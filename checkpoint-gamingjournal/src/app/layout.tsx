@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Poppins, Barlow, Noto_Sans } from "next/font/google";
 import "./globals.css";
 
 import '@mantine/core/styles.css';
@@ -15,6 +15,7 @@ import { Suspense } from "react";
 
 import { ColorSchemeScript, LoadingOverlay, MantineProvider, mantineHtmlProps } from '@mantine/core';
 
+// Font configurations using next/font
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -24,6 +25,29 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+})
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  variable: "--font-poppins",
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+})
+
+const barlow = Barlow({
+  subsets: ["latin"],
+  variable: "--font-barlow",
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+})
+
+const notoSans = Noto_Sans({
+  subsets: ["latin"],
+  variable: "--font-noto-sans",
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+})
 
 export const metadata: Metadata = {
   title: "CheckPoint",
