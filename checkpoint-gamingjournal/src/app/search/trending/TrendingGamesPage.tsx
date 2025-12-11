@@ -140,19 +140,14 @@ export default function TrendingPage() {
           <div className={classes.titleDescriptionSection}>
 
             <div className={classes.titleLogo}>
-              
-              <ThemeIcon variant='gradient' gradient={{ from: '#c21500', to: '#ffc500', deg: 90}} size={40}>
-                <Flame size={30} color='white'/> 
-              </ThemeIcon>
 
-              <h1 className={classes.titleText}> Top 75 Trending Games of 2025:</h1>
+              <h1 className={classes.titleText}>Trending Games</h1>
 
             </div>
 
             <Text className={classes.description} size="xl" mt="xl">
-              Stay ahead of the curve with the hottest games everyone’s talking about this year.
-              From new releases making waves to returning favorites seeing a surge in players 
-              — discover what’s trending across the gaming world in 2025.
+              The most popular and buzzworthy games that are currently trending in the gaming community.<br />
+              Stay updated with the latest hits and discover what everyone is talking about!
             </Text>
 
           </div>
@@ -177,6 +172,7 @@ export default function TrendingPage() {
           <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>
             {processedGames.map((game) => (
               <div className={classes.gameContainer} key={game.id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game.id}`) }} >
+                
                 <img
                   src={
                     game.cover

@@ -30,14 +30,16 @@
     justify-content: flex-start;
     gap: 0.4rem;
     padding: 2rem;
+    padding-left: 7rem;
+    padding-right: 7rem;
     z-index: 1;
     pointer-events: auto;
 }
 
 /* Search results heading */
 .titleText {
-    font-size: 2rem;
-    font-weight: 600;
+    font-size: 2.6rem;
+    font-weight: 700;
     color: white; /* Dark text for contrast */
     margin-bottom: 0.1rem;
     text-align: left;
@@ -72,8 +74,9 @@
 
 .description {
     color: var(--mantine-color-white);
-    font-weight: 400;
+    font-weight: 300;
     text-align: left;
+    font-style: italic;
     font-family: 'Poppins';
     max-width: 900px;
 
@@ -85,9 +88,9 @@
 
 /* Number of search results */
 .numberText{
-    font-size: 1.3rem;
-    font-weight: 300;
-    color: rgb(208, 205, 205); /* Dark text for contrast */
+    font-size: 20px;
+    font-weight: 500;
+    color: rgb(255, 255, 255); /* Dark text for contrast */
     margin-bottom: 0.5rem;
     margin-top: 1rem;
     font-family: 'Inter';

@@ -21,7 +21,7 @@
     z-index: 1;
     pointer-events: none;
     /* Fade from transparent to dark */
-    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 0%, #18181b 25%);
+    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 0%, #101012 25%);
 }
 
 .mainContent{
@@ -30,20 +30,23 @@
     justify-content: flex-start;
     gap: 0.4rem;
     padding: 2rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
     z-index: 1;
     pointer-events: auto;
 }
 
 /* Search results heading */
 .titleText {
-    font-size: 2rem;
-    font-weight: 600;
+    font-size: 3rem;
+    font-weight: 700;
     color: white; /* Dark text for contrast */
     margin-bottom: 0.1rem;
     text-align: left;
     font-family: 'Barlow';
+    text-decoration: underline;
+    text-underline-offset: 10px;
     margin: 0;
-    text-decoration: none;
     letter-spacing: 1px;
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
@@ -59,21 +62,16 @@
 .titleLogo{
     display: flex;
     align-items: center;
-    gap: 1rem;
     color: white;
     width: auto;
-    padding: 1.2rem 1.5rem;
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 16px;
-    backdrop-filter: blur(6px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .description {
+    font-size: 18px;
     color: var(--mantine-color-white);
-    font-weight: 400;
+    font-weight: 300;
     text-align: left;
+    font-style: italic;
     font-family: 'Poppins';
     max-width: 900px;
 
@@ -85,9 +83,9 @@
 
 /* Number of search results */
 .numberText{
-    font-size: 1.3rem;
-    font-weight: 300;
-    color: rgb(208, 205, 205); /* Dark text for contrast */
+    font-size: 20px;
+    font-weight: 500;
+    color: rgb(255, 255, 255); /* Dark text for contrast */
     margin-bottom: 0.5rem;
     margin-top: 1rem;
     font-family: 'Inter';
@@ -122,6 +120,22 @@
     cursor: pointer;
 }
 
+.imageWrapper {
+    position: relative;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    aspect-ratio: 3 / 4;
+}
+
+.imageWrapper:hover .overlay {
+    opacity: 1;
+    border: 2px solid rgb(77, 76, 76);
+    border-radius: 12px;
+}
+
 /* Game name */
 .gameName {
     font-size: 1rem;
@@ -147,6 +161,12 @@
 }
 
 @media screen and (max-width: 1245px) {
+
+    .mainContent{
+        padding-left: 4rem;
+        padding-right: 4rem;
+    }
+
     .gameGrid {
         justify-items: center;
     }
@@ -181,12 +201,23 @@
 }
 
 @media screen and (max-width: 610px){
+
+    .mainContent{
+        padding-left: 3rem;
+        padding-right: 3rem;
+    }
+
     .gameGrid{
         grid-template-columns: repeat(4, 1fr);
     }
 }
 
 @media screen and (max-width: 570px) {
+
+    .mainContent{
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
 
     .titleLogo{
         margin-bottom: -1rem;
@@ -204,20 +235,12 @@
         padding: 0;
     }
 
-    .mainContent{
-        padding: 0.8rem;
-    }
-
     .gameImage{
         width: 100%;
     }
 
     .titleText{
         font-size: 1.5rem;
-    }
-
-    .titleLogo{
-        padding: 0.3rem;
     }
     
 }
