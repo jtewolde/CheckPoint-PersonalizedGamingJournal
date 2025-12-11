@@ -25,6 +25,22 @@
     text-align: center;
 }
 
+.viewMoreIcon{
+    justify-self: flex-end;
+    align-self: center;
+    color: #ebebeb;
+    font-size: 100%;
+    font-weight: 500;
+    font-family: 'Poppins';
+    margin-top: 0.4rem;
+}
+
+.viewMoreIcon:hover{
+    color: #ffffff;
+    font-weight: 600;
+}
+
+
 .carousel{
     display: flex;
     justify-content: center;

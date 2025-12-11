@@ -11,7 +11,7 @@ import classes from './TrendingSection.module.css';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
-import { CircleArrowRight, ChevronRight } from "lucide-react";
+import { CircleArrowRight, CircleChevronRight, ChevronRight } from "lucide-react";
 
 export default function TrendingGamesSection() {
     // States to hold trending games data and loading status
@@ -56,7 +56,7 @@ export default function TrendingGamesSection() {
 
             <div className={classes.trendingLogo}>
                 <h2 className={classes.sectionTitle}>Trending</h2>
-                <a className={classes.viewMoreIcon} href='/search/trending'> <ChevronRight size={45} color="white"/> </a>
+                <a className={classes.viewMoreIcon} href='/search/trending'> <CircleArrowRight size={35} /> </a>
             </div>
             
 
@@ -84,7 +84,7 @@ export default function TrendingGamesSection() {
 
                         <div className={classes.gameInfo}>
                             <h3 className={classes.gameTitle}>{game.name}</h3>
-                            <Badge color='green' size='sm' radius='sm' c='white'>{game.game_type.type}</Badge>
+                            <Badge color='gray' size='sm' radius='lg' c='white'>{game.game_type.type}</Badge>
                             <p className={classes.gameDate}>{game.release_dates?.[0]?.human}</p>
                         </div>
                         
