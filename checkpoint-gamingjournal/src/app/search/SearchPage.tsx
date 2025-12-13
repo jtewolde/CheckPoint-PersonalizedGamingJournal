@@ -18,6 +18,7 @@ import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 export default function SearchResults() {
   const searchParams = useSearchParams();
   const query = searchParams.get('query') || ''; // Get the search query from the URL
+  const [searchQuery, setSearchQuery] = useState(query);
 
   const [opened, { toggle, close }] = useDisclosure();
 

@@ -12,9 +12,7 @@ const ratelimit = new Ratelimit({
     limiter: Ratelimit.slidingWindow(5, '1m'),
 })
 
-export const config = {
-    runtime: 'edge'
-}
+export const runtime = 'edge';
 
 // To make sure the the API Key for Gemini is in the .env file
 if(!process.env.GEMINI_API_KEY){
@@ -23,7 +21,7 @@ if(!process.env.GEMINI_API_KEY){
 
 // Initialize Gemini with API Key
 const google = createGoogleGenerativeAI({
-    apiKey: process.env.GEMINI_API_KEY
+    apiKey: process.env.GEMINI_API_KEY!
 })
 
 const model = google('gemini-2.0-flash', { useSearchGrounding: true});

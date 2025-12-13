@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Burger, Group, Drawer, Autocomplete, Image, Button } from '@mantine/core';
 import { useDisclosure, useMediaQuery} from '@mantine/hooks';
 
-import CheckPointLogo from '../../../public/DesktopLogo.png';
+import CheckPointLogo from '../../../public/DesktopLogoNew.png';
 import CheckPointMobileLogo from '../../../public/MobileCheckPointLogo.png';
 
 import classes from './Header.module.css';
@@ -78,13 +78,14 @@ export function Header() {
   return (
     <header className={classes.header}>
       <div className={classes.inner}>
-        
-        {isMobile ? (
-          <Image src={CheckPointMobileLogo.src} alt="CheckPoint Logo" className={classes.mobileLogo} onClick={handleLogoClick} style={{cursor: 'pointer'}} />
-        ): (
-          <Image src={CheckPointLogo.src} alt="CheckPoint Logo" className={classes.logo} onClick={handleLogoClick} style={{cursor: 'pointer'}} />
-        )
-        }
+
+        <div className={classes.logoContainer} onClick={handleLogoClick}>
+          {isMobile ? (
+            <Image src={CheckPointMobileLogo.src} alt="CheckPoint Logo" className={classes.mobileLogo} style={{cursor: 'pointer'}} />
+          ): (
+            <Image src={CheckPointLogo.src} alt="CheckPoint Logo" className={classes.logo} style={{cursor: 'pointer'}} />
+          )}
+        </div>
 
         <Autocomplete
           classNames={{
