@@ -155,6 +155,7 @@ export default function TrendingPage() {
           <h2 className={classes.numberText}>{processedGames.length} Game Results:</h2>
 
           <GameFilters
+            color="#546782ff"
             sortOption={sortOption}
             selectedType={selectedType}
             selectedGenres={selectedGenre}
@@ -182,6 +183,8 @@ export default function TrendingPage() {
                   alt={game.name}
                   className={classes.gameImage}
                 />
+
+                <p className={classes.gameTitle}>{game.name}</p>
                 
               </div>
             ))}

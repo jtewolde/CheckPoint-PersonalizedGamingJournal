@@ -7,6 +7,10 @@ export default function RoadmapPage() {
 
     const roadMapItems = [
         {
+            title: "Quality of Life Improvements for adding games to Library",
+            description: "Improve the process of adding games your library without needing to search and add manually on its own details page."
+        },
+        {
             title: "Calendar Integration for Journal Entries",
             description: "Create a calendar view to better visualize journal entries and gaming sessions."
         },

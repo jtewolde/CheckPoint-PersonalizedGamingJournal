@@ -137,13 +137,13 @@
 }
 
 /* Game name */
-.gameName {
+.gameTitle {
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 400;
     color: white;
     padding: 0.5rem;
     overflow: hidden;
-    font-family: 'Noto Sans';
+    font-family: 'Poppins';
 }
 
 /* Pagination */
@@ -240,7 +240,7 @@
     }
 
     .titleText{
-        font-size: 1.5rem;
+        font-size: 2.5rem;
     }
     
 }
