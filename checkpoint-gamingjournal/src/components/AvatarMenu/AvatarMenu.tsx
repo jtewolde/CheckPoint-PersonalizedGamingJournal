@@ -54,7 +54,7 @@ export default function AvatarMenu(){
                     backgroundColor: '#232526',
                     border: '1px solid #464646ff',
                     fontFamily: 'Poppins',
-                    fontWeight: 690,
+                    fontWeight: 300,
                 }
             }}>
                 <Menu.Item leftSection={<User size={30}/>} color="white" >
