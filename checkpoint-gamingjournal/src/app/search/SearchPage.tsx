@@ -154,6 +154,7 @@ export default function SearchResults() {
         <h2 className={classes.numberText}>{processedGames.length} Game Results:</h2>
 
         <GameFilters
+          color='gray'
           sortOption={sortOption}
           selectedType={selectedType}
           selectedGenres={selectedGenre}

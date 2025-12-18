@@ -11,15 +11,15 @@ import PlaceHolderImage from "../../../public/no-cover-image.png"
 import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconBookmarkFilled, IconCheck, IconQuestionMark, IconClipboardListFilled } from '@tabler/icons-react';
 import { Flame, Notebook, Gamepad, Star, CircleUserRound, CircleArrowRight, LayoutDashboard } from 'lucide-react';
 import classes from './dashboard.module.css';
-import AvatarMenu from '@/components/AvatarMenu/AvatarMenu';
+
+import TrendingSection from '@/components/TrendingSection/TrendingSection';
+import PopularSection from '@/components/PopularSection/PopularSection';
 
 export default function Dashboard() {
   const router = useRouter();
   const [userName, setUserName] = useState("")
 
-  const [games, setGames] = useState<any[]>([]); // State to store games data
   const [playingGames, setPlayingGames] = useState<any[]>([]); // State to store games that the user is currently playing
-  const [popularGames, setPopularGames] = useState<any[]>([]);
 
   const [playGamesLength, setPlayGamesLength] = useState(0) // State to store length of playing games user has
   const [noStatusLength, setNoStatusLength] = useState(0) // State to store length of games user has that has no status
@@ -31,8 +31,6 @@ export default function Dashboard() {
   const [completedPercentage, setCompletedPercentage] = useState(0)
 
   const [recentEntries, setRecentEntries] = useState<any[]>([]); // State to store recent journal entries
-  const [loading, setLoading] = useState(true); // State to handle loading
-  const [hasMounted, setHasMounted] = useState(false);
 
   // Check if the user is authenticated
   useEffect(() => {
@@ -49,48 +47,6 @@ export default function Dashboard() {
     checkAuth();
   }, [router]);
 
-  // Fetch games data from the API
-  useEffect(() => {
-    const fetchTrendingGames = async () => {
-      try {
-        const res = await fetch('/api/igdb/trendingGames');
-        
-        if (!res.ok) {
-          throw new Error('Failed to fetch popular games');
-        }
-        const data = await res.json();
-        setGames(data); // Store the games data in state
-        console.log("Trending Games: ",data);
-        
-      } catch (error) {
-        console.error('Error fetching trending games:', error);
-      } finally {
-        setLoading(false); // Set loading to false after fetching
-      }
-    };
-    fetchTrendingGames();
-    setHasMounted(true);
-  }, []);
-
-  // Function to get the most popular games from the IGDB API
-  const fetchPopularGames = async () => {
-    try {
-      const res = await fetch('/api/igdb/populargames')
-
-      if(!res.ok){
-        throw new Error('Failed to fetch popular games');
-      }
-
-      // Get the popular games data and store it in state
-      const data = await res.json();
-      setPopularGames(data);
-      console.log("Popular Games: ", data);
-
-    } catch (error) {
-      console.error('Error fetching popular games: ', error);
-    }
-
-  }
 
  // Function to get the games that the user is currently playing from their library
   const fetchPlayingGames = async () => {
@@ -166,21 +122,14 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    fetchPopularGames();
     fetchPlayingGames();
     fetchRecentJournalEntries();
   }, []);
 
-  // If loading into the dashboard page, display global Loader
-  if (loading){
-    return <GlobalLoader visible={loading} />
-  }
 
   return (
 
     <div className={classes.background}>
-
-      {loading && <GlobalLoader visible={loading} />}
 
       <div className={classes.backgroundOverlay}>
 
@@ -329,32 +278,9 @@ export default function Dashboard() {
               <a className={classes.viewMoreIcon} href='/search/trending'> <CircleArrowRight size={35} /> </a>
 
             </div>
-            
-            {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
 
-            <SimpleGrid cols={7} spacing="lg" verticalSpacing='xl' className={classes.trendingGamesGrid}>
-              {games.map((game) => (
-                <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
-
-                  <div className={classes.imageWrapper}>
-
-                    <Image src={
-                    game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
-                    alt={game.name} 
-                    className={classes.cover}  
-                    />
-
-                    <div className={classes.overlay}>
-
-                      <Text className={classes.gameName}>{game.name}</Text>
-
-                    </div>
-
-                  </div>
-
-                </div>
-              ))}
-            </SimpleGrid>
+            {/* Use TrendingSection component to display trending games */}
+            <TrendingSection />
 
           </div>
 
@@ -374,35 +300,9 @@ export default function Dashboard() {
                 <a className={classes.viewMoreIcon} href='/search/popular'><CircleArrowRight size={35} /></a>
 
               </div>
-
-              {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
             
-            <SimpleGrid cols={6} spacing="lg" verticalSpacing='xl' className={classes.popularGamesGrid}>
-              {popularGames.map((game) => (
-
-                <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
-
-                  <div className={classes.imageWrapper}>
-
-                    <Image 
-                      src={
-                        game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
-                      alt={game.name} 
-                      className={classes.cover} 
-                      onClick={() => router.push(`/games/${game.id}`)} 
-                    />
-
-                    <div className={classes.overlay}>
-
-                      <Text className={classes.gameName}>{game.name}</Text>
-
-                    </div>
-
-                  </div>
-
-                </div>
-              ))}
-            </SimpleGrid>
+              {/* Use PopularSection component to display popular games */}
+              <PopularSection />
 
           </div>
 
@@ -423,7 +323,6 @@ export default function Dashboard() {
                   <p className={classes.noEntriesText}>You have no games that have the 'Playing' status.</p>
               ) : (
                 <>
-                  {loading && <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}
                   <SimpleGrid cols={5} spacing="lg" className={classes.gamesGrid}>
                     {playingGames.map((game) => (
                       <div key={game._id} className={classes.gameCard} onClick={() => router.push(`/games/${game.gameId}`)} >
