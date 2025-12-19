@@ -1,0 +1,21 @@
+
+.scrollBar {
+    &,
+    &:hover {
+        background-color: #555555;
+    }
+
+    &[data-orientation='vertical'] .thumb {
+        background-color: black;
+    }
+}
+
+.option {
+    background-color: #232526;
+    color: white;
+}
+
+.option:hover {
+    background-color: #3a3a3c; /* Darker hover color */
+    color: #ffffff;
+}

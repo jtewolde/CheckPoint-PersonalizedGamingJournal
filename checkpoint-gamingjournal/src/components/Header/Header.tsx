@@ -17,6 +17,8 @@ import { LogIn, UserRoundPlus, LayoutDashboard, Library, BotMessageSquare, Noteb
 import AvatarMenu from "../AvatarMenu/AvatarMenu";
 import { useState } from 'react';
 
+import GameSearchBar from '../GameSearchBar/GameSearchBar';
+
 export function Header() {
   const [opened, { toggle, close }] = useDisclosure(false); // State for Drawer
   const [searchQuery, setSearchQuery] = useState('') // State for Search Input
@@ -87,7 +89,7 @@ export function Header() {
           )}
         </div>
 
-        <Autocomplete
+        {/* <Autocomplete
           classNames={{
             option: classes.autocompleteOption
           }}
@@ -126,7 +128,15 @@ export function Header() {
             router.push(`/search?query=${encodeURIComponent(inputValue)}`); // Navigate to the search results page
             setSearchQuery(''); // Clear search input after submission
           }}
-        />
+        /> */}
+
+        <GameSearchBar
+          className={classes.searchBar}
+          size='lg'
+          radius='md'
+          placeHolder='Search for Games...'
+          autoNavigate={true}
+          />
 
         {/* Desktop Links */}
         <div className={classes.links} >
