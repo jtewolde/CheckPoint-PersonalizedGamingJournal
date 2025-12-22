@@ -19,11 +19,18 @@
   gap: 2rem;
 }
 
+.logoContainer {
+  display: inline-flex;
+  width: fit-content;   /* ensures no extra space */
+  height: fit-content;
+  cursor: pointer;
+}
+
 .logo {
-  width: 170px;
+  display: inline-block;
+  width: 180px;
   height: auto;
   object-fit: contain;
-  margin-top: 0.5rem;
   justify-self: flex-start;
   justify-content: flex-start;
 }

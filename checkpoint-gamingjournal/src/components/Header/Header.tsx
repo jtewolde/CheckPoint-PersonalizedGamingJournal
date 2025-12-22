@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Burger, Group, Drawer, Autocomplete, Image, Button } from '@mantine/core';
 import { useDisclosure, useMediaQuery} from '@mantine/hooks';
 
-import CheckPointLogo from '../../../public/DesktopLogo.png';
+import CheckPointLogo from '../../../public/DesktopLogoNew.png';
 import CheckPointMobileLogo from '../../../public/MobileCheckPointLogo.png';
 
 import classes from './Header.module.css';
@@ -16,6 +16,8 @@ import { IconSearch } from '@tabler/icons-react';
 import { LogIn, UserRoundPlus, LayoutDashboard, Library, BotMessageSquare, Notebook, House } from 'lucide-react';
 import AvatarMenu from "../AvatarMenu/AvatarMenu";
 import { useState } from 'react';
+
+import GameSearchBar from '../GameSearchBar/GameSearchBar';
 
 export function Header() {
   const [opened, { toggle, close }] = useDisclosure(false); // State for Drawer
@@ -78,15 +80,16 @@ export function Header() {
   return (
     <header className={classes.header}>
       <div className={classes.inner}>
-        
-        {isMobile ? (
-          <Image src={CheckPointMobileLogo.src} alt="CheckPoint Logo" className={classes.mobileLogo} onClick={handleLogoClick} style={{cursor: 'pointer'}} />
-        ): (
-          <Image src={CheckPointLogo.src} alt="CheckPoint Logo" className={classes.logo} onClick={handleLogoClick} style={{cursor: 'pointer'}} />
-        )
-        }
 
-        <Autocomplete
+        <div className={classes.logoContainer} onClick={handleLogoClick}>
+          {isMobile ? (
+            <Image src={CheckPointMobileLogo.src} alt="CheckPoint Logo" className={classes.mobileLogo} style={{cursor: 'pointer'}} />
+          ): (
+            <Image src={CheckPointLogo.src} alt="CheckPoint Logo" className={classes.logo} style={{cursor: 'pointer'}} />
+          )}
+        </div>
+
+        {/* <Autocomplete
           classNames={{
             option: classes.autocompleteOption
           }}
@@ -125,7 +128,15 @@ export function Header() {
             router.push(`/search?query=${encodeURIComponent(inputValue)}`); // Navigate to the search results page
             setSearchQuery(''); // Clear search input after submission
           }}
-        />
+        /> */}
+
+        <GameSearchBar
+          className={classes.searchBar}
+          size='lg'
+          radius='md'
+          placeHolder='Search for Games...'
+          autoNavigate={true}
+          />
 
         {/* Desktop Links */}
         <div className={classes.links} >

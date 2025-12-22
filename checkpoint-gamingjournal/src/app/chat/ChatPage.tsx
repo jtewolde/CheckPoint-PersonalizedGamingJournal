@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation';
 import { useChat } from '@ai-sdk/react'
-import { Textarea, Button, Loader, Avatar } from '@mantine/core';
+import { Textarea, Button, Loader, Avatar, Card } from '@mantine/core';
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
 import Markdown from 'react-markdown';
@@ -80,97 +80,100 @@ export default function Chat() {
 
     // Array of common game-related questions to use as quick prompts for user in suggestion cards
     const gameSuggestions = [
-        {icon: <Earth size={30} color='lime'/> , text: "Best open-world games this year?"},
-        {icon: <Gamepad2 size={30} color='cyan'/> , text: "Can you recommend some indie games?"},
-        {icon: <Hourglass size={30} color='yellow'/> , text: "Most anticipated games coming out?"},
-        {icon: <Users size={30} color='pink'/> , text: "Looking for co-op games to play with friends."}
+        {icon: <Earth size={50} color='lime'/> , text: "Best open-world games this year?"},
+        {icon: <Gamepad2 size={50} color='cyan'/> , text: "Can you recommend some indie games?"},
+        {icon: <Hourglass size={50} color='yellow'/> , text: "Most anticipated games coming out?"},
+        {icon: <Users size={50} color='pink'/> , text: "Looking for co-op games to play with friends."}
     ]
 
     return (
         <div className={classes.container} >
 
             {!hasUserMessage && (
-                <>
+                <div className={classes.introHeader}>
                     <h2 className={classes.headerTitle}>Welcome to <span className={classes.highlight}>CheckPoint AI!</span></h2>
-                    <h3 className={classes.description}>Ask CheckPoint AI anything about video games and <br/> get instant and accurate answers!</h3>
-                </>
+                    <h3 className={classes.description}>Your personal gaming AI assistant powered by Gemini. Ask me anything about video games!</h3>
+                </div>
             )}
 
-            <div className={classes.chatRoom} style={{ marginBottom: 8, borderRadius: 8}}>
-                {messages.map((msg, idx) => {
-                    const isUser = msg.role === 'user';
-                    return (
-                        <div
-                            className={`messageBubble ${isUser ? 'user' : 'assistant'}`}
-                            key={idx}
-                            style={{
-                                display: 'flex',
-                                flexDirection: isUser ? 'row-reverse' : 'row',
-                                alignItems: 'flex-start',
-                                margin: '12px 0',
-                            }}
-                        >
-                            <Avatar
-                                radius="xl"
-                                size={40}
-                                src={isUser ? user?.image : undefined}
-                                alt={isUser ? (user?.name || "User") : "Gemini"}
-                                style={{ margin: isUser ? '0 0 0 12px' : '0 12px 12px 0', background: isUser ? undefined : '#383838ff' }}
-                            >
-                                {!isUser && "🤖"}
-                            </Avatar>
+            {hasUserMessage && (
+                <div className={classes.chatRoom} style={{ marginBottom: 8, borderRadius: 8}}>
+                    {messages.map((msg, idx) => {
+                        const isUser = msg.role === 'user';
+                        return (
                             <div
-                                className={classes.messageBubble}
-                                style={{ 
-                                    background: isUser ? '#424344ff' : '#5c5b5bff',
-                                    color: '#fff',
-                                    padding: '6px 12px',
-                                    fontFamily: 'Inter',
-                                    fontSize: 12,
-                                    fontWeight: 520,
-                                    borderRadius: isUser ? '16px' : '16px',
-                                    boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-                                    wordBreak: 'break-word',
-                                    textAlign: 'left',
+                                className={`messageBubble ${isUser ? 'user' : 'assistant'}`}
+                                key={idx}
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: isUser ? 'row-reverse' : 'row',
+                                    alignItems: 'flex-start',
+                                    margin: '12px 0',
                                 }}
                             >
-                            
-                            <div className={classes.markdownContent}>
-                                <Markdown
-                                    remarkPlugins={[remarkGfm]} 
-                                    rehypePlugins={[rehypeRaw]}
+                                <Avatar
+                                    radius="xl"
+                                    size={40}
+                                    src={isUser ? user?.image : undefined}
+                                    alt={isUser ? (user?.name || "User") : "Gemini"}
+                                    style={{ margin: isUser ? '0 0 0 12px' : '0 12px 12px 0', background: isUser ? undefined : '#383838ff' }}
                                 >
-                                {msg.content}
-                                </Markdown>
-                            </div>
+                                    {!isUser && "🤖"}
+                                </Avatar>
+                                <div
+                                    className={classes.messageBubble}
+                                    style={{ 
+                                        background: isUser ? '#424344ff' : '#5c5b5bff',
+                                        color: '#fff',
+                                        padding: '6px 12px',
+                                        fontFamily: 'Inter',
+                                        fontSize: 12,
+                                        fontWeight: 520,
+                                        borderRadius: isUser ? '16px' : '16px',
+                                        boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                                        wordBreak: 'break-word',
+                                        textAlign: 'left',
+                                    }}
+                                >
+                                
+                                <div className={classes.markdownContent}>
+                                    <Markdown
+                                        remarkPlugins={[remarkGfm]} 
+                                        rehypePlugins={[rehypeRaw]}
+                                    >
+                                    {msg.content}
+                                    </Markdown>
+                                </div>
 
-                            <div ref={chatContainer} />
-                            
+                                <div ref={chatContainer} />
+                                
+                                </div>
                             </div>
-                        </div>
-                    );
-                })}
-                {isLoading && <Loader color="white" type="dots" />}
-            </div>
-
+                        );
+                    })}
+                    {isLoading && <Loader color="white" type="dots" />}
+                </div>
+            )}
+            
             {!hasUserMessage && (
                 <div className={classes.suggestions}>
                 
                 {gameSuggestions.map((suggestion, index) => (
-                    <Button
+                    <Card
                         key={index}
                         variant="outline"
                         color="gray"
-                        size="lg"
-                        leftSection={suggestion.icon}
                         radius="md"
                         className={classes.suggestionButton}
                         onClick={() => {
                             setInput(suggestion.text);
                         }}
                     >
-                        {suggestion.text}
-                    </Button>
+                        <div className={classes.suggestionContent}>
+                            {suggestion.icon}
+                            {suggestion.text}
+                        </div>
+                    </Card>
                 ))}
             </div>
             )}

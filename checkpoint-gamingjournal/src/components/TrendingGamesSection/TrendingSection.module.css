@@ -25,6 +25,22 @@
     text-align: center;
 }
 
+.viewMoreIcon{
+    justify-self: flex-end;
+    align-self: center;
+    color: #ebebeb;
+    font-size: 100%;
+    font-weight: 500;
+    font-family: 'Poppins';
+    margin-top: 0.4rem;
+}
+
+.viewMoreIcon:hover{
+    color: #ffffff;
+    font-weight: 600;
+}
+
+
 .carousel{
     display: flex;
     justify-content: center;
@@ -35,9 +51,9 @@
 .gameCard{
     background-color: #1c1c1c;
     border: 1px solid #585757;
-    width: 340px;
+    width: 300px;
     object-fit: contain;
-    border-radius: 8px;
+    border-radius: 16px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     align-self: center;
@@ -51,7 +67,7 @@
 }
 
 .gameImage{
-    width: 340px;
+    width: 300px;
     margin-bottom: 0.5rem;
     border-bottom: 1px solid #585757;
     border-radius: 8px 8px 0 0;
@@ -63,16 +79,21 @@
     align-items: flex-start;
     justify-content: center;
     padding: 0.5rem;
-    gap: 4px;
+    gap: 10px;
     width: 100%;
 }
 
 .gameTitle{
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 800;
     color: white;
     font-family: 'Inter';
     cursor: default;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    display: block;
 }
 
 .gameRating, .gameDate{

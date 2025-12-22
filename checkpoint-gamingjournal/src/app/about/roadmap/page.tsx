@@ -7,12 +7,20 @@ export default function RoadmapPage() {
 
     const roadMapItems = [
         {
-            title: "Sorting and Filtering Options",
-            description: "Add more sorting and filtering options to the search page, popular games, and trending games pages to help users find games more easily."
+            title: "Quality of Life Improvements for adding games to Library",
+            description: "Improve the process of adding games your library without needing to search and add manually on its own details page."
+        },
+        {
+            title: "Calendar Integration for Journal Entries",
+            description: "Create a calendar view to better visualize journal entries and gaming sessions."
         },
         {
             title: 'Photo Gallery',
             description: "Allow users to upload and view screenshots and photos related to their gaming experiences."
+        },
+        {
+            title: "Add Platinum/100% Completion Status",
+            description: "Track and display platinum trophies or 100% completion status for games in the library."
         },
         { 
             title: "Achievements/Trophies Tracking System",

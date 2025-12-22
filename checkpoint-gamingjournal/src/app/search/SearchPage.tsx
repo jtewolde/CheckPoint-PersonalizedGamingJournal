@@ -18,6 +18,7 @@ import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 export default function SearchResults() {
   const searchParams = useSearchParams();
   const query = searchParams.get('query') || ''; // Get the search query from the URL
+  const [searchQuery, setSearchQuery] = useState(query);
 
   const [opened, { toggle, close }] = useDisclosure();
 
@@ -153,6 +154,7 @@ export default function SearchResults() {
         <h2 className={classes.numberText}>{processedGames.length} Game Results:</h2>
 
         <GameFilters
+          color='gray'
           sortOption={sortOption}
           selectedType={selectedType}
           selectedGenres={selectedGenre}

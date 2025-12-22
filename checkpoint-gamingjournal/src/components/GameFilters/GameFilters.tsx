@@ -8,6 +8,7 @@ import { validate } from "uuid";
 
 // Define the props for the GameFilter component
 interface GameFilterProps {
+    color: string;
     sortOption: string;
     selectedType: string[];
     selectedGenres: string[];
@@ -24,6 +25,7 @@ interface GameFilterProps {
 
 // Create the GameFilter component with the defined props to handle game filtering/sorting
 export default function GameFilters({
+    color,
     sortOption,
     selectedType,
     selectedGenres,
@@ -44,7 +46,7 @@ export default function GameFilters({
 
         <>
         
-            <Button className={classes.filterButton} size='lg' radius='md' color='#828997ff' leftSection={<ListFilter size={30} />} onClick={toggle}>Filters</Button>
+            <Button className={classes.filterButton} size='lg' radius='md' color={color} leftSection={<ListFilter size={30} />} onClick={toggle}>Filters</Button>
 
             {/* Drawer component to hold the filter options, slides in from left */}
             <Drawer

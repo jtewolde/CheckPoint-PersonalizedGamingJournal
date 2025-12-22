@@ -134,12 +134,8 @@ export default function PopularPage() {
           <div className={classes.titleDescriptionSection}>
 
             <div className={classes.titleLogo}>
-              
-              <ThemeIcon size={50} variant='gradient' gradient={{ from: '#f7971e', to: '#ffd200', deg: 20}} radius='md'>
-                <Star size={40} />
-              </ThemeIcon>
-              
-              <h1 className={classes.titleText}> Top 75 Popular Games:</h1>
+
+              <h1 className={classes.titleText}>Popular Games:</h1>
 
             </div>
 
@@ -154,6 +150,7 @@ export default function PopularPage() {
           <h2 className={classes.numberText}>{processedGames.length} Game Results:</h2>
 
           <GameFilters
+            color='#3697d4ff'
             sortOption={sortOption}
             selectedType={selectedType}
             selectedGenres={selectedGenre}
@@ -180,6 +177,9 @@ export default function PopularPage() {
                   alt={game.name}
                   className={classes.gameImage}
                 />
+
+                <p className={classes.gameTitle}>{game.name}</p>
+                
               </div>
             ))}
           </SimpleGrid>
