@@ -89,7 +89,7 @@
 
 @media (max-width: 480px) {
 
-    .popularGamesGrid{
+    .resultGamesGrid{
         grid-template-columns: repeat(2, 1fr);;
     } 
 }

@@ -89,13 +89,13 @@ export function Header() {
           )}
         </div>
 
-        <GameSearchBar
+        {/* <GameSearchBar
           className={classes.searchBar}
           size='lg'
           radius='md'
           placeHolder='Search for Games...'
           autoNavigate={true}
-          />
+          /> */}
 
         {/* Desktop Links */}
         <div className={classes.links} >
@@ -130,6 +130,13 @@ export function Header() {
                   </div>
                 </Link>
 
+                <Link href="/search" className={`${classes.link} ${pathname === '/search' ? classes.active : ''}`}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <IconSearch size={20} style={{ marginBottom: 2 }} />
+                    Search
+                  </div>
+                </Link>
+
                 <AvatarMenu />
               </>
             ) : (
@@ -155,6 +162,14 @@ export function Header() {
                       Register
                     </div>
                   </Link>
+
+                  <Link href="/search" className={`${classes.link} ${pathname === '/search' ? classes.active : ''}`}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <IconSearch size={20} style={{ marginBottom: 2 }} />
+                      Search
+                    </div>
+                  </Link>
+
                 </div>
               </>
             )}

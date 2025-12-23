@@ -125,29 +125,52 @@ export default function SearchResults({ query }: SearchResultsProps){
     }
 
     return (
-        <SimpleGrid cols={7} spacing="lg" verticalSpacing='xl' className={classes.resultGamesGrid}>
-            {processedGames.map((game) => (
-                <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
 
-                    <div className={classes.imageWrapper}>
+        <div className={classes.wrapper}>
 
-                        <Image 
-                        src={game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
-                        alt={game.name} 
-                        className={classes.cover}  
-                        />
+            <GameFilters
+            color="#546782ff"
+            sortOption={sortOption}
+            selectedType={selectedType}
+            selectedGenres={selectedGenre}
+            selectedThemes={selectedTheme}
+            selectedModes={selectedMode}
+            selectedPlatforms={selectedPlatform}
+            onSortChange={(v) => setSortOption(v as any)}
+            onTypeChange={(v) => setSelectedType(v as any)}
+            onGenresChange={(v) => setSelectedGenre(v as any)}
+            onThemesChange={(v) => setSelectedTheme(v as any)}
+            onModesChange={(v) => setSelectedMode(v as any)}
+            onPlatformsChange={(v) => setSelectedPlatform(v as any)}
+            />
 
-                        <div className={classes.overlay}>
+            <SimpleGrid cols={7} spacing="lg" verticalSpacing='xl' className={classes.resultGamesGrid}>
+                {processedGames.map((game) => (
+                    <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
 
-                            <Text className={classes.gameName}>{game.name}</Text>
+                        <div className={classes.imageWrapper}>
+
+                            <Image 
+                            src={game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
+                            alt={game.name} 
+                            className={classes.cover}  
+                            />
+
+                            <div className={classes.overlay}>
+
+                                <Text className={classes.gameName}>{game.name}</Text>
+
+                            </div>
 
                         </div>
 
                     </div>
+                ))}
+            </SimpleGrid>
 
-                </div>
-            ))}
-        </SimpleGrid>
+        </div>
+
+        
     )
 
     
