@@ -89,47 +89,6 @@ export function Header() {
           )}
         </div>
 
-        {/* <Autocomplete
-          classNames={{
-            option: classes.autocompleteOption
-          }}
-          styles={
-            {
-              dropdown: {
-                backgroundColor: '#232526',
-                color: 'white',
-                borderRadius: '4px'
-              },
-            }
-          }
-          scrollAreaProps={{ scrollbarSize: 16, type: 'auto', scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
-          comboboxProps={{ transitionProps: { transition: 'fade-down', duration: 200 } }}
-          className={classes.searchBar}
-          radius='md'
-          size='lg'
-          maxDropdownHeight={200}
-          variant='filled'
-          placeholder="Search For Games"
-          rightSection={<IconSearch size={28} color='lightgrey' style={{cursor: 'pointer'}} onClick={() => router.push(`/search?query=${encodeURIComponent(searchQuery)}`)}/>}
-          value={searchQuery}
-          onChange={handleSearch} // Update the search query state
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && searchQuery.trim() !== '') {
-              router.push(`/search?query=${encodeURIComponent(searchQuery)}`); // Navigate to the search results page
-            }
-          }}
-          data={searchResults.map((game) => ({
-            value: game.name,
-            label: game.name,
-          }))} // Map search results to Autocomplete options
-          onSubmit={(event) => {
-            event.preventDefault();
-            const inputValue = (event.target as HTMLInputElement).value;
-            router.push(`/search?query=${encodeURIComponent(inputValue)}`); // Navigate to the search results page
-            setSearchQuery(''); // Clear search input after submission
-          }}
-        /> */}
-
         <GameSearchBar
           className={classes.searchBar}
           size='lg'

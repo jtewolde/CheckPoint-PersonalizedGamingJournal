@@ -64,7 +64,7 @@ export default function SearchResults() {
     }
   }, [query, page]);
 
-// Function to sort out the search results of games using useMemo to sort 
+  // Function to sort out the search results of games using useMemo to sort 
   const sortedGames = useMemo(() => {
   if (!sortOption) return games;
 

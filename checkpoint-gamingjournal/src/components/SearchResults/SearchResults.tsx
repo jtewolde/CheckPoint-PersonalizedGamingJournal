@@ -1,0 +1,154 @@
+'use client'
+
+import { useEffect, useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import { SimpleGrid, Text, Image } from '@mantine/core';
+
+import GameFilters from '@/components/GameFilters/GameFilters';
+import GlobalLoader from '../GlobalLoader/GlobalLoader';
+
+import PlaceHolderImage from '../../../public/no-cover-image.png';
+import classes from './SearchResults.module.css';
+
+// Define the SearchResults component that takes a query prop
+interface SearchResultsProps {
+    query: string;
+}
+
+export default function SearchResults({ query }: SearchResultsProps){
+    const router = useRouter(); 
+
+    const [games, setGames] = useState<any[]>([]); // State to store games data
+    const [length, setLength] = useState("");
+    const [loading, setLoading] = useState(true);
+
+    const [page, setPage] = useState(1) // start with page 1 for pagination
+    const limit = 100; // Set the limit of games on page to 12
+
+    // States to handle sorting and filtering search results
+    const [sortOption, setSortOption] = useState<'first_release_date' | 'total_rating' | 'alphabetical' | ''>('total_rating'); // State to sort search results from release date/total_rating
+    const [selectedType, setSelectedType] = useState<string[]>(['all']);
+    const [selectedGenre, setSelectedGenre] = useState<string[]>(['all']);
+    const [selectedTheme, setSelectedTheme] = useState<string[]>(['all']);
+    const [selectedMode, setSelectedMode] = useState<string[]>(['all']);
+    const [selectedPlatform, setSelectedPlatform] = useState<string[]>(['all']);
+
+    useEffect(() => {
+        const fetchGames = async () => {
+
+            try {
+                const offset = (page - 1) * limit; // calculate offset based on page
+                const res = await fetch(`/api/igdb/games?query=${encodeURIComponent(query)}&limit=${limit}&offset=${offset}`);
+
+                if (!res.ok) {
+                throw new Error('Failed to fetch games');
+                }
+                const data = await res.json();
+                setGames(data);
+                setLength(data.length);
+                console.log("Game Results", data)
+            } catch (error) {
+                console.error('Error fetching games:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchGames();
+
+    }, [query, page]);
+
+    // Function to sort out the search results of games using useMemo to sort 
+    const sortedGames = useMemo(() => {
+
+        if (!sortOption) return games;
+
+        const sorted = [...games].sort((a, b) => {
+        if (sortOption === 'first_release_date') {
+            return (b.first_release_date || 0) - (a.first_release_date || 0);
+        }
+        if (sortOption === 'total_rating') {
+            return (b.total_rating || 0) - (a.total_rating || 0);
+        }
+        if (sortOption === 'alphabetical'){
+            return a.name.localeCompare(b.name);
+        }
+        return 0;
+        });
+
+        console.log("Sorted by:", sortOption, sorted.map(g => ({
+        name: g.name,
+        release: g.first_release_date,
+        rating: g.total_rating
+        })));
+
+        return sorted;
+
+    }, [games, sortOption]);
+
+    // Filter the sorted games based on game types like Main Games, DLCs, and Expansions
+    // Genres like Action, Adventure, RPG, etc.
+    const processedGames = sortedGames.filter((game) => {
+
+    // Handle cases where game_type or genres might be undefined
+    if (!game.game_type || !game.genres || !game.themes || !game.game_modes || !game.platforms) {
+        return selectedType.includes('all') && selectedGenre.includes('all') && selectedTheme.includes('all') && selectedMode.includes('all') && selectedPlatform.includes('all')
+    }
+
+    // Convert game types, genres, and platforms to lowercase for case-insensitive comparison
+    const gameType = game.game_type.type.toLowerCase();
+    const gameGenres = game.genres.map((genre: any) => genre.slug.toLowerCase());
+    const gameThemes = game.themes.map((theme: any) => theme.slug.toLowerCase());
+    const gameModes = game.game_modes.map((mode: any) => mode.slug.toLowerCase());
+    const platforms = game.platforms.map((platform : any) => platform.slug.toLowerCase());
+
+    // Check if the game matches the selected type and genre filters
+    const typeMatch = selectedType.includes('all') || (gameType && selectedType.includes(gameType));
+    // Check if any of the game's genres match the selected genres
+    const genreMatch = selectedGenre.includes('all') || gameGenres.some((genre: any) => selectedGenre.includes(genre));
+    // Check if any of the game's themes match the selected themes
+    const themeMatch = selectedTheme.includes('all') || gameThemes.some((theme: any) => selectedTheme.includes(theme));
+    // Check if any of the game's modes match the selected modes
+    const modeMatch = selectedMode.includes('all') || gameModes.some((mode: any) => selectedMode.includes(mode));
+    // Check if any of the game's platforms that it was released on matches
+    const platformMatch = selectedPlatform.includes('all') || platforms.some((platform: any) => selectedPlatform.includes(platform));
+
+    return (
+        typeMatch && genreMatch && themeMatch && modeMatch && platformMatch
+    );
+
+});
+        
+    // If the page is still loading, put a loading overlay
+    if (loading) {
+        return <GlobalLoader visible={loading} />
+    }
+
+    return (
+        <SimpleGrid cols={7} spacing="lg" verticalSpacing='xl' className={classes.resultGamesGrid}>
+            {processedGames.map((game) => (
+                <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
+
+                    <div className={classes.imageWrapper}>
+
+                        <Image 
+                        src={game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
+                        alt={game.name} 
+                        className={classes.cover}  
+                        />
+
+                        <div className={classes.overlay}>
+
+                            <Text className={classes.gameName}>{game.name}</Text>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            ))}
+        </SimpleGrid>
+    )
+
+    
+}
