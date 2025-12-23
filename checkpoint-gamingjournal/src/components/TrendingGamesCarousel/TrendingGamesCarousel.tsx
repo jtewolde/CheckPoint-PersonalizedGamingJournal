@@ -7,13 +7,13 @@ import { Badge } from "@mantine/core";
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 
-import classes from './TrendingSection.module.css';
+import classes from './TrendingCarousel.module.css';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
-import { CircleArrowRight, CircleChevronRight, ChevronRight } from "lucide-react";
+import { CircleArrowRight } from "lucide-react";
 
-export default function TrendingGamesSection() {
+export default function TrendingGamesCarousel() {
     // States to hold trending games data and loading status
     const [trendingGames, setTrendingGames] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);

@@ -13,7 +13,7 @@ import { useAuth } from '@/context/Authcontext';
 import classes from './page.module.css';
 
 import Questions from '@/components/FrequentQuestions/FrequentQuestions';
-import TrendingGamesSection from '@/components/TrendingGamesSection/TrendingGamesSection';
+import TrendingGamesCarousel from '@/components/TrendingGamesCarousel/TrendingGamesCarousel';
 
 export default function Home() {
   const router = useRouter();
@@ -85,7 +85,7 @@ export default function Home() {
             </div>
 
             <div className={classes.rightSideHeader}>
-              <TrendingGamesSection />
+              <TrendingGamesCarousel />
             </div>
 
           </div>
