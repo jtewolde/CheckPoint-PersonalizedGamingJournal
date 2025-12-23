@@ -1,0 +1,91 @@
+
+.searchPageContainer {
+    background: linear-gradient(to top, #1e2026, #232526);
+    padding: 2rem; /* Add padding around the content */
+    position: relative;
+    min-height: 100vh; /* Ensure the page takes up the full height */
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.searchBarContainer{
+    margin-top: 5rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    background-color: #4f4d4d;
+    padding: 20px;
+}
+
+.searchTitle{
+    font-size: 32px;
+    color: white;
+    font-family: 'Poppins';
+    font-weight: 400;
+}
+
+.sectionsContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.searchBar {
+    width: 90%; /* Ensure it spans the available width */
+    max-width: 100%; /* Limit the maximum width */
+    padding: 0.5rem; /* Add padding for better spacing */
+    border-radius: 8px; /* Add rounded corners */
+}
+
+.searchBar input {
+    background-color: #232526; /* example: dark background */
+    color: white;/* input text color */
+    border: 0.2px solid rgb(148, 148, 148);
+    font-family: 'Noto Sans';
+}
+
+.trendingSection,
+.popularSection{
+    display: flex;
+    flex-direction: row;
+    gap: 0.4rem;
+    font-weight: 800;
+    margin-bottom: 1.2rem;
+    background-color: #272727;
+    border-radius: 8px;
+    border: 1px solid #494949;
+    padding: 0.4rem 0.8rem;
+    align-items: flex-end;
+    justify-content: space-between;
+    font-family: 'Inter';
+    color: #e9e9e9;
+}
+
+.titleLogo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+}
+
+.viewMoreIcon{
+    justify-self: flex-end;
+    align-self: center;
+    color: #a7a7a7;
+    font-size: 100%;
+    font-weight: 500;
+    font-family: 'Poppins';
+    margin-top: 0.4rem;
+}
+
+.viewMoreIcon:hover{
+    color: #ffffff;
+    font-weight: 600;
+}
