@@ -1,13 +1,40 @@
 
+.background{
+    background: url('/EldenRing.png') top center no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    position: relative;
+    min-height: 100%; /* Ensure the page takes up the full height */
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 0;
+}
+
+.backgroundOverlay{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    /* Fade from transparent to dark */
+    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.30) 0%, #19191e 25%);
+}
+
 .searchPageContainer {
-    background: linear-gradient(to top, #1e2026, #232526);
     padding: 2rem; /* Add padding around the content */
+    padding-bottom: 3rem;
     position: relative;
     min-height: 100vh; /* Ensure the page takes up the full height */
     min-width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 2rem;
+    pointer-events: auto;
 }
 
 .searchBarContainer{
@@ -17,15 +44,19 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    background-color: #4f4d4d;
+    background-color: #242424;
+    border-radius: 16px;
     padding: 20px;
+    gap: 10px;
 }
 
 .searchTitle{
     font-size: 32px;
     color: white;
-    font-family: 'Poppins';
-    font-weight: 400;
+    font-family: 'Inter';
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 10px;
 }
 
 .sectionsContainer{
@@ -37,7 +68,7 @@
 }
 
 .searchBar {
-    width: 90%; /* Ensure it spans the available width */
+    width: 100%; /* Ensure it spans the available width */
     max-width: 100%; /* Limit the maximum width */
     padding: 0.5rem; /* Add padding for better spacing */
     border-radius: 8px; /* Add rounded corners */
