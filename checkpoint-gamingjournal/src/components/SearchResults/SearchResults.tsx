@@ -129,7 +129,7 @@ export default function SearchResults({ query }: SearchResultsProps){
         <div className={classes.wrapper}>
 
             <GameFilters
-            color="#546782ff"
+            color="#662f9aff"
             sortOption={sortOption}
             selectedType={selectedType}
             selectedGenres={selectedGenre}
@@ -161,6 +161,8 @@ export default function SearchResults({ query }: SearchResultsProps){
                                 <Text className={classes.gameName}>{game.name}</Text>
 
                             </div>
+
+                            <p className={classes.gameTitle}>{game.name}</p>
 
                         </div>
 

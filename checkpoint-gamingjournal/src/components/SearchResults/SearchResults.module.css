@@ -62,6 +62,15 @@
     padding: 0 8px;
 }
 
+.gameTitle{
+    font-size: 1rem;
+    font-weight: 400;
+    color: white;
+    padding: 0.5rem;
+    overflow: hidden;
+    font-family: 'Poppins';
+}
+
 .gameCard:hover{
     transform: scale(1.05);
     transition: transform 0.3s ease;
