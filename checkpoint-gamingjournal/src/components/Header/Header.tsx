@@ -89,19 +89,18 @@ export function Header() {
           )}
         </div>
 
-        {/* <GameSearchBar
-          className={classes.searchBar}
-          size='lg'
-          radius='md'
-          placeHolder='Search for Games...'
-          autoNavigate={true}
-          /> */}
-
         {/* Desktop Links */}
         <div className={classes.links} >
           <Group gap='lg' visibleFrom='lg' justify='flex-end' className={classes.linkGroup}>
             {isAuthenticated ? (
               <>
+                <Link href="/search" className={`${classes.link} ${pathname === '/search' ? classes.active : ''}`}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <IconSearch size={20} style={{ marginBottom: 2 }} />
+                    Search
+                  </div>
+                </Link>
+
                 <Link href="/dashboard" className={`${classes.link} ${pathname === '/dashboard' ? classes.active : ''}`}>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <LayoutDashboard size={20} style={{ marginBottom: 2 }} />
@@ -130,13 +129,6 @@ export function Header() {
                   </div>
                 </Link>
 
-                <Link href="/search" className={`${classes.link} ${pathname === '/search' ? classes.active : ''}`}>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <IconSearch size={20} style={{ marginBottom: 2 }} />
-                    Search
-                  </div>
-                </Link>
-
                 <AvatarMenu />
               </>
             ) : (
@@ -146,6 +138,13 @@ export function Header() {
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                       <House size={20} style={{ marginBottom: 2 }} />
                       Home
+                    </div>
+                  </Link>
+
+                  <Link href="/search" className={`${classes.link} ${pathname === '/search' ? classes.active : ''}`}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <IconSearch size={20} style={{ marginBottom: 2 }} />
+                      Search
                     </div>
                   </Link>
 
@@ -160,13 +159,6 @@ export function Header() {
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                       <UserRoundPlus size={20} style={{ marginBottom: 2 }} />
                       Register
-                    </div>
-                  </Link>
-
-                  <Link href="/search" className={`${classes.link} ${pathname === '/search' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <IconSearch size={20} style={{ marginBottom: 2 }} />
-                      Search
                     </div>
                   </Link>
 
