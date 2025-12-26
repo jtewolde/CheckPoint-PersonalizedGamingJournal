@@ -84,7 +84,7 @@
 }
 
 .gameTitle{
-    font-size: 20px;
+    font-size: 1.25rem;
     font-weight: 800;
     color: white;
     font-family: 'Inter';
@@ -102,7 +102,7 @@
     color: rgb(222, 221, 221);
     font-family: 'Barlow';
     cursor: default;
-    padding: 0 0.5rem 0.5rem 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
 .ratingLabel, .releaseLabel{

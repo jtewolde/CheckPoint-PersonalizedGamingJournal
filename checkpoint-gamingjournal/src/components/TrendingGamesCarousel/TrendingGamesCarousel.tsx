@@ -54,9 +54,9 @@ export default function TrendingGamesCarousel() {
     return (
         <div className={classes.trendingSection}>
 
-            <div className={classes.trendingLogo}>
+            <div className={classes.trendingLogo} >
                 <h2 className={classes.sectionTitle}>Trending</h2>
-                <a className={classes.viewMoreIcon} href='/search/trending'> <CircleArrowRight size={35} /> </a>
+                <a className={classes.viewMoreIcon}> <CircleArrowRight size={35} /> </a>
             </div>
             
 
@@ -84,7 +84,7 @@ export default function TrendingGamesCarousel() {
 
                         <div className={classes.gameInfo}>
                             <h3 className={classes.gameTitle}>{game.name}</h3>
-                            <Badge color='gray' size='sm' radius='lg' c='white'>{game.game_type.type}</Badge>
+                            <Badge color='gray' size='md' radius='lg' c='white'>{game.game_type.type}</Badge>
                             <p className={classes.gameDate}>{game.release_dates?.[0]?.human}</p>
                         </div>
                         
