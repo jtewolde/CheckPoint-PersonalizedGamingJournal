@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { SimpleGrid, Text, Image } from '@mantine/core';
+import { SimpleGrid, Text, Image, Badge } from '@mantine/core';
 
 import GameFilters from '@/components/GameFilters/GameFilters';
 import GlobalLoader from '../GlobalLoader/GlobalLoader';
@@ -128,8 +128,12 @@ export default function SearchResults({ query }: SearchResultsProps){
 
         <div className={classes.wrapper}>
 
+            <Text className={classes.resultsTitle}>
+                Search Results for: <span className={classes.gameResult}>{query}</span>
+            </Text>
+
             <GameFilters
-            color="#546782ff"
+            color="#5d2b9fff"
             sortOption={sortOption}
             selectedType={selectedType}
             selectedGenres={selectedGenre}
@@ -162,6 +166,12 @@ export default function SearchResults({ query }: SearchResultsProps){
 
                             </div>
 
+                        </div>
+                        
+                        <div className={classes.gameInfo}>
+                            <h3 className={classes.gameTitle}>{game.name}</h3>
+                            <Badge color='gray' size='sm' radius='lg' c='white'>{game.game_type.type}</Badge>
+                            <p className={classes.gameDate}>{game.release_dates?.[0]?.human}</p>
                         </div>
 
                     </div>
