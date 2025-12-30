@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react"
-import { Autocomplete } from "@mantine/core"
+import { Autocomplete, useCombobox } from "@mantine/core"
 import { IconSearch } from "@tabler/icons-react"
 import { useRouter } from "next/navigation"
 
@@ -32,6 +32,11 @@ export default function GameSearchBar({
     const [query, setQuery] = useState(initialQuery)
     const [searchResults, setSearchResults] = useState<{name: string}[]>([])
     const router = useRouter()
+
+    // Combobox used to close dropdown when entering name in search bar.
+    const combobox = useCombobox({
+        onDropdownClose: () => combobox.resetSelectedOption(),
+    })
 
     // Function to handle search queries and fetch results from the API
     const handleSearch = async (query: string) => {
@@ -99,13 +104,14 @@ export default function GameSearchBar({
             onChange={handleSearch}
             onKeyDown={(e) => {
                 if (e.key === 'Enter' && autoNavigate) {
-                navigateToSearch(query);
+                    navigateToSearch(query);
+                    close()
                 }
             }}
             rightSection={
                 <IconSearch
-                size={30}
-                style={{ cursor: 'pointer' }}
+                size={35}
+                style={{ cursor: 'pointer', color:'white' }}
                 onClick={() => autoNavigate && navigateToSearch(query)}
                 />
             }

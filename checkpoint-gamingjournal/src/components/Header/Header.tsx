@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { Burger, Group, Drawer, Autocomplete, Image, Button } from '@mantine/core';
+import { Burger, Group, Drawer, Image, Button } from '@mantine/core';
 import { useDisclosure, useMediaQuery} from '@mantine/hooks';
 
 import CheckPointLogo from '../../../public/DesktopLogoNew.png';
@@ -13,11 +13,9 @@ import Link from 'next/link';
 import { useAuth } from '@/context/Authcontext';
 
 import { IconSearch } from '@tabler/icons-react';
-import { LogIn, UserRoundPlus, LayoutDashboard, Library, BotMessageSquare, Notebook, House } from 'lucide-react';
+import { LogIn, UserRoundPlus, LayoutDashboard, Library, Notebook, House } from 'lucide-react';
 import AvatarMenu from "../AvatarMenu/AvatarMenu";
 import { useState } from 'react';
-
-import GameSearchBar from '../GameSearchBar/GameSearchBar';
 
 export function Header() {
   const [opened, { toggle, close }] = useDisclosure(false); // State for Drawer
@@ -32,7 +30,7 @@ export function Header() {
   // Drawer height for different conditions
   const drawerSize = (() => {
     if (isMobile && isAuthenticated) return '400px'; // smaller when logged in on mobile
-    if (isMobile && !isAuthenticated) return '270px'; // larger when guest on mobile
+    if (isMobile && !isAuthenticated) return '350px'; // larger when guest on mobile
     return '300px'; // default for desktop
   })();
 
@@ -44,38 +42,6 @@ export function Header() {
       router.push('/')
     }
   }
-
-  // Function to handle search
-  const handleSearch = async (query: string) => {
-    setSearchQuery(query);
-  
-    if (query.trim().length < 3) {
-      setSearchResults([]); // Clear results if the query is empty
-      return;
-    }
-    try {
-      const res = await fetch(`/api/igdb/games?query=${encodeURIComponent(query)}`);
-      if (!res.ok) {
-        throw new Error('Failed to fetch search results');
-      }
-      const data = await res.json();
-
-      if (!Array.isArray(data)) {
-        console.log("Unexpected response format:", data);
-        return;
-      }
-  
-      // Remove duplicate game names
-      const uniqueResults = data.filter(
-        (game: any, index: number, self: any[]) =>
-          index === self.findIndex((g) => g.name === game.name)
-      );
-  
-      setSearchResults(uniqueResults); // Update search results with unique values
-    } catch (error) {
-      console.error('Error fetching search results:', error);
-    }
-  };
 
   return (
     <header className={classes.header}>
@@ -94,12 +60,6 @@ export function Header() {
           <Group gap='lg' visibleFrom='lg' justify='flex-end' className={classes.linkGroup}>
             {isAuthenticated ? (
               <>
-                <Link href="/search" className={`${classes.link} ${pathname === '/search' ? classes.active : ''}`}>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <IconSearch size={20} style={{ marginBottom: 2 }} />
-                    Search
-                  </div>
-                </Link>
 
                 <Link href="/dashboard" className={`${classes.link} ${pathname === '/dashboard' ? classes.active : ''}`}>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -122,12 +82,19 @@ export function Header() {
                   </div>
                 </Link>
 
-                <Link href="/chat" className={`${classes.link} ${pathname === '/chat' ? classes.active : ''}`}>
+                <Link href="/search" className={`${classes.link} ${pathname === '/search' ? classes.active : ''}`}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <IconSearch size={20} style={{ marginBottom: 2 }} />
+                    Search
+                  </div>
+                </Link>
+
+                {/* <Link href="/chat" className={`${classes.link} ${pathname === '/chat' ? classes.active : ''}`}>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <BotMessageSquare size={20} style={{ marginBottom: 2 }} />
                     Chat
                   </div>
-                </Link>
+                </Link> */}
 
                 <AvatarMenu />
               </>
@@ -168,8 +135,19 @@ export function Header() {
           </Group>
         </div>
 
-        {/* Mobile Links */}
-        <Burger className={classes.burger} opened={opened} onClick={toggle} hiddenFrom="lg" size="lg" color='white' />
+        <Group gap="sm">
+          <Button
+            variant="subtle"
+            onClick={() => router.push('/search')}
+            aria-label="Search"
+          >
+            <IconSearch size={40} color='white'/>
+          </Button>
+
+          {/* Mobile Links */}
+          <Burger className={classes.burger} opened={opened} onClick={toggle} hiddenFrom="lg" size="lg" color='white' />
+
+        </Group>
 
         <Drawer
           opened={opened}
@@ -217,12 +195,19 @@ export function Header() {
                     </div>
                   </Link>
 
-                  <Link href="/chat" className={`${classes.link} ${pathname === '/chat' ? classes.active : ''}`}>
+                  <Link href="/search" className={`${classes.link} ${pathname === '/search' ? classes.active : ''}`}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '20px' }}>
+                      <IconSearch size={20} style={{ marginBottom: 2 }} />
+                      Search
+                    </div>
+                  </Link>
+
+                  {/* <Link href="/chat" className={`${classes.link} ${pathname === '/chat' ? classes.active : ''}`}>
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
                       <BotMessageSquare size={20} style={{ marginBottom: 2 }} />
                       Chat
                     </div>
-                  </Link>
+                  </Link> */}
 
                 </div>
 
@@ -236,6 +221,13 @@ export function Header() {
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '20px' }}>
                       <House size={20} style={{ marginBottom: 2 }} />
                       Home
+                    </div>
+                  </Link>
+
+                  <Link href="/search" className={`${classes.link} ${pathname === '/search' ? classes.active : ''}`}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '20px' }}>
+                      <IconSearch size={20} style={{ marginBottom: 2 }} />
+                      Search
                     </div>
                   </Link>
 

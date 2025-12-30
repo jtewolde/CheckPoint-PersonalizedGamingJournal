@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation"
 import { Divider, ThemeIcon, Title } from "@mantine/core"
 import { Flame, Star } from "lucide-react"
-import { CircleArrowRight } from "lucide-react";
+import { CircleArrowRight, ScanSearch } from "lucide-react";
 
 
 import SearchResults from "@/components/SearchResults/SearchResults";
@@ -31,8 +31,8 @@ export default function CentralSearchPage() {
 
                         <div className={classes.titleLogo}>
 
-                            <ThemeIcon size={50} variant='gradient' gradient={{ from: '#f7971e', to: '#ffd200', deg: 20}} radius='md'>
-                                <Star size={40} />
+                            <ThemeIcon size={50} variant='gradient' gradient={{ from: '#b61ee0ff', to: '#4a12a4ff', deg: 20}} radius='md'>
+                                <ScanSearch size={40} />
                             </ThemeIcon>
 
                             <Title className={classes.searchTitle}>Search Games</Title>
@@ -50,7 +50,7 @@ export default function CentralSearchPage() {
                     </div>
 
                     {/* Divider between search bar and results/sections */}
-                    <Divider my='lg' />
+                    <Divider my='sm' />
                     
                     {isSearching && query ? (
                         <SearchResults query={query} />
