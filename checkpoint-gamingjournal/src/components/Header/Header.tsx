@@ -25,7 +25,7 @@ export function Header() {
   const pathname = usePathname();
 
   const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
-  const isMobile = useMediaQuery('(max-width: 510px)');
+  const isMobile = useMediaQuery('(max-width: 400px)');
 
   // Drawer height for different conditions
   const drawerSize = (() => {
@@ -57,7 +57,7 @@ export function Header() {
 
         {/* Desktop Links */}
         <div className={classes.links} >
-          <Group gap='lg' visibleFrom='lg' justify='flex-end' className={classes.linkGroup}>
+          <Group gap='lg' visibleFrom='sm' justify='flex-end' className={classes.linkGroup}>
             {isAuthenticated ? (
               <>
 
@@ -135,17 +135,18 @@ export function Header() {
           </Group>
         </div>
 
-        <Group gap="sm">
+        <Group gap="xs">
           <Button
+            hiddenFrom='sm'
             variant="subtle"
             onClick={() => router.push('/search')}
             aria-label="Search"
           >
-            <IconSearch size={40} color='white'/>
+            <IconSearch size={35} color='white'/>
           </Button>
 
           {/* Mobile Links */}
-          <Burger className={classes.burger} opened={opened} onClick={toggle} hiddenFrom="lg" size="lg" color='white' />
+          <Burger className={classes.burger} opened={opened} onClick={toggle} hiddenFrom="sm" size="md" color='white' />
 
         </Group>
 
@@ -195,13 +196,7 @@ export function Header() {
                     </div>
                   </Link>
 
-                  <Link href="/search" className={`${classes.link} ${pathname === '/search' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '20px' }}>
-                      <IconSearch size={20} style={{ marginBottom: 2 }} />
-                      Search
-                    </div>
-                  </Link>
-
+                  
                   {/* <Link href="/chat" className={`${classes.link} ${pathname === '/chat' ? classes.active : ''}`}>
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
                       <BotMessageSquare size={20} style={{ marginBottom: 2 }} />
@@ -221,13 +216,6 @@ export function Header() {
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '20px' }}>
                       <House size={20} style={{ marginBottom: 2 }} />
                       Home
-                    </div>
-                  </Link>
-
-                  <Link href="/search" className={`${classes.link} ${pathname === '/search' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '20px' }}>
-                      <IconSearch size={20} style={{ marginBottom: 2 }} />
-                      Search
                     </div>
                   </Link>
 
