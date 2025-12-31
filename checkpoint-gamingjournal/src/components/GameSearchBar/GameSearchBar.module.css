@@ -1,4 +1,12 @@
 
+.wrapper{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
 .scrollBar {
     &,
     &:hover {
@@ -18,4 +26,20 @@
 .option:hover {
     background-color: #3a3a3c; /* Darker hover color */
     color: #ffffff;
+}
+
+.button{
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-family: 'Poppins';
+    padding-inline: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+@media (max-width: 600px) {
+    .wrapper{
+        flex-direction: column;
+        align-items: stretch;
+    }
 }

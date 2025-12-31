@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react"
-import { Autocomplete, useCombobox } from "@mantine/core"
+import { Autocomplete, useCombobox, Button } from "@mantine/core"
 import { IconSearch } from "@tabler/icons-react"
 import { useRouter } from "next/navigation"
 
@@ -78,43 +78,49 @@ export default function GameSearchBar({
     };
 
     return (
-        <Autocomplete
-            classNames={{ option: classes.option }}
-            className={className}
-            radius={radius}
-            size={size}
-            variant="filled"
-            placeholder={placeHolder}
-            value={query}
-            styles={
-                {
-                    dropdown: {
-                        backgroundColor: '#232526',
-                        color: 'white',
-                        borderRadius: '4px'
-                    },
+
+        <div className={classes.wrapper} >
+
+            <Autocomplete
+                classNames={{ option: classes.option }}
+                className={className}
+                radius={radius}
+                size={size}
+                variant="filled"
+                placeholder={placeHolder}
+                value={query}
+                styles={
+                    {
+                        dropdown: {
+                            backgroundColor: '#232526',
+                            color: 'white',
+                            borderRadius: '4px'
+                        },
+                    }
                 }
-            }
-            scrollAreaProps={{ scrollbarSize: 16, type: 'auto', scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
-            comboboxProps={{ transitionProps: { transition: 'fade-down', duration: 200 } }}
-            data={searchResults.map((game: {name: string}) => ({
-                value: game.name,
-                label: game.name,
-            }))}
-            onChange={handleSearch}
-            onKeyDown={(e) => {
-                if (e.key === 'Enter' && autoNavigate) {
-                    navigateToSearch(query);
-                    close()
+                scrollAreaProps={{ scrollbarSize: 16, type: 'auto', scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
+                comboboxProps={{ transitionProps: { transition: 'fade-down', duration: 200 } }}
+                data={searchResults.map((game: {name: string}) => ({
+                    value: game.name,
+                    label: game.name,
+                }))}
+                onChange={handleSearch}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' && autoNavigate) {
+                        navigateToSearch(query);
+                        close()
+                    }
+                }}
+                rightSection={
+                    <IconSearch
+                    size={35}
+                    style={{ cursor: 'pointer', color: 'white'}}
+                    onClick={() => autoNavigate && navigateToSearch(query)}
+                    />
                 }
-            }}
-            rightSection={
-                <IconSearch
-                size={35}
-                style={{ cursor: 'pointer', color:'white' }}
-                onClick={() => autoNavigate && navigateToSearch(query)}
-                />
-            }
-        />
+            />
+
+        </div>
+        
     );
 }

@@ -21,7 +21,7 @@ export default function CentralSearchPage() {
     const isSearching = Boolean(query && query.trim().length > 0);
 
     return (
-        <div className={classes.background}>
+        <div className={isSearching ? classes.noBackground : classes.background}>
 
             <div className={classes.backgroundOverlay}>
 
