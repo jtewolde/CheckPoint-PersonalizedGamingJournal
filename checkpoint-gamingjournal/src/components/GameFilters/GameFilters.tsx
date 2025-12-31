@@ -40,11 +40,13 @@ export default function GameFilters({
     onPlatformsChange
 } : GameFilterProps) {
 
+    // States for managing the drawer visibility and active filters
     const [opened, { toggle, close }] = useDisclosure(false);
+    const activeFilters = selectedType.length > 0 || selectedGenres.length > 0 || selectedModes.length > 0 || selectedThemes.length > 0 || selectedPlatforms.length > 0;
 
     return (
 
-        <>
+        <div className={classes.filterContainer}>
         
             <Button className={classes.filterButton} size='lg' radius='md' color={color} leftSection={<ListFilter size={30} />} onClick={toggle}>Filters</Button>
 
@@ -420,7 +422,7 @@ export default function GameFilters({
 
             </Drawer>
 
-        </>
+        </div>
     )
 
 }

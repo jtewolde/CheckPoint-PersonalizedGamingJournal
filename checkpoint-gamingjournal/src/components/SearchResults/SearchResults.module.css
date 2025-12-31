@@ -31,7 +31,7 @@
 }
 
 .gameCard{
-    background-color: #1c1c1c;
+    background-color: #2b2b2b;
     border: 1px solid #585757;
     object-fit: contain;
     border-radius: 16px;
@@ -103,8 +103,9 @@
     font-weight: 500;
     color: white;
     padding-top: 0.5rem;
-    overflow: hidden;
     font-family: 'Poppins';
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .gameRating, .gameDate{
@@ -141,7 +142,7 @@
 }
 
 
-@media (max-width: 480px) {
+@media (max-width: 520px) {
 
     .resultGamesGrid{
         grid-template-columns: repeat(2, 1fr);;
