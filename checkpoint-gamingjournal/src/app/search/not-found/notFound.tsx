@@ -3,12 +3,24 @@
 import { useRouter } from 'next/navigation';
 import { Button, Overlay } from '@mantine/core';
 import { LayoutDashboard } from 'lucide-react';
+import { useAuth } from '@/context/Authcontext';
 
 import classes from './notFound.module.css'
 
 export default function NotFound(){
 
+    // States for navigating to other pages
     const router = useRouter();
+    const { isAuthenticated, isAuthLoading } = useAuth();
+
+    // Function to handle redirecting from not-found page back to home or dashboard depending on user's auth
+    const handleRedirect = () => {
+        if(isAuthenticated){
+            router.push('/dashboard')
+        } else {
+            router.push('/')
+        }
+    }
 
     return (
         <div className={classes.container}>
@@ -34,9 +46,9 @@ export default function NotFound(){
                     size='lg' 
                     radius='md' 
                     leftSection={<LayoutDashboard size={30} />} 
-                    onClick={() => router.push('/dashboard')}
+                    onClick={handleRedirect}
                 >
-                Return to Dashboard
+                {isAuthenticated ? 'Return to Dashboard' : 'Return Home'}
                 </Button>
 
             </div>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react"
-import { Autocomplete } from "@mantine/core"
+import { Autocomplete, useCombobox, Button } from "@mantine/core"
 import { IconSearch } from "@tabler/icons-react"
 import { useRouter } from "next/navigation"
 
@@ -32,6 +32,11 @@ export default function GameSearchBar({
     const [query, setQuery] = useState(initialQuery)
     const [searchResults, setSearchResults] = useState<{name: string}[]>([])
     const router = useRouter()
+
+    // Combobox used to close dropdown when entering name in search bar.
+    const combobox = useCombobox({
+        onDropdownClose: () => combobox.resetSelectedOption(),
+    })
 
     // Function to handle search queries and fetch results from the API
     const handleSearch = async (query: string) => {
@@ -73,42 +78,49 @@ export default function GameSearchBar({
     };
 
     return (
-        <Autocomplete
-            classNames={{ option: classes.option }}
-            className={className}
-            radius={radius}
-            size={size}
-            variant="filled"
-            placeholder={placeHolder}
-            value={query}
-            styles={
-                {
-                    dropdown: {
-                        backgroundColor: '#232526',
-                        color: 'white',
-                        borderRadius: '4px'
-                    },
+
+        <div className={classes.wrapper} >
+
+            <Autocomplete
+                classNames={{ option: classes.option }}
+                className={className}
+                radius={radius}
+                size={size}
+                variant="filled"
+                placeholder={placeHolder}
+                value={query}
+                styles={
+                    {
+                        dropdown: {
+                            backgroundColor: '#232526',
+                            color: 'white',
+                            borderRadius: '4px'
+                        },
+                    }
                 }
-            }
-            scrollAreaProps={{ scrollbarSize: 16, type: 'auto', scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
-            comboboxProps={{ transitionProps: { transition: 'fade-down', duration: 200 } }}
-            data={searchResults.map((game: {name: string}) => ({
-                value: game.name,
-                label: game.name,
-            }))}
-            onChange={handleSearch}
-            onKeyDown={(e) => {
-                if (e.key === 'Enter' && autoNavigate) {
-                navigateToSearch(query);
+                scrollAreaProps={{ scrollbarSize: 16, type: 'auto', scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
+                comboboxProps={{ transitionProps: { transition: 'fade-down', duration: 200 } }}
+                data={searchResults.map((game: {name: string}) => ({
+                    value: game.name,
+                    label: game.name,
+                }))}
+                onChange={handleSearch}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' && autoNavigate) {
+                        navigateToSearch(query);
+                        close()
+                    }
+                }}
+                rightSection={
+                    <IconSearch
+                    size={35}
+                    style={{ cursor: 'pointer', color: 'white'}}
+                    onClick={() => autoNavigate && navigateToSearch(query)}
+                    />
                 }
-            }}
-            rightSection={
-                <IconSearch
-                size={30}
-                style={{ cursor: 'pointer' }}
-                onClick={() => autoNavigate && navigateToSearch(query)}
-                />
-            }
-        />
+            />
+
+        </div>
+        
     );
 }

@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 0;
+    padding: 0 2rem;
     color: white;
     margin-top: calc(var(--mantine-spacing-xl) * 6); /* Creates space below the Hero section */
     padding-bottom: calc(var(--mantine-spacing-xl) * 4); /* Creates space below the Hero section */

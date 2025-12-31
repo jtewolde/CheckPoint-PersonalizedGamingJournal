@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { useRouter, redirect } from 'next/navigation';
 import GameFilters from '@/components/GameFilters/GameFilters';
 
-import { LoadingOverlay, ThemeIcon, Text } from '@mantine/core';
+import { Text } from '@mantine/core';
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 import { SimpleGrid } from '@mantine/core';
 
@@ -37,7 +37,7 @@ export default function PopularPage() {
   useEffect(() => {
     const fetchPopularGames = async () => {
       try {
-        const res = await fetch(`/api/igdb/populargames?limit=${limit}`);
+        const res = await fetch(`/api/igdb/popularGames?limit=${limit}`);
         
         if (!res.ok) {
           throw new Error('Failed to fetch Popular games');

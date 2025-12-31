@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 0 1rem;
+  padding: 0 1.5rem;
   gap: 2rem;
 }
 
@@ -33,6 +33,7 @@
   object-fit: contain;
   justify-self: flex-start;
   justify-content: flex-start;
+  margin-left: 1rem;
 }
 
 .mobileLogo{
@@ -45,45 +46,6 @@
   justify-content: flex-start;
 }
 
-.searchBar {
-  width: 45%; /* Ensure it spans the available width */
-  max-width: 100%; /* Limit the maximum width */
-  margin-left: 2rem;
-  padding: 0.5rem; /* Add padding for better spacing */
-  border-radius: 8px; /* Add rounded corners */
-  justify-self: center;
-  align-self: center;
-  
-}
-
-.searchBar input {
-  background-color: #232526; /* example: dark background */
-  color: white;/* input text color */
-  border: 0.2px solid rgb(148, 148, 148);
-  font-family: 'Noto Sans';
-}
-
-.autocompleteOption {
-  background-color: #232526;
-  color: white;
-}
-
-.autocompleteOption:hover {
-  background-color: #3a3a3c; /* Darker hover color */
-  color: #ffffff;
-}
-
-
-.scrollBar {
-  &,
-  &:hover {
-    background-color: #555555;
-  }
-
-  &[data-orientation='vertical'] .thumb {
-    background-color: black;
-  }
-}
 
 @media screen and (max-width: 868px) {
 
@@ -92,15 +54,8 @@
     padding: 0 1rem;
   }
 
-  .searchBar {
-    width: 100%;
-    max-width: 69%;
-    margin-left: -1.5rem;
-    justify-self: center;
-  }
-
   .logo{
-    width: 140px;
+    width: 180px;
     height: auto;
     object-fit: contain;
     margin-left: 0.3rem; /* Keep consistent margin */
@@ -136,21 +91,6 @@
   .burger{
     margin-left: auto;
     margin-right: 0;
-  }
-
-  .searchBar {
-    width: 30rem;
-    margin-left: -3rem;
-    margin-right: -3rem;
-    justify-self: center;
-  }
-
-  .searchBar label{
-    color: black;
-    font-family: 'Poppins';
-    text-align: left;
-    font-weight: bold;
-    margin-top: 0.4rem;
   }
 }
 

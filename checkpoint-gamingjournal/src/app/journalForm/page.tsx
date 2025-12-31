@@ -4,7 +4,7 @@ import JournalForm from "./JournalFormPage";
 
 // Set the page title for journal form page
 export const generateMetadata = () => ({
-  title: "JournalForm | CheckPoint"
+  title: "Journal Form | CheckPoint"
 })
 
 export default function Page() {

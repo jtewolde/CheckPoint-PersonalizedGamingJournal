@@ -1,6 +1,6 @@
 
 import { Metadata } from "next";
-import SearchResults from "./SearchPage";
+import CentralSearchPage from "./CentralSearchPage";
 
 // Set the page title for Search page
 export const metadata: Metadata = {
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
-    return <SearchResults />
+    return <CentralSearchPage />
 }
