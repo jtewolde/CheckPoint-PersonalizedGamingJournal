@@ -84,7 +84,14 @@ export default function TrendingGamesCarousel() {
 
                         <div className={classes.gameInfo}>
                             <h3 className={classes.gameTitle}>{game.name}</h3>
-                            <Badge color='gray' size='md' radius='lg' c='white'>{game.game_type.type}</Badge>
+                            
+                            <div className={classes.badgeContainer}>
+
+                                <Badge color='gray' size='lg' radius='lg' c='white'>{game.game_type.type}</Badge>
+                                {game.genres && <Badge color='#ffffffff' size='lg' radius='lg' c='black' className={classes.genreBadge}>{game.genres[0].name}</Badge>}
+
+                            </div>
+                            
                             <p className={classes.gameDate}>{game.release_dates?.[0]?.human}</p>
                         </div>
                         

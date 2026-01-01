@@ -51,7 +51,7 @@
 .gameCard{
     background-color: #1c1c1c;
     border: 1px solid #585757;
-    width: 300px;
+    width: 70%;
     object-fit: contain;
     border-radius: 16px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -67,7 +67,7 @@
 }
 
 .gameImage{
-    width: 300px;
+    width: 100%;
     margin-bottom: 0.5rem;
     border-bottom: 1px solid #585757;
     border-radius: 8px 8px 0 0;
@@ -79,12 +79,19 @@
     align-items: flex-start;
     justify-content: center;
     padding: 0.5rem;
-    gap: 10px;
+    gap: 7px;
     width: 100%;
 }
 
+.badgeContainer{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
 .gameTitle{
-    font-size: 1.25rem;
+    font-size: 1.6rem;
     font-weight: 800;
     color: white;
     font-family: 'Inter';
@@ -108,4 +115,18 @@
 .ratingLabel, .releaseLabel{
     font-weight: 700;
     color: white;
+}
+
+@media (max-width: 960px) {
+    .gameCard{
+        width: 70%;
+    }
+
+    .gameTitle{
+        font-size: 1.5rem;
+    }
+
+    .gameDate{
+        font-size: 1.25rem;
+    }
 }
