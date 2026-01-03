@@ -87,8 +87,12 @@ export default function TrendingGamesCarousel() {
                             
                             <div className={classes.badgeContainer}>
 
-                                <Badge color='gray' size='lg' radius='lg' c='white'>{game.game_type.type}</Badge>
-                                {game.genres && <Badge color='#ffffffff' size='lg' radius='lg' c='black' className={classes.genreBadge}>{game.genres[0].name}</Badge>}
+                                <Badge color='gray' size='md' radius='lg' c='white'>{game.game_type.type}</Badge>
+                                {game.genres?.slice(0, 2).map((genre: { name: string }) => (
+                                    <Badge key={genre.name} size="md" variant="filled" color="white" radius='lg' c='black'>
+                                        {genre.name}
+                                    </Badge>
+                                    ))}
 
                             </div>
                             

@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 0 1.5rem;
+  padding-left: 1rem;
   gap: 2rem;
 }
 
@@ -118,7 +118,7 @@
   flex-direction: row;
   align-items: center; /* Center horizontally */
   justify-content: center;
-  gap: 10px;
+  gap: 20px;
   text-align: center;
 }
 
