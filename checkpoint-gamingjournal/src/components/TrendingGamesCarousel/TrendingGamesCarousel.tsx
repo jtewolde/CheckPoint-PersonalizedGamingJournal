@@ -13,6 +13,9 @@ import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 import { CircleArrowRight } from "lucide-react";
 
+import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
+IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
+
 export default function TrendingGamesCarousel() {
     // States to hold trending games data and loading status
     const [trendingGames, setTrendingGames] = useState<any[]>([]);
@@ -51,15 +54,37 @@ export default function TrendingGamesCarousel() {
         },
     }
 
+
+    // Function to retrieve logos for different platforms that games can be on
+    const getPlatformIcon = (platformAbbreviation: string) => {
+
+        if (platformAbbreviation.includes("Series X|S")) return <IconBrandXbox size={20} />;
+
+        if (platformAbbreviation.includes("PS")) return <IconIcons size={20} />;
+
+        if (platformAbbreviation.includes("PC") || platformAbbreviation.includes("win"))
+        return <IconDevicesPc size={20} />;
+
+        if (platformAbbreviation.includes("Switch")) return <IconDeviceNintendo size={20} />;
+
+        if (platformAbbreviation.includes("And")) return <IconBrandAndroid size={20} />;
+
+        if (platformAbbreviation.includes("ggl")) return <IconBrandGoogle size={20} />
+
+        if (platformAbbreviation.includes("IOS") || platformAbbreviation.includes("mac")) 
+        return <IconBrandApple size={20} />;
+
+        return null; // fallback if no match
+    };
+
     return (
         <div className={classes.trendingSection}>
 
             <div className={classes.trendingLogo} >
                 <h2 className={classes.sectionTitle}>Trending</h2>
-                <a className={classes.viewMoreIcon}> <CircleArrowRight size={35} /> </a>
+                <a className={classes.viewMoreIcon} href="/search/trending"> <CircleArrowRight size={35} /> </a>
             </div>
             
-
             <Carousel
             arrows={false}
             showDots={true}
@@ -87,16 +112,35 @@ export default function TrendingGamesCarousel() {
                             
                             <div className={classes.badgeContainer}>
 
-                                <Badge color='gray' size='md' radius='lg' c='white'>{game.game_type.type}</Badge>
-                                {game.genres?.slice(0, 2).map((genre: { name: string }) => (
-                                    <Badge key={genre.name} size="md" variant="filled" color="white" radius='lg' c='black'>
+                                <div className={classes.genreBadges}>
+
+                                    {game.genres?.slice(0, 2).map((genre: { name: string }) => (
+                                    <Badge key={genre.name} size="md" variant="filled" color="white" radius='md' c='black'>
                                         {genre.name}
                                     </Badge>
                                     ))}
 
+                                </div>
+
+                                <div className={classes.platformBadges}>
+
+                                    {game.platforms?.slice(0, 4).map((platform: { abbreviation: string }) => (
+                                    <Badge key={platform.abbreviation} size="md" variant="subtle" color="gray" radius='md' c='white' leftSection={getPlatformIcon(platform.abbreviation)}>
+                                        {platform.abbreviation}
+                                    </Badge>
+                                    ))}
+
+                                </div>
+
+                            </div>
+
+                            <div className={classes.dateRatingContainer}>
+
+                                <p className={classes.gameDate}>{game.release_dates?.[0]?.human} </p>
+                            
                             </div>
                             
-                            <p className={classes.gameDate}>{game.release_dates?.[0]?.human}</p>
+
                         </div>
                         
                     </div>

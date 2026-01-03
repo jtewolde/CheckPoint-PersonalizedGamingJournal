@@ -85,9 +85,15 @@
 
 .badgeContainer{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 0.5rem;
     margin-bottom: 0.5rem;
+}
+
+.genreBadges, .platformBadges{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem
 }
 
 .gameTitle{
@@ -105,16 +111,15 @@
 
 .gameRating, .gameDate{
     font-size: 1rem;
-    font-weight: 500;
-    color: rgb(222, 221, 221);
-    font-family: 'Barlow';
+    font-weight: 800;
+    color: rgb(255, 255, 255);
+    font-family: 'Noto Sans';
     cursor: default;
     padding-bottom: 0.5rem;
 }
 
-.ratingLabel, .releaseLabel{
-    font-weight: 700;
-    color: white;
+.ratingText{
+    justify-self: center;
 }
 
 @media (max-width: 960px) {
