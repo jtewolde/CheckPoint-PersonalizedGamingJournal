@@ -55,7 +55,7 @@ export default function Library(){
                 const data = await res.json();
                 setGames(data.games);
                 setTotalGames(data.games.length);
-                console.log("Total games ", data.games.length)
+                console.log("User Library Games: ", data.games);
             } catch(error) {
                 console.log('Error fetching user library', error);
             } finally {
@@ -132,26 +132,41 @@ export default function Library(){
                     <div className={classes.library}>
                         <SimpleGrid cols={6} spacing="sm" verticalSpacing='md' className={classes.responsiveGrid}>
                             {filteredGames.map((game) => (
-                                <div
-                                    className={classes.imageContainer}
-                                    key={game._id}
-                                    style={{ textAlign: 'center' }}
-                                    onClick={() => router.push(`/games/${game.gameId}`)}
-                                >
-                                    <Image
-                                        src={
-                                            game.coverImage
-                                                ? `https:${game.coverImage.replace('t_thumb', 't_cover_big')}`
-                                                : PlaceHolderImage.src
-                                        }
-                                        alt={game.name}
-                                        radius="md"
-                                        className={classes.image}
-                                    />
-                                    <Badge className={classes.badge} color='blue' variant='filled' size='md'>
-                                        {game.status || "No Status"}
-                                    </Badge>
+                                <div key={game.id} className={classes.libraryCard} onClick={() => router.push(`/games/${game.gameId}`)}>
+
+                                    <div className={classes.imageContainer} key={game._id} style={{ textAlign: 'center' }}>
+                                        <Image
+                                            src={
+                                                game.coverImage
+                                                    ? `https:${game.coverImage.replace('t_thumb', 't_cover_big')}`
+                                                    : PlaceHolderImage.src
+                                            }
+                                            alt={game.name}
+                                            radius="md"
+                                            className={classes.image}
+                                        />
+                                    </div>
+
+                                    <div className={classes.gameInfo}>
+
+                                        <h3 className={classes.gameTitle}>{game.title}</h3>
+
+                                        {/* <p className={classes.gameGenres}>{game.genre}</p> */}
+
+                                        <Badge 
+                                        className={classes.badge} 
+                                        color={game.status === 'Completed' ? 'green' : game.status === 'Playing' ? 'blue' : game.status === 'On Hold' ? 'yellow' : game.status === 'Dropped' ? 'red' : game.status === 'Plan to Play' ? 'yellow': game.status === 'No Status Given' ? 'white' : 'dark'} 
+                                        variant='outline'
+                                        size='md'
+                                        radius='sm'
+                                        >
+                                            {game.status || "No Status"}
+                                        </Badge>
+
+                                    </div>
+
                                 </div>
+                                
                             ))}
                         </SimpleGrid>
                     </div>
