@@ -132,9 +132,8 @@ export default function Library(){
                     <div className={classes.library}>
                         <SimpleGrid cols={6} spacing="sm" verticalSpacing='md' className={classes.responsiveGrid}>
                             {filteredGames.map((game) => (
-                                <div key={game.id} className={classes.libraryCard} onClick={() => router.push(`/games/${game.gameId}`)}>
-
-                                    <div className={classes.imageContainer} key={game._id} style={{ textAlign: 'center' }}>
+                                <div key={game._id} className={classes.libraryCard} onClick={() => router.push(`/games/${game.gameId}`)}>
+                                    <div className={classes.imageContainer} style={{ textAlign: 'center' }}>
                                         <Image
                                             src={
                                                 game.coverImage
