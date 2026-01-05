@@ -52,6 +52,14 @@ export default function TrendingGamesCarousel() {
             breakpoint: { max: 3000, min: 1024 },
             items: 1, // Show one slide at a time for desktop
         },
+        tablet: {
+            breakpoint: { max: 1024, min: 640 },
+            items: 1,
+        },
+        mobile: {
+            breakpoint: { max: 640, min: 0 },
+            items: 1,
+        },
     }
 
 

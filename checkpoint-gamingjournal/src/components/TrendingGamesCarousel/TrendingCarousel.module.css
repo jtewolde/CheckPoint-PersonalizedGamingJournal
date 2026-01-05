@@ -111,7 +111,7 @@
 
 .gameRating, .gameDate{
     font-size: 1rem;
-    font-weight: 800;
+    font-weight: 400;
     color: rgb(255, 255, 255);
     font-family: 'Noto Sans';
     cursor: default;
@@ -132,6 +132,6 @@
     }
 
     .gameDate{
-        font-size: 1.25rem;
+        font-size: 1rem;
     }
 }
