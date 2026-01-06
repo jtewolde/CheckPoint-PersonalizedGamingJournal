@@ -1,35 +1,38 @@
-
 .gameCard{
     background-color: #2b2b2b;
     border: 1px solid #585757;
     object-fit: contain;
-    border-radius: 16px;
+    border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     align-self: center;
     margin: 0 auto;
     margin-bottom: 2rem;
+    height: 500px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .imageWrapper {
     position: relative;
     width: 100%;
-    height: auto;
-    border-radius: 12px;
+    height: 375px;
     overflow: hidden;
     cursor: pointer;
-    aspect-ratio: 3 / 4;
+    flex-shrink: 0;
 }
 
 .imageWrapper:hover .overlay {
     opacity: 1;
     border: 2px solid rgb(77, 76, 76);
-    border-radius: 12px;
 }
 
 .cover {
     width: 100%;
-    margin-bottom: 0.5rem;
+    height: 100%;
+    object-fit: cover;
     border-bottom: 1px solid #585757;
     border-radius: 8px 8px 0 0;
 }
@@ -50,7 +53,7 @@
 
 .gameName {
     color: white;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     font-family: 'Noto Sans';
     font-weight: 600;
     text-align: center;
@@ -61,33 +64,57 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 5px;
     width: 100%;
-    padding: 0.5rem;
-}
-
-.gameTitle{
-    font-size: 1rem;
-    font-weight: 500;
-    color: white;
-    padding-top: 0.5rem;
-    font-family: 'Poppins';
+    padding: 0.75rem;
+    flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.gameRating, .gameDate{
-    font-size: 1rem;
+.gameTitle{
+    width: 100%;
+    min-width: 0;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: white;
+    font-family: 'Inter';
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.badgeContainer{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.badge{
+    font-size: 14px;
+}
+
+.gameDate, .gamePlatforms{
+    font-size: 1.1rem;
     font-weight: 500;
     color: rgb(222, 221, 221);
     font-family: 'Barlow';
     cursor: default;
-    padding-bottom: 0.5rem;
+    margin: 0;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .gameCard:hover{
-    transform: scale(1.05);
+    transform: scale(1.02);
     transition: transform 0.3s ease;
 }
 

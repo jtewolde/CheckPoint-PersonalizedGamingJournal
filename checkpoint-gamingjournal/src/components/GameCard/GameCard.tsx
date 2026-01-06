@@ -1,12 +1,10 @@
 'use client'
 
-import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { Badge, Text, Card, Image } from '@mantine/core';
+import { Badge, Text, Image } from '@mantine/core';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 import classes from './GameCard.module.css';
-import { UserRound } from 'lucide-react';
 
 // Define the GameCard component that takes a game prop
 interface GameCardProps {
@@ -16,12 +14,17 @@ interface GameCardProps {
         cover?: {url: string;};
         game_type?: {type: string;};
         genres?: {name: string;}[];
+        platforms?: {name: string;}[];
         release_dates?: {human: string;}[];
+        first_release_date?: number;
+        total_rating?: number;
     };
 }
 
 export default function GameCard({ game }: GameCardProps) {
     const router = useRouter();
+
+    console.log("Game Object", game)
 
     // Determine the cover image URL or use a placeholder if not available
     const coverImage = game.cover
@@ -49,8 +52,34 @@ export default function GameCard({ game }: GameCardProps) {
             
             <div className={classes.gameInfo}>
                 <h3 className={classes.gameTitle}>{game.name}</h3>
-                {game.game_type && <Badge color='gray' size='sm' radius='lg' c='white'>{game.game_type.type}</Badge>}
-                <p className={classes.gameDate}>{game.release_dates?.[0]?.human}</p>
+
+                <div className={classes.badgeContainer}>
+
+                    {game.genres?.slice(0, 1).map((genre: { name: string }) => (
+                        <Badge key={genre.name} size="md" variant="filled" color="white" radius='lg' c='black'>
+                            {genre.name}
+                        </Badge>
+                    ))}
+
+                    <Badge 
+                    className={classes.badge}
+                    variant='filled' 
+                    color='green'
+                    radius='md'
+                    size='md'
+                    >
+                        {game.total_rating ? `${Math.round(game.total_rating)}` : 'N/A'}
+                    </Badge>
+
+                </div>
+
+                <p className={classes.gameDate}>{game.first_release_date ? new Date(game.first_release_date * 1000).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                })
+                : 'N/A'}
+                </p>
             </div>
 
         </div>
