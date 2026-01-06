@@ -51,25 +51,30 @@ export default function GameCard({ game }: GameCardProps) {
             </div>
             
             <div className={classes.gameInfo}>
-                <h3 className={classes.gameTitle}>{game.name}</h3>
 
-                <div className={classes.badgeContainer}>
+                <div className={classes.ratingTypeSection}>
 
-                    {game.genres?.slice(0, 1).map((genre: { name: string }) => (
-                        <Badge key={genre.name} size="md" variant="filled" color="white" radius='lg' c='black'>
-                            {genre.name}
-                        </Badge>
-                    ))}
+                    <Badge size='md' variant='filled' color='gray'>{game.game_type?.type}</Badge>
 
                     <Badge 
                     className={classes.badge}
                     variant='filled' 
-                    color='green'
+                    color={game.total_rating && game.total_rating >= 80 ? 'green' : game.total_rating && game.total_rating >= 70 ? 'yellow' : 'red'}
                     radius='md'
                     size='md'
                     >
                         {game.total_rating ? `${Math.round(game.total_rating)}` : 'N/A'}
                     </Badge>
+
+                </div>
+
+                <div className={classes.badgeContainer}>
+
+                    {game.genres?.slice(0, 1).map((genre: { name: string }) => (
+                        <Badge size="md" variant="filled" color="white" radius='lg' c='black'>
+                            {genre.name}
+                        </Badge>
+                    ))}
 
                 </div>
 

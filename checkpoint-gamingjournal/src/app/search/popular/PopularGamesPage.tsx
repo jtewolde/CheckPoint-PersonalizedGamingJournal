@@ -2,14 +2,15 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { useRouter, redirect } from 'next/navigation';
+
 import GameFilters from '@/components/GameFilters/GameFilters';
+import GameCard from '@/components/GameCard/GameCard';
 
 import { Text } from '@mantine/core';
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 import { SimpleGrid } from '@mantine/core';
 
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
-import { Star } from 'lucide-react';
 
 import classes from './Popular.module.css';
 
@@ -167,20 +168,7 @@ export default function PopularPage() {
 
           <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>
             {processedGames.map((game) => (
-              <div className={classes.gameContainer} key={game.id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game.id}`) }} >
-                <img
-                  src={
-                    game.cover
-                      ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}`
-                      : PlaceHolderImage.src
-                  }
-                  alt={game.name}
-                  className={classes.gameImage}
-                />
-
-                <p className={classes.gameTitle}>{game.name}</p>
-                
-              </div>
+              <GameCard key={game.id} game={game} />
             ))}
           </SimpleGrid>
           
