@@ -23,7 +23,7 @@ export default function CentralSearchPage() {
     return (
         <div className={isSearching ? classes.noBackground : classes.background}>
 
-            <div className={classes.backgroundOverlay}>
+            <div className={isSearching ? classes.noBackgroundOverlay :classes.backgroundOverlay}>
 
                 <div className={classes.searchPageContainer}>
                     {/* Search Bar at the top of the page */}

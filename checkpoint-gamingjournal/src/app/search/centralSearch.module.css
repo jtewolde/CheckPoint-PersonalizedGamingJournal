@@ -14,9 +14,17 @@
 }
 
 .noBackground{
-    background-color: #000000;
-    min-height: 100vh;
-    width: 100%;
+    background: url('/tombRaider.jpg') top center no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    position: relative;
+    min-height: 100%; /* Ensure the page takes up the full height */
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 0;
 }
 
 .backgroundOverlay{
@@ -28,6 +36,17 @@
     pointer-events: none;
     /* Fade from transparent to dark */
     background: linear-gradient(to bottom, rgba(20, 20, 20, 0.60) 0%, #19191e 40%);
+}
+
+.noBackgroundOverlay{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    /* Fade from transparent to dark */
+    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.65) 0%, #19191e 15%);
 }
 
 .searchPageContainer {
