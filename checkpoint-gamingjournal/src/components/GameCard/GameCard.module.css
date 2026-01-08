@@ -8,16 +8,18 @@
     align-self: center;
     margin: 0 auto;
     height: auto;
-    width: 270x;
+    width: 310px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    will-change: transform;
+    transition: transform 0.25s ease;
 }
 
 .imageWrapper {
     position: relative;
     width: 100%;
-    height: 350px;
+    height: 100%;
     overflow: hidden;
     cursor: pointer;
     flex-shrink: 0;
@@ -92,6 +94,20 @@
     font-size: 14px;
 }
 
+.gameTitle{
+    width: 100%;
+    min-width: 0;
+    font-size: 1.14rem;
+    font-weight: 800;
+    color: white;
+    font-family: 'Inter';
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.2;
+    margin: 0;
+}
+
 .gameDate, .gamePlatforms{
     font-size: 0.9rem;
     font-weight: 500;
@@ -114,10 +130,18 @@
     opacity: 1;
 }
 
-@media (max-width: 520px){
+@media (max-width: 745px){
     .gameCard{
-        width: 95%;
+        width: 100%;
         height: auto;
+    }
+
+    .gameTitle{
+        font-size: 1.4rem;
+    }
+
+    .gameDate{
+        font-size: 1.2rem;
     }
 
     .imageWrapper {

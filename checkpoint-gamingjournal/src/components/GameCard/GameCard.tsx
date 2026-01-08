@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation';
+import { useMediaQuery } from '@mantine/hooks';
 import { Badge, Text, Image } from '@mantine/core';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
@@ -24,7 +25,7 @@ interface GameCardProps {
 export default function GameCard({ game }: GameCardProps) {
     const router = useRouter();
 
-    console.log("Game Object", game)
+    const isMobile = useMediaQuery('(max-width: 450px)');
 
     // Determine the cover image URL or use a placeholder if not available
     const coverImage = game.cover
@@ -52,6 +53,8 @@ export default function GameCard({ game }: GameCardProps) {
             
             <div className={classes.gameInfo}>
 
+                <h3 className={classes.gameTitle}>{game.name}</h3>
+
                 <div className={classes.ratingTypeSection}>
 
                     <Badge size='md' variant='filled' color='gray'>{game.game_type?.type}</Badge>
@@ -70,8 +73,8 @@ export default function GameCard({ game }: GameCardProps) {
 
                 <div className={classes.badgeContainer}>
 
-                    {game.genres?.slice(0, 1).map((genre: { name: string }) => (
-                        <Badge size="md" variant="filled" color="white" radius='lg' c='black'>
+                    {game.genres?.slice(0, 2).map((genre: { name: string }) => (
+                        <Badge key={genre.name} size="md" variant="filled" color="white" radius='lg' c='black'>
                             {genre.name}
                         </Badge>
                     ))}
