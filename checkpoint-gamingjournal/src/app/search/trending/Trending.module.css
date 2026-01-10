@@ -12,7 +12,6 @@
     gap: 0.5rem;
     z-index: 0;
 }
-
 .backgroundOverlay{
     width: 100%;
     height: 100%;
@@ -21,7 +20,7 @@
     z-index: 1;
     pointer-events: none;
     /* Fade from transparent to dark */
-    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 0%, #101012 25%);
+    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 0%, #18181b 15%);
 }
 
 .mainContent{
@@ -30,10 +29,19 @@
     justify-content: flex-start;
     gap: 0.4rem;
     padding: 2rem;
-    padding-left: 3rem;
-    padding-right: 3rem;
+    padding-left: 5rem;
+    padding-right: 5rem;
     z-index: 1;
     pointer-events: auto;
+}
+
+.headerSection{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1rem;
 }
 
 /* Search results heading */
@@ -67,7 +75,6 @@
 }
 
 .description {
-    font-size: 18px;
     color: var(--mantine-color-white);
     font-weight: 300;
     text-align: left;
@@ -81,63 +88,23 @@
     }
 }
 
-/* Number of search results */
-.numberText{
-    font-size: 20px;
-    font-weight: 500;
-    color: rgb(255, 255, 255); /* Dark text for contrast */
-    margin-bottom: 0.5rem;
-    margin-top: 1rem;
-    font-family: 'Inter';
-    font-style: italic;
-    text-align: center;
-    align-self: flex-start;
-}
 
 /* Grid layout for game cards */
 .gameGrid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
     width: 100%;
     box-sizing: border-box;
 }
 
 .gameContainer{
-    position: relative;
-    display: inline-block
-}
-
-.gameImage {
-    width: 90%;
-    border-radius: 8px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.gameImage:hover{
-    transform: translateY(-5px); /* Slight lift on hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
-    cursor: pointer;
-}
-
-.imageWrapper {
-    position: relative;
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    height: auto;
-    border-radius: 12px;
-    overflow: hidden;
-    cursor: pointer;
-    aspect-ratio: 3 / 4;
 }
 
-.imageWrapper:hover .overlay {
-    opacity: 1;
-    border: 2px solid rgb(77, 76, 76);
-    border-radius: 12px;
-}
-
-/* Game name */
-.gameTitle {
+.gameTitle{
     font-size: 1rem;
     font-weight: 400;
     color: white;
@@ -161,12 +128,6 @@
 }
 
 @media screen and (max-width: 1245px) {
-
-    .mainContent{
-        padding-left: 4rem;
-        padding-right: 4rem;
-    }
-
     .gameGrid {
         justify-items: center;
     }
@@ -189,34 +150,23 @@
     }
 }
 
-@media screen and (max-width: 820px){
+
+@media screen and (max-width: 1020px){
+
+    .gameGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 
     .searchText{
         font-size: 1.7rem;
     }
 
-    .gameGrid{
-        grid-template-columns: repeat(4, 1fr);
-    }
 }
 
-@media screen and (max-width: 610px){
-
-    .mainContent{
-        padding-left: 3rem;
-        padding-right: 3rem;
-    }
+@media screen and (max-width: 646px) {
 
     .gameGrid{
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-@media screen and (max-width: 570px) {
-
-    .mainContent{
-        padding-left: 2rem;
-        padding-right: 2rem;
+        grid-template-columns: 1fr;
     }
 
     .titleLogo{
@@ -227,12 +177,13 @@
         padding: 0;
     }
 
-    .gameGrid{
-        grid-template-columns: repeat(3, 1fr);
-    }
-
     .gameContainer{
         padding: 0;
+    }
+
+    .mainContent{
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 
     .gameImage{
@@ -242,19 +193,15 @@
     .titleText{
         font-size: 2.5rem;
     }
-    
-}
 
-@media screen and (max-width: 460px) {
-    .gameGrid{
-        grid-template-columns: repeat(2, 1fr);
+    .description{
+        font-size: 16px;
+    }
+
+    .titleLogo{
+        padding: 0.3rem;
     }
     
 }
 
-@media screen and (max-width: 370px) {
-    .gameGrid{
-        grid-template-columns: repeat(1, 1fr);
-    }
     
-}

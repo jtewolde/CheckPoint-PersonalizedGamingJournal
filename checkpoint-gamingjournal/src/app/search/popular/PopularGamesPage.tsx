@@ -132,39 +132,42 @@ export default function PopularPage() {
 
         <div className={classes.mainContent}>
 
-          <div className={classes.titleDescriptionSection}>
+          <div className={classes.headerSection}>
 
-            <div className={classes.titleLogo}>
+            <div className={classes.titleDescriptionSection}>
 
-              <h1 className={classes.titleText}>Popular Games:</h1>
+              <div className={classes.titleLogo}>
+
+                <h1 className={classes.titleText}>Popular Games:</h1>
+
+              </div>
+
+              <Text className={classes.description} size="xl" mt="xl">
+                Explore the most popular games that define today’s gaming scene. 
+                From timeless hits to modern blockbusters, 
+                these are the titles players around the world can’t stop playing and talking about.
+              </Text>
 
             </div>
 
-            <Text className={classes.description} size="xl" mt="xl">
-              Explore the most popular games that define today’s gaming scene. 
-              From timeless hits to modern blockbusters, 
-              these are the titles players around the world can’t stop playing and talking about.
-            </Text>
+            <GameFilters
+              color='#3697d4ff'
+              sortOption={sortOption}
+              selectedType={selectedType}
+              selectedGenres={selectedGenre}
+              selectedThemes={selectedTheme}
+              selectedModes={selectedMode}
+              selectedPlatforms={selectedPlatform}
+              onSortChange={(v) => setSortOption(v as any)}
+              onTypeChange={(v) => setSelectedType(v as any)}
+              onGenresChange={(v) => setSelectedGenre(v as any)}
+              onThemesChange={(v) => setSelectedTheme(v as any)}
+              onModesChange={(v) => setSelectedMode(v as any)}
+              onPlatformsChange={(v) => setSelectedPlatform(v as any)}
+            />
 
           </div>
 
-          <h2 className={classes.numberText}>{processedGames.length} Game Results:</h2>
-
-          <GameFilters
-            color='#3697d4ff'
-            sortOption={sortOption}
-            selectedType={selectedType}
-            selectedGenres={selectedGenre}
-            selectedThemes={selectedTheme}
-            selectedModes={selectedMode}
-            selectedPlatforms={selectedPlatform}
-            onSortChange={(v) => setSortOption(v as any)}
-            onTypeChange={(v) => setSelectedType(v as any)}
-            onGenresChange={(v) => setSelectedGenre(v as any)}
-            onThemesChange={(v) => setSelectedTheme(v as any)}
-            onModesChange={(v) => setSelectedMode(v as any)}
-            onPlatformsChange={(v) => setSelectedPlatform(v as any)}
-          />
 
           <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>
             {processedGames.map((game) => (

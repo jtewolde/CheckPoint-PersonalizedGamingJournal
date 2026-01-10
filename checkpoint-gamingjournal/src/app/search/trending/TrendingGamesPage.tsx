@@ -12,6 +12,7 @@ import PlaceHolderImage from '../../../../public/no-cover-image.png';
 import { Flame } from 'lucide-react';
 
 import classes from './Trending.module.css';
+import GameCard from '@/components/GameCard/GameCard';
 
 export default function TrendingPage() {
 
@@ -137,61 +138,46 @@ export default function TrendingPage() {
 
         <div className={classes.mainContent}>
 
-          <div className={classes.titleDescriptionSection}>
+          <div className={classes.headerSection}>
 
-            <div className={classes.titleLogo}>
+            <div className={classes.titleDescriptionSection}>
 
-              <h1 className={classes.titleText}>Trending Games</h1>
+              <div className={classes.titleLogo}>
+
+                <h1 className={classes.titleText}>Trending Games</h1>
+
+              </div>
+
+              <Text className={classes.description} size="xl" mt="xl">
+                The most popular and buzzworthy games that are currently trending in the gaming community.
+                Stay updated with the latest hits and discover what everyone is talking about!
+              </Text>
 
             </div>
 
-            <Text className={classes.description} size="xl" mt="xl">
-              The most popular and buzzworthy games that are currently trending in the gaming community.<br />
-              Stay updated with the latest hits and discover what everyone is talking about!
-            </Text>
+            <GameFilters
+              color="#546782ff"
+              sortOption={sortOption}
+              selectedType={selectedType}
+              selectedGenres={selectedGenre}
+              selectedThemes={selectedTheme}
+              selectedModes={selectedMode}
+              selectedPlatforms={selectedPlatform}
+              onSortChange={(v) => setSortOption(v as any)}
+              onTypeChange={(v) => setSelectedType(v as any)}
+              onGenresChange={(v) => setSelectedGenre(v as any)}
+              onThemesChange={(v) => setSelectedTheme(v as any)}
+              onModesChange={(v) => setSelectedMode(v as any)}
+              onPlatformsChange={(v) => setSelectedPlatform(v as any)}
+            />
 
           </div>
 
-          <h2 className={classes.numberText}>{processedGames.length} Game Results:</h2>
-
-          <GameFilters
-            color="#546782ff"
-            sortOption={sortOption}
-            selectedType={selectedType}
-            selectedGenres={selectedGenre}
-            selectedThemes={selectedTheme}
-            selectedModes={selectedMode}
-            selectedPlatforms={selectedPlatform}
-            onSortChange={(v) => setSortOption(v as any)}
-            onTypeChange={(v) => setSelectedType(v as any)}
-            onGenresChange={(v) => setSelectedGenre(v as any)}
-            onThemesChange={(v) => setSelectedTheme(v as any)}
-            onModesChange={(v) => setSelectedMode(v as any)}
-            onPlatformsChange={(v) => setSelectedPlatform(v as any)}
-          />
-
           <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>
             {processedGames.map((game) => (
-              <div className={classes.gameContainer} key={game.id} style={{ textAlign: 'center' }} onClick={() => {console.log("Naviagating to game details ", game.id); router.push(`/games/${game.id}`) }} >
-                
-                <img
-                  src={
-                    game.cover
-                      ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}`
-                      : PlaceHolderImage.src
-                  }
-                  alt={game.name}
-                  className={classes.gameImage}
-                />
-
-                <p className={classes.gameTitle}>{game.name}</p>
-                
-              </div>
+              <GameCard key={game.id} game={game} />
             ))}
           </SimpleGrid>
-          
-          {/* <Pagination total={Math.ceil(total/ limit)} size='lg' style={{ justifyContent: "center" }} 
-          className={classes.pagninaton} value={page} onChange={setPage} color='blue' radius="lg" /> */}
 
         </div>
         
