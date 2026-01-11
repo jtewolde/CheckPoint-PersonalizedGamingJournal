@@ -1,0 +1,156 @@
+.gameCard{
+    background-color: #2b2b2b;
+    border: 1px solid #585757;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    align-self: center;
+    margin: 0 auto;
+    height: auto;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    will-change: transform;
+    transition: transform 0.25s ease;
+}
+
+.imageWrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.imageWrapper:hover .overlay {
+    opacity: 1;
+    border: 2px solid rgb(77, 76, 76);
+}
+
+.cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-bottom: 1px solid #585757;
+    border-radius: 8px 8px 0 0;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 15, 15, 0.7);
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+}
+
+.gameName {
+    color: white;
+    font-size: 1.3rem;
+    font-family: 'Noto Sans';
+    font-weight: 600;
+    text-align: center;
+    padding: 0 8px;
+}
+
+.gameInfo{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 100%;
+    padding: 0.75rem;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.badgeContainer{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.ratingTypeSection{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.badge{
+    font-size: 14px;
+}
+
+.gameTitle{
+    width: 100%;
+    min-width: 0;
+    font-size: 1.14rem;
+    font-weight: 800;
+    color: white;
+    font-family: 'Inter';
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.gameDate, .gamePlatforms{
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgb(222, 221, 221);
+    font-family: 'Barlow';
+    cursor: default;
+    margin: 0;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.gameCard:hover{
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+}
+
+.gameCard:hover .gameName {
+    opacity: 1;
+}
+
+@media (max-width: 746px){
+    .gameCard{
+        width: 100%;
+    }
+}
+
+@media (max-width: 646px){
+    .gameCard{
+        width: 92%;
+        height: auto;
+    }
+
+    .gameTitle{
+        font-size: 1.4rem;
+    }
+
+    .gameDate{
+        font-size: 1.2rem;
+    }
+
+    .imageWrapper {
+        height: 100%;
+    }
+}

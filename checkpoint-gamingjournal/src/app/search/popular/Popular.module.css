@@ -30,10 +30,19 @@
     justify-content: flex-start;
     gap: 0.4rem;
     padding: 2rem;
-    padding-left: 3rem;
-    padding-right: 3rem;
+    padding-left: 5rem;
+    padding-right: 5rem;
     z-index: 1;
     pointer-events: auto;
+}
+
+.headerSection{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1rem;
 }
 
 /* Search results heading */
@@ -96,15 +105,16 @@
 /* Grid layout for game cards */
 .gameGrid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
     width: 100%;
     box-sizing: border-box;
 }
 
 .gameContainer{
-    position: relative;
-    display: inline-block
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .gameTitle{
@@ -114,28 +124,6 @@
     padding: 0.5rem;
     overflow: hidden;
     font-family: 'Poppins';
-}
-
-.gameImage {
-    width: 90%;
-    border-radius: 8px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.gameImage:hover{
-    transform: translateY(-5px); /* Slight lift on hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
-    cursor: pointer;
-}
-
-/* Game name */
-.gameName {
-    font-size: 1rem;
-    font-weight: 500;
-    color: white;
-    padding: 0.5rem;
-    overflow: hidden;
-    font-family: 'Noto Sans';
 }
 
 /* Pagination */
@@ -152,47 +140,27 @@
     padding: 0.5rem 1rem;
 }
 
-@media screen and (max-width: 1245px) {
+@media screen and (max-width: 1020px){
+
     .gameGrid {
-        justify-items: center;
+        grid-template-columns: repeat(2, 1fr);
     }
-
-    .gameImage {
-        width: 100%;         /* Responsive width inside grid cell */
-    }
-
-    .gameName {
-        font-size: 0.85rem;
-        max-width: 140px; /* match the mobile image size */
-        overflow: hidden;
-        text-overflow: ellipsis;
-        text-align: center;
-        margin: 0 auto;
-    }
-
-    .numberText {
-        font-size: 1.2rem;
-    }
-}
-
-@media screen and (max-width: 820px){
 
     .searchText{
         font-size: 1.7rem;
     }
 
-    .gameGrid{
-        grid-template-columns: repeat(4, 1fr);
-    }
 }
 
-@media screen and (max-width: 610px){
-    .gameGrid{
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
+@media screen and (max-width: 646px) {
 
-@media screen and (max-width: 570px) {
+    .gameGrid{
+        grid-template-columns: 1fr;
+    }
+
+    .headerSection{
+        text-align: center;
+    }
 
     .titleLogo{
         margin-bottom: -1rem;
@@ -200,10 +168,6 @@
 
     .titleDescriptionSection{
         padding: 0;
-    }
-
-    .gameGrid{
-        grid-template-columns: repeat(3, 1fr);
     }
 
     .gameContainer{
@@ -233,16 +197,4 @@
     
 }
 
-@media screen and (max-width: 460px) {
-    .gameGrid{
-        grid-template-columns: repeat(2, 1fr);
-    }
     
-}
-
-@media screen and (max-width: 370px) {
-    .gameGrid{
-        grid-template-columns: repeat(1, 1fr);
-    }
-    
-}

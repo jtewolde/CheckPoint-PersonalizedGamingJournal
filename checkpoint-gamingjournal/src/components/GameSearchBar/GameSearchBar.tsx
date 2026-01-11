@@ -111,14 +111,20 @@ export default function GameSearchBar({
                         close()
                     }
                 }}
-                rightSection={
-                    <IconSearch
-                    size={35}
-                    style={{ cursor: 'pointer', color: 'white'}}
-                    onClick={() => autoNavigate && navigateToSearch(query)}
-                    />
+                leftSection={
+                    <IconSearch size={30} />
                 }
             />
+
+            <Button 
+            className={classes.button} 
+            color= 'white'
+            c='black'
+            size={size}
+            radius={radius}
+            onClick={() => autoNavigate && navigateToSearch(query)}>
+                Search
+            </Button>
 
         </div>
         

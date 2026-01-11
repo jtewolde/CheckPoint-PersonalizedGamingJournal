@@ -124,7 +124,7 @@ export default function JournalForm() {
     <div className={classes.journalContainer}>
 
       <Overlay
-        gradient="linear-gradient(180deg,rgb(67, 67, 67) 30%,rgba(79, 78, 78, 1) 90%)"
+        gradient="linear-gradient(180deg,rgb(67, 67, 67) 0%,rgba(31, 28, 28, 1) 100%)"
         opacity={0.80}
         zIndex={0}
       />

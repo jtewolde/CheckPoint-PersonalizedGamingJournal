@@ -77,25 +77,6 @@ export function FeaturesGrid() {
     return (
       <div className={classes.wrapper}>
 
-        <Transition mounted={mounted} transition="fade" duration={500} timingFunction="ease">
-          {(styles) => (
-            <Title className={classes.title} style={styles}>
-              Track your gaming progress with ease!
-            </Title>
-          )}
-        </Transition>
-    
-        <Transition mounted={mounted} transition="fade" duration={600} timingFunction="ease">
-          {(styles) => (
-            <Container fluid p={0} style={styles}>
-              <Text size="sm" className={classes.description}>
-                Stay on top of your game progress, achievements, and goals across multiple titles. 
-                With CheckPoint, logging your sessions has never been easier.
-              </Text>
-            </Container>
-          )}
-        </Transition>
-
         <div className={classes.featureWidthSection}>
 
           <SimpleGrid cols={3} className={classes.featuresGrid}>

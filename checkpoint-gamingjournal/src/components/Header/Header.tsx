@@ -25,12 +25,12 @@ export function Header() {
   const pathname = usePathname();
 
   const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
-  const isMobile = useMediaQuery('(max-width: 400px)');
+  const isMobile = useMediaQuery('(max-width: 450px)');
 
   // Drawer height for different conditions
   const drawerSize = (() => {
-    if (isMobile && isAuthenticated) return '400px'; // smaller when logged in on mobile
-    if (isMobile && !isAuthenticated) return '350px'; // larger when guest on mobile
+    if (isMobile && isAuthenticated) return '270px'; // smaller when logged in on mobile
+    if (isMobile && !isAuthenticated) return '280px'; // larger when guest on mobile
     return '300px'; // default for desktop
   })();
 
@@ -89,14 +89,6 @@ export function Header() {
                   </div>
                 </Link>
 
-                {/* <Link href="/chat" className={`${classes.link} ${pathname === '/chat' ? classes.active : ''}`}>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <BotMessageSquare size={20} style={{ marginBottom: 2 }} />
-                    Chat
-                  </div>
-                </Link> */}
-
-                <AvatarMenu />
               </>
             ) : (
               <>
@@ -144,6 +136,8 @@ export function Header() {
           >
             <IconSearch size={35} color='white'/>
           </Button>
+
+          {isAuthenticated && <AvatarMenu />}
 
           {/* Mobile Links */}
           <Burger className={classes.burger} opened={opened} onClick={toggle} hiddenFrom="sm" size="md" color='white' />
@@ -196,17 +190,7 @@ export function Header() {
                     </div>
                   </Link>
 
-                  
-                  {/* <Link href="/chat" className={`${classes.link} ${pathname === '/chat' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
-                      <BotMessageSquare size={20} style={{ marginBottom: 2 }} />
-                      Chat
-                    </div>
-                  </Link> */}
-
                 </div>
-
-                  <AvatarMenu />
 
               </>
             ) : (

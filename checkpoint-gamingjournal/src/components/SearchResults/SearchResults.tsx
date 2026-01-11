@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { SimpleGrid, Text, Image, Badge } from '@mantine/core';
 
 import GameFilters from '@/components/GameFilters/GameFilters';
+import GameCard from '../GameCard/GameCard';
 import GlobalLoader from '../GlobalLoader/GlobalLoader';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
@@ -124,12 +125,17 @@ export default function SearchResults({ query }: SearchResultsProps){
         return <GlobalLoader visible={loading} />
     }
 
+    // Route to not found if no games found
+    if (processedGames.length === 0 ){
+        router.push('/not-found');
+    }
+
     return (
 
         <div className={classes.wrapper}>
 
             <Text className={classes.resultsTitle}>
-                Search Results for: <span className={classes.gameResult}>{query}</span>
+                Search Results for: "<span className={classes.gameResult}>{query}</span>"
             </Text>
 
             <GameFilters
@@ -150,31 +156,7 @@ export default function SearchResults({ query }: SearchResultsProps){
 
             <SimpleGrid cols={7} spacing="lg" verticalSpacing='xl' className={classes.resultGamesGrid}>
                 {processedGames.map((game) => (
-                    <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
-
-                        <div className={classes.imageWrapper}>
-
-                            <Image 
-                            src={game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
-                            alt={game.name} 
-                            className={classes.cover}  
-                            />
-
-                            <div className={classes.overlay}>
-
-                                <Text className={classes.gameName}>{game.name}</Text>
-
-                            </div>
-
-                        </div>
-                        
-                        <div className={classes.gameInfo}>
-                            <h3 className={classes.gameTitle}>{game.name}</h3>
-                            <Badge color='gray' size='sm' radius='lg' c='white'>{game.game_type.type}</Badge>
-                            <p className={classes.gameDate}>{game.release_dates?.[0]?.human}</p>
-                        </div>
-
-                    </div>
+                    <GameCard key={game.id} game={game} />
                 ))}
             </SimpleGrid>
 
