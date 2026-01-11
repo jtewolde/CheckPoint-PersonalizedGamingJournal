@@ -338,7 +338,7 @@ export default function GameDetails() {
       content: game.genres ? (
         <Group gap="xs">
           {game.genres.map((genre: any) => (
-            <Badge key={genre.id} color="blue" radius="lg" size='xl'>
+            <Badge key={genre.id} color="blue" radius="lg" size='lg'>
               {genre.name}
             </Badge>
           ))}
@@ -353,7 +353,7 @@ export default function GameDetails() {
       content: game.themes ? (
         <Group gap='sm'>
           {game.themes.map((theme: any) => 
-            <Badge size='xl' className={classes.badge} key={theme.id} color='grape' radius='lg'>
+            <Badge size='lg' className={classes.badge} key={theme.id} color='grape' radius='lg'>
               {theme.name}
             </Badge>
           )}
@@ -368,7 +368,7 @@ export default function GameDetails() {
       content: game.game_modes ? (
         <Group gap="xs">
           {game.game_modes.map((mode: any) => (
-            <Badge className={classes.badge} key={mode.id} color="teal" radius="lg" size='xl'>
+            <Badge className={classes.badge} key={mode.id} color="teal" radius="lg" size='lg'>
               {mode.name}
             </Badge>
           ))}
@@ -383,7 +383,7 @@ export default function GameDetails() {
       content: game.platforms ? (
         <Group gap='sm'>
           {game.platforms.map((platform: any) => 
-            <Badge size='xl' 
+            <Badge size='lg' 
               className={classes.badge} 
               key={platform.id} 
               color='cyan' 

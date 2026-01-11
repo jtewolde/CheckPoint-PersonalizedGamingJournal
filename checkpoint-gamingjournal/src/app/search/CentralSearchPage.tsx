@@ -42,7 +42,7 @@ export default function CentralSearchPage() {
                         <GameSearchBar
                             className={classes.searchBar}
                             size='xl'
-                            radius='lg'
+                            radius='md'
                             placeHolder='Search for Games...'
                             autoNavigate={true}
                         />

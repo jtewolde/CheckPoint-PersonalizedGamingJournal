@@ -8,7 +8,7 @@
     align-self: center;
     margin: 0 auto;
     height: auto;
-    width: 310px;
+    width: 300px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -130,9 +130,15 @@
     opacity: 1;
 }
 
-@media (max-width: 745px){
+@media (max-width: 746px){
     .gameCard{
         width: 100%;
+    }
+}
+
+@media (max-width: 646px){
+    .gameCard{
+        width: 92%;
         height: auto;
     }
 
