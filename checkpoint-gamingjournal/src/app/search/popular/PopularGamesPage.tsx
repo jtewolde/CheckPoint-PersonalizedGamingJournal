@@ -38,7 +38,7 @@ export default function PopularPage() {
   useEffect(() => {
     const fetchPopularGames = async () => {
       try {
-        const res = await fetch(`/api/igdb/popularGames?limit=${limit}`);
+        const res = await fetch(`/api/igdb/popular-games?limit=${limit}`);
         
         if (!res.ok) {
           throw new Error('Failed to fetch Popular games');

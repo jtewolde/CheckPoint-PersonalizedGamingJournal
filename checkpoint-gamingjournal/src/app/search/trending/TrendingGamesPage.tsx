@@ -5,11 +5,8 @@ import { useRouter, redirect } from 'next/navigation';
 
 import GameFilters from '@/components/GameFilters/GameFilters';
 
-import { LoadingOverlay, Text, SimpleGrid, ThemeIcon } from '@mantine/core';
+import { Text, SimpleGrid} from '@mantine/core';
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
-
-import PlaceHolderImage from '../../../../public/no-cover-image.png';
-import { Flame } from 'lucide-react';
 
 import classes from './Trending.module.css';
 import GameCard from '@/components/GameCard/GameCard';
@@ -38,7 +35,7 @@ export default function TrendingPage() {
     useEffect(() => {
       const fetchTrendingGames = async () => {
         try {
-          const res = await fetch(`/api/igdb/trendingGames?limit=${limit}`);
+          const res = await fetch(`/api/igdb/trending-games?limit=${limit}`);
           
           if (!res.ok) {
             throw new Error('Failed to fetch Trending games');
