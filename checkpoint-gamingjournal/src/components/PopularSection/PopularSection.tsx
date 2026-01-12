@@ -19,7 +19,7 @@ export default function PopularSection(){
     useEffect(() => {
         const fetchPopularGames = async () => {
             try {
-                const res = await fetch('/api/igdb/popularGames');
+                const res = await fetch('/api/igdb/popular-games');
                 
                 if (!res.ok) {
                     throw new Error('Failed to fetch popular games');
