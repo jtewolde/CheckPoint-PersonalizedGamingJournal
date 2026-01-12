@@ -19,7 +19,7 @@ export default function TrendingSection(){
     useEffect(() => {
         const fetchTrendingGames = async () => {
             try {
-                const res = await fetch('/api/igdb/trendingGames');
+                const res = await fetch('/api/igdb/trending-games');
                 
                 if (!res.ok) {
                     throw new Error('Failed to fetch Trending games');

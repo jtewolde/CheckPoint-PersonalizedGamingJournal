@@ -27,10 +27,10 @@ export default function TrendingGamesCarousel() {
     useEffect(() => {
         const fetchTrendingGames = async () => {
             try {
-                const res = await fetch('/api/igdb/trendingGames');
+                const res = await fetch('/api/igdb/trending-games');
                 
                 if (!res.ok) {
-                    throw new Error('Failed to fetch popular games');
+                    throw new Error('Failed to fetch trending games');
                 }
                 const data = await res.json();
                 setTrendingGames(data); // Store the games data in state
