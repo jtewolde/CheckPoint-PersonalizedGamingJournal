@@ -95,6 +95,7 @@ export default function GameFilters({
                     <Select
                         size='md'
                         label="Sort By:"
+                        placeholder="Select an option"
                         checkIconPosition='left'
                         styles={{
                         dropdown: {
@@ -135,7 +136,7 @@ export default function GameFilters({
                         size='md'
                         label="Game Types"
                         maxDropdownHeight={200}
-                        placeholder="Choose a category"
+                        placeholder={selectedType.length === 0 ? "Choose a Type" : ''}
                         checkIconPosition='left'
                         scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
                         styles={{
@@ -187,7 +188,7 @@ export default function GameFilters({
                         size='md'
                         label="Genres"
                         maxDropdownHeight={200}
-                        placeholder="Choose genres"
+                        placeholder={selectedGenres.length === 0 ? "Choose a Genre" : ""}
                         checkIconPosition='left'
                         scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
                         styles={{
@@ -252,7 +253,7 @@ export default function GameFilters({
                         size='md'
                         label="Themes"
                         maxDropdownHeight={200}
-                        placeholder="Choose a theme"
+                        placeholder={selectedThemes.length === 0 ? 'Choose a Theme' : ''}
                         checkIconPosition='left'
                         scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
                         styles={{
@@ -316,6 +317,7 @@ export default function GameFilters({
                     <MultiSelect
                         size='md'
                         label="Game Modes"
+                        placeholder={selectedModes.length === 0 ? 'Choose a Mode' : ''}
                         maxDropdownHeight={200}
                         checkIconPosition='left'
                         scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
@@ -365,6 +367,7 @@ export default function GameFilters({
                     <MultiSelect
                         size='md'
                         label="Platforms"
+                        placeholder={selectedPlatforms.length === 0 ? 'Choose a Platform' : ''}
                         maxDropdownHeight={200}
                         checkIconPosition='left'
                         scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
