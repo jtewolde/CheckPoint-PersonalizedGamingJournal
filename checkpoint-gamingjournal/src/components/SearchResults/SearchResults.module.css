@@ -4,9 +4,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding-left: 1rem;
-    padding-right: 1rem;
     gap: 1rem;
+    width: 94%;
 }
 
 .resultsTitle{
@@ -14,6 +13,8 @@
     color: white;
     font-family: 'Inter';
     font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
 }
 
 .gameResult{
@@ -27,18 +28,6 @@
     gap: 2rem;
     width: 100%;
     box-sizing: border-box;
-}
-
-@media screen and (max-width: 1674px) {
-    .resultGamesGrid{
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-@media screen and (max-width: 1264px){
-    .resultGamesGrid{
-        grid-template-columns: repeat(3, 1fr);
-    }
 }
 
 @media screen and (max-width: 820px){
@@ -57,10 +46,6 @@
 
     .titleDescriptionSection{
         padding: 0;
-    }
-
-    .resultGamesGrid{
-        grid-template-columns: repeat(3, 1fr);
     }
 
     .gameContainer{
@@ -90,22 +75,11 @@
     
 }
 
-@media screen and (max-width: 760px) {
-    .resultGamesGrid{
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-}
-
 @media screen and (max-width: 520px) {
 
     .wrapper{
         padding-left: 0.5rem;
         padding-right: 0.5rem;
-    }
-
-    .resultGamesGrid{
-        grid-template-columns: repeat(1, 1fr);
     }
     
 }
