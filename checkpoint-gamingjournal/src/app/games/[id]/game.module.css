@@ -182,28 +182,37 @@
   border-bottom: 2px solid #ffffff;
 }
 
-.carouselContainer {
-  margin-bottom: 1rem;
-  padding: 0.6rem;
+.swiperContainer {
+  width: 80%;
 }
 
 .carouselSlide{
-  width: 98.5%;
+  width: 100%;
+  margin-bottom: 1rem;
 }
 
 .carouselSlide :hover{
   filter: brightness(70%)
 }
 
+.thumbnailImage{
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #6c7274;
+  cursor: pointer;
+}
+
+.thumbnailSlide :hover{
+  filter: brightness(70%)
+}
+
 .screenshot {
   width: 100%;
+  margin: 0 auto;
   object-fit: cover;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border: 1px solid #6c7274;
-  display: block;
-  margin: 0 auto;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   cursor: pointer;
 }
 
@@ -389,15 +398,12 @@
 
   .accordion{
     margin-top: 1.5rem;
+    width: 120%;
   }
 
   .cover {
     width: 330px;
     height: auto;
-  }
-
-  .button{
-    width: 20px;
   }
 
   .info p {
@@ -415,13 +421,9 @@
   }
 
   .screenshot {
-    width: 100%;
+    width: 120%;
     height: auto;
     margin-bottom: 3rem;
-  }
-
-  .seriesGrid{
-    grid-template-columns: repeat(3, 1fr);
   }
 
   .modalScreenshot{
@@ -438,30 +440,8 @@
   }
 
   .button {
-    width: 100%;
+    width: 90%;
     text-align: center;
   }
 }
 
-@media screen and (max-width: 440px) {
-
-  .seriesGrid{
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .title{
-    border-bottom: none;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding: 0.7rem;
-    
-  }
-
-  .cover{
-    width: 80%;
-  }
-
-  .gameSeriesName{
-    font-size: 1.4rem;
-  }
-}

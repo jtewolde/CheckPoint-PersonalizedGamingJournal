@@ -12,6 +12,14 @@ import toast from 'react-hot-toast';
 import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack } from '@mantine/core';
 import Image from 'next/image';
 
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, FreeMode, Thumbs } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/thumbs';
+import 'swiper/css/free-mode';
+
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 
@@ -50,6 +58,7 @@ export default function GameDetails() {
   const router = useRouter();
 
   const [isMobile, setIsMobile] = useState(false);
+  const [thumbsSwiper, setThumbSwiper] = useState(null); // Use state for thumbnail swiper instance
 
   // Detect screen size for responsive design for screenshot carousel
   useEffect(() => {
@@ -622,21 +631,17 @@ export default function GameDetails() {
 
           <div className={classes.screenshotGrid}>
 
-            <Carousel
-              responsive={screenshotResponsive}
-              centerMode={!isMobile}
-              showDots
-              arrows={!modalOpen}
-              infinite={true}
-              autoPlay={false}
-              keyBoardControl={true}
-              containerClass={classes.carouselContainer}
-              itemClass={classes.carouselItem}
-              dotListClass={classes.carouselDots}
+            <Swiper
+              navigation
+              pagination={{ clickable: true }}
+              modules={[Navigation, Pagination]}
+              slidesPerView={1}
+              spaceBetween={20}
+              className={classes.swiperContainer}
             >
 
             {screenshots.map((screenshot: any, index: number) => (
-              <div key={screenshot.id} className={classes.carouselSlide}>
+              <SwiperSlide key={screenshot.id} className={classes.carouselSlide}>
                 <Image
                   src={`https:${screenshot.url.replace('t_thumb', 't_1080p')}`}
                   alt={`Screenshot of ${game.name}`}
@@ -652,10 +657,10 @@ export default function GameDetails() {
                     setModalOpen(true);
                   }}
                 />
-              </div>
+              </SwiperSlide>
             ))}
 
-            </Carousel>
+            </Swiper>
 
           </div>
 
@@ -718,17 +723,18 @@ export default function GameDetails() {
           <h2 className={classes.similarGamesName}>Similar Games: </h2>
 
           <div className={classes.similarGames}>
-            <Carousel
-              responsive={similarGameResponsive}
-              infinite={true}
-              autoPlay={false}
-              keyBoardControl={true}
-              containerClass={classes.carouselContainer}
-              itemClass={classes.carouselItem}
+            
+            <Swiper
+              navigation
+              pagination={{ clickable: true }}
+              modules={[Navigation, Pagination]}
+              slidesPerView={isMobile ? 1 : 3}
+              spaceBetween={20}
+              className={classes.swiperContainer}
             >
               {game.similar_games?.map((similarGame: any) => {
                 return (
-                  <div
+                  <SwiperSlide
                     key={similarGame.id}
                     className={classes.similarGameSlide}
                     onClick={() => router.push(`/games/${similarGame.id}`)} // Navigate to the similar game's details page
@@ -743,10 +749,11 @@ export default function GameDetails() {
                       className={classes.similarGameCover}
                     />
                     <p className={classes.similarGameName}>{similarGame.name}</p>
-                  </div>
+                  </SwiperSlide>
                 );
               })}
-            </Carousel>
+            </Swiper>
+
           </div>
 
         </div>
