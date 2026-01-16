@@ -97,7 +97,7 @@ export default function Library(){
                 {/* Status Filter Dropdown */}
                 <Popover width={300} position='bottom-end' withArrow shadow='lg'>
                     <Popover.Target>
-                        <Button className={classes.filterButton} size='md' radius='lg' variant='gradient' gradient={{from: '#e96443', to: '#904e95', deg: 90}} rightSection={<ListFilter />}>Filter By Status</Button>
+                        <Button className={classes.filterButton} size='md' radius='lg' variant='gradient' gradient={{from: '#43bae9', to: '#3b99d3', deg: 90}} rightSection={<ListFilter />}>Filter By Status</Button>
                     </Popover.Target>
 
                     <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>
