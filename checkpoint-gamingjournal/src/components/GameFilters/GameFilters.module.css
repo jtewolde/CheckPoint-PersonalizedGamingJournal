@@ -17,7 +17,7 @@
 }
 
 .filterButton{
-    width: 150px;
+    width: auto;
     font-family: 'Noto Sans';
     font-size: 20px;
     border: 1px solid black;

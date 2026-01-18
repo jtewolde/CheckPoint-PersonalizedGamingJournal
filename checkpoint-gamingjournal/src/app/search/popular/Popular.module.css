@@ -66,6 +66,7 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    gap: 1.2rem;
 }
 
 .titleLogo{
@@ -77,10 +78,9 @@
 
 .description {
     color: var(--mantine-color-white);
-    font-weight: 300;
+    font-weight: 400;
     text-align: left;
-    font-style: italic;
-    font-family: 'Poppins';
+    font-family: 'Noto Sans';
     max-width: 900px;
 
     @media (max-width: $mantine-breakpoint-sm) {
@@ -152,19 +152,13 @@
 
 }
 
+
 @media screen and (max-width: 646px) {
 
     .gameGrid{
         grid-template-columns: 1fr;
     }
 
-    .headerSection{
-        text-align: center;
-    }
-
-    .titleLogo{
-        margin-bottom: -1rem;
-    }
 
     .titleDescriptionSection{
         padding: 0;
@@ -179,22 +173,15 @@
         padding-right: 1rem;
     }
 
-    .gameImage{
-        width: 100%;
-    }
-
     .titleText{
         font-size: 2.5rem;
     }
 
     .description{
-        font-size: 16px;
-    }
-
-    .titleLogo{
-        padding: 0.3rem;
+        font-size: 18px;
     }
     
 }
+
 
     
