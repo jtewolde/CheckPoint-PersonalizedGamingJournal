@@ -133,7 +133,7 @@ export default function TrendingGamesCarousel() {
                                 <div className={classes.platformBadges}>
 
                                     {game.platforms?.slice(0, 4).map((platform: { abbreviation: string }) => (
-                                    <Badge key={platform.abbreviation} size="md" variant="subtle" color="gray" radius='md' c='white' leftSection={getPlatformIcon(platform.abbreviation)}>
+                                    <Badge key={platform.abbreviation} size="md" variant="filled" color="#5e5c5c" radius='md' c='white' leftSection={getPlatformIcon(platform.abbreviation)}>
                                         {platform.abbreviation}
                                     </Badge>
                                     ))}

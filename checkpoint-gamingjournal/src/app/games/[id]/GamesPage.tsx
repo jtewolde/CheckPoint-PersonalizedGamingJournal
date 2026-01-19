@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useParams, useRouter } from 'next/navigation';
 import { notFound } from 'next/navigation';
 
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
+import GameCard from '@/components/GameCard/GameCard';
 
 import toast from 'react-hot-toast';
 
@@ -13,15 +14,12 @@ import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid
 import Image from 'next/image';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, FreeMode, Thumbs } from 'swiper/modules';
+import { Navigation, Pagination} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/thumbs';
 import 'swiper/css/free-mode';
-
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
 
 import classes from './game.module.css';
 
@@ -57,16 +55,9 @@ export default function GameDetails() {
 
   const router = useRouter();
 
-  const [isMobile, setIsMobile] = useState(false);
-  const [thumbsSwiper, setThumbSwiper] = useState(null); // Use state for thumbnail swiper instance
+  const isMobile = useMediaQuery('(max-width: 650px)');
 
-  // Detect screen size for responsive design for screenshot carousel
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 464);
-    handleResize(); // run once on mount
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const [thumbsSwiper, setThumbSwiper] = useState(null); // Use state for thumbnail swiper instance
 
   // Fetch game details from IGDB API when component mounts or ID changes
   useEffect(() => {
@@ -257,40 +248,6 @@ export default function GameDetails() {
   if (!game) {
     return notFound()
   }
-
-  // Define responsive settings for similar games carousel
-  const similarGameResponsive = {
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 3, // Show three slides at a time for desktop
-      slidesToSlide: 3, // Number of slides to scroll at once
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 2, // Show two slides at a time for tablet
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 1, // Show one slide at a time
-    },
-  };
-
-  // Define responsive settings for screenshots carousel
-  const screenshotResponsive = {
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 1, // Show three slides at a time for desktop
-      slidesToSlide: 1, // Number of slides to scroll at once
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 1, // Show one slide at a time
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 1, // Show one slide at a time
-    },
-  };
 
   // Function to retrieve logos for different platforms that games can be on
   const getPlatformIcon = (platformName: string) => {
@@ -632,10 +589,12 @@ export default function GameDetails() {
           <div className={classes.screenshotGrid}>
 
             <Swiper
+              centeredSlides={true}
+              loop={true}
               navigation
               pagination={{ clickable: true }}
               modules={[Navigation, Pagination]}
-              slidesPerView={1}
+              slidesPerView={isMobile ? 1 : 1.5}
               spaceBetween={20}
               className={classes.swiperContainer}
             >
@@ -646,10 +605,9 @@ export default function GameDetails() {
                   src={`https:${screenshot.url.replace('t_thumb', 't_1080p')}`}
                   alt={`Screenshot of ${game.name}`}
                   className={classes.screenshot}
-                  width={750}
+                  width={900}
                   height={400}
                   loading='lazy'
-                  layout='responsive'
                   onClick={() => {
                     setSelectedScreenshot(`https:${screenshot.url.replace('t_thumb', 't_1080p')}`);
                     setSelectedScreenshotIndex(index);
@@ -692,11 +650,10 @@ export default function GameDetails() {
 
                 <div className={classes.nameButtonContainer}>
                   <h2 className={classes.gameSeriesName}> Other Games in the Series:</h2>
-                  {/* <a className={classes.viewMoreText} href='/search/popular' >View more</a> */}
                 </div>
                 
-                <SimpleGrid spacing='lg' verticalSpacing='lg' className={classes.seriesGrid}>
-                  {sortedCollections.slice(0, 6).map((collection: any) => (
+                <SimpleGrid cols={{ base: 2, sm: 3, md: 4}} spacing='lg' verticalSpacing='lg' className={classes.seriesGrid}>
+                  {sortedCollections.slice(0, 4).map((collection: any) => (
                       <div
                         className={classes.seriesGameCard}
                         key={collection.id}
@@ -726,8 +683,7 @@ export default function GameDetails() {
             
             <Swiper
               navigation
-              pagination={{ clickable: true }}
-              modules={[Navigation, Pagination]}
+              modules={[Navigation]}
               slidesPerView={isMobile ? 1 : 3}
               spaceBetween={20}
               className={classes.swiperContainer}
