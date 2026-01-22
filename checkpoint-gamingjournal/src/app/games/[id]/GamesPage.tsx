@@ -402,7 +402,7 @@ export default function GameDetails() {
 
   // Determine the background image (first screenshot if available)
   const backgroundPhoto = game.screenshots && game.screenshots.length > 0
-  ? `https:${game.screenshots[1].url.replace('t_thumb', 't_720p')}`
+  ? `https:${game.screenshots[0].url.replace('t_thumb', 't_720p')}`
   : PlaceHolderImage.src;
 
   return (
@@ -448,7 +448,7 @@ export default function GameDetails() {
                               {libraryGame?.status || 'No Status Given'}
                             </Badge>
                             
-                            <HoverCard width='auto' shadow='md' position='right' styles={{dropdown: {color: 'black'}}}>
+                            <HoverCard width='auto' shadow='md' position='right' styles={{dropdown: {color: 'white', backgroundColor: '#1e1e1e', fontFamily: 'Poppins', fontWeight: 300, border: '1px solid lightgray'}}}>
                               <HoverCard.Target>
                                 <Trophy 
                                 size={30} 
@@ -557,8 +557,8 @@ export default function GameDetails() {
                 styles={{item: {background: '#292828ff', color: 'white', border: '0.5px solid lightgrey'}, 
                   label: {color: 'white', paddingRight: '0.7rem', fontSize: '18px', fontWeight: 550}, 
                   chevron: {color: 'white'},
-                  panel: {color: 'white', fontSize: '18px', }}} 
-                
+                  panel: {color: 'white', fontSize: '18px'}
+                }} 
                 radius='md' 
                 variant='filled' 
                 multiple 

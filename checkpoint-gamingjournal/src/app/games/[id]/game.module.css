@@ -101,11 +101,6 @@
   padding: 1rem;
 }
 
-.hoverText{
-  font-family: 'Poppins';
-  font-weight: bold;
-}
-
 .rightSection{
   display: flex;
   flex-direction: column;
