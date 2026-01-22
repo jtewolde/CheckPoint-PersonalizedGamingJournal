@@ -6,11 +6,10 @@ import { useParams, useRouter } from 'next/navigation';
 import { notFound } from 'next/navigation';
 
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
-import GameCard from '@/components/GameCard/GameCard';
 
 import toast from 'react-hot-toast';
 
-import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack } from '@mantine/core';
+import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, ActionIcon, HoverCard, Rating } from '@mantine/core';
 import Image from 'next/image';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -23,7 +22,7 @@ import 'swiper/css/free-mode';
 
 import classes from './game.module.css';
 
-import { NotebookPen, Delete, X, CalendarDays} from 'lucide-react';
+import { NotebookPen, Delete, X, CalendarDays, Trophy} from 'lucide-react';
 
 import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
   IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
@@ -43,6 +42,7 @@ export default function GameDetails() {
   const [isGameInLibrary, setIsInLibrary] = useState(false);
 
   const [status, setStatus] = useState(''); // State to handle game status
+  const [isPlatinum, setIsPlatinum] = useState(false) // State to handle platinum of game
   const [opened, {open, close} ] = useDisclosure(false);
 
   const [screenshots, setScreensShots] = useState<any[]>([]); // State to store screenshots
@@ -107,6 +107,7 @@ export default function GameDetails() {
         setIsInLibrary(isGameInLibrary); // Update the state
         setLibraryGame(currentGame || null); // Store the current game details in state 
         setStatus(currentGame?.status);
+        setIsPlatinum(currentGame?.platinum ?? false)
       } catch (error) {
         console.error('Error checking if game is in library:', error);
       }
@@ -147,6 +148,7 @@ export default function GameDetails() {
               ? new Date(game.first_release_date * 1000).toISOString()
               : null,
             status: game.status,
+            platinum: game.platinum,
             journalEntries: [],
           },
         }),
@@ -207,11 +209,17 @@ export default function GameDetails() {
     }
   }
 
-  // Function to handle updating the game status
-  const handleUpdateStatus = async (newStatus: string) => {
+  // Create a partial update object to update game info like status and platinum
+  type GameUpdateInfo = {
+    status?: string;
+    platinum?: boolean;
+  }
+
+  // Function to handle updating the game status, trophy(platinum), and rating.
+  const handleUpdateInfo = async (status?: string, platinum?: boolean) => {
     try {
       const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token
-      const res = await fetch('/api/library/updateStatus', {
+      const res = await fetch('/api/library/updateInfo', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -220,7 +228,8 @@ export default function GameDetails() {
         body: JSON.stringify({
           gameID: id, // Pass the game ID
           gameDetails: {
-            status: newStatus, // Pass the new status
+            status,
+            platinum
           },
         }),
       });
@@ -230,13 +239,12 @@ export default function GameDetails() {
       }
         
       const data = await res.json();
-      console.log('Game status updated:', data);
-      toast.success(`Game status updated to: ${newStatus}`);
+      toast.success('Game info updated to:', data);
       
       router.push(`/games/${game.id}`)
     } catch (error) {
       console.error('Error updating game status:', error);
-      toast.error('Failed to update game status. Please try again.');
+      toast.error('Failed to update game info. Please try again.');
     }
   };
 
@@ -394,7 +402,7 @@ export default function GameDetails() {
 
   // Determine the background image (first screenshot if available)
   const backgroundPhoto = game.screenshots && game.screenshots.length > 0
-  ? `https:${game.screenshots[2].url.replace('t_thumb', 't_720p')}`
+  ? `https:${game.screenshots[1].url.replace('t_thumb', 't_720p')}`
   : PlaceHolderImage.src;
 
   return (
@@ -429,54 +437,99 @@ export default function GameDetails() {
                   className={classes.cover}
                 />
 
-                {isAuthenticated ? (
-                  isGameInLibrary ? (
-                    <div className={classes.buttonContainer}>
-                      <Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>
-                        {libraryGame?.status || 'No Status Given'}
-                      </Badge>
+                <div className={classes.coverInfoContainer}>
+                    {isAuthenticated ? (
+                      isGameInLibrary ? (
+                        <div className={classes.buttonContainer}>
 
-                      <Modal opened={opened} onClose={close} title="Change Game Status:" styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #424242', color: 'white', fontFamily: 'Noto Sans'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
-                        <Select
-                          className={classes.statusSelect}
-                          size='md'
-                          styles={{
-                              wrapper: { color: '#212121'}, 
-                              input: { color: 'white', background: '#212121'}, 
-                              dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
-                              option: { background: '#202020'}
-                          }}
-                          value={status}
-                          onChange={(value) => {
-                            setStatus(value || '');
-                            handleUpdateStatus(value || '');
-                            close();
-                          }}
-                          data={[
-                            { value: 'Playing', label: 'Playing' },
-                            { value: 'Completed', label: 'Completed' },
-                            { value: 'On Hold', label: 'On Hold' },
-                            { value: 'Dropped', label: 'Dropped' },
-                            { value: 'Plan to Play', label: 'Plan to Play' },
-                          ]}
-                          placeholder="Select game status"
-                        />
-                      </Modal>
-                      <Button
-                        variant="filled"
-                        color="#d8070b"
-                        size="md"
-                        radius="xl"
-                        className={classes.button}
-                        rightSection={<Delete />}
-                        onClick={handleRemoveFromLibrary}
-                        loading={addingToLibrary}
-                      >
-                        Remove from your Library!
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className={classes.buttonContainer}>
+                          <div style={{display: 'flex', flexDirection: 'row', gap: '1rem'}}>
+
+                            <Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>
+                              {libraryGame?.status || 'No Status Given'}
+                            </Badge>
+                            
+                            <HoverCard width='auto' shadow='md' position='right' styles={{dropdown: {color: 'black'}}}>
+                              <HoverCard.Target>
+                                <Trophy 
+                                size={30} 
+                                color={isPlatinum ? 'gold' : 'gray'}
+                                fill={isPlatinum ? 'gold' : 'none'}
+                                style={{ transition: 'all 0.2s ease' }}
+                                cursor={'pointer'}
+                                onClick={() => {
+                                const newValue = !isPlatinum;
+                                setIsPlatinum(newValue);
+                                handleUpdateInfo(undefined, newValue);
+                              }}
+                                />
+                              </HoverCard.Target>
+
+                              <HoverCard.Dropdown>
+                                <Text size='md' className={classes.hoverText}>
+                                  Platinumed/100%
+                                </Text>
+                              </HoverCard.Dropdown>
+                            </HoverCard>
+
+                          </div>
+
+                          <Modal opened={opened} onClose={close} title="Change Game Status:" styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #424242', color: 'white', fontFamily: 'Noto Sans'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
+                            <Select
+                              className={classes.statusSelect}
+                              size='md'
+                              styles={{
+                                  wrapper: { color: '#212121'}, 
+                                  input: { color: 'white', background: '#212121'}, 
+                                  dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
+                                  option: { background: '#202020'}
+                              }}
+                              value={status}
+                              onChange={(value) => {
+                                if(!value) return;
+                                setStatus(value);
+                                handleUpdateInfo(value);
+                                close();
+                              }}
+                              data={[
+                                { value: 'Playing', label: 'Playing' },
+                                { value: 'Completed', label: 'Completed' },
+                                { value: 'On Hold', label: 'On Hold' },
+                                { value: 'Dropped', label: 'Dropped' },
+                                { value: 'Plan to Play', label: 'Plan to Play' },
+                              ]}
+                              placeholder="Select game status"
+                            />
+                          </Modal>
+                          <Button
+                            variant="filled"
+                            color="#d8070b"
+                            size="md"
+                            radius="xl"
+                            className={classes.button}
+                            rightSection={<Delete />}
+                            onClick={handleRemoveFromLibrary}
+                            loading={addingToLibrary}
+                          >
+                            Remove from your Library!
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className={classes.buttonContainer}>
+                          <Button
+                            variant="filled"
+                            color="#2bdd66"
+                            size="lg"
+                            radius="xl"
+                            className={classes.button}
+                            rightSection={<NotebookPen />}
+                            onClick={handleAddToLibrary}
+                            loading={addingToLibrary}
+                          >
+                            Add to your Library!
+                          </Button>
+                        </div>
+                      )
+                    ) : (
                       <Button
                         variant="filled"
                         color="#2bdd66"
@@ -484,26 +537,13 @@ export default function GameDetails() {
                         radius="xl"
                         className={classes.button}
                         rightSection={<NotebookPen />}
-                        onClick={handleAddToLibrary}
-                        loading={addingToLibrary}
+                        onClick={() => router.push('/auth/signup')}
                       >
-                        Add to your Library!
+                        Create an account!
                       </Button>
-                    </div>
-                  )
-                ) : (
-                  <Button
-                    variant="filled"
-                    color="#2bdd66"
-                    size="lg"
-                    radius="xl"
-                    className={classes.button}
-                    rightSection={<NotebookPen />}
-                    onClick={() => router.push('/auth/signup')}
-                  >
-                    Create an account!
-                  </Button>
-                )}
+                    )}
+
+                  </div>
 
               </div>
 

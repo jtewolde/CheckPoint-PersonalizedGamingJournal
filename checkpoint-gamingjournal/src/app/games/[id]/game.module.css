@@ -92,6 +92,20 @@
   gap: 2rem; /* space between image and button */
 }
 
+.coverInfoContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  padding: 1rem;
+}
+
+.hoverText{
+  font-family: 'Poppins';
+  font-weight: bold;
+}
+
 .rightSection{
   display: flex;
   flex-direction: column;
@@ -106,7 +120,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .button{
@@ -432,7 +446,7 @@
   }
 
   .button {
-    width: 90%;
+    width: auto;
     text-align: center;
   }
 }
