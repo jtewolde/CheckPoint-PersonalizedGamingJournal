@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth-client'
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
-import { SimpleGrid, Badge, Image, Select, Popover, Button } from '@mantine/core';
-import { ListFilter } from 'lucide-react';
+import { SimpleGrid, Badge, Image, Select, Popover, Button, Tooltip } from '@mantine/core';
+import { ListFilter, Trophy } from 'lucide-react';
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 import classes from './library.module.css';
@@ -55,6 +55,7 @@ export default function Library(){
                 const data = await res.json();
                 setGames(data.games);
                 setTotalGames(data.games.length);
+                console.log("Platinum Games", data.games.platinum)
                 console.log("User Library Games: ", data.games);
             } catch(error) {
                 console.log('Error fetching user library', error);
@@ -97,7 +98,7 @@ export default function Library(){
                 {/* Status Filter Dropdown */}
                 <Popover width={300} position='bottom-end' withArrow shadow='lg'>
                     <Popover.Target>
-                        <Button className={classes.filterButton} size='md' radius='lg' variant='gradient' gradient={{from: '#e96443', to: '#904e95', deg: 90}} rightSection={<ListFilter />}>Filter By Status</Button>
+                        <Button className={classes.filterButton} size='md' radius='lg' variant='gradient' gradient={{from: '#43bae9', to: '#3b99d3', deg: 90}} rightSection={<ListFilter />}>Filter By Status</Button>
                     </Popover.Target>
 
                     <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>
@@ -135,22 +136,20 @@ export default function Library(){
                                 <div key={game._id} className={classes.libraryCard} onClick={() => router.push(`/games/${game.gameId}`)}>
                                     <div className={classes.imageContainer} style={{ textAlign: 'center' }}>
                                         <Image
-                                            src={
-                                                game.coverImage
-                                                    ? `https:${game.coverImage.replace('t_thumb', 't_cover_big')}`
-                                                    : PlaceHolderImage.src
-                                            }
-                                            alt={game.name}
-                                            radius="md"
-                                            className={classes.image}
+                                        src={
+                                        game.coverImage
+                                            ? `https:${game.coverImage.replace('t_thumb', 't_cover_big')}`
+                                            : PlaceHolderImage.src
+                                        }
+                                        alt={game.name}
+                                        radius="md"
+                                        className={classes.image}
                                         />
                                     </div>
 
                                     <div className={classes.gameInfo}>
 
                                         <h3 className={classes.gameTitle}>{game.title}</h3>
-
-                                        {/* <p className={classes.gameGenres}>{game.genre}</p> */}
 
                                         <Badge 
                                         className={classes.badge} 
@@ -161,6 +160,19 @@ export default function Library(){
                                         >
                                             {game.status || "No Status"}
                                         </Badge>
+
+                                        {game.platinum && (
+
+                                            <Tooltip label='Platinumed/100%' position='right'>
+                                                <Trophy 
+                                                size={30} 
+                                                color='gold'
+                                                fill='gold'
+                                                cursor={'pointer'}
+                                                />
+                                            </Tooltip>
+
+                                        )}
 
                                     </div>
 

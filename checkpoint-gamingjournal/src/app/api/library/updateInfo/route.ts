@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GameCollection } from "@/utils/db";
-import { ObjectId } from "mongodb";
 
 import { auth } from "@/utils/auth";
 import { redis } from "@/utils/redis";
 
-// This API route is used to update the status of a game in the user's library
+// This API route is used to update the status/rating/trophy of a game in the user's library
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json(); // Parse the request body

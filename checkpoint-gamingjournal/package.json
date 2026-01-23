@@ -43,6 +43,7 @@
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
     "resend": "^4.5.1",
+    "swiper": "^12.0.3",
     "uploadthing": "^7.7.3",
     "uuid": "^11.1.0"
   },

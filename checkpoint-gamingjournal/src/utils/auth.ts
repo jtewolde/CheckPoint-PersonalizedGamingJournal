@@ -24,12 +24,12 @@ export const auth = betterAuth({
 
     cors: {
     origin: [
-      "https://checkpoint-gaming.vercel.app",
-      "https://checkpoint-gaming-qpy6bmti8-joseph-tewoldes-projects.vercel.app",
-      "https://www.checkpoint-gamingjournal.com"
+        "https://checkpoint-gaming.vercel.app",
+        "https://checkpoint-gaming-qpy6bmti8-joseph-tewoldes-projects.vercel.app",
+        "https://www.checkpoint-gamingjournal.com"
     ],
     credentials: true
-  },
+},
 
     emailAndPassword: {
         enabled: true,
@@ -124,6 +124,11 @@ export const auth = betterAuth({
                 required: false,
                 enum: ["playing", "completed", "on_hold", "dropped", "plan_to_play"],
                 defaultValue: "No Status Given",
+            },
+            platinum: {
+                type: "boolean",
+                required: false,
+                defaultValue: false
             },
             summary: {
                 type: "string",

@@ -1,7 +1,23 @@
 
+.filterContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.activeFiltersText{
+    font-family: 'Inter';
+    font-size: 20px;
+    font-weight: 300;
+    justify-self: flex-end;
+}
+
 .filterButton{
-    width: 150px;
-    margin-bottom: 1.5rem;
+    width: auto;
     font-family: 'Noto Sans';
     font-size: 20px;
     border: 1px solid black;
@@ -16,5 +32,11 @@
   &[data-orientation='vertical'] .thumb {
     background-color: black;
   }
+}
+
+@media (max-width: 768px) {
+    .activeFiltersText{
+      font-size: 16px;
+    }
 }
 

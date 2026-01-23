@@ -1,6 +1,6 @@
 'use client';
 
-import { MultiSelect, Select, Drawer, Stack, Button } from "@mantine/core";4
+import { MultiSelect, Select, Drawer, Stack, Button, Text } from "@mantine/core";4
 import { useDisclosure } from "@mantine/hooks";
 import { ListFilter } from "lucide-react";
 import classes from './GameFilters.module.css';
@@ -9,6 +9,8 @@ import { validate } from "uuid";
 // Define the props for the GameFilter component
 interface GameFilterProps {
     color: string;
+    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    radius?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     sortOption: string;
     selectedType: string[];
     selectedGenres: string[];
@@ -26,6 +28,8 @@ interface GameFilterProps {
 // Create the GameFilter component with the defined props to handle game filtering/sorting
 export default function GameFilters({
     color,
+    size = "lg",
+    radius = 'md',
     sortOption,
     selectedType,
     selectedGenres,
@@ -40,15 +44,22 @@ export default function GameFilters({
     onPlatformsChange
 } : GameFilterProps) {
 
-    // States for managing the drawer visibility and active filters
+    // States for managing the drawer visibility
     const [opened, { toggle, close }] = useDisclosure(false);
+
+    // Determine if any filters are active and count them
     const activeFilters = selectedType.length > 0 || selectedGenres.length > 0 || selectedModes.length > 0 || selectedThemes.length > 0 || selectedPlatforms.length > 0;
+    const numberOfActiveFilters = selectedGenres.length + selectedType.length + selectedModes.length + selectedThemes.length + selectedPlatforms.length;
 
     return (
 
         <div className={classes.filterContainer}>
         
-            <Button className={classes.filterButton} size='lg' radius='md' color={color} leftSection={<ListFilter size={30} />} onClick={toggle}>Filters</Button>
+            <Button className={classes.filterButton} size={size} radius={radius} color={color} leftSection={<ListFilter size={30} />} onClick={toggle}>Filters</Button>
+
+            <Text className={classes.activeFiltersText} color='white'>
+                {activeFilters ? `${numberOfActiveFilters} Active Filter${numberOfActiveFilters > 1 ? 's' : ''}` : 'No Active Filters'}
+            </Text>
 
             {/* Drawer component to hold the filter options, slides in from left */}
             <Drawer
@@ -84,6 +95,7 @@ export default function GameFilters({
                     <Select
                         size='md'
                         label="Sort By:"
+                        placeholder="Select an option"
                         checkIconPosition='left'
                         styles={{
                         dropdown: {
@@ -124,6 +136,7 @@ export default function GameFilters({
                         size='md'
                         label="Game Types"
                         maxDropdownHeight={200}
+                        placeholder={selectedType.length === 0 ? "Choose a Type" : ''}
                         checkIconPosition='left'
                         scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
                         styles={{
@@ -155,7 +168,6 @@ export default function GameFilters({
                         }
                         }}
                         data={[
-                            { value: 'all', label: 'All'},
                             { value: 'main game', label: 'Main Game' },
                             { value: 'dlc', label: "DLC"},
                             { value: 'expansion', label: "Expansion"},
@@ -176,6 +188,7 @@ export default function GameFilters({
                         size='md'
                         label="Genres"
                         maxDropdownHeight={200}
+                        placeholder={selectedGenres.length === 0 ? "Choose a Genre" : ""}
                         checkIconPosition='left'
                         scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
                         styles={{
@@ -207,7 +220,6 @@ export default function GameFilters({
                         }
                         }}
                         data={[
-                            { value: 'all', label: 'All'},
                             { value: 'adventure', label: 'Adventure' },
                             { value: 'arcade', label: "Arcade"},
                             { value: 'card-and-board game', label:'Card & Board Game'},
@@ -241,6 +253,7 @@ export default function GameFilters({
                         size='md'
                         label="Themes"
                         maxDropdownHeight={200}
+                        placeholder={selectedThemes.length === 0 ? 'Choose a Theme' : ''}
                         checkIconPosition='left'
                         scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
                         styles={{
@@ -271,8 +284,7 @@ export default function GameFilters({
                             color: 'black'
                         }
                         }}
-                        data={[
-                            { value: 'all', label: 'All'},
+                        data={[    
                             { value: 'action', label: 'Action' },
                             { value: 'adventure', label: 'Adventure' },
                             { value: 'business', label: 'Business' },
@@ -305,6 +317,7 @@ export default function GameFilters({
                     <MultiSelect
                         size='md'
                         label="Game Modes"
+                        placeholder={selectedModes.length === 0 ? 'Choose a Mode' : ''}
                         maxDropdownHeight={200}
                         checkIconPosition='left'
                         scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
@@ -336,8 +349,7 @@ export default function GameFilters({
                             color: 'black'
                         }
                         }}
-                        data={[
-                            { value: 'all', label: 'All'},
+                        data={[     
                             { value: 'single-player', label: 'Single Player' },
                             { value: 'multiplayer', label: 'Multiplayer' },
                             { value: 'co-operative', label: 'Co-operative' },
@@ -355,6 +367,7 @@ export default function GameFilters({
                     <MultiSelect
                         size='md'
                         label="Platforms"
+                        placeholder={selectedPlatforms.length === 0 ? 'Choose a Platform' : ''}
                         maxDropdownHeight={200}
                         checkIconPosition='left'
                         scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
@@ -386,8 +399,7 @@ export default function GameFilters({
                             color: 'black'
                         }
                         }}
-                        data={[
-                            { value: 'all', label: 'All'},
+                        data={[  
                             { value: 'ps5', label: 'PlayStation 5' },
                             { value: 'series-x-s', label: 'Xbox Series X/S'},
                             { value: 'win', label: 'PC (Windows)' },

@@ -35,6 +35,11 @@ export async function POST(req: NextRequest) {
             gameDetails.status = "No Status Given"; // Default status of game if not provided
         }
 
+        // Ensure that the default value of platinum attribute of a game is false.
+        if(!gameDetails.platinum){
+            gameDetails.platinum = false;
+        }
+
         // Create a game with the user's ID
         const game = {
             userId: userId,

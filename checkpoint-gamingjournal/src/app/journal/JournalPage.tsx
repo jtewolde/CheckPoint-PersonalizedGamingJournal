@@ -6,10 +6,10 @@ import { useDisclosure } from '@mantine/hooks';
 import { authClient } from '@/lib/auth-client';
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
-import { Button, List, Popover, Select, SimpleGrid, Pagination, ThemeIcon, Modal, Group, Title, Text, Checkbox } from '@mantine/core';
+import { Button, List, Popover, Select, SimpleGrid, Pagination, ThemeIcon, Modal, Group, Title, Text, Checkbox, ActionIcon } from '@mantine/core';
 
 import toast from 'react-hot-toast';
-import { FilePlus, DeleteIcon, Eye, ListFilter, Trash2, Notebook } from 'lucide-react';
+import { FilePlus, DeleteIcon, ListFilter, Trash2, X } from 'lucide-react';
 
 import classes from './journal.module.css';
 
@@ -357,8 +357,28 @@ export default function Journal() {
                         
                         <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
                             {filteredEntries.map((entry) => (
-                                <div key={entry._id} className={classes.entryCard} >
-                                    <h3 className={classes.entryGame}>{entry.gameName}</h3>
+                                <div key={entry._id} className={classes.entryCard} onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}>
+
+                                    <div className={classes.entryHeader}>
+
+                                        <h3 className={classes.entryGame}>{entry.gameName}</h3>
+                                        <ActionIcon
+                                            className={classes.deleteButton}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                deleteJournalEntry(entry._id, entry.gameId)}
+                                            }
+                                            radius='md'
+                                            size='lg'
+                                            variant='filled'
+                                            color='#e01515ff'
+                                            loading={loading}
+                                        >
+                                            <Trash2 size={20} />
+                                        </ActionIcon>
+
+                                    </div>
+                                    
                                     <h3 className={classes.entryTitle}>{entry.title}</h3>
                                     <p className={classes.entryContent}>
                                         {entry.content.length > 150
@@ -366,32 +386,6 @@ export default function Journal() {
                                             : entry.content}
                                     </p>
                                     <p className={classes.entryDate}>{entry.displayDate}</p>
-
-                                    <div className={classes.entryActions}>
-                                        <Button
-                                            className={classes.viewButton}
-                                            onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}
-                                            color="blue"
-                                            radius="md"
-                                            variant="filled"
-                                            style={{ marginRight: 8 }}
-                                            rightSection={<Eye />}
-                                        >
-                                            View
-                                        </Button>
-
-                                        <Button
-                                            className={classes.deleteButton}
-                                            onClick={() => deleteJournalEntry(entry._id, entry.gameId)}
-                                            rightSection={<DeleteIcon />}
-                                            radius='md'
-                                            variant='filled'
-                                            color='#e01515ff'
-                                            loading={loading}
-                                        >
-                                            Delete
-                                        </Button>
-                                    </div>
                                 </div>
                             ))}
                         </SimpleGrid>                    

@@ -2,13 +2,12 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { SimpleGrid, Text, Image, Badge } from '@mantine/core';
+import { SimpleGrid, Text } from '@mantine/core';
 
 import GameFilters from '@/components/GameFilters/GameFilters';
 import GameCard from '../GameCard/GameCard';
 import GlobalLoader from '../GlobalLoader/GlobalLoader';
 
-import PlaceHolderImage from '../../../public/no-cover-image.png';
 import classes from './SearchResults.module.css';
 
 // Define the SearchResults component that takes a query prop
@@ -28,11 +27,11 @@ export default function SearchResults({ query }: SearchResultsProps){
 
     // States to handle sorting and filtering search results
     const [sortOption, setSortOption] = useState<'first_release_date' | 'total_rating' | 'alphabetical' | ''>('total_rating'); // State to sort search results from release date/total_rating
-    const [selectedType, setSelectedType] = useState<string[]>(['all']);
-    const [selectedGenre, setSelectedGenre] = useState<string[]>(['all']);
-    const [selectedTheme, setSelectedTheme] = useState<string[]>(['all']);
-    const [selectedMode, setSelectedMode] = useState<string[]>(['all']);
-    const [selectedPlatform, setSelectedPlatform] = useState<string[]>(['all']);
+    const [selectedType, setSelectedType] = useState<string[]>([]);
+    const [selectedGenre, setSelectedGenre] = useState<string[]>([]);
+    const [selectedTheme, setSelectedTheme] = useState<string[]>([]);
+    const [selectedMode, setSelectedMode] = useState<string[]>([]);
+    const [selectedPlatform, setSelectedPlatform] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchGames = async () => {
@@ -93,7 +92,7 @@ export default function SearchResults({ query }: SearchResultsProps){
 
     // Handle cases where game_type or genres might be undefined
     if (!game.game_type || !game.genres || !game.themes || !game.game_modes || !game.platforms) {
-        return selectedType.includes('all') && selectedGenre.includes('all') && selectedTheme.includes('all') && selectedMode.includes('all') && selectedPlatform.includes('all')
+        return selectedType.length === 0 && selectedGenre.length === 0 && selectedTheme.length === 0 && selectedMode.length === 0 && selectedPlatform.length === 0
     }
 
     // Convert game types, genres, and platforms to lowercase for case-insensitive comparison
@@ -104,15 +103,16 @@ export default function SearchResults({ query }: SearchResultsProps){
     const platforms = game.platforms.map((platform : any) => platform.slug.toLowerCase());
 
     // Check if the game matches the selected type and genre filters
-    const typeMatch = selectedType.includes('all') || (gameType && selectedType.includes(gameType));
+    // Empty array means no filter applied (show all)
+    const typeMatch = selectedType.length === 0 || (gameType && selectedType.includes(gameType));
     // Check if any of the game's genres match the selected genres
-    const genreMatch = selectedGenre.includes('all') || gameGenres.some((genre: any) => selectedGenre.includes(genre));
+    const genreMatch = selectedGenre.length === 0 || gameGenres.some((genre: any) => selectedGenre.includes(genre));
     // Check if any of the game's themes match the selected themes
-    const themeMatch = selectedTheme.includes('all') || gameThemes.some((theme: any) => selectedTheme.includes(theme));
+    const themeMatch = selectedTheme.length === 0 || gameThemes.some((theme: any) => selectedTheme.includes(theme));
     // Check if any of the game's modes match the selected modes
-    const modeMatch = selectedMode.includes('all') || gameModes.some((mode: any) => selectedMode.includes(mode));
+    const modeMatch = selectedMode.length === 0 || gameModes.some((mode: any) => selectedMode.includes(mode));
     // Check if any of the game's platforms that it was released on matches
-    const platformMatch = selectedPlatform.includes('all') || platforms.some((platform: any) => selectedPlatform.includes(platform));
+    const platformMatch = selectedPlatform.length === 0 || platforms.some((platform: any) => selectedPlatform.includes(platform));
 
     return (
         typeMatch && genreMatch && themeMatch && modeMatch && platformMatch
@@ -125,10 +125,10 @@ export default function SearchResults({ query }: SearchResultsProps){
         return <GlobalLoader visible={loading} />
     }
 
-    // Route to not found if no games found
-    if (processedGames.length === 0 ){
-        router.push('/not-found');
-    }
+    // // Route to not found if no games found
+    // if (processedGames.length === 0 ){
+    //     router.push('/not-found');
+    // }
 
     return (
 
@@ -140,6 +140,7 @@ export default function SearchResults({ query }: SearchResultsProps){
 
             <GameFilters
             color="#5d2b9fff"
+            size='lg'
             sortOption={sortOption}
             selectedType={selectedType}
             selectedGenres={selectedGenre}

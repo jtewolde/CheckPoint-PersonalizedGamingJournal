@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useParams, useRouter } from 'next/navigation';
 import { notFound } from 'next/navigation';
 
@@ -9,15 +9,20 @@ import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
 import toast from 'react-hot-toast';
 
-import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack } from '@mantine/core';
+import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, ActionIcon, HoverCard, Rating } from '@mantine/core';
 import Image from 'next/image';
 
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination} from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/thumbs';
+import 'swiper/css/free-mode';
 
 import classes from './game.module.css';
 
-import { NotebookPen, Delete, X, CalendarDays} from 'lucide-react';
+import { NotebookPen, Delete, X, CalendarDays, Trophy} from 'lucide-react';
 
 import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
   IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
@@ -37,6 +42,7 @@ export default function GameDetails() {
   const [isGameInLibrary, setIsInLibrary] = useState(false);
 
   const [status, setStatus] = useState(''); // State to handle game status
+  const [isPlatinum, setIsPlatinum] = useState(false) // State to handle platinum of game
   const [opened, {open, close} ] = useDisclosure(false);
 
   const [screenshots, setScreensShots] = useState<any[]>([]); // State to store screenshots
@@ -49,15 +55,9 @@ export default function GameDetails() {
 
   const router = useRouter();
 
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 650px)');
 
-  // Detect screen size for responsive design for screenshot carousel
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 464);
-    handleResize(); // run once on mount
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const [thumbsSwiper, setThumbSwiper] = useState(null); // Use state for thumbnail swiper instance
 
   // Fetch game details from IGDB API when component mounts or ID changes
   useEffect(() => {
@@ -107,6 +107,7 @@ export default function GameDetails() {
         setIsInLibrary(isGameInLibrary); // Update the state
         setLibraryGame(currentGame || null); // Store the current game details in state 
         setStatus(currentGame?.status);
+        setIsPlatinum(currentGame?.platinum ?? false)
       } catch (error) {
         console.error('Error checking if game is in library:', error);
       }
@@ -147,6 +148,7 @@ export default function GameDetails() {
               ? new Date(game.first_release_date * 1000).toISOString()
               : null,
             status: game.status,
+            platinum: game.platinum,
             journalEntries: [],
           },
         }),
@@ -207,11 +209,17 @@ export default function GameDetails() {
     }
   }
 
-  // Function to handle updating the game status
-  const handleUpdateStatus = async (newStatus: string) => {
+  // Create a partial update object to update game info like status and platinum
+  type GameUpdateInfo = {
+    status?: string;
+    platinum?: boolean;
+  }
+
+  // Function to handle updating the game status, trophy(platinum), and rating.
+  const handleUpdateInfo = async (status?: string, platinum?: boolean) => {
     try {
       const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token
-      const res = await fetch('/api/library/updateStatus', {
+      const res = await fetch('/api/library/updateInfo', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -220,7 +228,8 @@ export default function GameDetails() {
         body: JSON.stringify({
           gameID: id, // Pass the game ID
           gameDetails: {
-            status: newStatus, // Pass the new status
+            status,
+            platinum
           },
         }),
       });
@@ -230,13 +239,12 @@ export default function GameDetails() {
       }
         
       const data = await res.json();
-      console.log('Game status updated:', data);
-      toast.success(`Game status updated to: ${newStatus}`);
+      toast.success('Game info updated to:', data);
       
       router.push(`/games/${game.id}`)
     } catch (error) {
       console.error('Error updating game status:', error);
-      toast.error('Failed to update game status. Please try again.');
+      toast.error('Failed to update game info. Please try again.');
     }
   };
 
@@ -248,40 +256,6 @@ export default function GameDetails() {
   if (!game) {
     return notFound()
   }
-
-  // Define responsive settings for similar games carousel
-  const similarGameResponsive = {
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 3, // Show three slides at a time for desktop
-      slidesToSlide: 3, // Number of slides to scroll at once
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 2, // Show two slides at a time for tablet
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 1, // Show one slide at a time
-    },
-  };
-
-  // Define responsive settings for screenshots carousel
-  const screenshotResponsive = {
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 1, // Show three slides at a time for desktop
-      slidesToSlide: 1, // Number of slides to scroll at once
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 1, // Show one slide at a time
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 1, // Show one slide at a time
-    },
-  };
 
   // Function to retrieve logos for different platforms that games can be on
   const getPlatformIcon = (platformName: string) => {
@@ -428,7 +402,7 @@ export default function GameDetails() {
 
   // Determine the background image (first screenshot if available)
   const backgroundPhoto = game.screenshots && game.screenshots.length > 0
-  ? `https:${game.screenshots[2].url.replace('t_thumb', 't_720p')}`
+  ? `https:${game.screenshots[0].url.replace('t_thumb', 't_720p')}`
   : PlaceHolderImage.src;
 
   return (
@@ -463,54 +437,99 @@ export default function GameDetails() {
                   className={classes.cover}
                 />
 
-                {isAuthenticated ? (
-                  isGameInLibrary ? (
-                    <div className={classes.buttonContainer}>
-                      <Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>
-                        {libraryGame?.status || 'No Status Given'}
-                      </Badge>
+                <div className={classes.coverInfoContainer}>
+                    {isAuthenticated ? (
+                      isGameInLibrary ? (
+                        <div className={classes.buttonContainer}>
 
-                      <Modal opened={opened} onClose={close} title="Change Game Status:" styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #424242', color: 'white', fontFamily: 'Noto Sans'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
-                        <Select
-                          className={classes.statusSelect}
-                          size='md'
-                          styles={{
-                              wrapper: { color: '#212121'}, 
-                              input: { color: 'white', background: '#212121'}, 
-                              dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
-                              option: { background: '#202020'}
-                          }}
-                          value={status}
-                          onChange={(value) => {
-                            setStatus(value || '');
-                            handleUpdateStatus(value || '');
-                            close();
-                          }}
-                          data={[
-                            { value: 'Playing', label: 'Playing' },
-                            { value: 'Completed', label: 'Completed' },
-                            { value: 'On Hold', label: 'On Hold' },
-                            { value: 'Dropped', label: 'Dropped' },
-                            { value: 'Plan to Play', label: 'Plan to Play' },
-                          ]}
-                          placeholder="Select game status"
-                        />
-                      </Modal>
-                      <Button
-                        variant="filled"
-                        color="#d8070b"
-                        size="md"
-                        radius="xl"
-                        className={classes.button}
-                        rightSection={<Delete />}
-                        onClick={handleRemoveFromLibrary}
-                        loading={addingToLibrary}
-                      >
-                        Remove from your Library!
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className={classes.buttonContainer}>
+                          <div style={{display: 'flex', flexDirection: 'row', gap: '1rem'}}>
+
+                            <Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>
+                              {libraryGame?.status || 'No Status Given'}
+                            </Badge>
+                            
+                            <HoverCard width='auto' shadow='md' position='right' styles={{dropdown: {color: 'white', backgroundColor: '#1e1e1e', fontFamily: 'Poppins', fontWeight: 300, border: '1px solid lightgray'}}}>
+                              <HoverCard.Target>
+                                <Trophy 
+                                size={30} 
+                                color={isPlatinum ? 'gold' : 'gray'}
+                                fill={isPlatinum ? 'gold' : 'none'}
+                                style={{ transition: 'all 0.2s ease' }}
+                                cursor={'pointer'}
+                                onClick={() => {
+                                const newValue = !isPlatinum;
+                                setIsPlatinum(newValue);
+                                handleUpdateInfo(undefined, newValue);
+                              }}
+                                />
+                              </HoverCard.Target>
+
+                              <HoverCard.Dropdown>
+                                <Text size='md' className={classes.hoverText}>
+                                  Platinumed/100%
+                                </Text>
+                              </HoverCard.Dropdown>
+                            </HoverCard>
+
+                          </div>
+
+                          <Modal opened={opened} onClose={close} title="Change Game Status:" styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #424242', color: 'white', fontFamily: 'Noto Sans'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
+                            <Select
+                              className={classes.statusSelect}
+                              size='md'
+                              styles={{
+                                  wrapper: { color: '#212121'}, 
+                                  input: { color: 'white', background: '#212121'}, 
+                                  dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
+                                  option: { background: '#202020'}
+                              }}
+                              value={status}
+                              onChange={(value) => {
+                                if(!value) return;
+                                setStatus(value);
+                                handleUpdateInfo(value);
+                                close();
+                              }}
+                              data={[
+                                { value: 'Playing', label: 'Playing' },
+                                { value: 'Completed', label: 'Completed' },
+                                { value: 'On Hold', label: 'On Hold' },
+                                { value: 'Dropped', label: 'Dropped' },
+                                { value: 'Plan to Play', label: 'Plan to Play' },
+                              ]}
+                              placeholder="Select game status"
+                            />
+                          </Modal>
+                          <Button
+                            variant="filled"
+                            color="#d8070b"
+                            size="md"
+                            radius="xl"
+                            className={classes.button}
+                            rightSection={<Delete />}
+                            onClick={handleRemoveFromLibrary}
+                            loading={addingToLibrary}
+                          >
+                            Remove from your Library!
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className={classes.buttonContainer}>
+                          <Button
+                            variant="filled"
+                            color="#2bdd66"
+                            size="lg"
+                            radius="xl"
+                            className={classes.button}
+                            rightSection={<NotebookPen />}
+                            onClick={handleAddToLibrary}
+                            loading={addingToLibrary}
+                          >
+                            Add to your Library!
+                          </Button>
+                        </div>
+                      )
+                    ) : (
                       <Button
                         variant="filled"
                         color="#2bdd66"
@@ -518,26 +537,13 @@ export default function GameDetails() {
                         radius="xl"
                         className={classes.button}
                         rightSection={<NotebookPen />}
-                        onClick={handleAddToLibrary}
-                        loading={addingToLibrary}
+                        onClick={() => router.push('/auth/signup')}
                       >
-                        Add to your Library!
+                        Create an account!
                       </Button>
-                    </div>
-                  )
-                ) : (
-                  <Button
-                    variant="filled"
-                    color="#2bdd66"
-                    size="lg"
-                    radius="xl"
-                    className={classes.button}
-                    rightSection={<NotebookPen />}
-                    onClick={() => router.push('/auth/signup')}
-                  >
-                    Create an account!
-                  </Button>
-                )}
+                    )}
+
+                  </div>
 
               </div>
 
@@ -551,8 +557,8 @@ export default function GameDetails() {
                 styles={{item: {background: '#292828ff', color: 'white', border: '0.5px solid lightgrey'}, 
                   label: {color: 'white', paddingRight: '0.7rem', fontSize: '18px', fontWeight: 550}, 
                   chevron: {color: 'white'},
-                  panel: {color: 'white', fontSize: '18px', }}} 
-                
+                  panel: {color: 'white', fontSize: '18px'}
+                }} 
                 radius='md' 
                 variant='filled' 
                 multiple 
@@ -622,29 +628,26 @@ export default function GameDetails() {
 
           <div className={classes.screenshotGrid}>
 
-            <Carousel
-              responsive={screenshotResponsive}
-              centerMode={!isMobile}
-              showDots
-              arrows={!modalOpen}
-              infinite={true}
-              autoPlay={false}
-              keyBoardControl={true}
-              containerClass={classes.carouselContainer}
-              itemClass={classes.carouselItem}
-              dotListClass={classes.carouselDots}
+            <Swiper
+              centeredSlides={true}
+              loop={true}
+              navigation
+              pagination={{ clickable: true }}
+              modules={[Navigation, Pagination]}
+              slidesPerView={isMobile ? 1 : 1.5}
+              spaceBetween={20}
+              className={classes.swiperContainer}
             >
 
             {screenshots.map((screenshot: any, index: number) => (
-              <div key={screenshot.id} className={classes.carouselSlide}>
+              <SwiperSlide key={screenshot.id} className={classes.carouselSlide}>
                 <Image
                   src={`https:${screenshot.url.replace('t_thumb', 't_1080p')}`}
                   alt={`Screenshot of ${game.name}`}
                   className={classes.screenshot}
-                  width={750}
+                  width={900}
                   height={400}
                   loading='lazy'
-                  layout='responsive'
                   onClick={() => {
                     setSelectedScreenshot(`https:${screenshot.url.replace('t_thumb', 't_1080p')}`);
                     setSelectedScreenshotIndex(index);
@@ -652,10 +655,10 @@ export default function GameDetails() {
                     setModalOpen(true);
                   }}
                 />
-              </div>
+              </SwiperSlide>
             ))}
 
-            </Carousel>
+            </Swiper>
 
           </div>
 
@@ -687,11 +690,10 @@ export default function GameDetails() {
 
                 <div className={classes.nameButtonContainer}>
                   <h2 className={classes.gameSeriesName}> Other Games in the Series:</h2>
-                  {/* <a className={classes.viewMoreText} href='/search/popular' >View more</a> */}
                 </div>
                 
-                <SimpleGrid spacing='lg' verticalSpacing='lg' className={classes.seriesGrid}>
-                  {sortedCollections.slice(0, 6).map((collection: any) => (
+                <SimpleGrid cols={{ base: 2, sm: 3, md: 4}} spacing='lg' verticalSpacing='lg' className={classes.seriesGrid}>
+                  {sortedCollections.slice(0, 4).map((collection: any) => (
                       <div
                         className={classes.seriesGameCard}
                         key={collection.id}
@@ -718,17 +720,17 @@ export default function GameDetails() {
           <h2 className={classes.similarGamesName}>Similar Games: </h2>
 
           <div className={classes.similarGames}>
-            <Carousel
-              responsive={similarGameResponsive}
-              infinite={true}
-              autoPlay={false}
-              keyBoardControl={true}
-              containerClass={classes.carouselContainer}
-              itemClass={classes.carouselItem}
+            
+            <Swiper
+              navigation
+              modules={[Navigation]}
+              slidesPerView={isMobile ? 1 : 3}
+              spaceBetween={20}
+              className={classes.swiperContainer}
             >
               {game.similar_games?.map((similarGame: any) => {
                 return (
-                  <div
+                  <SwiperSlide
                     key={similarGame.id}
                     className={classes.similarGameSlide}
                     onClick={() => router.push(`/games/${similarGame.id}`)} // Navigate to the similar game's details page
@@ -743,10 +745,11 @@ export default function GameDetails() {
                       className={classes.similarGameCover}
                     />
                     <p className={classes.similarGameName}>{similarGame.name}</p>
-                  </div>
+                  </SwiperSlide>
                 );
               })}
-            </Carousel>
+            </Swiper>
+
           </div>
 
         </div>

@@ -2,10 +2,11 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { useRouter, redirect } from 'next/navigation';
+import { useMediaQuery } from '@mantine/hooks';
 
 import GameFilters from '@/components/GameFilters/GameFilters';
 
-import { Text, SimpleGrid} from '@mantine/core';
+import { Text, SimpleGrid } from '@mantine/core';
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
 import classes from './Trending.module.css';
@@ -17,43 +18,45 @@ export default function TrendingPage() {
   const limit = 75; // Set the limit of games on page to 50
   const [total, setTotal] = useState(0);
 
+  const isMobile = useMediaQuery('(max-width: 630px)');
+
   const [games, setGames] = useState<any[]>([]); // State to store games data
   const [length, setLength] = useState("")
   const [loading, setLoading] = useState(true); // State to handle loading
 
   // States to handle sorting and filtering search results
   const [sortOption, setSortOption] = useState<'first_release_date' | 'total_rating' | 'alphabetical' | ''>('total_rating'); // State to sort search results from release date/total_rating
-  const [selectedType, setSelectedType] = useState<string[]>(['all']);
-  const [selectedGenre, setSelectedGenre] = useState<string[]>(['all']);
-  const [selectedTheme, setSelectedTheme] = useState<string[]>(['all']);
-  const [selectedMode, setSelectedMode] = useState<string[]>(['all']);
-  const [selectedPlatform, setSelectedPlatform] = useState<string[]>(['all']);
+  const [selectedType, setSelectedType] = useState<string[]>([]);
+  const [selectedGenre, setSelectedGenre] = useState<string[]>([]);
+  const [selectedTheme, setSelectedTheme] = useState<string[]>([]);
+  const [selectedMode, setSelectedMode] = useState<string[]>([]);
+  const [selectedPlatform, setSelectedPlatform] = useState<string[]>([]);
 
   const router = useRouter();
 
   // Fetch games data from the API
-    useEffect(() => {
-      const fetchTrendingGames = async () => {
-        try {
-          const res = await fetch(`/api/igdb/trending-games?limit=${limit}`);
-          
-          if (!res.ok) {
-            throw new Error('Failed to fetch Trending games');
-          }
-          const data = await res.json();
-          setGames(data); // Store the games data in state
-          setLength(data.length);
-          setTotal(data.total);
-          console.log("Popular Games: ",data);
-          console.log("Total Games: ", data.total)
-        } catch (error) {
-          console.error('Error fetching popular games:', error);
-        } finally {
-          setLoading(false); // Set loading to false after fetching
+  useEffect(() => {
+    const fetchTrendingGames = async () => {
+      try {
+        const res = await fetch(`/api/igdb/trending-games?limit=${limit}`);
+        
+        if (!res.ok) {
+          throw new Error('Failed to fetch Trending games');
         }
-      };
-      fetchTrendingGames();
-    }, []);
+        const data = await res.json();
+        setGames(data); // Store the games data in state
+        setLength(data.length);
+        setTotal(data.total);
+        console.log("Popular Games: ",data);
+        console.log("Total Games: ", data.total)
+      } catch (error) {
+        console.error('Error fetching popular games:', error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching
+      }
+    };
+    fetchTrendingGames();
+  }, []);
 
   // Function to sort out the search results of games using useMemo to sort 
   const sortedGames = useMemo(() => {
@@ -87,7 +90,7 @@ export default function TrendingPage() {
 
     // Handle cases where game_type or genres might be undefined
     if (!game.game_type || !game.genres || !game.themes || !game.game_modes || !game.platforms) {
-      return selectedType.includes('all') && selectedGenre.includes('all') && selectedTheme.includes('all') && selectedMode.includes('all') && selectedPlatform.includes('all')
+        return selectedType.length === 0 && selectedGenre.length === 0 && selectedTheme.length === 0 && selectedMode.length === 0 && selectedPlatform.length === 0
     }
 
     // Convert game types, genres, and platforms to lowercase for case-insensitive comparison
@@ -97,20 +100,22 @@ export default function TrendingPage() {
     const gameModes = game.game_modes.map((mode: any) => mode.slug.toLowerCase());
     const platforms = game.platforms.map((platform : any) => platform.slug.toLowerCase());
 
-    // Check if the game matches the selected type and genre filters
-    const typeMatch = selectedType.includes('all') || (gameType && selectedType.includes(gameType));
+     // Check if the game matches the selected type and genre filters
+    // Empty array means no filter applied (show all)
+    const typeMatch = selectedType.length === 0 || (gameType && selectedType.includes(gameType));
     // Check if any of the game's genres match the selected genres
-    const genreMatch = selectedGenre.includes('all') || gameGenres.some((genre: any) => selectedGenre.includes(genre));
+    const genreMatch = selectedGenre.length === 0 || gameGenres.some((genre: any) => selectedGenre.includes(genre));
     // Check if any of the game's themes match the selected themes
-    const themeMatch = selectedTheme.includes('all') || gameThemes.some((theme: any) => selectedTheme.includes(theme));
+    const themeMatch = selectedTheme.length === 0 || gameThemes.some((theme: any) => selectedTheme.includes(theme));
     // Check if any of the game's modes match the selected modes
-    const modeMatch = selectedMode.includes('all') || gameModes.some((mode: any) => selectedMode.includes(mode));
+    const modeMatch = selectedMode.length === 0 || gameModes.some((mode: any) => selectedMode.includes(mode));
     // Check if any of the game's platforms that it was released on matches
-    const platformMatch = selectedPlatform.includes('all') || platforms.some((platform: any) => selectedPlatform.includes(platform));
+    const platformMatch = selectedPlatform.length === 0 || platforms.some((platform: any) => selectedPlatform.includes(platform));
 
     return (
-      typeMatch && genreMatch && themeMatch && modeMatch && platformMatch
+        typeMatch && genreMatch && themeMatch && modeMatch && platformMatch
     );
+
   });
 
   // If the page is still loading, put a loading overlay
@@ -145,15 +150,16 @@ export default function TrendingPage() {
 
               </div>
 
-              <Text className={classes.description} size="xl" mt="xl">
+              <Text className={classes.description} size="xl">
                 The most popular and buzzworthy games that are currently trending in the gaming community.
-                Stay updated with the latest hits and discover what everyone is talking about!
               </Text>
 
             </div>
 
             <GameFilters
               color="#546782ff"
+              size={isMobile ? 'md' : 'lg'}
+              radius='md'
               sortOption={sortOption}
               selectedType={selectedType}
               selectedGenres={selectedGenre}
