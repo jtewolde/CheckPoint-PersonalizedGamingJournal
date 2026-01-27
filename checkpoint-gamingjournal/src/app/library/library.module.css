@@ -182,11 +182,17 @@
   gap: 16px; /* Adjust spacing between items */
 }
 
+@media (max-width: 1400px){
+  .responsiveGrid{
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
 @media (max-width: 1200px) {
 
   .wrapper{
-    padding-left: 5rem;
-    padding-right: 5rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 
   .responsiveGrid {
@@ -197,8 +203,8 @@
 @media (max-width: 768px) {
 
   .wrapper{
-    padding-left: 3rem;
-    padding-right: 3rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   .responsiveGrid {
@@ -206,11 +212,11 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 530px) {
 
   .wrapper{
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 
   .responsiveGrid {
@@ -221,15 +227,19 @@
     font-size: 1.3rem;
   }
 
-  .overlay{
-    background: linear-gradient(to bottom, rgba(20, 20, 20, 1) 0%, #18181b 50%);
-  }
-
 }
 
-@media (max-width: 370px) {
+@media (max-width: 440px) {
   .responsiveGrid {
     grid-template-columns: repeat(1, 1fr); /* 1 column for screens smaller than 320px */
+  }
+
+  .libraryCard{
+    width: 90%;
+  }
+
+  .wrapper{
+
   }
 
   .titleLogo{

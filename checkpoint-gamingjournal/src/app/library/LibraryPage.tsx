@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth-client'
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
-import { SimpleGrid, Badge, Image, Select, Popover, Button, Tooltip } from '@mantine/core';
-import { ListFilter, Trophy } from 'lucide-react';
+import { SimpleGrid, Badge, Image, Select, Popover, Button, Tooltip, Rating } from '@mantine/core';
+import { ListFilter, Rat, Trophy } from 'lucide-react';
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 import classes from './library.module.css';
@@ -19,6 +19,7 @@ export default function Library(){
     const [totalGames, setTotalGames] = useState(0);
     const [loading, setLoading] = useState(true);
     const [selectedStatus, setSelectedStatus] = useState('all');
+    const [rating, setRating] = useState(0);
 
     const router = useRouter();
 
@@ -160,6 +161,15 @@ export default function Library(){
                                         >
                                             {game.status || "No Status"}
                                         </Badge>
+
+                                        {game.rating && (
+                                            <Rating 
+                                            size='sm' 
+                                            fractions={2}
+                                            readOnly
+                                            value={game.rating} 
+                                            /> 
+                                        )}
 
                                         {game.platinum && (
 
