@@ -1,8 +1,13 @@
 'use client'
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMediaQuery } from '@mantine/hooks';
-import { Badge, Text, Image } from '@mantine/core';
+import { useLibraryGame } from '@/hooks/useLibraryGame';
+
+import { Badge, Text, Image, Tooltip, ActionIcon } from '@mantine/core';
+
+import { Plus, Minus } from 'lucide-react';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 import classes from './GameCard.module.css';
@@ -23,14 +28,25 @@ interface GameCardProps {
 }
 
 export default function GameCard({ game }: GameCardProps) {
-    const router = useRouter();
 
+    const router = useRouter();
     const isMobile = useMediaQuery('(max-width: 450px)');
 
     // Determine the cover image URL or use a placeholder if not available
     const coverImage = game.cover
     ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}`
     : PlaceHolderImage.src;
+
+    // State variables for determing if current gameCard is in the user's library
+    const {isInLibrary, setIsInLibrary, loading} = useLibraryGame(game.id);
+    const [addingToLibrary, setAddingtoLibrary] = useState(false)
+
+    // const handleQuickToggle = async (e: React.MouseEvent) => {
+    //     e.stopPropagation();
+    //     if (loading || addingToLibrary) return;
+
+    //     setAdd
+    // }
 
     return (
         <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
@@ -46,6 +62,26 @@ export default function GameCard({ game }: GameCardProps) {
                 <div className={classes.overlay}>
 
                     <Text className={classes.gameName}>{game.name}</Text>
+
+                    <div 
+                    className={classes.quickAdd} 
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        console.log('Quick Add', game.id)
+                    }}
+                    >
+
+                        <Tooltip label={isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile}>
+                            <ActionIcon size='lg' radius='xl' variant='filled' color={isInLibrary ? 'red' : 'green'}>
+                                {isInLibrary ? (
+                                    <Minus size={18} strokeWidth={2.5} />
+                                    ) : (
+                                    <Plus size={18} strokeWidth={2.5} />
+                                )}
+                            </ActionIcon>
+                        </Tooltip>
+
+                    </div>
 
                 </div>
 
