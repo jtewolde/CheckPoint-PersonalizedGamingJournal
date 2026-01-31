@@ -4,10 +4,12 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMediaQuery } from '@mantine/hooks';
 import { useLibraryGame } from '@/hooks/useLibraryGame';
+import { useAuth } from '@/context/Authcontext';
 
 import { Badge, Text, Image, Tooltip, ActionIcon } from '@mantine/core';
+import toast from 'react-hot-toast';
 
-import { Plus, Minus } from 'lucide-react';
+import { Plus, Minus, Ellipsis } from 'lucide-react';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 import classes from './GameCard.module.css';
@@ -15,7 +17,7 @@ import classes from './GameCard.module.css';
 // Define the GameCard component that takes a game prop
 interface GameCardProps {
     game: {
-        id: number;
+        id: string;
         name: string;
         cover?: {url: string;};
         game_type?: {type: string;};
@@ -29,6 +31,8 @@ interface GameCardProps {
 
 export default function GameCard({ game }: GameCardProps) {
 
+    const {isAuthenticated, setIsAuthenticated} = useAuth(); // Access global auth state
+
     const router = useRouter();
     const isMobile = useMediaQuery('(max-width: 450px)');
 
@@ -41,12 +45,58 @@ export default function GameCard({ game }: GameCardProps) {
     const {isInLibrary, setIsInLibrary, loading} = useLibraryGame(game.id);
     const [addingToLibrary, setAddingtoLibrary] = useState(false)
 
-    // const handleQuickToggle = async (e: React.MouseEvent) => {
-    //     e.stopPropagation();
-    //     if (loading || addingToLibrary) return;
+    // Function to handle quick adding and removing games from the user's library.
+    const handleQuickToggle = async (gameId: string) => {
+        if (loading || addingToLibrary) return;
 
-    //     setAdd
-    // }
+        setAddingtoLibrary(true);
+        const wasInLibrary = isInLibrary
+
+        try{
+            if(!isAuthenticated){
+                toast.error("You must be logged in to manage your library!")
+                setAddingtoLibrary(false)
+                return
+            }
+
+            const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token from localStorage
+            const res = await fetch(wasInLibrary ? '/api/library/delete' : '/api/library/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`, // Include the Bearer token
+                },
+                body: JSON.stringify({
+                gameID: String(gameId),
+                gameDetails: {
+                    title: game.name,
+                    genre: game.genres?.map((genre: any) => genre.name).join(', '),
+                    coverImage: game.cover?.url,
+                    releaseDate: game.first_release_date
+                    ? new Date(game.first_release_date * 1000).toISOString()
+                    : null,
+                    journalEntries: [],
+                },
+            }),
+        });
+
+        if(!res.ok){
+            throw new Error('Failed to update library');
+        }
+
+        setIsInLibrary(!wasInLibrary);
+        toast.success('Your library has successfully updated!');
+
+        } catch(error) {
+            console.error('Error updating game library', error)
+            toast.error('Failed to update your library!')
+            // Revert optimistic update on failure
+            setIsInLibrary(wasInLibrary);
+        } finally {
+            setAddingtoLibrary(false);
+        }
+
+    }
 
     return (
         <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
@@ -67,13 +117,16 @@ export default function GameCard({ game }: GameCardProps) {
                     className={classes.quickAdd} 
                     onClick={(e) => {
                         e.stopPropagation();
-                        console.log('Quick Add', game.id)
+                        handleQuickToggle(String(game.id))
                     }}
                     >
 
-                        <Tooltip label={isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile}>
-                            <ActionIcon size='lg' radius='xl' variant='filled' color={isInLibrary ? 'red' : 'green'}>
-                                {isInLibrary ? (
+                        <Tooltip label={loading ? 'Checking library...' : isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile || loading}>
+                            <ActionIcon size='lg' radius='xl' variant='filled' color={loading ? 'gray' : isInLibrary ? 'red' : 'green'}>
+                                {loading ? (
+                                    <Ellipsis size={18} strokeWidth={2.5} />
+                                ):
+                                isInLibrary ? (
                                     <Minus size={18} strokeWidth={2.5} />
                                     ) : (
                                     <Plus size={18} strokeWidth={2.5} />

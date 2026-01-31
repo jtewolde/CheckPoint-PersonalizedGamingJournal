@@ -52,7 +52,7 @@ export default function GameDetails() {
 
   const [modalOpen, setModalOpen] = useState(false); // State to handle modal open/close
 
-  const {isAuthenticated, setIsAuthenticated} = useAuth(); // Access global auth state
+  const {isAuthenticated} = useAuth(); // Access global auth state
 
   const router = useRouter();
 

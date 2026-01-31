@@ -21,14 +21,18 @@ export async function POST(req: NextRequest) {
             headers: req.headers,
         });
 
-        console.log("Game Data: ", gameDetails);
-        console.log("Game Status", gameDetails.status);
-
         if (!session || !session.user) {
             return NextResponse.json({ error: "Unauthorized", session }, { status: 401 });
         }
 
         const userId = session.user.id; // Extract userId from the session
+
+        // Check if the game is already in the user's library
+        const existingGame = await GameCollection.findOne({ userId, gameId: gameID });
+        if (existingGame) {
+            console.log("Game exists in your library!")
+            return NextResponse.json({ message: "Game already in library" });
+        }
 
         // Ensure that the status of a game in library is defaulted to "plan to play"
         if(!gameDetails.status){
