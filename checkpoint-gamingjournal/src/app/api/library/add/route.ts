@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
         const existingGame = await GameCollection.findOne({ userId, gameId: gameID });
         if (existingGame) {
             console.log("Game exists in your library!")
-            return NextResponse.json({ message: "Game already in library" });
+            return NextResponse.json({ error: "Game already in library" }, {status: 409});
         }
 
         // Ensure that the status of a game in library is defaulted to "plan to play"

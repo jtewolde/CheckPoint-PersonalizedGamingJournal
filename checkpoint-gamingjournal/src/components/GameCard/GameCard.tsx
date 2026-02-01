@@ -47,9 +47,17 @@ export default function GameCard({ game }: GameCardProps) {
 
     // Function to handle quick adding and removing games from the user's library.
     const handleQuickToggle = async (gameId: string) => {
-        if (loading || addingToLibrary) return;
+        if (loading || addingToLibrary){
+            console.log('[GameCard]', {
+                gameId: game.id,
+                isInLibrary,
+                loading,
+            });
+            return;
+        } 
 
         setAddingtoLibrary(true);
+        
         const wasInLibrary = isInLibrary
 
         try{
@@ -80,16 +88,22 @@ export default function GameCard({ game }: GameCardProps) {
             }),
         });
 
-        if(!res.ok){
+        if(res.status === 409){
+            toast.error('The game already exists in your library!')
+        } 
+        
+        if (!res.ok){
             throw new Error('Failed to update library');
         }
 
         setIsInLibrary(!wasInLibrary);
-        toast.success('Your library has successfully updated!');
+        toast.success(
+            wasInLibrary ? 'Game has been removed from your library!' : 'Game has been added to your library!'
+        );
 
         } catch(error) {
             console.error('Error updating game library', error)
-            toast.error('Failed to update your library!')
+            toast.error('An error has occured!')
             // Revert optimistic update on failure
             setIsInLibrary(wasInLibrary);
         } finally {
@@ -122,8 +136,8 @@ export default function GameCard({ game }: GameCardProps) {
                     >
 
                         <Tooltip label={loading ? 'Checking library...' : isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile || loading}>
-                            <ActionIcon size='lg' radius='xl' variant='filled' color={loading ? 'gray' : isInLibrary ? 'red' : 'green'}>
-                                {loading ? (
+                            <ActionIcon size='lg' radius='xl' variant='filled' color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} disabled={loading || addingToLibrary}>
+                                {loading || isInLibrary === null ? (
                                     <Ellipsis size={18} strokeWidth={2.5} />
                                 ):
                                 isInLibrary ? (

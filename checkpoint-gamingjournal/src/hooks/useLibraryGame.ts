@@ -15,16 +15,22 @@ export function useLibraryGame(gameId: string | number, enabled = true) {
     const { isAuthenticated } = useAuth();
 
     useEffect(() => {
-        if (!enabled) return;
+        if (!enabled || !isAuthenticated){
+            setIsInLibrary(false);
+            setLibraryGame(null);
+            setLoading(false);
+            return;
+        }
 
         // Function to check if game is in the user's library 
         // by first checking if user is authenicated by checking if token exists.
         const checkLibrary = async () => {
             try {
+                setLoading(true);
+
                 const token = localStorage.getItem('bearer_token');
                 if (!token) {
                     setIsInLibrary(false);
-                    setLoading(false);
                     return;
                 }
 
@@ -34,21 +40,25 @@ export function useLibraryGame(gameId: string | number, enabled = true) {
                 });
 
                 const data = await res.json();
+                console.log("Data for Library Hook", data)
                 
                 // Check if the current game is in the user's library based on ID.
-                const found = data.games.find((g: any) => g.gameId === String(gameId));
+                const found = data.games.find((g: any) => String(g.gameId) === String(gameId));
+                console.log("Found Game: ", found)
 
                 setIsInLibrary(Boolean(found));
                 setLibraryGame(found || null);
-            } catch {
+            } catch(error) {
+                console.error('Library Check failed', error)
                 setIsInLibrary(false);
+                setLibraryGame(null);
             } finally {
                 setLoading(false);
             }
         };
 
         checkLibrary();
-    }, [gameId, enabled]);
+    }, [gameId, enabled, isAuthenticated]);
 
     return { isInLibrary, libraryGame, setIsInLibrary, loading };
 }
