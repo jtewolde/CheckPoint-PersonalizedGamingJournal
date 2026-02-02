@@ -42,7 +42,7 @@ export default function GameCard({ game }: GameCardProps) {
     : PlaceHolderImage.src;
 
     // State variables for determing if current gameCard is in the user's library
-    const {isInLibrary, setIsInLibrary, loading} = useLibraryGame(game.id);
+    const {isInLibrary, loading} = useLibraryGame(game.id);
     const [addingToLibrary, setAddingtoLibrary] = useState(false)
 
     // Function to handle quick adding and removing games from the user's library.
@@ -96,7 +96,6 @@ export default function GameCard({ game }: GameCardProps) {
             throw new Error('Failed to update library');
         }
 
-        setIsInLibrary(!wasInLibrary);
         toast.success(
             wasInLibrary ? 'Game has been removed from your library!' : 'Game has been added to your library!'
         );
@@ -104,8 +103,6 @@ export default function GameCard({ game }: GameCardProps) {
         } catch(error) {
             console.error('Error updating game library', error)
             toast.error('An error has occured!')
-            // Revert optimistic update on failure
-            setIsInLibrary(wasInLibrary);
         } finally {
             setAddingtoLibrary(false);
         }
