@@ -73,12 +73,6 @@ export default function PopularPage() {
       }
       return 0;
     });
-
-    console.log("Sorted by:", sortOption, sorted.map(g => ({
-      name: g.name,
-      release: g.first_release_date,
-      rating: g.total_rating
-    })));
   
     return sorted;
   }, [games, sortOption]);
