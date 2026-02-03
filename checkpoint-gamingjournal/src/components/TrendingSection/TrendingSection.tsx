@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SimpleGrid, Text, Image } from "@mantine/core";
 
+import GameCard from "../GameCard/GameCard";
+
 import classes from './TrendingSection.module.css';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
@@ -39,27 +41,9 @@ export default function TrendingSection(){
     }, []);
 
     return (
-        <SimpleGrid cols={7} spacing="lg" verticalSpacing='xl' className={classes.trendingGamesGrid}>
+        <SimpleGrid cols={{xs: 2, sm: 3, md: 4, lg: 5, xl: 6}} className={classes.trendingGamesGrid}>
             {trendingGames.map((game) => (
-            <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
-
-                <div className={classes.imageWrapper}>
-
-                <Image 
-                src={game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
-                alt={game.name} 
-                className={classes.cover}  
-                />
-
-                <div className={classes.overlay}>
-
-                    <Text className={classes.gameName}>{game.name}</Text>
-
-                </div>
-
-                </div>
-
-            </div>
+                <GameCard key={game.id} game={game} variant="compact" />
             ))}
         </SimpleGrid>
     )
