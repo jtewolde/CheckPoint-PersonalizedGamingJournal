@@ -14,6 +14,10 @@ import { Plus, Minus, Ellipsis } from 'lucide-react';
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 import classes from './GameCard.module.css';
 
+// Create type variable to determine which variant of gameCard, default for search results and more info
+// Compact for Popular and Trending games sections with less info
+type GameCardVariant = 'default' | 'compact'
+
 // Define the GameCard component that takes a game prop
 interface GameCardProps {
     game: {
@@ -27,9 +31,10 @@ interface GameCardProps {
         first_release_date?: number;
         total_rating?: number;
     };
+    variant?: GameCardVariant;
 }
 
-export default function GameCard({ game }: GameCardProps) {
+export default function GameCard({ game, variant = 'default' }: GameCardProps) {
 
     const {isAuthenticated, setIsAuthenticated} = useAuth(); // Access global auth state
 
@@ -110,7 +115,7 @@ export default function GameCard({ game }: GameCardProps) {
     }
 
     return (
-        <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
+        <div key={game.id} className={`${classes.gameCard} ${variant === 'compact' ? classes.compact : classes.default}`} onClick={() => router.push(`/games/${game.id}`)}>
 
             <div className={classes.imageWrapper}>
 
@@ -150,45 +155,50 @@ export default function GameCard({ game }: GameCardProps) {
                 </div>
 
             </div>
+
+            {variant === 'default' && (
             
-            <div className={classes.gameInfo}>
+                <div className={classes.gameInfo}>
 
-                <h3 className={classes.gameTitle}>{game.name}</h3>
+                    <h3 className={classes.gameTitle}>{game.name}</h3>
 
-                <div className={classes.ratingTypeSection}>
+                    <div className={classes.ratingTypeSection}>
 
-                    <Badge size='md' variant='filled' color='gray'>{game.game_type?.type}</Badge>
+                        <Badge size='md' variant='filled' color='gray'>{game.game_type?.type}</Badge>
 
-                    <Badge 
-                    className={classes.badge}
-                    variant='filled' 
-                    color={game.total_rating && game.total_rating >= 80 ? 'green' : game.total_rating && game.total_rating >= 70 ? 'yellow' : 'red'}
-                    radius='md'
-                    size='md'
-                    >
-                        {game.total_rating ? `${Math.round(game.total_rating)}` : 'N/A'}
-                    </Badge>
-
-                </div>
-
-                <div className={classes.badgeContainer}>
-
-                    {game.genres?.slice(0, 2).map((genre: { name: string }) => (
-                        <Badge key={genre.name} size="md" variant="filled" color="white" radius='lg' c='black'>
-                            {genre.name}
+                        <Badge 
+                        className={classes.badge}
+                        variant='filled' 
+                        color={game.total_rating && game.total_rating >= 80 ? 'green' : game.total_rating && game.total_rating >= 70 ? 'yellow' : '#e30000'}
+                        radius='md'
+                        size='md'
+                        >
+                            {game.total_rating ? `${Math.round(game.total_rating)}` : 'N/A'}
                         </Badge>
-                    ))}
+
+                    </div>
+
+                    <div className={classes.badgeContainer}>
+
+                        {game.genres?.slice(0, 2).map((genre: { name: string }) => (
+                            <Badge key={genre.name} size="md" variant="filled" color="white" radius='lg' c='black'>
+                                {genre.name}
+                            </Badge>
+                        ))}
+
+                    </div>
+
+                    <p className={classes.gameDate}>{game.first_release_date ? new Date(game.first_release_date * 1000).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                    })
+                    : 'N/A'}
+                    </p>
 
                 </div>
 
-                <p className={classes.gameDate}>{game.first_release_date ? new Date(game.first_release_date * 1000).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                })
-                : 'N/A'}
-                </p>
-            </div>
+            )}
 
         </div>
     )
