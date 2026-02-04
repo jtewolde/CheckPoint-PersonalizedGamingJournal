@@ -266,8 +266,9 @@
 
 .seriesGrid{
   justify-content: center;
+  justify-self: center;
   align-items: center;
-  margin: 0 auto;
+  gap: 2rem;
   padding-left: 1rem;
   padding-right: 1rem;
 }
@@ -291,12 +292,6 @@
 .viewMoreText:hover{
   color: #ffffff;
   font-weight: 600;
-}
-
-.seriesGameCard:hover{
-  cursor: pointer;
-  transform: scale(1.05);
-  transition: transform 0.3s ease;
 }
 
 .similarGameSlide{
@@ -327,11 +322,6 @@
   display: block;
   margin: 0 auto;
   cursor: pointer;
-}
-
-.similarGameCover:hover{
-  transform: scale(1.03);
-  transition: transform 0.3s ease;
 }
 
 .badge{

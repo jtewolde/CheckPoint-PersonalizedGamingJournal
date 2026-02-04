@@ -29,6 +29,7 @@ import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, Ic
 
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
 import { useAuth } from '@/context/Authcontext';
+import GameCard from '@/components/GameCard/GameCard';
 
 export default function GameDetails() {
   const { id } = useParams(); // Get the game ID from the URL
@@ -690,29 +691,13 @@ export default function GameDetails() {
 
             {game.collections?.[0]?.games.length > 0 && (
               <>
-
                 <div className={classes.nameButtonContainer}>
                   <h2 className={classes.gameSeriesName}> Other Games in the Series:</h2>
                 </div>
                 
-                <SimpleGrid cols={{ base: 2, sm: 3, md: 4}} spacing='lg' verticalSpacing='lg' className={classes.seriesGrid}>
+                <SimpleGrid cols={{ base: 2, sm: 3, md: 6}} spacing='lg' verticalSpacing='lg' className={classes.seriesGrid}>
                   {sortedCollections.slice(0, 4).map((collection: any) => (
-                      <div
-                        className={classes.seriesGameCard}
-                        key={collection.id}
-                        onClick={() => router.push(`/games/${collection.id}`)}
-                      >
-                        <img
-                          src={
-                            collection.cover
-                              ? `https:${collection.cover.url.replace('t_thumb', 't_1080p')}`
-                              : PlaceHolderImage.src
-                          }
-                          alt={collection.name}
-                          className={classes.gameCover}
-                          onClick={() => router.push(`/games/${game.id}`)}
-                        />
-                      </div>
+                      <GameCard variant='compact' key={collection.id} game={collection} />
                   ))}
                 </SimpleGrid>
               </>
@@ -738,16 +723,7 @@ export default function GameDetails() {
                     className={classes.similarGameSlide}
                     onClick={() => router.push(`/games/${similarGame.id}`)} // Navigate to the similar game's details page
                   >
-                    <img
-                      src={
-                        similarGame.cover
-                          ? `https:${similarGame.cover.url.replace('t_thumb', 't_1080p')}`
-                          : PlaceHolderImage.src
-                      }
-                      alt={similarGame.name}
-                      className={classes.similarGameCover}
-                    />
-                    <p className={classes.similarGameName}>{similarGame.name}</p>
+                    <GameCard variant='default' key={similarGame.id} game={similarGame} />
                   </SwiperSlide>
                 );
               })}
