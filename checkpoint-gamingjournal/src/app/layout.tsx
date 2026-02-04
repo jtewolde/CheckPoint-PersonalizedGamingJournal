@@ -8,12 +8,13 @@ import { Header } from "../components/Header/Header";
 import { Footer } from "../components/Footer/Footer";
 import { Toaster } from "react-hot-toast"
 import { AuthProvider } from "@/context/Authcontext";
+import { LibraryProvider } from "@/context/LibraryContext";
 
 import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
 
 import { Suspense } from "react";
 
-import { ColorSchemeScript, LoadingOverlay, MantineProvider, mantineHtmlProps } from '@mantine/core';
+import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
 
 // Font configurations using next/font
 const geistSans = Geist({
@@ -70,67 +71,69 @@ export default function RootLayout({
 
       <body className={`${geistSans.variable} ${geistMono.variable} page-container`}>
         <AuthProvider>
-          <MantineProvider
-            withGlobalClasses
-            theme={{
-              primaryColor: 'blue',
-              defaultRadius: 'md',
-            }}
-          >
-
-            <Toaster
-              position='top-center'
-              toastOptions={{
-                duration: 5000,
-                success: {
-                  style: {
-                    background: "#222121ff",
-                    color: 'white',
-                    fontFamily: 'Poppins',
-                    fontWeight: '500',
-                    borderRadius: '8px',
-                    border: '1px solid #555',
-                    textAlign: 'center',
-                    width: '100%'
-                  },
-                  iconTheme: {
-                    primary: 'green',
-                    secondary: 'white'
-                  }
-                },
-                error: {
-                  style: {
-                    background: '#2d2d2dff',
-                    color: 'white',
-                    fontFamily: 'Poppins',
-                    fontWeight: '500',
-                    borderRadius: '8px',
-                    textAlign: 'left',
-                    width: '80%'
-                  }
-                }  
+          <LibraryProvider>
+            <MantineProvider
+              withGlobalClasses
+              theme={{
+                primaryColor: 'blue',
+                defaultRadius: 'md',
               }}
-            />
+            >
 
-            <Header />
+              <Toaster
+                position='top-center'
+                toastOptions={{
+                  duration: 5000,
+                  success: {
+                    style: {
+                      background: "#222121ff",
+                      color: 'white',
+                      fontFamily: 'Poppins',
+                      fontWeight: '500',
+                      borderRadius: '8px',
+                      border: '1px solid #555',
+                      textAlign: 'center',
+                      width: '100%'
+                    },
+                    iconTheme: {
+                      primary: 'green',
+                      secondary: 'white'
+                    }
+                  },
+                  error: {
+                    style: {
+                      background: '#2d2d2dff',
+                      color: 'white',
+                      fontFamily: 'Poppins',
+                      fontWeight: '500',
+                      borderRadius: '8px',
+                      textAlign: 'left',
+                      width: '80%'
+                    }
+                  }  
+                }}
+              />
 
-              <main className="main-content">
-                <Suspense
-                  fallback={
-                    <GlobalLoader
-                      visible
-                    />
-                  }
-                >
-                  {children}
+              <Header />
+
+                <main className="main-content">
+                  <Suspense
+                    fallback={
+                      <GlobalLoader
+                        visible
+                      />
+                    }
+                  >
+                    {children}
+                  
+                  </Suspense>
+
+                </main>
+
+              <Footer />
                 
-                </Suspense>
-
-              </main>
-
-            <Footer />
-              
-          </MantineProvider>
+            </MantineProvider>
+          </LibraryProvider>
         </AuthProvider>
       </body>
     </html>

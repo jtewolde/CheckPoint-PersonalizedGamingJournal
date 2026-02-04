@@ -7,6 +7,7 @@ import { SimpleGrid, Text, Image } from "@mantine/core";
 import classes from './PopularSection.module.css';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
+import GameCard from "../GameCard/GameCard";
 
 export default function PopularSection(){
     // States to hold popular games data and loading status
@@ -39,27 +40,9 @@ export default function PopularSection(){
     }, []);
 
     return (
-        <SimpleGrid cols={7} spacing="lg" verticalSpacing='xl' className={classes.popularGamesGrid}>
+        <SimpleGrid cols={{xs: 2, sm: 3, md: 4, lg: 5, xl: 6}} className={classes.popularGamesGrid}>
             {popularGames.map((game) => (
-                <div key={game.id} className={classes.gameCard} onClick={() => router.push(`/games/${game.id}`)}>
-
-                    <div className={classes.imageWrapper}>
-
-                        <Image 
-                        src={game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
-                        alt={game.name} 
-                        className={classes.cover}  
-                        />
-
-                        <div className={classes.overlay}>
-
-                            <Text className={classes.gameName}>{game.name}</Text>
-
-                        </div>
-
-                    </div>
-
-                </div>
+                <GameCard key={game.id} game={game} variant="compact" />
             ))}
         </SimpleGrid>
     );

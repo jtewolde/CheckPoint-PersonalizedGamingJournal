@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth-client'
+import { useMediaQuery } from '@mantine/hooks';
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
-import { SimpleGrid, Badge, Image, Select, Popover, Button, Tooltip } from '@mantine/core';
+import { SimpleGrid, Badge, Image, Select, Popover, Button, Tooltip, Rating, Switch, Stack} from '@mantine/core';
 import { ListFilter, Trophy } from 'lucide-react';
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
@@ -15,11 +16,17 @@ export default function Library(){
     const [page, setPage] = useState(1);
     const limit = 14;
 
+    // State variables for going through user's games and loading state
     const [games, setGames] = useState<any[]>([]);
     const [totalGames, setTotalGames] = useState(0);
     const [loading, setLoading] = useState(true);
-    const [selectedStatus, setSelectedStatus] = useState('all');
 
+    // State variables for filtering library based on status, rating, and platinum
+    const [selectedStatus, setSelectedStatus] = useState('all');
+    const [filterRating, setFilterRating] = useState(false);
+    const [filterPlatinum, setFilterPlatinum] = useState(false);
+
+    const isMobile = useMediaQuery('(max-width: 450px)');
     const router = useRouter();
 
     // Check If the user is authenticated, if not redirect to signin page
@@ -67,9 +74,27 @@ export default function Library(){
     }, []);
 
     // Filter the games based on selected status
-    const filteredGames = games.filter((game) =>
-        selectedStatus === 'all' || game.status?.toLowerCase() === selectedStatus
-    );
+    const filteredGames = games.filter((game) => {
+
+        // Status filter
+        if (
+            selectedStatus !== 'all' &&
+            game.status?.toLowerCase() !== selectedStatus
+        ) {
+            return false;
+        }
+
+        // Platinum filter
+        if (filterPlatinum && !game.platinum) {
+            return false;
+        }
+
+        // Rated filter (rating > 0)
+        if (filterRating && (!game.rating || game.rating <= 0)) {
+            return false;
+        }
+        return true;
+    });
 
     return(
 
@@ -96,13 +121,14 @@ export default function Library(){
                 <p className={classes.subTitle}> You have <span className={classes.totalGames}>{totalGames} games</span> in your library. </p>
 
                 {/* Status Filter Dropdown */}
-                <Popover width={300} position='bottom-end' withArrow shadow='lg'>
+                <Popover width={300} position={isMobile ? 'bottom-end' : 'right'} withArrow shadow='lg'>
                     <Popover.Target>
-                        <Button className={classes.filterButton} size='md' radius='lg' variant='gradient' gradient={{from: '#43bae9', to: '#3b99d3', deg: 90}} rightSection={<ListFilter />}>Filter By Status</Button>
+                        <Button className={classes.filterButton} size={isMobile ? 'lg' : 'md'} radius='md' variant='gradient' gradient={{from: '#43bae9', to: '#3b99d3', deg: 90}} rightSection={<ListFilter />}>Filters</Button>
                     </Popover.Target>
 
                     <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>
-                        <Select
+                        <Stack gap='md'>
+                            <Select
                             label="Choose a status to filter your library by"
                             placeholder="Filter by status"
                             styles={{
@@ -124,7 +150,24 @@ export default function Library(){
                             onChange={(value) => setSelectedStatus(value || 'all')}
                             className={classes.filterDropdown}
                             mb="md"
-                        />
+                            />
+
+                            {/* RATING FILTER */}
+                            <Switch
+                                label="Only rated games"
+                                checked={filterRating}
+                                onChange={(e) => setFilterRating(e.currentTarget.checked)}
+                            />
+
+                            {/* PLATINUM FILTER */}
+                            <Switch
+                                label="Only platinum games"
+                                checked={filterPlatinum}
+                                onChange={(e) => setFilterPlatinum(e.currentTarget.checked)}
+                            />
+
+                        </Stack>
+                        
                     </Popover.Dropdown>
 
                 </Popover>
@@ -160,6 +203,15 @@ export default function Library(){
                                         >
                                             {game.status || "No Status"}
                                         </Badge>
+
+                                        {game.rating && (
+                                            <Rating 
+                                            size='sm' 
+                                            fractions={2}
+                                            readOnly
+                                            value={game.rating} 
+                                            /> 
+                                        )}
 
                                         {game.platinum && (
 

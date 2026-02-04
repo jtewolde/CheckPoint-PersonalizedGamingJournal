@@ -9,7 +9,7 @@ import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
 import toast from 'react-hot-toast';
 
-import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, ActionIcon, HoverCard, Rating } from '@mantine/core';
+import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, ActionIcon, HoverCard, Rating, Tooltip} from '@mantine/core';
 import Image from 'next/image';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -22,7 +22,7 @@ import 'swiper/css/free-mode';
 
 import classes from './game.module.css';
 
-import { NotebookPen, Delete, X, CalendarDays, Trophy} from 'lucide-react';
+import { NotebookPen, Delete, X, CalendarDays, Trophy, Rat} from 'lucide-react';
 
 import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
   IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
@@ -43,6 +43,7 @@ export default function GameDetails() {
 
   const [status, setStatus] = useState(''); // State to handle game status
   const [isPlatinum, setIsPlatinum] = useState(false) // State to handle platinum of game
+  const [rating, setRating] = useState(0); // State to handling rating of game given by user from 0-5 stars
   const [opened, {open, close} ] = useDisclosure(false);
 
   const [screenshots, setScreensShots] = useState<any[]>([]); // State to store screenshots
@@ -51,7 +52,7 @@ export default function GameDetails() {
 
   const [modalOpen, setModalOpen] = useState(false); // State to handle modal open/close
 
-  const {isAuthenticated, setIsAuthenticated} = useAuth(); // Access global auth state
+  const {isAuthenticated} = useAuth(); // Access global auth state
 
   const router = useRouter();
 
@@ -108,6 +109,7 @@ export default function GameDetails() {
         setLibraryGame(currentGame || null); // Store the current game details in state 
         setStatus(currentGame?.status);
         setIsPlatinum(currentGame?.platinum ?? false)
+        setRating(currentGame?.rating ?? 0)
       } catch (error) {
         console.error('Error checking if game is in library:', error);
       }
@@ -209,14 +211,8 @@ export default function GameDetails() {
     }
   }
 
-  // Create a partial update object to update game info like status and platinum
-  type GameUpdateInfo = {
-    status?: string;
-    platinum?: boolean;
-  }
-
   // Function to handle updating the game status, trophy(platinum), and rating.
-  const handleUpdateInfo = async (status?: string, platinum?: boolean) => {
+  const handleUpdateInfo = async (status?: string, platinum?: boolean, rating?: number) => {
     try {
       const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token
       const res = await fetch('/api/library/updateInfo', {
@@ -229,7 +225,8 @@ export default function GameDetails() {
           gameID: id, // Pass the game ID
           gameDetails: {
             status,
-            platinum
+            platinum,
+            rating
           },
         }),
       });
@@ -447,29 +444,23 @@ export default function GameDetails() {
                             <Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>
                               {libraryGame?.status || 'No Status Given'}
                             </Badge>
-                            
-                            <HoverCard width='auto' shadow='md' position='right' styles={{dropdown: {color: 'white', backgroundColor: '#1e1e1e', fontFamily: 'Poppins', fontWeight: 300, border: '1px solid lightgray'}}}>
-                              <HoverCard.Target>
-                                <Trophy 
+                          
+                            <Tooltip label='Platinumed/100%' position='right'>
+
+                              <Trophy 
                                 size={30} 
                                 color={isPlatinum ? 'gold' : 'gray'}
                                 fill={isPlatinum ? 'gold' : 'none'}
                                 style={{ transition: 'all 0.2s ease' }}
                                 cursor={'pointer'}
                                 onClick={() => {
-                                const newValue = !isPlatinum;
-                                setIsPlatinum(newValue);
-                                handleUpdateInfo(undefined, newValue);
-                              }}
-                                />
-                              </HoverCard.Target>
-
-                              <HoverCard.Dropdown>
-                                <Text size='md' className={classes.hoverText}>
-                                  Platinumed/100%
-                                </Text>
-                              </HoverCard.Dropdown>
-                            </HoverCard>
+                                  const newValue = !isPlatinum;
+                                  setIsPlatinum(newValue);
+                                  handleUpdateInfo(undefined, newValue);
+                                }}
+                              />
+                            
+                            </Tooltip>
 
                           </div>
 
@@ -500,6 +491,18 @@ export default function GameDetails() {
                               placeholder="Select game status"
                             />
                           </Modal>
+
+                          <Rating 
+                          size='lg' 
+                          fractions={2} 
+                          value={rating} 
+                          onChange={
+                            (value) => {
+                              setRating(value);
+                              handleUpdateInfo(undefined, undefined, value)
+                            }}
+                          />
+
                           <Button
                             variant="filled"
                             color="#d8070b"
