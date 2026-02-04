@@ -40,7 +40,7 @@ export default function PopularSection(){
     }, []);
 
     return (
-        <SimpleGrid cols={{xs: 2, sm: 3, md: 4, lg: 5, xl: 6}} className={classes.popularGamesGrid}>
+        <SimpleGrid cols={{base: 2, sm: 3, md: 4, lg: 5, xl: 6}} className={classes.popularGamesGrid}>
             {popularGames.map((game) => (
                 <GameCard key={game.id} game={game} variant="compact" />
             ))}
