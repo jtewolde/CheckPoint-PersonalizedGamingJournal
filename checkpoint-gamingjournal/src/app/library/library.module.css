@@ -8,7 +8,7 @@
   background-position: center 0%;
   background-image: url('/GTA6Background.jpg');
   background-repeat: no-repeat;
-  background-attachment: scroll;
+  background-attachment: fixed;
   z-index: 0;
 }
 
