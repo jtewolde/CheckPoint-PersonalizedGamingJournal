@@ -92,8 +92,6 @@
 }
 
 .profileStats,
-.trendingSection,
-.popularSection,
 .playingSection,
 .recentEntriesSection{
   display: flex;
@@ -153,11 +151,15 @@
 .statusGrid {
   display: grid;
   padding: 0.5rem;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
 
 .statusCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
   padding: 1rem;
   border-radius: 8px;
   background-color: #282828;
@@ -165,27 +167,15 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.statusLogo{
-  justify-self: center;
-  align-self: center;
-}
-
-.statusLogoCenter{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .statusTitle {
   font-size: 1.5rem;
-  font-weight: 450;
+  font-weight: 700;
   margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
   color: #ffffff;
-  font-family: 'Poppins';
+  font-family: 'Inter';
   text-decoration: underline;
-  text-underline-offset: 2px;
-  text-align: center;
+  text-underline-offset: 10px;
 }
 
 .statusCount {
@@ -204,8 +194,12 @@
   text-align: center;
 }
 
-.statusProgress{
-  justify-self: center;
+.chartWrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
 .trendingGames {
@@ -279,8 +273,6 @@
   opacity: 1;
 }
 
-.trendingGamesGrid,
-.popularGamesGrid,
 .gamesGrid{
   display: grid;
   grid-template-columns: repeat(6, 1fr); /* Default: 5 columns */
@@ -292,13 +284,6 @@
 
 .playingText{
   margin-top: 5rem;
-}
-
-.popularGames{
-  width: 100%;
-  max-width: 98%;
-  padding: 1rem 0;
-  display: block;
 }
 
 .playingGames{

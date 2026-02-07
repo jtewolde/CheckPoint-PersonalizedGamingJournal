@@ -1,19 +1,19 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
-import { LoadingOverlay, SimpleGrid, Image, Paper, SemiCircleProgress, Text, ThemeIcon } from '@mantine/core';
-import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
+
+import { SimpleGrid, Image, Paper, Text, ThemeIcon, LoadingOverlay } from '@mantine/core';
+import { DonutChart } from '@mantine/charts';
+
 import { authClient } from '@/lib/auth-client';
 
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
 import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconBookmarkFilled, IconCheck, IconQuestionMark, IconClipboardListFilled } from '@tabler/icons-react';
-import { Flame, Notebook, Gamepad, Star, CircleUserRound, CircleArrowRight, LayoutDashboard } from 'lucide-react';
-import classes from './dashboard.module.css';
+import { Notebook, Gamepad, CircleUserRound, CircleArrowRight, Gamepad2 } from 'lucide-react';
 
-import TrendingSection from '@/components/TrendingSection/TrendingSection';
-import PopularSection from '@/components/PopularSection/PopularSection';
+import classes from './dashboard.module.css';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -166,95 +166,51 @@ export default function Dashboard() {
               
             </div>
 
-            <SimpleGrid cols={6} spacing="lg" className={classes.statusGrid}>
+            <SimpleGrid cols={2} spacing="lg" className={classes.statusGrid}>
 
               <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
-                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
+                  <p className={classes.statusTitle}>Game Status Breakdown</p>
 
-                  <div className={classes.statusLogoCenter} >
-                    <IconClipboardListFilled size={60} color='#f018e8' className={classes.statusLogo}/>
+                  <div className={classes.chartWrapper}>
+
+                    <DonutChart
+                      size={220}
+                      strokeColor='black'
+                      strokeWidth={2}
+                      thickness={24}
+                      chartLabel={`${numOfGames} Games Tracked`}
+                      styles={{
+                        label:{
+                          color: 'white',
+                          fontFamily: 'Poppins',
+                          fill: 'white',
+                          fontSize: '16px'
+                        },
+                        tooltip:{
+                          border: '1px solid black'
+                        },
+                        tooltipBody:{
+                          backgroundColor: '#2b2b2b',
+                          color: 'white'
+                        },
+                        tooltipItemName:{
+                          color: 'white'
+                        },
+                        tooltipItemData: {
+                          color: 'white'
+                        }
+                      }}
+                      data={[
+                        { name: 'Plan to Play', value: planToPlayLength, color: 'blue' },
+                        { name: 'On Hold', value: onHoldLength, color: 'gray' },
+                        { name: 'Playing', value: playGamesLength, color: 'yellow'},
+                        { name: 'No Status Given', value: noStatusLength, color: 'red'},
+                        { name: 'Completed', value: completedLength, color: 'green'}
+                      ]}
+                    />
+
                   </div>
-                  
-                  <h3 className={classes.statusTitle}>Progress Summary</h3>
-                  <p className={classes.statusTotalCount}>Total Games: {numOfGames}</p>
-
-                  <SemiCircleProgress className={classes.statusProgress} value={completedPercentage} filledSegmentColor='#f018e8' size={170} thickness={15} 
-                    label={<Text c='#f018e8' component='span' size='lg' fw={600}>{completedPercentage || '0'}% Completed</Text>}>
-                  </SemiCircleProgress>
-
-                </Suspense>
-
-              </Paper>
-
-              <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-
-                  <div className={classes.statusLogoCenter} >
-                    <IconDeviceGamepad3Filled size={60} color="blue" />
-                  </div>
-
-                  <h3 className={classes.statusTitle}>Playing</h3>
-                  <p className={classes.statusCount}>{playGamesLength}</p>
-
-                </Suspense>
-
-              </Paper>
-
-              <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-
-                  <div className={classes.statusLogoCenter} >
-                    <IconBookmarkFilled size={60} color="green" className={classes.statusLogo}/>
-                  </div>
-
-                  <h3 className={classes.statusTitle}>Plan to Play</h3>
-                  <p className={classes.statusCount}>{planToPlayLength}</p>
-
-                </Suspense>
-
-              </Paper>
-
-              <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-
-                  <div className={classes.statusLogoCenter} >
-                    <IconCheck size={60} color="purple" className={classes.statusLogo}/>
-                  </div>
-
-                  <h3 className={classes.statusTitle}>Completed</h3>
-                  <p className={classes.statusCount}>{completedLength}</p>
-                </Suspense>
-
-              </Paper>
-
-              <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-                  <div className={classes.statusLogoCenter} >
-                    <IconQuestionMark size={60} color='#fc8a08' className={classes.statusLogo}/>
-                  </div>
-                  <h3 className={classes.statusTitle}>No Status</h3>
-                  <p className={classes.statusCount}>{noStatusLength}</p>
-                </Suspense>
-
-              </Paper>
-
-              <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-
-                  <div className={classes.statusLogoCenter} >
-                    <IconPlayerPauseFilled size={60} color="red" className={classes.statusLogo}/>
-                  </div>
-
-                  <h3 className={classes.statusTitle}>On Hold</h3>
-                  <p className={classes.statusCount}>{onHoldLength}</p>
-                  
-                </Suspense>
 
               </Paper>
 
@@ -262,48 +218,8 @@ export default function Dashboard() {
 
           </div>
 
-          <div className={classes.trendingGames}>
-
-            <div className={classes.trendingSection}>
-              
-              <div className={classes.titleLogo}>
-                <ThemeIcon variant='gradient' gradient={{ from: '#c21500', to: '#ffc500', deg: 90}} size={40}>
-                    <Flame size={30} color='white'/> 
-                  </ThemeIcon>
-
-                <h1 className={classes.gamesPlayingText}>Trending Games</h1>
-
-              </div>
-
-              <a className={classes.viewMoreIcon} href='/search/trending'> <CircleArrowRight size={35} /> </a>
-
-            </div>
-
-            {/* Use TrendingSection component to display trending games */}
-            <TrendingSection />
-
-          </div>
-
-          <div className={classes.popularGames}>
+          <div className={classes.continueSection}>
             
-              <div className={classes.popularSection}>
-              
-                <div className={classes.titleLogo}>
-
-                  <ThemeIcon size={50} variant='gradient' gradient={{ from: '#f7971e', to: '#ffd200', deg: 20}} radius='md'>
-                    <Star size={40} />
-                  </ThemeIcon>
-
-                  <h1 className={classes.gamesPlayingText}>Popular Games</h1>
-                </div>
-
-                <a className={classes.viewMoreIcon} href='/search/popular'><CircleArrowRight size={35} /></a>
-
-              </div>
-            
-              {/* Use PopularSection component to display popular games */}
-              <PopularSection />
-
           </div>
 
           <div className={classes.playingGames} >
