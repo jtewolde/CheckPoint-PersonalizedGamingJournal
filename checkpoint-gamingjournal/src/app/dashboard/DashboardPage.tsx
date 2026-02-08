@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { SimpleGrid, Image, Paper, Text, ThemeIcon, LoadingOverlay } from '@mantine/core';
-import { DonutChart } from '@mantine/charts';
+import { DonutChart, BarChart, LineChart } from '@mantine/charts';
 
 import { authClient } from '@/lib/auth-client';
 
@@ -31,6 +31,7 @@ export default function Dashboard() {
   const [completedPercentage, setCompletedPercentage] = useState(0)
 
   const [recentEntries, setRecentEntries] = useState<any[]>([]); // State to store recent journal entries
+  const [journalActivityData, setJournalActivityData] = useState<{ month: string; entries: number }[]>([]); // State to store data from journal entries over time chart
 
   // Check if the user is authenticated
   useEffect(() => {
@@ -116,16 +117,58 @@ export default function Dashboard() {
           const sortedEntries = data.journalEntries.reverse().slice(0, 4); // Limit to the 5 most recent entries
           setRecentEntries(sortedEntries); // Store the recent entries in state
           console.log('Recent Journal Entries:', sortedEntries);
+
+          setJournalActivityData(buildJournalEntriesOverTimeData(data.journalEntries)) // Build the data for the journal entries over time chart using the user's journal entries
       } catch (error) {
           console.error('Error fetching recent journal entries:', error);
       }
   };
 
+  // Function to build out the data for the journal entries activity over time chart.
+  // This will show the user how mmany journal entries they have made each month for the past 6 months. This will be based on the date of the journal entry and will be displayed in a line chart.
+  const buildJournalEntriesOverTimeData = (entries: any[]) => {
+    const currentDate = new Date();
+
+    // Create an array of the past 6 months with labels and keys for counting entries
+    const pastSixMonths = Array.from({ length: 6 }, (_, i) => {
+      const date = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() - i,
+        1
+      );
+      
+      return {
+        label: `${date.toLocaleString('default', { month: 'short' })} ${date.getFullYear()}`,
+        key: `${date.getFullYear()}-${date.getMonth()}`
+      };
+    }).reverse();
+
+    const counts: Record<string, number> = {};
+
+    pastSixMonths.forEach(m => {
+      counts[m.key] = 0;
+    });
+
+    entries.forEach(entry => {
+      const d = new Date(entry.createdAt);
+      const key = `${d.getFullYear()}-${d.getMonth()}`;
+
+      if (counts[key] !== undefined) {
+        counts[key]++;
+      }
+    });
+
+    return pastSixMonths.map(m => ({
+      month: m.label,
+      entries: counts[m.key]
+    }));
+  };
+
+  // useEffect to call both fetchPlayingGames and fetchRecentJournalEntries when the component mounts.
   useEffect(() => {
     fetchPlayingGames();
     fetchRecentJournalEntries();
   }, []);
-
 
   return (
 
@@ -175,17 +218,18 @@ export default function Dashboard() {
                   <div className={classes.chartWrapper}>
 
                     <DonutChart
-                      size={220}
+                      size={260}
                       strokeColor='black'
                       strokeWidth={2}
                       thickness={24}
+                      paddingAngle={3}
                       chartLabel={`${numOfGames} Games Tracked`}
                       styles={{
                         label:{
                           color: 'white',
                           fontFamily: 'Poppins',
                           fill: 'white',
-                          fontSize: '16px'
+                          fontSize: '18px'
                         },
                         tooltip:{
                           border: '1px solid black'
@@ -208,6 +252,60 @@ export default function Dashboard() {
                         { name: 'No Status Given', value: noStatusLength, color: 'red'},
                         { name: 'Completed', value: completedLength, color: 'green'}
                       ]}
+                    />
+
+                  </div>
+
+              </Paper>
+
+              <Paper shadow="md" radius="lg" className={classes.statusCard}>
+
+                  <p className={classes.statusTitle}>Journal Entries Activity Over Time</p>
+
+                  <div className={classes.chartWrapper}>
+
+                    <LineChart
+                      h={260}
+                      dataKey='month'
+                      yAxisLabel='Number of Entries'
+                      xAxisLabel='Months'
+                      strokeWidth={2}
+                      data={journalActivityData}
+                      series={[{ name: 'entries', color: 'blue' }]}
+                      styles={{
+                        axisLabel: {
+                          fill: 'white',
+                          fontFamily: 'Inter',
+                          fontSize: '14px',
+                        },
+                        axis: {
+                          fill: 'white',
+                          fontSize: '12px',
+                          fontWeight: 'bold'
+                        },
+                        tooltip:{
+                          backgroundColor: '#2b2b2b',
+                          color: 'white',
+                          border: '1px solid #424242'
+                        },
+                        tooltipBody:{
+                          backgroundColor: '#2b2b2b',
+                          color: 'white'
+                        },
+                        tooltipLabel:{
+                          color: 'white'
+                        },
+                        tooltipItemName:{
+                          color: 'white',
+                          fontFamily: 'Poppins',
+                          fontSize: '16px'
+                        },
+                        tooltipItemData: {
+                          color: 'white',
+                          fontFamily: 'Poppins',
+                          fontSize: '16px'
+                        }
+                      }}
                     />
 
                   </div>
