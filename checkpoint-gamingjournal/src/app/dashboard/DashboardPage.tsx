@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { SimpleGrid, Image, Paper, Text, ThemeIcon, LoadingOverlay } from '@mantine/core';
@@ -32,6 +32,7 @@ export default function Dashboard() {
 
   const [recentEntries, setRecentEntries] = useState<any[]>([]); // State to store recent journal entries
   const [journalActivityData, setJournalActivityData] = useState<{ month: string; entries: number }[]>([]); // State to store data from journal entries over time chart
+  const [ratingDistributionData, setRatingDistributionData] = useState<{ rating: string; count: number }[]>([]); // State to store data for game ratings distribution chart
 
   // Check if the user is authenticated
   useEffect(() => {
@@ -66,6 +67,9 @@ export default function Dashboard() {
       }
 
       const data = await res.json();
+
+      setRatingDistributionData(calculateRatingDistribution(data.games)) // Calculate the distribution of game ratings
+
       const playingGames = data.games.filter((game: any) => game.status === 'Playing').slice(0,6) // Filter games that are currently being played with the first 6 games
 
       console.log("Playing Games: ", playingGames);
@@ -164,6 +168,36 @@ export default function Dashboard() {
     }));
   };
 
+  // Function to calculate the distribution of game ratings for the user's library games. This will be used to display a bar chart of the user's game ratings.
+  const calculateRatingDistribution = (games: any[]) => {
+
+    // Initialize distribution object with keys for each rating (1-5) and values set to 0 to count number of entries for each rating
+    const distribution: Record<string, number> = {
+      '1' : 0,
+      '2' : 0,
+      '3' : 0,
+      '4' : 0,
+      '5' : 0
+    }
+
+    // Loop through each journal entry and increment the count for the corresponding rating in the distribution object
+    games.forEach(game => {
+      const rating = game.rating;
+
+      if(rating >= 1 && rating <= 5){
+        distribution[rating.toString()]++;
+      }
+    })
+
+    // Convert distributio object into an array of objects with keys 'rating' and 'count' for use in the bar chart
+    const distributionArray = Object.keys(distribution).map(rating => ({
+      rating,
+      count: distribution[rating]
+    }));
+
+    return distributionArray;
+  }
+
   // useEffect to call both fetchPlayingGames and fetchRecentJournalEntries when the component mounts.
   useEffect(() => {
     fetchPlayingGames();
@@ -179,19 +213,13 @@ export default function Dashboard() {
         <div className={classes.wrapper}>
 
           <div className={classes.dashboardHeader}>
-            
-            <div className={classes.dashboardTitleWrapper}>
-              <h2 className={classes.dashboardTitle}>Dashboard</h2>
-            </div>
 
             <div className={classes.heroTextContainer}>
 
-              <p className={classes.welcomeText}> Welcome back, <span className={classes.username} onClick={() => router.push('/settings/profile')}>{userName}! </span> </p>
+              <p className={classes.dashboardTitle}> Welcome back, <span className={classes.username} onClick={() => router.push('/settings/profile')}>{userName}! </span> </p>
               
               <p className={classes.welcomeText}> 
-                Your gaming story is always evolving. 
-                Log your latest sessions, revisit past entries, and discover new games to add to your journey. 
-                Explore what’s trending and let Checkpoint guide you toward your next great playthrough.
+                Here's a quick overview of your gaming journey so far!
               </p>
 
             </div>
@@ -209,7 +237,7 @@ export default function Dashboard() {
               
             </div>
 
-            <SimpleGrid cols={2} spacing="lg" className={classes.statusGrid}>
+            <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 2, xl: 3}} spacing="sm" className={classes.statusGrid}>
 
               <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
@@ -260,7 +288,7 @@ export default function Dashboard() {
 
               <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
-                  <p className={classes.statusTitle}>Journal Entries Activity Over Time</p>
+                  <p className={classes.statusTitle}>Journal Entries Activity</p>
 
                   <div className={classes.chartWrapper}>
 
@@ -272,6 +300,65 @@ export default function Dashboard() {
                       strokeWidth={2}
                       data={journalActivityData}
                       series={[{ name: 'entries', color: 'blue' }]}
+                      styles={{
+                        axisLabel: {
+                          fill: 'white',
+                          fontFamily: 'Inter',
+                          fontSize: '14px',
+                        },
+                        axis: {
+                          fill: 'white',
+                          fontSize: '12px',
+                          fontWeight: 'bold'
+                        },
+                        tooltip:{
+                          backgroundColor: '#2b2b2b',
+                          color: 'white',
+                          border: '1px solid #424242'
+                        },
+                        tooltipBody:{
+                          backgroundColor: '#2b2b2b',
+                          color: 'white'
+                        },
+                        tooltipLabel:{
+                          color: 'white'
+                        },
+                        tooltipItemName:{
+                          color: 'white',
+                          fontFamily: 'Poppins',
+                          fontSize: '16px'
+                        },
+                        tooltipItemData: {
+                          color: 'white',
+                          fontFamily: 'Poppins',
+                          fontSize: '16px'
+                        }
+                      }}
+                    />
+
+                  </div>
+
+              </Paper>
+
+              <Paper shadow="md" radius="lg" className={classes.statusCard}>
+
+                  <p className={classes.statusTitle}>Game Ratings</p>
+
+                  <div className={classes.chartWrapper}>
+
+                    <BarChart
+                      h={260}
+                      dataKey='rating'
+                      yAxisLabel='Games'
+                      xAxisLabel='Rating (1-5)'
+                      data={ratingDistributionData}
+                      series={[{ name: 'count', color: 'red' }]}
+                      yAxisProps={{
+                        allowDecimals: false
+                      }}
+                      xAxisProps={{
+                        allowDecimals: true
+                      }}
                       styles={{
                         axisLabel: {
                           fill: 'white',
