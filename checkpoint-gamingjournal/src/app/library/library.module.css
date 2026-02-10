@@ -70,8 +70,8 @@
 
 .subTitle{
   font-size: 20px;
-  font-weight: 200;
-  color: rgb(208, 205, 205); /* Dark text for contrast */
+  font-weight: 300;
+  color: rgb(251, 245, 245); /* Dark text for contrast */
   font-family: 'Inter';
   font-style: italic;
 }
