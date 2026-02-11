@@ -27,7 +27,12 @@ export default function Dashboard() {
   const [planToPlayLength, setPlanToPlayLength] = useState(0) // State to store length of game that the user plans to play
   const [onHoldLength, setOnHoldLength] = useState(0)
 
+  // State variables to store data for the profile stats section of the dashboard
   const [numOfGames, setNumOfGames] = useState(0);
+  const [avgRating, setAvgRating] = useState(0);
+  const [numEntries, setNumEntries] = useState(0);
+  const [numPlatinumedGames, setNumPlatinumedGames] = useState(0);
+
   const [completedPercentage, setCompletedPercentage] = useState(0)
 
   const [recentEntries, setRecentEntries] = useState<any[]>([]); // State to store recent journal entries
@@ -116,7 +121,7 @@ export default function Dashboard() {
           }
 
           const data = await res.json();
-          console.log("Data", data)
+          setNumEntries(data.journalEntries.length) // Store total number of journal entries
           
           const sortedEntries = data.journalEntries.reverse().slice(0, 4); // Limit to the 5 most recent entries
           setRecentEntries(sortedEntries); // Store the recent entries in state
@@ -197,6 +202,8 @@ export default function Dashboard() {
 
     return distributionArray;
   }
+
+  // Function to calculate the average rating of the user's games. This will be used to display as a quick stat card on the dashboard.
 
   // useEffect to call both fetchPlayingGames and fetchRecentJournalEntries when the component mounts.
   useEffect(() => {
@@ -397,6 +404,18 @@ export default function Dashboard() {
 
                   </div>
 
+              </Paper>
+
+              <Paper shadow='md' radius='lg' className={classes.statusCard}>
+                <div className={classes.quickStatsContainer}>
+                  <p className={classes.statusTitle}>Quick Stats</p>
+
+                  <div className={classes.quickStatsGrid}>
+                      <div className={classes.quickStatItem}>
+                        <Text className={classes.quickStatLabel}>Avg Rating:</Text>
+                      </div>
+                  </div>
+                </div>
               </Paper>
 
             </SimpleGrid>
