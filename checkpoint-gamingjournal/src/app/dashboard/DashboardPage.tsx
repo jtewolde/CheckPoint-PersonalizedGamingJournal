@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { SimpleGrid, Image, Paper, Text, ThemeIcon, LoadingOverlay } from '@mantine/core';
+import { SimpleGrid, Image, Paper, Text, ThemeIcon, Rating } from '@mantine/core';
 import { DonutChart, BarChart, LineChart } from '@mantine/charts';
 
 import { authClient } from '@/lib/auth-client';
@@ -11,7 +11,7 @@ import { authClient } from '@/lib/auth-client';
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
 import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconBookmarkFilled, IconCheck, IconQuestionMark, IconClipboardListFilled } from '@tabler/icons-react';
-import { Notebook, Gamepad, CircleUserRound, CircleArrowRight, Gamepad2 } from 'lucide-react';
+import { Notebook, Gamepad, CircleUserRound, CircleArrowRight, Trophy } from 'lucide-react';
 
 import classes from './dashboard.module.css';
 
@@ -74,10 +74,15 @@ export default function Dashboard() {
       const data = await res.json();
 
       setRatingDistributionData(calculateRatingDistribution(data.games)) // Calculate the distribution of game ratings
+      setAvgRating(calculateAverageRating(data.games)) // Calculate the average rating of the user's games
 
       const playingGames = data.games.filter((game: any) => game.status === 'Playing').slice(0,6) // Filter games that are currently being played with the first 6 games
+      const platinumedGames = data.games.filter((game: any) => game.platinum === true).length; // Filter games that have been platinumed and get the count
+      setNumPlatinumedGames(platinumedGames); // Store the number of platinumed games in state
 
       console.log("Playing Games: ", playingGames);
+      console.log("Avg Rating: ", avgRating);
+      console.log("Number of Platinumed Games: ", platinumedGames);
       setPlayingGames(playingGames); // Store the playing games in state
 
       const totalGames = data.games.length // Store total number of games
@@ -194,7 +199,7 @@ export default function Dashboard() {
       }
     })
 
-    // Convert distributio object into an array of objects with keys 'rating' and 'count' for use in the bar chart
+    // Convert distribution object into an array of objects with keys 'rating' and 'count' for use in the bar chart
     const distributionArray = Object.keys(distribution).map(rating => ({
       rating,
       count: distribution[rating]
@@ -204,6 +209,22 @@ export default function Dashboard() {
   }
 
   // Function to calculate the average rating of the user's games. This will be used to display as a quick stat card on the dashboard.
+  const calculateAverageRating = (games: any[]) => {
+
+    // Filter out unrated games in the user's library to get an accurate average rating.
+    const ratedGames = games.filter(game => game.rating >= 1 && game.rating <= 5);
+
+    if(ratedGames.length === 0) {
+      return 0;
+    }
+
+    let totalRating = 0;
+    ratedGames.forEach(game => {
+      totalRating += game.rating;
+    });
+
+    return totalRating / ratedGames.length;
+  }
 
   // useEffect to call both fetchPlayingGames and fetchRecentJournalEntries when the component mounts.
   useEffect(() => {
@@ -244,7 +265,7 @@ export default function Dashboard() {
               
             </div>
 
-            <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 2, xl: 3}} spacing="sm" className={classes.statusGrid}>
+            <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 2, xl: 2}} spacing="sm" className={classes.statusGrid}>
 
               <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
@@ -411,9 +432,31 @@ export default function Dashboard() {
                   <p className={classes.statusTitle}>Quick Stats</p>
 
                   <div className={classes.quickStatsGrid}>
+
                       <div className={classes.quickStatItem}>
-                        <Text className={classes.quickStatLabel}>Avg Rating:</Text>
+                        <Text className={classes.quickStatLabel}>Average Rating</Text>
+
+                        <div className={classes.ratingWrapper}>
+                          <Text className={classes.ratingValue}>{avgRating.toFixed(2)}</Text>
+                          <Rating value={avgRating} readOnly fractions={2} color='yellow' size='md' />
+                        </div>
+
                       </div>
+
+                      <div className={classes.quickStatItem}>
+                        <Text className={classes.quickStatLabel}>Games Platinumed</Text>
+                        <div className={classes.platinumWrapper}>
+                          <Text className={classes.platValue}>{numPlatinumedGames}</Text>
+                        </div>
+                      </div>
+
+                      <div className={classes.quickStatItem}>
+                        <Text className={classes.quickStatLabel}>Total Entries</Text>
+                        <div className={classes.ratingWrapper}>
+                          <Text className={classes.ratingValue}>{numEntries}</Text>
+                        </div>
+                      </div>
+
                   </div>
                 </div>
               </Paper>

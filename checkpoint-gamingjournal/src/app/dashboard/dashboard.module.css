@@ -179,6 +179,53 @@
   height: 100%;
 }
 
+.quickStatsContainer{
+  width: 100%;
+  max-width: 98%;
+}
+
+.quickStatsGrid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.quickStatItem{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #1b1a1a;
+  border: 1px solid #2f2e2e;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.quickStatLabel{
+  font-size: 18px;
+  font-family: 'Inter';
+  font-weight: 500;
+  color: white;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.ratingValue,
+.platValue{
+  color: #e0e0e0;
+  font-size: 24px;
+  font-weight: 600;
+  font-family: 'Inter';
+}
+
+.ratingWrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .trendingGames {
   width: 100%;
   max-width: 98%; /* Add a max width to prevent it from stretching too wide */
