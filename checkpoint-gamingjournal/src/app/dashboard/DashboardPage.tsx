@@ -1,19 +1,19 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LoadingOverlay, SimpleGrid, Image, Paper, SemiCircleProgress, Text, ThemeIcon } from '@mantine/core';
-import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
+
+import { SimpleGrid, Image, Paper, Text, ThemeIcon, Rating } from '@mantine/core';
+import { DonutChart, BarChart, LineChart } from '@mantine/charts';
+
 import { authClient } from '@/lib/auth-client';
 
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
-import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconBookmarkFilled, IconCheck, IconQuestionMark, IconClipboardListFilled } from '@tabler/icons-react';
-import { Flame, Notebook, Gamepad, Star, CircleUserRound, CircleArrowRight, LayoutDashboard } from 'lucide-react';
-import classes from './dashboard.module.css';
+import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconSword, IconClipboardListFilled } from '@tabler/icons-react';
+import { Notebook, Gamepad, CircleUserRound, CircleArrowRight, Trophy, Icon, Star } from 'lucide-react';
 
-import TrendingSection from '@/components/TrendingSection/TrendingSection';
-import PopularSection from '@/components/PopularSection/PopularSection';
+import classes from './dashboard.module.css';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -27,10 +27,18 @@ export default function Dashboard() {
   const [planToPlayLength, setPlanToPlayLength] = useState(0) // State to store length of game that the user plans to play
   const [onHoldLength, setOnHoldLength] = useState(0)
 
+  // State variables to store data for the profile stats section of the dashboard
   const [numOfGames, setNumOfGames] = useState(0);
+  const [avgRating, setAvgRating] = useState(0);
+  const [numEntries, setNumEntries] = useState(0);
+  const [numPlatinumedGames, setNumPlatinumedGames] = useState(0);
+  const [topRatedGame, setTopRatedGame] = useState("");
+
   const [completedPercentage, setCompletedPercentage] = useState(0)
 
   const [recentEntries, setRecentEntries] = useState<any[]>([]); // State to store recent journal entries
+  const [journalActivityData, setJournalActivityData] = useState<{ month: string; entries: number }[]>([]); // State to store data from journal entries over time chart
+  const [ratingDistributionData, setRatingDistributionData] = useState<{ rating: string; count: number }[]>([]); // State to store data for game ratings distribution chart
 
   // Check if the user is authenticated
   useEffect(() => {
@@ -65,9 +73,19 @@ export default function Dashboard() {
       }
 
       const data = await res.json();
+
+      setRatingDistributionData(calculateRatingDistribution(data.games)) // Calculate the distribution of game ratings
+      setAvgRating(calculateAverageRating(data.games)) // Calculate the average rating of the user's games
+      setTopRatedGame(calculateTopRatedGame(data.games));
+
       const playingGames = data.games.filter((game: any) => game.status === 'Playing').slice(0,6) // Filter games that are currently being played with the first 6 games
+      const platinumedGames = data.games.filter((game: any) => game.platinum === true).length; // Filter games that have been platinumed and get the count
+      setNumPlatinumedGames(platinumedGames); // Store the number of platinumed games in state
 
       console.log("Playing Games: ", playingGames);
+      console.log("Avg Rating: ", avgRating);
+      console.log("Number of Platinumed Games: ", platinumedGames);
+      console.log("Top Rated Game: ", topRatedGame);
       setPlayingGames(playingGames); // Store the playing games in state
 
       const totalGames = data.games.length // Store total number of games
@@ -111,21 +129,128 @@ export default function Dashboard() {
           }
 
           const data = await res.json();
-          console.log("Data", data)
+          setNumEntries(data.journalEntries.length) // Store total number of journal entries
           
           const sortedEntries = data.journalEntries.reverse().slice(0, 4); // Limit to the 5 most recent entries
           setRecentEntries(sortedEntries); // Store the recent entries in state
           console.log('Recent Journal Entries:', sortedEntries);
+
+          setJournalActivityData(buildJournalEntriesOverTimeData(data.journalEntries)) // Build the data for the journal entries over time chart using the user's journal entries
       } catch (error) {
           console.error('Error fetching recent journal entries:', error);
       }
   };
 
+  // Function to build out the data for the journal entries activity over time chart.
+  // This will show the user how mmany journal entries they have made each month for the past 6 months. This will be based on the date of the journal entry and will be displayed in a line chart.
+  const buildJournalEntriesOverTimeData = (entries: any[]) => {
+    const currentDate = new Date();
+
+    // Create an array of the past 6 months with labels and keys for counting entries
+    const pastSixMonths = Array.from({ length: 6 }, (_, i) => {
+      const date = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() - i,
+        1
+      );
+      
+      return {
+        label: `${date.toLocaleString('default', { month: 'short' })} ${date.getFullYear()}`,
+        key: `${date.getFullYear()}-${date.getMonth()}`
+      };
+    }).reverse();
+
+    const counts: Record<string, number> = {};
+
+    pastSixMonths.forEach(m => {
+      counts[m.key] = 0;
+    });
+
+    entries.forEach(entry => {
+      const d = new Date(entry.createdAt);
+      const key = `${d.getFullYear()}-${d.getMonth()}`;
+
+      if (counts[key] !== undefined) {
+        counts[key]++;
+      }
+    });
+
+    return pastSixMonths.map(m => ({
+      month: m.label,
+      entries: counts[m.key]
+    }));
+  };
+
+  // Function to calculate the distribution of game ratings for the user's library games. This will be used to display a bar chart of the user's game ratings.
+  const calculateRatingDistribution = (games: any[]) => {
+
+    // Initialize distribution object with keys for each rating (1-5) and values set to 0 to count number of entries for each rating
+    const distribution: Record<string, number> = {
+      '1' : 0,
+      '2' : 0,
+      '3' : 0,
+      '4' : 0,
+      '5' : 0
+    }
+
+    // Loop through each journal entry and increment the count for the corresponding rating in the distribution object
+    games.forEach(game => {
+      const rating = game.rating;
+
+      if(rating >= 1 && rating <= 5){
+        distribution[rating.toString()]++;
+      }
+    })
+
+    // Convert distribution object into an array of objects with keys 'rating' and 'count' for use in the bar chart
+    const distributionArray = Object.keys(distribution).map(rating => ({
+      rating,
+      count: distribution[rating]
+    }));
+
+    return distributionArray;
+  }
+
+  // Function to calculate the average rating of the user's games. This will be used to display as a quick stat card on the dashboard.
+  const calculateAverageRating = (games: any[]) => {
+
+    // Filter out unrated games in the user's library to get an accurate average rating.
+    const ratedGames = games.filter(game => game.rating >= 1 && game.rating <= 5);
+
+    if(ratedGames.length === 0) {
+      return 0;
+    }
+
+    let totalRating = 0;
+    ratedGames.forEach(game => {
+      totalRating += game.rating;
+    });
+
+    return totalRating / ratedGames.length;
+  }
+
+  // Function to calculate the top rated game in the user's library. This will be used to display as a quick stat card
+  const calculateTopRatedGame = (games: any[]) => {
+    const ratedGames = games.filter(game => game.rating >= 1 && game.rating <= 5);
+
+    if(ratedGames.length === 0) {
+      return 0;
+    }
+
+    let topRatedGame = ratedGames[0];
+    ratedGames.forEach(game => {
+      if(game.rating >= topRatedGame.rating){
+        topRatedGame = game;
+      }
+    })
+    return topRatedGame.title;
+  }
+
+  // useEffect to call both fetchPlayingGames and fetchRecentJournalEntries when the component mounts.
   useEffect(() => {
     fetchPlayingGames();
     fetchRecentJournalEntries();
   }, []);
-
 
   return (
 
@@ -136,19 +261,13 @@ export default function Dashboard() {
         <div className={classes.wrapper}>
 
           <div className={classes.dashboardHeader}>
-            
-            <div className={classes.dashboardTitleWrapper}>
-              <h2 className={classes.dashboardTitle}>Dashboard</h2>
-            </div>
 
             <div className={classes.heroTextContainer}>
 
-              <p className={classes.welcomeText}> Welcome back, <span className={classes.username} onClick={() => router.push('/settings/profile')}>{userName}! </span> </p>
+              <p className={classes.dashboardTitle}> Welcome back, <span className={classes.username} onClick={() => router.push('/settings/profile')}>{userName}! </span> </p>
               
               <p className={classes.welcomeText}> 
-                Your gaming story is always evolving. 
-                Log your latest sessions, revisit past entries, and discover new games to add to your journey. 
-                Explore what’s trending and let Checkpoint guide you toward your next great playthrough.
+                Here's a quick overview of your gaming journey so far!
               </p>
 
             </div>
@@ -166,144 +285,238 @@ export default function Dashboard() {
               
             </div>
 
-            <SimpleGrid cols={6} spacing="lg" className={classes.statusGrid}>
+            <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 2, xl: 2}} spacing="sm" className={classes.statusGrid}>
 
               <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
-                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
+                  <p className={classes.statusTitle}>Game Status Breakdown</p>
 
-                  <div className={classes.statusLogoCenter} >
-                    <IconClipboardListFilled size={60} color='#f018e8' className={classes.statusLogo}/>
+                  <div className={classes.chartWrapper}>
+
+                    <DonutChart
+                      size={260}
+                      strokeColor='black'
+                      strokeWidth={2}
+                      thickness={24}
+                      paddingAngle={3}
+                      chartLabel={`${numOfGames} Games Tracked`}
+                      styles={{
+                        label:{
+                          color: 'white',
+                          fontFamily: 'Poppins',
+                          fill: 'white',
+                          fontSize: '18px'
+                        },
+                        tooltip:{
+                          border: '1px solid black'
+                        },
+                        tooltipBody:{
+                          backgroundColor: '#2b2b2b',
+                          color: 'white'
+                        },
+                        tooltipItemName:{
+                          color: 'white'
+                        },
+                        tooltipItemData: {
+                          color: 'white'
+                        }
+                      }}
+                      data={[
+                        { name: 'Plan to Play', value: planToPlayLength, color: 'blue' },
+                        { name: 'On Hold', value: onHoldLength, color: 'gray' },
+                        { name: 'Playing', value: playGamesLength, color: 'yellow'},
+                        { name: 'No Status Given', value: noStatusLength, color: 'red'},
+                        { name: 'Completed', value: completedLength, color: 'green'}
+                      ]}
+                    />
+
                   </div>
-                  
-                  <h3 className={classes.statusTitle}>Progress Summary</h3>
-                  <p className={classes.statusTotalCount}>Total Games: {numOfGames}</p>
-
-                  <SemiCircleProgress className={classes.statusProgress} value={completedPercentage} filledSegmentColor='#f018e8' size={170} thickness={15} 
-                    label={<Text c='#f018e8' component='span' size='lg' fw={600}>{completedPercentage || '0'}% Completed</Text>}>
-                  </SemiCircleProgress>
-
-                </Suspense>
 
               </Paper>
 
               <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
-                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
+                  <p className={classes.statusTitle}>Journal Entries Activity</p>
 
-                  <div className={classes.statusLogoCenter} >
-                    <IconDeviceGamepad3Filled size={60} color="blue" />
+                  <div className={classes.chartWrapper}>
+
+                    <LineChart
+                      h={260}
+                      w='95%'
+                      dataKey='month'
+                      yAxisLabel='Number of Entries'
+                      xAxisLabel='Months'
+                      strokeWidth={2}
+                      data={journalActivityData}
+                      series={[{ name: 'entries', color: 'blue' }]}
+                      styles={{
+                        axisLabel: {
+                          fill: 'white',
+                          fontFamily: 'Inter',
+                          fontSize: '14px',
+                        },
+                        axis: {
+                          fill: 'white',
+                          fontSize: '12px',
+                          fontWeight: 'bold'
+                        },
+                        tooltip:{
+                          backgroundColor: '#2b2b2b',
+                          color: 'white',
+                          border: '1px solid #424242'
+                        },
+                        tooltipBody:{
+                          backgroundColor: '#2b2b2b',
+                          color: 'white'
+                        },
+                        tooltipLabel:{
+                          color: 'white'
+                        },
+                        tooltipItemName:{
+                          color: 'white',
+                          fontFamily: 'Poppins',
+                          fontSize: '16px'
+                        },
+                        tooltipItemData: {
+                          color: 'white',
+                          fontFamily: 'Poppins',
+                          fontSize: '16px'
+                        }
+                      }}
+                    />
+
                   </div>
-
-                  <h3 className={classes.statusTitle}>Playing</h3>
-                  <p className={classes.statusCount}>{playGamesLength}</p>
-
-                </Suspense>
 
               </Paper>
 
               <Paper shadow="md" radius="lg" className={classes.statusCard}>
 
-                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
+                  <p className={classes.statusTitle}>Game Ratings</p>
 
-                  <div className={classes.statusLogoCenter} >
-                    <IconBookmarkFilled size={60} color="green" className={classes.statusLogo}/>
+                  <div className={classes.chartWrapper}>
+
+                    <BarChart
+                      h={260}
+                      w='95%'
+                      dataKey='rating'
+                      yAxisLabel='Games'
+                      xAxisLabel='Rating (1-5)'
+                      data={ratingDistributionData}
+                      series={[{ name: 'count', color: 'red' }]}
+                      yAxisProps={{
+                        allowDecimals: false
+                      }}
+                      xAxisProps={{
+                        allowDecimals: true
+                      }}
+                      styles={{
+                        axisLabel: {
+                          fill: 'white',
+                          fontFamily: 'Inter',
+                          fontSize: '14px',
+                        },
+                        axis: {
+                          fill: 'white',
+                          fontSize: '12px',
+                          fontWeight: 'bold'
+                        },
+                        tooltip:{
+                          backgroundColor: '#2b2b2b',
+                          color: 'white',
+                          border: '1px solid #424242'
+                        },
+                        tooltipBody:{
+                          backgroundColor: '#2b2b2b',
+                          color: 'white'
+                        },
+                        tooltipLabel:{
+                          color: 'white'
+                        },
+                        tooltipItemName:{
+                          color: 'white',
+                          fontFamily: 'Poppins',
+                          fontSize: '16px'
+                        },
+                        tooltipItemData: {
+                          color: 'white',
+                          fontFamily: 'Poppins',
+                          fontSize: '16px'
+                        }
+                      }}
+                    />
+
                   </div>
-
-                  <h3 className={classes.statusTitle}>Plan to Play</h3>
-                  <p className={classes.statusCount}>{planToPlayLength}</p>
-
-                </Suspense>
 
               </Paper>
 
-              <Paper shadow="md" radius="lg" className={classes.statusCard}>
+              <Paper shadow='md' radius='lg' className={classes.statusCard}>
+                <div className={classes.quickStatsContainer}>
+                  <p className={classes.statusTitle}>Quick Stats</p>
 
-                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
+                  <div className={classes.quickStatsGrid}>
 
-                  <div className={classes.statusLogoCenter} >
-                    <IconCheck size={60} color="purple" className={classes.statusLogo}/>
+                      <div className={classes.quickStatItem}>
+
+                        <div className={classes.titleLogo}>
+                          <ThemeIcon size={30} radius='md' variant='filled' color='indigo'> <IconClipboardListFilled size={20} /> </ThemeIcon>
+                          <Text className={classes.quickStatLabel}>Average Rating</Text>
+                        </div>
+                        
+                        <div className={classes.ratingWrapper}>
+                          <Text className={classes.ratingValue}>{avgRating.toFixed(2)}</Text>
+                          <Rating value={avgRating} readOnly fractions={3} color='yellow' size='md' />
+                        </div>
+
+                      </div>
+
+                      <div className={classes.quickStatItem}>
+
+                        <div className={classes.titleLogo}>
+                          <ThemeIcon size={30} radius='md' variant='filled' color='teal'> <Trophy size={20} /> </ThemeIcon>
+                          <Text className={classes.quickStatLabel}>Games Platinumed</Text>
+                        </div>
+
+                        <div className={classes.platinumWrapper}>
+                          <Text className={classes.platValue}>{numPlatinumedGames}</Text>
+                        </div>
+                      </div>
+
+                      <div className={classes.quickStatItem}>
+
+                        <div className={classes.titleLogo}>
+                          <ThemeIcon size={30} radius='md' variant='filled' color='orange'> <Notebook size={20} /> </ThemeIcon>
+                          <Text className={classes.quickStatLabel}>Total Entries</Text>
+                        </div>
+
+                        <div className={classes.ratingWrapper}>
+                          <Text className={classes.ratingValue}>{numEntries}</Text>
+                        </div>
+
+                      </div>
+
+                      <div className={classes.quickStatItem}>
+
+                        <div className={classes.titleLogo}>
+                          <ThemeIcon size={30} radius='md' variant='filled' color='gold'> <Star size={20} /> </ThemeIcon>
+                          <Text className={classes.quickStatLabel}>Top Rated Game</Text>
+                        </div>
+
+                        <div className={classes.ratingWrapper}>
+                          <Text className={classes.ratingValue}>{topRatedGame || 'N/A'}</Text>
+                        </div>
+                        
+                      </div>
+
                   </div>
-
-                  <h3 className={classes.statusTitle}>Completed</h3>
-                  <p className={classes.statusCount}>{completedLength}</p>
-                </Suspense>
-
-              </Paper>
-
-              <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-                  <div className={classes.statusLogoCenter} >
-                    <IconQuestionMark size={60} color='#fc8a08' className={classes.statusLogo}/>
-                  </div>
-                  <h3 className={classes.statusTitle}>No Status</h3>
-                  <p className={classes.statusCount}>{noStatusLength}</p>
-                </Suspense>
-
-              </Paper>
-
-              <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-                <Suspense fallback={<LoadingOverlay visible zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />}>
-
-                  <div className={classes.statusLogoCenter} >
-                    <IconPlayerPauseFilled size={60} color="red" className={classes.statusLogo}/>
-                  </div>
-
-                  <h3 className={classes.statusTitle}>On Hold</h3>
-                  <p className={classes.statusCount}>{onHoldLength}</p>
-                  
-                </Suspense>
-
+                </div>
               </Paper>
 
             </SimpleGrid>
 
           </div>
 
-          <div className={classes.trendingGames}>
-
-            <div className={classes.trendingSection}>
-              
-              <div className={classes.titleLogo}>
-                <ThemeIcon variant='gradient' gradient={{ from: '#c21500', to: '#ffc500', deg: 90}} size={40}>
-                    <Flame size={30} color='white'/> 
-                  </ThemeIcon>
-
-                <h1 className={classes.gamesPlayingText}>Trending Games</h1>
-
-              </div>
-
-              <a className={classes.viewMoreIcon} href='/search/trending'> <CircleArrowRight size={35} /> </a>
-
-            </div>
-
-            {/* Use TrendingSection component to display trending games */}
-            <TrendingSection />
-
-          </div>
-
-          <div className={classes.popularGames}>
+          <div className={classes.continueSection}>
             
-              <div className={classes.popularSection}>
-              
-                <div className={classes.titleLogo}>
-
-                  <ThemeIcon size={50} variant='gradient' gradient={{ from: '#f7971e', to: '#ffd200', deg: 20}} radius='md'>
-                    <Star size={40} />
-                  </ThemeIcon>
-
-                  <h1 className={classes.gamesPlayingText}>Popular Games</h1>
-                </div>
-
-                <a className={classes.viewMoreIcon} href='/search/popular'><CircleArrowRight size={35} /></a>
-
-              </div>
-            
-              {/* Use PopularSection component to display popular games */}
-              <PopularSection />
-
           </div>
 
           <div className={classes.playingGames} >

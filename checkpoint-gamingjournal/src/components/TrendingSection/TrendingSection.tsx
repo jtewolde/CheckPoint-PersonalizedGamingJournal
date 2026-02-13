@@ -41,7 +41,7 @@ export default function TrendingSection(){
     }, []);
 
     return (
-        <SimpleGrid cols={{xs: 2, sm: 3, md: 4, lg: 5, xl: 6}} className={classes.trendingGamesGrid}>
+        <SimpleGrid cols={{base: 2, sm: 3, md: 4, lg: 5, xl: 6}} className={classes.trendingGamesGrid}>
             {trendingGames.map((game) => (
                 <GameCard key={game.id} game={game} variant="compact" />
             ))}

@@ -184,7 +184,7 @@ export default function Journal() {
                             Reflect on your gaming journey by managing your journal entries here. Here you can:
                         </Text>
 
-                        <List className={classes.descriptionList} spacing='sm' size='md' withPadding>
+                        <List className={classes.descriptionList} spacing='sm' size='md' >
                             <List.Item
                                 icon={
                                     <ThemeIcon size={30} radius="xl" variant='filled' color='#45B649'>
