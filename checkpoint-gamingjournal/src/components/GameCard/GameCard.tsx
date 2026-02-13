@@ -16,7 +16,7 @@ import classes from './GameCard.module.css';
 
 // Create type variable to determine which variant of gameCard, default for search results and more info
 // Compact for Popular and Trending games sections with less info
-type GameCardVariant = 'default' | 'compact'
+type GameCardVariant = 'default' | 'compact' | 'small';
 
 // Define the GameCard component that takes a game prop
 interface GameCardProps {
@@ -115,7 +115,7 @@ export default function GameCard({ game, variant = 'default' }: GameCardProps) {
     }
 
     return (
-        <div key={game.id} className={`${classes.gameCard} ${variant === 'compact' ? classes.compact : classes.default}`} onClick={() => router.push(`/games/${game.id}`)}>
+        <div key={game.id} className={`${classes.gameCard} ${variant === 'compact' ? classes.compact  : variant === 'small' ? classes.small : classes.default}`} onClick={() => router.push(`/games/${game.id}`)}>
 
             <div className={classes.imageWrapper}>
 
@@ -136,19 +136,20 @@ export default function GameCard({ game, variant = 'default' }: GameCardProps) {
                         handleQuickToggle(String(game.id))
                     }}
                     >
-
-                        <Tooltip label={loading ? 'Checking library...' : isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile || loading}>
-                            <ActionIcon size='lg' radius='xl' variant='filled' color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} disabled={loading || addingToLibrary}>
-                                {loading || isInLibrary === null ? (
-                                    <Ellipsis size={18} strokeWidth={2.5} />
-                                ):
-                                isInLibrary ? (
-                                    <Minus size={18} strokeWidth={2.5} />
-                                    ) : (
-                                    <Plus size={18} strokeWidth={2.5} />
-                                )}
-                            </ActionIcon>
-                        </Tooltip>
+                        {variant !== 'small' && (
+                            <Tooltip label={loading ? 'Checking library...' : isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile || loading}>
+                                <ActionIcon size='lg' radius='xl' variant='filled' color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} disabled={loading || addingToLibrary}>
+                                    {loading || isInLibrary === null ? (
+                                        <Ellipsis size={18} strokeWidth={2.5} />
+                                    ):
+                                    isInLibrary ? (
+                                        <Minus size={18} strokeWidth={2.5} />
+                                        ) : (
+                                        <Plus size={18} strokeWidth={2.5} />
+                                    )}
+                                </ActionIcon>
+                            </Tooltip>
+                        )}
 
                     </div>
 

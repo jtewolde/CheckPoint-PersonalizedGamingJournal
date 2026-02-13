@@ -11,7 +11,7 @@ import { authClient } from '@/lib/auth-client';
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
 import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconSword, IconClipboardListFilled } from '@tabler/icons-react';
-import { Notebook, Gamepad, CircleUserRound, CircleArrowRight, Trophy, Icon } from 'lucide-react';
+import { Notebook, Gamepad, CircleUserRound, CircleArrowRight, Trophy, Icon, Star } from 'lucide-react';
 
 import classes from './dashboard.module.css';
 
@@ -32,7 +32,7 @@ export default function Dashboard() {
   const [avgRating, setAvgRating] = useState(0);
   const [numEntries, setNumEntries] = useState(0);
   const [numPlatinumedGames, setNumPlatinumedGames] = useState(0);
-  const [mostPlayedGenre, setMostPlayedGenre] = useState("");
+  const [topRatedGame, setTopRatedGame] = useState("");
 
   const [completedPercentage, setCompletedPercentage] = useState(0)
 
@@ -76,7 +76,7 @@ export default function Dashboard() {
 
       setRatingDistributionData(calculateRatingDistribution(data.games)) // Calculate the distribution of game ratings
       setAvgRating(calculateAverageRating(data.games)) // Calculate the average rating of the user's games
-      setMostPlayedGenre(calculateMostPlayedGenre(data.games)) // Calculate the most played genre based on the user's library
+      setTopRatedGame(calculateTopRatedGame(data.games));
 
       const playingGames = data.games.filter((game: any) => game.status === 'Playing').slice(0,6) // Filter games that are currently being played with the first 6 games
       const platinumedGames = data.games.filter((game: any) => game.platinum === true).length; // Filter games that have been platinumed and get the count
@@ -85,7 +85,7 @@ export default function Dashboard() {
       console.log("Playing Games: ", playingGames);
       console.log("Avg Rating: ", avgRating);
       console.log("Number of Platinumed Games: ", platinumedGames);
-      console.log("Most Played Genre: ", mostPlayedGenre);
+      console.log("Top Rated Game: ", topRatedGame);
       setPlayingGames(playingGames); // Store the playing games in state
 
       const totalGames = data.games.length // Store total number of games
@@ -229,36 +229,21 @@ export default function Dashboard() {
     return totalRating / ratedGames.length;
   }
 
-  // Function to calculate the most played genre based on the user's library of games. This will be displayed as a quick stat on the dashboard.
-  const calculateMostPlayedGenre = (games: any[]) => {
-    const genreCounts: Record<string, number> = {};
+  // Function to calculate the top rated game in the user's library. This will be used to display as a quick stat card
+  const calculateTopRatedGame = (games: any[]) => {
+    const ratedGames = games.filter(game => game.rating >= 1 && game.rating <= 5);
 
-    // Loop through each game and count the occurrences of each genre in the user's library.
-    // 
-    games.forEach((game) => {
-      if(!game.genres || game.genres.length === 0) return;
+    if(ratedGames.length === 0) {
+      return 0;
+    }
 
-      game.genres.forEach((genre: string) => {
-        if (genreCounts[genre]) {
-          genreCounts[genre]++;
-        } else {
-          genreCounts[genre] = 1;
-        }
-      });
-    })
-
-    // Find the genre with the highest count
-    let mostPlayedGenre = '';
-    let maxCount = 0;
-
-    Object.keys(genreCounts).forEach(genre => {
-      if(genreCounts[genre] > maxCount){
-        maxCount = genreCounts[genre];
-        mostPlayedGenre = genre;
+    let topRatedGame = ratedGames[0];
+    ratedGames.forEach(game => {
+      if(game.rating >= topRatedGame.rating){
+        topRatedGame = game;
       }
     })
-
-    return mostPlayedGenre;
+    return topRatedGame.title;
   }
 
   // useEffect to call both fetchPlayingGames and fetchRecentJournalEntries when the component mounts.
@@ -512,12 +497,12 @@ export default function Dashboard() {
                       <div className={classes.quickStatItem}>
 
                         <div className={classes.titleLogo}>
-                          <ThemeIcon size={30} radius='md' variant='filled' color='pink'> <IconSword size={20} /> </ThemeIcon>
-                          <Text className={classes.quickStatLabel}>Most Played Genre</Text>
+                          <ThemeIcon size={30} radius='md' variant='filled' color='gold'> <Star size={20} /> </ThemeIcon>
+                          <Text className={classes.quickStatLabel}>Top Rated Game</Text>
                         </div>
 
                         <div className={classes.ratingWrapper}>
-                          <Text className={classes.ratingValue}>{mostPlayedGenre}</Text>
+                          <Text className={classes.ratingValue}>{topRatedGame || 'N/A'}</Text>
                         </div>
                         
                       </div>
