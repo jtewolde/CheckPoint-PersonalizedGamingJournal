@@ -145,7 +145,7 @@ export default function GameDetails() {
           gameID: id,
           gameDetails: {
             title: game.name,
-            genre: game.genres?.map((genre: any) => genre.name).join(', '),
+            genre: game.genres,
             coverImage: game.cover.url,
             releaseDate: game.first_release_date
               ? new Date(game.first_release_date * 1000).toISOString()
@@ -189,7 +189,7 @@ export default function GameDetails() {
           gameID: id,
           gameDetails: {
             title: game.name,
-            genre: game.genres?.map((genre: any) => genre.name).join(', '),
+            genre: game.genres,
             coverImage: game.cover.url,
             releaseDate: game.first_release_date
               ? new Date(game.first_release_date * 1000).toISOString()
