@@ -1,5 +1,5 @@
 .background{
-  background: url('/SilkSong.jpg') top center no-repeat;
+  background: url('/Hogwarts.jpeg') top center no-repeat;
   background-size: cover;
   background-attachment: fixed;
   position: relative;
@@ -138,7 +138,7 @@
   align-items: flex-start;
   padding: 1rem;
   gap: 1rem;
-  border-radius: 8px;
+  border-radius: 12px;
   background-color: #282828;
   border: 1px solid #424242;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -184,12 +184,6 @@
   max-width: 98%;
 }
 
-.quickStatsGrid{
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-}
-
 .quickStatItem{
   display: flex;
   flex-direction: column;
@@ -204,7 +198,7 @@
 }
 
 .quickStatLabel{
-  font-size: 18px;
+  font-size: 22px;
   font-family: 'Inter';
   font-weight: 500;
   color: white;
@@ -215,9 +209,21 @@
 .ratingValue,
 .platValue{
   color: #e0e0e0;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
   font-family: 'Inter';
+}
+
+.starsText{
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  font-family: 'Inter';
+}
+
+.ratingValue:hover{
+  color: white;
+  font-weight: 700;
 }
 
 .ratingWrapper{
@@ -449,10 +455,6 @@
 
   .welcomeText{
     font-size: 1.25rem;
-  }
-
-  .statusGrid {
-    grid-template-columns: repeat(1, 1fr); /* 2 columns for screens smaller than 768px */
   }
 
   .gamesGrid {
