@@ -181,6 +181,17 @@
   font-family: 'Poppins';
 }
 
+.scrollBar {
+    &,
+    &:hover {
+        background-color: #555555;
+    }
+
+    &[data-orientation='vertical'] .thumb {
+        background-color: black;
+    }
+}
+
 .screenshotsTitle {
   font-size: 1.8rem;
   font-weight: 300;

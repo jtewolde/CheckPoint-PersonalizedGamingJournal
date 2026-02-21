@@ -130,6 +130,11 @@ export const auth = betterAuth({
                 required: false,
                 defaultValue: false
             },
+            completionDate: {
+                type: "date",
+                required: false,
+                defaultValue: null,
+            },
             rating: {
                 type: "number",
                 required: false,
