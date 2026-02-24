@@ -255,7 +255,7 @@ export default function GameDetails() {
     if (opened && libraryGame) {
       setStatus(libraryGame.status ?? null);
       setCompletionDate(libraryGame.completionDate ?? null);
-      setIsPlatinum(libraryGame.isPlatinum ?? false);
+      setIsPlatinum(libraryGame.platinum ?? false);
       setRating(libraryGame.rating ?? null);
     }
   }, [opened, libraryGame]);
@@ -512,19 +512,13 @@ export default function GameDetails() {
                               {libraryGame?.status || 'No Status Given'}
                             </Badge>
                           
-                            <Tooltip label='Platinumed/100%' position='right'>
+                            <Tooltip label='Platinumed/100%' position='right' >
 
                               <Trophy 
                                 size={30} 
                                 color={isPlatinum ? 'gold' : 'gray'}
                                 fill={isPlatinum ? 'gold' : 'none'}
                                 style={{ transition: 'all 0.2s ease' }}
-                                cursor={'pointer'}
-                                onClick={() => {
-                                  const newValue = !isPlatinum;
-                                  setIsPlatinum(newValue);
-                                  handleUpdateInfo(undefined, newValue);
-                                }}
                               />
                             
                             </Tooltip>
@@ -536,7 +530,7 @@ export default function GameDetails() {
 
                               <Select
                                 className={classes.statusSelect}
-                                label="Status"
+                                label="Status:"
                                 placeholder="Select game status"
                                 size='md'
                                 styles={{
@@ -557,11 +551,45 @@ export default function GameDetails() {
                                 renderOption={renderSelectOption}
                               />
 
+                              <div className={classes.ratingContainer}>
+
+                                  <Text size='md' className={classes.ratingLabel}>Your Rating:</Text>
+
+                                  <Rating
+                                  size='lg' 
+                                  fractions={2} 
+                                  value={rating} 
+                                  onChange={
+                                    (value) => {
+                                      setRating(value);
+                                    }}
+                                  />
+
+                                </div>
+
+                                <div className={classes.ratingContainer}>
+
+                                  <Text size='md' className={classes.ratingLabel}>Platinum Trophy/100% Completed:</Text>
+
+                                  <Trophy 
+                                  size={30} 
+                                  color={isPlatinum ? 'gold' : 'gray'}
+                                  fill={isPlatinum ? 'gold' : 'none'}
+                                  style={{ transition: 'all 0.2s ease' }}
+                                  cursor={'pointer'}
+                                  onClick={() => {
+                                    const newValue = !isPlatinum;
+                                    setIsPlatinum(newValue);
+                                  }}
+                                  />
+
+                                </div>
+
                               {status === 'Completed' && (
                                 <>
                                   <DateInput
                                     size='md'
-                                    label="Completion Date"
+                                    label="Completion Date:"
                                     placeholder='Select completion date'
                                     clearable
                                     leftSection={<CalendarDays size={20} />}
@@ -572,34 +600,30 @@ export default function GameDetails() {
                                       setCompletionDate(dateObj);
                                     }}
                                   />
-
-                                  <Button
-                                    variant='filled'
-                                    color='blue'
-                                    size='md'
-                                    onClick={() => {
-                                      handleUpdateInfo(status, isPlatinum, rating, completionDate);
-                                      close();
-                                    }}
-                                  >
-                                    Save Changes
-                                  </Button>
                                 </>
                               )}
+
+                              <Button
+                                variant='filled'
+                                color='blue'
+                                size='md'
+                                onClick={() => {
+                                  handleUpdateInfo(status, isPlatinum, rating, completionDate);
+                                  close();
+                                }}
+                              >
+                                Save Changes
+                              </Button>
 
                             </Stack>
                             
                           </Modal>
-                          
-                          <Rating 
+
+                          <Rating
+                          readOnly
                           size='lg' 
                           fractions={2} 
                           value={rating} 
-                          onChange={
-                            (value) => {
-                              setRating(value);
-                              handleUpdateInfo(undefined, undefined, value)
-                            }}
                           />
 
                           <Button
