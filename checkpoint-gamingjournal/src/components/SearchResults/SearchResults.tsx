@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useMemo } from 'react';
+import { useMediaQuery } from '@mantine/hooks';
 import { useRouter } from 'next/navigation';
 import { SimpleGrid, Text } from '@mantine/core';
 
@@ -21,9 +22,10 @@ export default function SearchResults({ query }: SearchResultsProps){
     const [games, setGames] = useState<any[]>([]); // State to store games data
     const [length, setLength] = useState("");
     const [loading, setLoading] = useState(true);
+    const isMobile = useMediaQuery('(max-width: 600px)');
 
-    const [page, setPage] = useState(1) // start with page 1 for pagination
-    const limit = 100; // Set the limit of games on page to 12
+    const [hasMore, setHasMore] = useState(false); // State to determine if there are more games to load
+    const limit = 30; // Set the limit of games on page to 12
 
     // States to handle sorting and filtering search results
     const [sortOption, setSortOption] = useState<'first_release_date' | 'total_rating' | 'alphabetical' | ''>('total_rating'); // State to sort search results from release date/total_rating
@@ -32,31 +34,6 @@ export default function SearchResults({ query }: SearchResultsProps){
     const [selectedTheme, setSelectedTheme] = useState<string[]>([]);
     const [selectedMode, setSelectedMode] = useState<string[]>([]);
     const [selectedPlatform, setSelectedPlatform] = useState<string[]>([]);
-
-    useEffect(() => {
-        const fetchGames = async () => {
-
-            try {
-                const offset = (page - 1) * limit; // calculate offset based on page
-                const res = await fetch(`/api/igdb/games?query=${encodeURIComponent(query)}&limit=${limit}&offset=${offset}`);
-
-                if (!res.ok) {
-                throw new Error('Failed to fetch games');
-                }
-                const data = await res.json();
-                setGames(data);
-                setLength(data.length);
-                console.log("Game Results", data)
-            } catch (error) {
-                console.error('Error fetching games:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchGames();
-
-    }, [query, page]);
 
     // Function to sort out the search results of games using useMemo to sort 
     const sortedGames = useMemo(() => {
@@ -155,16 +132,16 @@ export default function SearchResults({ query }: SearchResultsProps){
             onPlatformsChange={(v) => setSelectedPlatform(v as any)}
             />
 
-            <SimpleGrid cols={7} spacing="lg" verticalSpacing='xl' className={classes.resultGamesGrid}>
-                {processedGames.map((game) => (
-                    <GameCard key={game.id} game={game} />
-                ))}
+            <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4 }} spacing="lg" verticalSpacing='xl' className={classes.resultGamesGrid}>
+                {processedGames.map((game) => 
+                    isMobile ? (
+                        <GameCard key={game.id} game={game} variant='small' />
+                    ) : (
+                        <GameCard key={game.id} game={game} />
+                    )
+                )}
             </SimpleGrid>
 
         </div>
-
-        
-    )
-
-    
+    );
 }
