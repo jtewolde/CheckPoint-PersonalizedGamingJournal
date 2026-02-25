@@ -169,6 +169,8 @@
   font-weight: 500;
   color: #f0f0f0;
   text-align: center;
+  font-family: 'Poppins';
+  font-size: 4rem;
 }
 
 .ratingContainer{
@@ -183,7 +185,7 @@
   font-size: 1.0rem;
   color: #f0f0f0;
   text-align: center;
-  font-family: 'Poppins';
+  font-weight: 500;
 }
 
 .scrollBar {

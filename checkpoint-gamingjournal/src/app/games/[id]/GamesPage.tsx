@@ -551,40 +551,6 @@ export default function GameDetails() {
                                 renderOption={renderSelectOption}
                               />
 
-                              <div className={classes.ratingContainer}>
-
-                                  <Text size='md' className={classes.ratingLabel}>Your Rating:</Text>
-
-                                  <Rating
-                                  size='lg' 
-                                  fractions={2} 
-                                  value={rating} 
-                                  onChange={
-                                    (value) => {
-                                      setRating(value);
-                                    }}
-                                  />
-
-                                </div>
-
-                                <div className={classes.ratingContainer}>
-
-                                  <Text size='md' className={classes.ratingLabel}>Platinum Trophy/100% Completed:</Text>
-
-                                  <Trophy 
-                                  size={30} 
-                                  color={isPlatinum ? 'gold' : 'gray'}
-                                  fill={isPlatinum ? 'gold' : 'none'}
-                                  style={{ transition: 'all 0.2s ease' }}
-                                  cursor={'pointer'}
-                                  onClick={() => {
-                                    const newValue = !isPlatinum;
-                                    setIsPlatinum(newValue);
-                                  }}
-                                  />
-
-                                </div>
-
                               {status === 'Completed' && (
                                 <>
                                   <DateInput
@@ -602,6 +568,40 @@ export default function GameDetails() {
                                   />
                                 </>
                               )}
+
+                              <div className={classes.ratingContainer}>
+
+                                <Text size='md' className={classes.ratingText}>Your Rating:</Text>
+
+                                <Rating
+                                size='lg' 
+                                fractions={2} 
+                                value={rating} 
+                                onChange={
+                                  (value) => {
+                                    setRating(value);
+                                  }}
+                                />
+
+                              </div>
+
+                              <div className={classes.ratingContainer}>
+
+                                <Text size='md' className={classes.ratingText}>Platinum Trophy/100% Completed:</Text>
+
+                                <Trophy 
+                                size={30} 
+                                color={isPlatinum ? 'gold' : 'gray'}
+                                fill={isPlatinum ? 'gold' : 'none'}
+                                style={{ transition: 'all 0.2s ease' }}
+                                cursor={'pointer'}
+                                onClick={() => {
+                                  const newValue = !isPlatinum;
+                                  setIsPlatinum(newValue);
+                                }}
+                                />
+
+                              </div>
 
                               <Button
                                 variant='filled'
