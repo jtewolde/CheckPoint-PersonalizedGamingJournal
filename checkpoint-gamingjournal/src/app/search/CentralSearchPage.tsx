@@ -5,7 +5,6 @@ import { Divider, ThemeIcon, Title } from "@mantine/core"
 import { Flame, Star } from "lucide-react"
 import { CircleArrowRight, ScanSearch } from "lucide-react";
 
-
 import SearchResults from "@/components/SearchResults/SearchResults";
 import PopularSection from "@/components/PopularSection/PopularSection";
 import TrendingSection from "@/components/TrendingSection/TrendingSection";

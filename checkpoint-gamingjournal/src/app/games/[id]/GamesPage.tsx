@@ -327,7 +327,7 @@ export default function GameDetails() {
       label: 'Plan to Play',
       description: "Have intentions to play the game in the future but haven't started yet.",
       icon: <Clock size={25} color='pink'/>,
-      color: 'pink'
+      color: 'blue'
     }
   ]
 
