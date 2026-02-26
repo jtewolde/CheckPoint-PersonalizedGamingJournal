@@ -21,10 +21,11 @@ export default function SearchResults({ query }: SearchResultsProps){
 
     const [games, setGames] = useState<any[]>([]); // State to store games data
     const [length, setLength] = useState("");
+    const [total, setTotal] = useState(0)
     const [loading, setLoading] = useState(true);
     const isMobile = useMediaQuery('(max-width: 600px)');
 
-    const [hasMore, setHasMore] = useState(false); // State to determine if there are more games to load
+    const [page, setPage] = useState(1) // start with page 1 for pagination
     const limit = 30; // Set the limit of games on page to 12
 
     // States to handle sorting and filtering search results
@@ -34,6 +35,31 @@ export default function SearchResults({ query }: SearchResultsProps){
     const [selectedTheme, setSelectedTheme] = useState<string[]>([]);
     const [selectedMode, setSelectedMode] = useState<string[]>([]);
     const [selectedPlatform, setSelectedPlatform] = useState<string[]>([]);
+
+    useEffect(() => {
+        const fetchGames = async () => {
+            try {
+                const offset = (page - 1) * limit; // calculate offset based on page
+                const res = await fetch(`/api/igdb/games?query=${encodeURIComponent(query)}&limit=${limit}&offset=${offset}`);
+
+                if (!res.ok) {
+                throw new Error('Failed to fetch games');
+                }
+                const data = await res.json();
+                setGames(data.games);
+                setLength(data.length);
+                console.log("Game Results", data.games)
+                console.log("Total Count", data.total)
+            } catch (error) {
+                console.error('Error fetching games:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchGames();
+
+    }, [query, page]);
 
     // Function to sort out the search results of games using useMemo to sort 
     const sortedGames = useMemo(() => {
