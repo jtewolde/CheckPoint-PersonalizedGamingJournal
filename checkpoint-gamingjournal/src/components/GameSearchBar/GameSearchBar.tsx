@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { Autocomplete, useCombobox, Button } from "@mantine/core"
 import { IconSearch } from "@tabler/icons-react"
 import { useRouter } from "next/navigation"
@@ -31,6 +31,9 @@ export default function GameSearchBar({
     // State to manage the current query and search results
     const [query, setQuery] = useState(initialQuery)
     const [searchResults, setSearchResults] = useState<{name: string}[]>([])
+
+    // Ref to use as a timeout for inputting game title to search in search bar
+    const denounceRef = useRef<NodeJS.Timeout | null>(null);
     const router = useRouter()
 
     // Combobox used to close dropdown when entering name in search bar.
@@ -41,34 +44,41 @@ export default function GameSearchBar({
     // Function to handle search queries and fetch results from the API
     const handleSearch = async (query: string) => {
         setQuery(query);
+
+        if(denounceRef.current){
+            clearTimeout(denounceRef.current)
+        }
     
         if (query.trim().length < 3) {
             setSearchResults([]); // Clear results if the query is empty
             return;
         }
 
-        try {
-            const res = await fetch(`/api/igdb/games?query=${encodeURIComponent(query)}`);
-            if (!res.ok) {
-                throw new Error('Failed to fetch search results');
-            }
+        denounceRef.current = setTimeout(async () => {
+            try {
+                const res = await fetch(`/api/igdb/games?query=${encodeURIComponent(query)}`);
+                if (!res.ok) {
+                    throw new Error('Failed to fetch search results');
+                }
 
-            const data = await res.json();
-            if (!Array.isArray(data)) {
-                console.log("Unexpected response format:", data);
-                return;
+                const data = await res.json();
+                if (!Array.isArray(data)) {
+                    console.log("Unexpected response format:", data);
+                    return;
+                }
+        
+                // Remove duplicate game names
+                const uniqueResults = data.filter(
+                    (game: any, index: number, self: any[]) =>
+                    index === self.findIndex((g) => g.name === game.name)
+                );
+        
+            setSearchResults(uniqueResults); // Update search results with unique values
+            
+            } catch (error) {
+                console.error('Error fetching search results:', error);
             }
-    
-            // Remove duplicate game names
-            const uniqueResults = data.filter(
-                (game: any, index: number, self: any[]) =>
-                index === self.findIndex((g) => g.name === game.name)
-            );
-    
-        setSearchResults(uniqueResults); // Update search results with unique values
-        } catch (error) {
-        console.error('Error fetching search results:', error);
-        }
+        }, 400);
     };
 
     // Function to navigate to the search results page
