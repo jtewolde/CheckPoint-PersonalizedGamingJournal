@@ -2,6 +2,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { redis } from '@/utils/redis';
+import { count } from 'console';
 
 const IGDB_URL = 'https://api.igdb.com/v4/games';
 
@@ -67,11 +68,23 @@ export async function GET(req: NextRequest) {
     const now = new Date();
     const thirtyDaysAgo = Math.floor((now.getTime() - 30 * 24 * 60 * 60 * 1000) / 1000); // 45 days ago in seconds
 
-    // Construct the query body
+    // Initialize two clauses to centralize searchQuery and filters with WHERE to be used in both games and count API
+    let whereClause = ''
+    let searchClause = ''
+
+    if(searchQuery){
+      searchClause = `search "${searchQuery}";`;
+      whereClause = `version_parent = null & total_rating >= 30`;
+    } else {
+      whereClause = `rating >= 80 & first_release_date >= ${thirtyDaysAgo} & first_release_date <= ${Math.floor(now.getTime() / 1000)} & cover != null`;
+    }
+
+    // Construct the query body for getting games
     const body = searchQuery
-      ? `search "${searchQuery}"; fields name, summary, genres.name, genres.slug, cover.url, version_title, game_type.type, game_modes.slug, screenshots.url, themes.slug, platforms.slug, first_release_date, release_dates.human, total_rating; where version_parent = null & total_rating >= 30; limit ${limit}; offset ${offset};`
+      ? `${searchClause} fields name, summary, genres.name, genres.slug, cover.url, version_title, game_type.type, game_modes.slug, screenshots.url, themes.slug, platforms.slug, first_release_date, release_dates.human, total_rating; where ${whereClause}; limit ${limit}; offset ${offset};`
       : `fields name, summary, genres, cover.url, version_title; where rating >= 80 & first_release_date >= ${thirtyDaysAgo} & first_release_date <= ${Math.floor(now.getTime() / 1000)} & cover != null; sort rating desc; limit 6; offset ${offset};`;
 
+    // Call API Request for getting specific info on searched games
     const igdbRes = await fetch(IGDB_URL, {
       method: 'POST',
       headers: {
@@ -82,6 +95,21 @@ export async function GET(req: NextRequest) {
       body,
     });
 
+    // Call API Request for getting the count of all games with those parameters for pagination
+    const countRes = await fetch('https://api.igdb.com/v4/games/count', {
+      method: 'POST',
+      headers: {
+        'Client-ID': process.env.IGDB_API_CLIENT_ID!,
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'text/plain',
+      },
+      body: `
+        ${searchClause}
+        where ${whereClause};
+      `,
+    });
+
+    // Handle errors for when IGDB Games API Request fails
     if (!igdbRes.ok) {
       const errorData = await igdbRes.json();
       console.error("IGDB API Error:", errorData);
@@ -91,13 +119,28 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    // Handle errors for getting the count for searching for game fails
+    if (!countRes.ok) {
+      const errorData = await countRes.json();
+      console.error("IGDB Count Error:", errorData);
+      return NextResponse.json(
+        { message: 'Failed to fetch the count of games from IGDB', error: errorData },
+        { status: countRes.status }
+      );
+    }
+
+    // Store the JSON Data from count request and the games request
+    const countData = await countRes.json();
+    const total = countData.count || 0;
     const games = await igdbRes.json();
 
+    // Group the games and total count together to form the complete response
+    const response = {games, total}
+
     // Cache the response in Redis for 10 minutes
-    await redis.set(cacheKey, JSON.stringify(games), 'EX', 600); 
+    await redis.set(cacheKey, JSON.stringify(response), 'EX', 600); 
 
-    return NextResponse.json(games, { status: 200 });
-
+    return NextResponse.json(response, { status: 200 });
 
   } catch (err: any) {
     console.error("Error:", err);

@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useMediaQuery } from '@mantine/hooks';
 import { useRouter } from 'next/navigation';
-import { SimpleGrid, Text } from '@mantine/core';
+import { SimpleGrid, Text, Pagination } from '@mantine/core';
 
 import GameFilters from '@/components/GameFilters/GameFilters';
 import GameCard from '../GameCard/GameCard';
@@ -21,15 +21,20 @@ export default function SearchResults({ query }: SearchResultsProps){
 
     const [games, setGames] = useState<any[]>([]); // State to store games data
     const [length, setLength] = useState("");
-    const [total, setTotal] = useState(0)
+
     const [loading, setLoading] = useState(true);
     const isMobile = useMediaQuery('(max-width: 600px)');
 
     const [page, setPage] = useState(1) // start with page 1 for pagination
-    const limit = 30; // Set the limit of games on page to 12
+    const limit = 16; // Set the limit of games on page to 12
+
+    // Calculate total amount of games received from IGDB API request
+    // Calcualte the total number of pages for pagination
+    const [total, setTotal] = useState(0)
+    const totalPages = Math.ceil(total/limit)
 
     // States to handle sorting and filtering search results
-    const [sortOption, setSortOption] = useState<'first_release_date' | 'total_rating' | 'alphabetical' | ''>('total_rating'); // State to sort search results from release date/total_rating
+    const [sortOption, setSortOption] = useState<'first_release_date' | 'total_rating' | 'alphabetical' | ''>('first_release_date'); // State to sort search results from release date/total_rating
     const [selectedType, setSelectedType] = useState<string[]>([]);
     const [selectedGenre, setSelectedGenre] = useState<string[]>([]);
     const [selectedTheme, setSelectedTheme] = useState<string[]>([]);
@@ -43,11 +48,15 @@ export default function SearchResults({ query }: SearchResultsProps){
                 const res = await fetch(`/api/igdb/games?query=${encodeURIComponent(query)}&limit=${limit}&offset=${offset}`);
 
                 if (!res.ok) {
-                throw new Error('Failed to fetch games');
+                    throw new Error('Failed to fetch games');
                 }
+
                 const data = await res.json();
+
                 setGames(data.games);
                 setLength(data.length);
+                setTotal(data.total)
+
                 console.log("Game Results", data.games)
                 console.log("Total Count", data.total)
             } catch (error) {
@@ -167,6 +176,21 @@ export default function SearchResults({ query }: SearchResultsProps){
                     )
                 )}
             </SimpleGrid>
+            
+            {totalPages > 1 && (
+                <div className={classes.paginationWrapper}>
+                    <Pagination
+                        size='lg'
+                        radius='lg'
+                        total={totalPages}
+                        value={page}
+                        onChange={(newPage) => {
+                            setPage(newPage);
+                            router.push(`/search?query=${encodeURIComponent(query)}&page=${newPage}`);
+                        }}
+                    />
+                </div>
+            )}
 
         </div>
     );

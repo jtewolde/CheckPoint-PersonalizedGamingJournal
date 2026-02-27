@@ -49,7 +49,7 @@ export default function CentralSearchPage() {
                     </div>
 
                     {/* Divider between search bar and results/sections */}
-                    <Divider my='sm' />
+                    <Divider my='xs' />
                     
                     {isSearching && query ? (
                         <SearchResults query={query} />
