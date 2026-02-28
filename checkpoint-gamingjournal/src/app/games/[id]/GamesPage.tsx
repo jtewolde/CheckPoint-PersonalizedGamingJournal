@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { DateInput } from '@mantine/dates';
 import { useParams, useRouter } from 'next/navigation';
 import { notFound } from 'next/navigation';
 
@@ -13,7 +14,7 @@ import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid
 import Image from 'next/image';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination} from 'swiper/modules';
+import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -22,7 +23,7 @@ import 'swiper/css/free-mode';
 
 import classes from './game.module.css';
 
-import { NotebookPen, Delete, X, CalendarDays, Trophy } from 'lucide-react';
+import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock } from 'lucide-react';
 
 import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
   IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
@@ -45,6 +46,7 @@ export default function GameDetails() {
   const [status, setStatus] = useState(''); // State to handle game status
   const [isPlatinum, setIsPlatinum] = useState(false) // State to handle platinum of game
   const [rating, setRating] = useState(0); // State to handling rating of game given by user from 0-5 stars
+  const [completionDate, setCompletionDate] = useState<string | null>(null); // State to handle completion date of game
   const [opened, {open, close} ] = useDisclosure(false);
 
   const [screenshots, setScreensShots] = useState<any[]>([]); // State to store screenshots
@@ -111,6 +113,7 @@ export default function GameDetails() {
         setStatus(currentGame?.status);
         setIsPlatinum(currentGame?.platinum ?? false)
         setRating(currentGame?.rating ?? 0)
+        setCompletionDate(currentGame?.completionDate ?? null)
       } catch (error) {
         console.error('Error checking if game is in library:', error);
       }
@@ -213,7 +216,7 @@ export default function GameDetails() {
   }
 
   // Function to handle updating the game status, trophy(platinum), and rating.
-  const handleUpdateInfo = async (status?: string, platinum?: boolean, rating?: number) => {
+  const handleUpdateInfo = async (status?: string, platinum?: boolean, rating?: number, completionDate?: string | null) => {
     try {
       const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token
       const res = await fetch('/api/library/updateInfo', {
@@ -227,7 +230,8 @@ export default function GameDetails() {
           gameDetails: {
             status,
             platinum,
-            rating
+            rating,
+            completionDate
           },
         }),
       });
@@ -246,6 +250,17 @@ export default function GameDetails() {
     }
   };
 
+  // Update local state when the modal opens to reflect the current status, platinum, and rating of the game.
+  useEffect(() => {
+    if (opened && libraryGame) {
+      setStatus(libraryGame.status ?? null);
+      setCompletionDate(libraryGame.completionDate ?? null);
+      setIsPlatinum(libraryGame.platinum ?? false);
+      setRating(libraryGame.rating ?? null);
+    }
+  }, [opened, libraryGame]);
+
+  // Show global loader while fetching game details
   if (loading) {
     return <GlobalLoader visible={loading} />;
   }
@@ -276,6 +291,57 @@ export default function GameDetails() {
 
     return null; // fallback if no match
   };
+
+  // Define possible game statuses for the Select component in the Modal with descriptions for each status that the user can read
+  const gameStatuses = [
+    {
+      value: 'Playing',
+      label: 'Playing',
+      description: "Currently playing and making progress in the game.",
+      icon: <IconDeviceGamepad2 size={25} color='lime' />,
+      color: 'green'
+    },
+    {
+      value: 'Completed',
+      label: 'Completed',
+      description: "Finished the game, having completed the main storyline or achieved the end goals.",
+      icon: <Check size={25} color='gold'/>,
+      color: 'gold'
+    },
+    {
+      value: 'On Hold',
+      label: 'On Hold',
+      description: "Temporarily paused playing the game, with the intention to return to it later.",
+      icon: <Pause size={25} color='violet'/>,
+      color: 'violet'
+    },
+    {
+      value: 'Dropped',
+      label: 'Dropped',
+      description: "Stopped playing the game without the intention to return",
+      icon: <X size={25} color='red'/>,
+      color: 'red'
+    },
+    {
+      value: 'Plan to Play',
+      label: 'Plan to Play',
+      description: "Have intentions to play the game in the future but haven't started yet.",
+      icon: <Clock size={25} color='pink'/>,
+      color: 'blue'
+    }
+  ]
+
+  // Function to render the options in the Select component with their respective icons and descriptions for each game status 
+  const renderSelectOption = ({option}: any) => { 
+    const statusItem = gameStatuses.find(s => s.value === option.value); 
+    return statusItem ? ( 
+      <Group gap='sm'> 
+          {statusItem.icon} 
+          <Text size='lg' fw={600}>{statusItem.label}</Text> 
+          <Text size='xs' c='dimmed'>{statusItem.description}</Text> 
+        </Group> 
+        ) : null; 
+    };
 
   // Prepare game information for display on Accordions
   const gameInfo = [
@@ -415,7 +481,7 @@ export default function GameDetails() {
 
             <h1 className={classes.title}>{game.name}</h1>
 
-            <Badge color='gray' size='lg' radius='lg' c='white'>{game.game_type.type}</Badge>
+            <Badge color='#787878' size='lg' radius='lg' c='white'>{game.game_type.type}</Badge>
 
           </div>
 
@@ -446,9 +512,84 @@ export default function GameDetails() {
                               {libraryGame?.status || 'No Status Given'}
                             </Badge>
                           
-                            <Tooltip label='Platinumed/100%' position='right'>
+                            <Tooltip label='Platinumed/100%' position='right' >
 
                               <Trophy 
+                                size={30} 
+                                color={isPlatinum ? 'gold' : 'gray'}
+                                fill={isPlatinum ? 'gold' : 'none'}
+                                style={{ transition: 'all 0.2s ease' }}
+                              />
+                            
+                            </Tooltip>
+
+                          </div>
+
+                          <Modal opened={opened} onClose={close} title="Change Game Info" styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #424242', color: 'white', fontFamily: 'Noto Sans'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
+                            <Stack gap='md'>
+
+                              <Select
+                                className={classes.statusSelect}
+                                label="Status:"
+                                placeholder="Select game status"
+                                size='md'
+                                styles={{
+                                    wrapper: { color: '#212121'}, 
+                                    input: { color: 'white', background: '#212121'}, 
+                                    dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
+                                }}
+                                scrollAreaProps={{ scrollbarSize: 16, type: 'auto', scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
+                                value={status}
+                                onChange={(value) => {
+                                  if(!value) return;
+                                  setStatus(value);
+                                }}
+                                data={gameStatuses.map((status) => ({
+                                  value: status.value,
+                                  label: status.label,
+                                }))}
+                                renderOption={renderSelectOption}
+                              />
+
+                              {status === 'Completed' && (
+                                <>
+                                  <DateInput
+                                    size='md'
+                                    label="Completion Date:"
+                                    placeholder='Select completion date'
+                                    clearable
+                                    leftSection={<CalendarDays size={20} />}
+                                    value={completionDate}
+                                    maxDate={new Date()}
+                                    onChange={(date) => {
+                                      const dateObj = date ? new Date(date).toISOString() : null;
+                                      setCompletionDate(dateObj);
+                                    }}
+                                  />
+                                </>
+                              )}
+
+                              <div className={classes.ratingContainer}>
+
+                                <Text size='md' className={classes.ratingText}>Your Rating:</Text>
+
+                                <Rating
+                                size='lg' 
+                                fractions={2} 
+                                value={rating} 
+                                onChange={
+                                  (value) => {
+                                    setRating(value);
+                                  }}
+                                />
+
+                              </div>
+
+                              <div className={classes.ratingContainer}>
+
+                                <Text size='md' className={classes.ratingText}>Platinum Trophy/100% Completed:</Text>
+
+                                <Trophy 
                                 size={30} 
                                 color={isPlatinum ? 'gold' : 'gray'}
                                 fill={isPlatinum ? 'gold' : 'none'}
@@ -457,51 +598,32 @@ export default function GameDetails() {
                                 onClick={() => {
                                   const newValue = !isPlatinum;
                                   setIsPlatinum(newValue);
-                                  handleUpdateInfo(undefined, newValue);
                                 }}
-                              />
+                                />
+
+                              </div>
+
+                              <Button
+                                variant='filled'
+                                color='blue'
+                                size='md'
+                                onClick={() => {
+                                  handleUpdateInfo(status, isPlatinum, rating, completionDate);
+                                  close();
+                                }}
+                              >
+                                Save Changes
+                              </Button>
+
+                            </Stack>
                             
-                            </Tooltip>
-
-                          </div>
-
-                          <Modal opened={opened} onClose={close} title="Change Game Status:" styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #424242', color: 'white', fontFamily: 'Noto Sans'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
-                            <Select
-                              className={classes.statusSelect}
-                              size='md'
-                              styles={{
-                                  wrapper: { color: '#212121'}, 
-                                  input: { color: 'white', background: '#212121'}, 
-                                  dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
-                                  option: { background: '#202020'}
-                              }}
-                              value={status}
-                              onChange={(value) => {
-                                if(!value) return;
-                                setStatus(value);
-                                handleUpdateInfo(value);
-                                close();
-                              }}
-                              data={[
-                                { value: 'Playing', label: 'Playing' },
-                                { value: 'Completed', label: 'Completed' },
-                                { value: 'On Hold', label: 'On Hold' },
-                                { value: 'Dropped', label: 'Dropped' },
-                                { value: 'Plan to Play', label: 'Plan to Play' },
-                              ]}
-                              placeholder="Select game status"
-                            />
                           </Modal>
 
-                          <Rating 
+                          <Rating
+                          readOnly
                           size='lg' 
                           fractions={2} 
                           value={rating} 
-                          onChange={
-                            (value) => {
-                              setRating(value);
-                              handleUpdateInfo(undefined, undefined, value)
-                            }}
                           />
 
                           <Button

@@ -174,14 +174,14 @@ export default function Library(){
 
                 {!loading && filteredGames.length > 0 && (
                     <div className={classes.library}>
-                        <SimpleGrid cols={6} spacing="sm" verticalSpacing='md' className={classes.responsiveGrid}>
+                        <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4, lg: 5, xl: 5 }} spacing="lg" verticalSpacing='xl' className={classes.responsiveGrid}>
                             {filteredGames.map((game) => (
                                 <div key={game._id} className={classes.libraryCard} onClick={() => router.push(`/games/${game.gameId}`)}>
                                     <div className={classes.imageContainer} style={{ textAlign: 'center' }}>
                                         <Image
                                         src={
                                         game.coverImage
-                                            ? `https:${game.coverImage.replace('t_thumb', 't_cover_big')}`
+                                            ? `https:${game.coverImage.replace('t_thumb', 't_1080p')}`
                                             : PlaceHolderImage.src
                                         }
                                         alt={game.name}
@@ -192,39 +192,42 @@ export default function Library(){
 
                                     <div className={classes.gameInfo}>
 
-                                        <h3 className={classes.gameTitle}>{game.title}</h3>
+                                        {game.genres?.slice(0, 2).map((genre: { name: string }) => (
+                                            <Badge key={genre.name} size="md" variant="filled" color="white" radius='lg' c='black'>
+                                                {genre.name}
+                                            </Badge>
+                                        ))}
 
                                         <Badge 
                                         className={classes.badge} 
-                                        color={game.status === 'Completed' ? 'green' : game.status === 'Playing' ? 'blue' : game.status === 'On Hold' ? 'yellow' : game.status === 'Dropped' ? 'red' : game.status === 'Plan to Play' ? 'yellow': game.status === 'No Status Given' ? 'white' : 'dark'} 
-                                        variant='outline'
+                                        color={game.status === 'Completed' ? 'green' : game.status === 'Playing' ? 'blue' : game.status === 'On Hold' ? 'yellow' : game.status === 'Dropped' ? 'red' : game.status === 'Plan to Play' ? 'yellow': game.status === 'No Status Given' ? 'gray' : 'dark'} 
+                                        variant='filled'
                                         size='md'
                                         radius='sm'
                                         >
                                             {game.status || "No Status"}
                                         </Badge>
 
-                                        {game.rating && (
+                                        <div className={classes.ratingSection}>
+                                        
                                             <Rating 
-                                            size='sm' 
+                                            size='md'
+                                            color={game.rating && game.rating > 0 ? 'yellow' : '#555'}
                                             fractions={2}
                                             readOnly
                                             value={game.rating} 
                                             /> 
-                                        )}
-
-                                        {game.platinum && (
 
                                             <Tooltip label='Platinumed/100%' position='right'>
                                                 <Trophy 
-                                                size={30} 
-                                                color='gold'
-                                                fill='gold'
+                                                size={25} 
+                                                color={game.platinum ? 'gold' : '#555'}
+                                                fill={game.platinum ? 'gold' : 'none'}
                                                 cursor={'pointer'}
                                                 />
                                             </Tooltip>
 
-                                        )}
+                                        </div>
 
                                     </div>
 

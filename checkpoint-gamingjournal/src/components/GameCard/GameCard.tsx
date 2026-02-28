@@ -165,7 +165,7 @@ export default function GameCard({ game, variant = 'default' }: GameCardProps) {
 
                     <div className={classes.ratingTypeSection}>
 
-                        <Badge size='md' variant='filled' color='gray'>{game.game_type?.type}</Badge>
+                        <Badge size='md' variant='filled' color='#767575'>{game.game_type?.type}</Badge>
 
                         <Badge 
                         className={classes.badge}

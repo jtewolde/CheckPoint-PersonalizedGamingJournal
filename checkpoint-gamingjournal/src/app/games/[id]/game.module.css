@@ -166,19 +166,37 @@
 }
 
 .ratingLabel {
-  font-size: 4rem;
   font-weight: 500;
   color: #f0f0f0;
-  justify-content: center;
   text-align: center;
   font-family: 'Poppins';
+  font-size: 4rem;
+}
+
+.ratingContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.2rem;
 }
 
 .ratingText{
   font-size: 1.0rem;
   color: #f0f0f0;
   text-align: center;
-  font-family: 'Poppins';
+  font-weight: 500;
+}
+
+.scrollBar {
+    &,
+    &:hover {
+        background-color: #555555;
+    }
+
+    &[data-orientation='vertical'] .thumb {
+        background-color: black;
+    }
 }
 
 .screenshotsTitle {

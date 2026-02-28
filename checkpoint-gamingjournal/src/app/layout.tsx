@@ -73,9 +73,23 @@ export default function RootLayout({
         <AuthProvider>
           <LibraryProvider>
             <MantineProvider
+              defaultColorScheme="dark"
               withGlobalClasses
               theme={{
-                primaryColor: 'blue',
+                colors: {
+                  dark: [
+                    '#C1C2C5', // 0 (text on dark)
+                    '#A6A7AB',
+                    '#909296',
+                    '#5C5F66',
+                    '#373A40',
+                    '#2C2E33',
+                    '#212121',
+                    '#1A1B1E',
+                    '#141517',
+                    '#101113', // 9 (deepest background)
+                  ]
+                },
                 defaultRadius: 'md',
               }}
             >

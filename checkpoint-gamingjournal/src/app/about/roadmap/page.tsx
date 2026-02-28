@@ -7,8 +7,8 @@ export default function RoadmapPage() {
 
     const roadMapItems = [
         {
-            title: "Quality of Life Improvements for adding games to Library",
-            description: "Improve the process of adding games your library without needing to search and add manually on its own details page."
+            title: "Add CompletationDate Field to completed games in library",
+            description: "Allow users to add a completion date to their completed games in the library, so they can track when they finished a game."
         },
         {
             title: "Calendar Integration for Journal Entries",
@@ -18,10 +18,6 @@ export default function RoadmapPage() {
             title: 'Photo Gallery',
             description: "Allow users to upload and view screenshots and photos related to their gaming experiences."
         },
-        {
-            title: "Add Platinum/100% Completion Status",
-            description: "Track and display platinum trophies or 100% completion status for games in the library."
-        },
         { 
             title: "Achievements/Trophies Tracking System",
             description: "Pull achievements and trophies data from APIs like Playstation, Xbox, Steam to have access to user progress automatically."
@@ -30,14 +26,6 @@ export default function RoadmapPage() {
             title: "Rich Media Journal Entries",
             description: "Allow users to upload screenshots, short clips, or attach links from Twitch/Youtube to remember moments."
         },
-        {
-            title: "CheckPoint AI Saved Conversations",
-            description: "Save and revisit past conversations with the AI for better context and continuity."
-        },
-        {
-            title: "CheckPoint AI Game Recommendations",
-            description: "Provide personalized game recommendations based on user's library."
-        }
     ]
 
     return(

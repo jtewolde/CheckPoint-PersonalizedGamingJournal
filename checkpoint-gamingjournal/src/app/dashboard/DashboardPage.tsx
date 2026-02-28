@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
-import { SimpleGrid, Image, Paper, Text, ThemeIcon, Rating } from '@mantine/core';
+import { SimpleGrid, Image, Paper, Text, ThemeIcon, Rating, Button } from '@mantine/core';
 import { DonutChart, BarChart, LineChart } from '@mantine/charts';
 
 import { authClient } from '@/lib/auth-client';
@@ -32,7 +33,7 @@ export default function Dashboard() {
   const [avgRating, setAvgRating] = useState(0);
   const [numEntries, setNumEntries] = useState(0);
   const [numPlatinumedGames, setNumPlatinumedGames] = useState(0);
-  const [topRatedGame, setTopRatedGame] = useState("");
+  const [topRatedGame, setTopRatedGame] = useState<any | null>(null);
 
   const [completedPercentage, setCompletedPercentage] = useState(0)
 
@@ -243,7 +244,7 @@ export default function Dashboard() {
         topRatedGame = game;
       }
     })
-    return topRatedGame.title;
+    return topRatedGame;
   }
 
   // useEffect to call both fetchPlayingGames and fetchRecentJournalEntries when the component mounts.
@@ -323,7 +324,7 @@ export default function Dashboard() {
                       }}
                       data={[
                         { name: 'Plan to Play', value: planToPlayLength, color: 'blue' },
-                        { name: 'On Hold', value: onHoldLength, color: 'gray' },
+                        { name: 'On Hold', value: onHoldLength, color: 'lightgray' },
                         { name: 'Playing', value: playGamesLength, color: 'yellow'},
                         { name: 'No Status Given', value: noStatusLength, color: 'red'},
                         { name: 'Completed', value: completedLength, color: 'green'}
@@ -344,7 +345,7 @@ export default function Dashboard() {
                       h={260}
                       w='95%'
                       dataKey='month'
-                      yAxisLabel='Number of Entries'
+                      yAxisLabel='# of Entries'
                       xAxisLabel='Months'
                       strokeWidth={2}
                       data={journalActivityData}
@@ -453,7 +454,7 @@ export default function Dashboard() {
                 <div className={classes.quickStatsContainer}>
                   <p className={classes.statusTitle}>Quick Stats</p>
 
-                  <div className={classes.quickStatsGrid}>
+                  <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 2, xl: 2}} spacing="lg" className={classes.quickStatsGrid}>
 
                       <div className={classes.quickStatItem}>
 
@@ -463,8 +464,7 @@ export default function Dashboard() {
                         </div>
                         
                         <div className={classes.ratingWrapper}>
-                          <Text className={classes.ratingValue}>{avgRating.toFixed(2)}</Text>
-                          <Rating value={avgRating} readOnly fractions={3} color='yellow' size='md' />
+                          <Text className={classes.ratingValue}>{avgRating.toFixed(2)}/5 Stars</Text>
                         </div>
 
                       </div>
@@ -502,13 +502,16 @@ export default function Dashboard() {
                         </div>
 
                         <div className={classes.ratingWrapper}>
-                          <Text className={classes.ratingValue}>{topRatedGame || 'N/A'}</Text>
+                          <Link className={classes.ratingValue} href={`/games/${topRatedGame?.gameId}`}>{topRatedGame?.title || 'N/A'}</Link>
+                          <Rating size='sm' value={topRatedGame?.rating || 0} readOnly fractions={2} color='yellow' />
                         </div>
                         
                       </div>
 
-                  </div>
+                  </SimpleGrid>
+
                 </div>
+
               </Paper>
 
             </SimpleGrid>
