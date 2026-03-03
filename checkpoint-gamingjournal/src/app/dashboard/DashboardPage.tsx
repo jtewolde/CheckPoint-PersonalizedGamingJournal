@@ -324,9 +324,9 @@ export default function Dashboard() {
                       }}
                       data={[
                         { name: 'Plan to Play', value: planToPlayLength, color: 'blue' },
-                        { name: 'On Hold', value: onHoldLength, color: 'lightgray' },
+                        { name: 'On Hold', value: onHoldLength, color: 'red' },
                         { name: 'Playing', value: playGamesLength, color: 'yellow'},
-                        { name: 'No Status Given', value: noStatusLength, color: 'red'},
+                        { name: 'No Status Given', value: noStatusLength, color: 'lightgrey'},
                         { name: 'Completed', value: completedLength, color: 'green'}
                       ]}
                     />
