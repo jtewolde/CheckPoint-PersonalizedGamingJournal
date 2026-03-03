@@ -200,7 +200,7 @@ export default function Library(){
 
                                         <Badge 
                                         className={classes.badge} 
-                                        color={game.status === 'Completed' ? 'green' : game.status === 'Playing' ? 'blue' : game.status === 'On Hold' ? 'yellow' : game.status === 'Dropped' ? 'red' : game.status === 'Plan to Play' ? 'yellow': game.status === 'No Status Given' ? 'gray' : 'dark'} 
+                                        color={game.status === 'Completed' ? 'green' : game.status === 'Playing' ? 'blue' : game.status === 'On Hold' ? '#bf00b9' : game.status === 'Dropped' ? 'red' : game.status === 'Plan to Play' ? 'yellow': game.status === 'No Status Given' ? 'gray' : 'dark'} 
                                         variant='filled'
                                         size='md'
                                         radius='sm'
