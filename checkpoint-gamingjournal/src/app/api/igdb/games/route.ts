@@ -2,7 +2,6 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { redis } from '@/utils/redis';
-import { count } from 'console';
 
 const IGDB_URL = 'https://api.igdb.com/v4/games';
 
@@ -50,14 +49,30 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '12', 10); // Default to 12 results per page
     const offset = parseInt(searchParams.get('offset') || '0', 10); // Default to 0 offset
 
-    // Create a unique cache key based on search parameters, limit and offset
-    const cacheKey = `igdb_games:${searchQuery}:${limit}:${offset}`;
+    // Variables to read filter params for sorting/filtering results from IGDB games API
+    const sort = searchParams.get('sort')
+    const game_types = searchParams.get('types')?.split(',').filter(Boolean) || [];
+    const genres = searchParams.get('genres')?.split(',').filter(Boolean) || [];
+    const themes = searchParams.get('themes')?.split(',').filter(Boolean) || [];
+    const modes = searchParams.get('modes')?.split(',').filter(Boolean) || [];
+    const platforms = searchParams.get('platforms')?.split(',').filter(Boolean) || [];
+
+    // Create a unique cache key based on search parameters, filters, sorting, and limit/offset
+    const cacheKey = `igdb_games:
+    ${searchQuery}:
+    ${limit}:
+    ${offset}:
+    ${sort || ''}:
+    ${game_types.join(',')}:
+    ${genres.join(',')}:
+    ${themes.join(',')}:
+    ${modes.join(',')}:
+    ${platforms.join(',')}`;
 
     // Try to get cached data from Redis
     const cachedData = await redis.get(cacheKey);
 
     if (cachedData) {
-      console.log("Returning cached data for: ", cacheKey);
       return NextResponse.json(JSON.parse(cachedData), { status: 200 });
     }
 
@@ -68,20 +83,62 @@ export async function GET(req: NextRequest) {
     const now = new Date();
     const thirtyDaysAgo = Math.floor((now.getTime() - 30 * 24 * 60 * 60 * 1000) / 1000); // 45 days ago in seconds
 
-    // Initialize two clauses to centralize searchQuery and filters with WHERE to be used in both games and count API
-    let whereClause = ''
-    let searchClause = ''
+    // Initialize whereConditions that stores strings in an array that would be the filters that users can apply to their search results
+    let whereConditions: string[] = []
 
+    // Always exclude versions of games and games that have low ratings
+    whereConditions.push('version_parent = null')
+    whereConditions.push('total_rating > 30')
+
+    // Depending on the contents of search query, determine the conditions for the where for the games results
     if(searchQuery){
-      searchClause = `search "${searchQuery}";`;
-      whereClause = `version_parent = null & total_rating >= 30`;
+        whereConditions.push(`name ~ *"${searchQuery}"*`);
     } else {
-      whereClause = `rating >= 80 & first_release_date >= ${thirtyDaysAgo} & first_release_date <= ${Math.floor(now.getTime() / 1000)} & cover != null`;
+        whereConditions.push(`rating >= 80`);
+        whereConditions.push(`first_release_date >= ${thirtyDaysAgo}`);
+        whereConditions.push(`first_release_date <= ${Math.floor(now.getTime() / 1000)}`);
+        whereConditions.push(`cover != null`);
+    }
+
+    // Add filters to the search query for IGDB games API request if there are any applied to the whereConditions
+    if(game_types.length){
+      whereConditions.push(`game_type.type = (${game_types.map(t => `"${t}"`).join(',')})`);
+    }
+    if (genres.length) {
+      whereConditions.push(`genres.slug = (${genres.map(g => `"${g}"`).join(',')})`);
+    }
+    if (themes.length) {
+      whereConditions.push(`themes.slug = (${themes.map(t => `"${t}"`).join(',')})`);
+    }
+    if (modes.length) {
+      whereConditions.push(`game_modes.slug = (${modes.map(m => `"${m}"`).join(',')})`);
+    }
+    if (platforms.length) {
+      whereConditions.push(`platforms.slug = (${platforms.map(p => `"${p}"`).join(',')})`);
+    }
+
+    // Create a final whereClause that combines all of the applied filters for the query body
+    const whereClause = whereConditions.join(' & ')
+    console.log("Where Conditions", whereConditions)
+
+    // Create a sortClause that will store the different ways to sort the game results 
+    let sortClause = '';
+
+    if (sort === 'alphabetical') {
+      sortClause = 'sort name asc;';
+    }
+
+    if (sort === 'first_release_date') {
+      sortClause = 'sort first_release_date desc;';
+    }
+
+    if (sort === 'total_rating') {
+      sortClause = 'sort total_rating desc;';
     }
 
     // Construct the query body for getting games
     const body = searchQuery
-      ? `${searchClause} fields name, summary, genres.name, genres.slug, cover.url, version_title, game_type.type, game_modes.slug, screenshots.url, themes.slug, platforms.slug, first_release_date, release_dates.human, total_rating; where ${whereClause}; limit ${limit}; offset ${offset};`
+      ? `fields name, summary, genres.name, genres.slug, cover.url, version_title, game_type.type, game_modes.slug, screenshots.url, themes.slug, platforms.slug, first_release_date, release_dates.human, total_rating; where ${whereClause}; ${sortClause} limit ${limit}; offset ${offset};`
       : `fields name, summary, genres, cover.url, version_title; where rating >= 80 & first_release_date >= ${thirtyDaysAgo} & first_release_date <= ${Math.floor(now.getTime() / 1000)} & cover != null; sort rating desc; limit 6; offset ${offset};`;
 
     // Call API Request for getting specific info on searched games
@@ -104,7 +161,6 @@ export async function GET(req: NextRequest) {
         'Content-Type': 'text/plain',
       },
       body: `
-        ${searchClause}
         where ${whereClause};
       `,
     });
