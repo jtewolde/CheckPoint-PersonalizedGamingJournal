@@ -1,26 +1,39 @@
 
 .filterContainer{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-    margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin-bottom: 1rem;
 }
 
 .activeFiltersText{
-    font-family: 'Inter';
-    font-size: 20px;
-    font-weight: 300;
-    justify-self: flex-end;
+  font-family: 'Inter';
+  font-size: 20px;
+  font-weight: 300;
+  justify-self: flex-end;
+}
+
+.buttonActions{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
 }
 
 .filterButton{
-    width: auto;
-    font-family: 'Noto Sans';
-    font-size: 20px;
-    border: 1px solid black;
+  width: auto;
+  font-family: 'Noto Sans';
+  font-size: 20px;
+  border: 1px solid black;
+}
+
+.saveButton{
+  font-family: 'Poppins';
+  font-weight: 400;
 }
 
 .scrollBar {

@@ -1,10 +1,10 @@
 'use client';
 
-import { MultiSelect, Select, Drawer, Stack, Button, Text } from "@mantine/core";4
+import { useState, useEffect } from "react";
+import { MultiSelect, Select, Drawer, Stack, Button, Text, ActionIcon, Tooltip } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { ListFilter } from "lucide-react";
+import { ListFilter, RefreshCcw } from "lucide-react";
 import classes from './GameFilters.module.css';
-import { validate } from "uuid";
 
 // Define the props for the GameFilter component
 interface GameFilterProps {
@@ -51,6 +51,47 @@ export default function GameFilters({
     const activeFilters = selectedType.length > 0 || selectedGenres.length > 0 || selectedModes.length > 0 || selectedThemes.length > 0 || selectedPlatforms.length > 0;
     const numberOfActiveFilters = selectedGenres.length + selectedType.length + selectedModes.length + selectedThemes.length + selectedPlatforms.length;
 
+    // Local draft state variables for keeping track of sorting and filters
+    const [draftSort, setDraftSort] = useState(sortOption);
+    const [draftType, setDraftType] = useState<string[]>(selectedType);
+    const [draftGenres, setDraftGenres] = useState<string[]>(selectedGenres);
+    const [draftModes, setDraftModes] = useState<string[]>(selectedModes);
+    const [draftThemes, setDraftThemes] = useState<string[]>(selectedThemes);
+    const [draftPlatforms, setDraftPlatforms] = useState<string[]>(selectedPlatforms);
+
+    // Function to handle filters/sorting with the update filters button
+    const handleApplyFilters = () => {
+        onSortChange(draftSort);
+        onTypeChange(draftType);
+        onGenresChange(draftGenres);
+        onModesChange(draftModes);
+        onThemesChange(draftThemes);
+        onPlatformsChange(draftPlatforms);
+        close();
+    }
+
+    // Function to clear all of the filters/sorting to be used in clear filters button
+    const handleClearFilters = () => {
+        setDraftSort('');
+        setDraftType([]);
+        setDraftGenres([]);
+        setDraftModes([]);
+        setDraftThemes([]);
+        setDraftPlatforms([]);
+    };
+
+    // Update local state when the modal opens to reflect the current filters and sorting option
+    useEffect(() => {
+        if (opened) {
+            setDraftSort(sortOption);
+            setDraftType(selectedType);
+            setDraftGenres(selectedGenres);
+            setDraftModes(selectedModes);
+            setDraftThemes(selectedThemes);
+            setDraftPlatforms(selectedPlatforms);
+        }
+    }, [opened]);
+
     return (
 
         <div className={classes.filterContainer}>
@@ -70,26 +111,26 @@ export default function GameFilters({
                 title='Sort and Filter'
                 className={classes.drawer}
                 styles={{
-                content: {
-                    backgroundColor: '#252525ff'
-                },
-                header: {
-                    backgroundColor: '#252525ff',
-                    borderBottom: '1px solid gray'
-                },
-                title: {
-                    fontSize: '24px',
-                    color: 'white',
-                    fontFamily: 'Noto Sans',
-                    fontWeight: 300
-                },
-                close: {
-                    color: 'white'
-                }
+                    content: {
+                        backgroundColor: '#252525ff'
+                    },
+                    header: {
+                        backgroundColor: '#252525ff',
+                        borderBottom: '1px solid gray'
+                    },
+                    title: {
+                        fontSize: '24px',
+                        color: 'white',
+                        fontFamily: 'Noto Sans',
+                        fontWeight: 300
+                    },
+                    close: {
+                        color: 'white'
+                    }
                 }}
             >
 
-                <Stack className={classes.drawerFilters} gap='md' justify='center' mt={20}>
+                <Stack className={classes.drawerFilters} gap='xs' justify='center' mt={20}>
 
                     {/* Sort By Dropdown */}
                     <Select
@@ -168,17 +209,17 @@ export default function GameFilters({
                         }
                         }}
                         data={[
-                            { value: 'main game', label: 'Main Game' },
-                            { value: 'dlc', label: "DLC"},
-                            { value: 'expansion', label: "Expansion"},
-                            { value: 'standalone expansion', label:'Standalone Expansions'},
-                            { value: 'remake', label: 'Remake'},
-                            { value: 'remaster', label: 'Remaster'},
-                            { value: 'episode', label: 'Episode'},
-                            { value: 'update', label: 'Update'}
+                            { value: 'Main Game', label: 'Main Game' },
+                            { value: 'DLC', label: "DLC"},
+                            { value: 'Expansion', label: "Expansion"},
+                            { value: 'Standalone Expansion', label:'Standalone Expansions'},
+                            { value: 'Remake', label: 'Remake'},
+                            { value: 'Remaster', label: 'Remaster'},
+                            { value: 'Episode', label: 'Episode'},
+                            { value: 'Update', label: 'Update'}
                         ]}
-                        value={selectedType}
-                        onChange={onTypeChange}
+                        value={draftType}
+                        onChange={setDraftType}
                         className={classes.filterSelect}
                         mb="md"
                     />
@@ -242,8 +283,8 @@ export default function GameFilters({
                             { value: 'tactical', label: 'Tactical'},
                             { value: 'turn-based-strategy-tbs', label: 'Turn-Based Strategy (TBS)'},       
                         ]}
-                        value={selectedGenres}
-                        onChange={onGenresChange}
+                        value={draftGenres}
+                        onChange={setDraftGenres}
                         className={classes.filterSelect}
                         mb="md"
                     />
@@ -307,8 +348,8 @@ export default function GameFilters({
                             { value: 'thriller', label: 'Thriller' },
                             { value: 'warfare', label: 'Warfare' }
                         ]}
-                        value={selectedThemes}
-                        onChange={onThemesChange}
+                        value={draftThemes}
+                        onChange={setDraftThemes}
                         className={classes.filterSelect}
                         mb="md"
                     />
@@ -357,8 +398,8 @@ export default function GameFilters({
                             { value: 'split-screen', label: 'Split Screen' },
                             { value: 'massively-multiplayer-online-mmo', label: 'MMO'}
                         ]}
-                        value={selectedModes}
-                        onChange={onModesChange}
+                        value={draftModes}
+                        onChange={setDraftModes}
                         className={classes.filterSelect}
                         mb="md"
                     />
@@ -424,12 +465,20 @@ export default function GameFilters({
                             { value: 'n64', label: 'Nintendo 64'},
                             { value: 'snes', label: 'SNES'}
                         ]}
-                        value={selectedPlatforms}
-                        onChange={onPlatformsChange}
+                        value={draftPlatforms}
+                        onChange={setDraftPlatforms}
                         className={classes.filterSelect}
                         mb="md"
                     />
 
+                    <div className={classes.buttonActions}>
+                        <Tooltip label='Clear Filters' position="top">
+                            <ActionIcon variant="filled" color="red" size='lg' onClick={handleClearFilters}><RefreshCcw size={20} /></ActionIcon>
+                        </Tooltip>
+
+                        <Button className={classes.saveButton} size="md" onClick={handleApplyFilters}>Update Filters</Button>
+                    </div>
+                    
                 </Stack>
 
             </Drawer>
