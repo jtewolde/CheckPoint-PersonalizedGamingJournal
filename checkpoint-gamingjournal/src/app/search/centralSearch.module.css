@@ -70,6 +70,7 @@
     align-items: flex-start;
     justify-content: center;
     background-color: #242424;
+    border: 1px solid #494949;
     border-radius: 16px;
     padding: 20px;
     gap: 10px;
