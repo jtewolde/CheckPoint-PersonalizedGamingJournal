@@ -165,11 +165,15 @@ export default function PopularPage() {
           </div>
 
 
-          <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>
-            {processedGames.map((game) => (
-              <GameCard key={game.id} game={game} />
-            ))}
-          </SimpleGrid>
+          <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4 }} spacing="lg" verticalSpacing='xl' className={classes.resultGamesGrid}>
+                {processedGames.map((game) => 
+                    isMobile ? (
+                        <GameCard key={game.id} game={game} variant='small' />
+                    ) : (
+                        <GameCard key={game.id} game={game} />
+                    )
+                )}
+            </SimpleGrid>
           
         </div>
 

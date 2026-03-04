@@ -25,7 +25,7 @@ export default function TrendingPage() {
   const [loading, setLoading] = useState(true); // State to handle loading
 
   // States to handle sorting and filtering search results
-  const [sortOption, setSortOption] = useState<'first_release_date' | 'total_rating' | 'alphabetical' | ''>('total_rating'); // State to sort search results from release date/total_rating
+  const [sortOption, setSortOption] = useState<'first_release_date' | 'total_rating' | 'alphabetical' | ''>('first_release_date'); // State to sort search results from release date/total_rating
   const [selectedType, setSelectedType] = useState<string[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<string[]>([]);
   const [selectedTheme, setSelectedTheme] = useState<string[]>([]);
@@ -170,10 +170,14 @@ export default function TrendingPage() {
 
           </div>
 
-          <SimpleGrid cols={6} spacing='sm' verticalSpacing='md' className={classes.gameGrid}>
-            {processedGames.map((game) => (
-              <GameCard key={game.id} game={game} />
-            ))}
+          <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4 }} spacing="lg" verticalSpacing='xl' className={classes.gamesGrid}>
+              {processedGames.map((game) => 
+                  isMobile ? (
+                      <GameCard key={game.id} game={game} variant='small' />
+                  ) : (
+                      <GameCard key={game.id} game={game} />
+                  )
+              )}
           </SimpleGrid>
 
         </div>
