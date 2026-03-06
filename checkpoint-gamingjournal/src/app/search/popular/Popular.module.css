@@ -138,6 +138,13 @@
     padding: 0.5rem 1rem;
 }
 
+.paginationWrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.4rem;
+}
+
 @media screen and (max-width: 1020px){
 
     .gameGrid {
