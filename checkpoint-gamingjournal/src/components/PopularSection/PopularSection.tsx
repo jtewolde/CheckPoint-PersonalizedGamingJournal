@@ -2,16 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { SimpleGrid, Text, Image } from "@mantine/core";
+import { SimpleGrid } from "@mantine/core";
 
 import classes from './PopularSection.module.css';
 
-import PlaceHolderImage from '../../../public/no-cover-image.png';
 import GameCard from "../GameCard/GameCard";
 
 export default function PopularSection(){
     // States to hold popular games data and loading status
     const [popularGames, setPopularGames] = useState<any[]>([]);
+    const limit = 12; // Set the limit of games on page to 12
     const [loading, setLoading] = useState(true);
     const [hasMounted, setHasMounted] = useState(false);
     const router = useRouter();
@@ -20,14 +20,14 @@ export default function PopularSection(){
     useEffect(() => {
         const fetchPopularGames = async () => {
             try {
-                const res = await fetch('/api/igdb/popular-games');
+                const res = await fetch(`/api/igdb/popular-games?limit=${limit}&sort=first_release_date`);
                 
                 if (!res.ok) {
                     throw new Error('Failed to fetch popular games');
                 }
                 const data = await res.json();
-                setPopularGames(data); // Store the games data in state
-                console.log("Popular Games: ", data);
+                setPopularGames(data.games); // Store the games data in state
+                console.log("Popular Games: ", data.games);
                 
                 } catch (error) {
                 console.error('Error fetching popular games:', error);
