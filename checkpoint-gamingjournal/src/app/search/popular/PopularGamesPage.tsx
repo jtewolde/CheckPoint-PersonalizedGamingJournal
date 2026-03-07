@@ -22,7 +22,7 @@ export default function PopularPage() {
   const [total, setTotal] = useState(0)
   const totalPages = Math.ceil(total/limit)
 
-  const isMobile = useMediaQuery('(max-width: 630px)');
+  const isMobile = useMediaQuery('(max-width: 520px)');
 
   const [games, setGames] = useState<any[]>([]); // State to store games data
   const [length, setLength] = useState("")
@@ -134,9 +134,11 @@ export default function PopularPage() {
             </div>
 
             <GameFilters
+              variant='default'
               color='#3697d4ff'
               size={isMobile ? 'md' : 'lg'}
               radius='md'
+              totalGames={total}
               sortOption={sortOption}
               selectedType={selectedType}
               selectedGenres={selectedGenre}
@@ -172,7 +174,7 @@ export default function PopularPage() {
                 <div className={classes.paginationWrapper}>
                     <Pagination
                         size='lg'
-                        radius='lg'
+                        radius='md'
                         total={totalPages}
                         value={page}
                         onChange={(newPage) => {
