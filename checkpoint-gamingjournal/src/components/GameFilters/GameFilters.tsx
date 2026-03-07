@@ -6,11 +6,15 @@ import { useDisclosure } from "@mantine/hooks";
 import { ListFilter, RefreshCcw } from "lucide-react";
 import classes from './GameFilters.module.css';
 
+type GameFiltersVariant = 'default' | 'small'
+
 // Define the props for the GameFilter component
 interface GameFilterProps {
     color: string;
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     radius?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    variant: GameFiltersVariant;
+    totalGames: number;
     sortOption: string;
     selectedType: string[];
     selectedGenres: string[];
@@ -30,6 +34,8 @@ export default function GameFilters({
     color,
     size = "lg",
     radius = 'md',
+    variant,
+    totalGames,
     sortOption,
     selectedType,
     selectedGenres,
@@ -95,11 +101,33 @@ export default function GameFilters({
     return (
 
         <div className={classes.filterContainer}>
-        
-            <Button className={classes.filterButton} size={size} radius={radius} color={color} leftSection={<ListFilter size={30} />} onClick={toggle}>Filters</Button>
+
+            {variant === 'default' && (
+                <Button 
+                className={classes.filterButton} 
+                size={size} 
+                radius={radius} 
+                color={color} 
+                leftSection={<ListFilter size={30} />} 
+                onClick={toggle}>
+                    Filters
+                </Button>
+
+            )}
+
+            {variant === 'small' && (
+                <ActionIcon
+                size={size}
+                radius={radius}
+                color={color}
+                onClick={toggle}
+                >
+                    <ListFilter size={30} />
+                </ActionIcon>
+            )}
 
             <Text className={classes.activeFiltersText} color='white'>
-                {activeFilters ? `${numberOfActiveFilters} Active Filter${numberOfActiveFilters > 1 ? 's' : ''}` : 'No Active Filters'}
+                {totalGames} Games
             </Text>
 
             {/* Drawer component to hold the filter options, slides in from left */}

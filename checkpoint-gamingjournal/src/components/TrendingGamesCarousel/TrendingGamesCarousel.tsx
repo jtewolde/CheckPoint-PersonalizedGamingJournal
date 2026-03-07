@@ -86,7 +86,6 @@ export default function TrendingGamesCarousel() {
             loop={true}
             autoplay
             pagination={{ clickable: true }}
-            navigation
             modules={[Navigation, Pagination]}
             spaceBetween={50}
             slidesPerView={1.4}
