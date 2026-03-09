@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
     const platforms = searchParams.get('platforms')?.split(',').filter(Boolean) || [];
 
     // Create a unique cache key based on search parameters, filters, sorting, and limit/offset
-    const cacheKey = `igdb_games:
+    const cacheKey = `igdb_popular_games:
     ${limit}:
     ${offset}:
     ${sort || ''}:

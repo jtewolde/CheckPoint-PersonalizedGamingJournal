@@ -15,7 +15,7 @@ import classes from './Popular.module.css';
 export default function PopularPage() {
 
   const [page, setPage] = useState(1) // start with page 1 for pagination
-  const limit = 32; // Set the limit of games on page to 50
+  const limit = 32; // Set the limit of games on page to 32
 
   // Calculate total amount of games received from IGDB API request
   // Calcualte the total number of pages for pagination
