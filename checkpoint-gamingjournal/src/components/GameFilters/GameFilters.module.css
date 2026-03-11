@@ -1,16 +1,25 @@
 
-
 .filterContainer{
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   gap: 0.5rem;
   width: 100%;
   margin-bottom: 1rem;
 }
 
-.activeFiltersText{
+.filterTopRow{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.filterBadge{
+  font-family: 'Poppins';
+  font-weight: 500;
+}
+
+.totalFiltersText{
   font-family: 'Inter';
   font-size: 20px;
   font-weight: 300;
@@ -48,9 +57,21 @@
   }
 }
 
-@media (max-width: 768px) {
-    .activeFiltersText{
-      font-size: 16px;
-    }
+@media (max-width: 480px) {
+
+  .filterContainer{
+    flex-direction: column-reverse;
+    gap: 1rem;
+  }
+
+  .filterTopRow{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .totalFiltersText{
+    font-size: 18px;
+  }
 }
 

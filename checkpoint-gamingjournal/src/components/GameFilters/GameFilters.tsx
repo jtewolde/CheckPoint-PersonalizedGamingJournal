@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { MultiSelect, Select, Drawer, Stack, Button, Text, ActionIcon, Tooltip } from "@mantine/core";
+import { MultiSelect, Select, Drawer, Stack, Button, Text, ActionIcon, Tooltip, Badge, Group } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { ListFilter, RefreshCcw } from "lucide-react";
 import classes from './GameFilters.module.css';
@@ -102,33 +102,36 @@ export default function GameFilters({
 
         <div className={classes.filterContainer}>
 
-            {variant === 'default' && (
-                <Button 
-                className={classes.filterButton} 
-                size={size} 
-                radius={radius} 
-                color={color} 
-                leftSection={<ListFilter size={30} />} 
-                onClick={toggle}>
-                    Filters
-                </Button>
+            <div className={classes.filterTopRow}>
 
-            )}
+                {variant === 'default' && (
+                    <Button 
+                    className={classes.filterButton} 
+                    size={size} 
+                    radius={radius} 
+                    color={color} 
+                    leftSection={<ListFilter size={30} />} 
+                    onClick={toggle}>
+                        Filters ({numberOfActiveFilters})
+                    </Button>
+                )}
 
-            {variant === 'small' && (
-                <ActionIcon
-                size={size}
-                radius={radius}
-                color={color}
-                onClick={toggle}
-                >
-                    <ListFilter size={30} />
-                </ActionIcon>
-            )}
+                {variant === 'small' && (
+                    <ActionIcon
+                    size={size}
+                    radius={radius}
+                    color={color}
+                    onClick={toggle}
+                    >
+                        <ListFilter size={30} />
+                    </ActionIcon>
+                )}
 
-            <Text className={classes.activeFiltersText} color='white'>
+            <Text className={classes.totalFiltersText} color='white'>
                 {totalGames} Games
             </Text>
+
+            </div>
 
             {/* Drawer component to hold the filter options, slides in from left */}
             <Drawer
@@ -510,6 +513,80 @@ export default function GameFilters({
                 </Stack>
 
             </Drawer>
+
+            {activeFilters && (
+                <Group className={classes.activeFilters} mt='sm' gap='md' wrap="wrap">
+                    {selectedType.length > 0 && (
+                        <Badge
+                            className={classes.filterBadge}
+                            size="lg"
+                            variant="outline"
+                            color="white"
+                            radius="sm"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => onTypeChange([])}
+                        >
+                            Type: {selectedType.join(", ")} ✕
+                        </Badge>
+                    )}
+
+                    {selectedGenres.length > 0 && (
+                        <Badge
+                            className={classes.filterBadge}
+                            size="lg"
+                            variant="outline"
+                            color="white"
+                            radius="sm"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => onTypeChange([])}
+                        >
+                            Genres: {selectedGenres.join(", ")} ✕
+                        </Badge>
+                    )}
+
+                    {selectedThemes.length > 0 && (
+                        <Badge
+                            className={classes.filterBadge}
+                            size="lg"
+                            variant="outline"
+                            color="white"
+                            radius="sm"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => onTypeChange([])}
+                        >
+                            Themes: {selectedThemes.join(", ")} ✕
+                        </Badge>
+                    )}
+
+                    {selectedModes.length > 0 && (
+                        <Badge
+                            className={classes.filterBadge}
+                            size="lg"
+                            variant="outline"
+                            color="white"
+                            radius="sm"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => onTypeChange([])}
+                        >
+                            Modes: {selectedModes.join(", ")} ✕
+                        </Badge>
+                    )}
+
+                    {selectedPlatforms.length > 0 && (
+                        <Badge
+                            className={classes.filterBadge}
+                            size="lg"
+                            variant="outline"
+                            color="white"
+                            radius="sm"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => onTypeChange([])}
+                        >
+                            Platforms: {selectedPlatforms.join(", ")} ✕
+                        </Badge>
+                    )}
+                </Group>
+            )}
 
         </div>
     )

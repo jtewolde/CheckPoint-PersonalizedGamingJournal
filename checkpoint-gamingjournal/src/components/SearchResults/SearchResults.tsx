@@ -23,7 +23,7 @@ export default function SearchResults({ query }: SearchResultsProps){
     const [length, setLength] = useState("");
 
     const [loading, setLoading] = useState(true);
-    const isMobile = useMediaQuery('(max-width: 600px)');
+    const isMobile = useMediaQuery('(max-width: 490px)');
 
     const [page, setPage] = useState(1) // start with page 1 for pagination
     const limit = 16; // Set the limit of games on page to 12
@@ -104,8 +104,10 @@ export default function SearchResults({ query }: SearchResultsProps){
             </Text>
 
             <GameFilters
+            variant='default'
+            totalGames={total}
             color="#5d2b9fff"
-            size='lg'
+            size={isMobile ? 'md' : 'lg'}
             sortOption={sortOption}
             selectedType={selectedType}
             selectedGenres={selectedGenre}
