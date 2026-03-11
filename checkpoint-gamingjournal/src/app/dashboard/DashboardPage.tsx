@@ -39,7 +39,7 @@ export default function Dashboard() {
 
   const [recentEntries, setRecentEntries] = useState<any[]>([]); // State to store recent journal entries
   const [journalActivityData, setJournalActivityData] = useState<{ month: string; entries: number }[]>([]); // State to store data from journal entries over time chart
-  const [ratingDistributionData, setRatingDistributionData] = useState<{ rating: string; count: number }[]>([]); // State to store data for game ratings distribution chart
+  const [ratingDistributionData, setRatingDistributionData] = useState<{ rating: number; count: number }[]>([]); // State to store data for game ratings distribution chart
 
   // Check if the user is authenticated
   useEffect(() => {
@@ -185,31 +185,29 @@ export default function Dashboard() {
   // Function to calculate the distribution of game ratings for the user's library games. This will be used to display a bar chart of the user's game ratings.
   const calculateRatingDistribution = (games: any[]) => {
 
-    // Initialize distribution object with keys for each rating (1-5) and values set to 0 to count number of entries for each rating
-    const distribution: Record<string, number> = {
-      '1' : 0,
-      '2' : 0,
-      '3' : 0,
-      '4' : 0,
-      '5' : 0
-    }
+    // Initialize ratingBuckets array that have the spread of potential ratings that games can be given
+    const ratingBuckets = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+    const distribution: Record<number, number> = {};
+
+    // Iterate through array and initialize all count for each rating as zero
+    ratingBuckets.forEach(r => {
+      distribution[r] = 0;
+    });
 
     // Loop through each journal entry and increment the count for the corresponding rating in the distribution object
     games.forEach(game => {
       const rating = game.rating;
 
-      if(rating >= 1 && rating <= 5){
-        distribution[rating.toString()]++;
+      if(rating >= 0.5 && rating <= 5){
+        const normalized = Math.round(rating * 2) / 2;
+        distribution[normalized]++;
       }
     })
 
-    // Convert distribution object into an array of objects with keys 'rating' and 'count' for use in the bar chart
-    const distributionArray = Object.keys(distribution).map(rating => ({
+    return ratingBuckets.map(rating => ({
       rating,
       count: distribution[rating]
     }));
-
-    return distributionArray;
   }
 
   // Function to calculate the average rating of the user's games. This will be used to display as a quick stat card on the dashboard.
@@ -528,7 +526,7 @@ export default function Dashboard() {
 
               <div className={classes.titleLogo}>
                 <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: '#e96443', to: '#904e95', deg: 90}}> <Gamepad size={40} /> </ThemeIcon>
-                <h1 className={classes.gamesPlayingText}> Games You're Playing </h1>
+                <h1 className={classes.gamesPlayingText}>Playing Games</h1>
               </div>
 
               <a className={classes.viewMoreText} href='/library'> <CircleArrowRight size={35} /> </a>
@@ -575,7 +573,7 @@ export default function Dashboard() {
 
                 <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: '#DCE35B', to: '#45B649', deg: 60}}> <Notebook size={40} /> </ThemeIcon>
                 
-                <h1 className={classes.gamesPlayingText}>Recent Journal Entries:</h1>
+                <h1 className={classes.gamesPlayingText}>Recent Entries:</h1>
 
               </div>
 
