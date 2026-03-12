@@ -60,12 +60,12 @@
 @media (max-width: 480px) {
 
   .filterContainer{
-    flex-direction: column-reverse;
+    flex-direction: column;
     gap: 1rem;
   }
 
   .filterTopRow{
-    flex-direction: column;
+    flex-direction: column-reverse;
     align-items: flex-start;
     gap: 1rem;
   }
