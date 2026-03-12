@@ -5,10 +5,10 @@ import { useRouter, redirect } from 'next/navigation';
 import { useMediaQuery } from '@mantine/hooks';
 
 import GameFilters from '@/components/GameFilters/GameFilters';
+import GameSkeletonCard from '@/components/GameCard/GameSkeletonCard';
 import GameCard from '@/components/GameCard/GameCard';
 
 import { Text, SimpleGrid, Pagination } from '@mantine/core';
-import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
 import classes from './Trending.module.css';
 
@@ -16,6 +16,9 @@ export default function TrendingPage() {
 
   const [page, setPage] = useState(1) // start with page 1 for pagination
   const limit = 32; // Set the limit of games on page to 32
+  
+  // Create skeletons array which length is the value of limit
+  const skeletons = Array.from({ length: limit });
 
   // Calculate total amount of games received from IGDB API request
   // Calcualte the total number of pages for pagination
@@ -101,11 +104,6 @@ export default function TrendingPage() {
       selectedType
   ]);
 
-  // If the page is still loading, put a loading overlay
-  if (loading) {
-    return <GlobalLoader visible={loading} />
-  }
-
   return (
     <div className={classes.wrapper}>
 
@@ -152,13 +150,20 @@ export default function TrendingPage() {
           </div>
 
           <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4 }} spacing="lg" verticalSpacing='xl' className={classes.gamesGrid}>
-              {games.map((game) => 
-                  isMobile ? (
-                      <GameCard key={game.id} game={game} variant='small' />
-                  ) : (
+              {loading && games.length === 0
+                ? skeletons.map((_, i) => (
+                    <GameSkeletonCard
+                    key={i}
+                    variant={isMobile ? "small" : "default"}
+                    />
+                ))
+                : games.map((game) =>
+                    isMobile ? (
+                      <GameCard key={game.id} game={game} variant="small" />
+                    ) : (
                       <GameCard key={game.id} game={game} />
-                  )
-              )}
+                    )
+                )}
           </SimpleGrid>
 
           {total == 0 && (

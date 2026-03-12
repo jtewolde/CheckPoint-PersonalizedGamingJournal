@@ -3,9 +3,11 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     gap: 1rem;
-    width: 94%;
+    width: 100%;
+    padding-left: 3rem;
+    padding-right: 3rem;
 }
 
 .resultsTitle{
@@ -60,7 +62,9 @@
 @media screen and (max-width: 570px) {
 
     .wrapper{
-        width: 99%;
+        width: 100%;
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 
     .titleLogo{
@@ -103,6 +107,10 @@
     .wrapper{
         padding-left: 0.5rem;
         padding-right: 0.5rem;
+    }
+
+    .gameResult{
+        font-size: 32px;
     }
     
 }

@@ -7,7 +7,7 @@ import { SimpleGrid, Text, Pagination } from '@mantine/core';
 
 import GameFilters from '@/components/GameFilters/GameFilters';
 import GameCard from '../GameCard/GameCard';
-import GlobalLoader from '../GlobalLoader/GlobalLoader';
+import GameSkeletonCard from '../GameCard/GameSkeletonCard';
 
 import classes from './SearchResults.module.css';
 
@@ -24,9 +24,13 @@ export default function SearchResults({ query }: SearchResultsProps){
 
     const [loading, setLoading] = useState(true);
     const isMobile = useMediaQuery('(max-width: 490px)');
+    
 
     const [page, setPage] = useState(1) // start with page 1 for pagination
     const limit = 16; // Set the limit of games on page to 12
+
+    // Create skeletons array which length is the value of limit
+    const skeletons = Array.from({ length: limit });
 
     // Calculate total amount of games received from IGDB API request
     // Calcualte the total number of pages for pagination
@@ -41,6 +45,7 @@ export default function SearchResults({ query }: SearchResultsProps){
     const [selectedMode, setSelectedMode] = useState<string[]>([]);
     const [selectedPlatform, setSelectedPlatform] = useState<string[]>([]);
 
+    // Fetch games from search query
     useEffect(() => {
         const fetchGames = async () => {
             try {
@@ -97,8 +102,6 @@ export default function SearchResults({ query }: SearchResultsProps){
 
         <div className={classes.wrapper}>
 
-            <GlobalLoader visible={loading} />
-
             <Text className={classes.resultsTitle}>
                 Search Results for: "<span className={classes.gameResult}>{query}</span>"
             </Text>
@@ -123,13 +126,20 @@ export default function SearchResults({ query }: SearchResultsProps){
             />
 
             <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4 }} spacing="lg" verticalSpacing='xl' className={classes.resultGamesGrid}>
-                {games.map((game) => 
-                    isMobile ? (
-                        <GameCard key={game.id} game={game} variant='small' />
-                    ) : (
-                        <GameCard key={game.id} game={game} />
-                    )
-                )}
+                {loading && games.length === 0
+                    ? skeletons.map((_, i) => (
+                        <GameSkeletonCard
+                        key={i}
+                        variant={isMobile ? "small" : "default"}
+                        />
+                    ))
+                    : games.map((game) =>
+                        isMobile ? (
+                            <GameCard key={game.id} game={game} variant="small" />
+                        ) : (
+                            <GameCard key={game.id} game={game} />
+                        )
+                    )}
             </SimpleGrid>
 
             {total == 0 && (
@@ -139,7 +149,7 @@ export default function SearchResults({ query }: SearchResultsProps){
             {totalPages > 1 && (
                 <div className={classes.paginationWrapper}>
                     <Pagination
-                        size='lg'
+                        size='xl'
                         radius='lg'
                         total={totalPages}
                         value={page}
