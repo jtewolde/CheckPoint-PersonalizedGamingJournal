@@ -81,8 +81,6 @@
 
 /* Grid layout for game cards */
 .gameGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
     width: 100%;
     box-sizing: border-box;
@@ -115,6 +113,13 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 0.5rem 1rem;
+}
+
+.paginationWrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.4rem;
 }
 
 @media screen and (max-width: 1245px) {

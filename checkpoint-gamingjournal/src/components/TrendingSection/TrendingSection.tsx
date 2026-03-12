@@ -2,17 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { SimpleGrid, Text, Image } from "@mantine/core";
+import { SimpleGrid } from "@mantine/core";
 
 import GameCard from "../GameCard/GameCard";
 
 import classes from './TrendingSection.module.css';
 
-import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 export default function TrendingSection(){
     // States to hold trending games data and loading status
     const [trendingGames, setTrendingGames] = useState<any[]>([]);
+    const limit = 12; // Set the limit of games on page to 12
     const [loading, setLoading] = useState(true);
     const [hasMounted, setHasMounted] = useState(false);
     const router = useRouter();
@@ -21,14 +21,14 @@ export default function TrendingSection(){
     useEffect(() => {
         const fetchTrendingGames = async () => {
             try {
-                const res = await fetch('/api/igdb/trending-games');
+                const res = await fetch(`/api/igdb/trending-games?limit=${limit}&sort=first_release_date`);
                 
                 if (!res.ok) {
                     throw new Error('Failed to fetch Trending games');
                 }
                 const data = await res.json();
-                setTrendingGames(data); // Store the games data in state
-                console.log("Trending Games: ",data);
+                setTrendingGames(data.games); // Store the games data in state
+                console.log("Trending Games: ", data.games);
                 
                 } catch (error) {
                 console.error('Error fetching trending games:', error);

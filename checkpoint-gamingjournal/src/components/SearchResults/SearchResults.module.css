@@ -19,6 +19,17 @@
     margin-bottom: 1rem;
 }
 
+.noResultsText{
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: rgb(208, 205, 205); /* Dark text for contrast */
+    margin-bottom: 1rem;
+    font-family: 'Poppins';
+    font-style: italic;
+    align-self: flex-start;
+    margin-top: 1rem;
+}
+
 .gameResult{
     font-size: 34px;
     font-weight: 700;

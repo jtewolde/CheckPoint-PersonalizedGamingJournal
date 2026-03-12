@@ -23,7 +23,7 @@ export default function SearchResults({ query }: SearchResultsProps){
     const [length, setLength] = useState("");
 
     const [loading, setLoading] = useState(true);
-    const isMobile = useMediaQuery('(max-width: 600px)');
+    const isMobile = useMediaQuery('(max-width: 490px)');
 
     const [page, setPage] = useState(1) // start with page 1 for pagination
     const limit = 16; // Set the limit of games on page to 12
@@ -44,8 +44,23 @@ export default function SearchResults({ query }: SearchResultsProps){
     useEffect(() => {
         const fetchGames = async () => {
             try {
+                setLoading(true)
                 const offset = (page - 1) * limit; // calculate offset based on page
-                const res = await fetch(`/api/igdb/games?query=${encodeURIComponent(query)}&limit=${limit}&offset=${offset}`);
+
+                // Create the params of URL to include the sorting and filters applied
+                const params = new URLSearchParams({
+                    query,
+                    limit: String(limit),
+                    offset: String(offset),
+                    sort: sortOption,
+                    types: selectedType.join(','),
+                    genres: selectedGenre.join(','),
+                    themes: selectedTheme.join(','),
+                    modes: selectedMode.join(','),
+                    platforms: selectedPlatform.join(',')
+                });
+
+                const res = await fetch(`/api/igdb/games?${params.toString()}`);
 
                 if (!res.ok) {
                     throw new Error('Failed to fetch games');
@@ -68,107 +83,47 @@ export default function SearchResults({ query }: SearchResultsProps){
 
         fetchGames();
 
-    }, [query, page]);
-
-    // Function to sort out the search results of games using useMemo to sort 
-    const sortedGames = useMemo(() => {
-
-        if (!sortOption) return games;
-
-        const sorted = [...games].sort((a, b) => {
-        if (sortOption === 'first_release_date') {
-            return (b.first_release_date || 0) - (a.first_release_date || 0);
-        }
-        if (sortOption === 'total_rating') {
-            return (b.total_rating || 0) - (a.total_rating || 0);
-        }
-        if (sortOption === 'alphabetical'){
-            return a.name.localeCompare(b.name);
-        }
-        return 0;
-        });
-
-        console.log("Sorted by:", sortOption, sorted.map(g => ({
-        name: g.name,
-        release: g.first_release_date,
-        rating: g.total_rating
-        })));
-
-        return sorted;
-
-    }, [games, sortOption]);
-
-    // Filter the sorted games based on game types like Main Games, DLCs, and Expansions
-    // Genres like Action, Adventure, RPG, etc.
-    const processedGames = sortedGames.filter((game) => {
-
-    // Handle cases where game_type or genres might be undefined
-    if (!game.game_type || !game.genres || !game.themes || !game.game_modes || !game.platforms) {
-        return selectedType.length === 0 && selectedGenre.length === 0 && selectedTheme.length === 0 && selectedMode.length === 0 && selectedPlatform.length === 0
-    }
-
-    // Convert game types, genres, and platforms to lowercase for case-insensitive comparison
-    const gameType = game.game_type.type.toLowerCase();
-    const gameGenres = game.genres.map((genre: any) => genre.slug.toLowerCase());
-    const gameThemes = game.themes.map((theme: any) => theme.slug.toLowerCase());
-    const gameModes = game.game_modes.map((mode: any) => mode.slug.toLowerCase());
-    const platforms = game.platforms.map((platform : any) => platform.slug.toLowerCase());
-
-    // Check if the game matches the selected type and genre filters
-    // Empty array means no filter applied (show all)
-    const typeMatch = selectedType.length === 0 || (gameType && selectedType.includes(gameType));
-    // Check if any of the game's genres match the selected genres
-    const genreMatch = selectedGenre.length === 0 || gameGenres.some((genre: any) => selectedGenre.includes(genre));
-    // Check if any of the game's themes match the selected themes
-    const themeMatch = selectedTheme.length === 0 || gameThemes.some((theme: any) => selectedTheme.includes(theme));
-    // Check if any of the game's modes match the selected modes
-    const modeMatch = selectedMode.length === 0 || gameModes.some((mode: any) => selectedMode.includes(mode));
-    // Check if any of the game's platforms that it was released on matches
-    const platformMatch = selectedPlatform.length === 0 || platforms.some((platform: any) => selectedPlatform.includes(platform));
-
-    return (
-        typeMatch && genreMatch && themeMatch && modeMatch && platformMatch
-    );
-
-});
-        
-    // If the page is still loading, put a loading overlay
-    if (loading) {
-        return <GlobalLoader visible={loading} />
-    }
-
-    // // Route to not found if no games found
-    // if (processedGames.length === 0 ){
-    //     router.push('/not-found');
-    // }
+    }, [query, 
+        page,
+        sortOption,
+        selectedGenre,
+        selectedMode,
+        selectedPlatform,
+        selectedTheme,
+        selectedType
+    ]);
 
     return (
 
         <div className={classes.wrapper}>
+
+            <GlobalLoader visible={loading} />
 
             <Text className={classes.resultsTitle}>
                 Search Results for: "<span className={classes.gameResult}>{query}</span>"
             </Text>
 
             <GameFilters
+            variant='default'
+            totalGames={total}
             color="#5d2b9fff"
-            size='lg'
+            size={isMobile ? 'md' : 'lg'}
             sortOption={sortOption}
             selectedType={selectedType}
             selectedGenres={selectedGenre}
             selectedThemes={selectedTheme}
             selectedModes={selectedMode}
             selectedPlatforms={selectedPlatform}
-            onSortChange={(v) => setSortOption(v as any)}
-            onTypeChange={(v) => setSelectedType(v as any)}
-            onGenresChange={(v) => setSelectedGenre(v as any)}
-            onThemesChange={(v) => setSelectedTheme(v as any)}
-            onModesChange={(v) => setSelectedMode(v as any)}
-            onPlatformsChange={(v) => setSelectedPlatform(v as any)}
+            onSortChange={(v) => {setSortOption(v as any); setPage(1)}}
+            onTypeChange={(v) => {setSelectedType(v as any); setPage(1)}}
+            onGenresChange={(v) => {setSelectedGenre(v as any); setPage(1)}}
+            onThemesChange={(v) => {setSelectedTheme(v as any); setPage(1)}}
+            onModesChange={(v) => {setSelectedMode(v as any); setPage(1)}}
+            onPlatformsChange={(v) => {setSelectedPlatform(v as any); setPage(1)}}
             />
 
             <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4 }} spacing="lg" verticalSpacing='xl' className={classes.resultGamesGrid}>
-                {processedGames.map((game) => 
+                {games.map((game) => 
                     isMobile ? (
                         <GameCard key={game.id} game={game} variant='small' />
                     ) : (
@@ -176,6 +131,10 @@ export default function SearchResults({ query }: SearchResultsProps){
                     )
                 )}
             </SimpleGrid>
+
+            {total == 0 && (
+                <p className={classes.noResultsText}>No games were found.</p>
+            )}
             
             {totalPages > 1 && (
                 <div className={classes.paginationWrapper}>
