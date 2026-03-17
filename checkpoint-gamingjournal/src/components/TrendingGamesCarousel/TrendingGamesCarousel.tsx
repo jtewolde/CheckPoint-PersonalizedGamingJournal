@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useMediaQuery } from "@mantine/hooks";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
@@ -16,14 +17,25 @@ import classes from './TrendingCarousel.module.css';
 import { CircleArrowRight } from "lucide-react";
 
 import { IconBrandXbox, IconIcons, IconDevicesPc, IconBrandGoogle, IconBrandWindows, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
+
 import GameCard from "../GameCard/GameCard";
+import GameSkeletonCard from "../GameCard/GameSkeletonCard";
 
 export default function TrendingGamesCarousel() {
     // States to hold trending games data and loading status
     const [trendingGames, setTrendingGames] = useState<any[]>([]);
     const limit = 12
+
+    // Create skeletons array which length is the value of limit
+    const skeletons = Array.from({ length: limit });
+
     const [loading, setLoading] = useState(true);
     const [hasMounted, setHasMounted] = useState(false);
+
+    // Create variables for tracking screen sizes to adjust how the carousel looks
+    const isMobile = useMediaQuery('(max-width: 540px)')
+    const isTablet = useMediaQuery('(max-width: 950px)')
+
     const router = useRouter();
 
     // Fetch trending games data from backend API on component mount
@@ -87,16 +99,34 @@ export default function TrendingGamesCarousel() {
             loop={true}
             autoplay
             pagination={{ clickable: true }}
+            navigation={true}
             modules={[Navigation, Pagination]}
-            spaceBetween={50}
-            slidesPerView={1.4}
+            breakpoints={{
+                0: {
+                    slidesPerView: 1.3,
+                    spaceBetween: 20,
+                },
+                1024: {
+                    slidesPerView: 1.4,
+                    spaceBetween: 40,
+                },
+            }}
             className={classes.swiperContainer}
             >
-                {trendingGames.map((game) => (
-                    <SwiperSlide key={game.id} className={classes.gameCard}>
-                        <GameCard game={game} variant="default" key={game.id}/>
-                    </SwiperSlide>
-                ))}
+                {loading
+                    ? skeletons.map((_, i) => (
+                        <GameSkeletonCard key={i} variant="compact" />
+                    ))
+                    : trendingGames.map((game) => (
+                        <SwiperSlide key={game.id} className={classes.carouselSlide}>
+                            <GameCard
+                                key={game.id}
+                                game={game}
+                                variant="default"
+                            />
+                        </SwiperSlide>
+                    ))
+                }
             </Swiper>
         </div>
     )
