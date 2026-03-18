@@ -14,10 +14,13 @@ import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid
 import Image from 'next/image';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
+import type { Swiper as SwiperType} from 'swiper/types';
+
+import { FreeMode, Navigation, Pagination, Thumbs} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import 'swiper/css/scrollbar'
 import 'swiper/css/thumbs';
 import 'swiper/css/free-mode';
 
@@ -56,12 +59,10 @@ export default function GameDetails() {
   const [modalOpen, setModalOpen] = useState(false); // State to handle modal open/close
 
   const {isAuthenticated} = useAuth(); // Access global auth state
-
   const router = useRouter();
-
   const isMobile = useMediaQuery('(max-width: 650px)');
 
-  const [thumbsSwiper, setThumbSwiper] = useState(null); // Use state for thumbnail swiper instance
+  const [thumbsSwiper, setThumbSwiper] = useState<SwiperType | null>(null);
 
   // Fetch game details from IGDB API when component mounts or ID changes
   useEffect(() => {
@@ -752,38 +753,60 @@ export default function GameDetails() {
 
           <h2 className={classes.screenshotsTitle}>Screenshots: </h2>
 
-          <div className={classes.screenshotGrid}>
+          <div className={classes.screenshotsContainer}>
 
             <Swiper
               centeredSlides={true}
               loop={true}
-              navigation
-              pagination={{ clickable: true }}
-              modules={[Navigation, Pagination]}
+              navigation={isMobile ? false : true}
+              thumbs={{ swiper: thumbsSwiper}}
+              modules={[Navigation, Thumbs]}
               slidesPerView={isMobile ? 1 : 1.5}
               spaceBetween={20}
               className={classes.swiperContainer}
             >
+              {screenshots.map((screenshot: any, index: number) => (
+                <SwiperSlide key={screenshot.id} className={classes.carouselSlide}>
+                  <Image
+                    src={`https:${screenshot.url.replace('t_thumb', 't_1080p')}`}
+                    alt={`Screenshot of ${game.name}`}
+                    className={classes.screenshot}
+                    width={900}
+                    height={400}
+                    loading='lazy'
+                    onClick={() => {
+                      setSelectedScreenshot(`https:${screenshot.url.replace('t_thumb', 't_1080p')}`);
+                      setSelectedScreenshotIndex(index);
+                      console.log("Selected Screenshot Index:", index);
+                      setModalOpen(true);
+                    }}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
 
-            {screenshots.map((screenshot: any, index: number) => (
-              <SwiperSlide key={screenshot.id} className={classes.carouselSlide}>
-                <Image
-                  src={`https:${screenshot.url.replace('t_thumb', 't_1080p')}`}
-                  alt={`Screenshot of ${game.name}`}
-                  className={classes.screenshot}
-                  width={900}
-                  height={400}
-                  loading='lazy'
-                  onClick={() => {
-                    setSelectedScreenshot(`https:${screenshot.url.replace('t_thumb', 't_1080p')}`);
-                    setSelectedScreenshotIndex(index);
-                    console.log("Selected Screenshot Index:", index);
-                    setModalOpen(true);
-                  }}
-                />
-              </SwiperSlide>
-            ))}
-
+            <Swiper
+            onSwiper={setThumbSwiper}
+            loop={true}
+            spaceBetween={10}
+            slidesPerView={isMobile ? 3 : 6}
+            freeMode={true}
+            watchSlidesProgress={true}
+            modules={[FreeMode, Thumbs]}
+            className={classes.thumbnailSwiper}
+            >
+              {screenshots.map((screenshot: any) => (
+                <SwiperSlide key={screenshot.id} className={classes.thumbnailSlide}>
+                  <Image
+                    src={`https:${screenshot.url.replace('t_thumb', 't_720p')}`}
+                    alt="thumbnail"
+                    loading='lazy'
+                    width={200}
+                    height={120}
+                    className={classes.thumbnailImage}
+                  />
+                </SwiperSlide>
+              ))}
             </Swiper>
 
           </div>
@@ -832,9 +855,11 @@ export default function GameDetails() {
           <div className={classes.similarGames}>
             
             <Swiper
-              navigation
-              modules={[Navigation]}
-              slidesPerView={isMobile ? 1 : 3}
+              centeredSlides={isMobile ? true: false}
+              navigation={isMobile ? false: true }
+              pagination={{clickable: true}}
+              modules={[Navigation, Pagination]}
+              slidesPerView={isMobile ? 1.4 : 3}
               spaceBetween={20}
               className={classes.swiperContainer}
             >

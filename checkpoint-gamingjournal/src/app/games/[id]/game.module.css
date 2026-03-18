@@ -17,7 +17,7 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 10%, #18181b 50%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.4) 0%, #18181b 50%);
 }
 
 .wrapper {
@@ -222,6 +222,10 @@
   filter: brightness(70%)
 }
 
+.thumbnailSlide :hover{
+  filter: brightness(70%)
+}
+
 .screenshot {
   width: 100%;
   height: auto;
@@ -229,7 +233,19 @@
   object-fit: contain;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid #6c7274;
+  border: 1px solid #373737;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.thumbnailImage{
+  width: 100%;
+  height: auto;
+  justify-self: center;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #454545;
   margin-bottom: 1rem;
   cursor: pointer;
 }
@@ -247,14 +263,6 @@
   justify-content: center;
   align-items: center;
   padding: 1rem;
-}
-
-.carouselButtons{
-  top: 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-end;
 }
 
 .closeButton{
@@ -316,7 +324,7 @@
   position: relative;
   width: 78%;
   justify-content: center;
-  margin: 0 auto;
+  margin-bottom: 3rem;
 }
 
 .similarGamesName,
@@ -329,22 +337,6 @@
   color: white;
   justify-self: center;
   border-bottom: 2px solid #ffffff;
-}
-
-.similarGameCover{
-  width: 300px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 0.5px solid #7c7c7c;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  display: block;
-  margin: 0 auto;
-  cursor: pointer;
-}
-
-.badge{
-  cursor: pointer;
-  font-family: 'Poppins';
 }
 
 @media screen and (max-width: 1000px){
@@ -430,9 +422,12 @@
   }
 
   .screenshot {
-    width: 120%;
+    width: 100%;
     height: auto;
-    margin-bottom: 3rem;
+  }
+
+  .thumbnailImage{
+    width: 100%
   }
 
   .modalScreenshot{
