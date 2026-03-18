@@ -4,15 +4,15 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-import { SimpleGrid, Image, Paper, Text, ThemeIcon, Rating, Button } from '@mantine/core';
+import { SimpleGrid, Image, Paper, Text, ThemeIcon, Rating } from '@mantine/core';
 import { DonutChart, BarChart, LineChart } from '@mantine/charts';
 
 import { authClient } from '@/lib/auth-client';
 
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
-import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconSword, IconClipboardListFilled } from '@tabler/icons-react';
-import { Notebook, Gamepad, CircleUserRound, CircleArrowRight, Trophy, Icon, Star } from 'lucide-react';
+import { IconClipboardListFilled } from '@tabler/icons-react';
+import { Notebook, Gamepad, CircleUserRound, CircleArrowRight, Trophy, Star } from 'lucide-react';
 
 import classes from './dashboard.module.css';
 
@@ -516,10 +516,6 @@ export default function Dashboard() {
 
           </div>
 
-          <div className={classes.continueSection}>
-            
-          </div>
-
           <div className={classes.playingGames} >
 
             <div className={classes.playingSection}>
@@ -529,7 +525,7 @@ export default function Dashboard() {
                 <h1 className={classes.gamesPlayingText}>Playing Games</h1>
               </div>
 
-              <a className={classes.viewMoreText} href='/library'> <CircleArrowRight size={35} /> </a>
+              <a className={classes.viewMoreIcon} href='/library'> <CircleArrowRight size={35} /> </a>
               
             </div>
 
