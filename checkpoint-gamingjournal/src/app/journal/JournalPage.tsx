@@ -160,11 +160,6 @@ export default function Journal() {
     // Find the selected game's object in the journal entries to get the gameID
     const selectedGameObject = entries.find(e => e.gameName === selectedGame);
 
-     // If the loading state is true, display the loading overlay on screen
-    if (loading) {
-        return <GlobalLoader visible={loading} />;
-    }
-
     return (
         <div className={classes.background}>
 
@@ -394,8 +389,12 @@ export default function Journal() {
 
                     <div className={classes.paginationWrapper}>
                         <Pagination
-                            size='lg'
-                            radius='lg'
+                            classNames={{
+                                control: classes.paginationControl
+                            }}
+                            size='xl'
+                            radius='xs'
+                            color='blue'
                             total={totalPages}
                             value={page}
                             onChange={setPage}

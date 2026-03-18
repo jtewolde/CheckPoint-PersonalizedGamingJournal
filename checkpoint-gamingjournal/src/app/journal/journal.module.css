@@ -222,6 +222,22 @@
     transition: background-color 0.3s ease;
 }
 
+.paginationControl {
+    background-color: #2c2c2f;
+    color: white;
+    border: 1px solid #555;
+}
+
+.paginationControl:hover {
+    background-color: #3a3a3d;
+}
+
+.paginationControl[data-active] {
+    background-color: #854bcb;
+    color: white;
+    border: 1px solid #555;
+}
+
 .paginationWrapper{
     display: flex;
     justify-content: center;
