@@ -17,7 +17,7 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.4) 0%, #18181b 50%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.6) 0%, #272525 100%);
 }
 
 .wrapper {
@@ -125,15 +125,15 @@
   font-weight: 400;
 }
 
-.accordionTitle{
+.accordionTitle,
+.screenshotsTitle{
   font-size: 1.8rem;
-  font-weight: 300;
-  margin-bottom: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
   margin-top: 1rem;
   font-family: 'Poppins';
   color: white;
   justify-self: center;
-  border-bottom: 2px solid #ffffff;
 }
 
 .accordion{
@@ -197,16 +197,6 @@
     &[data-orientation='vertical'] .thumb {
         background-color: black;
     }
-}
-
-.screenshotsTitle {
-  font-size: 1.8rem;
-  font-weight: 300;
-  margin-bottom: 2rem;
-  font-family: 'Poppins';
-  color: white;
-  justify-self: center;
-  border-bottom: 2px solid #ffffff;
 }
 
 .swiperContainer {
@@ -330,13 +320,37 @@
 .similarGamesName,
 .gameSeriesName{
   font-size: 1.8rem;
-  font-weight: 300;
+  font-weight: 500;
   margin-bottom: 1rem;
   margin-top: 3rem;
   font-family: 'Poppins';
   color: white;
   justify-self: center;
-  border-bottom: 2px solid #ffffff;
+}
+
+.swiper-button-prev,
+.swiper-button-next{
+  background: rgba(0, 0, 0, 0.5); /* dark overlay */
+  border-radius: 50%;
+  backdrop-filter: blur(4px);     /* 🔥 nice glass effect */
+  transition: all 0.2s ease;
+
+  /* Optional: slightly smaller than default */
+  width: 80px;
+  height: 80px;
+}
+
+/* Hover effect */
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+/* Make arrow icon a bit smaller */
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 18px;
+  font-weight: bold;
 }
 
 @media screen and (max-width: 1000px){

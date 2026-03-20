@@ -467,7 +467,7 @@ export default function GameDetails() {
 
   // Determine the background image (first screenshot if available)
   const backgroundPhoto = game.screenshots && game.screenshots.length > 0
-  ? `https:${game.screenshots[0].url.replace('t_thumb', 't_720p')}`
+  ? `https:${game.screenshots[1].url.replace('t_thumb', 't_720p')}`
   : PlaceHolderImage.src;
 
   return (
@@ -482,7 +482,7 @@ export default function GameDetails() {
 
             <h1 className={classes.title}>{game.name}</h1>
 
-            <Badge color='#787878' size='lg' radius='lg' c='white'>{game.game_type.type}</Badge>
+            <Badge color='#383838' size='lg' radius='lg' c='white'>{game.game_type.type}</Badge>
 
           </div>
 
@@ -751,7 +751,7 @@ export default function GameDetails() {
 
           </div>
 
-          <h2 className={classes.screenshotsTitle}>Screenshots: </h2>
+          <h2 className={classes.screenshotsTitle}>Screenshots ({game.screenshots.length}):</h2>
 
           <div className={classes.screenshotsContainer}>
 
@@ -837,7 +837,7 @@ export default function GameDetails() {
             {game.collections?.[0]?.games.length > 0 && (
               <>
                 <div className={classes.nameButtonContainer}>
-                  <h2 className={classes.gameSeriesName}> Other Games in the Series:</h2>
+                  <h2 className={classes.gameSeriesName}>Games in Same Series:</h2>
                 </div>
                 
                 <SimpleGrid cols={{ base: 2, sm: 3, md: 6}} spacing='lg' verticalSpacing='lg' className={classes.seriesGrid}>
@@ -856,7 +856,7 @@ export default function GameDetails() {
             
             <Swiper
               centeredSlides={isMobile ? true: false}
-              navigation={isMobile ? false: true }
+              navigation={true}
               pagination={{clickable: true}}
               modules={[Navigation, Pagination]}
               slidesPerView={isMobile ? 1.4 : 3}
