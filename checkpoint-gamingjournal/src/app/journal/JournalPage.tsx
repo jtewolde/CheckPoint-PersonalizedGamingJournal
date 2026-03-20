@@ -58,9 +58,6 @@ export default function Journal() {
             }
 
             const data = await res.json();
-            console.log('Journal Entries', data.journalEntries);
-            console.log('Pagination', data.pagination);
-            console.log('Total Entries from API:', data.pagination.totalEntries);
             setEntries(data.journalEntries);
             setTotalPages(data.pagination.totalPages);
             setTotalEntries(data.pagination.totalEntries)
@@ -162,8 +159,6 @@ export default function Journal() {
 
     return (
         <div className={classes.background}>
-
-            {loading && <GlobalLoader visible={loading} />}
 
             <div className={classes.backgroundOverlay}>
 
