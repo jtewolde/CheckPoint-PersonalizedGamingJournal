@@ -17,7 +17,7 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.6) 0%, #272525 100%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.6) 0%, #0a0a0a 40%);
 }
 
 .wrapper {
@@ -47,6 +47,20 @@
   align-items: flex-start;
   padding-left: 3rem;
   gap: 1rem;
+}
+
+.sectionHeader{
+  width: 100%;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  padding: 0.6rem 1rem;
+
+  background: rgba(30, 30, 30, 0.7);
+  border: 1px solid #444;
+  border-radius: 8px;
+
+  display: flex;
+  align-items: center;
 }
 
 .details {
@@ -125,12 +139,9 @@
   font-weight: 400;
 }
 
-.accordionTitle,
-.screenshotsTitle{
+.sectionTitle{
   font-size: 1.8rem;
   font-weight: 500;
-  margin-bottom: 0.5rem;
-  margin-top: 1rem;
   font-family: 'Poppins';
   color: white;
   justify-self: center;
@@ -152,7 +163,7 @@
   justify-content: center;
   justify-self: center;
   gap: 0.5rem;
-  margin-bottom: 10rem;
+  margin-bottom: 2rem;
 }
 
 .igdbRating {
@@ -165,7 +176,15 @@
   font-family: 'Poppins';
 }
 
-.ratingLabel {
+.ratingLabel{
+  font-weight: 500;
+  color: #f0f0f0;
+  text-align: center;
+  font-family: 'Poppins';
+  font-size: 2rem;
+}
+
+.ratingScore {
   font-weight: 500;
   color: #f0f0f0;
   text-align: center;

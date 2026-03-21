@@ -10,13 +10,13 @@ import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
 import toast from 'react-hot-toast';
 
-import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, Rating, Tooltip} from '@mantine/core';
+import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, Rating, Tooltip, ThemeIcon } from '@mantine/core';
 import Image from 'next/image';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType} from 'swiper/types';
 
-import { FreeMode, Navigation, Pagination, Thumbs} from 'swiper/modules';
+import { FreeMode, Navigation, Pagination, Thumbs } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -26,7 +26,7 @@ import 'swiper/css/free-mode';
 
 import classes from './game.module.css';
 
-import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock } from 'lucide-react';
+import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock, Camera } from 'lucide-react';
 
 import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
   IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
@@ -482,7 +482,7 @@ export default function GameDetails() {
 
             <h1 className={classes.title}>{game.name}</h1>
 
-            <Badge color='#383838' size='lg' radius='lg' c='white'>{game.game_type.type}</Badge>
+            <Badge color='#121212' size='lg' radius='lg' c='white'>{game.game_type.type}</Badge>
 
           </div>
 
@@ -678,7 +678,7 @@ export default function GameDetails() {
 
             <div className={classes.rightSection}>
 
-              <h2 className={classes.accordionTitle}>Game Details: </h2>
+              <h2 className={classes.sectionTitle} style={{marginBottom: '1rem'}}>Game Details: </h2>
 
               <Accordion className={classes.accordion} 
                 styles={{item: {background: '#292828ff', color: 'white', border: '0.5px solid lightgrey'}, 
@@ -703,55 +703,57 @@ export default function GameDetails() {
 
           </div>
 
-          <h2 className={classes.screenshotsTitle}>Ratings: </h2>
+          <div className={classes.sectionHeader}>
+              <h2 className={classes.sectionTitle}>Ratings: </h2>
+          </div>
 
           <div className={classes.ratings}>
 
             <div className={classes.igdbRating}>
 
-                <RingProgress
-                  size={300}
-                  thickness={18}
-                  sections={[
-                    { value: game.rating || 0, color: 'blue' },
-                    { value: 100 - (game.rating || 0), color: 'gray' },
-                  ]}
-                  label={
-                    <Text size="xl" fw={600} c='white' className={classes.ratingLabel}>
-                      {game.rating ? `${Math.round(game.rating)}%` : 'N/A'}
-                    </Text>
-                  }
+              <Text className={classes.ratingLabel}>User Score:</Text>
+
+              <RingProgress
+                size={300}
+                thickness={18}
+                sections={[
+                  { value: game.rating || 0, color: 'blue' },
+                  { value: 100 - (game.rating || 0), color: 'gray' },
+                ]}
+                label={
+                  <Text size="xl" fw={600} c='white' className={classes.ratingScore}>
+                    {game.rating ? `${Math.round(game.rating)}%` : 'N/A'}
+                  </Text>
+                }
                 />
-                <Text className={classes.ratingText} size="md" c='white'>
-                  {game.rating_count ? `${game.rating_count} average user ratings from IGDB` : 'No ratings available'}
-                </Text>
+            </div>
 
-              </div>
+            <div className={classes.aggregatedRating}>
 
-              <div className={classes.aggregatedRating}>
+              <Text className={classes.ratingLabel}>
+                Critic Score:
+              </Text>
 
-                <RingProgress
-                  size={300}
-                  thickness={18}
-                  sections={[
-                    { value: game.aggregated_rating || 0, color: 'red' },
-                    { value: 100 - (game.aggregated_rating || 0), color: 'gray' },
-                  ]}
-                  label={
-                    <Text size="xl" fw={600} c='white' className={classes.ratingLabel}>
-                      {game.aggregated_rating ? `${Math.round(game.aggregated_rating)}%` : 'N/A'}
-                    </Text>
-                  }
-                />
-                <Text className={classes.ratingText} size="md" c='white'>
-                  {game.aggregated_rating_count ? `${game.aggregated_rating_count} ratings from external critics` : 'No ratings available'}
-                </Text>
-
-              </div>
+              <RingProgress
+                size={300}
+                thickness={18}
+                sections={[
+                  { value: game.aggregated_rating || 0, color: 'red' },
+                  { value: 100 - (game.aggregated_rating || 0), color: 'gray' },
+                ]}
+                label={
+                  <Text size="xl" fw={600} c='white' className={classes.ratingScore}>
+                    {game.aggregated_rating ? `${Math.round(game.aggregated_rating)}%` : 'N/A'}
+                  </Text>
+                }
+              />
+            </div>
 
           </div>
 
-          <h2 className={classes.screenshotsTitle}>Screenshots ({game.screenshots.length}):</h2>
+          <div className={classes.sectionHeader}>
+            <h2 className={classes.sectionTitle}>Screenshots ({game.screenshots.length}):</h2>
+          </div>
 
           <div className={classes.screenshotsContainer}>
 
@@ -831,17 +833,16 @@ export default function GameDetails() {
             </div>
           )}
 
+          <div className={classes.sectionHeader}>
+            <h2 className={classes.sectionTitle}>Games in the Same Series:</h2>
+          </div>
           
           <div className={classes.gameSeries}>
 
             {game.collections?.[0]?.games.length > 0 && (
               <>
-                <div className={classes.nameButtonContainer}>
-                  <h2 className={classes.gameSeriesName}>Games in Same Series:</h2>
-                </div>
-                
                 <SimpleGrid cols={{ base: 2, sm: 3, md: 6}} spacing='lg' verticalSpacing='lg' className={classes.seriesGrid}>
-                  {sortedCollections.slice(0, 4).map((collection: any) => (
+                  {sortedCollections.slice(0, 10).map((collection: any) => (
                       <GameCard variant='compact' key={collection.id} game={collection} />
                   ))}
                 </SimpleGrid>
@@ -850,7 +851,9 @@ export default function GameDetails() {
 
           </div>
 
-          <h2 className={classes.similarGamesName}>Similar Games: </h2>
+          <div className={classes.sectionHeader}>
+            <h2 className={classes.sectionTitle}>Similar Games: </h2>
+          </div>
 
           <div className={classes.similarGames}>
             
