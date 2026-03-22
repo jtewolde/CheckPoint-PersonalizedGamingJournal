@@ -26,7 +26,7 @@ import 'swiper/css/free-mode';
 
 import classes from './game.module.css';
 
-import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock, Camera } from 'lucide-react';
+import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock, Camera, Star, Gamepad, Activity } from 'lucide-react';
 
 import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
   IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
@@ -482,7 +482,7 @@ export default function GameDetails() {
 
             <h1 className={classes.title}>{game.name}</h1>
 
-            <Badge color='#121212' size='lg' radius='lg' c='white'>{game.game_type.type}</Badge>
+            <Badge className={classes.gameTypeBadge} color='#656565' size='xl' radius='lg' variant='filled' c='white'>{game.game_type.type}</Badge>
 
           </div>
 
@@ -704,7 +704,10 @@ export default function GameDetails() {
           </div>
 
           <div className={classes.sectionHeader}>
-              <h2 className={classes.sectionTitle}>Ratings: </h2>
+            <ThemeIcon size={50} variant='gradient' gradient={{ from: '#f7971e', to: '#ffd200', deg: 20}} radius='md'>
+                <Star size={40} />
+            </ThemeIcon>
+            <h2 className={classes.sectionTitle}>Ratings: </h2>
           </div>
 
           <div className={classes.ratings}>
@@ -751,7 +754,44 @@ export default function GameDetails() {
 
           </div>
 
+          <div className={classes.activitySection}>
+            <div className={classes.sectionHeader}>
+                <ThemeIcon size={50} variant='gradient' gradient={{ from: '#e70e0e', to: '#ca1118', deg: 20}} radius='md'>
+                    <Activity size={40} />
+                </ThemeIcon>
+                <h2 className={classes.sectionTitle}>Your Activity: </h2>
+            </div>
+
+            <SimpleGrid cols={{base: 3}} spacing='lg' verticalSpacing='lg' className={classes.activityGrid}>
+
+              <div className={classes.activityItem}>
+                <div className={classes.titleLogo}>
+                  <Text className={classes.activityLabel}>Last Played</Text>
+                </div>
+                <Text className={classes.activityStat}>March</Text>
+              </div>
+
+              <div className={classes.activityItem}>
+                <div className={classes.titleLogo}>
+                  <Text className={classes.activityLabel}>Total Entries</Text>
+                </div>
+                <Text className={classes.activityStat}>23</Text>
+              </div>
+
+              <div className={classes.activityItem}>
+                <div className={classes.titleLogo}>
+                  <Text className={classes.activityLabel}>Total Playtime</Text>
+                </div>
+                <Text className={classes.activityStat}>4 Hours 59 Minutes</Text>
+              </div>
+
+            </SimpleGrid>
+          </div>
+
           <div className={classes.sectionHeader}>
+            <ThemeIcon size={50} variant='gradient' gradient={{ from: '#3ecb1b', to: '#10912a', deg: 20}} radius='md'>
+                <Camera size={40} />
+            </ThemeIcon>
             <h2 className={classes.sectionTitle}>Screenshots ({game.screenshots.length}):</h2>
           </div>
 
@@ -832,15 +872,15 @@ export default function GameDetails() {
               />
             </div>
           )}
-
-          <div className={classes.sectionHeader}>
-            <h2 className={classes.sectionTitle}>Games in the Same Series:</h2>
-          </div>
           
           <div className={classes.gameSeries}>
 
-            {game.collections?.[0]?.games.length > 0 && (
+            {game.collections?.[0]?.games.length > 4 && (
               <>
+                <div className={classes.sectionHeader}>
+                  <h2 className={classes.sectionTitle}>Games in the Same Series:</h2>
+                </div>
+
                 <SimpleGrid cols={{ base: 2, sm: 3, md: 6}} spacing='lg' verticalSpacing='lg' className={classes.seriesGrid}>
                   {sortedCollections.slice(0, 10).map((collection: any) => (
                       <GameCard variant='compact' key={collection.id} game={collection} />
@@ -852,6 +892,9 @@ export default function GameDetails() {
           </div>
 
           <div className={classes.sectionHeader}>
+            <ThemeIcon size={50} variant='gradient' gradient={{ from: '#0e6ce7', to: '#1d4ee2', deg: 20}} radius='md'>
+                <Gamepad size={40} />
+            </ThemeIcon>
             <h2 className={classes.sectionTitle}>Similar Games: </h2>
           </div>
 

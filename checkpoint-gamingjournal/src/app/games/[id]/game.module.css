@@ -40,6 +40,10 @@
   white-space: normal;
 }
 
+.gameTypeBadge{
+  border: 1px solid #0a0a0a;
+}
+
 .titleType{
   display: flex;
   flex-direction: column;
@@ -60,7 +64,17 @@
   border-radius: 8px;
 
   display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
   align-items: center;
+}
+
+.sectionTitle{
+  font-size: 2.1rem;
+  font-weight: 500;
+  font-family: 'Poppins';
+  color: white;
+  justify-self: center;
 }
 
 .details {
@@ -139,14 +153,6 @@
   font-weight: 400;
 }
 
-.sectionTitle{
-  font-size: 1.8rem;
-  font-weight: 500;
-  font-family: 'Poppins';
-  color: white;
-  justify-self: center;
-}
-
 .accordion{
   display: flex;
   flex-direction: column;
@@ -216,6 +222,42 @@
     &[data-orientation='vertical'] .thumb {
         background-color: black;
     }
+}
+
+.activitySection{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.activityItem{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #1b1a1a;
+  border: 1px solid #2f2e2e;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.activityLabel{
+  font-size: 22px;
+  font-family: 'Inter';
+  font-weight: 500;
+  color: white;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.activityStat{
+  color: #e0e0e0;
+  font-size: 20px;
+  font-weight: 600;
+  font-family: 'Inter';
 }
 
 .swiperContainer {
