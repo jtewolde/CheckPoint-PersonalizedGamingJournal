@@ -35,8 +35,16 @@
   color: rgb(230, 230, 230);
   font-size: 1.4rem;
   font-weight: bold;
-  margin-bottom: 2rem;
   font-family: 'Poppins';
+}
+
+.tagsContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .date {

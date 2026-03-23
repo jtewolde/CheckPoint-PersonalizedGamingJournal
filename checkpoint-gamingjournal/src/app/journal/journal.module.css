@@ -131,6 +131,22 @@
     font-family: 'Poppins';
 }
 
+.tagsContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.entryInfoContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
 .entryTitle {
     color: white;
     font-size: 1rem;
@@ -143,7 +159,6 @@
 .entryContent {
     font-size: 1rem;
     color: #e1e1e1;
-    margin-bottom: 1rem;
 }
 
 .entryDate {
@@ -166,7 +181,9 @@
 .addButton,
 .filterButton,
 .deleteEntriesButton {
-    font-size: 1.1rem;
+    font-family: 'Noto Sans';
+    font-size: 18px;
+    font-weight: 500;
     cursor: pointer;
     transition: background-color 0.3s ease;
     z-index: 1;
@@ -220,6 +237,17 @@
     font-family: 'Poppins';
     cursor: pointer;
     transition: background-color 0.3s ease;
+}
+
+.noGamesText{
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: rgb(208, 205, 205); /* Dark text for contrast */
+    margin-bottom: 2.5rem;
+    font-family: 'Poppins';
+    font-style: italic;
+    text-align: center;
+    margin-top: 2rem;
 }
 
 .paginationControl {

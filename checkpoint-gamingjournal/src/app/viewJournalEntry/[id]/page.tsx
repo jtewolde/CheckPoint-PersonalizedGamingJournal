@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Text, LoadingOverlay, Button } from '@mantine/core';
+import { Text, Badge, Group, Button } from '@mantine/core';
 
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
@@ -50,6 +50,21 @@ export default function ViewJournalEntry() {
         <div className={classes.entryContainer}>
             <Text className={classes.gameName}>{entry.gameName}</Text>
             <Text className={classes.title}>{entry.title}</Text>
+            {entry.tags && entry.tags.length > 0 && (
+                <Group className={classes.tagsContainter} gap="lg" mt="sm" mb='lg'>
+                    {entry.tags.map((tag: string, index: number) => (
+                    <Badge
+                        key={index}
+                        variant="filled"
+                        color="violet"
+                        radius="md"
+                        size='lg'
+                    >
+                        {tag}
+                    </Badge>
+                    ))}
+                </Group>
+            )}
             <Text className={classes.content}>{entry.content}</Text>
             <Text className={classes.date}><b>Date Created:</b> {entry.displayDate}</Text>
             <Button className={classes.backbtn} variant='filled' color='violet' radius='lg' size='lg' rightSection={<ArrowLeft />} onClick={() => router.back()}>Go Back</Button>
