@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useDisclosure } from '@mantine/hooks';
 import { authClient } from '@/lib/auth-client';
 
-import { Badge, Button, List, Popover, Select, SimpleGrid, Pagination, ThemeIcon, Modal, Group, Stack, Title, Text, Checkbox, ActionIcon, MultiSelect } from '@mantine/core';
+import { Badge, Button, List, Popover, Select, SimpleGrid, Pagination, ThemeIcon, Modal, Group, Stack, Title, 
+    Text, Checkbox, ActionIcon, MultiSelect, LoadingOverlay } from '@mantine/core';
 
 import toast from 'react-hot-toast';
 import { FilePlus, ListFilter, Trash2, X } from 'lucide-react';
@@ -294,6 +295,13 @@ export default function Journal() {
 
                     <div className={classes.mainSection}>
 
+                        {/* ✅ LOADING OVERLAY */}
+                        <LoadingOverlay
+                            visible={loading}
+                            overlayProps={{ radius: 'sm', blur: 2 }}
+                            loaderProps={{ size: 'lg', color: "grape", type: "bars" }}
+                        />
+
                         <div className={classes.buttonGroup} >
 
                             <Button
@@ -382,73 +390,73 @@ export default function Journal() {
 
                         </div>
                         
-                        {!loading && filteredEntries.length > 0 && (
-                        <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
-                            {filteredEntries.map((entry) => (
-                                <div key={entry._id} className={classes.entryCard} onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}>
+                        {filteredEntries.length > 0 && (
+                            <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
+                                {filteredEntries.map((entry) => (
+                                    <div key={entry._id} className={classes.entryCard} onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}>
 
-                                    <div className={classes.entryHeader}>
+                                        <div className={classes.entryHeader}>
 
-                                        <h3 className={classes.entryGame}>{entry.gameName}</h3>
+                                            <h3 className={classes.entryGame}>{entry.gameName}</h3>
 
-                                        <ActionIcon
-                                            className={classes.deleteButton}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                deleteJournalEntry(entry._id, entry.gameId)}
-                                            }
-                                            radius='md'
-                                            size='lg'
-                                            variant='filled'
-                                            color='#e01515ff'
-                                            loading={loading}
-                                        >
-                                            <Trash2 size={20} />
-                                        </ActionIcon>
+                                            <ActionIcon
+                                                className={classes.deleteButton}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    deleteJournalEntry(entry._id, entry.gameId)}
+                                                }
+                                                radius='md'
+                                                size='lg'
+                                                variant='filled'
+                                                color='#e01515ff'
+                                                loading={loading}
+                                            >
+                                                <Trash2 size={20} />
+                                            </ActionIcon>
 
+                                        </div>
+
+                                        <div className={classes.entryInfoContainer}>
+
+                                            <h3 className={classes.entryTitle}>{entry.title}</h3>
+
+                                            <p className={classes.entryContent}>
+                                                {entry.content.length > 150
+                                                    ? `${entry.content.slice(0, 200)}...` // Truncate long content
+                                                    : entry.content}
+                                            </p>
+
+                                            {/* ✅ TAGS SECTION */}
+                                            {entry.tags && entry.tags.length > 0 && (
+                                                <Group className={classes.tagsContainer}>
+                                                    {entry.tags.map((tag: string, index: number) => (
+                                                    <Badge
+                                                        key={index}
+                                                        variant="filled"
+                                                        color="#854bcb"
+                                                        radius="md"
+                                                        size='lg'
+                                                    >
+                                                        {tag}
+                                                    </Badge>
+                                                    ))}
+                                                </Group>
+                                            )}
+                                                
+                                            <p className={classes.entryDate}>{entry.displayDate}</p>
+
+                                        </div>
+                                        
                                     </div>
-
-                                    <div className={classes.entryInfoContainer}>
-
-                                        <h3 className={classes.entryTitle}>{entry.title}</h3>
-
-                                        <p className={classes.entryContent}>
-                                            {entry.content.length > 150
-                                                ? `${entry.content.slice(0, 200)}...` // Truncate long content
-                                                : entry.content}
-                                        </p>
-
-                                        {/* ✅ TAGS SECTION */}
-                                        {entry.tags && entry.tags.length > 0 && (
-                                            <Group className={classes.tagsContainer}>
-                                                {entry.tags.map((tag: string, index: number) => (
-                                                <Badge
-                                                    key={index}
-                                                    variant="filled"
-                                                    color="violet"
-                                                    radius="md"
-                                                    size='lg'
-                                                >
-                                                    {tag}
-                                                </Badge>
-                                                ))}
-                                            </Group>
-                                        )}
-                                            
-                                        <p className={classes.entryDate}>{entry.displayDate}</p>
-
-                                    </div>
-                                    
-                                </div>
-                            ))}
-                        </SimpleGrid>
+                                ))}
+                            </SimpleGrid>
                         
                         )}
 
                     </div>
 
                     {!loading && filteredEntries.length === 0 && (
-                        <p className={classes.noGamesText}>No games found for the selected status.</p>
+                        <p className={classes.noGamesText}>No games found for the selected tags.</p>
                     )}
 
                     {filteredEntries.length !== 0 &&(
@@ -459,7 +467,6 @@ export default function Journal() {
                                 }}
                                 size='xl'
                                 radius='xs'
-                                color='blue'
                                 total={totalPages}
                                 value={page}
                                 onChange={setPage}
