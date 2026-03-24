@@ -4,17 +4,14 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth-client'
 import { useMediaQuery } from '@mantine/hooks';
-import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
-import { SimpleGrid, Badge, Image, Select, Popover, Button, Tooltip, Rating, Switch, Stack} from '@mantine/core';
+import { SimpleGrid, Badge, Image, Select, Popover, Button, Tooltip, Rating, Switch, Stack, LoadingOverlay} from '@mantine/core';
 import { ListFilter, Trophy } from 'lucide-react';
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 import classes from './library.module.css';
 
 export default function Library(){
-    const [page, setPage] = useState(1);
-    const limit = 14;
 
     // State variables for going through user's games and loading state
     const [games, setGames] = useState<any[]>([]);
@@ -104,8 +101,6 @@ export default function Library(){
 
             <div className={classes.wrapper}>
 
-                {loading && <GlobalLoader visible={loading} />}
-
                 <div className={classes.libraryHeader}>
 
                     <div className={classes.titleLogo}>
@@ -172,8 +167,16 @@ export default function Library(){
 
                 </Popover>
 
-                {!loading && filteredGames.length > 0 && (
+                {filteredGames.length > 0 && (
                     <div className={classes.library}>
+
+                        {/* ✅ LOADING OVERLAY */}
+                        <LoadingOverlay
+                            visible={loading}
+                            overlayProps={{ radius: 'sm', blur: 2 }}
+                            loaderProps={{ size: 'lg', color: "grape", type: "bars" }}
+                        />
+
                         <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4, lg: 5, xl: 5 }} spacing="lg" verticalSpacing='xl' className={classes.responsiveGrid}>
                             {filteredGames.map((game) => (
                                 <div key={game._id} className={classes.libraryCard} onClick={() => router.push(`/games/${game.gameId}`)}>

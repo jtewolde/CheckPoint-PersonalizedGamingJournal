@@ -10,7 +10,7 @@ import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
 import toast from 'react-hot-toast';
 
-import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, Rating, Tooltip, ThemeIcon } from '@mantine/core';
+import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, Rating, Tooltip, ThemeIcon, ActionIcon } from '@mantine/core';
 import Image from 'next/image';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -26,7 +26,7 @@ import 'swiper/css/free-mode';
 
 import classes from './game.module.css';
 
-import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock, Camera, Star, Gamepad, Activity } from 'lucide-react';
+import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock, Camera, Star, Gamepad, Activity, Pencil } from 'lucide-react';
 
 import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
   IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
@@ -467,7 +467,7 @@ export default function GameDetails() {
 
   // Determine the background image (first screenshot if available)
   const backgroundPhoto = game.screenshots && game.screenshots.length > 0
-  ? `https:${game.screenshots[1].url.replace('t_thumb', 't_720p')}`
+  ? `https:${game.screenshots[3].url.replace('t_thumb', 't_720p')}`
   : PlaceHolderImage.src;
 
   return (
@@ -508,22 +508,29 @@ export default function GameDetails() {
                         <div className={classes.buttonContainer}>
 
                           <div style={{display: 'flex', flexDirection: 'row', gap: '1rem'}}>
-
-                            <Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>
+                            <Text className={classes.gameInfoText}>Status: </Text>
+                            <Badge className={classes.badge} color="green" size='lg' variant='filled'>
                               {libraryGame?.status || 'No Status Given'}
                             </Badge>
-                          
-                            <Tooltip label='Platinumed/100%' position='right' >
+                          </div>
 
-                              <Trophy 
-                                size={30} 
-                                color={isPlatinum ? 'gold' : 'gray'}
-                                fill={isPlatinum ? 'gold' : 'none'}
-                                style={{ transition: 'all 0.2s ease' }}
-                              />
-                            
-                            </Tooltip>
+                          <div style={{display: 'flex', flexDirection: 'row', gap: '1rem'}}>
+                            <Text className={classes.gameInfoText}>Rating: </Text>
+                            <Rating readOnly size='lg' fractions={2} value={rating}/>
+                          </div>
 
+                          <div style={{display: 'flex', flexDirection: 'row', gap: '1rem'}}>
+                            <Text className={classes.gameInfoText}>Completion Date: {completionDate ? new Date(completionDate).toLocaleDateString('en-US') : 'N/A'} </Text>
+                          </div>
+
+                          <div style={{display: 'flex', flexDirection: 'row', gap: '1rem'}}>
+                            <Text className={classes.gameInfoText}>Platinum: </Text>
+                            <Trophy 
+                              size={30} 
+                              color={isPlatinum ? 'gold' : 'gray'}
+                              fill={isPlatinum ? 'gold' : 'none'}
+                              style={{ transition: 'all 0.2s ease' }}
+                            />
                           </div>
 
                           <Modal opened={opened} onClose={close} title="Change Game Info" styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #424242', color: 'white', fontFamily: 'Noto Sans'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
@@ -620,25 +627,28 @@ export default function GameDetails() {
                             
                           </Modal>
 
-                          <Rating
-                          readOnly
-                          size='lg' 
-                          fractions={2} 
-                          value={rating} 
-                          />
+                          <div className={classes.buttonActions}>
+                            <Tooltip label='Remove game from library' position='top'>
+                              <Button
+                              variant="filled"
+                              color="#d8070b"
+                              size="md"
+                              radius="md"
+                              className={classes.button}
+                              rightSection={<Delete />}
+                              onClick={handleRemoveFromLibrary}
+                              loading={addingToLibrary}
+                              >
+                                Remove
+                              </Button>                          
+                            </Tooltip>
 
-                          <Button
-                            variant="filled"
-                            color="#d8070b"
-                            size="md"
-                            radius="xl"
-                            className={classes.button}
-                            rightSection={<Delete />}
-                            onClick={handleRemoveFromLibrary}
-                            loading={addingToLibrary}
-                          >
-                            Remove from your Library!
-                          </Button>
+                              <Tooltip label='Edit Game Info' position="top">
+                                  <Button className={classes.button} variant="filled" color="yellow" size='md' radius='md' rightSection={<Pencil size={20} />} onClick={open}>Edit </Button>
+                              </Tooltip>
+                          </div>
+
+
                         </div>
                       ) : (
                         <div className={classes.buttonContainer}>
@@ -703,53 +713,57 @@ export default function GameDetails() {
 
           </div>
 
-          <div className={classes.sectionHeader}>
-            <ThemeIcon size={50} variant='gradient' gradient={{ from: '#f7971e', to: '#ffd200', deg: 20}} radius='md'>
-                <Star size={40} />
-            </ThemeIcon>
-            <h2 className={classes.sectionTitle}>Ratings: </h2>
-          </div>
+          <div className={classes.ratingSection}>
 
-          <div className={classes.ratings}>
-
-            <div className={classes.igdbRating}>
-
-              <Text className={classes.ratingLabel}>User Score:</Text>
-
-              <RingProgress
-                size={300}
-                thickness={18}
-                sections={[
-                  { value: game.rating || 0, color: 'blue' },
-                  { value: 100 - (game.rating || 0), color: 'gray' },
-                ]}
-                label={
-                  <Text size="xl" fw={600} c='white' className={classes.ratingScore}>
-                    {game.rating ? `${Math.round(game.rating)}%` : 'N/A'}
-                  </Text>
-                }
-                />
+            <div className={classes.sectionHeader}>
+              <ThemeIcon size={50} variant='gradient' gradient={{ from: '#f7971e', to: '#ffd200', deg: 20}} radius='md'>
+                  <Star size={40} />
+              </ThemeIcon>
+              <h2 className={classes.sectionTitle}>Ratings: </h2>
             </div>
 
-            <div className={classes.aggregatedRating}>
+            <div className={classes.ratings}>
 
-              <Text className={classes.ratingLabel}>
-                Critic Score:
-              </Text>
+              <div className={classes.igdbRating}>
 
-              <RingProgress
-                size={300}
-                thickness={18}
-                sections={[
-                  { value: game.aggregated_rating || 0, color: 'red' },
-                  { value: 100 - (game.aggregated_rating || 0), color: 'gray' },
-                ]}
-                label={
-                  <Text size="xl" fw={600} c='white' className={classes.ratingScore}>
-                    {game.aggregated_rating ? `${Math.round(game.aggregated_rating)}%` : 'N/A'}
-                  </Text>
-                }
-              />
+                <Text className={classes.ratingLabel}>User Score</Text>
+
+                <RingProgress
+                  size={300}
+                  thickness={18}
+                  sections={[
+                    { value: game.rating || 0, color: 'blue' },
+                    { value: 100 - (game.rating || 0), color: 'gray' },
+                  ]}
+                  label={
+                    <Text size="xl" fw={600} c='white' className={classes.ratingScore}>
+                      {game.rating ? `${Math.round(game.rating)}%` : 'N/A'}
+                    </Text>
+                  }
+                  />
+              </div>
+
+              <div className={classes.aggregatedRating}>
+
+                <Text className={classes.ratingLabel}>
+                  Critic Score
+                </Text>
+
+                <RingProgress
+                  size={300}
+                  thickness={18}
+                  sections={[
+                    { value: game.aggregated_rating || 0, color: 'red' },
+                    { value: 100 - (game.aggregated_rating || 0), color: 'gray' },
+                  ]}
+                  label={
+                    <Text size="xl" fw={600} c='white' className={classes.ratingScore}>
+                      {game.aggregated_rating ? `${Math.round(game.aggregated_rating)}%` : 'N/A'}
+                    </Text>
+                  }
+                />
+              </div>
+
             </div>
 
           </div>
@@ -881,7 +895,7 @@ export default function GameDetails() {
                   <h2 className={classes.sectionTitle}>Games in the Same Series:</h2>
                 </div>
 
-                <SimpleGrid cols={{ base: 2, sm: 3, md: 6}} spacing='lg' verticalSpacing='lg' className={classes.seriesGrid}>
+                <SimpleGrid cols={{ base: 2, sm: 3, md: 5}} spacing='lg' verticalSpacing='lg' className={classes.seriesGrid}>
                   {sortedCollections.slice(0, 10).map((collection: any) => (
                       <GameCard variant='compact' key={collection.id} game={collection} />
                   ))}

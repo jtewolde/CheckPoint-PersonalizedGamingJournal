@@ -17,7 +17,7 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.6) 0%, #0a0a0a 40%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.4) 0%, #0a0a0a 40%);
 }
 
 .wrapper {
@@ -90,26 +90,29 @@
 }
 
 .leftSection{
-  padding-top: 2rem;
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   gap: 1rem;
+  background-color: #201f1f;
+  border: 1px solid rgb(56, 56, 56);
+  border-radius: 16px;
 }
 
 .cover {
   width: 350px;
   object-fit: contain;
-  border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid #6f7579;
+  border: 1px solid #2b2b2b;
+  border-bottom: 1px solid #585757;
+  border-radius: 8px 8px 0 0;
 }
 
 .gameCover{
   width: 90%;
   object-fit: contain;
-  border-radius: 8px;
 }
 
 .media {
@@ -117,15 +120,13 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  gap: 2rem; /* space between image and button */
 }
 
 .coverInfoContainer{
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  background-color: transparent;
+  align-items: flex-start;
   padding: 1rem;
 }
 
@@ -138,12 +139,25 @@
   margin-bottom: 3rem;
 }
 
+.gameInfoText{
+  font-family: 'Poppins';
+  font-weight: 400;
+}
+
 .buttonContainer{
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.buttonActions{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .button{
@@ -162,6 +176,13 @@
   width: 100%;
 }
 
+.ratingSection{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .ratings {
   display: flex;
   flex-direction: row;
@@ -169,7 +190,6 @@
   justify-content: center;
   justify-self: center;
   gap: 0.5rem;
-  margin-bottom: 2rem;
 }
 
 .igdbRating {
@@ -187,7 +207,7 @@
   color: #f0f0f0;
   text-align: center;
   font-family: 'Poppins';
-  font-size: 2rem;
+  font-size: 1.7rem;
 }
 
 .ratingScore {
@@ -229,6 +249,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-bottom: 2rem;
 }
 
 .activityItem{
@@ -450,10 +471,6 @@
     padding: 0;
   }
 
-  .leftSection{
-    align-items: center;
-  }
-
   .rightSection{
     margin-top: 4rem;
   }
@@ -489,7 +506,7 @@
   .ratings {
     flex-direction: column;
     align-items: center;
-    margin-bottom: 7rem;
+    margin-bottom: 2rem;
   }
 
   .carouselSlide{
