@@ -16,13 +16,14 @@ import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType} from 'swiper/types';
 
-import { FreeMode, Navigation, Pagination, Thumbs } from 'swiper/modules';
+import { FreeMode, Navigation, Pagination, Thumbs, Keyboard } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar'
 import 'swiper/css/thumbs';
 import 'swiper/css/free-mode';
+import 'swiper/css/keyboard';
 
 import classes from './game.module.css';
 
@@ -814,7 +815,8 @@ export default function GameDetails() {
             <Swiper
               centeredSlides={true}
               loop={true}
-              navigation={isMobile ? false : true}
+              navigation={true}
+              scrollbar={isMobile ? true: false}
               thumbs={{ swiper: thumbsSwiper}}
               modules={[Navigation, Thumbs]}
               slidesPerView={isMobile ? 1 : 1.5}
@@ -841,54 +843,73 @@ export default function GameDetails() {
               ))}
             </Swiper>
 
-            <Swiper
-            onSwiper={setThumbSwiper}
-            loop={true}
-            spaceBetween={10}
-            slidesPerView={isMobile ? 3 : 6}
-            freeMode={true}
-            watchSlidesProgress={true}
-            modules={[FreeMode, Thumbs]}
-            className={classes.thumbnailSwiper}
-            >
-              {screenshots.map((screenshot: any) => (
-                <SwiperSlide key={screenshot.id} className={classes.thumbnailSlide}>
-                  <Image
-                    src={`https:${screenshot.url.replace('t_thumb', 't_720p')}`}
-                    alt="thumbnail"
-                    loading='lazy'
-                    width={200}
-                    height={120}
-                    className={classes.thumbnailImage}
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
+            {!isMobile ? (
+              <Swiper
+              onSwiper={setThumbSwiper}
+              loop={true}
+              spaceBetween={10}
+              slidesPerView={3}
+              freeMode={true}
+              watchSlidesProgress={true}
+              modules={[FreeMode, Thumbs]}
+              className={classes.thumbnailSwiper}
+              >
+                {screenshots.map((screenshot: any) => (
+                  <SwiperSlide key={screenshot.id} className={classes.thumbnailSlide}>
+                    <Image
+                      src={`https:${screenshot.url.replace('t_thumb', 't_720p')}`}
+                      alt="thumbnail"
+                      loading='lazy'
+                      width={200}
+                      height={120}
+                      className={classes.thumbnailImage}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            ): (
+                <>
+                </>
+            )}
 
           </div>
 
-          {selectedScreenshot && modalOpen && (
+          {modalOpen && (
             <div className={classes.fullScreenOverlay}>
 
               <div className={classes.carouselButtons}>
                 <Button className={classes.closeButton} variant='light' color='white' size='sm' onClick={() =>setModalOpen(false)}><X size={40} /></Button>
               </div>
 
-              <Image
-                src={selectedScreenshot}
-                alt={`Screenshot of ${game.name}`}
-                className={classes.fullScreenImage}
-                width={800}
-                height={450}
-                style={{ objectFit: 'contain', maxHeight: '90vh', width: 'auto'}}
-                loading='lazy'
-                layout='responsive'
-              />
+              <Swiper
+              initialSlide={selectedScreenshotIndex}
+              navigation
+              loop
+              pagination={{ clickable: true, type: 'bullets' }}
+              keyboard={{ enabled: true }}
+              modules={[Navigation, Pagination, Keyboard]}
+              className={classes.fullscreenSwiper}
+              >
+                {screenshots.map((screenshot: any, index: number) => (
+                  <SwiperSlide key={screenshot.id}>
+                    <Image
+                      src={`https:${screenshot.url.replace('t_thumb', 't_1080p')}`}
+                      alt={`Screenshot ${index}`}
+                      className={classes.fullScreenImage}
+                      width={1200}
+                      height={700}
+                      style={{
+                        objectFit: 'contain',
+                        width: '100%',
+                        height: '100vh'
+                      }}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
             </div>
           )}
-          
           <div className={classes.gameSeries}>
-
             {game.collections?.[0]?.games.length > 4 && (
               <>
                 <div className={classes.sectionHeader}>
