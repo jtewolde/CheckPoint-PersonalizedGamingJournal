@@ -27,7 +27,7 @@ import 'swiper/css/keyboard';
 
 import classes from './game.module.css';
 
-import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock, Camera, Star, Gamepad, Activity, Pencil } from 'lucide-react';
+import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock, Camera, Star, Gamepad, Activity, Pencil, Info } from 'lucide-react';
 
 import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
   IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
@@ -56,6 +56,7 @@ export default function GameDetails() {
   const [screenshots, setScreensShots] = useState<any[]>([]); // State to store screenshots
   const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null); // State to handle selected screenshot for modal
   const [selectedScreenshotIndex, setSelectedScreenshotIndex] = useState(0); // State to track index of selected screenshot
+  const [backgroundImage, setBackgroundImage] = useState<string>(PlaceHolderImage.src)
 
   const [modalOpen, setModalOpen] = useState(false); // State to handle modal open/close
 
@@ -64,6 +65,26 @@ export default function GameDetails() {
   const isMobile = useMediaQuery('(max-width: 650px)');
 
   const [thumbsSwiper, setThumbSwiper] = useState<SwiperType | null>(null);
+
+  // Helper function to combining all screenshots and artworks of game in single array for different backgrounds
+  const getAllImages = (gameData: any) => {
+    const screenshots = gameData?.screenshots || [];
+    const artworks = gameData?.artworks || []
+
+    return [...screenshots, ...artworks]
+  }
+
+  // Function to help pick a random image from screenshots and artworks of game to be background for dynamic background instead of fixed image
+  const getRandomImage = (gameData: any) =>{
+    const images = getAllImages(gameData);
+
+    if(images.length === 0) return PlaceHolderImage.src
+
+    const randomIndex = Math.floor(Math.random() * images.length);
+    const selected = images[randomIndex]
+
+    return `https:${selected.url.replace('t_thumb', 't_1080p')}`;
+  }
 
   // Fetch game details from IGDB API when component mounts or ID changes
   useEffect(() => {
@@ -76,11 +97,9 @@ export default function GameDetails() {
         }
         const data = await res.json();
         setGame(data); // Store the game details in state
-        console.log("Game Data", data)
+        setBackgroundImage(getRandomImage(data))
         setStatus(data.status);
         setScreensShots(data.screenshots || []);
-        console.log("Screenshots", data.screenshots)
-
       } catch (error) {
         console.error('Error fetching game details:', error);
       } finally {
@@ -466,33 +485,18 @@ export default function GameDetails() {
   // Sort the collection games by total rating in descending order
   const sortedCollections = game.collections?.[0]?.games.sort((a: any, b: any) => b.total_rating - a.total_rating);
 
-  // Determine the background image (first screenshot if available)
-  const backgroundPhoto = game.screenshots && game.screenshots.length > 0
-  ? `https:${game.screenshots[3].url.replace('t_thumb', 't_720p')}`
-  : PlaceHolderImage.src;
-
   return (
-
-    <div className={classes.background} style={{ backgroundImage: `url(${backgroundPhoto})` }}>
-
+    <div className={classes.background} style={{ backgroundImage: `url(${backgroundImage})` }}>
       <div className={classes.backgroundOverlay}>
-
         <div className={classes.wrapper}>
-
           <div className={classes.titleType}>
-
             <h1 className={classes.title}>{game.name}</h1>
-
             <Badge className={classes.gameTypeBadge} color='#656565' size='xl' radius='lg' variant='filled' c='white'>{game.game_type.type}</Badge>
-
           </div>
 
           <div className={classes.details}>
-
             <div className={classes.leftSection}>
-
               <div className={classes.media}>
-                
                 <img
                   src={
                     game.cover
@@ -502,7 +506,6 @@ export default function GameDetails() {
                   alt={game.name}
                   className={classes.cover}
                 />
-
                 <div className={classes.coverInfoContainer}>
                     {isAuthenticated ? (
                       isGameInLibrary ? (
@@ -514,6 +517,18 @@ export default function GameDetails() {
                               {libraryGame?.status || 'No Status Given'}
                             </Badge>
                           </div>
+
+                          {/* <Tooltip label='Set Game Status' position='top'>
+                            <ActionIcon variant='outline' size='lg' radius='md' onClick={open}>
+                              <Info size={25} />
+                            </ActionIcon>
+                          </Tooltip>
+
+                          <Tooltip label='Completion Date' position='top'>
+                            <ActionIcon color='yellow' variant='outline' size='lg' radius='md' onClick={open}>
+                              <CalendarDays size={25} />
+                            </ActionIcon>
+                          </Tooltip> */}
 
                           <div style={{display: 'flex', flexDirection: 'row', gap: '1rem'}}>
                             <Text className={classes.gameInfoText}>Rating: </Text>
@@ -689,16 +704,15 @@ export default function GameDetails() {
 
             <div className={classes.rightSection}>
 
-              <h2 className={classes.sectionTitle} style={{marginBottom: '1rem'}}>Game Details: </h2>
 
               <Accordion className={classes.accordion} 
-                styles={{item: {background: '#292828ff', color: 'white', border: '0.5px solid lightgrey'}, 
+                styles={{item: {background: '#181717', color: 'white', border: '0.5px solid #5a5a59'}, 
                   label: {color: 'white', paddingRight: '0.7rem', fontSize: '18px', fontWeight: 550}, 
                   chevron: {color: 'white'},
                   panel: {color: 'white', fontSize: '18px'}
                 }} 
                 radius='md' 
-                variant='filled' 
+                variant='contained'
                 multiple 
                 defaultValue={['Description']}
               >

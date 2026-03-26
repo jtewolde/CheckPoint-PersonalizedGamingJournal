@@ -17,7 +17,7 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.4) 0%, #0a0a0a 40%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.55) 0%, #0a0a0a 40%);
 }
 
 .wrapper {
@@ -96,7 +96,6 @@
   justify-content: center;
   align-items: flex-start;
   gap: 1rem;
-  border: 1px solid rgb(56, 56, 56);
   border-radius: 16px;
 }
 
@@ -175,9 +174,9 @@
   display: flex;
   flex-direction: column;
   font-family: 'Noto Sans';
-  gap: 10px;
   font-weight: 400;
   width: 100%;
+  margin-top: 1rem;
 }
 
 .ratingSection{
