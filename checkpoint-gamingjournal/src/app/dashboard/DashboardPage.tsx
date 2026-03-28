@@ -4,15 +4,15 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-import { SimpleGrid, Image, Paper, Text, ThemeIcon, Rating, Button } from '@mantine/core';
+import { SimpleGrid, Image, Paper, Text, ThemeIcon, Rating } from '@mantine/core';
 import { DonutChart, BarChart, LineChart } from '@mantine/charts';
 
 import { authClient } from '@/lib/auth-client';
 
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
-import { IconDeviceGamepad3Filled, IconPlayerPauseFilled, IconSword, IconClipboardListFilled } from '@tabler/icons-react';
-import { Notebook, Gamepad, CircleUserRound, CircleArrowRight, Trophy, Icon, Star } from 'lucide-react';
+import { IconClipboardListFilled } from '@tabler/icons-react';
+import { Notebook, Gamepad, CircleUserRound, CircleArrowRight, Trophy, Star } from 'lucide-react';
 
 import classes from './dashboard.module.css';
 
@@ -454,57 +454,57 @@ export default function Dashboard() {
 
                   <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 2, xl: 2}} spacing="lg" className={classes.quickStatsGrid}>
 
-                      <div className={classes.quickStatItem}>
+                    <div className={classes.quickStatItem}>
 
-                        <div className={classes.titleLogo}>
-                          <ThemeIcon size={30} radius='md' variant='filled' color='indigo'> <IconClipboardListFilled size={20} /> </ThemeIcon>
-                          <Text className={classes.quickStatLabel}>Average Rating</Text>
-                        </div>
-                        
-                        <div className={classes.ratingWrapper}>
-                          <Text className={classes.ratingValue}>{avgRating.toFixed(2)}/5 Stars</Text>
-                        </div>
-
+                      <div className={classes.titleLogo}>
+                        <ThemeIcon size={30} radius='md' variant='filled' color='indigo'> <IconClipboardListFilled size={20} /> </ThemeIcon>
+                        <Text className={classes.quickStatLabel}>Average Rating</Text>
+                      </div>
+                      
+                      <div className={classes.ratingWrapper}>
+                        <Text className={classes.ratingValue}>{avgRating.toFixed(2)}/5 Stars</Text>
                       </div>
 
-                      <div className={classes.quickStatItem}>
+                    </div>
 
-                        <div className={classes.titleLogo}>
-                          <ThemeIcon size={30} radius='md' variant='filled' color='teal'> <Trophy size={20} /> </ThemeIcon>
-                          <Text className={classes.quickStatLabel}>Games Platinumed</Text>
-                        </div>
+                    <div className={classes.quickStatItem}>
 
-                        <div className={classes.platinumWrapper}>
-                          <Text className={classes.platValue}>{numPlatinumedGames}</Text>
-                        </div>
+                      <div className={classes.titleLogo}>
+                        <ThemeIcon size={30} radius='md' variant='filled' color='teal'> <Trophy size={20} /> </ThemeIcon>
+                        <Text className={classes.quickStatLabel}>Games Platinumed</Text>
                       </div>
 
-                      <div className={classes.quickStatItem}>
+                      <div className={classes.platinumWrapper}>
+                        <Text className={classes.platValue}>{numPlatinumedGames}</Text>
+                      </div>
+                    </div>
 
-                        <div className={classes.titleLogo}>
-                          <ThemeIcon size={30} radius='md' variant='filled' color='orange'> <Notebook size={20} /> </ThemeIcon>
-                          <Text className={classes.quickStatLabel}>Total Entries</Text>
-                        </div>
+                    <div className={classes.quickStatItem}>
 
-                        <div className={classes.ratingWrapper}>
-                          <Text className={classes.ratingValue}>{numEntries}</Text>
-                        </div>
-
+                      <div className={classes.titleLogo}>
+                        <ThemeIcon size={30} radius='md' variant='filled' color='orange'> <Notebook size={20} /> </ThemeIcon>
+                        <Text className={classes.quickStatLabel}>Total Entries</Text>
                       </div>
 
-                      <div className={classes.quickStatItem}>
-
-                        <div className={classes.titleLogo}>
-                          <ThemeIcon size={30} radius='md' variant='filled' color='gold'> <Star size={20} /> </ThemeIcon>
-                          <Text className={classes.quickStatLabel}>Top Rated Game</Text>
-                        </div>
-
-                        <div className={classes.ratingWrapper}>
-                          <Link className={classes.ratingValue} href={`/games/${topRatedGame?.gameId}`}>{topRatedGame?.title || 'N/A'}</Link>
-                          <Rating size='sm' value={topRatedGame?.rating || 0} readOnly fractions={2} color='yellow' />
-                        </div>
-                        
+                      <div className={classes.ratingWrapper}>
+                        <Text className={classes.ratingValue}>{numEntries}</Text>
                       </div>
+
+                    </div>
+
+                    <div className={classes.quickStatItem}>
+
+                      <div className={classes.titleLogo}>
+                        <ThemeIcon size={30} radius='md' variant='filled' color='gold'> <Star size={20} /> </ThemeIcon>
+                        <Text className={classes.quickStatLabel}>Top Rated Game</Text>
+                      </div>
+
+                      <div className={classes.ratingWrapper}>
+                        <Link className={classes.ratingValue} href={`/games/${topRatedGame?.gameId}`}>{topRatedGame?.title || 'N/A'}</Link>
+                        <Rating size='sm' value={topRatedGame?.rating || 0} readOnly fractions={2} color='yellow' />
+                      </div>
+                      
+                    </div>
 
                   </SimpleGrid>
 
@@ -516,10 +516,6 @@ export default function Dashboard() {
 
           </div>
 
-          <div className={classes.continueSection}>
-            
-          </div>
-
           <div className={classes.playingGames} >
 
             <div className={classes.playingSection}>
@@ -529,7 +525,7 @@ export default function Dashboard() {
                 <h1 className={classes.gamesPlayingText}>Playing Games</h1>
               </div>
 
-              <a className={classes.viewMoreText} href='/library'> <CircleArrowRight size={35} /> </a>
+              <a className={classes.viewMoreIcon} href='/library'> <CircleArrowRight size={35} /> </a>
               
             </div>
 

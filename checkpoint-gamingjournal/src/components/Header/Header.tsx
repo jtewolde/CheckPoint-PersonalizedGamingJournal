@@ -15,17 +15,14 @@ import { useAuth } from '@/context/Authcontext';
 import { IconSearch } from '@tabler/icons-react';
 import { LogIn, UserRoundPlus, LayoutDashboard, Library, Notebook, House } from 'lucide-react';
 import AvatarMenu from "../AvatarMenu/AvatarMenu";
-import { useState } from 'react';
 
 export function Header() {
   const [opened, { toggle, close }] = useDisclosure(false); // State for Drawer
-  const [searchQuery, setSearchQuery] = useState('') // State for Search Input
-  const [searchResults, setSearchResults] = useState<any[]>([]); // State for search results
   const router = useRouter();
   const pathname = usePathname();
 
   const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
-  const isMobile = useMediaQuery('(max-width: 450px)');
+  const isMobile = useMediaQuery('(max-width: 455px)');
 
   // Drawer height for different conditions
   const drawerSize = (() => {

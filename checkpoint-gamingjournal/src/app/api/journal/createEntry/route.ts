@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GameCollection, JournalEntriesCollection, UserCollection } from "@/utils/db";
-import { ObjectId } from "mongodb";
+import { GameCollection, JournalEntriesCollection } from "@/utils/db";
 import {v4 as uuidv4} from 'uuid';
 
 import { auth } from "@/utils/auth";
@@ -11,7 +10,7 @@ import { redis } from "@/utils/redis";
 export async function POST(req: NextRequest) {
     try {
       const body = await req.json(); // Parse the request body
-      const { gameID, title, content, date, gameName } = body;
+      const { gameID, title, content, tags, gameName } = body;
 
       console.log(body);
 
@@ -69,6 +68,7 @@ export async function POST(req: NextRequest) {
         gameName,
         userId,
         title,
+        tags,
         content,
         createdAt,
         displayDate

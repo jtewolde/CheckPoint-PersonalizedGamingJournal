@@ -17,7 +17,7 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 10%, #18181b 50%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.55) 0%, #0a0a0a 40%);
 }
 
 .wrapper {
@@ -40,6 +40,10 @@
   white-space: normal;
 }
 
+.gameTypeBadge{
+  border: 0.5px solid #454444;
+}
+
 .titleType{
   display: flex;
   flex-direction: column;
@@ -47,6 +51,30 @@
   align-items: flex-start;
   padding-left: 3rem;
   gap: 1rem;
+}
+
+.sectionHeader{
+  width: 100%;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  padding: 0.6rem 1rem;
+
+  background: rgba(30, 30, 30, 0.7);
+  border: 1px solid #444;
+  border-radius: 8px;
+
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.sectionTitle{
+  font-size: 2.1rem;
+  font-weight: 500;
+  font-family: 'Poppins';
+  color: white;
+  justify-self: center;
 }
 
 .details {
@@ -62,26 +90,26 @@
 }
 
 .leftSection{
-  padding-top: 2rem;
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
+  border-radius: 16px;
 }
 
 .cover {
   width: 350px;
   object-fit: contain;
-  border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid #6f7579;
+  border: 1px solid #2b2b2b;
+  border-radius: 8px;
 }
 
 .gameCover{
   width: 90%;
   object-fit: contain;
-  border-radius: 8px;
 }
 
 .media {
@@ -89,7 +117,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  gap: 2rem; /* space between image and button */
+  gap: 1rem;
 }
 
 .coverInfoContainer{
@@ -97,8 +125,22 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: transparent;
+}
+
+.cardActive{
+  background-color: #181717;
+  border: 1px solid #454545;
+  border-radius: 8px;
+  width: 100%;
   padding: 1rem;
+}
+
+.cardMinimal{
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0; /* important so button aligns cleanly */
+  align-items: center;
 }
 
 .rightSection{
@@ -110,39 +152,48 @@
   margin-bottom: 3rem;
 }
 
+.gameInfoText{
+  font-family: 'Poppins';
+  font-weight: 400;
+}
+
 .buttonContainer{
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1rem;
+}
+
+.buttonActions{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }
 
 .button{
   width: auto;
-  align-items: center;
+  align-self: center;
   font-family: 'Poppins';
   font-weight: 400;
-}
-
-.accordionTitle{
-  font-size: 1.8rem;
-  font-weight: 300;
-  margin-bottom: 1rem;
-  margin-top: 1rem;
-  font-family: 'Poppins';
-  color: white;
-  justify-self: center;
-  border-bottom: 2px solid #ffffff;
 }
 
 .accordion{
   display: flex;
   flex-direction: column;
   font-family: 'Noto Sans';
-  gap: 10px;
   font-weight: 400;
   width: 100%;
+  margin-top: 1rem;
+}
+
+.ratingSection{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .ratings {
@@ -152,7 +203,6 @@
   justify-content: center;
   justify-self: center;
   gap: 0.5rem;
-  margin-bottom: 10rem;
 }
 
 .igdbRating {
@@ -165,7 +215,15 @@
   font-family: 'Poppins';
 }
 
-.ratingLabel {
+.ratingLabel{
+  font-weight: 500;
+  color: #f0f0f0;
+  text-align: center;
+  font-family: 'Poppins';
+  font-size: 1.7rem;
+}
+
+.ratingScore {
   font-weight: 500;
   color: #f0f0f0;
   text-align: center;
@@ -199,14 +257,41 @@
     }
 }
 
-.screenshotsTitle {
-  font-size: 1.8rem;
-  font-weight: 300;
+.activitySection{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 2rem;
-  font-family: 'Poppins';
+}
+
+.activityItem{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #1b1a1a;
+  border: 1px solid #2f2e2e;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.activityLabel{
+  font-size: 22px;
+  font-family: 'Inter';
+  font-weight: 500;
   color: white;
-  justify-self: center;
-  border-bottom: 2px solid #ffffff;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.activityStat{
+  color: #e0e0e0;
+  font-size: 20px;
+  font-weight: 600;
+  font-family: 'Inter';
 }
 
 .swiperContainer {
@@ -222,6 +307,10 @@
   filter: brightness(70%)
 }
 
+.thumbnailSlide :hover{
+  filter: brightness(70%)
+}
+
 .screenshot {
   width: 100%;
   height: auto;
@@ -229,7 +318,19 @@
   object-fit: contain;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid #6c7274;
+  border: 1px solid #373737;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.thumbnailImage{
+  width: 100%;
+  height: auto;
+  justify-self: center;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #454545;
   margin-bottom: 1rem;
   cursor: pointer;
 }
@@ -240,21 +341,15 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.95);
-  z-index: 4;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
+  background-color: rgba(0, 0, 0, 1);
+  z-index: 9999;
+
+  padding: 2rem;
 }
 
-.carouselButtons{
-  top: 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-end;
+.fullScreenSwiper{
+  width: 100%;
+  height: 100%;
 }
 
 .closeButton{
@@ -316,35 +411,43 @@
   position: relative;
   width: 78%;
   justify-content: center;
-  margin: 0 auto;
+  margin-bottom: 3rem;
 }
 
 .similarGamesName,
 .gameSeriesName{
   font-size: 1.8rem;
-  font-weight: 300;
+  font-weight: 500;
   margin-bottom: 1rem;
   margin-top: 3rem;
   font-family: 'Poppins';
   color: white;
   justify-self: center;
-  border-bottom: 2px solid #ffffff;
 }
 
-.similarGameCover{
-  width: 300px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 0.5px solid #7c7c7c;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  display: block;
-  margin: 0 auto;
-  cursor: pointer;
+.swiper-button-prev,
+.swiper-button-next{
+  background: rgba(0, 0, 0, 0.5); /* dark overlay */
+  border-radius: 50%;
+  backdrop-filter: blur(4px);     /* 🔥 nice glass effect */
+  transition: all 0.2s ease;
+
+  /* Optional: slightly smaller than default */
+  width: 80px;
+  height: 80px;
 }
 
-.badge{
-  cursor: pointer;
-  font-family: 'Poppins';
+/* Hover effect */
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+/* Make arrow icon a bit smaller */
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 18px;
+  font-weight: bold;
 }
 
 @media screen and (max-width: 1000px){
@@ -383,10 +486,6 @@
     padding: 0;
   }
 
-  .leftSection{
-    align-items: center;
-  }
-
   .rightSection{
     margin-top: 4rem;
   }
@@ -422,7 +521,7 @@
   .ratings {
     flex-direction: column;
     align-items: center;
-    margin-bottom: 7rem;
+    margin-bottom: 2rem;
   }
 
   .carouselSlide{
@@ -430,13 +529,16 @@
   }
 
   .screenshot {
-    width: 120%;
+    width: 100%;
     height: auto;
-    margin-bottom: 3rem;
   }
 
-  .modalScreenshot{
-    width: 200%;
+  .thumbnailImage{
+    width: 100%
+  }
+
+  .fullScreenOverlay{
+    padding: 0.5rem;
   }
 
   .similarGamesName {
@@ -454,3 +556,8 @@
   }
 }
 
+@media screen and (max-width: 470px){
+  .sectionTitle{
+    font-size: 1.8rem;
+  }
+}

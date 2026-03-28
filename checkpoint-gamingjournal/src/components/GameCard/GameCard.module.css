@@ -140,11 +140,6 @@
     white-space: nowrap;
 }
 
-.gameCard:hover{
-    transform: scale(1.02);
-    transition: transform 0.3s ease;
-}
-
 .gameCard:hover .gameName {
     opacity: 1;
 }

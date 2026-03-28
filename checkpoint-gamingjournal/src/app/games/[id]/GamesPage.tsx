@@ -10,20 +10,24 @@ import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
 import toast from 'react-hot-toast';
 
-import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, Rating, Tooltip} from '@mantine/core';
+import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, Rating, Tooltip, ThemeIcon, ActionIcon } from '@mantine/core';
 import Image from 'next/image';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
+import type { Swiper as SwiperType} from 'swiper/types';
+
+import { FreeMode, Navigation, Pagination, Thumbs, Keyboard } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import 'swiper/css/scrollbar'
 import 'swiper/css/thumbs';
 import 'swiper/css/free-mode';
+import 'swiper/css/keyboard';
 
 import classes from './game.module.css';
 
-import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock } from 'lucide-react';
+import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock, Camera, Star, Gamepad, Activity, Pencil, Info } from 'lucide-react';
 
 import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
   IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
@@ -47,21 +51,44 @@ export default function GameDetails() {
   const [isPlatinum, setIsPlatinum] = useState(false) // State to handle platinum of game
   const [rating, setRating] = useState(0); // State to handling rating of game given by user from 0-5 stars
   const [completionDate, setCompletionDate] = useState<string | null>(null); // State to handle completion date of game
+  const completionDateString = completionDate ? new Date(completionDate).toLocaleDateString('en-US') : 'N/A';
+  const [numOfEntries, setNumOfEntries] = useState(0);
+
   const [opened, {open, close} ] = useDisclosure(false);
 
   const [screenshots, setScreensShots] = useState<any[]>([]); // State to store screenshots
   const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null); // State to handle selected screenshot for modal
   const [selectedScreenshotIndex, setSelectedScreenshotIndex] = useState(0); // State to track index of selected screenshot
+  const [backgroundImage, setBackgroundImage] = useState<string>(PlaceHolderImage.src)
 
   const [modalOpen, setModalOpen] = useState(false); // State to handle modal open/close
 
   const {isAuthenticated} = useAuth(); // Access global auth state
-
   const router = useRouter();
-
   const isMobile = useMediaQuery('(max-width: 650px)');
 
-  const [thumbsSwiper, setThumbSwiper] = useState(null); // Use state for thumbnail swiper instance
+  const [thumbsSwiper, setThumbSwiper] = useState<SwiperType | null>(null);
+  const showCardUI = isAuthenticated && isGameInLibrary;
+
+  // Helper function to combining all screenshots and artworks of game in single array for different backgrounds
+  const getAllImages = (gameData: any) => {
+    const screenshots = gameData?.screenshots || [];
+    const artworks = gameData?.artworks || []
+
+    return [...screenshots, ...artworks]
+  }
+
+  // Function to help pick a random image from screenshots and artworks of game to be background for dynamic background instead of fixed image
+  const getRandomImage = (gameData: any) =>{
+    const images = getAllImages(gameData);
+
+    if(images.length === 0) return PlaceHolderImage.src
+
+    const randomIndex = Math.floor(Math.random() * images.length);
+    const selected = images[randomIndex]
+
+    return `https:${selected.url.replace('t_thumb', 't_1080p')}`;
+  }
 
   // Fetch game details from IGDB API when component mounts or ID changes
   useEffect(() => {
@@ -74,11 +101,9 @@ export default function GameDetails() {
         }
         const data = await res.json();
         setGame(data); // Store the game details in state
-        console.log("Game Data", data)
+        setBackgroundImage(getRandomImage(data))
         setStatus(data.status);
         setScreensShots(data.screenshots || []);
-        console.log("Screenshots", data.screenshots)
-
       } catch (error) {
         console.error('Error fetching game details:', error);
       } finally {
@@ -114,6 +139,7 @@ export default function GameDetails() {
         setIsPlatinum(currentGame?.platinum ?? false)
         setRating(currentGame?.rating ?? 0)
         setCompletionDate(currentGame?.completionDate ?? null)
+        setNumOfEntries(currentGame?.journalEntries.length ?? 0)
       } catch (error) {
         console.error('Error checking if game is in library:', error);
       }
@@ -464,33 +490,18 @@ export default function GameDetails() {
   // Sort the collection games by total rating in descending order
   const sortedCollections = game.collections?.[0]?.games.sort((a: any, b: any) => b.total_rating - a.total_rating);
 
-  // Determine the background image (first screenshot if available)
-  const backgroundPhoto = game.screenshots && game.screenshots.length > 0
-  ? `https:${game.screenshots[0].url.replace('t_thumb', 't_720p')}`
-  : PlaceHolderImage.src;
-
   return (
-
-    <div className={classes.background} style={{ backgroundImage: `url(${backgroundPhoto})` }}>
-
+    <div className={classes.background} style={{ backgroundImage: `url(${backgroundImage})` }}>
       <div className={classes.backgroundOverlay}>
-
         <div className={classes.wrapper}>
-
           <div className={classes.titleType}>
-
             <h1 className={classes.title}>{game.name}</h1>
-
-            <Badge color='#787878' size='lg' radius='lg' c='white'>{game.game_type.type}</Badge>
-
+            <Badge className={classes.gameTypeBadge} color='#656565' size='xl' radius='lg' variant='filled' c='white'>{game.game_type.type}</Badge>
           </div>
 
           <div className={classes.details}>
-
             <div className={classes.leftSection}>
-
               <div className={classes.media}>
-                
                 <img
                   src={
                     game.cover
@@ -500,29 +511,39 @@ export default function GameDetails() {
                   alt={game.name}
                   className={classes.cover}
                 />
-
-                <div className={classes.coverInfoContainer}>
+                <div className={`${classes.coverInfoContainer} ${showCardUI ? classes.cardActive : classes.cardMinimal}`}>
                     {isAuthenticated ? (
                       isGameInLibrary ? (
                         <div className={classes.buttonContainer}>
 
-                          <div style={{display: 'flex', flexDirection: 'row', gap: '1rem'}}>
+                          <div style={{display:'flex', flexDirection:'row', justifyContent:'center', gap: '1rem'}}>
 
-                            <Badge className={classes.badge} color="green" size='xl' variant='filled' onClick={open}>
-                              {libraryGame?.status || 'No Status Given'}
+                            <Badge color="green" size="xl" radius="xl">
+                              {libraryGame?.status || 'No Status'}
                             </Badge>
-                          
-                            <Tooltip label='Platinumed/100%' position='right' >
 
-                              <Trophy 
-                                size={30} 
-                                color={isPlatinum ? 'gold' : 'gray'}
-                                fill={isPlatinum ? 'gold' : 'none'}
-                                style={{ transition: 'all 0.2s ease' }}
-                              />
-                            
+                            {/* Platinum */}
+                            <Tooltip label={isPlatinum ? 'Platinum Achieved' : 'Not Completed'} position='top' events={{ hover: true, focus: true, touch: true }}>
+                              <ThemeIcon size="lg" variant="subtle" color={isPlatinum ? 'yellow' : 'gray'}>
+                                <Trophy 
+                                  size={30} 
+                                  color={isPlatinum ? 'gold' : 'gray'}
+                                  fill={isPlatinum ? 'gold' : 'none'}
+                                  style={{ transition: 'all 0.2s ease' }}
+                                />
+                              </ThemeIcon>
                             </Tooltip>
 
+                            {/*Completion Date */}
+                            <Tooltip label={completionDateString} position='top' events={{ hover: true, focus: true, touch: true }}>
+                              <ThemeIcon variant='subtle' size='lg' radius='md'>
+                                <CalendarDays size={30} color={completionDate ? 'white' : 'gray'}/>
+                              </ThemeIcon>
+                            </Tooltip>
+                          </div>
+
+                          <div style={{display: 'flex', flexDirection: 'row', gap: '1rem'}}>
+                            <Rating readOnly size='lg' fractions={2} value={rating}/>
                           </div>
 
                           <Modal opened={opened} onClose={close} title="Change Game Info" styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #424242', color: 'white', fontFamily: 'Noto Sans'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
@@ -551,23 +572,23 @@ export default function GameDetails() {
                                 renderOption={renderSelectOption}
                               />
 
-                              {status === 'Completed' && (
-                                <>
-                                  <DateInput
-                                    size='md'
-                                    label="Completion Date:"
-                                    placeholder='Select completion date'
-                                    clearable
-                                    leftSection={<CalendarDays size={20} />}
-                                    value={completionDate}
-                                    maxDate={new Date()}
-                                    onChange={(date) => {
-                                      const dateObj = date ? new Date(date).toISOString() : null;
-                                      setCompletionDate(dateObj);
-                                    }}
-                                  />
-                                </>
-                              )}
+                              <DateInput
+                                size='md'
+                                label="Completion Date:"
+                                placeholder='Select completion date'
+                                clearable
+                                leftSection={<CalendarDays size={20} />}
+                                value={completionDate}
+                                disabled={status !== 'Completed'}
+                                maxDate={new Date()}
+                                description={
+                                  status !== 'Completed' ? 'Available when status is set to Completed' : undefined
+                                }
+                                onChange={(date) => {
+                                  const dateObj = date ? new Date(date).toISOString() : null;
+                                  setCompletionDate(dateObj);
+                                }}
+                              />
 
                               <div className={classes.ratingContainer}>
 
@@ -619,25 +640,28 @@ export default function GameDetails() {
                             
                           </Modal>
 
-                          <Rating
-                          readOnly
-                          size='lg' 
-                          fractions={2} 
-                          value={rating} 
-                          />
+                          <div className={classes.buttonActions}>
+                            <Tooltip label='Remove game from library' position='top'>
+                              <Button
+                              variant="filled"
+                              color="#d8070b"
+                              size="md"
+                              radius="md"
+                              className={classes.button}
+                              rightSection={<Delete />}
+                              onClick={handleRemoveFromLibrary}
+                              loading={addingToLibrary}
+                              >
+                                Remove
+                              </Button>                          
+                            </Tooltip>
 
-                          <Button
-                            variant="filled"
-                            color="#d8070b"
-                            size="md"
-                            radius="xl"
-                            className={classes.button}
-                            rightSection={<Delete />}
-                            onClick={handleRemoveFromLibrary}
-                            loading={addingToLibrary}
-                          >
-                            Remove from your Library!
-                          </Button>
+                              <Tooltip label='Edit Game Info' position="top">
+                                  <Button className={classes.button} variant="filled" color="yellow" size='md' radius='md' rightSection={<Pencil size={20} />} onClick={open}>Edit </Button>
+                              </Tooltip>
+                          </div>
+
+
                         </div>
                       ) : (
                         <div className={classes.buttonContainer}>
@@ -651,7 +675,7 @@ export default function GameDetails() {
                             onClick={handleAddToLibrary}
                             loading={addingToLibrary}
                           >
-                            Add to your Library!
+                            Add to Library
                           </Button>
                         </div>
                       )
@@ -665,7 +689,7 @@ export default function GameDetails() {
                         rightSection={<NotebookPen />}
                         onClick={() => router.push('/auth/signup')}
                       >
-                        Create an account!
+                        Create an account
                       </Button>
                     )}
 
@@ -676,17 +700,14 @@ export default function GameDetails() {
             </div>
 
             <div className={classes.rightSection}>
-
-              <h2 className={classes.accordionTitle}>Game Details: </h2>
-
               <Accordion className={classes.accordion} 
-                styles={{item: {background: '#292828ff', color: 'white', border: '0.5px solid lightgrey'}, 
+                styles={{item: {background: '#181717', color: 'white', border: '0.5px solid #5a5a59'}, 
                   label: {color: 'white', paddingRight: '0.7rem', fontSize: '18px', fontWeight: 550}, 
                   chevron: {color: 'white'},
                   panel: {color: 'white', fontSize: '18px'}
                 }} 
                 radius='md' 
-                variant='filled' 
+                variant='contained'
                 multiple 
                 defaultValue={['Description']}
               >
@@ -702,11 +723,20 @@ export default function GameDetails() {
 
           </div>
 
-          <h2 className={classes.screenshotsTitle}>Ratings: </h2>
+          <div className={classes.ratingSection}>
 
-          <div className={classes.ratings}>
+            <div className={classes.sectionHeader}>
+              <ThemeIcon size={50} variant='gradient' gradient={{ from: '#f7971e', to: '#ffd200', deg: 20}} radius='md'>
+                  <Star size={40} />
+              </ThemeIcon>
+              <h2 className={classes.sectionTitle}>Ratings: </h2>
+            </div>
 
-            <div className={classes.igdbRating}>
+            <div className={classes.ratings}>
+
+              <div className={classes.igdbRating}>
+
+                <Text className={classes.ratingLabel}>User Score</Text>
 
                 <RingProgress
                   size={300}
@@ -716,18 +746,18 @@ export default function GameDetails() {
                     { value: 100 - (game.rating || 0), color: 'gray' },
                   ]}
                   label={
-                    <Text size="xl" fw={600} c='white' className={classes.ratingLabel}>
+                    <Text size="xl" fw={600} c='white' className={classes.ratingScore}>
                       {game.rating ? `${Math.round(game.rating)}%` : 'N/A'}
                     </Text>
                   }
-                />
-                <Text className={classes.ratingText} size="md" c='white'>
-                  {game.rating_count ? `${game.rating_count} average user ratings from IGDB` : 'No ratings available'}
-                </Text>
-
+                  />
               </div>
 
               <div className={classes.aggregatedRating}>
+
+                <Text className={classes.ratingLabel}>
+                  Critic Score
+                </Text>
 
                 <RingProgress
                   size={300}
@@ -737,88 +767,166 @@ export default function GameDetails() {
                     { value: 100 - (game.aggregated_rating || 0), color: 'gray' },
                   ]}
                   label={
-                    <Text size="xl" fw={600} c='white' className={classes.ratingLabel}>
+                    <Text size="xl" fw={600} c='white' className={classes.ratingScore}>
                       {game.aggregated_rating ? `${Math.round(game.aggregated_rating)}%` : 'N/A'}
                     </Text>
                   }
                 />
-                <Text className={classes.ratingText} size="md" c='white'>
-                  {game.aggregated_rating_count ? `${game.aggregated_rating_count} ratings from external critics` : 'No ratings available'}
-                </Text>
-
               </div>
+
+            </div>
 
           </div>
 
-          <h2 className={classes.screenshotsTitle}>Screenshots: </h2>
+          {/* <div className={classes.activitySection}>
+            <div className={classes.sectionHeader}>
+                <ThemeIcon size={50} variant='gradient' gradient={{ from: '#e70e0e', to: '#ca1118', deg: 20}} radius='md'>
+                    <Activity size={40} />
+                </ThemeIcon>
+                <h2 className={classes.sectionTitle}>Your Activity: </h2>
+            </div>
 
-          <div className={classes.screenshotGrid}>
+            <SimpleGrid cols={{base: 3}} spacing='lg' verticalSpacing='lg' className={classes.activityGrid}>
+
+              <div className={classes.activityItem}>
+                <div className={classes.titleLogo}>
+                  <Text className={classes.activityLabel}>Last Played</Text>
+                </div>
+                <Text className={classes.activityStat}>March</Text>
+              </div>
+
+              <div className={classes.activityItem}>
+                <div className={classes.titleLogo}>
+                  <Text className={classes.activityLabel}>Total Entries</Text>
+                </div>
+                <Text className={classes.activityStat}>{numOfEntries}</Text>
+              </div>
+
+              <div className={classes.activityItem}>
+                <div className={classes.titleLogo}>
+                  <Text className={classes.activityLabel}>Total Playtime</Text>
+                </div>
+                <Text className={classes.activityStat}>4 Hours 59 Minutes</Text>
+              </div>
+
+            </SimpleGrid>
+          </div> */}
+
+          <div className={classes.sectionHeader}>
+            <ThemeIcon size={50} variant='gradient' gradient={{ from: '#3ecb1b', to: '#10912a', deg: 20}} radius='md'>
+                <Camera size={40} />
+            </ThemeIcon>
+            <h2 className={classes.sectionTitle}>Screenshots ({game.screenshots.length}):</h2>
+          </div>
+
+          <div className={classes.screenshotsContainer}>
 
             <Swiper
               centeredSlides={true}
               loop={true}
-              navigation
-              pagination={{ clickable: true }}
-              modules={[Navigation, Pagination]}
+              navigation={true}
+              scrollbar={isMobile ? true: false}
+              thumbs={{ swiper: thumbsSwiper}}
+              modules={[Navigation, Thumbs]}
               slidesPerView={isMobile ? 1 : 1.5}
               spaceBetween={20}
               className={classes.swiperContainer}
             >
-
-            {screenshots.map((screenshot: any, index: number) => (
-              <SwiperSlide key={screenshot.id} className={classes.carouselSlide}>
-                <Image
-                  src={`https:${screenshot.url.replace('t_thumb', 't_1080p')}`}
-                  alt={`Screenshot of ${game.name}`}
-                  className={classes.screenshot}
-                  width={900}
-                  height={400}
-                  loading='lazy'
-                  onClick={() => {
-                    setSelectedScreenshot(`https:${screenshot.url.replace('t_thumb', 't_1080p')}`);
-                    setSelectedScreenshotIndex(index);
-                    console.log("Selected Screenshot Index:", index);
-                    setModalOpen(true);
-                  }}
-                />
-              </SwiperSlide>
-            ))}
-
+              {screenshots.map((screenshot: any, index: number) => (
+                <SwiperSlide key={screenshot.id} className={classes.carouselSlide}>
+                  <Image
+                    src={`https:${screenshot.url.replace('t_thumb', 't_1080p')}`}
+                    alt={`Screenshot of ${game.name}`}
+                    className={classes.screenshot}
+                    width={900}
+                    height={400}
+                    loading='lazy'
+                    onClick={() => {
+                      setSelectedScreenshot(`https:${screenshot.url.replace('t_thumb', 't_1080p')}`);
+                      setSelectedScreenshotIndex(index);
+                      console.log("Selected Screenshot Index:", index);
+                      setModalOpen(true);
+                    }}
+                  />
+                </SwiperSlide>
+              ))}
             </Swiper>
+
+            {!isMobile ? (
+              <Swiper
+              onSwiper={setThumbSwiper}
+              loop={true}
+              spaceBetween={10}
+              slidesPerView={3}
+              freeMode={true}
+              watchSlidesProgress={true}
+              modules={[FreeMode, Thumbs]}
+              className={classes.thumbnailSwiper}
+              >
+                {screenshots.map((screenshot: any) => (
+                  <SwiperSlide key={screenshot.id} className={classes.thumbnailSlide}>
+                    <Image
+                      src={`https:${screenshot.url.replace('t_thumb', 't_720p')}`}
+                      alt="thumbnail"
+                      loading='lazy'
+                      width={200}
+                      height={120}
+                      className={classes.thumbnailImage}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            ): (
+                <>
+                </>
+            )}
 
           </div>
 
-          {selectedScreenshot && modalOpen && (
+          {modalOpen && (
             <div className={classes.fullScreenOverlay}>
 
               <div className={classes.carouselButtons}>
                 <Button className={classes.closeButton} variant='light' color='white' size='sm' onClick={() =>setModalOpen(false)}><X size={40} /></Button>
               </div>
 
-              <Image
-                src={selectedScreenshot}
-                alt={`Screenshot of ${game.name}`}
-                className={classes.fullScreenImage}
-                width={800}
-                height={450}
-                style={{ objectFit: 'contain', maxHeight: '90vh', width: 'auto'}}
-                loading='lazy'
-                layout='responsive'
-              />
+              <Swiper
+              initialSlide={selectedScreenshotIndex}
+              navigation
+              loop
+              pagination={{ clickable: true, type: 'bullets' }}
+              keyboard={{ enabled: true }}
+              modules={[Navigation, Pagination, Keyboard]}
+              className={classes.fullscreenSwiper}
+              >
+                {screenshots.map((screenshot: any, index: number) => (
+                  <SwiperSlide key={screenshot.id}>
+                    <Image
+                      src={`https:${screenshot.url.replace('t_thumb', 't_1080p')}`}
+                      alt={`Screenshot ${index}`}
+                      className={classes.fullScreenImage}
+                      width={1200}
+                      height={700}
+                      style={{
+                        objectFit: 'contain',
+                        width: '100%',
+                        height: '100vh'
+                      }}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
             </div>
           )}
-
-          
           <div className={classes.gameSeries}>
-
-            {game.collections?.[0]?.games.length > 0 && (
+            {game.collections?.[0]?.games.length > 4 && (
               <>
-                <div className={classes.nameButtonContainer}>
-                  <h2 className={classes.gameSeriesName}> Other Games in the Series:</h2>
+                <div className={classes.sectionHeader}>
+                  <h2 className={classes.sectionTitle}>Games in the Same Series:</h2>
                 </div>
-                
-                <SimpleGrid cols={{ base: 2, sm: 3, md: 6}} spacing='lg' verticalSpacing='lg' className={classes.seriesGrid}>
-                  {sortedCollections.slice(0, 4).map((collection: any) => (
+
+                <SimpleGrid cols={{ base: 2, sm: 3, md: 5}} spacing='lg' verticalSpacing='lg' className={classes.seriesGrid}>
+                  {sortedCollections.slice(0, 10).map((collection: any) => (
                       <GameCard variant='compact' key={collection.id} game={collection} />
                   ))}
                 </SimpleGrid>
@@ -827,14 +935,21 @@ export default function GameDetails() {
 
           </div>
 
-          <h2 className={classes.similarGamesName}>Similar Games: </h2>
+          <div className={classes.sectionHeader}>
+            <ThemeIcon size={50} variant='gradient' gradient={{ from: '#0e6ce7', to: '#1d4ee2', deg: 20}} radius='md'>
+                <Gamepad size={40} />
+            </ThemeIcon>
+            <h2 className={classes.sectionTitle}>Similar Games: </h2>
+          </div>
 
           <div className={classes.similarGames}>
             
             <Swiper
-              navigation
-              modules={[Navigation]}
-              slidesPerView={isMobile ? 1 : 3}
+              centeredSlides={isMobile ? true: false}
+              navigation={true}
+              pagination={{clickable: true}}
+              modules={[Navigation, Pagination]}
+              slidesPerView={isMobile ? 1.4 : 3}
               spaceBetween={20}
               className={classes.swiperContainer}
             >

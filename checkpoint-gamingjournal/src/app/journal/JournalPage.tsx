@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDisclosure } from '@mantine/hooks';
 import { authClient } from '@/lib/auth-client';
-import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
-import { Button, List, Popover, Select, SimpleGrid, Pagination, ThemeIcon, Modal, Group, Title, Text, Checkbox, ActionIcon } from '@mantine/core';
+import { Badge, Button, List, Popover, Select, SimpleGrid, Pagination, ThemeIcon, Modal, Group, Stack, Title, 
+    Text, Checkbox, ActionIcon, MultiSelect, LoadingOverlay } from '@mantine/core';
 
 import toast from 'react-hot-toast';
-import { FilePlus, DeleteIcon, ListFilter, Trash2, X } from 'lucide-react';
+import { FilePlus, ListFilter, Trash2, X } from 'lucide-react';
 
 import classes from './journal.module.css';
 
@@ -27,6 +27,7 @@ export default function Journal() {
 
     const [gameName, setGameName] = useState('all')
     const [selectedGame, setSelectedGame] = useState('');
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
     const [opened, {open, close}] = useDisclosure(false);
 
@@ -58,9 +59,6 @@ export default function Journal() {
             }
 
             const data = await res.json();
-            console.log('Journal Entries', data.journalEntries);
-            console.log('Pagination', data.pagination);
-            console.log('Total Entries from API:', data.pagination.totalEntries);
             setEntries(data.journalEntries);
             setTotalPages(data.pagination.totalPages);
             setTotalEntries(data.pagination.totalEntries)
@@ -153,22 +151,25 @@ export default function Journal() {
     // Get unique game names from entries for the dropdown
     const gameNames = Array.from(new Set(entries.map(entry => entry.gameName)));
 
-    // Derived Filtered List
-    const filteredEntries = entries.filter(
-    (entry) => gameName === 'all' || entry.gameName === gameName).slice()
+    // Function to filter the journal entries based on game or tags associated
+    const filteredEntries = entries.filter((entry) => {
+        const matchesGame =
+            gameName === 'all' || entry.gameName === gameName;
+
+        const matchesTags =
+            selectedTags.length === 0 ||
+            selectedTags.every((tag) =>
+            entry.tags?.includes(tag)
+            );
+
+        return matchesGame && matchesTags;
+    });
 
     // Find the selected game's object in the journal entries to get the gameID
     const selectedGameObject = entries.find(e => e.gameName === selectedGame);
 
-     // If the loading state is true, display the loading overlay on screen
-    if (loading) {
-        return <GlobalLoader visible={loading} />;
-    }
-
     return (
         <div className={classes.background}>
-
-            {loading && <GlobalLoader visible={loading} />}
 
             <div className={classes.backgroundOverlay}>
 
@@ -294,6 +295,13 @@ export default function Journal() {
 
                     <div className={classes.mainSection}>
 
+                        {/* ✅ LOADING OVERLAY */}
+                        <LoadingOverlay
+                            visible={loading}
+                            overlayProps={{ radius: 'sm', blur: 2 }}
+                            loaderProps={{ size: 'lg', color: "grape", type: "bars" }}
+                        />
+
                         <div className={classes.buttonGroup} >
 
                             <Button
@@ -309,34 +317,61 @@ export default function Journal() {
                             </Button>
                             
 
-                            <Popover width={300} position='bottom' withArrow shadow='lg'>
+                            <Popover width={400} position='bottom-end' withArrow shadow='lg'>
                                 <Popover.Target>
-                                    <Button className={classes.filterButton} size='md' color='#854bcb' radius='md' variant="filled" rightSection={<ListFilter />}>Filter</Button>
+                                    <Button className={classes.filterButton} size='md' color='#854bcb' radius='md' variant="filled" rightSection={<ListFilter />}>Filters</Button>
                                 </Popover.Target>
 
                                 <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>
-                                    <Select
-                                    styles={{
-                                        wrapper: { color: '#212121'}, 
-                                        input: { color: 'white', background: '#212121'}, 
-                                        dropdown: { background: '#212121', color: 'whitesmoke'},
-                                        option: { background: '#202020'}
-                                    }}
-                                    label="Choose a game to filter your journal by:"
-                                    placeholder="Filter by Game"
-                                    checkIconPosition='right'
-                                    data={[
-                                        { value: 'all', label: 'All Games' },
-                                        ...gameNames.map((gameName) => ({
-                                            value: gameName,
-                                            label: gameName
-                                        }))
-                                    ]}
-                                    value={gameName}
-                                    onChange={(value) => setGameName(value || 'all')}
-                                    className={classes.filterDropdown}
-                                    mb="md"
-                                    />
+                                    <Stack gap='xs'>
+                                        <Select
+                                            styles={{
+                                                wrapper: { color: '#212121'}, 
+                                                input: { color: 'white', background: '#212121'}, 
+                                                dropdown: { background: '#212121', color: 'whitesmoke'},
+                                                option: { background: '#202020'}
+                                            }}
+                                            label="Filter by Game"
+                                            placeholder="Select Game"
+                                            checkIconPosition='right'
+                                            data={[
+                                                { value: 'all', label: 'All Games' },
+                                                ...gameNames.map((gameName) => ({
+                                                    value: gameName,
+                                                    label: gameName
+                                                }))
+                                            ]}
+                                            value={gameName}
+                                            onChange={(value) => setGameName(value || 'all')}
+                                            className={classes.filterDropdown}
+                                            mb="md"
+                                        />
+
+                                        <MultiSelect
+                                            label="Filter by Tags"
+                                            placeholder="Select Tags"
+                                            styles={{
+                                                wrapper: { color: '#212121'}, 
+                                                input: { color: 'white', background: '#212121'}, 
+                                                dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
+                                                option: { background: '#202020'}
+                                            }}
+                                            checkIconPosition='left'
+                                            data={[
+                                                "Story",
+                                                "Boss Fight",
+                                                "Exploration",
+                                                "Multiplayer",
+                                                "Grinding",
+                                                "Side Quest",
+                                                "Achievement",
+                                            ]}
+                                            value={selectedTags}
+                                            onChange={(value) => setSelectedTags(value || 'all')}
+                                            className={classes.filterDropdown}
+                                            mb="md"
+                                        />
+                                    </Stack>
                                 </Popover.Dropdown>
 
                             </Popover>
@@ -355,52 +390,89 @@ export default function Journal() {
 
                         </div>
                         
-                        <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
-                            {filteredEntries.map((entry) => (
-                                <div key={entry._id} className={classes.entryCard} onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}>
+                        {filteredEntries.length > 0 && (
+                            <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
+                                {filteredEntries.map((entry) => (
+                                    <div key={entry._id} className={classes.entryCard} onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}>
 
-                                    <div className={classes.entryHeader}>
+                                        <div className={classes.entryHeader}>
 
-                                        <h3 className={classes.entryGame}>{entry.gameName}</h3>
-                                        <ActionIcon
-                                            className={classes.deleteButton}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                deleteJournalEntry(entry._id, entry.gameId)}
-                                            }
-                                            radius='md'
-                                            size='lg'
-                                            variant='filled'
-                                            color='#e01515ff'
-                                            loading={loading}
-                                        >
-                                            <Trash2 size={20} />
-                                        </ActionIcon>
+                                            <h3 className={classes.entryGame}>{entry.gameName}</h3>
 
+                                            <ActionIcon
+                                                className={classes.deleteButton}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    deleteJournalEntry(entry._id, entry.gameId)}
+                                                }
+                                                radius='md'
+                                                size='lg'
+                                                variant='filled'
+                                                color='#e01515ff'
+                                                loading={loading}
+                                            >
+                                                <Trash2 size={20} />
+                                            </ActionIcon>
+
+                                        </div>
+
+                                        <div className={classes.entryInfoContainer}>
+
+                                            <h3 className={classes.entryTitle}>{entry.title}</h3>
+
+                                            <p className={classes.entryContent}>
+                                                {entry.content.length > 150
+                                                    ? `${entry.content.slice(0, 200)}...` // Truncate long content
+                                                    : entry.content}
+                                            </p>
+
+                                            {/* ✅ TAGS SECTION */}
+                                            {entry.tags && entry.tags.length > 0 && (
+                                                <Group className={classes.tagsContainer}>
+                                                    {entry.tags.map((tag: string, index: number) => (
+                                                    <Badge
+                                                        key={index}
+                                                        variant="filled"
+                                                        color="#854bcb"
+                                                        radius="md"
+                                                        size='lg'
+                                                    >
+                                                        {tag}
+                                                    </Badge>
+                                                    ))}
+                                                </Group>
+                                            )}
+                                                
+                                            <p className={classes.entryDate}>{entry.displayDate}</p>
+
+                                        </div>
+                                        
                                     </div>
-                                    
-                                    <h3 className={classes.entryTitle}>{entry.title}</h3>
-                                    <p className={classes.entryContent}>
-                                        {entry.content.length > 150
-                                            ? `${entry.content.slice(0, 200)}...` // Truncate long content
-                                            : entry.content}
-                                    </p>
-                                    <p className={classes.entryDate}>{entry.displayDate}</p>
-                                </div>
-                            ))}
-                        </SimpleGrid>                    
+                                ))}
+                            </SimpleGrid>
+                        
+                        )}
 
                     </div>
 
-                    <div className={classes.paginationWrapper}>
-                        <Pagination
-                            size='lg'
-                            radius='lg'
-                            total={totalPages}
-                            value={page}
-                            onChange={setPage}
-                        />
-                    </div>
+                    {!loading && filteredEntries.length === 0 && (
+                        <p className={classes.noGamesText}>No games found for the selected tags.</p>
+                    )}
+
+                    {filteredEntries.length !== 0 &&(
+                        <div className={classes.paginationWrapper}>
+                            <Pagination
+                                classNames={{
+                                    control: classes.paginationControl
+                                }}
+                                size='xl'
+                                radius='xs'
+                                total={totalPages}
+                                value={page}
+                                onChange={setPage}
+                            />
+                        </div>
+                    )}
 
                 </div>
 

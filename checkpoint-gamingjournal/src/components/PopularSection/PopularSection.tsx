@@ -7,11 +7,16 @@ import { SimpleGrid } from "@mantine/core";
 import classes from './PopularSection.module.css';
 
 import GameCard from "../GameCard/GameCard";
+import GameSkeletonCard from "../GameCard/GameSkeletonCard";
 
 export default function PopularSection(){
     // States to hold popular games data and loading status
     const [popularGames, setPopularGames] = useState<any[]>([]);
     const limit = 12; // Set the limit of games on page to 12
+
+    // Create skeletons array which length is the value of limit
+    const skeletons = Array.from({ length: limit });
+
     const [loading, setLoading] = useState(true);
     const [hasMounted, setHasMounted] = useState(false);
     const router = useRouter();
@@ -41,9 +46,18 @@ export default function PopularSection(){
 
     return (
         <SimpleGrid cols={{base: 2, sm: 3, md: 4, lg: 5, xl: 6}} className={classes.popularGamesGrid}>
-            {popularGames.map((game) => (
-                <GameCard key={game.id} game={game} variant="compact" />
-            ))}
+            {loading
+            ? skeletons.map((_, i) => (
+                <GameSkeletonCard key={i} variant="compact" />
+            ))
+            : popularGames.map((game) => (
+                <GameCard
+                    key={game.id}
+                    game={game}
+                    variant="compact"
+                />
+            ))
+        }
         </SimpleGrid>
     );
 }

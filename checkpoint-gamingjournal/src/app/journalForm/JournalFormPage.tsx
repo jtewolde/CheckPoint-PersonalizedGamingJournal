@@ -4,19 +4,20 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
-import { TextInput, Textarea, Button, Select, Overlay } from "@mantine/core";
+import { TextInput, Textarea, Button, Select, Overlay, MultiSelect } from "@mantine/core";
 
 import toast from "react-hot-toast";
-import { Send, Gamepad2, Captions, MessageSquareText } from "lucide-react";
+import { Send, Gamepad2, Captions, LibraryBig } from "lucide-react";
 
 import classes from './journalForm.module.css';
 import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
 
 
 export default function JournalForm() {
-  // State variables for the journal form
+  // State variables for the journal form like name, content, and associated tags
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
   const [gameID, setGameID] = useState(""); // Selected game ID
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]); // Default to today's date
 
@@ -95,6 +96,7 @@ export default function JournalForm() {
         body: JSON.stringify({
           title,
           content,
+          tags,
           gameID,
           gameName,
         }),
@@ -157,6 +159,31 @@ export default function JournalForm() {
               onChange={(value) => setGameID(value || "")}
               required
               disabled={loading} // Disable the dropdown while loading
+            />
+
+            <MultiSelect
+              className={classes.select}
+              leftSection={<LibraryBig size={30} />}
+              label="Tags"
+              placeholder="Add tags (e.g. boss, story, multiplayer)"
+              data={[
+                "Story",
+                "Boss Fight",
+                "Exploration",
+                "Multiplayer",
+                "Grinding",
+                "Side Quest",
+                "Achievement",
+              ]}
+              value={tags}
+              onChange={setTags}
+              searchable
+              size="lg"
+              styles={{
+                input: { color: "white", background: "#212121" },
+                dropdown: { background: "#212121", color: "whitesmoke" },
+              }}
+              style={{ marginTop: "1rem" }}
             />
 
             <TextInput

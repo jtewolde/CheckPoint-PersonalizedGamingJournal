@@ -149,6 +149,11 @@ export const auth = betterAuth({
                 required: false,
                 defaultValue: [],
             },
+            playSessions: {
+                type: "string[]",
+                required: false,
+                defaultValue: [],
+            },
             userId: {
                 type: "string",
                 required: true,

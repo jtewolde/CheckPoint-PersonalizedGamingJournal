@@ -132,7 +132,7 @@ export async function GET(req: NextRequest) {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'text/plain',
       },
-      body: `fields name, summary, genres, genres.name, genres.slug, cover.url, version_title, game_type.type, game_modes.slug, themes.slug, platforms.name, platforms.abbreviation, platforms.slug, first_release_date, release_dates.human, total_rating; where ${whereClause}; ${sortClause} limit ${limit};`
+      body: `fields name, summary, genres, genres.name, genres.slug, cover.url, version_title, game_type.type, game_modes.slug, themes.slug, platforms.name, platforms.abbreviation, platforms.slug, first_release_date, release_dates.human, total_rating; where ${whereClause}; ${sortClause} limit ${limit}; offset ${offset};`
     });
 
     // Call API Request for getting the count of all games with those parameters for pagination

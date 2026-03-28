@@ -1,14 +1,14 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
-import { useRouter, redirect } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useMediaQuery } from '@mantine/hooks';
 
 import GameFilters from '@/components/GameFilters/GameFilters';
 import GameCard from '@/components/GameCard/GameCard';
+import GameSkeletonCard from '@/components/GameCard/GameSkeletonCard';
 
 import { Text, SimpleGrid, Pagination } from '@mantine/core';
-import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 
 import classes from './Popular.module.css';
 
@@ -16,6 +16,8 @@ export default function PopularPage() {
 
   const [page, setPage] = useState(1) // start with page 1 for pagination
   const limit = 32; // Set the limit of games on page to 32
+  // Create skeletons array which length is the value of limit
+  const skeletons = Array.from({ length: limit });
 
   // Calculate total amount of games received from IGDB API request
   // Calcualte the total number of pages for pagination
@@ -51,45 +53,45 @@ export default function PopularPage() {
   ]);
 
   useEffect(() => {
-        const fetchPopularGames = async () => {
-            try {
-                setLoading(true)
-                const offset = (page - 1) * limit; // calculate offset based on page
+      const fetchPopularGames = async () => {
+          try {
+              setLoading(true)
+              const offset = (page - 1) * limit; // calculate offset based on page
 
-                // Create the params of URL to include the sorting and filters applied
-                const params = new URLSearchParams({
-                    limit: String(limit),
-                    offset: String(offset),
-                    sort: sortOption,
-                    types: selectedType.join(','),
-                    genres: selectedGenre.join(','),
-                    themes: selectedTheme.join(','),
-                    modes: selectedMode.join(','),
-                    platforms: selectedPlatform.join(',')
-                });
+              // Create the params of URL to include the sorting and filters applied
+              const params = new URLSearchParams({
+                  limit: String(limit),
+                  offset: String(offset),
+                  sort: sortOption,
+                  types: selectedType.join(','),
+                  genres: selectedGenre.join(','),
+                  themes: selectedTheme.join(','),
+                  modes: selectedMode.join(','),
+                  platforms: selectedPlatform.join(',')
+              });
 
-                const res = await fetch(`/api/igdb/popular-games?${params.toString()}`);
+              const res = await fetch(`/api/igdb/popular-games?${params.toString()}`);
 
-                if (!res.ok) {
-                    throw new Error('Failed to fetch games');
-                }
+              if (!res.ok) {
+                  throw new Error('Failed to fetch games');
+              }
 
-                const data = await res.json();
+              const data = await res.json();
 
-                setGames(data.games);
-                setLength(data.length);
-                setTotal(data.total)
+              setGames(data.games);
+              setLength(data.length);
+              setTotal(data.total)
 
-                console.log("Game Results", data.games)
-                console.log("Total Count", data.total)
-            } catch (error) {
-                console.error('Error fetching games:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+              console.log("Game Results", data.games)
+              console.log("Total Count", data.total)
+          } catch (error) {
+              console.error('Error fetching games:', error);
+          } finally {
+              setLoading(false);
+          }
+      };
 
-        fetchPopularGames();
+      fetchPopularGames();
 
     }, [page,
         sortOption,
@@ -99,16 +101,6 @@ export default function PopularPage() {
         selectedTheme,
         selectedType
     ]);
-
-  // If the page is still loading, put a loading overlay
-  if (loading) {
-    return <GlobalLoader visible={loading} />
-  }
-
-  // If there are no popular games results, redirect the user to the not-found page
-  if (!games.length) {
-    redirect('/search/not-found')
-  }
 
   return (
     <div className={classes.wrapper} >
@@ -157,13 +149,20 @@ export default function PopularPage() {
 
 
           <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4 }} spacing="lg" verticalSpacing='xl' className={classes.resultGamesGrid}>
-                {games.map((game) => 
-                    isMobile ? (
-                        <GameCard key={game.id} game={game} variant='small' />
-                    ) : (
+                {loading && games.length === 0
+                  ? skeletons.map((_, i) => (
+                      <GameSkeletonCard
+                      key={i}
+                      variant={isMobile ? "small" : "default"}
+                      />
+                  ))
+                  : games.map((game) =>
+                      isMobile ? (
+                        <GameCard key={game.id} game={game} variant="small" />
+                      ) : (
                         <GameCard key={game.id} game={game} />
-                    )
-                )}
+                      )
+                  )}
             </SimpleGrid>
 
             {total == 0 && (
@@ -171,24 +170,21 @@ export default function PopularPage() {
             )}
             
             {totalPages > 1 && (
-                <div className={classes.paginationWrapper}>
-                    <Pagination
-                        size='lg'
-                        radius='md'
-                        total={totalPages}
-                        value={page}
-                        onChange={(newPage) => {
-                            setPage(newPage);
-                            router.push(`/search/popular?&page=${newPage}`);
-                        }}
-                    />
-                </div>
+              <div className={classes.paginationWrapper}>
+                  <Pagination
+                      size='xl'
+                      radius='md'
+                      total={totalPages}
+                      value={page}
+                      onChange={(newPage) => {
+                          setPage(newPage);
+                          router.push(`/search/popular?&page=${newPage}`);
+                      }}
+                  />
+              </div>
             )}
-          
         </div>
-
       </div>
-
     </div>
   );
 }

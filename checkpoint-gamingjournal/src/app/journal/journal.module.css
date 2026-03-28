@@ -19,7 +19,7 @@
     z-index: 1;
     pointer-events: none;
     /* Fade from transparent to dark */
-    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.55) 0%, #18181b 40%);
+    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.65) 0%, #18181b 100%);
 }
 
 .journalWrapper{
@@ -28,8 +28,8 @@
     flex: 1;
     position: relative;
     z-index: 1;
-    padding-left: 4rem;
-    padding-right: 4rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
     padding-top: 1rem;
     padding-bottom: 1rem;
     border-radius: 16px; /* Rounded corners */
@@ -42,7 +42,7 @@
     flex-direction: column;
     align-items: flex-start; /* center by default (mobile-first) */
     text-align: left;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     gap: 0rem;
     width: 100%;
 }
@@ -51,10 +51,8 @@
     font-size: 3rem;
     font-weight: 700;
     color: white; /* Dark text for contrast */
-    margin-bottom: 0.1rem;
     text-align: left;
     font-family: 'Barlow';
-    margin: 0;
     text-decoration: underline;
     text-underline-offset: 10px;
     letter-spacing: 1px;
@@ -110,6 +108,9 @@
     border: 2px solid #474747;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+    overflow: hidden;
+    will-change: transform;
+    transition: transform 0.25s ease;
 }
 
 .entryCard:hover{
@@ -125,10 +126,26 @@
 
 .entryGame{
     color: white;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
     font-family: 'Poppins';
+}
+
+.tagsContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.entryInfoContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 .entryTitle {
@@ -136,21 +153,19 @@
     font-size: 1rem;
     font-weight: 400;
     font-style: italic;
-    margin-bottom: 0.5rem;
     font-family: 'Poppins';
 }
 
 .entryContent {
     font-size: 1rem;
     color: #e1e1e1;
-    margin-bottom: 1rem;
 }
 
 .entryDate {
     font-size: 1rem;
     font-weight: 500;
     font-family: 'Barlow';
-    color: #d6d6d6;
+    color: #ffffff;
 }
 
 .buttonGroup{
@@ -159,19 +174,19 @@
     justify-content: flex-start;
     align-items: flex-start;
     gap: 1rem; /* space between buttons */
-    margin-top: 0rem;
     flex-wrap: wrap; /* optional: ensures it looks good on smaller screens */
 }
 
 .addButton,
 .filterButton,
 .deleteEntriesButton {
-    font-size: 1.1rem;
+    font-size: 18px;
+    font-weight: 500;
     cursor: pointer;
     transition: background-color 0.3s ease;
     z-index: 1;
     margin-bottom: 1rem;
-    font-family: 'Poppins';
+    font-family: 'Noto Sans';
 }
 
 .addButton:hover {
@@ -179,6 +194,7 @@
 }
 
 .mainSection{
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -220,6 +236,33 @@
     font-family: 'Poppins';
     cursor: pointer;
     transition: background-color 0.3s ease;
+}
+
+.noGamesText{
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: rgb(208, 205, 205); /* Dark text for contrast */
+    margin-bottom: 2.5rem;
+    font-family: 'Poppins';
+    font-style: italic;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.paginationControl {
+    background-color: #2c2c2f;
+    color: white;
+    border: 1px solid #555;
+}
+
+.paginationControl:hover {
+    background-color: #3a3a3d;
+}
+
+.paginationControl[data-active] {
+    background-color: #854bcb;
+    color: white;
+    border: 1px solid #555;
 }
 
 .paginationWrapper{
