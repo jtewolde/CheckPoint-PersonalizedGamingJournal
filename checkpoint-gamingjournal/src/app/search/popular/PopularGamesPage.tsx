@@ -170,24 +170,21 @@ export default function PopularPage() {
             )}
             
             {totalPages > 1 && (
-                <div className={classes.paginationWrapper}>
-                    <Pagination
-                        size='lg'
-                        radius='md'
-                        total={totalPages}
-                        value={page}
-                        onChange={(newPage) => {
-                            setPage(newPage);
-                            router.push(`/search/popular?&page=${newPage}`);
-                        }}
-                    />
-                </div>
+              <div className={classes.paginationWrapper}>
+                  <Pagination
+                      size='xl'
+                      radius='md'
+                      total={totalPages}
+                      value={page}
+                      onChange={(newPage) => {
+                          setPage(newPage);
+                          router.push(`/search/popular?&page=${newPage}`);
+                      }}
+                  />
+              </div>
             )}
-          
         </div>
-
       </div>
-
     </div>
   );
 }

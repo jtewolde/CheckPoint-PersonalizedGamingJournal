@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
-import { useRouter, redirect } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useMediaQuery } from '@mantine/hooks';
 
 import GameFilters from '@/components/GameFilters/GameFilters';
@@ -171,24 +171,21 @@ export default function TrendingPage() {
             )}
             
             {totalPages > 1 && (
-                <div className={classes.paginationWrapper}>
-                    <Pagination
-                        size='lg'
-                        radius='md'
-                        total={totalPages}
-                        value={page}
-                        onChange={(newPage) => {
-                            setPage(newPage);
-                            router.push(`/search/trending?&page=${newPage}`);
-                        }}
-                    />
-                </div>
+              <div className={classes.paginationWrapper}>
+                  <Pagination
+                      size='xl'
+                      radius='md'
+                      total={totalPages}
+                      value={page}
+                      onChange={(newPage) => {
+                          setPage(newPage);
+                          router.push(`/search/trending?&page=${newPage}`);
+                      }}
+                  />
+              </div>
             )}
-
-        </div>
-        
-      </div>
-        
+        </div>   
+      </div>  
     </div>
   );
 }
