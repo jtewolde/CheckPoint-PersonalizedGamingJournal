@@ -17,13 +17,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType} from 'swiper/types';
 
 import { FreeMode, Navigation, Pagination, Thumbs, Keyboard } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar'
-import 'swiper/css/thumbs';
-import 'swiper/css/free-mode';
-import 'swiper/css/keyboard';
 
 import classes from './game.module.css';
 
@@ -515,7 +508,6 @@ export default function GameDetails() {
                     {isAuthenticated ? (
                       isGameInLibrary ? (
                         <div className={classes.buttonContainer}>
-
                           <div style={{display:'flex', flexDirection:'row', justifyContent:'center', gap: '1rem'}}>
 
                             <Badge color="green" size="xl" radius="xl">
@@ -825,9 +817,10 @@ export default function GameDetails() {
               centeredSlides={true}
               loop={true}
               navigation={true}
+              pagination={{type: 'progressbar'}}
               scrollbar={isMobile ? true: false}
               thumbs={{ swiper: thumbsSwiper}}
-              modules={[Navigation, Thumbs]}
+              modules={[Pagination, Navigation, Thumbs]}
               slidesPerView={isMobile ? 1 : 1.5}
               spaceBetween={20}
               className={classes.swiperContainer}
@@ -851,36 +844,6 @@ export default function GameDetails() {
                 </SwiperSlide>
               ))}
             </Swiper>
-
-            {!isMobile ? (
-              <Swiper
-              onSwiper={setThumbSwiper}
-              loop={true}
-              spaceBetween={10}
-              slidesPerView={3}
-              freeMode={true}
-              watchSlidesProgress={true}
-              modules={[FreeMode, Thumbs]}
-              className={classes.thumbnailSwiper}
-              >
-                {screenshots.map((screenshot: any) => (
-                  <SwiperSlide key={screenshot.id} className={classes.thumbnailSlide}>
-                    <Image
-                      src={`https:${screenshot.url.replace('t_thumb', 't_720p')}`}
-                      alt="thumbnail"
-                      loading='lazy'
-                      width={200}
-                      height={120}
-                      className={classes.thumbnailImage}
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            ): (
-                <>
-                </>
-            )}
-
           </div>
 
           {modalOpen && (
