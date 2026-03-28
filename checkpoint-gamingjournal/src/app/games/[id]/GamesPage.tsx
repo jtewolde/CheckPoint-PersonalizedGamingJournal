@@ -51,6 +51,9 @@ export default function GameDetails() {
   const [isPlatinum, setIsPlatinum] = useState(false) // State to handle platinum of game
   const [rating, setRating] = useState(0); // State to handling rating of game given by user from 0-5 stars
   const [completionDate, setCompletionDate] = useState<string | null>(null); // State to handle completion date of game
+  const completionDateString = completionDate ? new Date(completionDate).toLocaleDateString('en-US') : 'N/A';
+  const [numOfEntries, setNumOfEntries] = useState(0);
+
   const [opened, {open, close} ] = useDisclosure(false);
 
   const [screenshots, setScreensShots] = useState<any[]>([]); // State to store screenshots
@@ -65,6 +68,7 @@ export default function GameDetails() {
   const isMobile = useMediaQuery('(max-width: 650px)');
 
   const [thumbsSwiper, setThumbSwiper] = useState<SwiperType | null>(null);
+  const showCardUI = isAuthenticated && isGameInLibrary;
 
   // Helper function to combining all screenshots and artworks of game in single array for different backgrounds
   const getAllImages = (gameData: any) => {
@@ -135,6 +139,7 @@ export default function GameDetails() {
         setIsPlatinum(currentGame?.platinum ?? false)
         setRating(currentGame?.rating ?? 0)
         setCompletionDate(currentGame?.completionDate ?? null)
+        setNumOfEntries(currentGame?.journalEntries.length ?? 0)
       } catch (error) {
         console.error('Error checking if game is in library:', error);
       }
@@ -506,47 +511,39 @@ export default function GameDetails() {
                   alt={game.name}
                   className={classes.cover}
                 />
-                <div className={classes.coverInfoContainer}>
+                <div className={`${classes.coverInfoContainer} ${showCardUI ? classes.cardActive : classes.cardMinimal}`}>
                     {isAuthenticated ? (
                       isGameInLibrary ? (
                         <div className={classes.buttonContainer}>
 
-                          <div style={{display: 'flex', flexDirection: 'row', gap: '1rem'}}>
-                            <Text className={classes.gameInfoText}>Status: </Text>
-                            <Badge className={classes.badge} color="green" size='lg' variant='filled'>
-                              {libraryGame?.status || 'No Status Given'}
+                          <div style={{display:'flex', flexDirection:'row', justifyContent:'center', gap: '1rem'}}>
+
+                            <Badge color="green" size="xl" radius="xl">
+                              {libraryGame?.status || 'No Status'}
                             </Badge>
+
+                            {/* Platinum */}
+                            <Tooltip label={isPlatinum ? 'Platinum Achieved' : 'Not Completed'} position='top' events={{ hover: true, focus: true, touch: true }}>
+                              <ThemeIcon size="lg" variant="subtle" color={isPlatinum ? 'yellow' : 'gray'}>
+                                <Trophy 
+                                  size={30} 
+                                  color={isPlatinum ? 'gold' : 'gray'}
+                                  fill={isPlatinum ? 'gold' : 'none'}
+                                  style={{ transition: 'all 0.2s ease' }}
+                                />
+                              </ThemeIcon>
+                            </Tooltip>
+
+                            {/*Completion Date */}
+                            <Tooltip label={completionDateString} position='top' events={{ hover: true, focus: true, touch: true }}>
+                              <ThemeIcon variant='subtle' size='lg' radius='md'>
+                                <CalendarDays size={30} color={completionDate ? 'white' : 'gray'}/>
+                              </ThemeIcon>
+                            </Tooltip>
                           </div>
 
-                          {/* <Tooltip label='Set Game Status' position='top'>
-                            <ActionIcon variant='outline' size='lg' radius='md' onClick={open}>
-                              <Info size={25} />
-                            </ActionIcon>
-                          </Tooltip>
-
-                          <Tooltip label='Completion Date' position='top'>
-                            <ActionIcon color='yellow' variant='outline' size='lg' radius='md' onClick={open}>
-                              <CalendarDays size={25} />
-                            </ActionIcon>
-                          </Tooltip> */}
-
                           <div style={{display: 'flex', flexDirection: 'row', gap: '1rem'}}>
-                            <Text className={classes.gameInfoText}>Rating: </Text>
                             <Rating readOnly size='lg' fractions={2} value={rating}/>
-                          </div>
-
-                          <div style={{display: 'flex', flexDirection: 'row', gap: '1rem'}}>
-                            <Text className={classes.gameInfoText}>Completion Date: {completionDate ? new Date(completionDate).toLocaleDateString('en-US') : 'N/A'} </Text>
-                          </div>
-
-                          <div style={{display: 'flex', flexDirection: 'row', gap: '1rem'}}>
-                            <Text className={classes.gameInfoText}>Platinum: </Text>
-                            <Trophy 
-                              size={30} 
-                              color={isPlatinum ? 'gold' : 'gray'}
-                              fill={isPlatinum ? 'gold' : 'none'}
-                              style={{ transition: 'all 0.2s ease' }}
-                            />
                           </div>
 
                           <Modal opened={opened} onClose={close} title="Change Game Info" styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #424242', color: 'white', fontFamily: 'Noto Sans'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
@@ -575,23 +572,23 @@ export default function GameDetails() {
                                 renderOption={renderSelectOption}
                               />
 
-                              {status === 'Completed' && (
-                                <>
-                                  <DateInput
-                                    size='md'
-                                    label="Completion Date:"
-                                    placeholder='Select completion date'
-                                    clearable
-                                    leftSection={<CalendarDays size={20} />}
-                                    value={completionDate}
-                                    maxDate={new Date()}
-                                    onChange={(date) => {
-                                      const dateObj = date ? new Date(date).toISOString() : null;
-                                      setCompletionDate(dateObj);
-                                    }}
-                                  />
-                                </>
-                              )}
+                              <DateInput
+                                size='md'
+                                label="Completion Date:"
+                                placeholder='Select completion date'
+                                clearable
+                                leftSection={<CalendarDays size={20} />}
+                                value={completionDate}
+                                disabled={status !== 'Completed'}
+                                maxDate={new Date()}
+                                description={
+                                  status !== 'Completed' ? 'Available when status is set to Completed' : undefined
+                                }
+                                onChange={(date) => {
+                                  const dateObj = date ? new Date(date).toISOString() : null;
+                                  setCompletionDate(dateObj);
+                                }}
+                              />
 
                               <div className={classes.ratingContainer}>
 
@@ -678,7 +675,7 @@ export default function GameDetails() {
                             onClick={handleAddToLibrary}
                             loading={addingToLibrary}
                           >
-                            Add to your Library!
+                            Add to Library
                           </Button>
                         </div>
                       )
@@ -692,7 +689,7 @@ export default function GameDetails() {
                         rightSection={<NotebookPen />}
                         onClick={() => router.push('/auth/signup')}
                       >
-                        Create an account!
+                        Create an account
                       </Button>
                     )}
 
@@ -703,8 +700,6 @@ export default function GameDetails() {
             </div>
 
             <div className={classes.rightSection}>
-
-
               <Accordion className={classes.accordion} 
                 styles={{item: {background: '#181717', color: 'white', border: '0.5px solid #5a5a59'}, 
                   label: {color: 'white', paddingRight: '0.7rem', fontSize: '18px', fontWeight: 550}, 
@@ -783,7 +778,7 @@ export default function GameDetails() {
 
           </div>
 
-          <div className={classes.activitySection}>
+          {/* <div className={classes.activitySection}>
             <div className={classes.sectionHeader}>
                 <ThemeIcon size={50} variant='gradient' gradient={{ from: '#e70e0e', to: '#ca1118', deg: 20}} radius='md'>
                     <Activity size={40} />
@@ -804,7 +799,7 @@ export default function GameDetails() {
                 <div className={classes.titleLogo}>
                   <Text className={classes.activityLabel}>Total Entries</Text>
                 </div>
-                <Text className={classes.activityStat}>23</Text>
+                <Text className={classes.activityStat}>{numOfEntries}</Text>
               </div>
 
               <div className={classes.activityItem}>
@@ -815,7 +810,7 @@ export default function GameDetails() {
               </div>
 
             </SimpleGrid>
-          </div>
+          </div> */}
 
           <div className={classes.sectionHeader}>
             <ThemeIcon size={50} variant='gradient' gradient={{ from: '#3ecb1b', to: '#10912a', deg: 20}} radius='md'>
