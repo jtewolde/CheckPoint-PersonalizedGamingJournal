@@ -13,6 +13,7 @@ const db = client.db();
 export const UserCollection = db.collection("users");
 export const GameCollection = db.collection("games");
 export const JournalEntriesCollection = db.collection("journalEntries");
+export const PlaySessionCollection = db.collection("playSessions")
 
 // Export the database instance
 export default db;

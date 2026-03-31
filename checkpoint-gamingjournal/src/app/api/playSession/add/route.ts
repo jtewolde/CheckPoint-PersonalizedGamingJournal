@@ -1,0 +1,77 @@
+import { NextRequest, NextResponse } from "next/server";
+import { PlaySessionCollection, GameCollection } from "@/utils/db";
+import { ObjectId } from "mongodb";
+
+import { auth } from "@/utils/auth";
+import { redis } from "@/utils/redis";
+
+// This API Route is used to add/create a play session for a game that is in the user's library
+export async function POST(req: NextRequest){
+    try{
+        const body = await req.json();
+        const { gameID, gameName, date, duration, notes } = body;
+
+        // Validate required fields for the play session object like gameID, date of session, and duration
+        if(!gameID || !gameName || !date || !duration){
+            return NextResponse.json({error: "Missing required fields"}, { status: 400 })
+        }
+
+        // Get the authenticated user's session
+        const session = await auth.api.getSession({
+            headers: req.headers,
+        });
+
+        // If user isn't authenticated, then return specific error
+        if (!session || !session.user) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
+        const userId = session.user.id;
+
+        // Check if the instance of the game exists and belongs to the user and in their library
+        const game = await GameCollection.findOne({
+            gameId: gameID, // Query as a string
+            userId: userId, // Query as a string
+        });
+
+        // Check if the game is in the user's library
+        if (!game) {
+            return NextResponse.json(
+                { error: "Game not found in user's library" },
+                { status: 404 }
+            );
+        }
+
+        // Create play session object
+        const playSession = {
+            userId,
+            gameID,
+            gameName,
+            duration,
+            date,
+            notes
+        }
+
+        // Insert the play session into the playSession collection
+        const result = await PlaySessionCollection.insertOne(playSession);
+        const insertedSessionId = result.insertedId;
+
+        // Clear cache (important for dashboard + game page)
+        await redis.del(`user_library:${userId}`);
+        await redis.del(`play_sessions:${userId}:${gameID}`);
+
+        // Return the json response for a successful creation of plays session
+        return NextResponse.json({
+            message: "Play session added successfully",
+            playSessionId: insertedSessionId,
+        });
+    
+    } catch (error) {
+        console.error("Error adding play session:", error);
+
+        return NextResponse.json(
+            { error: "Internal server error" },
+            { status: 500 }
+        );
+    }
+}
