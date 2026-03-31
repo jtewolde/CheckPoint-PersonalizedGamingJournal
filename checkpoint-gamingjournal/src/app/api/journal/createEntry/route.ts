@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GameCollection, JournalEntriesCollection } from "@/utils/db";
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4} from 'uuid';
 
 import { auth } from "@/utils/auth";
 import { redis } from "@/utils/redis";
@@ -81,12 +81,12 @@ export async function POST(req: NextRequest) {
       const updateGameResult = await GameCollection.updateOne(
           { gameId: gameID,
             userId: userId
-           },
+          },
           { $addToSet: { journalEntries: journalEntry.uuid } } // Prevent duplicates
       )
 
       //Invalidate/clear the cache of the user's journal entries after deletion
-        await redis.del(`user_journal_entries:${userId}`);
+      await redis.del(`user_journal_entries:${userId}`);
 
       // Invalidate/clear the cache for all paginated journal entries
       // This is a simple approach; for a more efficient solution, consider tracking which pages contain the deleted entry
