@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PlaySessionCollection, GameCollection } from "@/utils/db";
-import { ObjectId } from "mongodb";
 
 import { auth } from "@/utils/auth";
 import { redis } from "@/utils/redis";
