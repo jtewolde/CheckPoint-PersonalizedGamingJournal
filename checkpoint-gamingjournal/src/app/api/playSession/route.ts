@@ -4,7 +4,7 @@ import { PlaySessionCollection, GameCollection } from "@/utils/db";
 import { auth } from "@/utils/auth";
 import { redis } from "@/utils/redis";
 
-// This API Route is used to add/create a play session for a game that is in the user's library
+// This API Route is used to add/create a play session for a game that is in the user's library using POST method
 export async function POST(req: NextRequest){
     try{
         const body = await req.json();
@@ -71,6 +71,61 @@ export async function POST(req: NextRequest){
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }
+        );
+    }
+}
+
+// This API Route is used to get all play sessions for a game that is in the user's library using GET method
+export async function GET(req: NextRequest){
+    try{
+        // Get the authenticated user's session
+        const session = await auth.api.getSession({
+            headers: req.headers,
+        });
+
+        // If user isn't authenticated, then return specific error
+        if (!session || !session.user) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
+        const userId = session.user.id;
+
+        // Get the gameID from the query parameters for optional filtering of play sessions by game
+        const { searchParams } = new URL(req.url);
+        const gameID = searchParams.get("gameID");
+
+        // Cache key for play sessions, if the gameID is provided, then cache key is specific to that game, otherwise it's for all sessions of the user
+        const cacheKey = gameID
+        ? `play_sessions:${userId}:${gameID}`
+        : `play_sessions:${userId}`;
+
+        // Attempt to get play sessions from cache first
+        const cachedSessions = await redis.get(cacheKey);
+        
+        if (cachedSessions) {
+            return NextResponse.json(JSON.parse(cachedSessions));
+        }
+
+        // Build the query for fetching play sessions, if gameID is provided, then filter by that gameID, otherwise get all play sessions for the user
+        const query: any = { userId };
+        if (gameID) {
+            query.gameID = gameID;
+        }
+
+        // Fetch play sessions from the database based on the query
+        const playSessions = await PlaySessionCollection.find(query).toArray();
+
+        // Cache the play sessions for future requests
+        await redis.set(cacheKey, JSON.stringify(playSessions), "EX", 60 * 60); // Cache for 1 hour
+
+        // Return json response with the play sessions
+        return NextResponse.json(playSessions);
+        
+    } catch (error) {
+        console.error("Error fetching play sessions:", error);
+        return NextResponse.json(
+            { error: "Internal server error"},
+            { status: 500}
         );
     }
 }
