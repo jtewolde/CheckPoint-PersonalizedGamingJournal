@@ -157,7 +157,7 @@ export default function GameDetails() {
 
     try {
       const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token from localStorage
-      const res = await fetch('/api/library/add', {
+      const res = await fetch('/api/library', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -201,8 +201,8 @@ export default function GameDetails() {
 
     try {
       const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token from localStorage
-      const res = await fetch('/api/library/delete', {
-        method: 'POST',
+      const res = await fetch(`/api/library/${id}`, {
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`, // Include the Bearer token

@@ -27,9 +27,6 @@ export default function TrendingSection(){
         const fetchTrendingGames = async () => {
             try {
                 const res = await fetch(`/api/igdb/trending-games?limit=${limit}&sort=first_release_date`);
-
-                
-                
                 if (!res.ok) {
                     throw new Error('Failed to fetch Trending games');
                 }
