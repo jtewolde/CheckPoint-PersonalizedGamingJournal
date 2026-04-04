@@ -25,8 +25,9 @@ export const LibraryProvider = ({ children }: { children: React.ReactNode }) => 
             const token = localStorage.getItem('bearer_token');
 
             // Use the getLibrary API Call to get the user's library of games
-            const res = await fetch('/api/user/getLibrary', {
+            const res = await fetch('/api/library', {
                 headers: { Authorization: `Bearer ${token}` },
+                method: 'GET',
             });
 
             // Get data from API call to insert all of the user's library in the library state variable

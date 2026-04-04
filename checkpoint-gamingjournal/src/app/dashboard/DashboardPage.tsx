@@ -61,7 +61,7 @@ export default function Dashboard() {
   const fetchPlayingGames = async () => {
     try {
       const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
-      const res = await fetch('/api/user/getLibrary', {
+      const res = await fetch('/api/library', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

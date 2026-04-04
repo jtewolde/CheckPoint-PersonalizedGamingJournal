@@ -108,7 +108,7 @@ export default function GameDetails() {
     const checkIfInLibrary = async () => {
       try {
         const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token
-        const res = await fetch('/api/user/getLibrary', {
+        const res = await fetch('/api/library', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -238,14 +238,13 @@ export default function GameDetails() {
   const handleUpdateInfo = async (status?: string, platinum?: boolean, rating?: number, completionDate?: string | null) => {
     try {
       const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token
-      const res = await fetch('/api/library/updateInfo', {
-        method: 'POST',
+      const res = await fetch(`/api/library/${id}`, {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`, // Include the Bearer token
         },
         body: JSON.stringify({
-          gameID: id, // Pass the game ID
           gameDetails: {
             status,
             platinum,
