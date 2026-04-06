@@ -117,7 +117,7 @@ export default function Dashboard() {
   const fetchRecentJournalEntries = async () => {
       try {
           const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
-          const res = await fetch('/api/journal/getRecentEntries', {
+          const res = await fetch('/api/journal', {
               method: 'GET',
               headers: {
                   'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ export default function Dashboard() {
           const data = await res.json();
           setNumEntries(data.journalEntries.length) // Store total number of journal entries
           
-          const sortedEntries = data.journalEntries.reverse().slice(0, 4); // Limit to the 5 most recent entries
+          const sortedEntries = data.journalEntries.slice(0, 4); // Limit to the 5 most recent entries
           setRecentEntries(sortedEntries); // Store the recent entries in state
           console.log('Recent Journal Entries:', sortedEntries);
 
@@ -582,7 +582,7 @@ export default function Dashboard() {
               ) : (
                   <SimpleGrid cols={4} spacing="lg" className={classes.entriesGrid}>
                       {recentEntries.map((entry) => (
-                          <div key={entry._id} className={classes.entryCard} onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}>
+                          <div key={entry._id} className={classes.entryCard} onClick={() => router.push(`/journal/${entry._id}`)}>
                               <h3 className={classes.entryGame}>{entry.gameName}</h3>
                               <h3 className={classes.entryTitle}>{entry.title}</h3>
                               <p className={classes.entryContent}>
