@@ -582,7 +582,7 @@ export default function Dashboard() {
               ) : (
                   <SimpleGrid cols={4} spacing="lg" className={classes.entriesGrid}>
                       {recentEntries.map((entry) => (
-                          <div key={entry._id} className={classes.entryCard} onClick={() => router.push(`/journal/${entry._id}`)}>
+                          <div key={entry.uuid} className={classes.entryCard} onClick={() => router.push(`/journal/${entry.uuid}`)}>
                               <h3 className={classes.entryGame}>{entry.gameName}</h3>
                               <h3 className={classes.entryTitle}>{entry.title}</h3>
                               <p className={classes.entryContent}>

@@ -46,7 +46,7 @@ export default function JournalForm() {
       setLoading(true);
       try {
         const token = localStorage.getItem("bearer_token"); // Retrieve Bearer Token
-        const res = await fetch("/api/user/getLibrary", {
+        const res = await fetch("/api/library", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -87,7 +87,7 @@ export default function JournalForm() {
 
     try {
       const token = localStorage.getItem("bearer_token"); // Retrieve Bearer Token
-      const res = await fetch("/api/journal/createEntry", {
+      const res = await fetch("/api/journal", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
