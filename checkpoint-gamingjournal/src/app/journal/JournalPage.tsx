@@ -46,7 +46,7 @@ export default function Journal() {
         setLoading(true);
         try {
             const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token
-            const res = await fetch(`/api/journal/getEntries?page=${pageNum}&limit=6`, {
+            const res = await fetch(`/api/journal?page=${pageNum}&limit=6`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -81,8 +81,8 @@ export default function Journal() {
     const deleteJournalEntry = async (journalEntryId: string, gameID: string) => {
         try {
             setLoading(true);
-            const res = await fetch('/api/journal/deleteEntry', {
-                method: 'POST',
+            const res = await fetch(`/api/journal/${journalEntryId}`, {
+                method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${localStorage.getItem('bearer_token')}`,
@@ -393,7 +393,7 @@ export default function Journal() {
                         {filteredEntries.length > 0 && (
                             <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
                                 {filteredEntries.map((entry) => (
-                                    <div key={entry._id} className={classes.entryCard} onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}>
+                                    <div key={entry.uuid} className={classes.entryCard} onClick={() => router.push(`/journal/${entry.uuid}`)}>
 
                                         <div className={classes.entryHeader}>
 
