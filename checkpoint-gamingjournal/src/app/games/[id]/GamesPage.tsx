@@ -7,20 +7,21 @@ import { useParams, useRouter } from 'next/navigation';
 import { notFound } from 'next/navigation';
 
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
+import PlaySessionModal from '@/components/PlaySessionModal/SessionModal';
 
 import toast from 'react-hot-toast';
 
-import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, Rating, Tooltip, ThemeIcon, ActionIcon } from '@mantine/core';
+import { Button, Modal, Select, Badge, RingProgress, Text, TextInput, Accordion, SimpleGrid, Group, Stack, Rating, Tooltip, ThemeIcon, ActionIcon, NumberInput } from '@mantine/core';
 import Image from 'next/image';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType} from 'swiper/types';
 
-import { FreeMode, Navigation, Pagination, Thumbs, Keyboard } from 'swiper/modules';
+import { Navigation, Pagination, Thumbs, Keyboard } from 'swiper/modules';
 
 import classes from './game.module.css';
 
-import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock, Camera, Star, Gamepad, Activity, Pencil, Info } from 'lucide-react';
+import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock, Camera, Star, Gamepad, Activity, Pencil, Captions } from 'lucide-react';
 
 import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
   IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
@@ -48,6 +49,7 @@ export default function GameDetails() {
   const [numOfEntries, setNumOfEntries] = useState(0);
 
   const [opened, {open, close} ] = useDisclosure(false);
+  const [playSessionModalOpened, {open: openPlaySessionModal, close: closePlaySessionModal}] = useDisclosure(false);
 
   const [screenshots, setScreensShots] = useState<any[]>([]); // State to store screenshots
   const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null); // State to handle selected screenshot for modal
@@ -104,6 +106,29 @@ export default function GameDetails() {
       }
     };
 
+    // Function to fetch the journal entries for the game from the user's library if the game is in the library and user is authenticated
+    // Use API call to fetch most recent journal entries
+    const fetchRecentJournalEntries = async () => {
+        try {
+            const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
+            const res = await fetch('/api/journal', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!res.ok) {
+                throw new Error('Failed to fetch journal entries');
+            }
+            const data = await res.json();
+            setNumOfEntries(data.journalEntries.length) // Store total number of journal entries
+        } catch (error) {
+            console.error('Error fetching recent journal entries:', error);
+        }
+    };
+
     // Function to check if the game is in the user's library
     const checkIfInLibrary = async () => {
       try {
@@ -142,6 +167,7 @@ export default function GameDetails() {
       fetchIGDBGameDetails();
       if(isAuthenticated) { // Only check library if user is authenticated}
       checkIfInLibrary();
+      fetchRecentJournalEntries();
       } else {
         setIsInLibrary(false)
         setLibraryGame(null)
@@ -626,10 +652,23 @@ export default function GameDetails() {
                               >
                                 Save Changes
                               </Button>
-
                             </Stack>
-                            
                           </Modal>
+
+                          <PlaySessionModal opened={playSessionModalOpened} onClose={closePlaySessionModal} gameId={game.id} gameName={game.name} />
+
+                          <Tooltip label="Log a new play session" position='top'>
+                            <Button
+                            className={classes.button}
+                            variant='filled'
+                            color='#2a22be'
+                            size='md'
+                            leftSection={<NotebookPen size={20} />}
+                            onClick={openPlaySessionModal}
+                            >
+                              Log Play Session
+                            </Button>
+                          </Tooltip>
 
                           <div className={classes.buttonActions}>
                             <Tooltip label='Remove game from library' position='top'>
@@ -769,7 +808,7 @@ export default function GameDetails() {
 
           </div>
 
-          {/* <div className={classes.activitySection}>
+          <div className={classes.activitySection}>
             <div className={classes.sectionHeader}>
                 <ThemeIcon size={50} variant='gradient' gradient={{ from: '#e70e0e', to: '#ca1118', deg: 20}} radius='md'>
                     <Activity size={40} />
@@ -801,7 +840,7 @@ export default function GameDetails() {
               </div>
 
             </SimpleGrid>
-          </div> */}
+          </div>
 
           <div className={classes.sectionHeader}>
             <ThemeIcon size={50} variant='gradient' gradient={{ from: '#3ecb1b', to: '#10912a', deg: 20}} radius='md'>

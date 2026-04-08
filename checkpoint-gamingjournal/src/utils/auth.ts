@@ -172,9 +172,9 @@ export const auth = betterAuth({
                 type: "string",
                 required: true,
             },
-            content:{
+            notes:{
                 type: "string",
-                required:true,
+                required: true,
             },
             date:{
                 type: "date",
