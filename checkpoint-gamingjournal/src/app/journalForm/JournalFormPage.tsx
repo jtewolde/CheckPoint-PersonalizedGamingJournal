@@ -158,6 +158,7 @@ export default function JournalForm() {
               value={gameID}
               onChange={(value) => setGameID(value || "")}
               required
+              searchable
               disabled={loading} // Disable the dropdown while loading
             />
 
