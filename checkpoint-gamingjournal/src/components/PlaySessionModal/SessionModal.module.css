@@ -4,3 +4,11 @@
     flex-direction: row;
     gap: 1rem;
 }
+
+.logButton{
+    margin-top: 1rem;
+    width: auto;
+    align-self: center;
+    font-family: 'Poppins';
+    font-weight: 400;
+}

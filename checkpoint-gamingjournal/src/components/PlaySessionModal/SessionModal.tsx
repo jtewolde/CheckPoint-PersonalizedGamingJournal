@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 
 import classes from './SessionModal.module.css';
 
-import { Captions, CalendarDays, NotebookPen, Gamepad2 } from "lucide-react";
+import { Captions, CalendarDays, NotebookPen, Gamepad2, Clock } from "lucide-react";
 
 // Define the props for the PlaySessionModal component
 type PlaySessionModalProps = {
@@ -72,9 +72,23 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
         };
     }, [opened, gameId]);
 
+    // Update selected game name and ID when the modal is opened with a specific game, or when the library game data changes
+    useEffect(() => {
+        if (opened && gameId) {
+            setSelectedGameId(gameId);
+            setSelectedGameName(gameName || '');
+        }
+    }, [opened, gameId, gameName]);
+
     // Function to handle logging a play session for the game. This will involve opening a modal with a form to input play session details such as duration and notes, and then making an API call to save the play session to the database and associate it with the game and user's library.
     const handleLogPlaySession = async () => {
         try{
+            // Validate required fields and show error toast if any are missing
+            if (!selectedGameId || !playSessionDate || duration <= 0) {
+                toast.error("Please fill out all required fields.");
+                return;
+            }
+
             const token = localStorage.getItem('bearer_token');
             const res = await fetch('/api/playSession', {
                 method: 'POST',
@@ -83,19 +97,32 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
                     Authorization: `Bearer ${token}`, // Include the Bearer token
                 },
                 body: JSON.stringify({
-                    gameId,
-                    gameName,
+                    gameID: selectedGameId,
+                    gameName: selectedGameName,
                     duration,
                     notes: playSessionNotes,
                     date: playSessionDate
                 })
             });
 
-        if(!res.ok){
-            throw new Error('Failed to log play session');
-        }
+            console.log({
+                gameID: String(selectedGameId),
+                gameName: selectedGameName,
+                duration,
+                notes: playSessionNotes,
+                date: playSessionDate
+            });
 
-        toast.success('Play session logged succcessfully!');
+            if(!res.ok){
+                throw new Error('Failed to log play session');
+            }
+
+            // Show success toast and reset form fields after successful logging
+            toast.success('Play session logged succcessfully!');
+            setHours(0);
+            setMinutes(0);
+            setPlaySessionNotes("");
+            setPlaySessionDate(null);
         
         } catch(error){
             console.error('Error logging play session:', error);
@@ -104,7 +131,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
     }
 
     return (
-        <Modal opened={opened} onClose={close} size='lg' title={'Log Play Session for ' + gameName} withCloseButton>
+        <Modal opened={opened} onClose={onClose} size='lg' title={'Play Session for ' + gameName} withCloseButton>
             <Stack gap='md'>
                 {gameId ? (
                     <TextInput
@@ -112,11 +139,11 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
                     required
                     value={gameName}
                     readOnly
-                    leftSection={<Gamepad2 size={30} />}
+                    leftSection={<Gamepad2 size={20} />}
                     />
                 ): (
                     <Select
-                    leftSection={<Gamepad2 size={25} />}
+                    leftSection={<Gamepad2 size={20} />}
                     maxDropdownHeight={300}
                     className={classes.select}
                     data={userGames.map((game: any) => ({
@@ -124,7 +151,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
                         label: game.title
                     }))}
                     scrollAreaProps={{ type: 'auto', scrollbarSize: 16, scrollbars: 'y', color:'black',  classNames: { scrollbar: classes.scrollBar }}}
-                    size="lg"
+                    size="md"
                     label="Select Game"
                     placeholder="Choose a game from your library"
                     value={selectedGameId}
@@ -146,7 +173,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
                 size="md"
                 label="Notes"
                 placeholder="Enter play session notes... "
-                leftSection={<Captions size={30} />}
+                leftSection={<Captions size={20} />}
                 value={playSessionNotes}
                 onChange={(e) => setPlaySessionNotes(e.target.value)}
                 required
@@ -170,7 +197,9 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
 
                 <div className={classes.durationContainer}>
                     <NumberInput
-                    label='Hours'
+                    label='Time Played (Hours)'
+                    leftSection={<Clock size={20} />}
+                    placeholder="Enter hours"
                     min={0}
                     value={hours}
                     onChange={(value) => setHours(Number(value) || 0)}
@@ -178,6 +207,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
 
                     <NumberInput
                     label='Minutes'
+                    placeholder="Enter minutes"
                     min={0}
                     max={59}
                     value={minutes}
@@ -186,16 +216,19 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
                 </div>
 
                 <Button
+                className={classes.logButton}
                 variant='filled'
                 color='green'
+                leftSection={<NotebookPen size={20}/>}
                 size='md'
+                disabled={!selectedGameId || !playSessionDate || duration <= 0}
                 onClick={() => {
                     handleLogPlaySession();
                     onClose();
                     if(onSuccess) onSuccess();
                 }}
                 >
-                    Log Play Session
+                    Create Play Session
                 </Button>
 
             </Stack>

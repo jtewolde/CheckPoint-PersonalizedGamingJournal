@@ -661,7 +661,7 @@ export default function GameDetails() {
                             <Button
                             className={classes.button}
                             variant='filled'
-                            color='#2a22be'
+                            color='#832fad'
                             size='md'
                             leftSection={<NotebookPen size={20} />}
                             onClick={openPlaySessionModal}
