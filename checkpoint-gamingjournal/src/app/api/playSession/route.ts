@@ -4,7 +4,10 @@ import { PlaySessionCollection, GameCollection } from "@/utils/db";
 import { auth } from "@/utils/auth";
 import { redis } from "@/utils/redis";
 
-// This API Route is used to add/create a play session for a game that is in the user's library using POST method
+//=================================
+// CREATE PLAY SESSION(POST)
+// This API route is used to create a play session for a game in the user's library
+//=================================
 export async function POST(req: NextRequest){
     try{
         const body = await req.json();
@@ -44,7 +47,7 @@ export async function POST(req: NextRequest){
         // Create play session object
         const playSession = {
             userId,
-            gameID,
+            gameId: gameID,
             gameName,
             duration,
             date,
@@ -75,7 +78,10 @@ export async function POST(req: NextRequest){
     }
 }
 
-// This API Route is used to get all play sessions for a game that is in the user's library using GET method
+//=================================
+// GET PLAY SESSIONS(GET_)
+// This API route is used to fetch all play sessions for a game in the user's library
+//=================================
 export async function GET(req: NextRequest){
     try{
         // Get the authenticated user's session

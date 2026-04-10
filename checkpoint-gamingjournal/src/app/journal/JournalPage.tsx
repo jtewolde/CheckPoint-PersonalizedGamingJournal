@@ -46,6 +46,7 @@ export default function Journal() {
         setLoading(true);
         try {
             const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token
+
             const res = await fetch(`/api/journal?page=${pageNum}&limit=6`, {
                 method: 'GET',
                 headers: {

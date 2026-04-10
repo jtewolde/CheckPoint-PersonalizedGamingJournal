@@ -90,14 +90,14 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
             }
 
             const token = localStorage.getItem('bearer_token');
-            const res = await fetch('/api/playSession', {
+            const res = await fetch("/api/playSession", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`, // Include the Bearer token
                 },
                 body: JSON.stringify({
-                    gameID: selectedGameId,
+                    gameID: String(selectedGameId),
                     gameName: selectedGameName,
                     duration,
                     notes: playSessionNotes,
@@ -106,7 +106,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
             });
 
             console.log({
-                gameID: String(selectedGameId),
+                gameID: selectedGameId,
                 gameName: selectedGameName,
                 duration,
                 notes: playSessionNotes,
@@ -114,7 +114,8 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
             });
 
             if(!res.ok){
-                throw new Error('Failed to log play session');
+                const errorData = await res.json();
+                throw new Error(errorData.error || 'Failed to log play session');
             }
 
             // Show success toast and reset form fields after successful logging
