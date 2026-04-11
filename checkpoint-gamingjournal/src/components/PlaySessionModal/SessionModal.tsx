@@ -1,9 +1,8 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { Modal, Group, Stack, Button, TextInput, NumberInput, Select} from "@mantine/core";
+import { Modal, Divider, Stack, Button, TextInput, NumberInput, Select} from "@mantine/core";
 import { DateInput } from "@mantine/dates";
-import { Calendar } from "@mantine/dates";
 
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import toast from "react-hot-toast";
@@ -216,21 +215,37 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
                     />
                 </div>
 
-                <Button
-                className={classes.logButton}
-                variant='filled'
-                color='green'
-                leftSection={<NotebookPen size={20}/>}
-                size='md'
-                disabled={!selectedGameId || !playSessionDate || duration <= 0}
-                onClick={() => {
-                    handleLogPlaySession();
-                    onClose();
-                    if(onSuccess) onSuccess();
-                }}
-                >
-                    Create Play Session
-                </Button>
+                <Divider styles={{label: {color: 'white'}}} labelPosition="center" color='dimmed' my="lg"  />
+
+                <div className={classes.buttonGroup}>
+
+                    <Button 
+                    className={classes.cancelButton}
+                    color="black"
+                    size="md"
+                    variant='white'
+                    onClick={onClose}
+                    >
+                        Cancel
+                    </Button>
+
+                    <Button
+                    className={classes.logButton}
+                    variant='filled'
+                    color='green'
+                    leftSection={<NotebookPen size={20}/>}
+                    size='md'
+                    disabled={!selectedGameId || !playSessionDate || duration <= 0}
+                    onClick={() => {
+                        handleLogPlaySession();
+                        onClose();
+                        if(onSuccess) onSuccess();
+                    }}
+                    >
+                        Create Play Session
+                    </Button>
+
+                </div>
 
             </Stack>
         </Modal>

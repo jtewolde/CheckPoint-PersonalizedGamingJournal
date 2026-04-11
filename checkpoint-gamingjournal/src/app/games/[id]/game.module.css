@@ -262,6 +262,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
   margin-bottom: 2rem;
 }
 
@@ -270,6 +271,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
   gap: 0.5rem;
   padding: 1rem;
   border-radius: 8px;

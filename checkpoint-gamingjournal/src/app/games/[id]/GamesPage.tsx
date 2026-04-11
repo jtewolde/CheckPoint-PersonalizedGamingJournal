@@ -11,7 +11,9 @@ import PlaySessionModal from '@/components/PlaySessionModal/SessionModal';
 
 import toast from 'react-hot-toast';
 
-import { Button, Modal, Select, Badge, RingProgress, Text, TextInput, Accordion, SimpleGrid, Group, Stack, Rating, Tooltip, ThemeIcon, ActionIcon, NumberInput } from '@mantine/core';
+import { Button, Modal, Select, Badge, RingProgress, Text, TextInput, Accordion, SimpleGrid, Group, Stack, Rating, Tooltip, ThemeIcon } from '@mantine/core';
+import { Heatmap } from '@mantine/charts';
+import { Calendar } from '@mantine/dates';
 import Image from 'next/image';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -816,13 +818,13 @@ export default function GameDetails() {
                 <h2 className={classes.sectionTitle}>Your Activity: </h2>
             </div>
 
-            <SimpleGrid cols={{base: 3}} spacing='lg' verticalSpacing='lg' className={classes.activityGrid}>
+            <SimpleGrid cols={{base: 4}} spacing='lg' verticalSpacing='lg' className={classes.activityGrid}>
 
               <div className={classes.activityItem}>
                 <div className={classes.titleLogo}>
-                  <Text className={classes.activityLabel}>Last Played</Text>
+                  <Text className={classes.activityLabel}>Session Calendar</Text>
                 </div>
-                <Text className={classes.activityStat}>March</Text>
+                <Calendar w='100%'/>
               </div>
 
               <div className={classes.activityItem}>
