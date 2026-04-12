@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import { Modal, Divider, Stack, Button, TextInput, NumberInput, Select} from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import toast from "react-hot-toast";
 
 import classes from './SessionModal.module.css';
