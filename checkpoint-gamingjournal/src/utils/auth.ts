@@ -172,6 +172,11 @@ export const auth = betterAuth({
                 type: "string",
                 required: true,
             },
+            tags: {
+                type: "string[]",
+                required: false,
+                defaultValue: []
+            },
             notes:{
                 type: "string",
                 required: true,
@@ -210,7 +215,12 @@ export const auth = betterAuth({
             notes: {
                 type: "string",
                 required: false
-            }
+            },
+            tags: {
+                type: "string[]",
+                required: false,
+                defaultValue: []
+            },
         }
     },
 

@@ -11,7 +11,7 @@ import { redis } from "@/utils/redis";
 export async function POST(req: NextRequest){
     try{
         const body = await req.json();
-        const { gameID, gameName, date, duration, notes } = body;
+        const { gameID, gameName, date, duration, notes, tags } = body;
 
         // Validate required fields for the play session object like gameID, date of session, and duration
         if(!gameID || !gameName || !date || !duration){
@@ -51,7 +51,8 @@ export async function POST(req: NextRequest){
             gameName,
             duration,
             date,
-            notes
+            notes,
+            tags
         }
 
         // Insert the play session into the playSession collection
