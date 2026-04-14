@@ -1,0 +1,30 @@
+
+.gameSessionCard{
+    width: 100%;
+    background-color: #212121;
+    border: 1px solid #333;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.sessionHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+}
+
+.actionIcons{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.tagsContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+}
