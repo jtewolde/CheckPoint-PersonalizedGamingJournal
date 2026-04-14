@@ -62,6 +62,7 @@ export async function POST(req: NextRequest){
         // Clear cache (important for dashboard + game page)
         await redis.del(`user_library:${userId}`);
         await redis.del(`play_sessions:${userId}:${gameID}`);
+        await redis.del(`play_sessions:${userId}`);
 
         // Return the json response for a successful creation of plays session
         return NextResponse.json({
@@ -99,7 +100,7 @@ export async function GET(req: NextRequest){
 
         // Get the gameID from the query parameters for optional filtering of play sessions by game
         const { searchParams } = new URL(req.url);
-        const gameID = searchParams.get("gameID");
+        const gameID = searchParams.get("gameId");
 
         // Cache key for play sessions, if the gameID is provided, then cache key is specific to that game, otherwise it's for all sessions of the user
         const cacheKey = gameID
@@ -116,7 +117,7 @@ export async function GET(req: NextRequest){
         // Build the query for fetching play sessions, if gameID is provided, then filter by that gameID, otherwise get all play sessions for the user
         const query: any = { userId };
         if (gameID) {
-            query.gameID = gameID;
+            query.gameId = gameID;
         }
 
         // Fetch play sessions from the database based on the query

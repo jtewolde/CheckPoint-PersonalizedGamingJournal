@@ -130,7 +130,7 @@ export default function Dashboard() {
           }
 
           const data = await res.json();
-          setNumEntries(data.journalEntries.length) // Store total number of journal entries
+          setNumEntries(data.pagination.totalEntries) // Store total number of journal entries
           
           const sortedEntries = data.journalEntries.slice(0, 4); // Limit to the 5 most recent entries
           setRecentEntries(sortedEntries); // Store the recent entries in state

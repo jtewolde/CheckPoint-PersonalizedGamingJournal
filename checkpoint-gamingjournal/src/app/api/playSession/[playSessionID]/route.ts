@@ -57,6 +57,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ p
 
         // Clear cache for the user's library and play sessions for the specific gme
         await redis.del(`play_sessions:${userId}:${existingSession.gameId}`);
+        await redis.del(`play_sessions:${userId}`);
 
         return NextResponse.json({
             message: "Play session deleted successfully",
