@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect } from "react"
+import { formatDate, isSameDay } from "@/utils/dateUtils"
 import { Calendar } from "@mantine/dates"
 import { Indicator, Modal, Stack, Text, Group, ActionIcon, Badge } from "@mantine/core"
-import { Trash2, Edit, Trash2Icon } from "lucide-react"
+import { Trash2Icon } from "lucide-react"
 import toast from "react-hot-toast"
 import classes from "./SessionCalendar.module.css"
 
@@ -30,7 +31,7 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
   const sessionsForDate = selectedDate
     ? localSessions.filter(
         (s) =>
-          new Date(s.date).toDateString() === selectedDate.toDateString()
+          isSameDay(s.date, selectedDate)
       )
     : []
 
@@ -79,7 +80,7 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
 
           const hasSession = localSessions.some(
             (s) =>
-              new Date(s.date).toDateString() === date.toDateString()
+              isSameDay(s.date, date)
           )
 
           return hasSession ? (
@@ -98,7 +99,7 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
         onClose={() => setOpened(false)}
         title={
           selectedDate
-            ? `Sessions for ${selectedDate.toDateString()}`
+            ? `Sessions for ${formatDate(selectedDate)}`
             : "Sessions"
         }
       >
