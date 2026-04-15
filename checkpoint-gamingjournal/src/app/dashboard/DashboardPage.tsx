@@ -82,11 +82,6 @@ export default function Dashboard() {
       const playingGames = data.games.filter((game: any) => game.status === 'Playing').slice(0,6) // Filter games that are currently being played with the first 6 games
       const platinumedGames = data.games.filter((game: any) => game.platinum === true).length; // Filter games that have been platinumed and get the count
       setNumPlatinumedGames(platinumedGames); // Store the number of platinumed games in state
-
-      console.log("Playing Games: ", playingGames);
-      console.log("Avg Rating: ", avgRating);
-      console.log("Number of Platinumed Games: ", platinumedGames);
-      console.log("Top Rated Game: ", topRatedGame);
       setPlayingGames(playingGames); // Store the playing games in state
 
       const totalGames = data.games.length // Store total number of games
@@ -134,7 +129,6 @@ export default function Dashboard() {
           
           const sortedEntries = data.journalEntries.slice(0, 4); // Limit to the 5 most recent entries
           setRecentEntries(sortedEntries); // Store the recent entries in state
-          console.log('Recent Journal Entries:', sortedEntries);
 
           setJournalActivityData(buildJournalEntriesOverTimeData(data.journalEntries)) // Build the data for the journal entries over time chart using the user's journal entries
       } catch (error) {

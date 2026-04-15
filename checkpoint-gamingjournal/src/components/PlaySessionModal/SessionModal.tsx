@@ -1,14 +1,15 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { Modal, Divider, Stack, Button, TextInput, NumberInput, Select} from "@mantine/core";
+import { Modal, Divider, Stack, Button, TextInput, NumberInput, Select, MultiSelect } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
+import { formatDate } from "@/utils/dateUtils";
 
 import toast from "react-hot-toast";
 
 import classes from './SessionModal.module.css';
 
-import { Captions, CalendarDays, NotebookPen, Gamepad2, Clock } from "lucide-react";
+import { Captions, CalendarDays, NotebookPen, Gamepad2, Clock, LibraryBig } from "lucide-react";
 
 // Define the props for the PlaySessionModal component
 type PlaySessionModalProps = {
@@ -17,9 +18,10 @@ type PlaySessionModalProps = {
     gameId?: string;
     gameName?: string;
     onSuccess?: () => void; // optional refresh callback
+    onSessionCreated?: () => void;
 };
 
-export default function PlaySessionModal({ opened, onClose, gameId, gameName, onSuccess }: PlaySessionModalProps) {
+export default function PlaySessionModal({ opened, onClose, gameId, gameName, onSuccess, onSessionCreated }: PlaySessionModalProps) {
 
     // State variables to hold info on play time duration using hours and minutes inputs
     const [hours, setHours] = useState(0);
@@ -29,7 +31,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
     // State variables to hold play session notes and date inputs
     const [playSessionNotes, setPlaySessionNotes] = useState("");
     const [playSessionDate, setPlaySessionDate] = useState<string | null>(null);
-    const [sessionDates, setSessionDates] = useState<Date[]>([]);
+    const [tags, setTags] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
 
     // State variables to hold selected game and user's game library for the select dropdown in the modal
@@ -99,6 +101,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
                     gameName: selectedGameName,
                     duration,
                     notes: playSessionNotes,
+                    tags: tags,
                     date: playSessionDate
                 })
             });
@@ -108,7 +111,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
                 gameName: selectedGameName,
                 duration,
                 notes: playSessionNotes,
-                date: playSessionDate
+                date: playSessionDate ? formatDate(new Date(playSessionDate)) : null
             });
 
             if(!res.ok){
@@ -122,6 +125,10 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
             setMinutes(0);
             setPlaySessionNotes("");
             setPlaySessionDate(null);
+
+            onSessionCreated?.();
+            onSuccess?.();
+            onClose();
         
         } catch(error){
             console.error('Error logging play session:', error);
@@ -164,34 +171,59 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
                 )}
 
                 <TextInput
-                className={classes.textInput}
-                styles={{
-                    wrapper: { color: '#212121'}, 
-                    input: { color: 'white', background: '#212121'}, 
-                }}
-                size="md"
-                label="Notes"
-                placeholder="Enter play session notes... "
-                leftSection={<Captions size={20} />}
-                value={playSessionNotes}
-                onChange={(e) => setPlaySessionNotes(e.target.value)}
-                required
-                style={{ marginTop: "1rem" }}
+                    className={classes.textInput}
+                    styles={{
+                        wrapper: { color: '#212121'}, 
+                        input: { color: 'white', background: '#212121'}, 
+                    }}
+                    size="md"
+                    label="Notes"
+                    placeholder="Enter play session notes... "
+                    leftSection={<Captions size={20} />}
+                    value={playSessionNotes}
+                    onChange={(e) => setPlaySessionNotes(e.target.value)}
+                    required
+                    style={{ marginTop: "1rem" }}
+                />
+
+                
+                <MultiSelect
+                    className={classes.select}
+                    leftSection={<LibraryBig size={20} />}
+                    label="Tags"
+                    placeholder="Add tags (e.g. boss, story, multiplayer)"
+                    data={[
+                        "Story",
+                        "Boss Fight",
+                        "Exploration",
+                        "Multiplayer",
+                        "Grinding",
+                        "Side Quest",
+                        "Achievement",
+                    ]}
+                    value={tags}
+                    onChange={setTags}
+                    searchable
+                    size="md"
+                    styles={{
+                    input: { color: "white", background: "#212121" },
+                    dropdown: { background: "#212121", color: "whitesmoke" },
+                    }}
+                    style={{ marginTop: "1rem" }}
                 />
 
                 <DateInput
-                size='md'
-                label="Session Date"
-                placeholder='Select session date'
-                clearable
-                required
-                leftSection={<CalendarDays size={20} />}
-                value={playSessionDate}
-                maxDate={new Date()}
-                onChange={(date) => {
-                    const dateObj = date ? new Date(date).toISOString() : null;
-                    setPlaySessionDate(dateObj);
-                }}
+                    size='md'
+                    label="Session Date"
+                    placeholder='Select session date'
+                    clearable
+                    required
+                    leftSection={<CalendarDays size={20} />}
+                    value={playSessionDate}
+                    maxDate={new Date()}
+                    onChange={(date) => {
+                        setPlaySessionDate(date);
+                    }}
                 />
 
                 <div className={classes.durationContainer}>
@@ -237,11 +269,9 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
                     disabled={!selectedGameId || !playSessionDate || duration <= 0}
                     onClick={() => {
                         handleLogPlaySession();
-                        onClose();
-                        if(onSuccess) onSuccess();
                     }}
                     >
-                        Create Play Session
+                        Create
                     </Button>
 
                 </div>
