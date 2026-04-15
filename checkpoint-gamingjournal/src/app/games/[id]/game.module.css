@@ -239,6 +239,17 @@
   gap: 0.2rem;
 }
 
+.ratingWrapper{
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+}
+
+.starsCount{
+  font-size: 1.3rem;
+  font-family: 'Poppins';
+}
+
 .ratingText{
   font-size: 1.0rem;
   color: #f0f0f0;

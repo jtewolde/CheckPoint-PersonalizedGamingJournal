@@ -8,12 +8,11 @@ import { notFound } from 'next/navigation';
 
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 import PlaySessionModal from '@/components/PlaySessionModal/SessionModal';
+import SessionCalendar from '@/components/SessionCalendar/SessionCalendar';
 
 import toast from 'react-hot-toast';
 
 import { Button, Modal, Select, Badge, RingProgress, Text, TextInput, Accordion, SimpleGrid, Group, Stack, Rating, Tooltip, ThemeIcon } from '@mantine/core';
-import { Heatmap } from '@mantine/charts';
-import { Calendar } from '@mantine/dates';
 import Image from 'next/image';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -49,6 +48,9 @@ export default function GameDetails() {
   const [completionDate, setCompletionDate] = useState<string | null>(null); // State to handle completion date of game
   const completionDateString = completionDate ? new Date(completionDate).toLocaleDateString('en-US') : 'N/A';
   const [numOfEntries, setNumOfEntries] = useState(0);
+
+  const [totalHoursPlayed, setTotalHoursPlayed] = useState(""); 
+  const [sessions, setSessions] = useState<any[]>([]);
 
   const [opened, {open, close} ] = useDisclosure(false);
   const [playSessionModalOpened, {open: openPlaySessionModal, close: closePlaySessionModal}] = useDisclosure(false);
@@ -113,7 +115,7 @@ export default function GameDetails() {
     const fetchRecentJournalEntries = async () => {
         try {
             const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
-            const res = await fetch('/api/journal', {
+            const res = await fetch(`/api/journal/count?gameID=${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -125,7 +127,10 @@ export default function GameDetails() {
                 throw new Error('Failed to fetch journal entries');
             }
             const data = await res.json();
-            setNumOfEntries(data.journalEntries.length) // Store total number of journal entries
+          
+            console.log("Entries: ", data.count)
+
+            setNumOfEntries(data.count);
         } catch (error) {
             console.error('Error fetching recent journal entries:', error);
         }
@@ -174,6 +179,45 @@ export default function GameDetails() {
         setIsInLibrary(false)
         setLibraryGame(null)
       }
+    }
+  }, [id, isAuthenticated]);
+
+  // Function to fetch play sessions for the game to display on calendar and calculate total tracked playtime.
+  const fetchPlaySessions = async () => {
+    try {
+      const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
+        const res = await fetch(`/api/playSession?gameID=${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!res.ok) {
+            throw new Error('Failed to fetch play sessions');
+        }
+
+        const data = await res.json();
+        console.log("All Sessions:", data)
+
+        const gameSessions = data.filter((session: any) => session.gameId === id);
+        setSessions(gameSessions);
+
+        const totalPlaytime = gameSessions.reduce((total: number, session: any) => total + session.duration, 0);
+        const hoursPlayed = (totalPlaytime / 60).toFixed(2)
+        setTotalHoursPlayed(hoursPlayed);
+
+        console.log("Game Sessions", gameSessions);
+    } catch (error) {
+      console.error('Error fetching recent play sessions:', error);
+    }
+  }
+
+  // Re-fetch play sessions of game
+  useEffect(() => {
+    if (id && isAuthenticated) {
+      fetchPlaySessions();
     }
   }, [id, isAuthenticated]);
 
@@ -235,17 +279,6 @@ export default function GameDetails() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`, // Include the Bearer token
         },
-        body: JSON.stringify({
-          gameID: id,
-          gameDetails: {
-            title: game.name,
-            genre: game.genres,
-            coverImage: game.cover.url,
-            releaseDate: game.first_release_date
-              ? new Date(game.first_release_date * 1000).toISOString()
-              : null,
-          },
-        }),
       });
 
       if (!res.ok) {
@@ -613,15 +646,19 @@ export default function GameDetails() {
 
                                 <Text size='md' className={classes.ratingText}>Your Rating:</Text>
 
-                                <Rating
-                                size='lg' 
-                                fractions={2} 
-                                value={rating} 
-                                onChange={
-                                  (value) => {
-                                    setRating(value);
-                                  }}
-                                />
+                                <div className={classes.ratingWrapper}>
+                                  <Rating
+                                  size='lg' 
+                                  fractions={2} 
+                                  value={rating} 
+                                  onChange={
+                                    (value) => {
+                                      setRating(value);
+                                    }}
+                                  />
+
+                                  <p className={classes.starsCount}>{rating}/5</p>
+                                </div>
 
                               </div>
 
@@ -657,7 +694,7 @@ export default function GameDetails() {
                             </Stack>
                           </Modal>
 
-                          <PlaySessionModal opened={playSessionModalOpened} onClose={closePlaySessionModal} gameId={game.id} gameName={game.name} />
+                          <PlaySessionModal opened={playSessionModalOpened} onClose={closePlaySessionModal} gameId={game.id} gameName={game.name} onSessionCreated={fetchPlaySessions}/>
 
                           <Tooltip label="Log a new play session" position='top'>
                             <Button
@@ -818,13 +855,13 @@ export default function GameDetails() {
                 <h2 className={classes.sectionTitle}>Your Activity: </h2>
             </div>
 
-            <SimpleGrid cols={{base: 4}} spacing='lg' verticalSpacing='lg' className={classes.activityGrid}>
+            <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 3, xl: 3}} spacing='lg' verticalSpacing='lg' className={classes.activityGrid}>
 
               <div className={classes.activityItem}>
                 <div className={classes.titleLogo}>
                   <Text className={classes.activityLabel}>Session Calendar</Text>
                 </div>
-                <Calendar w='100%'/>
+                <SessionCalendar gameId={game.id} sessions={sessions}/>
               </div>
 
               <div className={classes.activityItem}>
@@ -836,9 +873,9 @@ export default function GameDetails() {
 
               <div className={classes.activityItem}>
                 <div className={classes.titleLogo}>
-                  <Text className={classes.activityLabel}>Total Playtime</Text>
+                  <Text className={classes.activityLabel}>Total Playtime Tracked</Text>
                 </div>
-                <Text className={classes.activityStat}>4 Hours 59 Minutes</Text>
+                <Text className={classes.activityStat}>{totalHoursPlayed} Hours</Text>
               </div>
 
             </SimpleGrid>
