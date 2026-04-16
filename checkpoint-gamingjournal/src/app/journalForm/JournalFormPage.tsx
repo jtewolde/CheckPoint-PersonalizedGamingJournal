@@ -12,7 +12,6 @@ import { Send, Gamepad2, Captions, LibraryBig } from "lucide-react";
 import classes from './journalForm.module.css';
 import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
 
-
 export default function JournalForm() {
   // State variables for the journal form like name, content, and associated tags
   const [title, setTitle] = useState("");

@@ -109,7 +109,8 @@ export async function POST(req: NextRequest) {
 
 //=================================
 // GET JOURNAL ENTRIES (GET)
-// This API route is used to get all journal entries for a user with pagination support. It also implements caching with Redis to optimize performance.
+// This API route is used to get all journal entries for a user with pagination support. 
+// It also implements caching with Redis to optimize performance.
 //=================================
 export async function GET(req: NextRequest){
     try{

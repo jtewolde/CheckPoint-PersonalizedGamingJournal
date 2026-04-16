@@ -82,7 +82,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ pl
         // Extract playSessionID from the route parameters
         const { playSessionID } = await params;
         const body = await req.json();
-        const { date, duration, notes } = body;
+        const { date, duration, notes, tags } = body;
 
         // Validate that play session
         if (!playSessionID){
@@ -124,6 +124,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ pl
         if (date !== undefined) updateData.date = date;
         if (duration !== undefined) updateData.duration = duration;
         if (notes !== undefined) updateData.notes = notes;
+        if (tags !== undefined) updateData.tags = tags;
 
         // Update the play session
         const updateResult = await PlaySessionCollection.updateOne(
