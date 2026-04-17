@@ -1,4 +1,8 @@
 
+.calendar{
+    width: 100%;
+}
+
 .gameSessionCard{
     width: 100%;
     background-color: #212121;
@@ -27,4 +31,11 @@
     gap: 0.4rem;
     margin-bottom: 0.5rem;
     margin-top: 0.5rem;
+}
+
+.daySession{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

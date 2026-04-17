@@ -67,6 +67,9 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
   return (
     <>
       <Calendar
+        fullWidth
+        highlightToday={true}
+        withCellSpacing
         maxDate={new Date()}
         getDayProps={(dateString) => ({
           onClick: () => {
@@ -84,9 +87,11 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
           )
 
           return hasSession ? (
-            <Indicator size={10} color="red">
-              <div>{date.getDate()}</div>
-            </Indicator>
+            <div className={classes.daySession}>
+              <Indicator size={15} color="green">
+                <div>{date.getDate()}</div>
+              </Indicator>
+            </div>
           ) : (
             <div>{date.getDate()}</div>
           )
