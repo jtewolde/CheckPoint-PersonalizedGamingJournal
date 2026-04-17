@@ -277,18 +277,51 @@
   margin-bottom: 2rem;
 }
 
+.activityLayout{
+  width: 95%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.calendarCard {
+  background: #1b1a1a;
+  border: 1px solid #2f2e2e;
+  border-radius: 12px;
+  padding: 1.2rem;
+}
+
+.statsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 .activityItem{
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  width: 100%;
-  gap: 0.5rem;
-  padding: 1rem;
-  border-radius: 8px;
-  background-color: #1b1a1a;
+
+  width: 95%;
+  padding: 1.2rem;
+  border-radius: 12px;
+
+  background: linear-gradient(145deg, #1f1f1f, #171717);
   border: 1px solid #2f2e2e;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  box-shadow: 
+    0 4px 12px rgba(0,0,0,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.03);
+
+  transition: all 0.25s ease;
+}
+
+.activityItem:hover {
+  transform: translateY(-4px);
+  border-color: #3a3a3a;
+
+  box-shadow: 
+    0 8px 20px rgba(0,0,0,0.4),
+    0 0 10px rgba(131, 47, 173, 0.15); /* subtle purple glow */
 }
 
 .activityLabel{
@@ -305,6 +338,7 @@
   font-size: 20px;
   font-weight: 600;
   font-family: 'Inter';
+  align-self: center;
 }
 
 .swiperContainer {
@@ -554,6 +588,18 @@
   .button {
     width: auto;
     text-align: center;
+  }
+}
+
+@media screen and (max-width: 540px){
+  .activityLayout{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+  }
+
+  .activityItem{
+    width: 100%;
   }
 }
 

@@ -12,7 +12,7 @@ import SessionCalendar from '@/components/SessionCalendar/SessionCalendar';
 
 import toast from 'react-hot-toast';
 
-import { Button, Modal, Select, Badge, RingProgress, Text, TextInput, Accordion, SimpleGrid, Group, Stack, Rating, Tooltip, ThemeIcon } from '@mantine/core';
+import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, Rating, Tooltip, ThemeIcon } from '@mantine/core';
 import Image from 'next/image';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -22,7 +22,7 @@ import { Navigation, Pagination, Thumbs, Keyboard } from 'swiper/modules';
 
 import classes from './game.module.css';
 
-import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock, Camera, Star, Gamepad, Activity, Pencil, Captions } from 'lucide-react';
+import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock, Camera, Star, Gamepad, Activity, Pencil, Notebook } from 'lucide-react';
 
 import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
   IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
@@ -49,6 +49,13 @@ export default function GameDetails() {
   const completionDateString = completionDate ? new Date(completionDate).toLocaleDateString('en-US') : 'N/A';
   const [numOfEntries, setNumOfEntries] = useState(0);
 
+  // State variable that holds a dictionary of stats used in 'Your Activity' section
+  const [stats, setStats] = useState({
+    avg: 0,
+    longest: 0,
+    totalSessions: 0,
+  })
+  
   const [totalHoursPlayed, setTotalHoursPlayed] = useState(""); 
   const [sessions, setSessions] = useState<any[]>([]);
 
@@ -77,15 +84,13 @@ export default function GameDetails() {
     return [...screenshots, ...artworks]
   }
 
-  // Function to help pick a random image from screenshots and artworks of game to be background for dynamic background instead of fixed image
+  // Function to help pick a random image from screenshots and artworks of game to be 
+  // background for dynamic background instead of fixed image
   const getRandomImage = (gameData: any) =>{
     const images = getAllImages(gameData);
-
     if(images.length === 0) return PlaceHolderImage.src
-
     const randomIndex = Math.floor(Math.random() * images.length);
     const selected = images[randomIndex]
-
     return `https:${selected.url.replace('t_thumb', 't_1080p')}`;
   }
 
@@ -201,12 +206,24 @@ export default function GameDetails() {
         const data = await res.json();
         console.log("All Sessions:", data)
 
+        // Retrieve the play sessions of the user only for the selected game
         const gameSessions = data.filter((session: any) => session.gameId === id);
         setSessions(gameSessions);
 
+        // Calculate the total playtime of the game based on play sessions
         const totalPlaytime = gameSessions.reduce((total: number, session: any) => total + session.duration, 0);
         const hoursPlayed = (totalPlaytime / 60).toFixed(2)
         setTotalHoursPlayed(hoursPlayed);
+
+        // Calculate the average play session duration that a user has for the game
+        const avgSessionDuration = gameSessions.length ? gameSessions.reduce((sum: any, s: { duration: any; }) => sum + s.duration, 0) / gameSessions.length / 60 : 0;
+        console.log("Average", avgSessionDuration)
+
+        // Calculate the longest play session that the user has tracked for the specific game
+        const longest = gameSessions.length ? Math.max(...gameSessions.map((s: any) => s.duration)) : 0;
+        console.log("Longest", longest)
+
+        setStats({avg: Number(avgSessionDuration.toFixed(1)), totalSessions: gameSessions.length, longest: longest / 60})
 
         console.log("Game Sessions", gameSessions);
     } catch (error) {
@@ -852,33 +869,46 @@ export default function GameDetails() {
                 <ThemeIcon size={50} variant='gradient' gradient={{ from: '#e70e0e', to: '#ca1118', deg: 20}} radius='md'>
                     <Activity size={40} />
                 </ThemeIcon>
-                <h2 className={classes.sectionTitle}>Your Activity: </h2>
+                <h2 className={classes.sectionTitle}>Your Activity</h2>
             </div>
 
-            <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 3, xl: 3}} spacing='lg' verticalSpacing='lg' className={classes.activityGrid}>
-
-              <div className={classes.activityItem}>
-                <div className={classes.titleLogo}>
-                  <Text className={classes.activityLabel}>Session Calendar</Text>
-                </div>
+            <div className={classes.activityLayout}>
+              <div className={classes.calendarCard}>
                 <SessionCalendar gameId={game.id} sessions={sessions}/>
               </div>
 
-              <div className={classes.activityItem}>
-                <div className={classes.titleLogo}>
-                  <Text className={classes.activityLabel}>Total Entries</Text>
+              <div className={classes.statsColumn}>
+
+                <div className={classes.activityItem}>
+                  <div className={classes.titleLogo}>
+                    <Text className={classes.activityLabel}>Total Journal Entries</Text>
+                  </div>
+                  <Text className={classes.activityStat}>{numOfEntries}</Text>
                 </div>
-                <Text className={classes.activityStat}>{numOfEntries}</Text>
+
+                <div className={classes.activityItem}>
+                  <div className={classes.titleLogo}>
+                    <Text className={classes.activityLabel}>Total Playtime Tracked</Text>
+                  </div>
+                  <Text className={classes.activityStat}>{totalHoursPlayed} Hours</Text>
+                </div>
+
+                <div className={classes.activityItem}>
+                  <div className={classes.titleLogo}>
+                    <Text className={classes.activityLabel}>Average Session Duration</Text>
+                  </div>
+                  <Text className={classes.activityStat}>{stats.avg} Hours</Text>
+                </div>
+
+                <div className={classes.activityItem}>
+                  <div className={classes.titleLogo}>
+                    <Text className={classes.activityLabel}>Longest Session</Text>
+                  </div>
+                  <Text className={classes.activityStat}>{stats.longest} Hours</Text>
+                </div>
               </div>
 
-              <div className={classes.activityItem}>
-                <div className={classes.titleLogo}>
-                  <Text className={classes.activityLabel}>Total Playtime Tracked</Text>
-                </div>
-                <Text className={classes.activityStat}>{totalHoursPlayed} Hours</Text>
-              </div>
-
-            </SimpleGrid>
+            </div>
           </div>
 
           <div className={classes.sectionHeader}>
