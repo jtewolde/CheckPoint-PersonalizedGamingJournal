@@ -36,6 +36,9 @@
   font-size: 1.4rem;
   font-weight: bold;
   font-family: 'Poppins';
+  margin-bottom: 0.5rem;
+  text-decoration: underline;
+  text-underline-offset: 8px;
 }
 
 .tagsContainer{
@@ -49,7 +52,7 @@
 
 .date {
   color: rgb(208, 208, 208);
-  font-size: 1rem;
+  font-size: 1.2rem;
   margin-bottom: 3rem;
   font-family: 'Poppins';
 }

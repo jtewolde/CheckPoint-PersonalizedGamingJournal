@@ -149,11 +149,6 @@ export const auth = betterAuth({
                 required: false,
                 defaultValue: [],
             },
-            playSessions: {
-                type: "string[]",
-                required: false,
-                defaultValue: [],
-            },
             userId: {
                 type: "string",
                 required: true,
@@ -177,13 +172,54 @@ export const auth = betterAuth({
                 type: "string",
                 required: true,
             },
-            content:{
-                type:"string",
-                required:true,
+            tags: {
+                type: "string[]",
+                required: false,
+                defaultValue: []
+            },
+            notes:{
+                type: "string",
+                required: true,
             },
             date:{
-                type:"date",
+                type: "date",
                 required:true,
+            },
+        }
+    },
+
+    playSessions: {
+        modelName: 'playSessions',
+
+        fields: {
+            gameId: {
+                type: "string",
+                required: true,
+            },
+            userId: {
+                type: "string",
+                required: true,
+            },
+            gameName: {
+                type: "string",
+                required: true,
+            },
+            date: {
+                type: "date",
+                required: true
+            },
+            duration: {
+                type: 'number',
+                required: false //Stored as minutes,
+            },
+            notes: {
+                type: "string",
+                required: false
+            },
+            tags: {
+                type: "string[]",
+                required: false,
+                defaultValue: []
             },
         }
     },

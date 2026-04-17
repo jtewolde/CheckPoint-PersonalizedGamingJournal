@@ -7,27 +7,22 @@ import { useParams, useRouter } from 'next/navigation';
 import { notFound } from 'next/navigation';
 
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
+import PlaySessionModal from '@/components/PlaySessionModal/SessionModal';
+import SessionCalendar from '@/components/SessionCalendar/SessionCalendar';
 
 import toast from 'react-hot-toast';
 
-import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, Rating, Tooltip, ThemeIcon, ActionIcon } from '@mantine/core';
+import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, Rating, Tooltip, ThemeIcon } from '@mantine/core';
 import Image from 'next/image';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType} from 'swiper/types';
 
-import { FreeMode, Navigation, Pagination, Thumbs, Keyboard } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar'
-import 'swiper/css/thumbs';
-import 'swiper/css/free-mode';
-import 'swiper/css/keyboard';
+import { Navigation, Pagination, Thumbs, Keyboard } from 'swiper/modules';
 
 import classes from './game.module.css';
 
-import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock, Camera, Star, Gamepad, Activity, Pencil, Info } from 'lucide-react';
+import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock, Camera, Star, Gamepad, Activity, Pencil, Notebook } from 'lucide-react';
 
 import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
   IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
@@ -54,7 +49,18 @@ export default function GameDetails() {
   const completionDateString = completionDate ? new Date(completionDate).toLocaleDateString('en-US') : 'N/A';
   const [numOfEntries, setNumOfEntries] = useState(0);
 
+  // State variable that holds a dictionary of stats used in 'Your Activity' section
+  const [stats, setStats] = useState({
+    avg: 0,
+    longest: 0,
+    totalSessions: 0,
+  })
+  
+  const [totalHoursPlayed, setTotalHoursPlayed] = useState(""); 
+  const [sessions, setSessions] = useState<any[]>([]);
+
   const [opened, {open, close} ] = useDisclosure(false);
+  const [playSessionModalOpened, {open: openPlaySessionModal, close: closePlaySessionModal}] = useDisclosure(false);
 
   const [screenshots, setScreensShots] = useState<any[]>([]); // State to store screenshots
   const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null); // State to handle selected screenshot for modal
@@ -78,15 +84,13 @@ export default function GameDetails() {
     return [...screenshots, ...artworks]
   }
 
-  // Function to help pick a random image from screenshots and artworks of game to be background for dynamic background instead of fixed image
+  // Function to help pick a random image from screenshots and artworks of game to be 
+  // background for dynamic background instead of fixed image
   const getRandomImage = (gameData: any) =>{
     const images = getAllImages(gameData);
-
     if(images.length === 0) return PlaceHolderImage.src
-
     const randomIndex = Math.floor(Math.random() * images.length);
     const selected = images[randomIndex]
-
     return `https:${selected.url.replace('t_thumb', 't_1080p')}`;
   }
 
@@ -111,11 +115,37 @@ export default function GameDetails() {
       }
     };
 
+    // Function to fetch the journal entries for the game from the user's library if the game is in the library and user is authenticated
+    // Use API call to fetch most recent journal entries
+    const fetchRecentJournalEntries = async () => {
+        try {
+            const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
+            const res = await fetch(`/api/journal/count?gameID=${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!res.ok) {
+                throw new Error('Failed to fetch journal entries');
+            }
+            const data = await res.json();
+          
+            console.log("Entries: ", data.count)
+
+            setNumOfEntries(data.count);
+        } catch (error) {
+            console.error('Error fetching recent journal entries:', error);
+        }
+    };
+
     // Function to check if the game is in the user's library
     const checkIfInLibrary = async () => {
       try {
         const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token
-        const res = await fetch('/api/user/getLibrary', {
+        const res = await fetch('/api/library', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -149,10 +179,62 @@ export default function GameDetails() {
       fetchIGDBGameDetails();
       if(isAuthenticated) { // Only check library if user is authenticated}
       checkIfInLibrary();
+      fetchRecentJournalEntries();
       } else {
         setIsInLibrary(false)
         setLibraryGame(null)
       }
+    }
+  }, [id, isAuthenticated]);
+
+  // Function to fetch play sessions for the game to display on calendar and calculate total tracked playtime.
+  const fetchPlaySessions = async () => {
+    try {
+      const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
+        const res = await fetch(`/api/playSession?gameID=${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!res.ok) {
+            throw new Error('Failed to fetch play sessions');
+        }
+
+        const data = await res.json();
+        console.log("All Sessions:", data)
+
+        // Retrieve the play sessions of the user only for the selected game
+        const gameSessions = data.filter((session: any) => session.gameId === id);
+        setSessions(gameSessions);
+
+        // Calculate the total playtime of the game based on play sessions
+        const totalPlaytime = gameSessions.reduce((total: number, session: any) => total + session.duration, 0);
+        const hoursPlayed = (totalPlaytime / 60).toFixed(2)
+        setTotalHoursPlayed(hoursPlayed);
+
+        // Calculate the average play session duration that a user has for the game
+        const avgSessionDuration = gameSessions.length ? gameSessions.reduce((sum: any, s: { duration: any; }) => sum + s.duration, 0) / gameSessions.length / 60 : 0;
+        console.log("Average", avgSessionDuration)
+
+        // Calculate the longest play session that the user has tracked for the specific game
+        const longest = gameSessions.length ? Math.max(...gameSessions.map((s: any) => s.duration)) : 0;
+        console.log("Longest", longest)
+
+        setStats({avg: Number(avgSessionDuration.toFixed(1)), totalSessions: gameSessions.length, longest: longest / 60})
+
+        console.log("Game Sessions", gameSessions);
+    } catch (error) {
+      console.error('Error fetching recent play sessions:', error);
+    }
+  }
+
+  // Re-fetch play sessions of game
+  useEffect(() => {
+    if (id && isAuthenticated) {
+      fetchPlaySessions();
     }
   }, [id, isAuthenticated]);
 
@@ -164,7 +246,7 @@ export default function GameDetails() {
 
     try {
       const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token from localStorage
-      const res = await fetch('/api/library/add', {
+      const res = await fetch('/api/library', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -208,23 +290,12 @@ export default function GameDetails() {
 
     try {
       const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token from localStorage
-      const res = await fetch('/api/library/delete', {
-        method: 'POST',
+      const res = await fetch(`/api/library/${id}`, {
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`, // Include the Bearer token
         },
-        body: JSON.stringify({
-          gameID: id,
-          gameDetails: {
-            title: game.name,
-            genre: game.genres,
-            coverImage: game.cover.url,
-            releaseDate: game.first_release_date
-              ? new Date(game.first_release_date * 1000).toISOString()
-              : null,
-          },
-        }),
       });
 
       if (!res.ok) {
@@ -245,14 +316,13 @@ export default function GameDetails() {
   const handleUpdateInfo = async (status?: string, platinum?: boolean, rating?: number, completionDate?: string | null) => {
     try {
       const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token
-      const res = await fetch('/api/library/updateInfo', {
-        method: 'POST',
+      const res = await fetch(`/api/library/${id}`, {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`, // Include the Bearer token
         },
         body: JSON.stringify({
-          gameID: id, // Pass the game ID
           gameDetails: {
             status,
             platinum,
@@ -515,7 +585,6 @@ export default function GameDetails() {
                     {isAuthenticated ? (
                       isGameInLibrary ? (
                         <div className={classes.buttonContainer}>
-
                           <div style={{display:'flex', flexDirection:'row', justifyContent:'center', gap: '1rem'}}>
 
                             <Badge color="green" size="xl" radius="xl">
@@ -594,15 +663,19 @@ export default function GameDetails() {
 
                                 <Text size='md' className={classes.ratingText}>Your Rating:</Text>
 
-                                <Rating
-                                size='lg' 
-                                fractions={2} 
-                                value={rating} 
-                                onChange={
-                                  (value) => {
-                                    setRating(value);
-                                  }}
-                                />
+                                <div className={classes.ratingWrapper}>
+                                  <Rating
+                                  size='lg' 
+                                  fractions={2} 
+                                  value={rating} 
+                                  onChange={
+                                    (value) => {
+                                      setRating(value);
+                                    }}
+                                  />
+
+                                  <p className={classes.starsCount}>{rating}/5</p>
+                                </div>
 
                               </div>
 
@@ -635,10 +708,23 @@ export default function GameDetails() {
                               >
                                 Save Changes
                               </Button>
-
                             </Stack>
-                            
                           </Modal>
+
+                          <PlaySessionModal opened={playSessionModalOpened} onClose={closePlaySessionModal} gameId={game.id} gameName={game.name} onSessionCreated={fetchPlaySessions}/>
+
+                          <Tooltip label="Log a new play session" position='top'>
+                            <Button
+                            className={classes.button}
+                            variant='filled'
+                            color='#832fad'
+                            size='md'
+                            leftSection={<NotebookPen size={20} />}
+                            onClick={openPlaySessionModal}
+                            >
+                              Log Play Session
+                            </Button>
+                          </Tooltip>
 
                           <div className={classes.buttonActions}>
                             <Tooltip label='Remove game from library' position='top'>
@@ -778,39 +864,52 @@ export default function GameDetails() {
 
           </div>
 
-          {/* <div className={classes.activitySection}>
+          <div className={classes.activitySection}>
             <div className={classes.sectionHeader}>
                 <ThemeIcon size={50} variant='gradient' gradient={{ from: '#e70e0e', to: '#ca1118', deg: 20}} radius='md'>
                     <Activity size={40} />
                 </ThemeIcon>
-                <h2 className={classes.sectionTitle}>Your Activity: </h2>
+                <h2 className={classes.sectionTitle}>Your Activity</h2>
             </div>
 
-            <SimpleGrid cols={{base: 3}} spacing='lg' verticalSpacing='lg' className={classes.activityGrid}>
-
-              <div className={classes.activityItem}>
-                <div className={classes.titleLogo}>
-                  <Text className={classes.activityLabel}>Last Played</Text>
-                </div>
-                <Text className={classes.activityStat}>March</Text>
+            <div className={classes.activityLayout}>
+              <div className={classes.calendarCard}>
+                <SessionCalendar gameId={game.id} sessions={sessions}/>
               </div>
 
-              <div className={classes.activityItem}>
-                <div className={classes.titleLogo}>
-                  <Text className={classes.activityLabel}>Total Entries</Text>
+              <div className={classes.statsColumn}>
+
+                <div className={classes.activityItem}>
+                  <div className={classes.titleLogo}>
+                    <Text className={classes.activityLabel}>Total Journal Entries</Text>
+                  </div>
+                  <Text className={classes.activityStat}>{numOfEntries}</Text>
                 </div>
-                <Text className={classes.activityStat}>{numOfEntries}</Text>
+
+                <div className={classes.activityItem}>
+                  <div className={classes.titleLogo}>
+                    <Text className={classes.activityLabel}>Total Playtime Tracked</Text>
+                  </div>
+                  <Text className={classes.activityStat}>{totalHoursPlayed} Hours</Text>
+                </div>
+
+                <div className={classes.activityItem}>
+                  <div className={classes.titleLogo}>
+                    <Text className={classes.activityLabel}>Average Session Duration</Text>
+                  </div>
+                  <Text className={classes.activityStat}>{stats.avg} Hours</Text>
+                </div>
+
+                <div className={classes.activityItem}>
+                  <div className={classes.titleLogo}>
+                    <Text className={classes.activityLabel}>Longest Session</Text>
+                  </div>
+                  <Text className={classes.activityStat}>{stats.longest} Hours</Text>
+                </div>
               </div>
 
-              <div className={classes.activityItem}>
-                <div className={classes.titleLogo}>
-                  <Text className={classes.activityLabel}>Total Playtime</Text>
-                </div>
-                <Text className={classes.activityStat}>4 Hours 59 Minutes</Text>
-              </div>
-
-            </SimpleGrid>
-          </div> */}
+            </div>
+          </div>
 
           <div className={classes.sectionHeader}>
             <ThemeIcon size={50} variant='gradient' gradient={{ from: '#3ecb1b', to: '#10912a', deg: 20}} radius='md'>
@@ -825,9 +924,10 @@ export default function GameDetails() {
               centeredSlides={true}
               loop={true}
               navigation={true}
+              pagination={{type: 'progressbar'}}
               scrollbar={isMobile ? true: false}
               thumbs={{ swiper: thumbsSwiper}}
-              modules={[Navigation, Thumbs]}
+              modules={[Pagination, Navigation, Thumbs]}
               slidesPerView={isMobile ? 1 : 1.5}
               spaceBetween={20}
               className={classes.swiperContainer}
@@ -851,36 +951,6 @@ export default function GameDetails() {
                 </SwiperSlide>
               ))}
             </Swiper>
-
-            {!isMobile ? (
-              <Swiper
-              onSwiper={setThumbSwiper}
-              loop={true}
-              spaceBetween={10}
-              slidesPerView={3}
-              freeMode={true}
-              watchSlidesProgress={true}
-              modules={[FreeMode, Thumbs]}
-              className={classes.thumbnailSwiper}
-              >
-                {screenshots.map((screenshot: any) => (
-                  <SwiperSlide key={screenshot.id} className={classes.thumbnailSlide}>
-                    <Image
-                      src={`https:${screenshot.url.replace('t_thumb', 't_720p')}`}
-                      alt="thumbnail"
-                      loading='lazy'
-                      width={200}
-                      height={120}
-                      className={classes.thumbnailImage}
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            ): (
-                <>
-                </>
-            )}
-
           </div>
 
           {modalOpen && (

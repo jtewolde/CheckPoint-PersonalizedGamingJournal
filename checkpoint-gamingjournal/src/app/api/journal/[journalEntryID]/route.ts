@@ -1,17 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GameCollection, JournalEntriesCollection } from "@/utils/db";
+import { JournalEntriesCollection, UserCollection } from "@/utils/db";
 import { ObjectId } from "mongodb";
 
 import { auth } from "@/utils/auth";
 import { redis } from "@/utils/redis";
 
-export async function POST(req: NextRequest) {
+//=================================
+// DELETE JOURNAL ENTRY(DELETE)
+// This API route is used to delete a journal entry for a game in the user's library
+//=================================
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ journalEntryID: string }> }){
     try {
-        const body = await req.json(); // Parse the request body
-        const { journalEntryId, gameID } = body;
+        const { journalEntryID } = await params;
 
         // Validate required fields
-        if (!journalEntryId || !gameID) {
+        if (!journalEntryID) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
         }
 
@@ -28,7 +31,7 @@ export async function POST(req: NextRequest) {
 
         // Check if the journal entry exists and belongs to the user
         const journalEntry = await JournalEntriesCollection.findOne({
-            _id: new ObjectId(journalEntryId), // Query as a string
+            _id: new ObjectId(journalEntryID), // Query as a string
             userId: userId, // Query as a string
         });
 
@@ -42,7 +45,7 @@ export async function POST(req: NextRequest) {
 
         // Delete the journal entry from the JournalEntriesCollection
         const journalResult = await JournalEntriesCollection.deleteOne({
-            _id: new ObjectId(journalEntryId), // Query as a string
+            _id: new ObjectId(journalEntryID), // Query as a string
         });
 
         if (journalResult.deletedCount === 0) {
@@ -52,12 +55,6 @@ export async function POST(req: NextRequest) {
                 { status: 500 }
             );
         }
-
-        // Remove the journal entry ID from the game's journalEntries field
-        const gameResult = await GameCollection.updateOne(
-            { gameId: gameID, userId: userId }, // Query as a string
-            { $pull: { journalEntries: journalEntry.uuid } }
-        );
 
         //Invalidate/clear the cache of the user's journal entries after deletion
         await redis.del(`user_journal_entries:${userId}`);
@@ -72,11 +69,47 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({
             message: "Journal entry deleted successfully",
             journalResult,
-            gameResult,
         });
 
     } catch (error) {
         console.error("Error deleting journal entry:", error);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    }
+}
+
+// ===================================
+// GET JOURNAL ENTRY BY ID (GET)
+// This API route is used to get a specific journal entry by its ID for a user
+// ===================================
+export async function GET(req: NextRequest, { params }: { params: Promise<{ journalEntryID: string }> }){
+    try{
+        const { journalEntryID } = await params;
+
+         // Validate required fields
+        if (!journalEntryID) {
+            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+        }
+
+        const session = await auth.api.getSession({
+            headers: req.headers,
+        });
+
+        // If there is no session/authencicated, return an error
+        if(!session?.user) {
+            return NextResponse.json({ error: "Unauthorized"}, {status: 401});
+        }
+
+        // Get user Id from session
+        const userId = session.user.id
+
+        // Find the journal entry in the journalEntries collection by uuid and userID
+        const journalEntry = await JournalEntriesCollection.findOne({
+            uuid: journalEntryID,
+            userId: userId
+        })
+
+        return NextResponse.json({ entry: journalEntry });
+    } catch (error) {
+        return NextResponse.json({ error: "Server error" }, { status: 500 });
     }
 }

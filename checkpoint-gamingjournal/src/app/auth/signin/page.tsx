@@ -151,12 +151,12 @@ export default function signInPage(){
           Sign in with 
         </Text>
 
-          <Group grow mb="md" mt="md">
-              <GoogleButton radius="xl" onClick={handleGoogleSignIn}>Google</GoogleButton>
-              <DiscordButton radius='xl' onClick={handleDiscordSignIn}>Discord </DiscordButton>
-          </Group>
+        <Group grow mb="md" mt="md">
+            <GoogleButton radius="xl" onClick={handleGoogleSignIn}>Google</GoogleButton>
+            <DiscordButton radius='xl' onClick={handleDiscordSignIn}>Discord </DiscordButton>
+        </Group>
 
-          <Divider styles={{label: {color: 'white'}}} label="Or continue with email" labelPosition="center" color='white' my="lg"  />
+        <Divider styles={{label: {color: 'white'}}} label="Or continue with email" labelPosition="center" color='white' my="lg"  />
 
         <TextInput className={classes.emailInput} label="Email Address" placeholder="Your Email" size="md" leftSection={<Mail size={20} />} required mt="md" mb='md' value={email} onChange={(e) => setEmail(e.currentTarget.value)} error={error} />
 

@@ -44,7 +44,7 @@ export default function Library(){
             setLoading(true);
             try {
                 const token = localStorage.getItem('bearer_token');
-                const res = await fetch('/api/user/getLibrary', {
+                const res = await fetch('/api/library', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

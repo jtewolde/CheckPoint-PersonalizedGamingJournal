@@ -73,8 +73,8 @@ export default function GameCard({ game, variant = 'default' }: GameCardProps) {
             }
 
             const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token from localStorage
-            const res = await fetch(wasInLibrary ? '/api/library/delete' : '/api/library/add', {
-                method: 'POST',
+            const res = await fetch(wasInLibrary ? `/api/library/${gameId}` : '/api/library', {
+                method: wasInLibrary ? 'DELETE' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`, // Include the Bearer token

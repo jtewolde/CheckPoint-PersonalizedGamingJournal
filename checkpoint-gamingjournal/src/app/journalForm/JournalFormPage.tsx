@@ -12,7 +12,6 @@ import { Send, Gamepad2, Captions, LibraryBig } from "lucide-react";
 import classes from './journalForm.module.css';
 import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
 
-
 export default function JournalForm() {
   // State variables for the journal form like name, content, and associated tags
   const [title, setTitle] = useState("");
@@ -46,7 +45,7 @@ export default function JournalForm() {
       setLoading(true);
       try {
         const token = localStorage.getItem("bearer_token"); // Retrieve Bearer Token
-        const res = await fetch("/api/user/getLibrary", {
+        const res = await fetch("/api/library", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -87,7 +86,7 @@ export default function JournalForm() {
 
     try {
       const token = localStorage.getItem("bearer_token"); // Retrieve Bearer Token
-      const res = await fetch("/api/journal/createEntry", {
+      const res = await fetch("/api/journal", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -158,6 +157,7 @@ export default function JournalForm() {
               value={gameID}
               onChange={(value) => setGameID(value || "")}
               required
+              searchable
               disabled={loading} // Disable the dropdown while loading
             />
 

@@ -61,7 +61,7 @@ export default function Dashboard() {
   const fetchPlayingGames = async () => {
     try {
       const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
-      const res = await fetch('/api/user/getLibrary', {
+      const res = await fetch('/api/library', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -82,11 +82,6 @@ export default function Dashboard() {
       const playingGames = data.games.filter((game: any) => game.status === 'Playing').slice(0,6) // Filter games that are currently being played with the first 6 games
       const platinumedGames = data.games.filter((game: any) => game.platinum === true).length; // Filter games that have been platinumed and get the count
       setNumPlatinumedGames(platinumedGames); // Store the number of platinumed games in state
-
-      console.log("Playing Games: ", playingGames);
-      console.log("Avg Rating: ", avgRating);
-      console.log("Number of Platinumed Games: ", platinumedGames);
-      console.log("Top Rated Game: ", topRatedGame);
       setPlayingGames(playingGames); // Store the playing games in state
 
       const totalGames = data.games.length // Store total number of games
@@ -117,7 +112,7 @@ export default function Dashboard() {
   const fetchRecentJournalEntries = async () => {
       try {
           const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
-          const res = await fetch('/api/journal/getRecentEntries', {
+          const res = await fetch('/api/journal', {
               method: 'GET',
               headers: {
                   'Content-Type': 'application/json',
@@ -130,11 +125,10 @@ export default function Dashboard() {
           }
 
           const data = await res.json();
-          setNumEntries(data.journalEntries.length) // Store total number of journal entries
+          setNumEntries(data.pagination.totalEntries) // Store total number of journal entries
           
-          const sortedEntries = data.journalEntries.reverse().slice(0, 4); // Limit to the 5 most recent entries
+          const sortedEntries = data.journalEntries.slice(0, 4); // Limit to the 5 most recent entries
           setRecentEntries(sortedEntries); // Store the recent entries in state
-          console.log('Recent Journal Entries:', sortedEntries);
 
           setJournalActivityData(buildJournalEntriesOverTimeData(data.journalEntries)) // Build the data for the journal entries over time chart using the user's journal entries
       } catch (error) {
@@ -582,7 +576,7 @@ export default function Dashboard() {
               ) : (
                   <SimpleGrid cols={4} spacing="lg" className={classes.entriesGrid}>
                       {recentEntries.map((entry) => (
-                          <div key={entry._id} className={classes.entryCard} onClick={() => router.push(`/viewJournalEntry/${entry._id}`)}>
+                          <div key={entry.uuid} className={classes.entryCard} onClick={() => router.push(`/journal/${entry.uuid}`)}>
                               <h3 className={classes.entryGame}>{entry.gameName}</h3>
                               <h3 className={classes.entryTitle}>{entry.title}</h3>
                               <p className={classes.entryContent}>
