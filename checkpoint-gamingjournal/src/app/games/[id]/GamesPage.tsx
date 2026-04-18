@@ -566,7 +566,7 @@ export default function GameDetails() {
         <div className={classes.wrapper}>
           <div className={classes.titleType}>
             <h1 className={classes.title}>{game.name}</h1>
-            <Badge className={classes.gameTypeBadge} color='#656565' size='xl' radius='lg' variant='filled' c='white'>{game.game_type.type}</Badge>
+            <Badge className={classes.gameTypeBadge} color='#717171' size='xl' radius='lg' variant='filled' c='white'>{game.game_type.type}</Badge>
           </div>
 
           <div className={classes.details}>
@@ -864,52 +864,57 @@ export default function GameDetails() {
 
           </div>
 
-          <div className={classes.activitySection}>
-            <div className={classes.sectionHeader}>
-                <ThemeIcon size={50} variant='gradient' gradient={{ from: '#e70e0e', to: '#ca1118', deg: 20}} radius='md'>
-                    <Activity size={40} />
-                </ThemeIcon>
-                <h2 className={classes.sectionTitle}>Your Activity</h2>
-            </div>
-
-            <div className={classes.activityLayout}>
-              <div className={classes.calendarCard}>
-                <SessionCalendar gameId={game.id} sessions={sessions}/>
+          {isAuthenticated ? (
+            <div className={classes.activitySection}>
+              <div className={classes.sectionHeader}>
+                  <ThemeIcon size={50} variant='gradient' gradient={{ from: '#e70e0e', to: '#ca1118', deg: 20}} radius='md'>
+                      <Activity size={40} />
+                  </ThemeIcon>
+                  <h2 className={classes.sectionTitle}>Your Activity</h2>
               </div>
 
-              <div className={classes.statsColumn}>
-
-                <div className={classes.activityItem}>
-                  <div className={classes.titleLogo}>
-                    <Text className={classes.activityLabel}>Total Journal Entries</Text>
-                  </div>
-                  <Text className={classes.activityStat}>{numOfEntries}</Text>
+              <div className={classes.activityLayout}>
+                <div className={classes.calendarCard}>
+                  <SessionCalendar gameId={game.id} sessions={sessions}/>
                 </div>
 
-                <div className={classes.activityItem}>
-                  <div className={classes.titleLogo}>
-                    <Text className={classes.activityLabel}>Total Playtime Tracked</Text>
+                <div className={classes.statsColumn}>
+
+                  <div className={classes.activityItem}>
+                    <div className={classes.titleLogo}>
+                      <Text className={classes.activityLabel}>Total Journal Entries</Text>
+                    </div>
+                    <Text className={classes.activityStat}>{numOfEntries}</Text>
                   </div>
-                  <Text className={classes.activityStat}>{totalHoursPlayed} Hours</Text>
+
+                  <div className={classes.activityItem}>
+                    <div className={classes.titleLogo}>
+                      <Text className={classes.activityLabel}>Total Playtime Tracked</Text>
+                    </div>
+                    <Text className={classes.activityStat}>{totalHoursPlayed} Hours</Text>
+                  </div>
+
+                  <div className={classes.activityItem}>
+                    <div className={classes.titleLogo}>
+                      <Text className={classes.activityLabel}>Average Session Duration</Text>
+                    </div>
+                    <Text className={classes.activityStat}>{stats.avg} Hours</Text>
+                  </div>
+
+                  <div className={classes.activityItem}>
+                    <div className={classes.titleLogo}>
+                      <Text className={classes.activityLabel}>Longest Session</Text>
+                    </div>
+                    <Text className={classes.activityStat}>{stats.longest} Hours</Text>
+                  </div>
                 </div>
 
-                <div className={classes.activityItem}>
-                  <div className={classes.titleLogo}>
-                    <Text className={classes.activityLabel}>Average Session Duration</Text>
-                  </div>
-                  <Text className={classes.activityStat}>{stats.avg} Hours</Text>
-                </div>
-
-                <div className={classes.activityItem}>
-                  <div className={classes.titleLogo}>
-                    <Text className={classes.activityLabel}>Longest Session</Text>
-                  </div>
-                  <Text className={classes.activityStat}>{stats.longest} Hours</Text>
-                </div>
               </div>
-
             </div>
-          </div>
+          ): (
+            <>
+            </>
+          )}
 
           <div className={classes.sectionHeader}>
             <ThemeIcon size={50} variant='gradient' gradient={{ from: '#3ecb1b', to: '#10912a', deg: 20}} radius='md'>
