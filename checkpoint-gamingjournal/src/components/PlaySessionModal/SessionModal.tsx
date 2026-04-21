@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { Modal, Divider, Stack, Button, TextInput, NumberInput, Select, MultiSelect } from "@mantine/core";
+import { Modal, Divider, Stack, Button, TextInput, Textarea, NumberInput, Select, MultiSelect } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { formatDate } from "@/utils/dateUtils";
 
@@ -11,17 +11,28 @@ import classes from './SessionModal.module.css';
 
 import { Captions, CalendarDays, NotebookPen, Gamepad2, Clock, LibraryBig } from "lucide-react";
 
+// Define the playSession object used on both calendar and modal with the props
+type PlaySession = {
+    _id: string
+    gameName: string
+    date: string
+    duration: number
+    notes: string
+    tags: string[]
+}
+
 // Define the props for the PlaySessionModal component
 type PlaySessionModalProps = {
     opened: boolean;
     onClose: () => void;
     gameId?: string;
     gameName?: string;
-    onSuccess?: () => void; // optional refresh callback
+    session?: PlaySession | null;
+    onSuccess?: (session: PlaySession) => void
     onSessionCreated?: () => void;
 };
 
-export default function PlaySessionModal({ opened, onClose, gameId, gameName, onSuccess, onSessionCreated }: PlaySessionModalProps) {
+export default function PlaySessionModal({ opened, onClose, gameId, session, gameName, onSuccess, onSessionCreated }: PlaySessionModalProps) {
 
     // State variables to hold info on play time duration using hours and minutes inputs
     const [hours, setHours] = useState(0);
@@ -80,8 +91,10 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
         }
     }, [opened, gameId, gameName]);
 
-    // Function to handle logging a play session for the game. This will involve opening a modal with a form to input play session details such as duration and notes, and then making an API call to save the play session to the database and associate it with the game and user's library.
-    const handleLogPlaySession = async () => {
+    // Function to handle creating or updating a play session for a game 
+    // This will involve opening a modal with a form to input play session details such as duration and notes, 
+    // and then making an API call to save the play session to the database and associate it with the game and user's library.
+    const handleSubmit = async () => {
         try{
             // Validate required fields and show error toast if any are missing
             if (!selectedGameId || !playSessionDate || duration <= 0) {
@@ -89,9 +102,19 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
                 return;
             }
 
+            // Receive session token for authenication and determine if play session is being edited or not
             const token = localStorage.getItem('bearer_token');
-            const res = await fetch("/api/playSession", {
-                method: 'POST',
+            const isEditing = !!session
+
+            // Create custom URL for updating or creating play session
+            const url = isEditing
+                ? `/api/playSession/${session._id}`
+                : `/api/playSession`;
+
+            const method = isEditing ? "PATCH" : "POST";
+            
+            const res = await fetch(url, {
+                method,
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`, // Include the Bearer token
@@ -106,28 +129,19 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
                 })
             });
 
-            console.log({
-                gameID: selectedGameId,
-                gameName: selectedGameName,
-                duration,
-                notes: playSessionNotes,
-                date: playSessionDate ? formatDate(new Date(playSessionDate)) : null
-            });
-
             if(!res.ok){
                 const errorData = await res.json();
                 throw new Error(errorData.error || 'Failed to log play session');
             }
 
             // Show success toast and reset form fields after successful logging
-            toast.success('Play session logged succcessfully!');
+            toast.success(isEditing ? "Session updated!" : "Session created!");
             setHours(0);
             setMinutes(0);
             setPlaySessionNotes("");
             setPlaySessionDate(null);
 
             onSessionCreated?.();
-            onSuccess?.();
             onClose();
         
         } catch(error){
@@ -228,21 +242,21 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
 
                 <div className={classes.durationContainer}>
                     <NumberInput
-                    label='Time Played (Hours)'
-                    leftSection={<Clock size={20} />}
-                    placeholder="Enter hours"
-                    min={0}
-                    value={hours}
-                    onChange={(value) => setHours(Number(value) || 0)}
+                        label='Time Played (Hours)'
+                        leftSection={<Clock size={20} />}
+                        placeholder="Enter hours"
+                        min={0}
+                        value={hours}
+                        onChange={(value) => setHours(Number(value) || 0)}
                     />
 
                     <NumberInput
-                    label='Minutes'
-                    placeholder="Enter minutes"
-                    min={0}
-                    max={59}
-                    value={minutes}
-                    onChange={(value) => setMinutes(Number(value) || 0)}
+                        label='Minutes'
+                        placeholder="Enter minutes"
+                        min={0}
+                        max={59}
+                        value={minutes}
+                        onChange={(value) => setMinutes(Number(value) || 0)}
                     />
                 </div>
 
@@ -268,10 +282,10 @@ export default function PlaySessionModal({ opened, onClose, gameId, gameName, on
                     size='md'
                     disabled={!selectedGameId || !playSessionDate || duration <= 0}
                     onClick={() => {
-                        handleLogPlaySession();
+                        handleSubmit();
                     }}
                     >
-                        Create
+                        {session ? 'Update' : 'Create'}
                     </Button>
 
                 </div>
