@@ -2,25 +2,29 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import Link from 'next/link';
 
-import { SimpleGrid, Image, Paper, Text, ThemeIcon, Rating } from '@mantine/core';
+import { SimpleGrid, Image, Paper, Text, ThemeIcon, Rating, Tooltip, ActionIcon, Modal, Button } from '@mantine/core';
 import { DonutChart, BarChart, LineChart } from '@mantine/charts';
 
 import { authClient } from '@/lib/auth-client';
+import PlaySessionModal from '@/components/PlaySessionModal/SessionModal';
 
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
 import { IconClipboardListFilled } from '@tabler/icons-react';
-import { Notebook, Gamepad, CircleUserRound, CircleArrowRight, Trophy, Star } from 'lucide-react';
+import { Notebook, Gamepad, CircleUserRound, CircleArrowRight, Trophy, Star, PlusCircle, Book } from 'lucide-react';
 
 import classes from './dashboard.module.css';
 
 export default function Dashboard() {
   const router = useRouter();
+  const isMobile = useMediaQuery('768px')
   const [userName, setUserName] = useState("")
 
   const [playingGames, setPlayingGames] = useState<any[]>([]); // State to store games that the user is currently playing
+  const [libraryGames, setLibraryGames] = useState<any[]>([]); // State to store all of the games that the user has in their library
 
   const [playGamesLength, setPlayGamesLength] = useState(0) // State to store length of playing games user has
   const [noStatusLength, setNoStatusLength] = useState(0) // State to store length of games user has that has no status
@@ -40,6 +44,15 @@ export default function Dashboard() {
   const [recentEntries, setRecentEntries] = useState<any[]>([]); // State to store recent journal entries
   const [journalActivityData, setJournalActivityData] = useState<{ month: string; entries: number }[]>([]); // State to store data from journal entries over time chart
   const [ratingDistributionData, setRatingDistributionData] = useState<{ rating: number; count: number }[]>([]); // State to store data for game ratings distribution chart
+
+  // State variables for quick logging play sessions on the dashboard
+  const [opened, {open, close} ] = useDisclosure(false);
+  const [selectedGame, setSelectedGame] = useState<{
+    gameId: string;
+    title: string;
+    cover: string;
+    } | null>(null);
+
 
   // Check if the user is authenticated
   useEffect(() => {
@@ -79,10 +92,12 @@ export default function Dashboard() {
       setAvgRating(calculateAverageRating(data.games)) // Calculate the average rating of the user's games
       setTopRatedGame(calculateTopRatedGame(data.games));
 
+
       const playingGames = data.games.filter((game: any) => game.status === 'Playing').slice(0,6) // Filter games that are currently being played with the first 6 games
       const platinumedGames = data.games.filter((game: any) => game.platinum === true).length; // Filter games that have been platinumed and get the count
       setNumPlatinumedGames(platinumedGames); // Store the number of platinumed games in state
       setPlayingGames(playingGames); // Store the playing games in state
+      setLibraryGames(data.games);
 
       const totalGames = data.games.length // Store total number of games
       
@@ -446,7 +461,7 @@ export default function Dashboard() {
                 <div className={classes.quickStatsContainer}>
                   <p className={classes.statusTitle}>Quick Stats</p>
 
-                  <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 2, xl: 2}} spacing="lg" className={classes.quickStatsGrid}>
+                  <SimpleGrid cols={{base: 1, sm: 1, md: 2, lg: 2, xl: 2}} spacing="lg" className={classes.quickStatsGrid}>
 
                     <div className={classes.quickStatItem}>
 
@@ -510,6 +525,20 @@ export default function Dashboard() {
 
           </div>
 
+          {/*QUICK LOG SESSION MODAL*/}
+          <PlaySessionModal
+            opened={opened}
+            onClose={() => {
+              close();
+              setSelectedGame(null);
+            }}
+            gameId={selectedGame?.gameId || ""}
+            gameName={selectedGame?.title || ""}
+            onSuccess={() => {
+              close();
+            }}
+          />
+
           <div className={classes.playingGames} >
 
             <div className={classes.playingSection}>
@@ -519,7 +548,17 @@ export default function Dashboard() {
                 <h1 className={classes.gamesPlayingText}>Playing Games</h1>
               </div>
 
-              <a className={classes.viewMoreIcon} href='/library'> <CircleArrowRight size={35} /> </a>
+              <Button
+                className={classes.logButton}
+                leftSection={<PlusCircle size={20} />}
+                size="sm"
+                radius="xl"
+                color='green'
+                onClick={open}
+                >
+                Quick Log
+              </Button>
+
               
             </div>
 
@@ -562,12 +601,13 @@ export default function Dashboard() {
               <div className={classes.titleLogo}>
 
                 <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: '#DCE35B', to: '#45B649', deg: 60}}> <Notebook size={40} /> </ThemeIcon>
-                
                 <h1 className={classes.gamesPlayingText}>Recent Entries:</h1>
 
               </div>
 
-              <a className={classes.viewMoreIcon} href='/journal'> <CircleArrowRight size={35} /> </a>
+              <Tooltip label='View Library' position='top' events={{ hover: true, focus: true, touch: true }}>
+                <ActionIcon size={40} variant='subtle' color='white' onClick={() => router.push('/journal')}> <CircleArrowRight size={40} /> </ActionIcon>
+              </Tooltip>
 
             </div>
 

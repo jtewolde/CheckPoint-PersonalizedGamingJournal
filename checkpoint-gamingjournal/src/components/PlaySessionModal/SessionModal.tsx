@@ -96,6 +96,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
     // and then making an API call to save the play session to the database and associate it with the game and user's library.
     const handleSubmit = async () => {
         try{
+            setLoading(true);
             // Validate required fields and show error toast if any are missing
             if (!selectedGameId || !playSessionDate || duration <= 0) {
                 toast.error("Please fill out all required fields.");
@@ -140,7 +141,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
             setMinutes(0);
             setPlaySessionNotes("");
             setPlaySessionDate(null);
-
+            setLoading(false);
             onSessionCreated?.();
             onClose();
         
@@ -151,7 +152,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
     }
 
     return (
-        <Modal opened={opened} onClose={onClose} size='lg' title={'Play Session for ' + gameName} withCloseButton>
+        <Modal opened={opened} onClose={onClose} size='lg' title={(gameId ? 'Play Session for ' + gameName : 'Quick Log Session')} withCloseButton>
             <Stack gap='md'>
                 {gameId ? (
                     <TextInput
