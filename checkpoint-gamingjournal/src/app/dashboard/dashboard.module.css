@@ -125,6 +125,13 @@
   text-wrap: balance;
 }
 
+.gamesPlayingText:hover{
+  color: white;
+  font-weight: 900;
+  cursor: pointer;
+  border-bottom: 2px solid white;
+}
+
 .statCards {
   width: 100%;
   max-width: 98%;
@@ -340,7 +347,7 @@
 }
 
 .entryCard {
-  height: 300px;
+  height: auto;
   padding: 1rem;
   border-radius: 8px;
   background-color: #282828;

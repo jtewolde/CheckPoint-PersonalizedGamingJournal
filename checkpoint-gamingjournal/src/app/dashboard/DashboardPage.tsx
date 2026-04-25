@@ -545,7 +545,7 @@ export default function Dashboard() {
 
               <div className={classes.titleLogo}>
                 <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: '#e96443', to: '#904e95', deg: 90}}> <Gamepad size={40} /> </ThemeIcon>
-                <h1 className={classes.gamesPlayingText}>Playing Games</h1>
+                <a className={classes.gamesPlayingText} href='/library'>Playing Games</a>
               </div>
 
               <Button
@@ -599,15 +599,9 @@ export default function Dashboard() {
             <div className={classes.recentEntriesSection}>
               
               <div className={classes.titleLogo}>
-
                 <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: '#DCE35B', to: '#45B649', deg: 60}}> <Notebook size={40} /> </ThemeIcon>
-                <h1 className={classes.gamesPlayingText}>Recent Entries:</h1>
-
+                <a className={classes.gamesPlayingText} href='/journal'>Recent Entries</a>
               </div>
-
-              <Tooltip label='View Library' position='top' events={{ hover: true, focus: true, touch: true }}>
-                <ActionIcon size={40} variant='subtle' color='white' onClick={() => router.push('/journal')}> <CircleArrowRight size={40} /> </ActionIcon>
-              </Tooltip>
 
             </div>
 
