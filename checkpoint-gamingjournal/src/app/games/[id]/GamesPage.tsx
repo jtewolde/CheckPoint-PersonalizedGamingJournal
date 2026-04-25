@@ -52,7 +52,7 @@ export default function GameDetails() {
   // State variable that holds a dictionary of stats used in 'Your Activity' section
   const [stats, setStats] = useState({
     avg: 0,
-    longest: 0,
+    longest: '',
     totalSessions: 0,
   })
   
@@ -223,7 +223,7 @@ export default function GameDetails() {
         const longest = gameSessions.length ? Math.max(...gameSessions.map((s: any) => s.duration)) : 0;
         console.log("Longest", longest)
 
-        setStats({avg: Number(avgSessionDuration.toFixed(1)), totalSessions: gameSessions.length, longest: longest / 60})
+        setStats({avg: Number(avgSessionDuration.toFixed(1)), totalSessions: gameSessions.length, longest: (longest / 60).toFixed(2)})
 
         console.log("Game Sessions", gameSessions);
     } catch (error) {

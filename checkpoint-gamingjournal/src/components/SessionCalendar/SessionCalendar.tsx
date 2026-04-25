@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { formatDate, isSameDay } from "@/utils/dateUtils"
 import PlaySessionModal from "../PlaySessionModal/SessionModal"
 import { Calendar } from "@mantine/dates"
-import { Indicator, Modal, Stack, Text, Group, ActionIcon, Badge, Tooltip } from "@mantine/core"
+import { Indicator, Modal, Stack, Text, Group, ActionIcon, Badge, Tooltip, LoadingOverlay } from "@mantine/core"
 import { Trash2Icon, Pencil } from "lucide-react"
 import toast from "react-hot-toast"
 import classes from "./SessionCalendar.module.css"
@@ -133,6 +133,12 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
             : "Sessions"
         }
       >
+        {/* ✅ LOADING OVERLAY */}
+        <LoadingOverlay
+            visible={loading}
+            overlayProps={{ radius: 'sm', blur: 2 }}
+            loaderProps={{ size: 'lg', color: "white", type: "oval" }}
+        />
         <Stack>
           {sessionsForDate.length === 0 && (
             <Text c="dimmed">No sessions</Text>

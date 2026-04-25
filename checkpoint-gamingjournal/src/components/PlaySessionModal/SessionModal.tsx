@@ -1,9 +1,8 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { Modal, Divider, Stack, Button, TextInput, Textarea, NumberInput, Select, MultiSelect } from "@mantine/core";
+import { Modal, Divider, Stack, Button, TextInput, LoadingOverlay, NumberInput, Select, MultiSelect } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
-import { formatDate } from "@/utils/dateUtils";
 
 import toast from "react-hot-toast";
 
@@ -153,6 +152,14 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
 
     return (
         <Modal opened={opened} onClose={onClose} size='lg' title={(gameId ? 'Play Session for ' + gameName : 'Quick Log Session')} withCloseButton>
+
+            {/* ✅ LOADING OVERLAY */}
+            <LoadingOverlay
+                visible={loading}
+                overlayProps={{ radius: 'sm', blur: 2 }}
+                loaderProps={{ size: 'lg', color: "white", type: "oval" }}
+            />
+
             <Stack gap='md'>
                 {gameId ? (
                     <TextInput
