@@ -366,6 +366,7 @@ export default function Journal() {
                                                 "Grinding",
                                                 "Side Quest",
                                                 "Achievement",
+                                                "Review",
                                             ]}
                                             value={selectedTags}
                                             onChange={(value) => setSelectedTags(value || 'all')}

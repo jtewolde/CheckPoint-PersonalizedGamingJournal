@@ -174,6 +174,7 @@ export default function JournalForm() {
                 "Grinding",
                 "Side Quest",
                 "Achievement",
+                "Review"
               ]}
               value={tags}
               onChange={setTags}
