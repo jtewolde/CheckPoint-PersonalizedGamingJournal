@@ -2,14 +2,15 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useMediaQuery } from '@mantine/hooks';
+import { useMediaQuery, useDisclosure } from '@mantine/hooks';
 import { useLibraryGame } from '@/hooks/useLibraryGame';
 import { useAuth } from '@/context/Authcontext';
+import PlaySessionModal from '../PlaySessionModal/SessionModal';
 
-import { Badge, Text, Image, Tooltip, ActionIcon, Rating,  } from '@mantine/core';
+import { Badge, Text, Image, Tooltip, ActionIcon, Rating } from '@mantine/core';
 import toast from 'react-hot-toast';
 
-import { Plus, Minus, Ellipsis, Trophy } from 'lucide-react';
+import { Plus, Minus, Ellipsis, Trophy, ClipboardEdit } from 'lucide-react';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 import classes from './GameCard.module.css';
@@ -53,6 +54,7 @@ interface GameCardProps {
 export default function GameCard({ game, variant = 'default', libraryMeta, onQuickLog }: GameCardProps) {
 
     const {isAuthenticated, setIsAuthenticated} = useAuth(); // Access global auth state
+    const [opened, {open, close} ] = useDisclosure(false);
 
     const router = useRouter();
     const isMobile = useMediaQuery('(max-width: 450px)');
@@ -131,7 +133,7 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
     }
 
     return (
-        <div key={game.id} className={`${classes.gameCard} ${variant === 'compact' ? classes.compact  : variant === 'small' ? classes.small : variant === 'library' ? classes.library : classes.default}`} onClick={() => router.push(`/games/${game.id}`)}>
+        <div key={game.id} className={`${classes.gameCard} ${variant === 'compact' ? classes.compact  : variant === 'small' ? classes.small : variant === 'library' ? classes.library : classes.default}`} onClick={() => {if(opened) return;  router.push(`/games/${game.id}`)}}>
 
             <div className={classes.imageWrapper}>
 
@@ -145,30 +147,43 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
 
                     <Text className={classes.gameName}>{game.name}</Text>
 
-                    <div 
-                    className={classes.quickAdd} 
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        handleQuickToggle(String(game.id))
-                    }}
-                    >
-                        {variant !== 'small' && (
-                            <Tooltip label={loading ? 'Checking library...' : isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile || loading}>
-                                <ActionIcon size='lg' radius='xl' variant='filled' color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} disabled={loading || addingToLibrary}>
-                                    {loading || isInLibrary === null ? (
-                                        <Ellipsis size={18} strokeWidth={2.5} />
-                                    ):
-                                    isInLibrary ? (
-                                        <Minus size={18} strokeWidth={2.5} />
-                                        ) : (
-                                        <Plus size={18} strokeWidth={2.5} />
-                                    )}
-                                </ActionIcon>
-                            </Tooltip>
-                        )}
+                    <div className={classes.quickButtons}>
 
+                        <div className={classes.quickAdd} onClick={(e) => {e.stopPropagation(); handleQuickToggle(String(game.id))}}>
+                            {variant !== 'small' && (
+                                <Tooltip label={loading ? 'Checking library...' : isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile || loading}>
+                                    <ActionIcon size='lg' radius='xl' variant='filled' color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} disabled={loading || addingToLibrary}>
+                                        {loading || isInLibrary === null ? (
+                                            <Ellipsis size={18} strokeWidth={2.5} />
+                                        ):
+                                        isInLibrary ? (
+                                            <Minus size={18} strokeWidth={2.5} />
+                                            ) : (
+                                            <Plus size={18} strokeWidth={2.5} />
+                                        )}
+                                    </ActionIcon>
+                                </Tooltip>
+                            )}
+
+                        </div>
+                        
+                        <PlaySessionModal 
+                        key={game.id} 
+                        opened={opened} 
+                        onClose={close} 
+                        gameId={game.id} 
+                        gameName={game.name} 
+                        onSuccess={() => close()}  
+                        />
+                        
+                        <div className={classes.quickLog}>
+                            {variant === 'library' && (
+                                <Tooltip label='Quick Log' withArrow>
+                                    <ActionIcon size='lg' radius='xl' variant='filled' color='blue' onClick={(e) => {e.stopPropagation(); open();}}> <ClipboardEdit size={18} /> </ActionIcon>
+                                </Tooltip>
+                            )}
+                        </div>
                     </div>
-
                 </div>
 
             </div>
