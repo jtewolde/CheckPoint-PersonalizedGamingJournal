@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { Modal, Divider, Stack, Button, TextInput, LoadingOverlay, NumberInput, Select, MultiSelect } from "@mantine/core";
+import { Modal, Divider, Stack, Button, TextInput, LoadingOverlay, NumberInput, Select, MultiSelect, Textarea } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 
 import toast from "react-hot-toast";
@@ -192,7 +192,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                     />
                 )}
 
-                <TextInput
+                <Textarea
                     className={classes.textInput}
                     styles={{
                         wrapper: { color: '#212121'}, 
@@ -201,7 +201,6 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                     size="md"
                     label="Notes"
                     placeholder="Enter play session notes... "
-                    leftSection={<Captions size={20} />}
                     value={playSessionNotes}
                     onChange={(e) => setPlaySessionNotes(e.target.value)}
                     required

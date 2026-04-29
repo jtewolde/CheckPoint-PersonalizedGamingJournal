@@ -422,7 +422,7 @@ export default function GameDetails() {
       value: 'Plan to Play',
       label: 'Plan to Play',
       description: "Have intentions to play the game in the future but haven't started yet.",
-      icon: <Clock size={25} color='pink'/>,
+      icon: <Clock size={25} color='rgb(20, 147, 231)'/>,
       color: 'blue'
     }
   ]
@@ -743,7 +743,7 @@ export default function GameDetails() {
                             </Tooltip>
 
                               <Tooltip label='Edit Game Info' position="top">
-                                  <Button className={classes.button} variant="filled" color="yellow" size='md' radius='md' rightSection={<Pencil size={20} />} onClick={open}>Edit </Button>
+                                  <Button className={classes.button} variant="filled" color="#eb8111" size='md' radius='md' rightSection={<Pencil size={20} />} onClick={open}>Edit </Button>
                               </Tooltip>
                           </div>
 
