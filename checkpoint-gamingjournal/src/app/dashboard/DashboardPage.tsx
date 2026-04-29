@@ -127,7 +127,7 @@ export default function Dashboard() {
   const fetchRecentJournalEntries = async () => {
       try {
           const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
-          const res = await fetch('/api/journal', {
+          const res = await fetch('/api/journal?limit=100', {
               method: 'GET',
               headers: {
                   'Content-Type': 'application/json',
@@ -179,6 +179,13 @@ export default function Dashboard() {
     entries.forEach(entry => {
       const d = new Date(entry.createdAt);
       const key = `${d.getFullYear()}-${d.getMonth()}`;
+
+      console.log(
+        entry.createdAt,
+        d.toString(),
+        d.getMonth(),
+        d.getUTCMonth()
+      );
 
       if (counts[key] !== undefined) {
         counts[key]++;
@@ -491,7 +498,7 @@ export default function Dashboard() {
                     <div className={classes.quickStatItem}>
 
                       <div className={classes.titleLogo}>
-                        <ThemeIcon size={30} radius='md' variant='filled' color='orange'> <Notebook size={20} /> </ThemeIcon>
+                        <ThemeIcon size={30} radius='md' variant='filled' color='red'> <Notebook size={20} /> </ThemeIcon>
                         <Text className={classes.quickStatLabel}>Total Entries</Text>
                       </div>
 
