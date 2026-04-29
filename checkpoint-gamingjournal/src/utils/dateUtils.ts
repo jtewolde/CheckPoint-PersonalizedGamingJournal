@@ -15,9 +15,25 @@ export const formatDate = (date: Date): string => {
 /**
  * Compare stored date string with a Date object
  */
-export const isSameDay = (dateString: string, date: Date): boolean => {
-    return dateString === formatDate(date);
-};
+export function isSameDay(
+    date1: string | Date,
+    date2: string | Date
+    ) {
+    const normalize = (d: string | Date) => {
+        if (typeof d === "string") {
+            const [y, m, day] = d.split("-").map(Number);
+            return new Date(y, m - 1, day);
+        }
+
+        return new Date(
+            d.getFullYear(),
+            d.getMonth(),
+            d.getDate()
+        );
+    };
+
+    return normalize(date1).getTime() === normalize(date2).getTime();
+}
 
 /**
  * Get today's date as "YYYY-MM-DD"

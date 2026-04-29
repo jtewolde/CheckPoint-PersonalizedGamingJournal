@@ -85,7 +85,8 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
           }
         })}
         renderDay={(dateString) => {
-          const date = new Date(dateString)
+          const [year, month, day] = dateString.split('-').map(Number);
+          const date = new Date(year, month - 1, day); // local date, no UTC shift
 
           const hasSession = localSessions.some(
             (s) =>
