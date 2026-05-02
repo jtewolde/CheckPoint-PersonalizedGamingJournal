@@ -170,27 +170,27 @@ export default function GameFilters({
                         placeholder="Select an option"
                         checkIconPosition='left'
                         styles={{
-                        dropdown: {
-                            background: '#212121',
-                            color: 'whitesmoke'
-                        },
-                        input: {
-                            background: '#212121',
-                            fontFamily: 'Noto Sans',
-                            color: 'white'
-                        },
-                        option: {
-                            background: '#212121',
-                            fontFamily: 'Noto Sans',
-                            fontSize: '16px',
-                            fontWeight: 330
-                        },
-                        label: {
-                            fontFamily: 'Noto Sans',
-                            color: 'white',
-                            fontSize: '20px',
-                            fontWeight: 300
-                        }
+                            dropdown: {
+                                background: '#212121',
+                                color: 'whitesmoke'
+                            },
+                            input: {
+                                background: '#212121',
+                                fontFamily: 'Noto Sans',
+                                color: 'white'
+                            },
+                            option: {
+                                background: '#212121',
+                                fontFamily: 'Noto Sans',
+                                fontSize: '16px',
+                                fontWeight: 330
+                            },
+                            label: {
+                                fontFamily: 'Noto Sans',
+                                color: 'white',
+                                fontSize: '20px',
+                                fontWeight: 300
+                            }
                         }}
                         data={[
                             { value: 'alphabetical', label: 'Alphabetical (A-Z)'},
