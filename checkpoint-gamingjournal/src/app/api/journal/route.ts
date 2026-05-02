@@ -131,6 +131,11 @@ export async function GET(req: NextRequest){
         const limit = parseInt(searchParams.get('limit') || "10", 10)
         const skip = (page - 1) * limit;
 
+        // Setup filter options for sorting and filtering journal entries based on query params
+        const tag = searchParams.get('tag') || '';
+        const gameId = searchParams.get('gameId') || '';
+        const sortDirection = searchParams.get('order') === 'asc' ? 1 : -1;
+
         // Find the user in the collection of users
         const user = await UserCollection.findOne({ _id: new ObjectId(userId)})
 
@@ -138,8 +143,18 @@ export async function GET(req: NextRequest){
             return NextResponse.json({error: "User not found"}, {status: 404});
         }
 
-        // Create unique cache key based on user ID
-        const cacheKey = `user_journal_entries:${userId}:page:${page}:limit:${limit}`;
+        // Build the query object for filtering journal entries based on search parameters
+        const query: any = { userId: userId };
+
+        if (gameId) {
+            query.gameId = gameId;
+        }
+        if (tag) {
+            query.tags = tag; // Assuming tags is an array, this will match entries that have the specified tag
+        }
+
+        // Create unique cache key based on user ID, pagination, filters, and sorting options
+        const cacheKey = `user_journal_entries:${userId}:page:${page}:limit:${limit}:game:${gameId}:tag:${tag}:order:${sortDirection}`;
 
         // Attempt to get cached data from Redis
         const cachedData = await redis.get(cacheKey);
@@ -150,10 +165,10 @@ export async function GET(req: NextRequest){
         }
 
         // Count all journal entries for the user
-        const totalEntries = await JournalEntriesCollection.countDocuments({ userId: userId });
+        const totalEntries = await JournalEntriesCollection.countDocuments(query);
 
-       // Retrieve all journal entries for the user
-        const journalEntries = await JournalEntriesCollection.find({ userId: userId }).sort({ createdAt: -1}).skip(skip).limit(limit).toArray();
+       // Retrieve all journal entries for the user with pagination, sorting, and filtering applied
+        const journalEntries = await JournalEntriesCollection.find(query).sort({ createdAt: sortDirection}).skip(skip).limit(limit).toArray();
 
         // Create response object that has journal entries and pagination info
         const response = {

@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useDisclosure } from '@mantine/hooks';
 import { authClient } from '@/lib/auth-client';
 
-import { Badge, Button, List, Popover, Select, SimpleGrid, Pagination, ThemeIcon, Modal, Group, Stack, Title, 
-    Text, Checkbox, ActionIcon, MultiSelect, LoadingOverlay } from '@mantine/core';
+import { Badge, Button, List, Select, SimpleGrid, Pagination, ThemeIcon, Modal, Group, Stack, Title, 
+    Text, Checkbox, ActionIcon, MultiSelect, LoadingOverlay, Drawer } from '@mantine/core';
 
 import toast from 'react-hot-toast';
 import { FilePlus, ListFilter, Trash2, X } from 'lucide-react';
@@ -25,11 +25,20 @@ export default function Journal() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-    const [gameName, setGameName] = useState('all')
+    const [games, setGames] = useState<{ gameId: string, gameName: string }[]>([]);
+
+    const [gameId, setGameId] = useState('all')
     const [selectedGame, setSelectedGame] = useState('');
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
+    // Draft filters (inside popover)
+    const [draftGameId, setDraftGameId] = useState('all');
+    const [draftTags, setDraftTags] = useState<string[]>([]);
+
+    // State for opening delete all modal
     const [opened, {open, close}] = useDisclosure(false);
+
+    const [drawerOpened, { toggle, close: closeDrawer }] = useDisclosure(false);
 
     const router = useRouter();
 
@@ -41,13 +50,45 @@ export default function Journal() {
         }
     }
 
+    // Function to fetch the list of games with journal entries for the filter dropdown
+    const fetchGames = async () => {
+        try{
+            const token = localStorage.getItem('bearer_token');
+            const res = await fetch('/api/journal/games', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!res.ok) {
+                throw new Error('Failed to fetch user journal entries');
+            }
+
+            const data = await res.json();
+            setGames(data.games);
+            console.log('Games with journal entries:', data.games);
+        } catch (error) {
+            console.log('Error fetching games with journal entries', error);
+        }
+    }
+
     // Function to fetch journal entries
     const fetchEntries = async (pageNum = 1) => {
         setLoading(true);
         try {
             const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token
 
-            const res = await fetch(`/api/journal?page=${pageNum}&limit=6`, {
+            const params = new URLSearchParams({
+                page: pageNum.toString(),
+                limit: '6',
+                gameId: gameId !== 'all' ? gameId : '',
+                tag: selectedTags.length > 0 ? selectedTags.join(',') : '',
+                order: 'desc'
+            })
+
+            const res = await fetch(`/api/journal?${params.toString()}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,12 +112,14 @@ export default function Journal() {
     };
 
     useEffect(() => {
+        fetchGames(); // Fetch games for filter dropdown 
         checkAuth(); // Check authentication on component mount
     }, [router]);
 
+    // Refetch journal entries whenenver the page number changes
     useEffect(() => {
         fetchEntries(page);
-    }, [page]);
+    }, [page, gameId, selectedTags]);
 
     // Function to delete a journal entry
     const deleteJournalEntry = async (journalEntryId: string, gameID: string) => {
@@ -151,20 +194,6 @@ export default function Journal() {
 
     // Get unique game names from entries for the dropdown
     const gameNames = Array.from(new Set(entries.map(entry => entry.gameName)));
-
-    // Function to filter the journal entries based on game or tags associated
-    const filteredEntries = entries.filter((entry) => {
-        const matchesGame =
-            gameName === 'all' || entry.gameName === gameName;
-
-        const matchesTags =
-            selectedTags.length === 0 ||
-            selectedTags.every((tag) =>
-            entry.tags?.includes(tag)
-            );
-
-        return matchesGame && matchesTags;
-    });
 
     // Find the selected game's object in the journal entries to get the gameID
     const selectedGameObject = entries.find(e => e.gameName === selectedGame);
@@ -317,33 +346,84 @@ export default function Journal() {
                                 Add Entry
                             </Button>
                             
+                            <Button 
+                            className={classes.filterButton} 
+                            size='md' 
+                            color='#854bcb' 
+                            radius='md' 
+                            variant="filled" 
+                            rightSection={<ListFilter />}
+                            onClick={toggle}
+                            >
+                            Filters
+                            </Button>
 
-                            <Popover width={400} position='bottom-end' withArrow shadow='lg'>
-                                <Popover.Target>
-                                    <Button className={classes.filterButton} size='md' color='#854bcb' radius='md' variant="filled" rightSection={<ListFilter />}>Filters</Button>
-                                </Popover.Target>
-
-                                <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>
+                                {/* Drawer component to hold the filter options, slides in from left */}
+                                <Drawer
+                                    opened={drawerOpened}
+                                    onClose={closeDrawer}
+                                    position='left'
+                                    size="330px"
+                                    title='Sort and Filter'
+                                    className={classes.drawer}
+                                    styles={{
+                                        content: {
+                                            backgroundColor: '#252525ff'
+                                        },
+                                        header: {
+                                            backgroundColor: '#252525ff',
+                                            borderBottom: '1px solid gray',
+                                            marginBottom: '10px'
+                                        },
+                                        title: {
+                                            fontSize: '24px',
+                                            color: 'white',
+                                            fontFamily: 'Noto Sans',
+                                            fontWeight: 300
+                                        },
+                                        close: {
+                                            color: 'white'
+                                        }
+                                    }}
+                                >
                                     <Stack gap='xs'>
                                         <Select
                                             styles={{
-                                                wrapper: { color: '#212121'}, 
-                                                input: { color: 'white', background: '#212121'}, 
-                                                dropdown: { background: '#212121', color: 'whitesmoke'},
-                                                option: { background: '#202020'}
+                                                dropdown: {
+                                                    background: '#212121',
+                                                    color: 'whitesmoke'
+                                                },
+                                                input: {
+                                                    background: '#212121',
+                                                    fontFamily: 'Noto Sans',
+                                                    color: 'white'
+                                                },
+                                                option: {
+                                                    background: '#212121',
+                                                    fontFamily: 'Noto Sans',
+                                                    fontSize: '16px',
+                                                    fontWeight: 330
+                                                },
+                                                label: {
+                                                    fontFamily: 'Noto Sans',
+                                                    color: 'white',
+                                                    fontSize: '20px',
+                                                    fontWeight: 300
+                                                }
                                             }}
                                             label="Filter by Game"
                                             placeholder="Select Game"
                                             checkIconPosition='right'
+                                            scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
                                             data={[
                                                 { value: 'all', label: 'All Games' },
-                                                ...gameNames.map((gameName) => ({
-                                                    value: gameName,
-                                                    label: gameName
+                                                ...games.map((game) => ({
+                                                    value: game.gameId,
+                                                    label: game.gameName
                                                 }))
                                             ]}
-                                            value={gameName}
-                                            onChange={(value) => setGameName(value || 'all')}
+                                            value={draftGameId}
+                                            onChange={(value) => setDraftGameId(value || 'all')}
                                             className={classes.filterDropdown}
                                             mb="md"
                                         />
@@ -352,10 +432,27 @@ export default function Journal() {
                                             label="Filter by Tags"
                                             placeholder="Select Tags"
                                             styles={{
-                                                wrapper: { color: '#212121'}, 
-                                                input: { color: 'white', background: '#212121'}, 
-                                                dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
-                                                option: { background: '#202020'}
+                                                dropdown: {
+                                                    background: '#212121',
+                                                    color: 'whitesmoke'
+                                                },
+                                                input: {
+                                                    background: '#212121',
+                                                    fontFamily: 'Noto Sans',
+                                                    color: 'white'
+                                                },
+                                                option: {
+                                                    background: '#212121',
+                                                    fontFamily: 'Noto Sans',
+                                                    fontSize: '16px',
+                                                    fontWeight: 330
+                                                },
+                                                label: {
+                                                    fontFamily: 'Noto Sans',
+                                                    color: 'white',
+                                                    fontSize: '20px',
+                                                    fontWeight: 300
+                                                }
                                             }}
                                             checkIconPosition='left'
                                             data={[
@@ -368,15 +465,28 @@ export default function Journal() {
                                                 "Achievement",
                                                 "Review",
                                             ]}
-                                            value={selectedTags}
-                                            onChange={(value) => setSelectedTags(value || 'all')}
+                                            value={draftTags}
+                                            onChange={(value) => setDraftTags(value || 'all')}
+                                            scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
                                             className={classes.filterDropdown}
                                             mb="md"
                                         />
-                                    </Stack>
-                                </Popover.Dropdown>
 
-                            </Popover>
+                                        <Button
+                                            fullWidth
+                                            mt="md"
+                                            color="violet"
+                                            onClick={() => {
+                                                setGameId(draftGameId);
+                                                setSelectedTags(draftTags);
+                                                setPage(1);
+                                                closeDrawer();
+                                            }}
+                                        >
+                                            Apply Filters
+                                        </Button>
+                                    </Stack>
+                                </Drawer>
 
                             <Button
                             variant='filled'
@@ -392,9 +502,9 @@ export default function Journal() {
 
                         </div>
                         
-                        {filteredEntries.length > 0 && (
+                        {entries.length > 0 && (
                             <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
-                                {filteredEntries.map((entry) => (
+                                {entries.map((entry) => (
                                     <div key={entry.uuid} className={classes.entryCard} onClick={() => router.push(`/journal/${entry.uuid}`)}>
 
                                         <div className={classes.entryHeader}>
@@ -457,11 +567,11 @@ export default function Journal() {
 
                     </div>
 
-                    {!loading && filteredEntries.length === 0 && (
+                    {!loading && entries.length === 0 && (
                         <p className={classes.noGamesText}>No games found for the selected tags.</p>
                     )}
 
-                    {filteredEntries.length !== 0 &&(
+                    {entries.length !== 0 &&(
                         <div className={classes.paginationWrapper}>
                             <Pagination
                                 classNames={{
