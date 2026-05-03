@@ -79,7 +79,9 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
         maxDate={new Date()}
         getDayProps={(dateString) => ({
           onClick: () => {
-            const date = new Date(dateString)
+            const [year, month, day] = dateString.split('-').map(Number);
+            const date = new Date(year, month - 1, day); // local date, no UTC shift
+            
             setSelectedDate(date)
             setOpened(true)
           }
