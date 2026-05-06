@@ -27,13 +27,20 @@ export default function Journal() {
 
     const [games, setGames] = useState<{ gameId: string, gameName: string }[]>([]);
 
+    // State variables for filters based on game, tags, and sorting order
     const [gameId, setGameId] = useState('all')
     const [selectedGame, setSelectedGame] = useState('');
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-    // Draft filters (inside popover)
+    // Draft filters (inside the drawer)
     const [draftGameId, setDraftGameId] = useState('all');
     const [draftTags, setDraftTags] = useState<string[]>([]);
+
+    // Compute active filters for display in the UI
+    const activeFilters = (gameId !== 'all' ? [`Game: ${games.find(g => g.gameId === gameId)?.gameName}`] : []).concat(
+        selectedTags.length > 0 ? [`Tags: ${selectedTags.join(', ')}`] : []
+    );
 
     // State for opening delete all modal
     const [opened, {open, close}] = useDisclosure(false);
@@ -85,7 +92,7 @@ export default function Journal() {
                 limit: '6',
                 gameId: gameId !== 'all' ? gameId : '',
                 tag: selectedTags.length > 0 ? selectedTags.join(',') : '',
-                order: 'desc'
+                order: sortOrder
             })
 
             const res = await fetch(`/api/journal?${params.toString()}`, {
@@ -119,7 +126,7 @@ export default function Journal() {
     // Refetch journal entries whenenver the page number changes
     useEffect(() => {
         fetchEntries(page);
-    }, [page, gameId, selectedTags]);
+    }, [page, gameId, selectedTags, sortOrder]);
 
     // Function to delete a journal entry
     const deleteJournalEntry = async (journalEntryId: string, gameID: string) => {
@@ -472,19 +479,32 @@ export default function Journal() {
                                             mb="md"
                                         />
 
-                                        <Button
-                                            fullWidth
-                                            mt="md"
-                                            color="violet"
-                                            onClick={() => {
-                                                setGameId(draftGameId);
-                                                setSelectedTags(draftTags);
-                                                setPage(1);
-                                                closeDrawer();
-                                            }}
-                                        >
-                                            Apply Filters
-                                        </Button>
+                                        <div style={{display: 'flex', flexDirection: 'column', gap: '0.2rem'}}>
+                                            <Button
+                                                variant="filled"
+                                                color="#c717b9"
+                                                fullWidth
+                                                mb="md"
+                                                onClick={() => setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc')}
+                                            >
+                                                Sort: {sortOrder === 'desc' ? 'Newest → Oldest' : 'Oldest → Newest'}
+                                            </Button>
+
+                                            <Button
+                                                fullWidth
+                                                variant='filled'
+                                                color="blue"
+                                                onClick={() => {
+                                                    setGameId(draftGameId);
+                                                    setSelectedTags(draftTags);
+                                                    setPage(1);
+                                                    closeDrawer();
+                                                }}
+                                            >
+                                                Apply Filters
+                                            </Button>
+
+                                        </div>
                                     </Stack>
                                 </Drawer>
 
@@ -501,6 +521,45 @@ export default function Journal() {
                             </Button>
 
                         </div>
+
+                        {activeFilters.length > 0 && (
+                            <Group className={classes.activeFiltersWrapper} mb='lg' gap='xs'>
+                                {gameId !== 'all' && (
+                                    <Badge
+                                        className={classes.filterBadge}
+                                        size="lg"
+                                        variant="outline"
+                                        color='#f0f1f2'
+                                        radius="sm"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => {
+                                            setGameId('all');
+                                            setPage(1);
+                                        }}
+                                    >
+                                        {`Game: ${games.find(g => g.gameId === gameId)?.gameName}`} ✕
+                                    </Badge>
+                                )}
+
+                                {draftTags.length > 0 && (
+                                    <Badge
+                                        className={classes.filterBadge}
+                                        size="lg"
+                                        variant="outline"
+                                        color='#f0f1f2'
+                                        radius="sm"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => {
+                                            setDraftTags([]);
+                                            setSelectedTags([]);
+                                            setPage(1);
+                                        }}
+                                    >
+                                        {`Tags: ${draftTags.join(', ')}`} ✕
+                                    </Badge>
+                                )}
+                            </Group>
+                        )}
                         
                         {entries.length > 0 && (
                             <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>

@@ -193,6 +193,11 @@
     background-color: #059624;
 }
 
+.filterBadge{
+    border: '1px solid white';
+    background-color: #2c2c2f;
+}
+
 .mainSection{
     position: relative;
     display: flex;
