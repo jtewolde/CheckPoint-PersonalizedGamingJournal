@@ -10,7 +10,7 @@ import { Badge, Button, List, Select, SimpleGrid, Pagination, ThemeIcon, Modal, 
     Tooltip} from '@mantine/core';
 
 import toast from 'react-hot-toast';
-import { FilePlus, ListFilter, Trash2, X } from 'lucide-react';
+import { FilePlus, ListFilter, Trash2, Eye } from 'lucide-react';
 
 import classes from './journal.module.css';
 
@@ -572,28 +572,27 @@ export default function Journal() {
                         {entries.length > 0 && (
                             <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 3}} spacing="lg" className={classes.entriesGrid}>
                                 {entries.map((entry) => (
-                                    <div key={entry.uuid} className={classes.entryCard} onClick={() => router.push(`/journal/${entry.uuid}`)}>
-
+                                    <div key={entry.uuid} className={classes.entryCard}>
                                         <div className={classes.entryHeader}>
-
                                             <h3 className={classes.entryGame}>{entry.gameName}</h3>
 
-                                            <Tooltip label="Delete Entry" withArrow position="top">
-                                                <ActionIcon
-                                                    className={classes.deleteButton}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        deleteJournalEntry(entry._id, entry.gameId)}
-                                                    }
-                                                    radius='md'
-                                                    size='xl'
-                                                    variant='transparent'
-                                                    color='#e01515ff'
-                                                    loading={loading}
-                                                >
-                                                    <Trash2 size={20} />
-                                                </ActionIcon>
-                                            </Tooltip>
+                                            <div className={classes.entryActions}>
+                                                <Tooltip label="View Entry" withArrow position='top'>
+                                                    <Eye color='white' size={23} onClick={() => router.push(`/journal/${entry.uuid}`)}/>
+                                                </Tooltip>
+
+                                                <Tooltip label="Delete Entry" withArrow position="top">
+                                                    <Trash2 
+                                                        size={23}
+                                                        color='#ef2b2b'
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            deleteJournalEntry(entry._id, entry.gameId)}
+                                                        }
+                                                    />
+                                                </Tooltip>
+                                                
+                                            </div>
 
                                         </div>
 
@@ -622,12 +621,9 @@ export default function Journal() {
                                                     </Badge>
                                                     ))}
                                                 </Group>
-                                            )}
-                                                
+                                            )}   
                                             <p className={classes.entryDate}>{entry.displayDate}</p>
-
-                                        </div>
-                                        
+                                        </div>   
                                     </div>
                                 ))}
                             </SimpleGrid>

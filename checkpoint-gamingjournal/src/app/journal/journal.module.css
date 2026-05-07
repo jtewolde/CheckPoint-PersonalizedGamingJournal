@@ -123,9 +123,12 @@
     pointer-events: auto;
 }
 
-.entryCard:hover{
-    transform: scale(1.05);
-    transition: transform 0.3s ease;
+.entryActions{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-top: 0.5rem;
 }
 
 .entryHeader {
