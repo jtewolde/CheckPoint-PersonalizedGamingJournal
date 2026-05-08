@@ -5,12 +5,11 @@ import { useRouter } from 'next/navigation';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { authClient } from '@/lib/auth-client';
 
-import { Badge, Button, List, Select, SimpleGrid, Pagination, ThemeIcon, Modal, Group, Stack, Title, 
-    Text, Checkbox, ActionIcon, MultiSelect, LoadingOverlay, Drawer, 
-    Tooltip} from '@mantine/core';
+import { Badge, Button, Select, SimpleGrid, Pagination, SegmentedControl, Modal, Group, Stack, Title, 
+    Text, Checkbox, ActionIcon, MultiSelect, LoadingOverlay, Drawer, Tooltip} from '@mantine/core';
 
 import toast from 'react-hot-toast';
-import { FilePlus, ListFilter, Trash2, Eye } from 'lucide-react';
+import { FilePlus, ListFilter, Trash2, Eye, RotateCcw } from 'lucide-react';
 
 import classes from './journal.module.css';
 
@@ -346,42 +345,42 @@ export default function Journal() {
                             </ActionIcon>
 
                             <Button
-                            variant='filled'
-                            color='green'
-                            size='md'
-                            radius= 'md'
-                            className={classes.addButton}
-                            onClick={() => router.push('/journalForm')}
-                            rightSection={<FilePlus />}
-                            visibleFrom='sm'
+                                variant='filled'
+                                color='green'
+                                size='md'
+                                radius= 'md'
+                                className={classes.addButton}
+                                onClick={() => router.push('/journalForm')}
+                                rightSection={<FilePlus />}
+                                visibleFrom='sm'
                             >
                                 Add Entry
                             </Button>
                             
                             <Button 
-                            className={classes.filterButton} 
-                            size='md' 
-                            color='#854bcb' 
-                            radius='md' 
-                            variant="filled" 
-                            rightSection={<ListFilter />}
-                            onClick={toggle}
-                            hidden={!isMobile}
-                            visibleFrom='sm'
+                                className={classes.filterButton} 
+                                size='md' 
+                                color='#854bcb' 
+                                radius='md' 
+                                variant="filled" 
+                                rightSection={<ListFilter />}
+                                onClick={toggle}
+                                hidden={!isMobile}
+                                visibleFrom='sm'
                             >
                             Filters
                             </Button>
 
                             <Button
-                            variant='filled'
-                            color='#e01515ff'
-                            size='md'
-                            radius= 'md'
-                            className={classes.deleteEntriesButton}
-                            onClick={open}
-                            rightSection={<Trash2 />}
-                            hidden={isMobile}
-                            visibleFrom='sm'
+                                variant='filled'
+                                color='#e01515ff'
+                                size='md'
+                                radius= 'md'
+                                className={classes.deleteEntriesButton}
+                                onClick={open}
+                                rightSection={<Trash2 />}
+                                hidden={isMobile}
+                                visibleFrom='sm'
                             >
                                 Delete All
                             </Button>
@@ -391,17 +390,18 @@ export default function Journal() {
                                 opened={drawerOpened}
                                 onClose={closeDrawer}
                                 position='left'
-                                size="330px"
+                                size="300px"
                                 title='Sort and Filter'
                                 className={classes.drawer}
                                 styles={{
-                                    content: {
-                                        backgroundColor: '#252525ff'
-                                    },
                                     header: {
-                                        backgroundColor: '#252525ff',
                                         borderBottom: '1px solid gray',
                                         marginBottom: '10px'
+                                    },
+                                    body: {
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        height: '90%',
                                     },
                                     title: {
                                         fontSize: '24px',
@@ -414,118 +414,138 @@ export default function Journal() {
                                     }
                                 }}
                             >
-                                <Stack gap='xs'>
-                                    <Select
-                                        styles={{
-                                            dropdown: {
-                                                background: '#212121',
-                                                color: 'whitesmoke'
-                                            },
-                                            input: {
-                                                background: '#212121',
-                                                fontFamily: 'Noto Sans',
-                                                color: 'white'
-                                            },
-                                            option: {
-                                                background: '#212121',
-                                                fontFamily: 'Noto Sans',
-                                                fontSize: '16px',
-                                                fontWeight: 330
-                                            },
-                                            label: {
-                                                fontFamily: 'Noto Sans',
-                                                color: 'white',
-                                                fontSize: '20px',
-                                                fontWeight: 300
-                                            }
-                                        }}
-                                        label="Filter by Game"
-                                        placeholder="Select Game"
-                                        checkIconPosition='right'
-                                        scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
-                                        data={[
-                                            { value: 'all', label: 'All Games' },
-                                            ...games.map((game) => ({
-                                                value: game.gameId,
-                                                label: game.gameName
-                                            }))
-                                        ]}
-                                        value={draftGameId}
-                                        onChange={(value) => setDraftGameId(value || 'all')}
-                                        className={classes.filterDropdown}
-                                        mb="md"
-                                    />
-
-                                    <MultiSelect
-                                        label="Filter by Tags"
-                                        placeholder="Select Tags"
-                                        styles={{
-                                            dropdown: {
-                                                background: '#212121',
-                                                color: 'whitesmoke'
-                                            },
-                                            input: {
-                                                background: '#212121',
-                                                fontFamily: 'Noto Sans',
-                                                color: 'white'
-                                            },
-                                            option: {
-                                                background: '#212121',
-                                                fontFamily: 'Noto Sans',
-                                                fontSize: '16px',
-                                                fontWeight: 330
-                                            },
-                                            label: {
-                                                fontFamily: 'Noto Sans',
-                                                color: 'white',
-                                                fontSize: '20px',
-                                                fontWeight: 300
-                                            }
-                                        }}
-                                        checkIconPosition='left'
-                                        data={[
-                                            "Story",
-                                            "Boss Fight",
-                                            "Exploration",
-                                            "Multiplayer",
-                                            "Grinding",
-                                            "Side Quest",
-                                            "Achievement",
-                                            "Review",
-                                        ]}
-                                        value={draftTags}
-                                        onChange={(value) => setDraftTags(value || 'all')}
-                                        scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
-                                        className={classes.filterDropdown}
-                                        mb="md"
-                                    />
-
-                                    <div style={{display: 'flex', flexDirection: 'column', gap: '0.2rem'}}>
-                                        <Button
-                                            variant="filled"
-                                            color="#c717b9"
-                                            fullWidth
+                                <Stack justify='space-between' h='100%'>
+                                    <Stack gap='md'>
+                                        <Select
+                                            styles={{
+                                                dropdown: {
+                                                    background: '#212121',
+                                                    color: 'whitesmoke'
+                                                },
+                                                input: {
+                                                    background: '#212121',
+                                                    fontFamily: 'Noto Sans',
+                                                    color: 'white'
+                                                },
+                                                option: {
+                                                    fontFamily: 'Noto Sans',
+                                                    fontSize: '16px',
+                                                    fontWeight: 330
+                                                },
+                                                label: {
+                                                    fontFamily: 'Noto Sans',
+                                                    color: 'white',
+                                                    fontSize: '20px',
+                                                    fontWeight: 300
+                                                }
+                                            }}
+                                            label="Filter by Game"
+                                            placeholder="Select Game"
+                                            checkIconPosition='right'
+                                            scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
+                                            data={[
+                                                { value: 'all', label: 'All Games' },
+                                                ...games.map((game) => ({
+                                                    value: game.gameId,
+                                                    label: game.gameName
+                                                }))
+                                            ]}
+                                            value={draftGameId}
+                                            onChange={(value) => setDraftGameId(value || 'all')}
+                                            className={classes.filterDropdown}
                                             mb="md"
-                                            onClick={() => setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc')}
+                                        />
+
+                                        <MultiSelect
+                                            label="Filter by Tags"
+                                            placeholder="Select Tags"
+                                            styles={{
+                                                dropdown: {
+                                                    background: '#212121',
+                                                    color: 'whitesmoke'
+                                                },
+                                                input: {
+                                                    background: '#212121',
+                                                    fontFamily: 'Noto Sans',
+                                                    color: 'white'
+                                                },
+                                                option: {
+                                                    fontFamily: 'Noto Sans',
+                                                    fontSize: '16px',
+                                                    fontWeight: 330
+                                                },
+                                                label: {
+                                                    fontFamily: 'Noto Sans',
+                                                    color: 'white',
+                                                    fontSize: '20px',
+                                                    fontWeight: 300
+                                                }
+                                                }}
+                                                checkIconPosition='left'
+                                                data={[
+                                                    "Story",
+                                                    "Boss Fight",
+                                                    "Exploration",
+                                                    "Multiplayer",
+                                                    "Grinding",
+                                                    "Side Quest",
+                                                    "Achievement",
+                                                    "Review",
+                                                ]}
+                                                value={draftTags}
+                                                onChange={(value) => setDraftTags(value || 'all')}
+                                                scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
+                                                className={classes.filterDropdown}
+                                                mb="md"
+                                        />
+
+                                        <SegmentedControl
+                                            fullWidth
+                                            value={sortOrder}
+                                            size='md'
+                                            mb="md"
+                                            onChange={(value) => setSortOrder(value as 'asc' | 'desc')}
+                                            data={[
+                                                { label: 'Newest', value: 'desc' },
+                                                { label: 'Oldest', value: 'asc' }
+                                            ]}
                                         >
                                             Sort: {sortOrder === 'desc' ? 'Newest → Oldest' : 'Oldest → Newest'}
-                                        </Button>
+                                        </SegmentedControl>
+                                    </Stack>
+                                    
+                                    <Stack gap='sm'>
+                                        <div style={{ borderTop: '1px solid #6c6c6c', paddingTop: '0.5rem', gap: '0.5rem'}}>
+                                            <Button
+                                                fullWidth
+                                                variant='subtle'
+                                                color='white'
+                                                leftSection={<RotateCcw size={18} />}
+                                                mb='sm'
+                                                onClick={() => {
+                                                    setGameId('all');
+                                                    setSelectedTags([]);
+                                                }}
+                                            >
+                                                Clear Filters
+                                            </Button>
 
-                                        <Button
-                                            fullWidth
-                                            variant='filled'
-                                            color="blue"
-                                            onClick={() => {
-                                                setGameId(draftGameId);
-                                                setSelectedTags(draftTags);
-                                                setPage(1);
-                                                closeDrawer();
-                                            }}
-                                        >
-                                            Apply Filters
-                                        </Button>
+                                            <Button
+                                                fullWidth
+                                                variant='filled'
+                                                color="blue"
+                                                onClick={() => {
+                                                    setGameId(draftGameId);
+                                                    setSelectedTags(draftTags);
+                                                    setPage(1);
+                                                    closeDrawer();
+                                                }}
+                                            >
+                                                Apply Filters
+                                            </Button>
 
-                                    </div>
+                                        </div>
+                                    </Stack>
                                 </Stack>
                             </Drawer>
                         </div>

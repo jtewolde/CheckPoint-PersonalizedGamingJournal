@@ -864,7 +864,7 @@ export default function GameDetails() {
 
           </div>
 
-          {isAuthenticated ? (
+          {isAuthenticated && isGameInLibrary ? (
             <div className={classes.activitySection}>
               <div className={classes.sectionHeader}>
                   <ThemeIcon size={50} variant='gradient' gradient={{ from: '#e70e0e', to: '#ca1118', deg: 20}} radius='md'>

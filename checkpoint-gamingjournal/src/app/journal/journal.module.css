@@ -116,7 +116,6 @@
     background-color: #25252b;
     border: 2px solid #474747;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
     overflow: hidden;
     will-change: transform;
     transition: transform 0.25s ease;
@@ -129,6 +128,7 @@
     justify-content: flex-end;
     align-items: flex-end;
     margin-top: 0.5rem;
+    cursor: pointer;
 }
 
 .entryHeader {
