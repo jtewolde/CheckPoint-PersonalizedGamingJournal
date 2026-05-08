@@ -3,13 +3,15 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth-client'
-import { useMediaQuery } from '@mantine/hooks';
+import { useMediaQuery, useDisclosure } from '@mantine/hooks';
+import PlaySessionModal from '@/components/PlaySessionModal/SessionModal';
 
 import { SimpleGrid, Badge, Image, Select, Popover, Button, Tooltip, Rating, Switch, Stack, LoadingOverlay} from '@mantine/core';
 import { ListFilter, Trophy } from 'lucide-react';
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 
 import classes from './library.module.css';
+import GameCard from '@/components/GameCard/GameCard';
 
 export default function Library(){
 
@@ -24,6 +26,7 @@ export default function Library(){
     const [filterPlatinum, setFilterPlatinum] = useState(false);
 
     const isMobile = useMediaQuery('(max-width: 450px)');
+    const [opened, {open, close} ] = useDisclosure(false);
     const router = useRouter();
 
     // Check If the user is authenticated, if not redirect to signin page
@@ -94,161 +97,108 @@ export default function Library(){
     });
 
     return(
-
-    <div className={classes.background}>
-
-        <div className={classes.overlay}>
-
-            <div className={classes.wrapper}>
-
-                <div className={classes.libraryHeader}>
-
-                    <div className={classes.titleLogo}>
-
-                        <h2 className={classes.title}>Your Library</h2>
-
+        <div className={classes.background}>
+            <div className={classes.overlay}>
+                <div className={classes.wrapper}>
+                    <div className={classes.libraryHeader}>
+                        <div className={classes.titleLogo}>
+                            <h2 className={classes.title}>Your Library</h2>
+                        </div>
                     </div>
 
+                    <p className={classes.subTitle}> Track and manage your gaming adventures all in one place. </p>
+
+                    <p className={classes.subTitle}> You have <span className={classes.totalGames}>{totalGames} games</span> in your library. </p>
+
+                    {/* Status Filter Dropdown */}
+                    <Popover width={300} position={isMobile ? 'bottom-end' : 'right'} withArrow shadow='lg'>
+                        <Popover.Target>
+                            <Button className={classes.filterButton} size={isMobile ? 'lg' : 'md'} radius='md' variant='gradient' gradient={{from: '#43bae9', to: '#3b99d3', deg: 90}} rightSection={<ListFilter />}>Filters</Button>
+                        </Popover.Target>
+
+                        <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>
+                            <Stack gap='md'>
+                                <Select
+                                label="Choose a status to filter your library by"
+                                placeholder="Filter by status"
+                                styles={{
+                                    wrapper: { color: '#212121'}, 
+                                    input: { color: 'white', background: '#212121'}, 
+                                    dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
+                                    option: { background: '#202020'}
+                                }}
+                                checkIconPosition='left'
+                                data={[
+                                    { value: 'all', label: 'All' },
+                                    { value: 'plan to play', label: "Plan to Play"},
+                                    { value: 'playing', label: 'Playing'},
+                                    { value: 'completed', label: 'Completed'},
+                                    { value: 'on hold', label: 'On Hold'},
+                                    { value: 'dropped', label: "Dropped"}
+                                ]}
+                                value={selectedStatus}
+                                onChange={(value) => setSelectedStatus(value || 'all')}
+                                className={classes.filterDropdown}
+                                mb="md"
+                                />
+
+                                {/* RATING FILTER */}
+                                <Switch
+                                    label="Only rated games"
+                                    checked={filterRating}
+                                    onChange={(e) => setFilterRating(e.currentTarget.checked)}
+                                />
+
+                                {/* PLATINUM FILTER */}
+                                <Switch
+                                    label="Only platinum games"
+                                    checked={filterPlatinum}
+                                    onChange={(e) => setFilterPlatinum(e.currentTarget.checked)}
+                                />
+
+                            </Stack>
+                            
+                        </Popover.Dropdown>
+
+                    </Popover>
+
+                    {filteredGames.length > 0 && (
+                        <div className={classes.library}>
+
+                            {/* ✅ LOADING OVERLAY */}
+                            <LoadingOverlay
+                                visible={loading}
+                                overlayProps={{ radius: 'sm', blur: 2 }}
+                                loaderProps={{ size: 'lg', color: "grape", type: "bars" }}
+                            />
+
+                            <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4, lg: 5, xl: 5 }} spacing="lg" verticalSpacing='xl' className={classes.responsiveGrid}>
+                                {filteredGames.map((game) => (
+                                    <GameCard
+                                        variant="library"
+                                        key={game._id}
+                                        game={{
+                                            id: game.gameId,
+                                            name: game.title,
+                                            cover: { url: game.coverImage },
+                                            genres: game.genre
+                                        }}
+                                        libraryMeta={{
+                                            status: game.status,
+                                            rating: game.rating,
+                                            platinum: game.platinum
+                                        }}
+                                    />
+                                ))}
+                            </SimpleGrid>
+                        </div>
+                    )}
+
+                    {!loading && filteredGames.length === 0 && (
+                        <p className={classes.noGamesText}>No games found for the selected status.</p>
+                    )}
                 </div>
-
-                <p className={classes.subTitle}> Track and manage your gaming adventures all in one place. </p>
-
-                <p className={classes.subTitle}> You have <span className={classes.totalGames}>{totalGames} games</span> in your library. </p>
-
-                {/* Status Filter Dropdown */}
-                <Popover width={300} position={isMobile ? 'bottom-end' : 'right'} withArrow shadow='lg'>
-                    <Popover.Target>
-                        <Button className={classes.filterButton} size={isMobile ? 'lg' : 'md'} radius='md' variant='gradient' gradient={{from: '#43bae9', to: '#3b99d3', deg: 90}} rightSection={<ListFilter />}>Filters</Button>
-                    </Popover.Target>
-
-                    <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>
-                        <Stack gap='md'>
-                            <Select
-                            label="Choose a status to filter your library by"
-                            placeholder="Filter by status"
-                            styles={{
-                                wrapper: { color: '#212121'}, 
-                                input: { color: 'white', background: '#212121'}, 
-                                dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
-                                option: { background: '#202020'}
-                            }}
-                            checkIconPosition='left'
-                            data={[
-                                { value: 'all', label: 'All' },
-                                { value: 'plan to play', label: "Plan to Play"},
-                                { value: 'playing', label: 'Playing'},
-                                { value: 'completed', label: 'Completed'},
-                                { value: 'on hold', label: 'On Hold'},
-                                { value: 'dropped', label: "Dropped"}
-                            ]}
-                            value={selectedStatus}
-                            onChange={(value) => setSelectedStatus(value || 'all')}
-                            className={classes.filterDropdown}
-                            mb="md"
-                            />
-
-                            {/* RATING FILTER */}
-                            <Switch
-                                label="Only rated games"
-                                checked={filterRating}
-                                onChange={(e) => setFilterRating(e.currentTarget.checked)}
-                            />
-
-                            {/* PLATINUM FILTER */}
-                            <Switch
-                                label="Only platinum games"
-                                checked={filterPlatinum}
-                                onChange={(e) => setFilterPlatinum(e.currentTarget.checked)}
-                            />
-
-                        </Stack>
-                        
-                    </Popover.Dropdown>
-
-                </Popover>
-
-                {filteredGames.length > 0 && (
-                    <div className={classes.library}>
-
-                        {/* ✅ LOADING OVERLAY */}
-                        <LoadingOverlay
-                            visible={loading}
-                            overlayProps={{ radius: 'sm', blur: 2 }}
-                            loaderProps={{ size: 'lg', color: "grape", type: "bars" }}
-                        />
-
-                        <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4, lg: 5, xl: 5 }} spacing="lg" verticalSpacing='xl' className={classes.responsiveGrid}>
-                            {filteredGames.map((game) => (
-                                <div key={game._id} className={classes.libraryCard} onClick={() => router.push(`/games/${game.gameId}`)}>
-                                    <div className={classes.imageContainer} style={{ textAlign: 'center' }}>
-                                        <Image
-                                        src={
-                                        game.coverImage
-                                            ? `https:${game.coverImage.replace('t_thumb', 't_1080p')}`
-                                            : PlaceHolderImage.src
-                                        }
-                                        alt={game.name}
-                                        radius="md"
-                                        className={classes.image}
-                                        />
-                                    </div>
-
-                                    <div className={classes.gameInfo}>
-
-                                        {game.genres?.slice(0, 2).map((genre: { name: string }) => (
-                                            <Badge key={genre.name} size="md" variant="filled" color="white" radius='lg' c='black'>
-                                                {genre.name}
-                                            </Badge>
-                                        ))}
-
-                                        <Badge 
-                                        className={classes.badge} 
-                                        color={game.status === 'Completed' ? 'green' : game.status === 'Playing' ? 'blue' : game.status === 'On Hold' ? 'red' : game.status === 'Dropped' ? 'red' : game.status === 'Plan to Play' ? 'yellow': game.status === 'No Status Given' ? 'gray' : 'dark'} 
-                                        variant='filled'
-                                        size='md'
-                                        radius='sm'
-                                        >
-                                            {game.status || "No Status"}
-                                        </Badge>
-
-                                        <div className={classes.ratingSection}>
-                                        
-                                            <Rating 
-                                            size='md'
-                                            color={game.rating && game.rating > 0 ? 'yellow' : '#555'}
-                                            fractions={2}
-                                            readOnly
-                                            value={game.rating} 
-                                            /> 
-
-                                            <Tooltip label='Platinumed/100%' position='right'>
-                                                <Trophy 
-                                                size={25} 
-                                                color={game.platinum ? 'gold' : '#555'}
-                                                fill={game.platinum ? 'gold' : 'none'}
-                                                cursor={'pointer'}
-                                                />
-                                            </Tooltip>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                                
-                            ))}
-                        </SimpleGrid>
-                    </div>
-                )}
-
-                {!loading && filteredGames.length === 0 && (
-                    <p className={classes.noGamesText}>No games found for the selected status.</p>
-                )}
             </div>
-
         </div>
-
-    </div>
-
     )
 }

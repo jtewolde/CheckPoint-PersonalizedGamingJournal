@@ -2,14 +2,16 @@
 
 import { useState, useEffect } from "react"
 import { formatDate, isSameDay } from "@/utils/dateUtils"
+import PlaySessionModal from "../PlaySessionModal/SessionModal"
 import { Calendar } from "@mantine/dates"
-import { Indicator, Modal, Stack, Text, Group, ActionIcon, Badge } from "@mantine/core"
-import { Trash2Icon } from "lucide-react"
+import { Indicator, Modal, Stack, Text, Group, ActionIcon, Badge, Tooltip, LoadingOverlay } from "@mantine/core"
+import { Trash2Icon, Pencil } from "lucide-react"
 import toast from "react-hot-toast"
 import classes from "./SessionCalendar.module.css"
 
 type PlaySession = {
   _id: string
+  gameName: string
   date: string
   duration: number
   notes: string
@@ -19,10 +21,14 @@ type PlaySession = {
 export default function SessionCalendar({ gameId, sessions }: { gameId: string, sessions: PlaySession[] }) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [localSessions, setLocalSessions] = useState<PlaySession[]>(sessions)
+
+  const [editModalOpened, setEditModalOpened] = useState(false);
+  const [selectedSession, setSelectedSession] = useState<PlaySession | null>(null);
+
   const [opened, setOpened] = useState(false)
   const [loading, setLoading] = useState(false);
 
-    // Sync up current play sessions of game when parent changes
+  // Sync up current play sessions of game when parent changes
   useEffect(() => {
     setLocalSessions(sessions);
   }, [sessions]);
@@ -73,13 +79,16 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
         maxDate={new Date()}
         getDayProps={(dateString) => ({
           onClick: () => {
-            const date = new Date(dateString)
+            const [year, month, day] = dateString.split('-').map(Number);
+            const date = new Date(year, month - 1, day); // local date, no UTC shift
+            
             setSelectedDate(date)
             setOpened(true)
           }
         })}
         renderDay={(dateString) => {
-          const date = new Date(dateString)
+          const [year, month, day] = dateString.split('-').map(Number);
+          const date = new Date(year, month - 1, day); // local date, no UTC shift
 
           const hasSession = localSessions.some(
             (s) =>
@@ -98,6 +107,25 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
         }}
       />
 
+      <PlaySessionModal
+        gameName={selectedSession?.gameName}
+        opened={editModalOpened}
+        onClose={() => {
+          setEditModalOpened(false);
+          setSelectedSession(null);
+        }}
+        gameId={gameId}
+        session={selectedSession}   // 👈 THIS is key
+        onSuccess={(updatedSession) => {
+          // update local state without refetch
+          setLocalSessions(prev =>
+            prev.map(s =>
+              s._id === updatedSession._id ? updatedSession : s
+            )
+          );
+        }}
+      />
+
       {/* Modal */}
       <Modal
         opened={opened}
@@ -108,6 +136,12 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
             : "Sessions"
         }
       >
+        {/* ✅ LOADING OVERLAY */}
+        <LoadingOverlay
+            visible={loading}
+            overlayProps={{ radius: 'sm', blur: 2 }}
+            loaderProps={{ size: 'lg', color: "white", type: "oval" }}
+        />
         <Stack>
           {sessionsForDate.length === 0 && (
             <Text c="dimmed">No sessions</Text>
@@ -128,7 +162,22 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
 
                     {/* ACTION ICONS (EDIT/DELETE) */}
                     <div className={classes.actionIcons}>
-                      <ActionIcon variant='transparent' color="#f21616" onClick={() => handleDeleteSession(s._id)}> <Trash2Icon size={20}/> </ActionIcon>
+                      <Tooltip label='Delete' position='top'>
+                        <ActionIcon variant='transparent' color="#dc4242" onClick={() => handleDeleteSession(s._id)}> <Trash2Icon size={20}/> </ActionIcon>
+                      </Tooltip>
+
+                      <Tooltip label='Edit' position='top'>
+                        <ActionIcon 
+                        variant='transparent' 
+                        color="#ffffff" 
+                        onClick={() => {
+                          setSelectedSession(s)
+                          setEditModalOpened(true)
+                          setOpened(false)
+                        }}
+                        > 
+                        <Pencil size={20}/> </ActionIcon>
+                      </Tooltip>
                     </div>
 
                   </div>

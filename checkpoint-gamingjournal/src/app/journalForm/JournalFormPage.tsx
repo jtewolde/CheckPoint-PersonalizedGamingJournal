@@ -141,10 +141,7 @@ export default function JournalForm() {
               maxDropdownHeight={300}
               className={classes.select}
               styles={{
-                wrapper: { color: '#212121'}, 
                 input: { color: 'white', background: '#212121'}, 
-                dropdown: { background: '#212121', color: 'whitesmoke'},
-                option: { background: '#202020'}
               }}
               scrollAreaProps={{ type: 'auto', scrollbarSize: 16, scrollbars: 'y', color:'black',  classNames: { scrollbar: classes.scrollBar }}}
               size="lg"
@@ -174,15 +171,12 @@ export default function JournalForm() {
                 "Grinding",
                 "Side Quest",
                 "Achievement",
+                "Review"
               ]}
               value={tags}
               onChange={setTags}
               searchable
               size="lg"
-              styles={{
-                input: { color: "white", background: "#212121" },
-                dropdown: { background: "#212121", color: "whitesmoke" },
-              }}
               style={{ marginTop: "1rem" }}
             />
 

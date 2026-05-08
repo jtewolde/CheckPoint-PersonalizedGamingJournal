@@ -2,23 +2,24 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useMediaQuery } from '@mantine/hooks';
+import { useMediaQuery, useDisclosure } from '@mantine/hooks';
 import { useLibraryGame } from '@/hooks/useLibraryGame';
 import { useAuth } from '@/context/Authcontext';
+import PlaySessionModal from '../PlaySessionModal/SessionModal';
 
-import { Badge, Text, Image, Tooltip, ActionIcon } from '@mantine/core';
+import { Badge, Text, Image, Tooltip, ActionIcon, Rating } from '@mantine/core';
 import toast from 'react-hot-toast';
 
-import { Plus, Minus, Ellipsis } from 'lucide-react';
+import { Plus, Minus, Ellipsis, Trophy, ClipboardEdit } from 'lucide-react';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 import classes from './GameCard.module.css';
 
 // Create type variable to determine which variant of gameCard, default for search results and more info
 // Compact for Popular and Trending games sections with less info
-type GameCardVariant = 'default' | 'compact' | 'small';
+type GameCardVariant = 'default' | 'compact' | 'small' | 'library';
 
-// Define the GameCard component that takes a game prop
+// Define the GameCard component that takes a game prop and attributes
 interface GameCardProps {
     game: {
         id: string;
@@ -30,13 +31,30 @@ interface GameCardProps {
         release_dates?: {human: string;}[];
         first_release_date?: number;
         total_rating?: number;
+        status?: string
     };
+
+    // Optional props for if the game is in the user's library
+    libraryMeta?: {
+        status?: string;
+        rating?: number;
+        platinum?: boolean;
+        completionDate?: string;
+    }
+
+    onQuickLog?: (game: {
+        gameId: string;
+        title: string;
+        cover?: string;
+    }) => void;
+
     variant?: GameCardVariant;
 }
 
-export default function GameCard({ game, variant = 'default' }: GameCardProps) {
+export default function GameCard({ game, variant = 'default', libraryMeta, onQuickLog }: GameCardProps) {
 
     const {isAuthenticated, setIsAuthenticated} = useAuth(); // Access global auth state
+    const [opened, {open, close} ] = useDisclosure(false);
 
     const router = useRouter();
     const isMobile = useMediaQuery('(max-width: 450px)');
@@ -115,7 +133,7 @@ export default function GameCard({ game, variant = 'default' }: GameCardProps) {
     }
 
     return (
-        <div key={game.id} className={`${classes.gameCard} ${variant === 'compact' ? classes.compact  : variant === 'small' ? classes.small : classes.default}`} onClick={() => router.push(`/games/${game.id}`)}>
+        <div key={game.id} className={`${classes.gameCard} ${variant === 'compact' ? classes.compact  : variant === 'small' ? classes.small : variant === 'library' ? classes.library : classes.default}`} onClick={() => {if(opened) return;  router.push(`/games/${game.id}`)}}>
 
             <div className={classes.imageWrapper}>
 
@@ -129,44 +147,88 @@ export default function GameCard({ game, variant = 'default' }: GameCardProps) {
 
                     <Text className={classes.gameName}>{game.name}</Text>
 
-                    <div 
-                    className={classes.quickAdd} 
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        handleQuickToggle(String(game.id))
-                    }}
-                    >
-                        {variant !== 'small' && (
-                            <Tooltip label={loading ? 'Checking library...' : isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile || loading}>
-                                <ActionIcon size='lg' radius='xl' variant='filled' color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} disabled={loading || addingToLibrary}>
-                                    {loading || isInLibrary === null ? (
-                                        <Ellipsis size={18} strokeWidth={2.5} />
-                                    ):
-                                    isInLibrary ? (
-                                        <Minus size={18} strokeWidth={2.5} />
-                                        ) : (
-                                        <Plus size={18} strokeWidth={2.5} />
-                                    )}
-                                </ActionIcon>
-                            </Tooltip>
-                        )}
+                    <div className={classes.quickButtons}>
 
+                        <div className={classes.quickAdd} onClick={(e) => {e.stopPropagation(); handleQuickToggle(String(game.id))}}>
+                            {variant !== 'small' && (
+                                <Tooltip label={loading ? 'Checking library...' : isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile || loading}>
+                                    <ActionIcon size='lg' radius='xl' variant='filled' color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} disabled={loading || addingToLibrary}>
+                                        {loading || isInLibrary === null ? (
+                                            <Ellipsis size={18} strokeWidth={2.5} />
+                                        ):
+                                        isInLibrary ? (
+                                            <Minus size={18} strokeWidth={2.5} />
+                                            ) : (
+                                            <Plus size={18} strokeWidth={2.5} />
+                                        )}
+                                    </ActionIcon>
+                                </Tooltip>
+                            )}
+
+                        </div>
+                        
+                        <PlaySessionModal 
+                        key={game.id} 
+                        opened={opened} 
+                        onClose={close} 
+                        gameId={game.id} 
+                        gameName={game.name} 
+                        onSuccess={() => close()}  
+                        />
+                        
+                        <div className={classes.quickLog}>
+                            {variant === 'library' && (
+                                <Tooltip label='Quick Log' withArrow>
+                                    <ActionIcon size='lg' radius='xl' variant='filled' color='blue' onClick={(e) => {e.stopPropagation(); open();}}> <ClipboardEdit size={18} /> </ActionIcon>
+                                </Tooltip>
+                            )}
+                        </div>
                     </div>
-
                 </div>
 
             </div>
 
-            {variant === 'default' && (
-            
+            {variant === 'library' && (
                 <div className={classes.gameInfo}>
+                    <Badge 
+                    className={classes.badge} 
+                    color={libraryMeta?.status === 'Completed' ? 'green' : libraryMeta?.status === 'Playing' ? 'blue' : libraryMeta?.status === 'On Hold' ? 'red' : libraryMeta?.status === 'Dropped' ? 'red' : libraryMeta?.status === 'Plan to Play' ? 'yellow': libraryMeta?.status === 'No Status Given' ? 'gray' : 'dark'} 
+                    variant='filled'
+                    size='md'
+                    radius='sm'
+                    >
+                        {libraryMeta?.status || "No Status"}
+                    </Badge>
 
+                    <div className={classes.ratingSection}>
+                    
+                        <Rating 
+                        size='md'
+                        color={libraryMeta?.rating && libraryMeta?.rating > 0 ? 'yellow' : '#555'}
+                        fractions={2}
+                        readOnly
+                        value={libraryMeta?.rating} 
+                        /> 
+
+                        <Tooltip label='Platinumed/100%' position='right'>
+                            <Trophy 
+                            size={25} 
+                            color={libraryMeta?.platinum ? 'gold' : '#555'}
+                            fill={libraryMeta?.platinum ? 'gold' : 'none'}
+                            cursor={'pointer'}
+                            />
+                        </Tooltip>
+
+                    </div>
+
+                </div>
+            )}
+
+            {variant === 'default' && (
+                <div className={classes.gameInfo}>
                     <h3 className={classes.gameTitle}>{game.name}</h3>
-
                     <div className={classes.ratingTypeSection}>
-
                         <Badge size='md' variant='filled' color='#767575'>{game.game_type?.type}</Badge>
-
                         <Badge 
                         className={classes.badge}
                         variant='filled' 
@@ -176,17 +238,14 @@ export default function GameCard({ game, variant = 'default' }: GameCardProps) {
                         >
                             {game.total_rating ? `${Math.round(game.total_rating)}` : 'N/A'}
                         </Badge>
-
                     </div>
 
                     <div className={classes.badgeContainer}>
-
                         {game.genres?.slice(0, 2).map((genre: { name: string }) => (
                             <Badge key={genre.name} size="md" variant="filled" color="white" radius='lg' c='black'>
                                 {genre.name}
                             </Badge>
                         ))}
-
                     </div>
 
                     <p className={classes.gameDate}>{game.first_release_date ? new Date(game.first_release_date * 1000).toLocaleDateString('en-US', {
@@ -196,9 +255,7 @@ export default function GameCard({ game, variant = 'default' }: GameCardProps) {
                     })
                     : 'N/A'}
                     </p>
-
                 </div>
-
             )}
 
         </div>

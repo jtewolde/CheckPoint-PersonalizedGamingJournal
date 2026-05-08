@@ -1,5 +1,3 @@
-// API Call for getting top 12 popular games to display on dashboard
-
 import { NextRequest, NextResponse } from 'next/server';
 import { redis } from '@/utils/redis';
 

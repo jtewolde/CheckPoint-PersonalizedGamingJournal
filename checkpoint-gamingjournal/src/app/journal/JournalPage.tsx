@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { authClient } from '@/lib/auth-client';
 
-import { Badge, Button, List, Popover, Select, SimpleGrid, Pagination, ThemeIcon, Modal, Group, Stack, Title, 
-    Text, Checkbox, ActionIcon, MultiSelect, LoadingOverlay } from '@mantine/core';
+import { Badge, Button, Select, SimpleGrid, Pagination, SegmentedControl, Modal, Group, Stack, Title, 
+    Text, Checkbox, ActionIcon, MultiSelect, LoadingOverlay, Drawer, Tooltip} from '@mantine/core';
 
 import toast from 'react-hot-toast';
-import { FilePlus, ListFilter, Trash2, X } from 'lucide-react';
+import { FilePlus, ListFilter, Trash2, Eye, RotateCcw } from 'lucide-react';
 
 import classes from './journal.module.css';
 
@@ -25,12 +25,28 @@ export default function Journal() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-    const [gameName, setGameName] = useState('all')
+    const [games, setGames] = useState<{ gameId: string, gameName: string }[]>([]);
+
+    // State variables for filters based on game, tags, and sorting order
+    const [gameId, setGameId] = useState('all')
     const [selectedGame, setSelectedGame] = useState('');
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
+    // Draft filters (inside the drawer)
+    const [draftGameId, setDraftGameId] = useState('all');
+    const [draftTags, setDraftTags] = useState<string[]>([]);
+
+    // Compute active filters for display in the UI
+    const activeFilters = (gameId !== 'all' ? [`Game: ${games.find(g => g.gameId === gameId)?.gameName}`] : []).concat(
+        selectedTags.length > 0 ? [`Tags: ${selectedTags.join(', ')}`] : []
+    );
+
+    // State for opening delete all modal
     const [opened, {open, close}] = useDisclosure(false);
+    const [drawerOpened, { toggle, close: closeDrawer }] = useDisclosure(false);
 
+    const isMobile = useMediaQuery('(max-width: 560px)');
     const router = useRouter();
 
     // Check if the user is authenticated, if not redirect to auth page
@@ -41,13 +57,45 @@ export default function Journal() {
         }
     }
 
+    // Function to fetch the list of games with journal entries for the filter dropdown
+    const fetchGames = async () => {
+        try{
+            const token = localStorage.getItem('bearer_token');
+            const res = await fetch('/api/journal/games', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!res.ok) {
+                throw new Error('Failed to fetch user journal entries');
+            }
+
+            const data = await res.json();
+            setGames(data.games);
+            console.log('Games with journal entries:', data.games);
+        } catch (error) {
+            console.log('Error fetching games with journal entries', error);
+        }
+    }
+
     // Function to fetch journal entries
     const fetchEntries = async (pageNum = 1) => {
         setLoading(true);
         try {
             const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token
 
-            const res = await fetch(`/api/journal?page=${pageNum}&limit=6`, {
+            const params = new URLSearchParams({
+                page: pageNum.toString(),
+                limit: '6',
+                gameId: gameId !== 'all' ? gameId : '',
+                tag: selectedTags.length > 0 ? selectedTags.join(',') : '',
+                order: sortOrder
+            })
+
+            const res = await fetch(`/api/journal?${params.toString()}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,12 +119,14 @@ export default function Journal() {
     };
 
     useEffect(() => {
+        fetchGames(); // Fetch games for filter dropdown 
         checkAuth(); // Check authentication on component mount
     }, [router]);
 
+    // Refetch journal entries whenenver the page number changes
     useEffect(() => {
         fetchEntries(page);
-    }, [page]);
+    }, [page, gameId, selectedTags, sortOrder]);
 
     // Function to delete a journal entry
     const deleteJournalEntry = async (journalEntryId: string, gameID: string) => {
@@ -152,20 +202,6 @@ export default function Journal() {
     // Get unique game names from entries for the dropdown
     const gameNames = Array.from(new Set(entries.map(entry => entry.gameName)));
 
-    // Function to filter the journal entries based on game or tags associated
-    const filteredEntries = entries.filter((entry) => {
-        const matchesGame =
-            gameName === 'all' || entry.gameName === gameName;
-
-        const matchesTags =
-            selectedTags.length === 0 ||
-            selectedTags.every((tag) =>
-            entry.tags?.includes(tag)
-            );
-
-        return matchesGame && matchesTags;
-    });
-
     // Find the selected game's object in the journal entries to get the gameID
     const selectedGameObject = entries.find(e => e.gameName === selectedGame);
 
@@ -182,41 +218,9 @@ export default function Journal() {
                             <h2 className={classes.journalTitle}>Your Journal</h2>
                         </div>
 
-                        <Text className={classes.description} size="xl" mt="xl">
-                            Reflect on your gaming journey by managing your journal entries here. Here you can:
+                        <Text className={classes.description} size="xl">
+                            Track and revisit your gaming experiences by creating journal entries for each game you play.
                         </Text>
-
-                        <List className={classes.descriptionList} spacing='sm' size='md' >
-                            <List.Item
-                                icon={
-                                    <ThemeIcon size={30} radius="xl" variant='filled' color='#45B649'>
-                                        <FilePlus size={16} />
-                                    </ThemeIcon>
-                                }
-                            >
-                                <span className={classes.bold}>Add</span> new journal entries to document your gaming experiences.
-                            </List.Item>
-
-                            <List.Item
-                                icon={
-                                    <ThemeIcon size={30} radius="xl" variant="filled" color='#8b2ad4ff'>
-                                        <ListFilter size={16} />
-                                    </ThemeIcon>
-                                }
-                            >
-                                <span className={classes.bold}>Filter</span> entries by game to easily find specific reflections.
-                            </List.Item>
-
-                            <List.Item
-                                icon={
-                                    <ThemeIcon size={30} radius="xl" variant="filled" color='#d31919ff'>
-                                        <Trash2 size={16} />
-                                    </ThemeIcon>
-                                }
-                            >
-                                <span className={classes.bold}>Delete</span> individual entries or all entries for a specific game to keep your journal organized.
-                            </List.Item>
-                        </List>
 
                     </div>
 
@@ -229,7 +233,7 @@ export default function Journal() {
                             </Title>
 
                             <Text c="white" fz="md" ta="center" mb={10}>
-                                This will permanently delete <b>all</b> journal entries assoicated with the selected game.
+                                This will permanently delete <b>all</b> journal entries assoicated with the selected game.  
                                 This action cannot be undone.
                             </Text>
 
@@ -304,46 +308,150 @@ export default function Journal() {
                         />
 
                         <div className={classes.buttonGroup} >
+                            <ActionIcon
+                                variant='filled'
+                                color='green'
+                                size='xl'
+                                radius= 'md'
+                                className={classes.addButton}
+                                onClick={() => router.push('/journalForm')}
+                                hiddenFrom='sm'
+                            >
+                                <FilePlus />
+                            </ActionIcon>
+                            
+                            <ActionIcon
+                                variant='filled'
+                                color='#854bcb'
+                                size='xl'
+                                radius= 'md'
+                                className={classes.filterButton}
+                                onClick={toggle}
+                                hiddenFrom='sm'
+                            >
+                                <ListFilter />
+                            </ActionIcon>
+
+                            <ActionIcon
+                                variant='filled'
+                                color='#e01515ff'
+                                size='xl'
+                                radius= 'md'
+                                className={classes.deleteEntriesButton}
+                                onClick={open}
+                                hiddenFrom='sm'
+                            >
+                                <Trash2 />
+                            </ActionIcon>
 
                             <Button
-                            variant='filled'
-                            color='green'
-                            size='md'
-                            radius= 'md'
-                            className={classes.addButton}
-                            onClick={() => router.push('/journalForm')}
-                            rightSection={<FilePlus />}
+                                variant='filled'
+                                color='green'
+                                size='md'
+                                radius= 'md'
+                                className={classes.addButton}
+                                onClick={() => router.push('/journalForm')}
+                                rightSection={<FilePlus />}
+                                visibleFrom='sm'
                             >
                                 Add Entry
                             </Button>
                             
+                            <Button 
+                                className={classes.filterButton} 
+                                size='md' 
+                                color='#854bcb' 
+                                radius='md' 
+                                variant="filled" 
+                                rightSection={<ListFilter />}
+                                onClick={toggle}
+                                hidden={!isMobile}
+                                visibleFrom='sm'
+                            >
+                            Filters
+                            </Button>
 
-                            <Popover width={400} position='bottom-end' withArrow shadow='lg'>
-                                <Popover.Target>
-                                    <Button className={classes.filterButton} size='md' color='#854bcb' radius='md' variant="filled" rightSection={<ListFilter />}>Filters</Button>
-                                </Popover.Target>
+                            <Button
+                                variant='filled'
+                                color='#e01515ff'
+                                size='md'
+                                radius= 'md'
+                                className={classes.deleteEntriesButton}
+                                onClick={open}
+                                rightSection={<Trash2 />}
+                                hidden={isMobile}
+                                visibleFrom='sm'
+                            >
+                                Delete All
+                            </Button>
 
-                                <Popover.Dropdown styles={{dropdown: {backgroundColor: '#212121', color: 'white', border: '2px solid #424040ff'}}}>
-                                    <Stack gap='xs'>
+                            {/* Drawer component to hold the filter options, slides in from left */}
+                            <Drawer
+                                opened={drawerOpened}
+                                onClose={closeDrawer}
+                                position='left'
+                                size="300px"
+                                title='Sort and Filter'
+                                className={classes.drawer}
+                                styles={{
+                                    header: {
+                                        borderBottom: '1px solid gray',
+                                        marginBottom: '10px'
+                                    },
+                                    body: {
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        height: '90%',
+                                    },
+                                    title: {
+                                        fontSize: '24px',
+                                        color: 'white',
+                                        fontFamily: 'Noto Sans',
+                                        fontWeight: 300
+                                    },
+                                    close: {
+                                        color: 'white'
+                                    }
+                                }}
+                            >
+                                <Stack justify='space-between' h='100%'>
+                                    <Stack gap='md'>
                                         <Select
                                             styles={{
-                                                wrapper: { color: '#212121'}, 
-                                                input: { color: 'white', background: '#212121'}, 
-                                                dropdown: { background: '#212121', color: 'whitesmoke'},
-                                                option: { background: '#202020'}
+                                                dropdown: {
+                                                    background: '#212121',
+                                                    color: 'whitesmoke'
+                                                },
+                                                input: {
+                                                    background: '#212121',
+                                                    fontFamily: 'Noto Sans',
+                                                    color: 'white'
+                                                },
+                                                option: {
+                                                    fontFamily: 'Noto Sans',
+                                                    fontSize: '16px',
+                                                    fontWeight: 330
+                                                },
+                                                label: {
+                                                    fontFamily: 'Noto Sans',
+                                                    color: 'white',
+                                                    fontSize: '20px',
+                                                    fontWeight: 300
+                                                }
                                             }}
                                             label="Filter by Game"
                                             placeholder="Select Game"
                                             checkIconPosition='right'
+                                            scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
                                             data={[
                                                 { value: 'all', label: 'All Games' },
-                                                ...gameNames.map((gameName) => ({
-                                                    value: gameName,
-                                                    label: gameName
+                                                ...games.map((game) => ({
+                                                    value: game.gameId,
+                                                    label: game.gameName
                                                 }))
                                             ]}
-                                            value={gameName}
-                                            onChange={(value) => setGameName(value || 'all')}
+                                            value={draftGameId}
+                                            onChange={(value) => setDraftGameId(value || 'all')}
                                             className={classes.filterDropdown}
                                             mb="md"
                                         />
@@ -352,68 +460,159 @@ export default function Journal() {
                                             label="Filter by Tags"
                                             placeholder="Select Tags"
                                             styles={{
-                                                wrapper: { color: '#212121'}, 
-                                                input: { color: 'white', background: '#212121'}, 
-                                                dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
-                                                option: { background: '#202020'}
-                                            }}
-                                            checkIconPosition='left'
-                                            data={[
-                                                "Story",
-                                                "Boss Fight",
-                                                "Exploration",
-                                                "Multiplayer",
-                                                "Grinding",
-                                                "Side Quest",
-                                                "Achievement",
-                                            ]}
-                                            value={selectedTags}
-                                            onChange={(value) => setSelectedTags(value || 'all')}
-                                            className={classes.filterDropdown}
-                                            mb="md"
+                                                dropdown: {
+                                                    background: '#212121',
+                                                    color: 'whitesmoke'
+                                                },
+                                                input: {
+                                                    background: '#212121',
+                                                    fontFamily: 'Noto Sans',
+                                                    color: 'white'
+                                                },
+                                                option: {
+                                                    fontFamily: 'Noto Sans',
+                                                    fontSize: '16px',
+                                                    fontWeight: 330
+                                                },
+                                                label: {
+                                                    fontFamily: 'Noto Sans',
+                                                    color: 'white',
+                                                    fontSize: '20px',
+                                                    fontWeight: 300
+                                                }
+                                                }}
+                                                checkIconPosition='left'
+                                                data={[
+                                                    "Story",
+                                                    "Boss Fight",
+                                                    "Exploration",
+                                                    "Multiplayer",
+                                                    "Grinding",
+                                                    "Side Quest",
+                                                    "Achievement",
+                                                    "Review",
+                                                ]}
+                                                value={draftTags}
+                                                onChange={(value) => setDraftTags(value || 'all')}
+                                                scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
+                                                className={classes.filterDropdown}
+                                                mb="md"
                                         />
+
+                                        <SegmentedControl
+                                            fullWidth
+                                            value={sortOrder}
+                                            size='md'
+                                            mb="md"
+                                            onChange={(value) => setSortOrder(value as 'asc' | 'desc')}
+                                            data={[
+                                                { label: 'Newest', value: 'desc' },
+                                                { label: 'Oldest', value: 'asc' }
+                                            ]}
+                                        >
+                                            Sort: {sortOrder === 'desc' ? 'Newest → Oldest' : 'Oldest → Newest'}
+                                        </SegmentedControl>
                                     </Stack>
-                                </Popover.Dropdown>
+                                    
+                                    <Stack gap='sm'>
+                                        <div style={{ borderTop: '1px solid #6c6c6c', paddingTop: '0.5rem', gap: '0.5rem'}}>
+                                            <Button
+                                                fullWidth
+                                                variant='subtle'
+                                                color='white'
+                                                leftSection={<RotateCcw size={18} />}
+                                                mb='sm'
+                                                onClick={() => {
+                                                    setGameId('all');
+                                                    setSelectedTags([]);
+                                                }}
+                                            >
+                                                Clear Filters
+                                            </Button>
 
-                            </Popover>
+                                            <Button
+                                                fullWidth
+                                                variant='filled'
+                                                color="blue"
+                                                onClick={() => {
+                                                    setGameId(draftGameId);
+                                                    setSelectedTags(draftTags);
+                                                    setPage(1);
+                                                    closeDrawer();
+                                                }}
+                                            >
+                                                Apply Filters
+                                            </Button>
 
-                            <Button
-                            variant='filled'
-                            color='#e01515ff'
-                            size='md'
-                            radius= 'md'
-                            className={classes.deleteEntriesButton}
-                            onClick={open}
-                            rightSection={<Trash2 />}
-                            >
-                                Delete All
-                            </Button>
-
+                                        </div>
+                                    </Stack>
+                                </Stack>
+                            </Drawer>
                         </div>
+
+                        {activeFilters.length > 0 && (
+                            <Group className={classes.activeFiltersWrapper} mb='lg' gap='xs'>
+                                {gameId !== 'all' && (
+                                    <Badge
+                                        className={classes.filterBadge}
+                                        size="lg"
+                                        variant="outline"
+                                        color='#f0f1f2'
+                                        radius="sm"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => {
+                                            setGameId('all');
+                                            setPage(1);
+                                        }}
+                                    >
+                                        {`Game: ${games.find(g => g.gameId === gameId)?.gameName}`} ✕
+                                    </Badge>
+                                )}
+
+                                {draftTags.length > 0 && (
+                                    <Badge
+                                        className={classes.filterBadge}
+                                        size="lg"
+                                        variant="outline"
+                                        color='#f0f1f2'
+                                        radius="sm"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => {
+                                            setDraftTags([]);
+                                            setSelectedTags([]);
+                                            setPage(1);
+                                        }}
+                                    >
+                                        {`Tags: ${draftTags.join(', ')}`} ✕
+                                    </Badge>
+                                )}
+                            </Group>
+                        )}
                         
-                        {filteredEntries.length > 0 && (
-                            <SimpleGrid cols={3} spacing="lg" className={classes.entriesGrid}>
-                                {filteredEntries.map((entry) => (
-                                    <div key={entry.uuid} className={classes.entryCard} onClick={() => router.push(`/journal/${entry.uuid}`)}>
-
+                        {entries.length > 0 && (
+                            <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 3}} spacing="lg" className={classes.entriesGrid}>
+                                {entries.map((entry) => (
+                                    <div key={entry.uuid} className={classes.entryCard}>
                                         <div className={classes.entryHeader}>
-
                                             <h3 className={classes.entryGame}>{entry.gameName}</h3>
 
-                                            <ActionIcon
-                                                className={classes.deleteButton}
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    deleteJournalEntry(entry._id, entry.gameId)}
-                                                }
-                                                radius='md'
-                                                size='lg'
-                                                variant='filled'
-                                                color='#e01515ff'
-                                                loading={loading}
-                                            >
-                                                <Trash2 size={20} />
-                                            </ActionIcon>
+                                            <div className={classes.entryActions}>
+                                                <Tooltip label="View Entry" withArrow position='top'>
+                                                    <Eye color='white' size={23} onClick={() => router.push(`/journal/${entry.uuid}`)}/>
+                                                </Tooltip>
+
+                                                <Tooltip label="Delete Entry" withArrow position="top">
+                                                    <Trash2 
+                                                        size={23}
+                                                        color='#ef2b2b'
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            deleteJournalEntry(entry._id, entry.gameId)}
+                                                        }
+                                                    />
+                                                </Tooltip>
+                                                
+                                            </div>
 
                                         </div>
 
@@ -442,12 +641,9 @@ export default function Journal() {
                                                     </Badge>
                                                     ))}
                                                 </Group>
-                                            )}
-                                                
+                                            )}   
                                             <p className={classes.entryDate}>{entry.displayDate}</p>
-
-                                        </div>
-                                        
+                                        </div>   
                                     </div>
                                 ))}
                             </SimpleGrid>
@@ -456,11 +652,11 @@ export default function Journal() {
 
                     </div>
 
-                    {!loading && filteredEntries.length === 0 && (
+                    {!loading && entries.length === 0 && (
                         <p className={classes.noGamesText}>No games found for the selected tags.</p>
                     )}
 
-                    {filteredEntries.length !== 0 &&(
+                    {entries.length !== 0 &&(
                         <div className={classes.paginationWrapper}>
                             <Pagination
                                 classNames={{

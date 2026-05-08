@@ -187,8 +187,8 @@ export default function Home() {
             <div className={classes.imageReverseContainer} >
 
               <Image
-                src="/ChatRoom.png"
-                alt="Chatroom Page"
+                src="/PlaySession.png"
+                alt="PlaySession Calendar"
                 className={classes.image}
                 width={800}
                 height={600}
@@ -197,12 +197,12 @@ export default function Home() {
 
               <div className={classes.imageTextContainer} >
                 <Text className={classes.chatRoomTitle} size='xl' mt='lg' >
-                  Chat with Gemini AI
+                  Track Your Play Sessions
                 </Text>
 
                 <Text className={classes.chatRoomText} size='lg' mt='lg' >
-                  Ask questions, get recommendations, learn strategies, or explore new games with the help of Gemini AI. 
-                  Your personal gaming assistant is always ready to help—no matter what you're playing.
+                  Log every gaming session and visualize your activity over time with a built-in calendar. 
+                  See when you played, how long you spent, and what you accomplished—so you always know exactly where you left off.
                 </Text>
               </div>
 

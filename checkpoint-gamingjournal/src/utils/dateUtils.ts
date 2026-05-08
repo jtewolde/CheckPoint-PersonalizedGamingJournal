@@ -14,10 +14,34 @@ export const formatDate = (date: Date): string => {
 
 /**
  * Compare stored date string with a Date object
+ * Handles both "YYYY-MM-DD" format and ISO strings with time
  */
-export const isSameDay = (dateString: string, date: Date): boolean => {
-    return dateString === formatDate(date);
-};
+export function isSameDay(
+    date1: string | Date,
+    date2: string | Date
+    ) {
+    const normalize = (d: string | Date) => {
+        if (typeof d === "string") {
+            // Handle ISO strings like "2026-05-03T14:30:00Z" or "2026-05-03T14:30:00"
+            const isoMatch = d.match(/^(\d{4})-(\d{2})-(\d{2})/);
+            if (isoMatch) {
+                const [, year, month, day] = isoMatch.map(Number);
+                return new Date(year, month - 1, day);
+            }
+            // Fallback for "YYYY-MM-DD" format
+            const [y, m, day] = d.split("-").map(Number);
+            return new Date(y, m - 1, day);
+        }
+
+        return new Date(
+            d.getFullYear(),
+            d.getMonth(),
+            d.getDate()
+        );
+    };
+
+    return normalize(date1).getTime() === normalize(date2).getTime();
+}
 
 /**
  * Get today's date as "YYYY-MM-DD"

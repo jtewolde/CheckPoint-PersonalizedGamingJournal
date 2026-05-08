@@ -137,6 +137,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ pl
 
         // Clear cache for the user's library and play sessions for the specific game
         await redis.del(`play_sessions:${userId}:${existingSession.gameId}`);
+        await redis.del(`play_sessions:${userId}`);
 
         return NextResponse.json({
             message: "Play session updated successfully",
