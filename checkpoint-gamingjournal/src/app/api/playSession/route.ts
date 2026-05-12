@@ -82,7 +82,7 @@ export async function POST(req: NextRequest){
 
 //=================================
 // GET PLAY SESSIONS(GET_)
-// This API route is used to fetch all play sessions for a game in the user's library
+// This API route is used to fetch all play sessions for a game in the user's library or all play sessions for the user if no gameID is provided as a query parameter
 //=================================
 export async function GET(req: NextRequest){
     try{
