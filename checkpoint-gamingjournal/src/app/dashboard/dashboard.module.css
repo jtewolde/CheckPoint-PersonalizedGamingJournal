@@ -20,7 +20,7 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.50) 0%, #121213 100%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.80) 0%, #121213 100%);
 }
 
 .wrapper {
@@ -67,7 +67,7 @@
   line-height: 1.2;
 }
 
-.profileStats,
+.profileStatSection,
 .playingSection,
 .recentEntriesSection{
   display: flex;
@@ -151,8 +151,14 @@
   padding: 1rem;
   gap: 1rem;
   border-radius: 12px;
-  background-color: #282828;
-  border: 1px solid #424242;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(40,40,40,0.95),
+      rgba(24,24,24,0.98)
+    );
+
+  border: 1px solid #3a3a3a;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -196,26 +202,70 @@
   max-width: 98%;
 }
 
+.quickStatHeader{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .quickStatItem{
   display: flex;
   flex-direction: column;
+
+  min-height: 100px;
+  padding: 1.25rem;
+  border-radius: 18px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(40,40,40,0.95),
+      rgba(24,24,24,0.98)
+    );
+
+  border: 1px solid #3a3a3a;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.quickStatBody{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  border-radius: 16px;
-  background-color: #1b1a1a;
-  border: 1px solid #2f2e2e;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 .quickStatLabel{
-  font-size: 22px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #cfcfcf;
   font-family: 'Inter';
-  font-weight: 500;
+}
+
+.quickStatSubtext{
+  font-size: 0.8rem;
+  color: #8f8f8f;
+  margin-top: 2px;
+}
+
+.quickStatValue{
+  font-size: 2.6rem;
+  font-weight: 800;
+  line-height: 1;
+  align-self: center;
   color: white;
-  margin-top: 0.5rem;
-  text-align: center;
+  font-family: 'Barlow';
+}
+
+.ratingWrapper{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .ratingValue,
@@ -227,23 +277,15 @@
   text-align: center;
 }
 
-.starsText{
-  color: white;
-  font-size: 18px;
-  font-weight: 500;
-  font-family: 'Inter';
+.topRatedCover{
+  margin-top: 0.5rem;
+  width: 27%;
+  border-radius: 8px;
 }
 
 .ratingValue:hover{
   color: white;
   font-weight: 700;
-}
-
-.ratingWrapper{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .gameCard{
@@ -350,8 +392,14 @@
   height: auto;
   padding: 1rem;
   border-radius: 8px;
-  background-color: #282828;
-  border: 2px solid #424242;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(40,40,40,0.95),
+      rgba(24,24,24,0.98)
+    );
+
+  border: 1px solid #3a3a3a;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
