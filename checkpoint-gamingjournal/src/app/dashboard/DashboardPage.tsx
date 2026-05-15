@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import Link from 'next/link';
 
-import { SimpleGrid, Image, Paper, Text, ThemeIcon, Button, Rating, Group, Stack } from '@mantine/core';
+import { SimpleGrid, Image, Paper, Text, ThemeIcon, Button, Rating, Group, Avatar, Stack } from '@mantine/core';
 import { DonutChart, BarChart, LineChart } from '@mantine/charts';
 
 import { authClient } from '@/lib/auth-client';
@@ -22,7 +22,8 @@ import classes from './dashboard.module.css';
 export default function Dashboard() {
   const router = useRouter();
   const isMobile = useMediaQuery('768px')
-  const [userName, setUserName] = useState("")
+
+  const [user, setUser] = useState<{ name?: string; image?: string } | null>(null); // State to store user information such as name and profile image
 
   const [playingGames, setPlayingGames] = useState<any[]>([]); // State to store games that the user is currently playing
   const [libraryGames, setLibraryGames] = useState<any[]>([]); // State to store all of the games that the user has in their library
@@ -63,7 +64,10 @@ export default function Dashboard() {
         // If the user isn't authenticated, redirect to the sign-in page
         router.push('/auth/signin')
       } else {
-        setUserName(data.user.name)
+        setUser({
+          name: data.user.name,
+          image: data.user.image || undefined,
+        });
       }
     };
 
@@ -271,28 +275,21 @@ export default function Dashboard() {
 
           <div className={classes.dashboardHeader}>
 
-            <div className={classes.heroTextContainer}>
-
-              <p className={classes.dashboardTitle}> Welcome back, <span className={classes.username} onClick={() => router.push('/settings/profile')}>{userName}! </span> </p>
+            <div className={classes.heroContainer}>
+              <Group gap={10} align='center'>
+                <Avatar radius='xl' size={45} src={user?.image || undefined} alt={user?.name || "User"} onClick={() => router.push('/settings/profile')} />
+                <p className={classes.dashboardTitle}> Welcome back, <span className={classes.username}>{user?.name}! </span> </p>
+              </Group>
               
               <p className={classes.welcomeText}> 
-                Here's a quick overview of your gaming journey so far!
+                  Your latest stats, sessions, and milestones — all in one place.
               </p>
-
+              
             </div>
           
           </div>
 
           <div className={classes.statCards}>
-
-            <div className={classes.profileStatSection}>
-
-              <div className={classes.titleLogo}>
-                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: '#56CCF2', to: '#2F80ED', deg: 30}}> <CircleUserRound size={40} /> </ThemeIcon>
-                <p className={classes.profileTitle}>Profile Stats</p>
-              </div>
-              
-            </div>
 
             <SimpleGrid cols={{base: 1, sm: 1, md: 2, lg: 4, xl: 4}} spacing="lg" className={classes.quickStatsGrid}>
 
@@ -525,13 +522,10 @@ export default function Dashboard() {
               </Paper>
 
               <Paper shadow='md' radius='lg' className={classes.statusCard}>
-                <div className={classes.quickStatsContainer}>
                   <p className={classes.statusTitle}>Session Heatmap</p>
-
-                  <SessionHeatmap />
-
-                </div>
-
+                  <div className={classes.heatmapWrapper}>
+                    <SessionHeatmap />
+                  </div>
               </Paper>
 
             </SimpleGrid>

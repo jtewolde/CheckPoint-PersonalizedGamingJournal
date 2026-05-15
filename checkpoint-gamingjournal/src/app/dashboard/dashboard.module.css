@@ -46,11 +46,18 @@
 .dashboardHeader{
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 1rem;
-  width: 600px;
   gap: 0.4rem;
+}
+
+.heroContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .welcomeText{
@@ -60,15 +67,14 @@
   font-family: 'Inter';
   font-style: italic;
   color: #dfdcdc;
-  margin-top: 1rem;
   width: auto;
 }
 
 .dashboardTitle{
-  font-size: 3rem;
+  font-size: 28px;
   font-weight: 700;
   color: white; /* Dark text for contrast */
-  text-align: center;
+  text-align: left;
   font-family: 'Barlow';
   letter-spacing: 1px;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
@@ -145,7 +151,7 @@
   max-width: 98%;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .statusGrid {
@@ -155,9 +161,9 @@
 
 .statusCard {
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-start;
   padding: 1rem;
   gap: 1rem;
@@ -177,7 +183,7 @@
   font-size: 1.5rem;
   font-weight: 700;
   margin-top: 0.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   color: #ffffff;
   font-family: 'Inter';
   text-decoration: underline;
@@ -206,6 +212,14 @@
   align-items: center;
   width: 100%;
   height: 100%;
+}
+
+.heatmapWrapper{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .quickStatsContainer{
@@ -403,12 +417,7 @@
   height: auto;
   padding: 1rem;
   border-radius: 8px;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(40,40,40,0.95),
-      rgba(24,24,24,0.98)
-    );
+  background-color: #272727;
 
   border: 1px solid #3a3a3a;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -483,7 +492,11 @@
   }
 
   .welcomeText{
-    text-align: center;
+    text-align: left;
+  }
+
+  .dashboardTitle{
+    font-size: 24px;
   }
 
   .dashboardHeader{
@@ -491,6 +504,12 @@
     text-align: center;
     width: auto;
     margin-bottom: 0;
+  }
+
+  .heroContainer{
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
   }
 
   .gamesGrid,
@@ -539,11 +558,11 @@
   }
 
   .dashboardTitle{
-    font-size: 2rem;
+    font-size: 22px;
   }
 
   .welcomeText{
-    font-size: 1.2rem;
+    font-size: 18px;
   }
 
   .gamesGrid {
