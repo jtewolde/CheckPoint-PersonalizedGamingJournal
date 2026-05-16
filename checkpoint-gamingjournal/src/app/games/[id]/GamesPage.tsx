@@ -718,7 +718,16 @@ export default function GameDetails() {
                             </Stack>
                           </Modal>
 
-                          <PlaySessionModal opened={playSessionModalOpened} onClose={closePlaySessionModal} gameId={game.id} gameName={game.name} onSessionCreated={fetchPlaySessions}/>
+                          <PlaySessionModal 
+                            key={game.id} 
+                            opened={playSessionModalOpened}
+                            onClose={closePlaySessionModal}
+                            gameId={game.id} 
+                            gameName={game.name}
+                            platforms={game.platforms?.map((platform: { name: string }) => platform.name)}
+                            onSuccess={() => close()}
+                            onSessionCreated={fetchPlaySessions}
+                          />
 
                           <Tooltip label="Log a new play session" position='top'>
                             <Button

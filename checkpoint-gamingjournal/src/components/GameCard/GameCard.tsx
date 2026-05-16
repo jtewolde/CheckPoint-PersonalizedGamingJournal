@@ -172,7 +172,8 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
                         opened={opened} 
                         onClose={close} 
                         gameId={game.id} 
-                        gameName={game.name} 
+                        gameName={game.name}
+                        platforms={game.platforms?.map((platform) => platform.name)}
                         onSuccess={() => close()}  
                         />
                         
