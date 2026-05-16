@@ -543,7 +543,7 @@
   }
 
   .gameInfo{
-    width: 100%;
+    width: 50%;
     margin-top: 1rem;
     padding: 0;
   }
@@ -553,9 +553,13 @@
   }
 
   .cover {
-    width: 330px;
+    width: 75%;
     height: auto;
     margin-bottom: 1rem;
+  }
+
+  .cardActive{
+    width: 75%;
   }
 
   .info p {

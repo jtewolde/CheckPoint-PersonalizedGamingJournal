@@ -256,14 +256,21 @@ export default function GameDetails() {
           gameID: id,
           gameDetails: {
             title: game.name,
-            genre: game.genres,
+
+            genre: game.genres?.map(
+              (genre: any) => genre.name
+            ) || [],
+
+            platforms: game.platforms?.map(
+              (platform: any) => platform.name
+            ) || [],
+
             coverImage: game.cover.url,
             releaseDate: game.first_release_date
               ? new Date(game.first_release_date * 1000).toISOString()
               : null,
             status: game.status,
             platinum: game.platinum,
-            journalEntries: [],
           },
         }),
       });
