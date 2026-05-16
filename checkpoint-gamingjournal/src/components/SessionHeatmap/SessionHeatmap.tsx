@@ -61,7 +61,16 @@ export default function SessionHeatmap(){
         const durationByDate: Record<string, number> = {};
 
         sessions.forEach(session => {
-            const date = formatDate(new Date(session.date));
+            const sessionDate = new Date(session.date);
+
+            const localDate = new Date(
+                sessionDate.getFullYear(),
+                sessionDate.getMonth(),
+                sessionDate.getDate()
+            );
+
+            const date = formatDate(localDate)
+
             if(durationByDate[date]){
                 durationByDate[date] += session.duration;
             } else {
