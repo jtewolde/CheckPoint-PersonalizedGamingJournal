@@ -216,7 +216,15 @@ export const auth = betterAuth({
                 type: "string",
                 required: false
             },
-            tags: {
+            mood: {
+                type: "string",
+                required: false,
+            },
+            platform: {
+                type: "string",
+                required: false,
+            },
+            sessionType: {
                 type: "string[]",
                 required: false,
                 defaultValue: []
