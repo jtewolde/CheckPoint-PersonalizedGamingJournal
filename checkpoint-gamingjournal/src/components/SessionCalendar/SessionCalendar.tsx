@@ -9,14 +9,18 @@ import { Trash2Icon, Pencil } from "lucide-react"
 import toast from "react-hot-toast"
 import classes from "./SessionCalendar.module.css"
 
+// Define the playSession object used on both calendar and modal with props
 type PlaySession = {
-  _id: string
-  gameName: string
-  date: string
-  duration: number
-  notes: string
-  tags: string[]
+    _id: string
+    gameName: string
+    date: string
+    duration: number
+    notes: string
+    sessionType: string[]
+    mood?: string
+    platform?: string
 }
+
 
 export default function SessionCalendar({ gameId, sessions }: { gameId: string, sessions: PlaySession[] }) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
@@ -189,9 +193,9 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
 
                   <div className={classes.tagContainer}>
                      {/* ✅ TAGS SECTION */}
-                      {s.tags && s.tags.length > 0 && (
-                        <Group className={classes.tagsContainer}>
-                            {s.tags.map((tag: string, index: number) => (
+                      {s.sessionType && s.sessionType.length > 0 && (
+                        <Group className={classes.typeContainer}>
+                            {s.sessionType.map((type: string, index: number) => (
                             <Badge
                                 key={index}
                                 variant="filled"
@@ -199,12 +203,20 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
                                 radius="md"
                                 size='md'
                             >
-                                {tag}
+                                {type}
                             </Badge>
                             ))}
                         </Group>
                       )}
                   </div>
+                  
+                  {s.mood && (
+                    <div className={classes.moodContainer}>
+                      {/*MOOD SECTION */}
+                      <Badge variant="filled" color="#07a2a7" radius='md' size="md">{s.mood}</Badge>
+                    </div>
+                  )}
+
                 </div>
               </Group>
             )
