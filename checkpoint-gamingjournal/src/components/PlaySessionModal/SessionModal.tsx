@@ -8,7 +8,8 @@ import toast from "react-hot-toast";
 
 import classes from './SessionModal.module.css';
 
-import { Captions, CalendarDays, NotebookPen, Gamepad2, Clock, LibraryBig } from "lucide-react";
+import { Smile, CalendarDays, NotebookPen, Gamepad2, Clock, LibraryBig } from "lucide-react";
+import { IconBrandXbox } from "@tabler/icons-react";
 
 // Define the playSession object used on both calendar and modal with the props
 type PlaySession = {
@@ -17,7 +18,9 @@ type PlaySession = {
     date: string
     duration: number
     notes: string
-    tags: string[]
+    sessionType: string[]
+    mood?: string
+    platform?: string
 }
 
 // Define the props for the PlaySessionModal component
@@ -26,22 +29,26 @@ type PlaySessionModalProps = {
     onClose: () => void;
     gameId?: string;
     gameName?: string;
+    platforms?: string[];
     session?: PlaySession | null;
     onSuccess?: (session: PlaySession) => void
     onSessionCreated?: () => void;
 };
 
-export default function PlaySessionModal({ opened, onClose, gameId, session, gameName, onSuccess, onSessionCreated }: PlaySessionModalProps) {
+export default function PlaySessionModal({ opened, onClose, gameId, session, gameName, platforms, onSuccess, onSessionCreated }: PlaySessionModalProps) {
 
     // State variables to hold info on play time duration using hours and minutes inputs
     const [hours, setHours] = useState(0);
     const [minutes, setMinutes] = useState(0);
     const duration = hours * 60 + minutes;
 
-    // State variables to hold play session notes and date inputs
+    // State variables to hold play session details such as notes, date, session type, mood, and platform for the form inputs in the modal
     const [playSessionNotes, setPlaySessionNotes] = useState("");
     const [playSessionDate, setPlaySessionDate] = useState<string | null>(null);
-    const [tags, setTags] = useState<string[]>([]);
+    const [sessionType, setSessionType] = useState<string[]>([]);
+    const [mood, setMood] = useState<string>("");
+    const [platform, setPlatform] = useState<string>("");
+
     const [loading, setLoading] = useState(false);
 
     // State variables to hold selected game and user's game library for the select dropdown in the modal
@@ -124,8 +131,10 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                     gameName: selectedGameName,
                     duration,
                     notes: playSessionNotes,
-                    tags: tags,
-                    date: playSessionDate
+                    sessionType: sessionType,
+                    mood,
+                    platform,
+                    date: playSessionDate,
                 })
             });
 
@@ -145,6 +154,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
             onClose();
         
         } catch(error){
+            setLoading(false);
             console.error('Error logging play session:', error);
             toast.error('Failed to log play session. Please try again.');
         }
@@ -160,35 +170,35 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                 loaderProps={{ size: 'lg', color: "white", type: "oval" }}
             />
 
-            <Stack gap='md'>
+            <Stack gap='lg'>
                 {gameId ? (
                     <TextInput
-                    label="Game"
-                    required
-                    value={gameName}
-                    readOnly
-                    leftSection={<Gamepad2 size={20} />}
+                        label="Game"
+                        required
+                        value={gameName}
+                        readOnly
+                        leftSection={<Gamepad2 size={20} />}
                     />
                 ): (
                     <Select
-                    leftSection={<Gamepad2 size={20} />}
-                    maxDropdownHeight={300}
-                    className={classes.select}
-                    data={userGames.map((game: any) => ({
-                        value: game.gameId,
-                        label: game.title
-                    }))}
-                    scrollAreaProps={{ type: 'auto', scrollbarSize: 16, scrollbars: 'y', color:'black',  classNames: { scrollbar: classes.scrollBar }}}
-                    size="md"
-                    label="Select Game"
-                    placeholder="Choose a game from your library"
-                    value={selectedGameId}
-                    onChange={(value, option) =>{
-                        setSelectedGameId(value || '')
-                        setSelectedGameName(option?.label || '')
-                    }}
-                    searchable
-                    required
+                        leftSection={<Gamepad2 size={20} />}
+                        maxDropdownHeight={300}
+                        className={classes.select}
+                        data={userGames.map((game: any) => ({
+                            value: game.gameId,
+                            label: game.title
+                        }))}
+                        scrollAreaProps={{ type: 'auto', scrollbarSize: 16, scrollbars: 'y', color:'black',  classNames: { scrollbar: classes.scrollBar }}}
+                        size="md"
+                        label="Select Game"
+                        placeholder="Choose a game from your library"
+                        value={selectedGameId}
+                        onChange={(value, option) =>{
+                            setSelectedGameId(value || '')
+                            setSelectedGameName(option?.label || '')
+                        }}
+                        searchable
+                        required
                     />
                 )}
 
@@ -199,39 +209,86 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                         input: { color: 'white', background: '#212121'}, 
                     }}
                     size="md"
-                    label="Notes"
+                    minRows={3}
+                    maxLength={500}
+                    label="Session Summary"
                     placeholder="Enter play session notes... "
+                    description="Quick update on what you accomplished (500 character limit)"
                     value={playSessionNotes}
                     onChange={(e) => setPlaySessionNotes(e.target.value)}
-                    required
                     style={{ marginTop: "1rem" }}
                 />
 
-                
                 <MultiSelect
                     className={classes.select}
                     leftSection={<LibraryBig size={20} />}
-                    label="Tags"
-                    placeholder="Add tags (e.g. boss, story, multiplayer)"
+                    label="Session Type"
+                    placeholder="Add session type (e.g. story, multiplayer)"
                     data={[
-                        "Story",
+                        "Story Progress",
+                        "Multiplayer",
+                        "Casual Play",
+                        "Ranked",
                         "Boss Fight",
                         "Exploration",
-                        "Multiplayer",
                         "Grinding",
                         "Side Quest",
-                        "Achievement",
+                        "Achievement Hunting",
                     ]}
-                    value={tags}
-                    onChange={setTags}
+                    value={sessionType}
+                    onChange={setSessionType}
                     searchable
                     size="md"
                     styles={{
-                    input: { color: "white", background: "#212121" },
-                    dropdown: { background: "#212121", color: "whitesmoke" },
+                        input: { color: "white", background: "#212121" },
+                        dropdown: { background: "#212121", color: "whitesmoke" },
                     }}
                     style={{ marginTop: "1rem" }}
                 />
+
+                <div className={classes.platformMoodContainer}>
+                    <Select
+                        leftSection={<IconBrandXbox size={20} />}
+                        maxDropdownHeight={300}
+                        className={classes.select}
+                        value={platform}
+                        data={(platforms ?? []).map((platform) => ({
+                            value: platform,
+                            label: platform
+                        }))}
+                        scrollAreaProps={{ type: 'auto', scrollbarSize: 16, scrollbars: 'y', color:'black',  classNames: { scrollbar: classes.scrollBar }}}
+                        size="md"
+                        label="Platform"
+                        description="Where did you play?"
+                        placeholder="(e.g. PC, PS5, Xbox)"
+                        onChange={(value) =>{
+                            setPlatform(value || '')
+                        }}
+                    />
+
+                    <Select
+                        leftSection={<Smile size={20} />}
+                        maxDropdownHeight={300}
+                        className={classes.select}
+                        data={[
+                            "Relaxed",
+                            "Focused",
+                            "Competitive",
+                            "Frustrated",
+                            "Excited",
+                            "Chill"
+                        ]}
+                        scrollAreaProps={{ type: 'auto', scrollbarSize: 16, scrollbars: 'y', color:'black',  classNames: { scrollbar: classes.scrollBar }}}
+                        size="md"
+                        label="Mood"
+                        description="How did you feel during this session?"
+                        placeholder="(e.g. Fun, Frustrating, Relaxing, Nostalgic)"
+                        value={mood}
+                        onChange={(value) => {
+                            setMood(value || '')
+                        }}
+                    />
+                </div>
 
                 <DateInput
                     size='md'
@@ -267,7 +324,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                     />
                 </div>
 
-                <Divider styles={{label: {color: 'white'}}} labelPosition="center" color='dimmed' my="lg"  />
+                <Divider styles={{label: {color: 'white'}}} labelPosition="center" color='dimmed' my="md"  />
 
                 <div className={classes.buttonGroup}>
 
