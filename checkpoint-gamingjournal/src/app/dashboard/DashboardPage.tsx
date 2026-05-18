@@ -53,6 +53,7 @@ export default function Dashboard() {
     gameId: string;
     title: string;
     cover: string;
+    platforms: string[];
     } | null>(null);
 
 
@@ -541,6 +542,7 @@ export default function Dashboard() {
             }}
             gameId={selectedGame?.gameId || ""}
             gameName={selectedGame?.title || ""}
+            platforms={selectedGame?.platforms}
             onSuccess={() => {
               close();
             }}
@@ -554,18 +556,6 @@ export default function Dashboard() {
                 <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: '#e96443', to: '#904e95', deg: 90}}> <Gamepad size={40} /> </ThemeIcon>
                 <a className={classes.gamesPlayingText} href='/library'>Playing Games</a>
               </div>
-
-              <Button
-                className={classes.logButton}
-                leftSection={<PlusCircle size={20} />}
-                size="sm"
-                radius="xl"
-                color='green'
-                onClick={open}
-                >
-                Quick Log
-              </Button>
-
               
             </div>
 

@@ -190,8 +190,9 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                         }))}
                         scrollAreaProps={{ type: 'auto', scrollbarSize: 16, scrollbars: 'y', color:'black',  classNames: { scrollbar: classes.scrollBar }}}
                         size="md"
-                        label="Select Game"
-                        placeholder="Choose a game from your library"
+                        label="Game"
+                        description="Choose a game from your library"
+                        placeholder="(e.g. God of War)"
                         value={selectedGameId}
                         onChange={(value, option) =>{
                             setSelectedGameId(value || '')
@@ -224,6 +225,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                     leftSection={<LibraryBig size={20} />}
                     label="Session Type"
                     placeholder="Add session type (e.g. story, multiplayer)"
+                    description="What type of play session did you have?"
                     data={[
                         "Story Progress",
                         "Multiplayer",
