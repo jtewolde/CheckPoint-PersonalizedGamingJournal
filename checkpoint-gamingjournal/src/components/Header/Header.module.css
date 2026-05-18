@@ -1,6 +1,6 @@
 .header {
   height: 69px;
-  background-color: #1f1e1e;
+  background-color: #29292b;
   display: flex; /* Ensure flexbox is applied */
   justify-content: center;
   align-items: center;
