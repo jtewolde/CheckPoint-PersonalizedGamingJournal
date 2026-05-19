@@ -164,6 +164,10 @@ export const auth = betterAuth({
                 type: "string",
                 required: true,
             },
+            gameName: {
+                type: "string",
+                required: true
+            },
             userId: {
                 type: "string",
                 required: true,
@@ -172,12 +176,16 @@ export const auth = betterAuth({
                 type: "string",
                 required: true,
             },
+            entryType: {
+                type: "string",
+                required: false,
+            },
             tags: {
-                type: "string[]",
+                type: 'string[]',
                 required: false,
                 defaultValue: []
             },
-            notes:{
+            content:{
                 type: "string",
                 required: true,
             },
