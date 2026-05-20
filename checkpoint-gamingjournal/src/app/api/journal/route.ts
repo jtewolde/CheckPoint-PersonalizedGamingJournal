@@ -156,7 +156,7 @@ export async function GET(req: NextRequest){
             query.tags = tag; // Assuming tags is an array, this will match entries that have the specified tag
         }
         if (type) {
-            query.type = type 
+            query.entryType = type 
         }
 
         // Create unique cache key based on user ID, pagination, filters, and sorting options
