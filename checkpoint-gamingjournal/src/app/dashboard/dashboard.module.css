@@ -1,13 +1,5 @@
 .background{
-  background:
-    radial-gradient(circle at top left, rgba(88, 101, 242, 0.18), transparent 30%),
-    radial-gradient(circle at top right, rgba(0, 212, 170, 0.12), transparent 25%),
-    linear-gradient(
-      180deg,
-      #16181d 0%,
-      #111216 40%,
-      #0b0c10 100%
-  );
+  background: #4a4a4a;
   background-size: cover;
   background-attachment: fixed;
   position: relative;

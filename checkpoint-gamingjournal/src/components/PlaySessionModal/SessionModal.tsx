@@ -212,6 +212,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                     size="md"
                     minRows={3}
                     maxLength={500}
+                    autosize
                     label="Session Summary"
                     placeholder="Enter play session notes... "
                     description="Quick update on what you accomplished (500 character limit)"
@@ -332,9 +333,9 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
 
                     <Button 
                     className={classes.cancelButton}
-                    color="black"
+                    color="red"
                     size="md"
-                    variant='white'
+                    variant='filled'
                     onClick={onClose}
                     >
                         Cancel
