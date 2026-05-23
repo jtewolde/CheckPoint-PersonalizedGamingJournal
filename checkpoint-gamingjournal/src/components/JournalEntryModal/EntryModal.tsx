@@ -15,7 +15,7 @@ type JournalEntry = {
     gameId: string
     gameName: string
     title: string
-    notes: string
+    content: string
     entryType: string
     tags: string[]
 }
@@ -46,6 +46,7 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
     const [selectedGameId, setSelectedGameId] = useState(gameId || "");
     const [userGames, setUserGames] = useState<any[]>([]);
 
+    
     // Fetch the user's library of games to populate the select dropdown
     useEffect(() => {
         if(!gameId && opened){
@@ -122,6 +123,7 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
                     title,
                     content,
                     entryType,
+                    tags
                 })
             });
 
