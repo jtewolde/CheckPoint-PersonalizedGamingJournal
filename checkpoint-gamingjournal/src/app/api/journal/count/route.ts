@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { JournalEntriesCollection } from "@/utils/db";
-import { ObjectId } from "mongodb";
-import { v4 as uuidv4 } from 'uuid';
 
 import { auth } from "@/utils/auth";
 import { redis } from "@/utils/redis";
-
 
 //=================================
 // GET COUNT OF JOURNAL ENTRIES (GET)

@@ -168,6 +168,11 @@ export const auth = betterAuth({
                 type: "string",
                 required: true
             },
+            coverImage: {
+                type: "string",
+                required: false,
+                defaultValue: ""
+            },
             userId: {
                 type: "string",
                 required: true,

@@ -14,6 +14,7 @@ type JournalEntry = {
     _id: string
     gameId: string
     gameName: string
+    coverImage?: string
     title: string
     content: string
     entryType: string
@@ -43,10 +44,10 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
     
     // State variables to hold selected game and user's game library for the select dropdown in the modal
     const [selectedGameName, setSelectedGameName] = useState(gameName || "");
+    const [gameCover, setGameCover] = useState("")
     const [selectedGameId, setSelectedGameId] = useState(gameId || "");
     const [userGames, setUserGames] = useState<any[]>([]);
 
-    
     // Fetch the user's library of games to populate the select dropdown
     useEffect(() => {
         if(!gameId && opened){
@@ -120,6 +121,7 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
                 body: JSON.stringify({
                     gameID: String(selectedGameId),
                     gameName: selectedGameName,
+                    coverImage: gameCover,
                     title,
                     content,
                     entryType,
@@ -184,6 +186,12 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
                         onChange={(value, option) =>{
                             setSelectedGameId(value || '')
                             setSelectedGameName(option?.label || '')
+
+                            const selectedGame = userGames.find(
+                                (game) => game.gameId === value
+                            );
+
+                            setGameCover(selectedGame?.coverImage || '');
                         }}
                         searchable
                         required

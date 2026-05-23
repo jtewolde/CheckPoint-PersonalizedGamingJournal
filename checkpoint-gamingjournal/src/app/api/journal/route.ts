@@ -13,7 +13,7 @@ import { redis } from "@/utils/redis";
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json(); // Parse the request body
-        const { gameID, gameName, title, content, tags, entryType } = body;
+        const { gameID, gameName, coverImage, title, content, tags, entryType } = body;
 
         console.log(body);
 
@@ -71,6 +71,7 @@ export async function POST(req: NextRequest) {
             uuid: uuidv4(),
             gameId: gameID,
             gameName,
+            coverImage,
             userId,
             title,
             tags,
