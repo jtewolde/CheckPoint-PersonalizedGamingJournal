@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useDisclosure } from '@mantine/hooks';
 import { Text, Badge, Group, Button, Paper, ActionIcon, Tooltip } from '@mantine/core';
 import toast from 'react-hot-toast';
 
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
+import JournalEntryModal from '@/components/JournalEntryModal/EntryModal';
 
 import { ArrowLeft, Pencil, Trash2 } from 'lucide-react';
 import classes from './viewJournal.module.css';
@@ -13,6 +15,7 @@ import classes from './viewJournal.module.css';
 export default function ViewJournalEntry() {
   const { journalEntryId } = useParams();
   const [entry, setEntry] = useState<any>(null);
+  const [entryModalOpened, {open: openEntryModal, close: closeEntryModal}] = useDisclosure(false);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -95,14 +98,44 @@ export default function ViewJournalEntry() {
 
             <Group gap='sm'>
 
+              <JournalEntryModal
+              opened={entryModalOpened}
+              onClose={closeEntryModal}
+              entry={entry}
+              onEntryCreated={async () => {
+                  try {
+                      setLoading(true);
+
+                      const token = localStorage.getItem('bearer_token');
+
+                      const res = await fetch(`/api/journal/${journalEntryId}`, {
+                          headers: {
+                              Authorization: `Bearer ${token}`,
+                          },
+                      });
+
+                      const data = await res.json();
+
+                      setEntry(data.entry);
+                      router.push('/journal')
+
+                  } catch (error) {
+                      console.error(error);
+                  } finally {
+                      setLoading(false);
+                  }
+                }}
+              />
+
               <Tooltip label='Edit' position='top'>
                 <ActionIcon
                   variant="light"
                   color="blue"
                   radius="md"
-                  size="lg"
+                  size="xl"
+                  onClick={openEntryModal}
                 >
-                  <Pencil size={18} />
+                  <Pencil size={25} />
                 </ActionIcon>
               </Tooltip>
 
@@ -111,15 +144,21 @@ export default function ViewJournalEntry() {
                   variant="light"
                   color="red"
                   radius="md"
-                  size="lg"
+                  size="xl"
+                  onClick={(e) => {
+                      e.stopPropagation();
+                      deleteJournalEntry(entry._id, entry.gameId)}
+                  }
                 >
-                  <Trash2 size={18} />
+                  <Trash2 size={25} />
                 </ActionIcon>
               </Tooltip>
 
             </Group>
 
           </Group>
+
+          <Text className={classes.date}><b>Date Created:</b> {entry.displayDate}</Text>
 
           {/* Game Name */}
           <Group gap="xs" align='center'>
@@ -157,7 +196,6 @@ export default function ViewJournalEntry() {
               </Group>
           )}
             <Text className={classes.content}>{entry.content}</Text>
-            <Text className={classes.date}><b>Date Created:</b> {entry.displayDate}</Text>
         </Paper>
     </div>
   );

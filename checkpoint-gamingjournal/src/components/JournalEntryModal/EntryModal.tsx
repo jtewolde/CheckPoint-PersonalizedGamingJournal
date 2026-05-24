@@ -38,7 +38,6 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
     const [content, setContent] = useState("");
     const [entryType, setEntryType] = useState('');
     const [tags, setTags] = useState<string[]>([]);
-    const [gameID, setGameID] = useState(""); // Selected game ID
 
     const [loading, setLoading] = useState(false);
     
@@ -82,14 +81,33 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
     }, [opened, gameId]);
 
     // Update selected game name and ID when the modal is opened with a specific game, or when the library game data changes
+    // Populate form when editing an existing entry
     useEffect(() => {
-        if (opened && gameId) {
-            setSelectedGameId(gameId);
-            setSelectedGameName(gameName || '');
-        }
-    }, [opened, gameId, gameName]);
+        if (opened && entry) {
+            setTitle(entry.title || '');
+            setContent(entry.content || '');
+            setEntryType(entry.entryType || '');
+            setTags(entry.tags || []);
 
-    // Function to handle creating or updating a play session for a game 
+            setSelectedGameId(entry.gameId || '');
+            setSelectedGameName(entry.gameName || '');
+            setGameCover(entry.coverImage || '');
+        }
+
+        // Reset form when creating a new entry
+        if (opened && !entry) {
+            setTitle('');
+            setContent('');
+            setEntryType('');
+            setTags([]);
+
+            setSelectedGameId(gameId || '');
+            setSelectedGameName(gameName || '');
+            setGameCover('');
+        }
+    }, [opened, entry, gameId, gameName]);
+
+    // Function to handle creating or updating a journal entry 
     // This will involve opening a modal with a form to input play session details such as duration and notes, 
     // and then making an API call to save the play session to the database and associate it with the game and user's library.
     const handleSubmit = async () => {
@@ -160,11 +178,11 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
             />
 
             <Stack gap='lg'>
-                {gameId ? (
+                {entry ? (
                     <TextInput
                         label="Game"
                         required
-                        value={gameName}
+                        value={selectedGameName}
                         readOnly
                         leftSection={<Gamepad2 size={20} />}
                     />
@@ -218,12 +236,12 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
                     description="Choose the kind of experience you're documenting"
                     placeholder="Select an entry type"
                     data={[
+                        "First Impressions",
                         "Progress Update",
                         "Boss Fight",
                         "Achievement",
                         "Story Reaction",
                         "Review",
-                        "First Impressions",
                         "Ending Thoughts",
                         "General",
                     ]}
@@ -287,9 +305,9 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
 
                     <Button 
                     className={classes.cancelButton}
-                    color="black"
+                    color="red"
                     size="md"
-                    variant='white'
+                    variant='filled'
                     onClick={onClose}
                     >
                         Cancel
