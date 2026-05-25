@@ -150,8 +150,8 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ jo
         );
 
         // Clear cache for the user's library and journal entries for the specific game
-        await redis.del(`journal_entries:${userId}:${existingEntry.gameId}`);
-        await redis.del(`journal_entries:${userId}`);
+        await redis.del(`user_journal_entries:${userId}:${existingEntry.gameId}`);
+        await redis.del(`user_journal_entries:${userId}`);
 
         return NextResponse.json({
             message: "Journal Entry updated successfully",

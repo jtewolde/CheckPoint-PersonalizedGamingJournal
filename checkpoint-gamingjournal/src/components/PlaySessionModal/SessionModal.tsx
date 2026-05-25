@@ -15,6 +15,7 @@ import { IconBrandXbox } from "@tabler/icons-react";
 type PlaySession = {
     _id: string
     gameName: string
+    gameId: string
     date: string
     duration: number
     notes: string
@@ -91,9 +92,23 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
 
     // Update selected game name and ID when the modal is opened with a specific game, or when the library game data changes
     useEffect(() => {
-        if (opened && gameId) {
-            setSelectedGameId(gameId);
-            setSelectedGameName(gameName || '');
+        if (opened && session) {
+            setSelectedGameId(session.gameId || '');
+            setSelectedGameName(session.gameName || '');
+            setSessionType(session.sessionType || []);
+            setPlaySessionNotes(session.notes || '');
+            setPlaySessionDate(session.date || '');
+            setPlatform(session.platform || '');
+            setMood(session.mood || '');
+        }
+        if (opened && !session){
+            setSelectedGameId('');
+            setSelectedGameName('');
+            setSessionType([]);
+            setPlaySessionNotes('');
+            setPlaySessionDate('');
+            setPlatform('');
+            setMood('');
         }
     }, [opened, gameId, gameName]);
 
