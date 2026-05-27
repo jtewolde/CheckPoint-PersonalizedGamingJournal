@@ -45,7 +45,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
 
     // State variables to hold play session details such as notes, date, session type, mood, and platform for the form inputs in the modal
     const [playSessionNotes, setPlaySessionNotes] = useState("");
-    const [playSessionDate, setPlaySessionDate] = useState<string | null>(null);
+    const [playSessionDate, setPlaySessionDate] = useState<Date | null>(null);
     const [sessionType, setSessionType] = useState<string[]>([]);
     const [mood, setMood] = useState<string>("");
     const [platform, setPlatform] = useState<string>("");
@@ -97,18 +97,24 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
             setSelectedGameName(session.gameName || '');
             setSessionType(session.sessionType || []);
             setPlaySessionNotes(session.notes || '');
-            setPlaySessionDate(session.date || '');
+            setPlaySessionDate(session.date ? new Date(session.date) : null);
             setPlatform(session.platform || '');
             setMood(session.mood || '');
+
+            setHours(Math.floor(session.duration / 60));
+            setMinutes(session.duration % 60);
         }
         if (opened && !session){
-            setSelectedGameId('');
-            setSelectedGameName('');
+            setSelectedGameId(gameId || '');
+            setSelectedGameName(gameName || '');
             setSessionType([]);
             setPlaySessionNotes('');
-            setPlaySessionDate('');
+            setPlaySessionDate(null);
             setPlatform('');
             setMood('');
+            
+            setHours(0);
+            setMinutes(0);
         }
     }, [opened, gameId, gameName]);
 
@@ -319,7 +325,12 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                     value={playSessionDate}
                     maxDate={new Date()}
                     onChange={(date) => {
-                        setPlaySessionDate(date);
+                        // DateInput can return a Date or a string (or null) depending on configuration
+                        if (typeof date === 'string') {
+                            setPlaySessionDate(date ? new Date(date) : null);
+                        } else {
+                            setPlaySessionDate(date);
+                        }
                     }}
                 />
 
