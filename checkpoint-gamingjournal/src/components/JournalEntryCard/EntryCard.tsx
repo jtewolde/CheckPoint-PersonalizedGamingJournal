@@ -13,6 +13,7 @@ type EntryCardVariant = 'dashboard' | 'journal' | 'compact';
 // Define the entryCard component props that uses all of the attributes and variant of entryCard
 interface JournalEntryCardProps {
     entry: {
+        _id: string;
         uuid: string;
         gameId: string;
         gameName: string;
@@ -37,7 +38,7 @@ export default function JournalEntryCard({entry, variant =  "journal"}: JournalE
     : PlaceHolderImage.src;
 
     return (
-        <div className={`${classes.entryCard} ${variant === 'dashboard' ? classes.dashboard : variant === 'compact' ? classes.compact: classes.journal}`} onClick={() => router.push(`/journal/${entry.uuid}`)}>
+        <div className={`${classes.entryCard} ${variant === 'dashboard' ? classes.dashboard : variant === 'compact' ? classes.compact: classes.journal}`} onClick={() => router.push(`/journal/${entry._id}`)}>
 
             {/*COVER*/}
             <div className={classes.coverWrapper}>
