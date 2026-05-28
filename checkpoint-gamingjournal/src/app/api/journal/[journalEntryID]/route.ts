@@ -149,9 +149,15 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ jo
             { $set: updateData }
         );
 
-        // Clear cache for the user's library and journal entries for the specific game
-        await redis.del(`user_journal_entries:${userId}:${existingEntry.gameId}`);
+       // Clear main journal cache
         await redis.del(`user_journal_entries:${userId}`);
+
+        // Clear all paginated journal caches
+        const keys = await redis.keys(`user_journal_entries:${userId}:page:*`);
+
+        if (keys.length > 0) {
+            await redis.del(...keys);
+        }
 
         return NextResponse.json({
             message: "Journal Entry updated successfully",
