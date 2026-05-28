@@ -12,6 +12,7 @@ import classes from "./SessionCalendar.module.css"
 // Define the playSession object used on both calendar and modal with props
 type PlaySession = {
     _id: string
+    gameId: string
     gameName: string
     date: string
     duration: number
@@ -139,6 +140,7 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
             ? `Sessions for ${formatDate(selectedDate)}`
             : "Sessions"
         }
+        size='lg'
       >
         {/* ✅ LOADING OVERLAY */}
         <LoadingOverlay
@@ -161,7 +163,7 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
                   <div className={classes.sessionHeader}>
                     {/* DURATION */}
                     <Text fw={500}>
-                      {hours}h {minutes}m
+                      {hours} hrs {minutes} mins
                     </Text>
 
                     {/* ACTION ICONS (EDIT/DELETE) */}
@@ -208,14 +210,14 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
                             ))}
                         </Group>
                       )}
+
+                      {s.mood && (
+                        <div className={classes.moodContainer}>
+                          {/*MOOD SECTION */}
+                          <Badge variant="filled" color="#07a2a7" radius='md' size="md">{s.mood}</Badge>
+                        </div>
+                      )}
                   </div>
-                  
-                  {s.mood && (
-                    <div className={classes.moodContainer}>
-                      {/*MOOD SECTION */}
-                      <Badge variant="filled" color="#07a2a7" radius='md' size="md">{s.mood}</Badge>
-                    </div>
-                  )}
 
                 </div>
               </Group>
