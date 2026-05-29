@@ -57,6 +57,28 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
     const [selectedGameId, setSelectedGameId] = useState(gameId || "");
     const [userGames, setUserGames] = useState<any[]>([]);
 
+    // Helper function to quickly reset the all of the info on the form
+    const resetForm = () => {
+        setHours(0);
+        setMinutes(0);
+        setPlaySessionNotes("");
+        setPlaySessionDate(null);
+        setSessionType([]);
+        setMood('');
+        setPlatform('');
+    };
+
+    // Helper function to parse the date from the date input in the modal to display correct date
+    const parseLocalDate = (dateString: string) => {
+        const date = new Date(dateString);
+
+        return new Date(
+            date.getUTCFullYear(),
+            date.getUTCMonth(),
+            date.getUTCDate()
+        );
+    };
+
     // Fetch the user's library of games to populate the select dropdown
     useEffect(() => {
         if(!gameId && opened){
@@ -92,30 +114,24 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
 
     // Update selected game name and ID when the modal is opened with a specific game, or when the library game data changes
     useEffect(() => {
-        if (opened && session) {
+        if(!opened) return;
+
+        if (session) {
             setSelectedGameId(session.gameId || '');
             setSelectedGameName(session.gameName || '');
             setSessionType(session.sessionType || []);
             setPlaySessionNotes(session.notes || '');
-            setPlaySessionDate(session.date ? new Date(session.date) : null);
+            setPlaySessionDate(session.date ? parseLocalDate(session.date) : null);
             setPlatform(session.platform || '');
             setMood(session.mood || '');
 
             setHours(Math.floor(session.duration / 60));
             setMinutes(session.duration % 60);
+        } else if(!playSessionNotes) {
+            setSelectedGameId(gameId || '')
+            setSelectedGameName(gameName || '')
         }
-        if (opened && !session){
-            setSelectedGameId(gameId || '');
-            setSelectedGameName(gameName || '');
-            setSessionType([]);
-            setPlaySessionNotes('');
-            setPlaySessionDate(null);
-            setPlatform('');
-            setMood('');
-            
-            setHours(0);
-            setMinutes(0);
-        }
+        
     }, [opened, gameId, gameName]);
 
     // Function to handle creating or updating a play session for a game 
@@ -166,10 +182,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
 
             // Show success toast and reset form fields after successful logging
             toast.success(isEditing ? "Session updated!" : "Session created!");
-            setHours(0);
-            setMinutes(0);
-            setPlaySessionNotes("");
-            setPlaySessionDate(null);
+            resetForm();
             setLoading(false);
             onSessionCreated?.();
             onClose();
@@ -181,8 +194,39 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
         }
     }
 
+    // Custom close handler that will display window to user if modal close button is clicked on
+    // This is to prevent changes/additions to notes, tags, session type to be lost
+    const handleClose = () =>{
+        const hasUnsavedChanges =
+            playSessionNotes ||
+            playSessionDate ||
+            sessionType.length > 0 ||
+            mood || platform ||
+            hours > 0 || minutes > 0;
+            
+        if(hasUnsavedChanges){
+            const confirmed = window.confirm(
+                "You have unsaved changes. Are you sure you want to close?"
+            );
+
+            if(!confirmed){
+                return
+            }
+        }
+
+        onClose();
+    }
+
     return (
-        <Modal opened={opened} onClose={onClose} size='lg' title={(gameId ? 'Play Session for ' + gameName : 'Quick Log Session')} withCloseButton>
+        <Modal 
+            opened={opened} 
+            onClose={onClose} 
+            size='lg' 
+            title={(gameId ? 'Play Session for ' + gameName : 'Quick Log Session')} 
+            withCloseButton 
+            closeOnClickOutside={false} 
+            closeOnEscape={false}
+        >
 
             {/* ✅ LOADING OVERLAY */}
             <LoadingOverlay
@@ -363,7 +407,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                     color="red"
                     size="md"
                     variant='filled'
-                    onClick={onClose}
+                    onClick={handleClose}
                     >
                         Cancel
                     </Button>
