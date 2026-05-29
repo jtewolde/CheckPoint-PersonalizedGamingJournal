@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Modal, Divider, Stack, Button, TextInput, LoadingOverlay, NumberInput, Select, MultiSelect, Textarea } from "@mantine/core";
-import { DateInput } from "@mantine/dates";
+import { DateInput, DatePickerInput } from "@mantine/dates";
 
 import toast from "react-hot-toast";
 
@@ -45,7 +45,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
 
     // State variables to hold play session details such as notes, date, session type, mood, and platform for the form inputs in the modal
     const [playSessionNotes, setPlaySessionNotes] = useState("");
-    const [playSessionDate, setPlaySessionDate] = useState<Date | null>(null);
+    const [playSessionDate, setPlaySessionDate] = useState<string | null>(null);
     const [sessionType, setSessionType] = useState<string[]>([]);
     const [mood, setMood] = useState<string>("");
     const [platform, setPlatform] = useState<string>("");
@@ -121,7 +121,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
             setSelectedGameName(session.gameName || '');
             setSessionType(session.sessionType || []);
             setPlaySessionNotes(session.notes || '');
-            setPlaySessionDate(session.date ? parseLocalDate(session.date) : null);
+            setPlaySessionDate(session.date ?? null);
             setPlatform(session.platform || '');
             setMood(session.mood || '');
 
@@ -359,23 +359,17 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                     />
                 </div>
 
-                <DateInput
+                <DatePickerInput
                     size='md'
                     label="Session Date"
                     placeholder='Select session date'
                     clearable
                     required
                     leftSection={<CalendarDays size={20} />}
-                    value={playSessionDate}
                     maxDate={new Date()}
-                    onChange={(date) => {
-                        // DateInput can return a Date or a string (or null) depending on configuration
-                        if (typeof date === 'string') {
-                            setPlaySessionDate(date ? new Date(date) : null);
-                        } else {
-                            setPlaySessionDate(date);
-                        }
-                    }}
+                    // Convert stored string → Date ONLY for display
+                    value={playSessionDate}
+                    onChange={setPlaySessionDate}
                 />
 
                 <div className={classes.durationContainer}>
