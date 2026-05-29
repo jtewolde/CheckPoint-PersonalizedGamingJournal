@@ -1,6 +1,6 @@
 .entryCard {
     display: flex;
-    flex-direction: column;
+    align-items: stretch;
     overflow: hidden;
     cursor: pointer;
     border-radius: 18px;
@@ -20,6 +20,29 @@
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
 }
 
+.entryCard:hover .hoverCover {
+    opacity: 0.25;
+    transform: translateX(0);
+}
+
+.hoverCover {
+    position: absolute;
+    top: 0;
+    right: -20px;
+
+    height: 100%;
+    width: 180px;
+
+    opacity: 0;
+    transition:
+        opacity 0.35s ease,
+        transform 0.35s ease;
+
+    transform: translateX(20px);
+    pointer-events: none;
+    z-index: 0;
+}
+
 .cover {
     width: 100%;
     height: 100%;
@@ -32,7 +55,8 @@
     display: flex;
     flex-direction: column;
     flex: 1;
-    padding: 1rem;
+    padding: 1rem 1.1rem;
+    min-width: 0;
 }
 
 .header{

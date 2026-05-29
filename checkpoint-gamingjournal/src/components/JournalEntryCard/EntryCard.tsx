@@ -40,8 +40,8 @@ export default function JournalEntryCard({entry, variant =  "journal"}: JournalE
     return (
         <div className={`${classes.entryCard} ${variant === 'dashboard' ? classes.dashboard : variant === 'compact' ? classes.compact: classes.journal}`} onClick={() => router.push(`/journal/${entry._id}`)}>
 
-            {/*COVER*/}
-            <div className={classes.coverWrapper}>
+            {/* COVER */}
+            <div className={classes.hoverCover}>
                 <Image
                     src={coverImage}
                     alt={entry.gameName}
@@ -62,7 +62,7 @@ export default function JournalEntryCard({entry, variant =  "journal"}: JournalE
                             variant="light"
                             color="lime"
                             radius='xl'
-                            size="xs"
+                            size="md"
                         >
                             {entry.entryType}
                         </Badge>
@@ -82,7 +82,7 @@ export default function JournalEntryCard({entry, variant =  "journal"}: JournalE
                             0,
                             variant === 'dashboard'
                             ? 100
-                            : 180
+                            : 150
                         )}...`
                         : entry.content}
                 </Text>
@@ -93,10 +93,10 @@ export default function JournalEntryCard({entry, variant =  "journal"}: JournalE
                         {entry.tags?.slice(0, variant === 'dashboard' ? 2 : 4).map((tag, index) => (
                             <Badge
                                 key={index}
-                                size="xs"
+                                size="md"
                                 radius="sm"
                                 variant="dot"
-                                color="gray"
+                                color="blue"
                             >
                                 {tag}
                             </Badge>
