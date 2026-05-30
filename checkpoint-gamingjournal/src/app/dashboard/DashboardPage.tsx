@@ -5,16 +5,17 @@ import { useRouter } from 'next/navigation';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import Link from 'next/link';
 
-import { SimpleGrid, Image, Paper, Text, ThemeIcon, Button, Rating, Group, Avatar, Stack } from '@mantine/core';
+import { SimpleGrid, Image, Paper, Text, ThemeIcon, Badge, Rating, Group, Avatar } from '@mantine/core';
 import { DonutChart, BarChart, LineChart } from '@mantine/charts';
 
 import { authClient } from '@/lib/auth-client';
 import SessionHeatmap from '@/components/SessionHeatmap/SessionHeatmap';
+import JournalEntryCard from '@/components/JournalEntryCard/EntryCard';
 import PlaySessionModal from '@/components/PlaySessionModal/SessionModal';
 
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
-import { Notebook, Gamepad, CircleUserRound, PlusCircle } from 'lucide-react';
+import { Notebook, Gamepad } from 'lucide-react';
 import { Trophy, Star, ClipboardCheck } from 'lucide-react';
 
 import classes from './dashboard.module.css';
@@ -607,16 +608,7 @@ export default function Dashboard() {
               ) : (
                   <SimpleGrid cols={4} spacing="lg" className={classes.entriesGrid}>
                       {recentEntries.map((entry) => (
-                          <div key={entry.uuid} className={classes.entryCard} onClick={() => router.push(`/journal/${entry.uuid}`)}>
-                              <h3 className={classes.entryGame}>{entry.gameName}</h3>
-                              <h3 className={classes.entryTitle}>{entry.title}</h3>
-                              <p className={classes.entryContent}>
-                                  {entry.content.length > 150
-                                      ? `${entry.content.slice(0, 150)}...` // Truncate long content
-                                      : entry.content}
-                              </p>
-                              <p className={classes.entryDate}>{entry.displayDate}</p>
-                          </div>
+                        <JournalEntryCard key={entry._id} entry={entry} variant='dashboard'/>
                       ))}
                   </SimpleGrid>
               )}

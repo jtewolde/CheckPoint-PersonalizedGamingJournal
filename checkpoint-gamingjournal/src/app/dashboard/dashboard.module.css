@@ -160,12 +160,7 @@
   padding: 1rem;
   gap: 1rem;
   border-radius: 12px;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(40,40,40,0.95),
-      rgba(24,24,24,0.98)
-    );
+  background-color: #272727;
 
   border: 1px solid #3a3a3a;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -232,14 +227,10 @@
   min-height: 100px;
   padding: 1.25rem;
   border-radius: 18px;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(40,40,40,0.95),
-      rgba(24,24,24,0.98)
-    );
+  background-color: #272727;
 
   border: 1px solid #3a3a3a;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition:
     transform 0.2s ease,
     border-color 0.2s ease,
@@ -406,19 +397,21 @@
 }
 
 .entryCard {
+  width: 100%;
   height: auto;
-  padding: 1rem;
-  border-radius: 8px;
   background-color: #272727;
-
-  border: 1px solid #3a3a3a;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
   cursor: pointer;
 }
 
-.entryCard:hover{
-  transform: scale(1.05);
-  transition: transform 0.3s ease;
+.entryCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,0.18);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
 }
 
 .entryGame{
