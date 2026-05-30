@@ -134,6 +134,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ jo
         if (content !== undefined) updateData.content = content;
         if (entryType !== undefined) updateData.entryType = entryType;
         if (tags !== undefined) updateData.tags = tags;
+        if (coverImage) updateData.coverImage = coverImage;
 
         // If no fields are provided for update, return an error
         if (Object.keys(updateData).length === 0) {

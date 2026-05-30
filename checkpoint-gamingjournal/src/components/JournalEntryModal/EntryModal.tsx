@@ -68,8 +68,6 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
 
                     const data = await res.json();
                     setUserGames(data.games); // Store the games in state
-                    console.log(data.games);
-
                 } catch (error) {
                     console.error("Error fetching user library:", error);
                 } finally {
@@ -91,7 +89,22 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
 
             setSelectedGameId(entry.gameId || '');
             setSelectedGameName(entry.gameName || '');
-            setGameCover(entry.coverImage || '');
+            
+            // If journal entry has a cover image, use the existing one,
+            // Otherwise, find the matching game from library and set cover image for entry
+            if(entry.coverImage){
+                setGameCover(entry.coverImage);
+            } else {
+                const matchingGame = userGames.find(
+                    (game) => game.gameId === entry.gameId
+                );
+                console.log("Games:", userGames);
+                console.log("Matching Game for Cover Image: ", matchingGame)
+                
+                if (matchingGame?.coverImage) {
+                    setGameCover(matchingGame.coverImage);
+                }
+            }
         }
 
         // Reset form when creating a new entry
@@ -105,7 +118,7 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
             setSelectedGameName(gameName || '');
             setGameCover('');
         }
-    }, [opened, entry, gameId, gameName]);
+    }, [opened, entry, gameId, gameName, userGames]);
 
     // Function to handle creating or updating a journal entry 
     // This will involve opening a modal with a form to input play session details such as duration and notes, 

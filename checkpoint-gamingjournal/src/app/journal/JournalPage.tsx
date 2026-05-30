@@ -4,6 +4,8 @@ import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { authClient } from '@/lib/auth-client';
+
+import JournalEntryCard from '@/components/JournalEntryCard/EntryCard';
 import JournalEntryModal from '@/components/JournalEntryModal/EntryModal';
 
 import { Badge, Button, Select, SimpleGrid, Pagination, SegmentedControl, Modal, Group, Stack, Title, 
@@ -500,12 +502,12 @@ export default function Journal() {
                                                 }
                                             }}
                                             data={[
+                                                "First Impressions",
                                                 "Progress Update",
                                                 "Boss Fight",
                                                 "Achievement",
                                                 "Story Reaction",
                                                 "Review",
-                                                "First Impressions",
                                                 "Ending Thoughts",
                                                 "General",
                                             ]}
@@ -678,71 +680,7 @@ export default function Journal() {
                         {entries.length > 0 && (
                             <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 3}} spacing="lg" className={classes.entriesGrid}>
                                 {entries.map((entry) => (
-                                    <div key={entry.uuid} className={classes.entryCard}>
-                                        <div className={classes.entryHeader}>
-                                            <h3 className={classes.entryGame}>{entry.gameName}</h3>
-
-                                            <div className={classes.entryActions}>
-                                                <Tooltip label="View Entry" withArrow position='top'>
-                                                    <Eye color='white' size={23} onClick={() => router.push(`/journal/${entry.uuid}`)}/>
-                                                </Tooltip>
-
-                                                <Tooltip label="Delete Entry" withArrow position="top">
-                                                    <Trash2 
-                                                        size={23}
-                                                        color='#ef2b2b'
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            deleteJournalEntry(entry._id, entry.gameId)}
-                                                        }
-                                                    />
-                                                </Tooltip>
-                                                
-                                            </div>
-
-                                        </div>
-
-                                        <div className={classes.entryInfoContainer}>
-                                                        
-                                            {entry.entryType && (
-                                                <Badge
-                                                    variant="light"
-                                                    color='blue'
-                                                    radius="sm"
-                                                    size="md"
-                                                    mb="sm"
-                                                >
-                                                    {entry.entryType}
-                                                </Badge>
-                                            )}
-
-                                            <h3 className={classes.entryTitle}>{entry.title}</h3>
-
-                                            <p className={classes.entryContent}>
-                                                {entry.content.length > 150
-                                                    ? `${entry.content.slice(0, 200)}...` // Truncate long content
-                                                    : entry.content}
-                                            </p>
-
-                                            {/* ✅ TAGS SECTION */}
-                                            {entry.tags && entry.tags.length > 0 && (
-                                                <Group className={classes.tagsContainer}>
-                                                    {entry.tags.map((tag: string, index: number) => (
-                                                    <Badge
-                                                        key={index}
-                                                        variant="filled"
-                                                        color="#854bcb"
-                                                        radius="md"
-                                                        size='sm'
-                                                    >
-                                                        {tag}
-                                                    </Badge>
-                                                    ))}
-                                                </Group>
-                                            )}   
-                                            <p className={classes.entryDate}>{entry.displayDate}</p>
-                                        </div>   
-                                    </div>
+                                    <JournalEntryCard key={entry._id} entry={entry} variant='journal'/>
                                 ))}
                             </SimpleGrid>
                         
