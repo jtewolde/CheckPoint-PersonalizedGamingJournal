@@ -81,28 +81,29 @@ export default function JournalEntryCard({entry, variant =  "journal"}: JournalE
                         ? `${entry.content.slice(
                             0,
                             variant === 'dashboard'
-                            ? 100
+                            ? 110
                             : 150
-                        )}...`
+                    )}...`
                         : entry.content}
                 </Text>
 
                 {/*FOOTER*/}
                 <div className={classes.footer}>
-                    <Group gap={6}>
-                        {entry.tags?.slice(0, variant === 'dashboard' ? 2 : 4).map((tag, index) => (
-                            <Badge
-                                key={index}
-                                size="md"
-                                radius="sm"
-                                variant="dot"
-                                color="blue"
-                            >
-                                {tag}
-                            </Badge>
-                        ))}
-                    </Group>
-
+                    {entry.tags && entry.tags.length > 0 &&(
+                        <Group gap={6}>
+                            {entry.tags?.slice(0, variant === 'dashboard' ? 2 : 4).map((tag, index) => (
+                                <Badge
+                                    key={index}
+                                    size="md"
+                                    radius="sm"
+                                    variant="dot"
+                                    color="blue"
+                                >
+                                    {tag}
+                                </Badge>
+                            ))}
+                        </Group>
+                    )}
                     <Text className={classes.date}>{entry.displayDate}</Text>
                 </div>
             </div>
