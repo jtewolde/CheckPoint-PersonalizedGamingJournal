@@ -169,7 +169,6 @@ export default function GameDetails() {
         setIsPlatinum(currentGame?.platinum ?? false)
         setRating(currentGame?.rating ?? 0)
         setCompletionDate(currentGame?.completionDate ?? null)
-        setNumOfEntries(currentGame?.journalEntries.length ?? 0)
       } catch (error) {
         console.error('Error checking if game is in library:', error);
       }

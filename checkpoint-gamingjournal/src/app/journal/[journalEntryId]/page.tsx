@@ -169,32 +169,37 @@ export default function ViewJournalEntry() {
 
           <Text className={classes.title}>{entry.title}</Text>
 
-          {entry.entryType && (
-            <Badge
-              variant="light"
-              color="blue"
-              radius="sm"
-              size="lg"
-            >
-                {entry.entryType}
-            </Badge>
-          )}
+          <Group gap='lg'>
 
-          {entry.tags && entry.tags.length > 0 && (
-              <Group className={classes.tagsContainter} gap="lg" mt="sm" mb='lg'>
-                  {entry.tags.map((tag: string, index: number) => (
-                  <Badge
-                      key={index}
-                      variant="filled"
-                      color="violet"
-                      radius="md"
-                      size='lg'
-                  >
-                      {tag}
-                  </Badge>
-                  ))}
-              </Group>
-          )}
+              {entry.entryType && (
+                <Badge
+                  variant="light"
+                  color="green"
+                  radius="sm"
+                  size="lg"
+                >
+                    {entry.entryType}
+                </Badge>
+              )}
+
+              {entry.tags && entry.tags.length > 0 && (
+                <Group className={classes.tagsContainter} gap="lg" mt="sm" mb='sm'>
+                    {entry.tags.map((tag: string, index: number) => (
+                    <Badge
+                        key={index}
+                        variant="dot"
+                        color="blue"
+                        radius="md"
+                        size='lg'
+                    >
+                        {tag}
+                    </Badge>
+                    ))}
+                </Group>
+              )}
+
+            </Group>
+
             <Text className={classes.content}>{entry.content}</Text>
         </Paper>
     </div>
