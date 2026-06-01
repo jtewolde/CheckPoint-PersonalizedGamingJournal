@@ -1,9 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { authClient } from '@/lib/auth-client';
+
+import JournalEntryCard from '@/components/JournalEntryCard/EntryCard';
+import JournalEntryModal from '@/components/JournalEntryModal/EntryModal';
 
 import { Badge, Button, Select, SimpleGrid, Pagination, SegmentedControl, Modal, Group, Stack, Title, 
     Text, Checkbox, ActionIcon, MultiSelect, LoadingOverlay, Drawer, Tooltip} from '@mantine/core';
@@ -27,23 +30,29 @@ export default function Journal() {
 
     const [games, setGames] = useState<{ gameId: string, gameName: string }[]>([]);
 
-    // State variables for filters based on game, tags, and sorting order
+    // State variables for filters based on game, entry type, tags, and sorting order
     const [gameId, setGameId] = useState('all')
     const [selectedGame, setSelectedGame] = useState('');
+    const [selectedType, setSelectedType] = useState("");
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
     // Draft filters (inside the drawer)
     const [draftGameId, setDraftGameId] = useState('all');
+    const [draftType, setDraftType] = useState("")
     const [draftTags, setDraftTags] = useState<string[]>([]);
 
     // Compute active filters for display in the UI
-    const activeFilters = (gameId !== 'all' ? [`Game: ${games.find(g => g.gameId === gameId)?.gameName}`] : []).concat(
-        selectedTags.length > 0 ? [`Tags: ${selectedTags.join(', ')}`] : []
+    const activeFilters = (gameId !== 'all'? [`Game: ${games.find(g => g.gameId === gameId)?.gameName}`]: []).concat(
+        selectedType ? [`Type: ${selectedType}`] : [],
+        selectedTags.length > 0
+            ? [`Tags: ${selectedTags.join(', ')}`]
+            : []
     );
 
     // State for opening delete all modal
     const [opened, {open, close}] = useDisclosure(false);
+    const [entryModalOpened, {open: openEntryModal, close: closeEntryModal}] = useDisclosure(false);
     const [drawerOpened, { toggle, close: closeDrawer }] = useDisclosure(false);
 
     const isMobile = useMediaQuery('(max-width: 560px)');
@@ -91,6 +100,7 @@ export default function Journal() {
                 page: pageNum.toString(),
                 limit: '6',
                 gameId: gameId !== 'all' ? gameId : '',
+                type: selectedType,
                 tag: selectedTags.length > 0 ? selectedTags.join(',') : '',
                 order: sortOrder
             })
@@ -126,7 +136,7 @@ export default function Journal() {
     // Refetch journal entries whenenver the page number changes
     useEffect(() => {
         fetchEntries(page);
-    }, [page, gameId, selectedTags, sortOrder]);
+    }, [page, gameId, selectedTags, selectedType, sortOrder]);
 
     // Function to delete a journal entry
     const deleteJournalEntry = async (journalEntryId: string, gameID: string) => {
@@ -307,6 +317,16 @@ export default function Journal() {
                             loaderProps={{ size: 'lg', color: "grape", type: "bars" }}
                         />
 
+                        <JournalEntryModal
+                            key={selectedGameObject?.gameId ?? 'journal-entry-modal'}
+                            opened={entryModalOpened}
+                            onClose={closeEntryModal}
+                            gameId={selectedGameObject?.gameId ?? ''}
+                            gameName={selectedGameObject?.gameName ?? ''}
+                            onSuccess={() => close()}
+                            onEntryCreated={fetchEntries}
+                        />
+
                         <div className={classes.buttonGroup} >
                             <ActionIcon
                                 variant='filled'
@@ -314,7 +334,7 @@ export default function Journal() {
                                 size='xl'
                                 radius= 'md'
                                 className={classes.addButton}
-                                onClick={() => router.push('/journalForm')}
+                                onClick={openEntryModal}
                                 hiddenFrom='sm'
                             >
                                 <FilePlus />
@@ -350,7 +370,7 @@ export default function Journal() {
                                 size='md'
                                 radius= 'md'
                                 className={classes.addButton}
-                                onClick={() => router.push('/journalForm')}
+                                onClick={openEntryModal}
                                 rightSection={<FilePlus />}
                                 visibleFrom='sm'
                             >
@@ -456,6 +476,48 @@ export default function Journal() {
                                             mb="md"
                                         />
 
+                                        <Select
+                                            label="Filter by Entry Type"
+                                            placeholder="Select Entry Type"
+                                            styles={{
+                                                dropdown: {
+                                                    background: '#212121',
+                                                    color: 'whitesmoke'
+                                                },
+                                                input: {
+                                                    background: '#212121',
+                                                    fontFamily: 'Noto Sans',
+                                                    color: 'white'
+                                                },
+                                                option: {
+                                                    fontFamily: 'Noto Sans',
+                                                    fontSize: '16px',
+                                                    fontWeight: 330
+                                                },
+                                                label: {
+                                                    fontFamily: 'Noto Sans',
+                                                    color: 'white',
+                                                    fontSize: '20px',
+                                                    fontWeight: 300
+                                                }
+                                            }}
+                                            data={[
+                                                "First Impressions",
+                                                "Progress Update",
+                                                "Boss Fight",
+                                                "Achievement",
+                                                "Story Reaction",
+                                                "Review",
+                                                "Ending Thoughts",
+                                                "General",
+                                            ]}
+                                            value={draftType}
+                                            onChange={(value) => setDraftType(value || '')}
+                                            className={classes.filterDropdown}
+                                            mb="md"
+                                            clearable
+                                        />
+
                                         <MultiSelect
                                             label="Filter by Tags"
                                             placeholder="Select Tags"
@@ -524,7 +586,14 @@ export default function Journal() {
                                                 mb='sm'
                                                 onClick={() => {
                                                     setGameId('all');
+                                                    setSelectedType('');
                                                     setSelectedTags([]);
+
+                                                    setDraftGameId('all');
+                                                    setDraftType('');
+                                                    setDraftTags([]);
+
+                                                    setPage(1);
                                                 }}
                                             >
                                                 Clear Filters
@@ -537,6 +606,7 @@ export default function Journal() {
                                                 onClick={() => {
                                                     setGameId(draftGameId);
                                                     setSelectedTags(draftTags);
+                                                    setSelectedType(draftType)
                                                     setPage(1);
                                                     closeDrawer();
                                                 }}
@@ -586,65 +656,31 @@ export default function Journal() {
                                         {`Tags: ${draftTags.join(', ')}`} ✕
                                     </Badge>
                                 )}
+
+                                {selectedType && (
+                                    <Badge
+                                        className={classes.filterBadge}
+                                        size="lg"
+                                        variant="outline"
+                                        color='#f0f1f2'
+                                        radius="sm"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => {
+                                            setSelectedType('');
+                                            setDraftType('');
+                                            setPage(1);
+                                        }}
+                                    >
+                                        {`Type: ${selectedType}`} ✕
+                                    </Badge>
+                                )}
                             </Group>
                         )}
                         
                         {entries.length > 0 && (
                             <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 3}} spacing="lg" className={classes.entriesGrid}>
                                 {entries.map((entry) => (
-                                    <div key={entry.uuid} className={classes.entryCard}>
-                                        <div className={classes.entryHeader}>
-                                            <h3 className={classes.entryGame}>{entry.gameName}</h3>
-
-                                            <div className={classes.entryActions}>
-                                                <Tooltip label="View Entry" withArrow position='top'>
-                                                    <Eye color='white' size={23} onClick={() => router.push(`/journal/${entry.uuid}`)}/>
-                                                </Tooltip>
-
-                                                <Tooltip label="Delete Entry" withArrow position="top">
-                                                    <Trash2 
-                                                        size={23}
-                                                        color='#ef2b2b'
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            deleteJournalEntry(entry._id, entry.gameId)}
-                                                        }
-                                                    />
-                                                </Tooltip>
-                                                
-                                            </div>
-
-                                        </div>
-
-                                        <div className={classes.entryInfoContainer}>
-
-                                            <h3 className={classes.entryTitle}>{entry.title}</h3>
-
-                                            <p className={classes.entryContent}>
-                                                {entry.content.length > 150
-                                                    ? `${entry.content.slice(0, 200)}...` // Truncate long content
-                                                    : entry.content}
-                                            </p>
-
-                                            {/* ✅ TAGS SECTION */}
-                                            {entry.tags && entry.tags.length > 0 && (
-                                                <Group className={classes.tagsContainer}>
-                                                    {entry.tags.map((tag: string, index: number) => (
-                                                    <Badge
-                                                        key={index}
-                                                        variant="filled"
-                                                        color="#854bcb"
-                                                        radius="md"
-                                                        size='lg'
-                                                    >
-                                                        {tag}
-                                                    </Badge>
-                                                    ))}
-                                                </Group>
-                                            )}   
-                                            <p className={classes.entryDate}>{entry.displayDate}</p>
-                                        </div>   
-                                    </div>
+                                    <JournalEntryCard key={entry._id} entry={entry} variant='journal'/>
                                 ))}
                             </SimpleGrid>
                         

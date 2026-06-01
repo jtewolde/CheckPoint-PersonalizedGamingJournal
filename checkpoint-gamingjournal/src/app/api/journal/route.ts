@@ -13,7 +13,7 @@ import { redis } from "@/utils/redis";
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json(); // Parse the request body
-        const { gameID, title, content, tags, gameName } = body;
+        const { gameID, gameName, coverImage, title, content, tags, entryType } = body;
 
         console.log(body);
 
@@ -71,9 +71,11 @@ export async function POST(req: NextRequest) {
             uuid: uuidv4(),
             gameId: gameID,
             gameName,
+            coverImage,
             userId,
             title,
             tags,
+            entryType,
             content,
             createdAt,
             displayDate
@@ -133,6 +135,7 @@ export async function GET(req: NextRequest){
 
         // Setup filter options for sorting and filtering journal entries based on query params
         const tag = searchParams.get('tag') || '';
+        const type = searchParams.get('type') || '';
         const gameId = searchParams.get('gameId') || '';
         const sortDirection = searchParams.get('order') === 'asc' ? 1 : -1;
 
@@ -146,15 +149,19 @@ export async function GET(req: NextRequest){
         // Build the query object for filtering journal entries based on search parameters
         const query: any = { userId: userId };
 
+        // Filter base on game name/id, tags associated with entry, and the journal entry type
         if (gameId) {
             query.gameId = gameId;
         }
         if (tag) {
             query.tags = tag; // Assuming tags is an array, this will match entries that have the specified tag
         }
+        if (type) {
+            query.entryType = type 
+        }
 
         // Create unique cache key based on user ID, pagination, filters, and sorting options
-        const cacheKey = `user_journal_entries:${userId}:page:${page}:limit:${limit}:game:${gameId}:tag:${tag}:order:${sortDirection}`;
+        const cacheKey = `user_journal_entries:${userId}:page:${page}:limit:${limit}:game:${gameId}:tag:${tag}:type:${type}:order:${sortDirection}`;
 
         // Attempt to get cached data from Redis
         const cachedData = await redis.get(cacheKey);

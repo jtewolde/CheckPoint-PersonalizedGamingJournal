@@ -164,6 +164,15 @@ export const auth = betterAuth({
                 type: "string",
                 required: true,
             },
+            gameName: {
+                type: "string",
+                required: true
+            },
+            coverImage: {
+                type: "string",
+                required: false,
+                defaultValue: ""
+            },
             userId: {
                 type: "string",
                 required: true,
@@ -172,12 +181,16 @@ export const auth = betterAuth({
                 type: "string",
                 required: true,
             },
+            entryType: {
+                type: "string",
+                required: false,
+            },
             tags: {
-                type: "string[]",
+                type: 'string[]',
                 required: false,
                 defaultValue: []
             },
-            notes:{
+            content:{
                 type: "string",
                 required: true,
             },
@@ -216,7 +229,15 @@ export const auth = betterAuth({
                 type: "string",
                 required: false
             },
-            tags: {
+            mood: {
+                type: "string",
+                required: false,
+            },
+            platform: {
+                type: "string",
+                required: false,
+            },
+            sessionType: {
                 type: "string[]",
                 required: false,
                 defaultValue: []

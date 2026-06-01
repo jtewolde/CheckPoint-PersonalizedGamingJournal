@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { JournalEntriesCollection, UserCollection } from "@/utils/db";
+import { JournalEntriesCollection } from "@/utils/db";
 import { ObjectId } from "mongodb";
 
 import { auth } from "@/utils/auth";
@@ -77,6 +77,103 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ j
     }
 }
 
+//=================================
+// UPDATE JOURNAL ENTRY(PATCH)
+// This API Route is used to update a journal entry for a game that is in the user's library
+//=================================
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ journalEntryID: string }> }){
+    try{
+        // Extract playSessionID from the route parameters
+        const { journalEntryID } = await params;
+        const body = await req.json();
+        const { gameID, gameName, coverImage, title, content, tags, entryType } = body;
+
+        // Validate required fields
+        if (!gameID || !title || !content || !entryType) {
+            return NextResponse.json(
+                { error: "Missing required fields" },
+                { status: 400 }
+            );
+        }
+
+        console.log("ID for Journal Entry:", journalEntryID)
+
+        // Validate that the JournalEntryID is a valid object ID format
+        if (!ObjectId.isValid(journalEntryID)) {
+            return NextResponse.json({ error: "Invalid Journal Entry ID format" }, { status: 400 });
+        }
+
+        // Get the authenticated user's session
+        const session = await auth.api.getSession({
+            headers: req.headers,
+        });
+
+        if (!session || !session.user) {
+            return NextResponse.json({ error: "Unauthorized", session }, { status: 401 });
+        }
+
+        const userId = session.user.id; // Extract userId from the session
+
+        // Check if the journal entry exists and belongs to the user
+        const existingEntry = await JournalEntriesCollection.findOne({
+            _id: new ObjectId(journalEntryID),
+            userId: userId
+        });
+
+        // If the entry doesn't exist or don't belong to the user, return an error
+        if (!existingEntry) {
+            return NextResponse.json(
+                { error: "Session not found or unauthorized" },
+                { status: 404 }
+            );
+        }
+
+        // Build update object with only provided fields
+        const updateData: any = {};
+        if (title !== undefined) updateData.title = title;
+        if (content !== undefined) updateData.content = content;
+        if (entryType !== undefined) updateData.entryType = entryType;
+        if (tags !== undefined) updateData.tags = tags;
+        if (coverImage) updateData.coverImage = coverImage;
+
+        // If no fields are provided for update, return an error
+        if (Object.keys(updateData).length === 0) {
+            return NextResponse.json({ error: "No fields provided for update" }, { status: 400 });
+        }
+
+        // Update the play session
+        const updateResult = await JournalEntriesCollection.updateOne(
+            {
+                _id: new ObjectId(journalEntryID),
+                userId: userId
+            },
+            { $set: updateData }
+        );
+
+       // Clear main journal cache
+        await redis.del(`user_journal_entries:${userId}`);
+
+        // Clear all paginated journal caches
+        const keys = await redis.keys(`user_journal_entries:${userId}:page:*`);
+
+        if (keys.length > 0) {
+            await redis.del(...keys);
+        }
+
+        return NextResponse.json({
+            message: "Journal Entry updated successfully",
+            updateResult,
+        });
+
+    } catch (error) {
+        console.error("Error updating journal entry:", error);
+        return NextResponse.json(
+            { error: "Internal server error" },
+            { status: 500 }
+        );
+    }
+}
+
 // ===================================
 // GET JOURNAL ENTRY BY ID (GET)
 // This API route is used to get a specific journal entry by its ID for a user
@@ -104,7 +201,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ jour
 
         // Find the journal entry in the journalEntries collection by uuid and userID
         const journalEntry = await JournalEntriesCollection.findOne({
-            uuid: journalEntryID,
+            _id: new ObjectId(journalEntryID),
             userId: userId
         })
 

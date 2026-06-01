@@ -13,8 +13,7 @@ export default function AvatarMenu(){
     const { isAuthenticated, setIsAuthenticated}  = useAuth();
     const [user, setUser] = useState<{ name?: string; image?: string } | null>(null);
 
-
-      // 🧠 Fetch session info on mount
+    // 🧠 Fetch session info on mount
     useEffect(() => {
         const fetchSession = async () => {
             const session = await authClient.getSession(); // Get current session
@@ -33,11 +32,11 @@ export default function AvatarMenu(){
     const handleSignOut = async () => {
         const { error } = await authClient.signOut();
         if (error) {
-        console.error('Error signing out:', error);
+            console.error('Error signing out:', error);
         } else {
-        setIsAuthenticated(false);
-        router.push('/'); // Redirect to home page after sign out
-        toast.success('Signed out successfully!'); // Show success toast      
+            setIsAuthenticated(false);
+            router.push('/'); // Redirect to home page after sign out
+            toast.success('Signed out successfully!'); // Show success toast      
         }
     };
 

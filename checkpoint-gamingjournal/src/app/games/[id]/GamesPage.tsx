@@ -169,7 +169,6 @@ export default function GameDetails() {
         setIsPlatinum(currentGame?.platinum ?? false)
         setRating(currentGame?.rating ?? 0)
         setCompletionDate(currentGame?.completionDate ?? null)
-        setNumOfEntries(currentGame?.journalEntries.length ?? 0)
       } catch (error) {
         console.error('Error checking if game is in library:', error);
       }
@@ -256,14 +255,21 @@ export default function GameDetails() {
           gameID: id,
           gameDetails: {
             title: game.name,
-            genre: game.genres,
+
+            genre: game.genres?.map(
+              (genre: any) => genre.name
+            ) || [],
+
+            platforms: game.platforms?.map(
+              (platform: any) => platform.name
+            ) || [],
+
             coverImage: game.cover.url,
             releaseDate: game.first_release_date
               ? new Date(game.first_release_date * 1000).toISOString()
               : null,
             status: game.status,
             platinum: game.platinum,
-            journalEntries: [],
           },
         }),
       });
@@ -711,7 +717,16 @@ export default function GameDetails() {
                             </Stack>
                           </Modal>
 
-                          <PlaySessionModal opened={playSessionModalOpened} onClose={closePlaySessionModal} gameId={game.id} gameName={game.name} onSessionCreated={fetchPlaySessions}/>
+                          <PlaySessionModal 
+                            key={game.id} 
+                            opened={playSessionModalOpened}
+                            onClose={closePlaySessionModal}
+                            gameId={game.id} 
+                            gameName={game.name}
+                            platforms={game.platforms?.map((platform: { name: string }) => platform.name)}
+                            onSuccess={() => close()}
+                            onSessionCreated={fetchPlaySessions}
+                          />
 
                           <Tooltip label="Log a new play session" position='top'>
                             <Button

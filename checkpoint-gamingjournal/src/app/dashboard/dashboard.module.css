@@ -1,5 +1,5 @@
 .background{
-  background: url('/Hogwarts.jpeg') top center no-repeat;
+  background: #4a4a4a;
   background-size: cover;
   background-attachment: fixed;
   position: relative;
@@ -20,7 +20,7 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.50) 0%, #121213 100%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.80) 0%, #121213 100%);
 }
 
 .wrapper {
@@ -38,11 +38,18 @@
 .dashboardHeader{
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 1rem;
-  width: 600px;
   gap: 0.4rem;
+}
+
+.heroContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .welcomeText{
@@ -52,22 +59,21 @@
   font-family: 'Inter';
   font-style: italic;
   color: #dfdcdc;
-  margin-top: 1rem;
   width: auto;
 }
 
 .dashboardTitle{
-  font-size: 3rem;
+  font-size: 28px;
   font-weight: 700;
   color: white; /* Dark text for contrast */
-  text-align: center;
+  text-align: left;
   font-family: 'Barlow';
   letter-spacing: 1px;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
   line-height: 1.2;
 }
 
-.profileStats,
+.profileStatSection,
 .playingSection,
 .recentEntriesSection{
   display: flex;
@@ -135,6 +141,9 @@
 .statCards {
   width: 100%;
   max-width: 98%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .statusGrid {
@@ -144,15 +153,16 @@
 
 .statusCard {
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-start;
   padding: 1rem;
   gap: 1rem;
   border-radius: 12px;
-  background-color: #282828;
-  border: 1px solid #424242;
+  background-color: #272727;
+
+  border: 1px solid #3a3a3a;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -160,7 +170,7 @@
   font-size: 1.5rem;
   font-weight: 700;
   margin-top: 0.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   color: #ffffff;
   font-family: 'Inter';
   text-decoration: underline;
@@ -191,31 +201,79 @@
   height: 100%;
 }
 
+.heatmapWrapper{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .quickStatsContainer{
   width: 100%;
   max-width: 98%;
 }
 
+.quickStatHeader{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .quickStatItem{
   display: flex;
   flex-direction: column;
+
+  min-height: 100px;
+  padding: 1.25rem;
+  border-radius: 18px;
+  background-color: #272727;
+
+  border: 1px solid #3a3a3a;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.quickStatBody{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  border-radius: 16px;
-  background-color: #1b1a1a;
-  border: 1px solid #2f2e2e;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 .quickStatLabel{
-  font-size: 22px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #cfcfcf;
   font-family: 'Inter';
-  font-weight: 500;
+}
+
+.quickStatSubtext{
+  font-size: 0.9rem;
+  color: #8f8f8f;
+  margin-top: 22px;
+}
+
+.quickStatValue{
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 1;
+  align-self: center;
   color: white;
-  margin-top: 0.5rem;
-  text-align: center;
+  font-family: 'Barlow';
+}
+
+.ratingWrapper{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .ratingValue,
@@ -227,23 +285,15 @@
   text-align: center;
 }
 
-.starsText{
-  color: white;
-  font-size: 18px;
-  font-weight: 500;
-  font-family: 'Inter';
+.topRatedCover{
+  margin-top: 0.5rem;
+  width: 27%;
+  border-radius: 8px;
 }
 
 .ratingValue:hover{
   color: white;
   font-weight: 700;
-}
-
-.ratingWrapper{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .gameCard{
@@ -347,18 +397,21 @@
 }
 
 .entryCard {
+  width: 100%;
   height: auto;
+  background-color: #272727;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
   padding: 1rem;
-  border-radius: 8px;
-  background-color: #282828;
-  border: 2px solid #424242;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
   cursor: pointer;
 }
 
-.entryCard:hover{
-  transform: scale(1.05);
-  transition: transform 0.3s ease;
+.entryCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,0.18);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
 }
 
 .entryGame{
@@ -424,7 +477,11 @@
   }
 
   .welcomeText{
-    text-align: center;
+    text-align: left;
+  }
+
+  .dashboardTitle{
+    font-size: 24px;
   }
 
   .dashboardHeader{
@@ -432,6 +489,12 @@
     text-align: center;
     width: auto;
     margin-bottom: 0;
+  }
+
+  .heroContainer{
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
   }
 
   .gamesGrid,
@@ -480,11 +543,11 @@
   }
 
   .dashboardTitle{
-    font-size: 2rem;
+    font-size: 22px;
   }
 
   .welcomeText{
-    font-size: 1.2rem;
+    font-size: 18px;
   }
 
   .gamesGrid {

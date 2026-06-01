@@ -5,23 +5,26 @@ import { useRouter } from 'next/navigation';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import Link from 'next/link';
 
-import { SimpleGrid, Image, Paper, Text, ThemeIcon, Rating, Tooltip, ActionIcon, Modal, Button } from '@mantine/core';
+import { SimpleGrid, Image, Paper, Text, ThemeIcon, Badge, Rating, Group, Avatar } from '@mantine/core';
 import { DonutChart, BarChart, LineChart } from '@mantine/charts';
 
 import { authClient } from '@/lib/auth-client';
+import SessionHeatmap from '@/components/SessionHeatmap/SessionHeatmap';
+import JournalEntryCard from '@/components/JournalEntryCard/EntryCard';
 import PlaySessionModal from '@/components/PlaySessionModal/SessionModal';
 
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
-import { IconClipboardListFilled } from '@tabler/icons-react';
-import { Notebook, Gamepad, CircleUserRound, CircleArrowRight, Trophy, Star, PlusCircle, Book } from 'lucide-react';
+import { Notebook, Gamepad } from 'lucide-react';
+import { Trophy, Star, ClipboardCheck } from 'lucide-react';
 
 import classes from './dashboard.module.css';
 
 export default function Dashboard() {
   const router = useRouter();
   const isMobile = useMediaQuery('768px')
-  const [userName, setUserName] = useState("")
+
+  const [user, setUser] = useState<{ name?: string; image?: string } | null>(null); // State to store user information such as name and profile image
 
   const [playingGames, setPlayingGames] = useState<any[]>([]); // State to store games that the user is currently playing
   const [libraryGames, setLibraryGames] = useState<any[]>([]); // State to store all of the games that the user has in their library
@@ -51,6 +54,7 @@ export default function Dashboard() {
     gameId: string;
     title: string;
     cover: string;
+    platforms: string[];
     } | null>(null);
 
 
@@ -62,7 +66,10 @@ export default function Dashboard() {
         // If the user isn't authenticated, redirect to the sign-in page
         router.push('/auth/signin')
       } else {
-        setUserName(data.user.name)
+        setUser({
+          name: data.user.name,
+          image: data.user.image || undefined,
+        });
       }
     };
 
@@ -180,13 +187,6 @@ export default function Dashboard() {
       const d = new Date(entry.createdAt);
       const key = `${d.getFullYear()}-${d.getMonth()}`;
 
-      console.log(
-        entry.createdAt,
-        d.toString(),
-        d.getMonth(),
-        d.getUTCMonth()
-      );
-
       if (counts[key] !== undefined) {
         counts[key]++;
       }
@@ -277,28 +277,87 @@ export default function Dashboard() {
 
           <div className={classes.dashboardHeader}>
 
-            <div className={classes.heroTextContainer}>
-
-              <p className={classes.dashboardTitle}> Welcome back, <span className={classes.username} onClick={() => router.push('/settings/profile')}>{userName}! </span> </p>
+            <div className={classes.heroContainer}>
+              <Group gap={10} align='center'>
+                <Avatar radius='xl' size={45} src={user?.image || undefined} alt={user?.name || "User"} onClick={() => router.push('/settings/profile')} />
+                <p className={classes.dashboardTitle}> Welcome back, <span className={classes.username}>{user?.name}! </span> </p>
+              </Group>
               
               <p className={classes.welcomeText}> 
-                Here's a quick overview of your gaming journey so far!
+                  Your latest stats, sessions, and milestones — all in one place.
               </p>
-
+              
             </div>
           
           </div>
 
           <div className={classes.statCards}>
 
-            <div className={classes.profileStats}>
+            <SimpleGrid cols={{base: 1, sm: 1, md: 2, lg: 4, xl: 4}} spacing="lg" className={classes.quickStatsGrid}>
 
-              <div className={classes.titleLogo}>
-                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: '#56CCF2', to: '#2F80ED', deg: 30}}> <CircleUserRound size={40} /> </ThemeIcon>
-                <p className={classes.profileTitle}>Profile Stats</p>
+              <div className={classes.quickStatItem}>
+
+                <div className={classes.quickStatHeader}>
+                  <ThemeIcon size={42} radius='xl' variant='filled' color='indigo'> <ClipboardCheck size={30} /> </ThemeIcon>
+                  <Text className={classes.quickStatLabel}>Average Rating</Text>
+                </div>
+                
+                <div className={classes.quickStatBody}>
+                  <Text className={classes.quickStatValue}>
+                    {avgRating.toFixed(1)}
+                    <span className={classes.quickStatUnit}>/5</span>
+                  </Text>
+                  <Text className={classes.quickStatSubtext}>Across rated games</Text>
+                </div>
+
               </div>
-              
-            </div>
+
+              <div className={classes.quickStatItem}>
+
+                <div className={classes.quickStatHeader}>
+                  <ThemeIcon size={42} radius='xl' variant='filled' color='teal'> <Trophy size={20} /> </ThemeIcon>
+                  <Text className={classes.quickStatLabel}>Games Platinumed</Text>
+                </div>
+
+                <div className={classes.quickStatBody}>
+                  <Text className={classes.quickStatValue}>{numPlatinumedGames}</Text>
+                  <Text className={classes.quickStatSubtext}>Games you've earned a platinum trophy on</Text>
+                </div>
+                
+              </div>
+
+              <div className={classes.quickStatItem}>
+
+                <div className={classes.quickStatHeader}>
+                  <ThemeIcon size={42} radius='xl' variant='filled' color='red'> <Notebook size={20} /> </ThemeIcon>
+                  <Text className={classes.quickStatLabel}>Total Entries</Text>
+                </div>
+
+                <div className={classes.quickStatBody}>
+                  <Text className={classes.quickStatValue}>{numEntries}</Text>
+                  <Text className={classes.quickStatSubtext}>Journal entries made</Text>
+                </div>
+        
+              </div>
+
+              <div className={classes.quickStatItem}>
+
+                <div className={classes.quickStatHeader}>
+                  <ThemeIcon size={42} radius='xl' variant='filled' color='#f2c617'> <Star size={20} /> </ThemeIcon>
+                  <Text className={classes.quickStatLabel}>Top Rated Game</Text>
+                </div>
+
+                <div className={classes.ratingWrapper}>
+                  <Image src={topRatedGame?.coverImage ? `https:${topRatedGame.coverImage.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src} alt={topRatedGame?.title || "No Image"} className={classes.topRatedCover} />
+                  <Group gap='md' align='center' justify='center'> 
+                    <Link className={classes.ratingValue} href={`/games/${topRatedGame?.gameId}`}>{topRatedGame?.title || 'N/A'}</Link>
+                    <Rating size='md' value={topRatedGame?.rating || 0} readOnly fractions={2} color='yellow' />
+                  </Group>
+                </div>
+                
+              </div>
+
+            </SimpleGrid>
 
             <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 2, xl: 2}} spacing="sm" className={classes.statusGrid}>
 
@@ -465,67 +524,10 @@ export default function Dashboard() {
               </Paper>
 
               <Paper shadow='md' radius='lg' className={classes.statusCard}>
-                <div className={classes.quickStatsContainer}>
-                  <p className={classes.statusTitle}>Quick Stats</p>
-
-                  <SimpleGrid cols={{base: 1, sm: 1, md: 2, lg: 2, xl: 2}} spacing="lg" className={classes.quickStatsGrid}>
-
-                    <div className={classes.quickStatItem}>
-
-                      <div className={classes.titleLogo}>
-                        <ThemeIcon size={30} radius='md' variant='filled' color='indigo'> <IconClipboardListFilled size={20} /> </ThemeIcon>
-                        <Text className={classes.quickStatLabel}>Average Rating</Text>
-                      </div>
-                      
-                      <div className={classes.ratingWrapper}>
-                        <Text className={classes.ratingValue}>{avgRating.toFixed(2)}/5 Stars</Text>
-                      </div>
-
-                    </div>
-
-                    <div className={classes.quickStatItem}>
-
-                      <div className={classes.titleLogo}>
-                        <ThemeIcon size={30} radius='md' variant='filled' color='teal'> <Trophy size={20} /> </ThemeIcon>
-                        <Text className={classes.quickStatLabel}>Games Platinumed</Text>
-                      </div>
-
-                      <div className={classes.platinumWrapper}>
-                        <Text className={classes.platValue}>{numPlatinumedGames}</Text>
-                      </div>
-                    </div>
-
-                    <div className={classes.quickStatItem}>
-
-                      <div className={classes.titleLogo}>
-                        <ThemeIcon size={30} radius='md' variant='filled' color='red'> <Notebook size={20} /> </ThemeIcon>
-                        <Text className={classes.quickStatLabel}>Total Entries</Text>
-                      </div>
-
-                      <div className={classes.ratingWrapper}>
-                        <Text className={classes.ratingValue}>{numEntries}</Text>
-                      </div>
-
-                    </div>
-
-                    <div className={classes.quickStatItem}>
-
-                      <div className={classes.titleLogo}>
-                        <ThemeIcon size={30} radius='md' variant='filled' color='gold'> <Star size={20} /> </ThemeIcon>
-                        <Text className={classes.quickStatLabel}>Top Rated Game</Text>
-                      </div>
-
-                      <div className={classes.ratingWrapper}>
-                        <Link className={classes.ratingValue} href={`/games/${topRatedGame?.gameId}`}>{topRatedGame?.title || 'N/A'}</Link>
-                        <Rating size='sm' value={topRatedGame?.rating || 0} readOnly fractions={2} color='yellow' />
-                      </div>
-                      
-                    </div>
-
-                  </SimpleGrid>
-
-                </div>
-
+                  <p className={classes.statusTitle}>Session Heatmap</p>
+                  <div className={classes.heatmapWrapper}>
+                    <SessionHeatmap />
+                  </div>
               </Paper>
 
             </SimpleGrid>
@@ -541,6 +543,7 @@ export default function Dashboard() {
             }}
             gameId={selectedGame?.gameId || ""}
             gameName={selectedGame?.title || ""}
+            platforms={selectedGame?.platforms}
             onSuccess={() => {
               close();
             }}
@@ -554,18 +557,6 @@ export default function Dashboard() {
                 <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: '#e96443', to: '#904e95', deg: 90}}> <Gamepad size={40} /> </ThemeIcon>
                 <a className={classes.gamesPlayingText} href='/library'>Playing Games</a>
               </div>
-
-              <Button
-                className={classes.logButton}
-                leftSection={<PlusCircle size={20} />}
-                size="sm"
-                radius="xl"
-                color='green'
-                onClick={open}
-                >
-                Quick Log
-              </Button>
-
               
             </div>
 
@@ -617,16 +608,7 @@ export default function Dashboard() {
               ) : (
                   <SimpleGrid cols={4} spacing="lg" className={classes.entriesGrid}>
                       {recentEntries.map((entry) => (
-                          <div key={entry.uuid} className={classes.entryCard} onClick={() => router.push(`/journal/${entry.uuid}`)}>
-                              <h3 className={classes.entryGame}>{entry.gameName}</h3>
-                              <h3 className={classes.entryTitle}>{entry.title}</h3>
-                              <p className={classes.entryContent}>
-                                  {entry.content.length > 150
-                                      ? `${entry.content.slice(0, 150)}...` // Truncate long content
-                                      : entry.content}
-                              </p>
-                              <p className={classes.entryDate}>{entry.displayDate}</p>
-                          </div>
+                        <JournalEntryCard key={entry._id} entry={entry} variant='dashboard'/>
                       ))}
                   </SimpleGrid>
               )}

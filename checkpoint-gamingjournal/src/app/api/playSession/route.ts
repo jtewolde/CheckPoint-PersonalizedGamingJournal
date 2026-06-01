@@ -11,7 +11,7 @@ import { redis } from "@/utils/redis";
 export async function POST(req: NextRequest){
     try{
         const body = await req.json();
-        const { gameID, gameName, date, duration, notes, tags } = body;
+        const { gameID, gameName, date, duration, notes, sessionType, mood, platform } = body;
 
         // Validate required fields for the play session object like gameID, date of session, and duration
         if(!gameID || !gameName || !date || !duration){
@@ -52,7 +52,9 @@ export async function POST(req: NextRequest){
             duration,
             date,
             notes,
-            tags
+            sessionType,
+            mood,
+            platform,
         }
 
         // Insert the play session into the playSession collection
@@ -82,7 +84,7 @@ export async function POST(req: NextRequest){
 
 //=================================
 // GET PLAY SESSIONS(GET_)
-// This API route is used to fetch all play sessions for a game in the user's library
+// This API route is used to fetch all play sessions for a game in the user's library or all play sessions for the user if no gameID is provided as a query parameter
 //=================================
 export async function GET(req: NextRequest){
     try{

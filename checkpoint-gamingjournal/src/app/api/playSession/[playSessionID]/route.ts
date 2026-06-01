@@ -82,7 +82,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ pl
         // Extract playSessionID from the route parameters
         const { playSessionID } = await params;
         const body = await req.json();
-        const { date, duration, notes, tags } = body;
+        const { date, duration, notes, sessionType, mood, platform } = body;
 
         // Validate that play session
         if (!playSessionID){
@@ -124,7 +124,14 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ pl
         if (date !== undefined) updateData.date = date;
         if (duration !== undefined) updateData.duration = duration;
         if (notes !== undefined) updateData.notes = notes;
-        if (tags !== undefined) updateData.tags = tags;
+        if (sessionType !== undefined) updateData.sessionType = sessionType;
+        if (mood !== undefined) updateData.mood = mood;
+        if (platform !== undefined) updateData.platform = platform;
+
+        // If no fields are provided for update, return an error
+        if (Object.keys(updateData).length === 0) {
+            return NextResponse.json({ error: "No fields provided for update" }, { status: 400 });
+        }
 
         // Update the play session
         const updateResult = await PlaySessionCollection.updateOne(

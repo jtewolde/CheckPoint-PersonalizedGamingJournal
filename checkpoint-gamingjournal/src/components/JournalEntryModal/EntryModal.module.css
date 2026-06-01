@@ -13,12 +13,6 @@
     gap: 1rem;
 }
 
-.platformMoodContainer{
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-}
-
 .logButton{
     width: auto;
     font-family: 'Poppins';

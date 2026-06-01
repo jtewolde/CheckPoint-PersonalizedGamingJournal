@@ -24,12 +24,18 @@
     justify-content: center;
 }
 
-.tagsContainer{
+.typeContainer{
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 0.4rem;
-    margin-bottom: 0.5rem;
+}
+
+.tagContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.3rem;
     margin-top: 0.5rem;
 }
 
