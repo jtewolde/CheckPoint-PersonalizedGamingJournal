@@ -61,28 +61,17 @@ export default function SessionHeatmap(){
         const durationByDate: Record<string, number> = {};
 
         sessions.forEach(session => {
-            const sessionDate = new Date(session.date);
+            const dateKey = session.date; // already YYYY-MM-DD
 
-            const localDate = new Date(
-                sessionDate.getFullYear(),
-                sessionDate.getMonth(),
-                sessionDate.getDate()
-            );
-
-            const date = formatDate(localDate)
-
-            if(durationByDate[date]){
-                durationByDate[date] += session.duration;
-            } else {
-                durationByDate[date] = session.duration;
-            }
+            durationByDate[dateKey] =
+                (durationByDate[dateKey] || 0) + session.duration;
         })
 
         setHeatmapData(durationByDate);
     }, [sessions]);
 
     // Determine rectSize and gap based on screen size
-    const rectSize = isSmallMobile ? 20 : isTablet ? 24 : isLaptop ? 28 : 30;
+    const rectSize = isSmallMobile ? 22 : isTablet ? 24 : isLaptop ? 28 : 30;
     const gap = isSmallMobile ? 6 : isTablet ? 7 : isLaptop ? 8 : 10;
 
     return (
