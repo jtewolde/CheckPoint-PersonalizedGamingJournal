@@ -22,7 +22,6 @@ type PlaySession = {
     platform?: string
 }
 
-
 export default function SessionCalendar({ gameId, sessions }: { gameId: string, sessions: PlaySession[] }) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [localSessions, setLocalSessions] = useState<PlaySession[]>(sessions)
@@ -174,13 +173,13 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
 
                       <Tooltip label='Edit' position='top'>
                         <ActionIcon 
-                        variant='transparent' 
-                        color="#ffffff" 
-                        onClick={() => {
-                          setSelectedSession(s)
-                          setEditModalOpened(true)
-                          setOpened(false)
-                        }}
+                          variant='transparent' 
+                          color="#ffffff" 
+                          onClick={() => {
+                            setSelectedSession(s)
+                            setEditModalOpened(true)
+                            setOpened(false)
+                          }}
                         > 
                         <Pencil size={20}/> </ActionIcon>
                       </Tooltip>
@@ -218,7 +217,6 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
                         </div>
                       )}
                   </div>
-
                 </div>
               </Group>
             )

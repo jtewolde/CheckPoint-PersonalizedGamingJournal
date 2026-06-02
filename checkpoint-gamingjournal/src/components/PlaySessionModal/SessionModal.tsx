@@ -277,11 +277,11 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                     size="md"
                     minRows={3}
                     maxRows={10}
-                    maxLength={1000}
+                    maxLength={2500}
                     autosize
                     label="Session Summary"
                     placeholder="Enter play session notes... "
-                    description={`${playSessionNotes.length}/1000 characters`}
+                    description={`${playSessionNotes.length}/2500 characters`}
                     value={playSessionNotes}
                     onChange={(e) => setPlaySessionNotes(e.target.value)}
                     style={{ marginTop: "1rem" }}
