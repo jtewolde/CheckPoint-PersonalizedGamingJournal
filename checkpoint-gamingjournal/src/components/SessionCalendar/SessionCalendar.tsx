@@ -1,13 +1,18 @@
 'use client'
 
-import { useState, useEffect } from "react"
-import { formatDate, isSameDay } from "@/utils/dateUtils"
-import PlaySessionModal from "../PlaySessionModal/SessionModal"
+import { useState, useEffect } from "react";
+import { formatDate, isSameDay } from "@/utils/dateUtils";
+
+import PlaySessionModal from "../PlaySessionModal/SessionModal";
+import SessionDayModal from "../SessionDayModal/SessionDayModal";
+
 import { Calendar } from "@mantine/dates"
-import { Indicator, Modal, Stack, Text, Group, ActionIcon, Badge, Tooltip, LoadingOverlay } from "@mantine/core"
-import { Trash2Icon, Pencil } from "lucide-react"
-import toast from "react-hot-toast"
-import classes from "./SessionCalendar.module.css"
+
+import { Indicator, Modal, Stack, Text, Group, ActionIcon, Badge, Tooltip, LoadingOverlay } from "@mantine/core";
+import { Trash2Icon, Pencil } from "lucide-react";
+
+import toast from "react-hot-toast";
+import classes from "./SessionCalendar.module.css";
 
 // Define the playSession object used on both calendar and modal with props
 type PlaySession = {
@@ -130,99 +135,18 @@ export default function SessionCalendar({ gameId, sessions }: { gameId: string, 
         }}
       />
 
-      {/* Modal */}
-      <Modal
+      <SessionDayModal
         opened={opened}
         onClose={() => setOpened(false)}
-        title={
-          selectedDate
-            ? `Sessions for ${formatDate(selectedDate)}`
-            : "Sessions"
-        }
-        size='lg'
-      >
-        {/* ✅ LOADING OVERLAY */}
-        <LoadingOverlay
-            visible={loading}
-            overlayProps={{ radius: 'sm', blur: 2 }}
-            loaderProps={{ size: 'lg', color: "white", type: "oval" }}
-        />
-        <Stack>
-          {sessionsForDate.length === 0 && (
-            <Text c="dimmed">No sessions</Text>
-          )}
+        selectedDate={selectedDate}
+        sessions={sessionsForDate}
+        onEditSession={(session) => {
+          setSelectedSession(session);
+          setEditModalOpened(true);
+        }}
+        onDeleteSession={handleDeleteSession}
+      />
 
-          {sessionsForDate.map((s) => {
-            const hours = Math.floor(s.duration / 60)
-            const minutes = s.duration % 60
-
-            return (
-              <Group key={s._id} justify="space-between">
-                <div className={classes.gameSessionCard}>
-                  <div className={classes.sessionHeader}>
-                    {/* DURATION */}
-                    <Text fw={500}>
-                      {hours} hrs {minutes} mins
-                    </Text>
-
-                    {/* ACTION ICONS (EDIT/DELETE) */}
-                    <div className={classes.actionIcons}>
-                      <Tooltip label='Delete' position='top'>
-                        <ActionIcon variant='transparent' color="#dc4242" onClick={() => handleDeleteSession(s._id)}> <Trash2Icon size={20}/> </ActionIcon>
-                      </Tooltip>
-
-                      <Tooltip label='Edit' position='top'>
-                        <ActionIcon 
-                          variant='transparent' 
-                          color="#ffffff" 
-                          onClick={() => {
-                            setSelectedSession(s)
-                            setEditModalOpened(true)
-                            setOpened(false)
-                          }}
-                        > 
-                        <Pencil size={20}/> </ActionIcon>
-                      </Tooltip>
-                    </div>
-
-                  </div>
-
-                  {/* NOTES SECTION */}
-                  <Text size="sm" c="dimmed">
-                    {s.notes || "No notes"}
-                  </Text>
-
-                  <div className={classes.tagContainer}>
-                     {/* ✅ TAGS SECTION */}
-                      {s.sessionType && s.sessionType.length > 0 && (
-                        <Group className={classes.typeContainer}>
-                            {s.sessionType.map((type: string, index: number) => (
-                            <Badge
-                                key={index}
-                                variant="filled"
-                                color="#0d8251"
-                                radius="md"
-                                size='md'
-                            >
-                                {type}
-                            </Badge>
-                            ))}
-                        </Group>
-                      )}
-
-                      {s.mood && (
-                        <div className={classes.moodContainer}>
-                          {/*MOOD SECTION */}
-                          <Badge variant="filled" color="#07a2a7" radius='md' size="md">{s.mood}</Badge>
-                        </div>
-                      )}
-                  </div>
-                </div>
-              </Group>
-            )
-          })}
-        </Stack>
-      </Modal>
     </>
   )
 }

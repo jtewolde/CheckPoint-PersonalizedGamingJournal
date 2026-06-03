@@ -1,14 +1,23 @@
 'use client'
 
-import { useState, useEffect } from "react"
-import { useMediaQuery } from "@mantine/hooks"
-import { formatDate, isSameDay } from "@/utils/dateUtils"
-import { Heatmap } from "@mantine/charts"
-import classes from './SessionHeatmap.module.css'
+import { useState, useEffect } from "react";
+import { useMediaQuery } from "@mantine/hooks";
+import SessionDayModal from "../SessionDayModal/SessionDayModal";
+import { formatDate, isSameDay } from "@/utils/dateUtils";
+import { Heatmap } from "@mantine/charts";
+import classes from './SessionHeatmap.module.css';
 
+// Define the playSession object used on both calendar and modal with props
 type PlaySession = {
+    _id: string
+    gameId: string
+    gameName: string
     date: string
     duration: number
+    notes: string
+    sessionType: string[]
+    mood?: string
+    platform?: string
 }
 
 export default function SessionHeatmap(){
@@ -16,6 +25,10 @@ export default function SessionHeatmap(){
     const [heatmapData, setHeatmapData] = useState<Record<string, number>>({});
     // Fetch play sessions data for the user and store it in state
     const [sessions, setSessions] = useState<PlaySession[]>([]);
+
+    // States for handling the session day modal
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [opened, setOpened] = useState(false);
 
     // Define the date range for the heatmap (e.g., last 90 days) and adjust for mobile view
     const endDate = new Date();
@@ -25,7 +38,7 @@ export default function SessionHeatmap(){
     mobileStartDate.setDate(endDate.getDate() - 60); // Show last 30 days on mobile
 
     // Responsive design breakpoints
-    const isSmallMobile = useMediaQuery('(max-width: 480px)');
+    const isSmallMobile = useMediaQuery('(max-width: 500px)');
     const isTablet = useMediaQuery('(max-width: 768px)');
     const isLaptop = useMediaQuery('(max-width: 1000px)');
 
@@ -69,32 +82,50 @@ export default function SessionHeatmap(){
 
         setHeatmapData(durationByDate);
     }, [sessions]);
+    
 
     // Determine rectSize and gap based on screen size
-    const rectSize = isSmallMobile ? 22 : isTablet ? 24 : isLaptop ? 28 : 30;
+    const rectSize = isSmallMobile ? 23 : isTablet ? 24 : isLaptop ? 28 : 30;
     const gap = isSmallMobile ? 6 : isTablet ? 7 : isLaptop ? 8 : 10;
 
     return (
         <div className={classes.heatmapContainer}>
             <Heatmap
-            data={heatmapData}
-            domain={[0, Math.max(...Object.values(heatmapData), 60)]} // Set domain based on max duration, with a minimum of 60 minutes for better color scaling
-            startDate={isSmallMobile ? mobileStartDate : startDate}
-            endDate={endDate}
-            withMonthLabels
-            withWeekdayLabels
-            withTooltip
-            rectSize={rectSize}
-            rectRadius={10}
-            gap={gap}
-            colors={[
-                'var(--mantine-color-yellow-1)',
-                'var(--mantine-color-yellow-2)',
-                'var(--mantine-color-yellow-3)',
-                'var(--mantine-color-yellow-4)',
-                'var(--mantine-color-yellow-5)',
-            ]}
-            getTooltipLabel={({date, value}) => `${date}: ${Math.floor((value ?? 0) / 60)} hours`}
+                data={heatmapData}
+                domain={[0, Math.max(...Object.values(heatmapData), 60)]} // Set domain based on max duration, with a minimum of 60 minutes for better color scaling
+                startDate={isSmallMobile ? mobileStartDate : startDate}
+                endDate={endDate}
+                withMonthLabels
+                withWeekdayLabels
+                withTooltip
+                rectSize={rectSize}
+                rectRadius={10}
+                gap={gap}
+                colors={[
+                    'var(--mantine-color-yellow-1)',
+                    'var(--mantine-color-yellow-2)',
+                    'var(--mantine-color-yellow-3)',
+                    'var(--mantine-color-yellow-4)',
+                    'var(--mantine-color-yellow-5)',
+                ]}
+                getTooltipLabel={({date, value}) => `${date}: ${Math.floor((value ?? 0) / 60)} hours`}
+                getRectProps={({ date, value }) => ({
+                    style: {cursor: value ? 'pointer' : 'pointer'},
+
+                    onClick: () => {
+                    if (!value) return;
+
+                    setSelectedDate(new Date(date));
+                    setOpened(true);
+                    },
+                })}
+            />
+
+            <SessionDayModal
+                opened={opened}
+                onClose={() => setOpened(false)}
+                selectedDate={selectedDate}
+                sessions={sessions.filter(s => isSameDay(s.date, selectedDate ?? new Date()))}
             />
         </div>
     )
