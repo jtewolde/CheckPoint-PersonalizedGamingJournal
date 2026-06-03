@@ -345,6 +345,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                             "Competitive",
                             "Frustrated",
                             "Excited",
+                            "Fun",
                             "Chill"
                         ]}
                         scrollAreaProps={{ type: 'auto', scrollbarSize: 16, scrollbars: 'y', color:'black',  classNames: { scrollbar: classes.scrollBar }}}
