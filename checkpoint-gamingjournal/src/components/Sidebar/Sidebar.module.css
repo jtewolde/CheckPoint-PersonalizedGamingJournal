@@ -1,0 +1,90 @@
+.sidebar {
+    width: 260px;
+    min-width: 260px;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 1rem;
+
+    background-color: #111827;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+
+    position: sticky;
+    top: 0;
+}
+
+.logoContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-bottom: 2rem;
+}
+
+.logo {
+    width: 180px;
+    height: auto;
+}
+
+.mobileLogo {
+    width: 50px;
+    height: auto;
+}
+
+.navlinks,
+.discoverLinks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.divider {
+    margin: 1rem 0;
+}
+
+.navlink {
+    display: flex;
+    align-items: center;
+
+    padding: 0.85rem 1rem;
+
+    border-radius: 12px;
+
+    color: #d1d5db;
+    text-decoration: none;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .navlink:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+
+    color: white;
+
+    transform: translateX(2px);
+}
+
+.active {
+    background-color: #4f46e5;
+    color: white;
+    font-weight: 600;
+}
+
+.active:hover {
+    background-color: #4f46e5;
+}
+
+.sectionTitle {
+    margin-bottom: 0.5rem;
+    padding-left: 1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #6b7280;
+    text-transform: uppercase;
+}
