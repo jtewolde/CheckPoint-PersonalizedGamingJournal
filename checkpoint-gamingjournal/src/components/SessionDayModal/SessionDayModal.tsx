@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { formatDate, isSameDay } from "@/utils/dateUtils";
-import { ActionIcon, Modal, Text, Tooltip, LoadingOverlay, Stack, Group, Badge } from "@mantine/core";
+import { ActionIcon, Modal, Text, Tooltip, LoadingOverlay, Stack, Group, Badge, Spoiler } from "@mantine/core";
 
 import { Trash2Icon, Pencil } from "lucide-react";
 import toast from 'react-hot-toast';
@@ -110,9 +110,11 @@ export default function SessionDayModal({ opened, onClose, selectedDate, session
                             </div>
 
                             {/* NOTES SECTION */}
-                            <Text size="sm" c="dimmed">
-                                {s.notes || "No notes"}
-                            </Text>
+                            <Spoiler maxHeight={100} showLabel="Show more" hideLabel="Show less" styles={{ control: { color: '#b9b5b5', fontWeight: 500, fontSize: '14px', marginBottom: '0.5rem'}}}>
+                                <Text size="sm" c="dimmed">
+                                    {s.notes || "No notes"}
+                                </Text>
+                            </Spoiler>
 
                             <div className={classes.tagContainer}>
                                 {/* ✅ TAGS SECTION */}
