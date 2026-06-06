@@ -106,12 +106,12 @@
 .mobileLink{
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
   justify-content: center;
   font-family: 'Poppins';
-  font-size: 34px;
+  font-size: 28px;
   width: auto;
-  color: #000000;
+  color: #ffffff;
 }
 
 .linkGroup{
@@ -129,7 +129,14 @@
   align-items: center; /* Center horizontally */
   justify-content: flex-start;
   gap: 20px;
-  text-align: center;
+  text-align: left;
+}
+
+.mobileLink:active{
+  border-bottom: 2px solid black;
+  border-radius: 0;
+  color: darkblue;
+  font-weight: bold;
 }
 
 .mobileLink:hover {
@@ -137,94 +144,10 @@
   color: #000000; /* Black text on hover */
 }
 
-.mobileSignInButton,
-.mobileSignUpButton,
-.mobileSignOutButton {
-  display: block;
-  line-height: 1;
-  padding: 8px 12px;
-  border-radius: var(--mantine-radius-sm);
-  border: 2px solid black;
-  text-decoration: none;
-  color: black;
-  background-color: #c6c1c3;
-  font-size: 20px;
-  font-weight: 400;
-  font-family: 'Poppins';
-  transition: background-color 0.3s, color 0.3s;
-  transition: width 0.2s;
-}
-
-.mobileSignInButton {
-  background-color: #dbe0de; /* Green background for Sign In */
-}
-
-.mobileSignUpButton {
-  background-color: #b7b4b5; /* Red background for Sign Up */
-}
-
-.mobileSignInButton:hover {
-  background-color: #2aed95; /* Darker green on hover */
-}
-
-.mobileSignUpButton:hover {
-  background-color: #e81b1b; /* Darker red on hover */
-}
-
-.mobileSignOutButton {
-  background-color: #e3101e; /* Red background for Sign Up */
-}
-
-.mobileSignOutButton:hover {
-  background-color: #aa1313; /* Darker red on hover */
-}
-
 .guestLinks{
   display: flex;
   align-items: center;
   gap: 16px;
-}
-
-.homeButton{
-  display: block;
-  line-height: 1;
-  padding: 8px 12px;
-  border: 2px solid black;
-  text-decoration: none;
-  color: black;
-  background-color: #d8d4d6;
-  font-size: 19px;
-  font-weight: 400;
-  font-family: 'Poppins';
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.signUpButton{
-  display: block;
-  line-height: 1;
-  padding: 8px 12px;
-  border: 2px solid black;
-  text-decoration: none;
-  color: black;
-  background-color: #e3101e;
-  font-size: 20px;
-  font-weight: 400;
-  font-family: 'Poppins';
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.signInButton{
-  display: block;
-  line-height: 1;
-  padding: 8px 12px;
-  border: 2px solid black;
-  text-decoration: none;
-  color: black;
-  background-color: #2aed95;
-  font-size: 19px;
-  font-weight: 400;
-  font-family: 'Poppins';
-  transition: background-color 0.3s, color 0.3s;
 }
 
 .drawer{
@@ -239,16 +162,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 9px;
-  padding: 1rem;
-}
-
-.guestMobileLinksContainer{
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 20px;
+  gap: 25px;
   padding: 1rem;
 }
 
@@ -274,24 +188,6 @@
   font-weight: bold;
 }
 
-.homeButton:hover{
-  background-color: rgba(0, 0, 0, 0.1);
-  background-color: #d8d4d6;
-  font-weight: bold;
-}
-
-.signInButton:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  background-color: #2aed95;
-  font-weight: bold;
-}
-
-.signUpButton:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  background-color: #e81b1b;
-  font-weight: bold;
-}
-
 .active {
   border-bottom: 4px solid rgb(255, 255, 255);
   color: rgb(255, 255, 255);
@@ -302,11 +198,4 @@
   border-bottom: 2px solid rgb(0, 0, 0);
   color: rgb(0, 0, 0);
   font-weight: 799
-}
-
-.mobileLink:active{
-  border-bottom: 2px solid black;
-  border-radius: 0;
-  color: darkblue;
-  font-weight: bold;
 }

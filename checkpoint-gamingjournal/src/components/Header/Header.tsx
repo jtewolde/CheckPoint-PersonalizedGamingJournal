@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { Burger, Group, Drawer, Image, Button } from '@mantine/core';
+import { Burger, Group, Drawer, Image, Button, Menu, Divider } from '@mantine/core';
 import { useDisclosure, useMediaQuery} from '@mantine/hooks';
 
 import CheckPointLogo from '../../../public/DesktopLogoNew.png';
@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { useAuth } from '@/context/Authcontext';
 
 import { IconSearch } from '@tabler/icons-react';
-import { LogIn, UserRoundPlus, LayoutDashboard, Library, Notebook, House } from 'lucide-react';
+import { LogIn, UserRoundPlus, LayoutDashboard, Library, Notebook, House, Timer, Star, Flame, Settings, LogOut } from 'lucide-react';
 import AvatarMenu from "../AvatarMenu/AvatarMenu";
 
 export function Header() {
@@ -24,13 +24,6 @@ export function Header() {
   const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
   const isMobile = useMediaQuery('(max-width: 455px)');
 
-  // Drawer height for different conditions
-  const drawerSize = (() => {
-    if (isMobile && isAuthenticated) return '270px'; // smaller when logged in on mobile
-    if (isMobile && !isAuthenticated) return '280px'; // larger when guest on mobile
-    return '300px'; // default for desktop
-  })();
-
   // Function to handle clicking the logo and redirecting user to dashboard or homepage based on authenication
   const handleLogoClick = async () => {
     if(isAuthenticated){
@@ -39,6 +32,57 @@ export function Header() {
       router.push('/')
     }
   }
+
+  // Define the navigation links with their labels, icons, and hrefs
+  const navLinks = [
+      { label: 'Dashboard', icon: <LayoutDashboard size={20} />, href: '/dashboard' },
+      { label: 'Library', icon: <Library size={20} />, href: '/library' },
+      { label: 'Journal', icon: <Notebook size={20} />, href: '/journal' },
+      { label: 'Discover', icon: <IconSearch size={20} />, href: '/search', links: [
+        { label: 'Popular', icon: <Star size={20} />, href: '/search/popular' },
+        { label: 'Trending', icon: <Flame size={20} />, href: '/search/trending' },
+      ]},
+  ]
+
+  // Define the guest navigation links with their labels, icons, and hrefs
+  const guestNavLinks = [
+      { label: 'Home', icon: <House size={20} />, href: '/' },
+      { label: 'Discover', icon: <IconSearch size={20} />, href: '/search'},
+      { label: 'Sign In', icon: <LogIn size={20} />, href: '/auth/signin' },
+      { label: 'Register', icon: <UserRoundPlus size={20} />, href: '/auth/signup'},
+  ]
+  
+  // Define the discover links with their labels, icons, and hrefs
+  const mobileGuestLinks = [
+      { label: 'Home', icon: <House size={20} />, href: '/' },
+      { label: 'Sign In', icon: <LogIn size={20} />, href: '/auth/signin' },
+      { label: 'Register', icon: <UserRoundPlus size={20} />, href: '/auth/signup'},
+      { label: 'Search Games', icon: <IconSearch size={20} />, href: '/search' },
+      { label: 'Popular Games', icon: <Star size={20} />, href: '/search/popular' },
+      { label: 'Trending Games', icon: <Flame size={20} />, href: '/search/trending' },
+  ]
+
+  // Define links for when user is on mobile and signed in
+  const mobileAuthLinks = {
+    main: [
+      { label: 'Dashboard', icon: <LayoutDashboard size={20} />, href: '/dashboard' },
+      { label: 'Library', icon: <Library size={20} />, href: '/library' },
+      { label: 'Journal', icon: <Notebook size={20} />, href: '/journal' },
+      { label: 'Sessions', icon: <Timer size={20} />, href: '/sessions' },
+    ],
+
+    discover: [
+      { label: 'Search', icon: <IconSearch size={20} />, href: '/search' },
+      { label: 'Popular', icon: <Star size={20} />, href: '/search/popular' },
+      { label: 'Trending', icon: <Flame size={20} />, href: '/search/trending' },
+    ],
+
+    account: [
+      { label: 'Profile', icon: <UserRoundPlus size={20} />, href: '/profile' },
+      { label: 'Settings', icon: <Settings size={20} />, href: '/settings'},
+      { label: 'Log Out', icon: <LogOut size={20} />, href: '/'}
+    ],
+};
 
   return (
     <header className={classes.header}>
@@ -57,67 +101,180 @@ export function Header() {
           <Group gap='lg' visibleFrom='sm' justify='flex-end' className={classes.linkGroup}>
             {isAuthenticated ? (
               <>
+              {navLinks.map((link) => {
+                if (link.label === 'Discover') {
+                  return (
+                    <Menu
+                      key={link.href}
+                      trigger="hover"
+                      openDelay={100}
+                      closeDelay={200}
+                      shadow="md"
+                      width={220}
+                    >
+                      <Menu.Target>
+                        <div
+                          className={`${classes.link} ${
+                            pathname === '/search' ||
+                            pathname === '/search/popular' ||
+                            pathname === '/search/trending'
+                              ? classes.active
+                              : ''
+                          }`}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <div
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                            }}
+                          >
+                            {link.icon}
+                            {link.label}
+                          </div>
+                        </div>
+                      </Menu.Target>
 
-                <Link href="/dashboard" className={`${classes.link} ${pathname === '/dashboard' ? classes.active : ''}`}>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <LayoutDashboard size={20} style={{ marginBottom: 2 }} />
-                    Dashboard
-                  </div>
-                </Link>
+                      <Menu.Dropdown>
+                        <Menu.Item
+                          component={Link}
+                          href="/search"
+                          leftSection={<IconSearch size={20} color='white' />}
+                        >
+                          Search Games
+                        </Menu.Item>
 
-                <Link href="/library" className={`${classes.link} ${pathname === '/library' ? classes.active : ''}`}>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <Library size={20} style={{ marginBottom: 2 }} />
-                    Library
-                  </div>
-                </Link>
+                        <Menu.Item
+                          component={Link}
+                          href="/search/popular"
+                          leftSection={<Star size={20} color='#e4c61d'/>}
+                        >
+                          Popular Games
+                        </Menu.Item>
 
-                <Link href="/journal" className={`${classes.link} ${pathname === '/journal' ? classes.active : ''}`}>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <Notebook size={20} style={{ marginBottom: 2 }} />
-                    Journal
-                  </div>
-                </Link>
+                        <Menu.Item
+                          component={Link}
+                          href="/search/trending"
+                          leftSection={<Flame size={20} color='#ff8c00'/>}
+                        >
+                          Trending Games
+                        </Menu.Item>
+                      </Menu.Dropdown>
+                    </Menu>
+                  );
+                }
 
-                <Link href="/search" className={`${classes.link} ${pathname === '/search' ? classes.active : ''}`}>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <IconSearch size={20} style={{ marginBottom: 2 }} />
-                    Search
-                  </div>
-                </Link>
-
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`${classes.link} ${
+                      pathname === link.href ? classes.active : ''
+                    }`}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                      }}
+                    >
+                      {link.icon}
+                      {link.label}
+                    </div>
+                  </Link>
+                );
+              })}
               </>
             ) : (
               <>
                 <div className={classes.guestLinks}>
-                  <Link href="/" className={`${classes.link} ${pathname === '/' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <House size={20} style={{ marginBottom: 2 }} />
-                      Home
-                    </div>
-                  </Link>
+                  {guestNavLinks.map((link) => {
+                    if (link.label === 'Discover') {
+                      return (
+                        <Menu
+                          key={link.href}
+                          trigger="hover"
+                          openDelay={100}
+                          closeDelay={200}
+                          shadow="md"
+                          width={220}
+                        >
+                          <Menu.Target>
+                            <div
+                              className={`${classes.link} ${
+                                pathname === '/search' ||
+                                pathname === '/search/popular' ||
+                                pathname === '/search/trending'
+                                  ? classes.active
+                                  : ''
+                              }`}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                {link.icon}
+                                {link.label}
+                              </div>
+                            </div>
+                          </Menu.Target>
 
-                  <Link href="/search" className={`${classes.link} ${pathname === '/search' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <IconSearch size={20} style={{ marginBottom: 2 }} />
-                      Search
-                    </div>
-                  </Link>
+                          <Menu.Dropdown>
+                            <Menu.Item
+                              component={Link}
+                              href="/search"
+                              leftSection={<IconSearch size={20} color='white'/>}
+                            >
+                              Search Games
+                            </Menu.Item>
 
-                  <Link href="/auth/signin" className={`${classes.link} ${pathname === '/auth/signin' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <LogIn size={20} style={{ marginBottom: 2 }} />
-                      Sign In
-                    </div>
-                  </Link>
+                            <Menu.Item
+                              component={Link}
+                              href="/search/popular"
+                              leftSection={<Star size={20} color='#e4c61d'/>}
+                            >
+                              Popular Games
+                            </Menu.Item>
 
-                  <Link href="/auth/signup" className={`${classes.link} ${pathname === '/auth/signup' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <UserRoundPlus size={20} style={{ marginBottom: 2 }} />
-                      Register
-                    </div>
-                  </Link>
+                            <Menu.Item
+                              component={Link}
+                              href="/search/trending"
+                              leftSection={<Flame size={20} color='#ff8c00'/>}
+                            >
+                              Trending Games
+                            </Menu.Item>
+                          </Menu.Dropdown>
+                        </Menu>
+                      );
+                    }
 
+                    return (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className={`${classes.link} ${
+                          pathname === link.href ? classes.active : ''
+                        }`}
+                      >
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                          }}
+                        >
+                          {link.icon}
+                          {link.label}
+                        </div>
+                      </Link>
+                    );
+                  })}
                 </div>
               </>
             )}
@@ -144,8 +301,9 @@ export function Header() {
         <Drawer
           opened={opened}
           onClose={close}
-          position='top'
-          size={drawerSize}
+          position='left'
+          withCloseButton={false}
+          size={isMobile ? (isAuthenticated ? '270px' : '280px') : '300px'} // Adjust size based on conditions
           className={classes.drawer}
           styles={{
             content: {
@@ -160,61 +318,57 @@ export function Header() {
             }
           }}
         >
-          <div className={classes.linkSpacing}>
 
+          <div className={classes.logoContainer}>
+              <Image src={CheckPointLogo.src} alt="CheckPoint Logo" className={classes.logo} style={{cursor: 'pointer'}} />
+          </div>
+
+          <Divider my='sm' color='grey' />
+
+          <div className={classes.linkSpacing}>
             {isAuthenticated ? (
               <>
-                <div className={classes.mobileLinksContainer} >
+                <div className={classes.mobileLinksContainer}>
 
-                  <Link href="/dashboard" className={`${classes.link} ${pathname === '/dashboard' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
-                      <LayoutDashboard size={20} style={{ marginBottom: 2 }} />
-                      Dashboard
-                    </div>
-                  </Link>
+                  <Divider label='Main' labelPosition='left' size='lg' styles={{label: { fontSize: '18px'}}} />
 
-                  <Link href="/library" className={`${classes.link} ${pathname === '/library' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
-                      <Library size={20} style={{ marginBottom: 2 }} />
-                      Library
-                    </div>
-                  </Link>
+                  {mobileAuthLinks.main.map((link) => (
+                    <>
+                      <Link key={link.href} href={link.href} className={`${classes.link} ${pathname === link.href ? classes.active : ''}`}>
+                        <div className={classes.mobileLink}>
+                          {link.icon}
+                          {link.label}
+                        </div>
+                      </Link>
+                    </>
+                  ))}
 
-                  <Link href="/journal" className={`${classes.link} ${pathname === '/journal' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
-                      <Notebook size={20} style={{ marginBottom: 2 }} />
-                      Journal
-                    </div>
-                  </Link>
+                  <Divider label='Discover Games' labelPosition='left' size='lg' my='sm' styles={{ label: { fontSize: '18px' } }} />
+
+                  {mobileAuthLinks.discover.map((link) => (
+                    <>
+                      <Link key={link.href} href={link.href} className={`${classes.link} ${pathname === link.href ? classes.active : ''}`}>
+                        <div className={classes.mobileLink}>
+                          {link.icon}
+                          {link.label}
+                        </div>
+                      </Link>
+                    </>
+                  ))}
 
                 </div>
-
               </>
             ) : (
-              <>
                 <div className={classes.guestMobileLinksContainer} >
-                  <Link href="/" className={`${classes.link} ${pathname === '/' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '20px' }}>
-                      <House size={20} style={{ marginBottom: 2 }} />
-                      Home
-                    </div>
-                  </Link>
-
-                  <Link href="/auth/signin" className={`${classes.link} ${pathname === '/auth/signin' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '20px' }}>
-                      <LogIn size={20} style={{ marginBottom: 2 }} />
-                      Sign In
-                    </div>
-                  </Link>
-
-                  <Link href="/auth/signup" className={`${classes.link} ${pathname === '/auth/signup' ? classes.active : ''}`}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '20px' }}>
-                      <UserRoundPlus size={20} style={{ marginBottom: 2 }} />
-                      Register
-                    </div>
-                  </Link>
+                  {mobileGuestLinks.map((link) => (
+                    <Link key={link.href} href={link.href} className={`${classes.link} ${pathname === link.href ? classes.active : ''}`}>
+                      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px' }}>
+                        {link.icon}
+                        {link.label}
+                      </div>
+                    </Link>
+                  ))}
                 </div>
-              </>
             )}
           </div>
         </Drawer>
