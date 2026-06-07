@@ -1,11 +1,13 @@
-import { Menu, Avatar } from "@mantine/core";
-import { LogOut, User, CircleHelp, Settings } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
+
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import { useState, useEffect} from "react";
-import toast from "react-hot-toast";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/context/Authcontext";
+import { authClient } from "@/lib/auth-client";
+
+import { Menu, Avatar } from "@mantine/core";
+import { LogOut, User, CircleHelp, Settings } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function AvatarMenu(){
     const router = useRouter();
@@ -41,7 +43,6 @@ export default function AvatarMenu(){
     };
 
     return(
-
         <Menu width={200} shadow="md" position='bottom-start'>
 
             <Menu.Target>

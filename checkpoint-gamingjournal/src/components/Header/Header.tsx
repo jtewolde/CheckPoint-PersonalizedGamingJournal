@@ -11,10 +11,12 @@ import classes from './Header.module.css';
 import Link from 'next/link';
 
 import { useAuth } from '@/context/Authcontext';
+import { authClient } from '@/lib/auth-client';
 
 import { IconSearch } from '@tabler/icons-react';
 import { LogIn, UserRoundPlus, LayoutDashboard, Library, Notebook, House, Timer, Star, Flame, Settings, LogOut } from 'lucide-react';
 import AvatarMenu from "../AvatarMenu/AvatarMenu";
+import toast from 'react-hot-toast';
 
 export function Header() {
   const [opened, { toggle, close }] = useDisclosure(false); // State for Drawer
@@ -22,7 +24,7 @@ export function Header() {
   const pathname = usePathname();
 
   const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
-  const isMobile = useMediaQuery('(max-width: 455px)');
+  const isMobile = useMediaQuery('(max-width: 520px)');
 
   // Function to handle clicking the logo and redirecting user to dashboard or homepage based on authenication
   const handleLogoClick = async () => {
@@ -32,6 +34,18 @@ export function Header() {
       router.push('/')
     }
   }
+
+  // Function to handle sign out for authenticated users
+  const handleSignOut = async () => {
+      const { error } = await authClient.signOut();
+      if (error) {
+          console.error('Error signing out:', error);
+      } else {
+          setIsAuthenticated(false);
+          router.push('/'); // Redirect to home page after sign out
+          toast.success('Signed out successfully!'); // Show success toast      
+      }
+  };
 
   // Define the navigation links with their labels, icons, and hrefs
   const navLinks = [
@@ -65,22 +79,22 @@ export function Header() {
   // Define links for when user is on mobile and signed in
   const mobileAuthLinks = {
     main: [
-      { label: 'Dashboard', icon: <LayoutDashboard size={20} />, href: '/dashboard' },
-      { label: 'Library', icon: <Library size={20} />, href: '/library' },
-      { label: 'Journal', icon: <Notebook size={20} />, href: '/journal' },
-      { label: 'Sessions', icon: <Timer size={20} />, href: '/sessions' },
+      { label: 'Dashboard', icon: <LayoutDashboard size={25} />, href: '/dashboard' },
+      { label: 'Library', icon: <Library size={25} />, href: '/library' },
+      { label: 'Journal', icon: <Notebook size={25} />, href: '/journal' },
+      { label: 'Sessions', icon: <Timer size={25} />, href: '/sessions' },
     ],
 
     discover: [
-      { label: 'Search', icon: <IconSearch size={20} />, href: '/search' },
-      { label: 'Popular', icon: <Star size={20} />, href: '/search/popular' },
-      { label: 'Trending', icon: <Flame size={20} />, href: '/search/trending' },
+      { label: 'Search', icon: <IconSearch size={25} />, href: '/search' },
+      { label: 'Popular', icon: <Star size={25} />, href: '/search/popular' },
+      { label: 'Trending', icon: <Flame size={25} />, href: '/search/trending' },
     ],
 
     account: [
-      { label: 'Profile', icon: <UserRoundPlus size={20} />, href: '/profile' },
-      { label: 'Settings', icon: <Settings size={20} />, href: '/settings'},
-      { label: 'Log Out', icon: <LogOut size={20} />, href: '/'}
+      { label: 'Profile', icon: <UserRoundPlus size={25} />, href: '/settings/profile' },
+      { label: 'Settings', icon: <Settings size={25} />, href: '/settings', color: '#999b99'},
+      { label: 'Log Out', icon: <LogOut size={25} color='red' />, href: '/', onClick: handleSignOut, color: '#f05345'}
     ],
 };
 
@@ -282,16 +296,8 @@ export function Header() {
         </div>
 
         <Group gap="xs">
-          <Button
-            hiddenFrom='sm'
-            variant="subtle"
-            onClick={() => router.push('/search')}
-            aria-label="Search"
-          >
-            <IconSearch size={35} color='white'/>
-          </Button>
-
-          {isAuthenticated && <AvatarMenu />}
+    
+          {isAuthenticated && !isMobile ? <AvatarMenu /> : null}
 
           {/* Mobile Links */}
           <Burger className={classes.burger} opened={opened} onClick={toggle} hiddenFrom="sm" size="md" color='white' />
@@ -343,17 +349,26 @@ export function Header() {
                     </>
                   ))}
 
-                  <Divider label='Discover Games' labelPosition='left' size='lg' my='sm' styles={{ label: { fontSize: '18px' } }} />
+                  <Divider label='Discover Games' labelPosition='left' size='lg' styles={{ label: { fontSize: '18px', fontFamily: 'Poppins' } }} />
 
                   {mobileAuthLinks.discover.map((link) => (
-                    <>
                       <Link key={link.href} href={link.href} className={`${classes.link} ${pathname === link.href ? classes.active : ''}`}>
                         <div className={classes.mobileLink}>
                           {link.icon}
                           {link.label}
                         </div>
                       </Link>
-                    </>
+                  ))}
+
+                  <Divider label='Account' labelPosition='left' size='lg' styles={{ label: { fontSize: '18px', fontFamily: 'Poppins' }}} />
+
+                  {mobileAuthLinks.account.map((link) => (
+                    <Link key={link.href} href={link.href} className={`${classes.link} ${pathname === link.href ? classes.active : ''}`}>
+                      <div className={classes.mobileLink} style={link.label === 'Log Out' ? {color: '#f05345'} : link.label === 'Settings' ? {color: '#aeaeae'} : {}} >
+                        {link.icon}
+                        {link.label}
+                      </div>
+                    </Link>
                   ))}
 
                 </div>
