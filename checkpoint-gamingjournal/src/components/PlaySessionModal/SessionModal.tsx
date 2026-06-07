@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Modal, Divider, Stack, Button, TextInput, LoadingOverlay, NumberInput, Select, MultiSelect, Textarea } from "@mantine/core";
-import { DateInput, DatePickerInput } from "@mantine/dates";
+import { DatePickerInput } from "@mantine/dates";
 
 import toast from "react-hot-toast";
 

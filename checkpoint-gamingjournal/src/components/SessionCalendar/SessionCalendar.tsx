@@ -8,7 +8,7 @@ import SessionDayModal from "../SessionDayModal/SessionDayModal";
 
 import { Calendar } from "@mantine/dates"
 
-import { Indicator, Modal, Stack, Text, Group, ActionIcon, Badge, Tooltip, LoadingOverlay } from "@mantine/core";
+import { Indicator } from "@mantine/core";
 import { Trash2Icon, Pencil } from "lucide-react";
 
 import toast from "react-hot-toast";
