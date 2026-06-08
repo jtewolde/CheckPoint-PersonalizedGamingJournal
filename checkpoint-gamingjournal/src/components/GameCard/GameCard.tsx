@@ -7,10 +7,10 @@ import { useLibraryGame } from '@/hooks/useLibraryGame';
 import { useAuth } from '@/context/Authcontext';
 import PlaySessionModal from '../PlaySessionModal/SessionModal';
 
-import { Badge, Text, Image, Tooltip, ActionIcon, Rating } from '@mantine/core';
+import { Badge, Pill, Text, Image, Tooltip, ActionIcon, Rating, Group, OverflowList } from '@mantine/core';
 import toast from 'react-hot-toast';
 
-import { Plus, Minus, Ellipsis, Trophy, ClipboardEdit } from 'lucide-react';
+import { Plus, Minus, Ellipsis, Trophy, ClipboardEdit, Star } from 'lucide-react';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 import classes from './GameCard.module.css';
@@ -27,7 +27,7 @@ interface GameCardProps {
         cover?: {url: string;};
         game_type?: {type: string;};
         genres?: {name: string;}[];
-        platforms?: {name: string;}[];
+        platforms?: {name: string; abbreviation?: string;}[];
         release_dates?: {human: string;}[];
         first_release_date?: number;
         total_rating?: number;
@@ -57,7 +57,7 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
     const [opened, {open, close} ] = useDisclosure(false);
 
     const router = useRouter();
-    const isMobile = useMediaQuery('(max-width: 450px)');
+    const isMobile = useMediaQuery('(max-width: 480px)');
 
     // Determine the cover image URL or use a placeholder if not available
     const coverImage = game.cover
@@ -67,6 +67,11 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
     // State variables for determing if current gameCard is in the user's library
     const {isInLibrary, loading} = useLibraryGame(game.id);
     const [addingToLibrary, setAddingtoLibrary] = useState(false)
+
+    // Prepare platform data for display, showing up to 3 platforms and indicating if there are more.
+    const platforms = game.platforms ?? [];
+    const visiblePlatforms = platforms.slice(0, 3);
+    const remainingPlatforms = platforms.length - visiblePlatforms.length;
 
     // Function to handle quick adding and removing games from the user's library.
     const handleQuickToggle = async (gameId: string) => {
@@ -143,9 +148,23 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
                 className={classes.cover}  
                 />
 
-                <div className={classes.overlay}>
+                {variant === 'default' && (
+                    <Badge 
+                        className={classes.ratingBadge}
+                        variant='dot' 
+                        color={game.total_rating && game.total_rating >= 80 ? '#2b8d08' : game.total_rating && game.total_rating >= 70 ? 'yellow' : '#e30000'}
+                        radius='md'
+                        size='sm'
+                    >
+                        <Group gap={5} align='center' >
+                            <Star size={12} color='gold' fill='gold'/> 
+                            {game.total_rating ? `${Math.round(game.total_rating)}` : 'N/A'}
+                        </Group>
+                        
+                    </Badge>
+                )}
 
-                    <Text className={classes.gameName}>{game.name}</Text>
+                <div className={classes.overlay}>
 
                     <div className={classes.quickButtons}>
 
@@ -191,11 +210,14 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
 
             {variant === 'library' && (
                 <div className={classes.gameInfo}>
+
+                    <h3 className={classes.gameTitle}>{game.name}</h3>
+
                     <Badge 
                     className={classes.badge} 
                     color={libraryMeta?.status === 'Completed' ? 'green' : libraryMeta?.status === 'Playing' ? 'blue' : libraryMeta?.status === 'On Hold' ? 'red' : libraryMeta?.status === 'Dropped' ? 'red' : libraryMeta?.status === 'Plan to Play' ? 'yellow': libraryMeta?.status === 'No Status Given' ? 'gray' : 'dark'} 
                     variant='filled'
-                    size='md'
+                    size='sm'
                     radius='sm'
                     >
                         {libraryMeta?.status || "No Status"}
@@ -227,27 +249,65 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
 
             {variant === 'default' && (
                 <div className={classes.gameInfo}>
-                    <h3 className={classes.gameTitle}>{game.name}</h3>
-                    <div className={classes.ratingTypeSection}>
-                        <Badge size='md' variant='filled' color='#767575'>{game.game_type?.type}</Badge>
-                        <Badge 
-                        className={classes.badge}
-                        variant='filled' 
-                        color={game.total_rating && game.total_rating >= 80 ? 'green' : game.total_rating && game.total_rating >= 70 ? 'yellow' : '#e30000'}
-                        radius='md'
-                        size='md'
-                        >
-                            {game.total_rating ? `${Math.round(game.total_rating)}` : 'N/A'}
-                        </Badge>
-                    </div>
 
-                    <div className={classes.badgeContainer}>
-                        {game.genres?.slice(0, 2).map((genre: { name: string }) => (
-                            <Badge key={genre.name} size="md" variant="filled" color="white" radius='lg' c='black'>
-                                {genre.name}
+                    <h3 className={classes.gameTitle}>{game.name}</h3>
+
+                    <OverflowList
+                        data={game.genres ?? []}
+                        maxVisibleItems={3}
+                        renderItem={(genre) => (
+                            <Badge
+                            key={genre.name}
+                            size={'sm'}
+                            variant="filled"
+                            color="#2e2e2e"
+                            radius="lg"
+                            >
+                            {genre.name}
                             </Badge>
-                        ))}
-                    </div>
+                        )}
+                        renderOverflow={(overflowItems) => (
+                            <Badge
+                            size={isMobile ? 'xs' : 'md'}
+                            color='#808080'
+                            variant="light"
+                            radius="lg"
+                            >
+                            +{overflowItems.length} More
+                            </Badge>
+                        )}
+                    />
+                    
+                    {/* <OverflowList
+                        data={game.platforms ?? []}
+                        maxVisibleItems={3}
+                        renderItem={(platform) => (
+                            <Badge
+                            key={platform.abbreviation}
+                            size="md"
+                            variant="filled"
+                            color="#292728"
+                            radius="lg"
+                            >
+                            {platform.abbreviation}
+                            </Badge>
+                        )}
+                        renderOverflow={(overflowItems) => (
+                            <Badge
+                            size="md"
+                            variant="light"
+                            radius="lg"
+                            color='#726d6c'
+                            >
+                            +{overflowItems.length}
+                            </Badge>
+                        )}
+                    /> */}
+
+                    <p className={classes.gamePlatforms}>
+                        {visiblePlatforms.map((p) => p.abbreviation || p.name).join(' • ')}
+                        {remainingPlatforms > 0 && ` +${remainingPlatforms}`}
+                    </p>
 
                     <p className={classes.gameDate}>{game.first_release_date ? new Date(game.first_release_date * 1000).toLocaleDateString('en-US', {
                         year: 'numeric',

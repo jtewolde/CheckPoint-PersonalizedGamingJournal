@@ -1,6 +1,6 @@
 .gameCard{
-    background-color: #2b2b2b;
-    border: 1px solid #585757;
+    background-color: #181818;
+    border: 1px solid #2d2c2c;
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -8,7 +8,7 @@
     align-self: center;
     margin: 0 auto;
     height: auto;
-    width: 300px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -21,8 +21,8 @@
 }
 
 .library{
-    background-color: #2b2b2b;
-    border: 1px solid #585757;
+    background-color: #181818;
+    border: 1px solid #2d2c2c;
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -36,36 +36,6 @@
     overflow: hidden;
 }
 
-.gameInfo{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 0.5rem;
-    width: 100%;
-    padding: 0.5rem;
-}
-
-.gameTitle{
-    font-size: 1.2rem;
-    font-weight: 800;
-    color: white;
-    padding-top: 0.5rem;
-    font-family: 'Inter';
-    line-height: normal;
-    width: 100%;
-}
-
-.gameGenres{
-    font-size: 1rem;
-    font-weight: 400;
-    color:rgb(156, 155, 155);
-    font-family: 'Poppins';
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-
 .ratingSection{
     display: flex;
     flex-direction: row;
@@ -73,18 +43,9 @@
     gap: 8px;
 }
 
-.badge {
-    opacity: 1;
-    padding: 4px 8px; /* Add some padding for better appearance */
-    border-radius: 4px; /* Optional: Add rounded corners */
-    font-size: 0.8rem; /* Adjust the font size */
-    font-family: 'Poppins';
-}
-
 .imageWrapper {
     position: relative;
-    width: 100%;
-    height: 100%;
+    aspect-ratio: 3/4;
     overflow: hidden;
     cursor: pointer;
     flex-shrink: 0;
@@ -101,6 +62,14 @@
     object-fit: cover;
     border-bottom: 1px solid #585757;
     border-radius: 8px 8px 0 0;
+}
+
+.ratingBadge{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 5;
+    backdrop-filter: blur(6px);
 }
 
 .overlay {
@@ -141,26 +110,40 @@
     transform: scale(1);
 }
 
-.gameName {
-    color: white;
-    font-size: 1.3rem;
-    font-family: 'Noto Sans';
-    font-weight: 600;
-    text-align: center;
-    padding: 0 8px;
-}
-
 .gameInfo{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    gap: 10px;
+    gap: 12px;
     width: 100%;
     padding: 0.75rem;
     flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.gameTitle{
+    width: 100%;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    font-family: 'Inter';
+    line-height: 1.2;
+    margin: 0;
+}
+
+.gameDate, .gamePlatforms{
+    font-size: 13px;
+    font-weight: 500;
+    color: rgb(157, 154, 154);
+    font-family: 'Barlow';
+    cursor: default;
+    margin: 0;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .badgeContainer{
@@ -179,35 +162,8 @@
     gap: 0.5rem;
 }
 
-.badge{
-    font-size: 14px;
-}
-
-.gameTitle{
-    width: 100%;
-    min-width: 0;
-    font-size: 1.14rem;
-    font-weight: 800;
-    color: white;
-    font-family: 'Inter';
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    line-height: 1.2;
-    margin: 0;
-}
-
-.gameDate, .gamePlatforms{
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: rgb(222, 221, 221);
-    font-family: 'Barlow';
-    cursor: default;
-    margin: 0;
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.gameCard:hover {
+    border-color: #dedce4;
 }
 
 .gameCard:hover .gameName {
@@ -227,11 +183,12 @@
     }
 
     .gameTitle{
-        font-size: 1.4rem;
+        font-size: 0.9rem;
+        color: white;
     }
 
     .gameDate{
-        font-size: 1.2rem;
+        font-size: 13px;
     }
 
     .imageWrapper {
