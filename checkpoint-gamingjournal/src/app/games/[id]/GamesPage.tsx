@@ -1039,7 +1039,7 @@ export default function GameDetails() {
               navigation={true}
               pagination={{clickable: true}}
               modules={[Navigation, Pagination]}
-              slidesPerView={isMobile ? 1.4 : 3}
+              slidesPerView={isMobile ? 1.4 : 5}
               spaceBetween={20}
               className={classes.swiperContainer}
             >
