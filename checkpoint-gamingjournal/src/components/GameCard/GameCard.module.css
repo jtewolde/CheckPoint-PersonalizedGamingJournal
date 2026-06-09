@@ -133,7 +133,19 @@
     margin: 0;
 }
 
-.gameDate, .gamePlatforms{
+.gamePlatforms{
+    font-size: 13px;
+    font-weight: 500;
+    color: rgb(206, 204, 204);
+    font-family: 'Barlow';
+    cursor: default;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.gameDate{
     font-size: 13px;
     font-weight: 500;
     color: rgb(157, 154, 154);

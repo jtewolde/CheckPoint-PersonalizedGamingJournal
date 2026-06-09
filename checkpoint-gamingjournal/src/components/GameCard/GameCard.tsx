@@ -7,10 +7,10 @@ import { useLibraryGame } from '@/hooks/useLibraryGame';
 import { useAuth } from '@/context/Authcontext';
 import PlaySessionModal from '../PlaySessionModal/SessionModal';
 
-import { Badge, Pill, Text, Image, Tooltip, ActionIcon, Rating, Group, OverflowList } from '@mantine/core';
+import { Badge, Text, Image, Tooltip, ActionIcon, Rating, Group, OverflowList } from '@mantine/core';
 import toast from 'react-hot-toast';
 
-import { Plus, Minus, Ellipsis, Trophy, ClipboardEdit, Star } from 'lucide-react';
+import { Plus, Minus, Ellipsis, Trophy, ClipboardEdit, Star, Clock } from 'lucide-react';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 import classes from './GameCard.module.css';
@@ -38,6 +38,7 @@ interface GameCardProps {
     libraryMeta?: {
         status?: string;
         rating?: number;
+        duration?: number;
         platinum?: boolean;
         completionDate?: string;
     }
@@ -214,11 +215,11 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
                     <h3 className={classes.gameTitle}>{game.name}</h3>
 
                     <Badge 
-                    className={classes.badge} 
-                    color={libraryMeta?.status === 'Completed' ? 'green' : libraryMeta?.status === 'Playing' ? 'blue' : libraryMeta?.status === 'On Hold' ? 'red' : libraryMeta?.status === 'Dropped' ? 'red' : libraryMeta?.status === 'Plan to Play' ? 'yellow': libraryMeta?.status === 'No Status Given' ? 'gray' : 'dark'} 
-                    variant='filled'
-                    size='sm'
-                    radius='sm'
+                        className={classes.badge} 
+                        color={libraryMeta?.status === 'Completed' ? 'green' : libraryMeta?.status === 'Playing' ? 'blue' : libraryMeta?.status === 'On Hold' ? 'red' : libraryMeta?.status === 'Dropped' ? 'red' : libraryMeta?.status === 'Plan to Play' ? 'yellow': libraryMeta?.status === 'No Status Given' ? 'gray' : 'dark'} 
+                        variant='filled'
+                        size='sm'
+                        radius='sm'
                     >
                         {libraryMeta?.status || "No Status"}
                     </Badge>
