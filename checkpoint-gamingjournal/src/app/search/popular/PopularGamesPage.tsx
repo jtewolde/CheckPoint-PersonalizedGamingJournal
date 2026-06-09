@@ -15,7 +15,8 @@ import classes from './Popular.module.css';
 export default function PopularPage() {
 
   const [page, setPage] = useState(1) // start with page 1 for pagination
-  const limit = 32; // Set the limit of games on page to 32
+  const limit = 36; // Set the limit of games on page to 32
+
   // Create skeletons array which length is the value of limit
   const skeletons = Array.from({ length: limit });
 
@@ -105,8 +106,6 @@ export default function PopularPage() {
   return (
     <div className={classes.wrapper} >
 
-      <div className={classes.backgroundOverlay}>
-
         <div className={classes.mainContent}>
 
           <div className={classes.headerSection}>
@@ -127,7 +126,7 @@ export default function PopularPage() {
 
             <GameFilters
               variant='default'
-              color='#3697d4ff'
+              color='rgb(120, 120, 120)'
               size={isMobile ? 'md' : 'lg'}
               radius='md'
               totalGames={total}
@@ -148,7 +147,7 @@ export default function PopularPage() {
           </div>
 
 
-          <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4 }} spacing="lg" verticalSpacing='xl' className={classes.resultGamesGrid}>
+          <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4 }} spacing="lg" verticalSpacing='xl' className={classes.gamesGrid}>
                 {loading && games.length === 0
                   ? skeletons.map((_, i) => (
                       <GameSkeletonCard
@@ -156,12 +155,9 @@ export default function PopularPage() {
                       variant={isMobile ? "small" : "default"}
                       />
                   ))
-                  : games.map((game) =>
-                      isMobile ? (
-                        <GameCard key={game.id} game={game} variant="small" />
-                      ) : (
-                        <GameCard key={game.id} game={game} />
-                      )
+                  : games.map((game) =>(
+                      <GameCard key={game.id} game={game} />
+                    )
                   )}
             </SimpleGrid>
 
@@ -184,7 +180,6 @@ export default function PopularPage() {
               </div>
             )}
         </div>
-      </div>
     </div>
   );
 }
