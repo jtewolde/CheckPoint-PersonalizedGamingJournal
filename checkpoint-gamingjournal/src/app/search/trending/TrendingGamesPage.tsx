@@ -15,7 +15,7 @@ import classes from './Trending.module.css';
 export default function TrendingPage() {
 
   const [page, setPage] = useState(1) // start with page 1 for pagination
-  const limit = 32; // Set the limit of games on page to 32
+  const limit = 36; // Set the limit of games on page to 32
   
   // Create skeletons array which length is the value of limit
   const skeletons = Array.from({ length: limit });
@@ -107,8 +107,6 @@ export default function TrendingPage() {
   return (
     <div className={classes.wrapper}>
 
-      <div className={classes.backgroundOverlay}>
-
         <div className={classes.mainContent}>
 
           <div className={classes.headerSection}>
@@ -149,7 +147,7 @@ export default function TrendingPage() {
 
           </div>
 
-          <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4 }} spacing="lg" verticalSpacing='xl' className={classes.gamesGrid}>
+          <SimpleGrid cols={{ base: 1, xs: 2, sm: 3, md: 4 }} spacing="lg" verticalSpacing='xl' className={classes.gamesGrid}>
               {loading && games.length === 0
                 ? skeletons.map((_, i) => (
                     <GameSkeletonCard
@@ -158,11 +156,7 @@ export default function TrendingPage() {
                     />
                 ))
                 : games.map((game) =>
-                    isMobile ? (
-                      <GameCard key={game.id} game={game} variant="small" />
-                    ) : (
-                      <GameCard key={game.id} game={game} />
-                    )
+                  <GameCard key={game.id} game={game} />
                 )}
           </SimpleGrid>
 
@@ -184,8 +178,7 @@ export default function TrendingPage() {
                   />
               </div>
             )}
-        </div>   
-      </div>  
+        </div>    
     </div>
   );
 }
