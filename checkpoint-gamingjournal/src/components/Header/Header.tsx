@@ -251,7 +251,7 @@ export function Header() {
                             <Menu.Item
                               component={Link}
                               href="/search/popular"
-                              leftSection={<Star size={20} color='#e4c61d'/>}
+                              leftSection={<Star size={20} color='#e4c61d' fill='#e4c61d'/>}
                             >
                               Popular Games
                             </Menu.Item>
@@ -259,7 +259,7 @@ export function Header() {
                             <Menu.Item
                               component={Link}
                               href="/search/trending"
-                              leftSection={<Flame size={20} color='#ff8c00'/>}
+                              leftSection={<Flame size={20} color='#ff8c00' fill='#ff8c00'/>}
                             >
                               Trending Games
                             </Menu.Item>
