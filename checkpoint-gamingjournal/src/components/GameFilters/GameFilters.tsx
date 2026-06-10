@@ -127,10 +127,6 @@ export default function GameFilters({
                     </ActionIcon>
                 )}
 
-            <Text className={classes.totalFiltersText} color='white'>
-                {totalGames} Games
-            </Text>
-
             </div>
 
             {/* Drawer component to hold the filter options, slides in from left */}
