@@ -23,7 +23,7 @@ type GamePageSearchProps = {
 };
 
 export default function GamePageSearch({
-    placeHolder = "Search for games...",
+    placeHolder = "Search for games on this page...",
     size = "lg",
     radius = 'md',
     className,
