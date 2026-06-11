@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { MultiSelect, Select, Drawer, Stack, Button, Text, ActionIcon, Tooltip, Badge, Group } from "@mantine/core";
+import { MultiSelect, Select, Drawer, Stack, Button, ActionIcon, Tooltip, Divider } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { ListFilter, RefreshCcw } from "lucide-react";
 import classes from './GameFilters.module.css';
@@ -105,26 +105,30 @@ export default function GameFilters({
             <div className={classes.filterTopRow}>
 
                 {variant === 'default' && (
-                    <Button 
-                    className={classes.filterButton} 
-                    size={size} 
-                    radius={radius} 
-                    color={color} 
-                    leftSection={<ListFilter size={30} />} 
-                    onClick={toggle}>
-                        Filters ({numberOfActiveFilters})
-                    </Button>
+                    <Tooltip label='Apply Filters' position="top">
+                        <Button 
+                        className={classes.filterButton} 
+                        size={size} 
+                        radius={radius} 
+                        color={color} 
+                        leftSection={<ListFilter size={30} />} 
+                        onClick={toggle}>
+                            Filters ({numberOfActiveFilters})
+                        </Button>
+                    </Tooltip>
                 )}
 
                 {variant === 'small' && (
-                    <ActionIcon
-                    size={size}
-                    radius={radius}
-                    color={color}
-                    onClick={toggle}
-                    >
-                        <ListFilter size={30} />
-                    </ActionIcon>
+                    <Tooltip label='Apply Filters' position="top">
+                        <ActionIcon
+                        size={size}
+                        radius={radius}
+                        color={color}
+                        onClick={toggle}
+                        >
+                            <ListFilter size={30} />
+                        </ActionIcon>
+                    </Tooltip>
                 )}
 
             </div>
@@ -155,6 +159,8 @@ export default function GameFilters({
                         color: 'white'
                     }
                 }}
+                removeScrollProps={{ allowPinchZoom: true }}
+                keepMounted
             >
 
                 <Stack className={classes.drawerFilters} gap='xs' justify='center' mt={20}>
@@ -497,6 +503,8 @@ export default function GameFilters({
                         className={classes.filterSelect}
                         mb="md"
                     />
+
+                    <Divider color="lightgray" my='md' />
 
                     <div className={classes.buttonActions}>
                         <Tooltip label='Clear Filters' position="top">
