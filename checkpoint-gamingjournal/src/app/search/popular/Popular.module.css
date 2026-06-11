@@ -37,13 +37,11 @@
 
 /* Search results heading */
 .titleText {
-    font-size: 3rem;
+    font-size: 56px;
     font-weight: 700;
     color: white; /* Dark text for contrast */
     text-align: left;
-    font-family: 'Barlow';
-    text-decoration: underline;
-    text-underline-offset: 10px;
+    font-family: 'Noto Sans';
     letter-spacing: 1px;
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
@@ -54,26 +52,61 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    gap: 1.2rem;
+    gap: 5px;
 }
 
 .description {
-    color: var(--mantine-color-white);
+    color: #bdbbbb;
     font-weight: 400;
     text-align: left;
-    font-family: 'Noto Sans';
+    font-family: 'Barlow';
+    font-size: 24px;
     max-width: 900px;
+}
 
-    @media (max-width: $mantine-breakpoint-sm) {
-        max-width: 100%;
-        font-size: 18px;
-    }
+.toolbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    width: 100%;
+
+    padding: 1rem;
+
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+}
+
+.toolbarContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.searchContainer{
+    flex: 1;
+}
+
+.filterContainer{
+    flex-shrink: 0;
+}
+
+.resultsText{
+    font-family: 'Inter';
+    font-size: 20px;
+    font-weight: 300;
+    justify-self: flex-end;
 }
 
 /* Grid layout for game cards */
 .gamesGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(193px, 1fr));
     gap: 1rem;
 }
 

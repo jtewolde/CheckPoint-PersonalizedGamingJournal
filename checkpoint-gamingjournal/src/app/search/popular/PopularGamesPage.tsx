@@ -5,8 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useMediaQuery } from '@mantine/hooks';
 
 import GameFilters from '@/components/GameFilters/GameFilters';
+import ActiveFilters from '@/components/ActiveFilters/ActiveFilters';
 import GameCard from '@/components/GameCard/GameCard';
 import GameSkeletonCard from '@/components/GameCard/GameSkeletonCard';
+import GamePageSearch from '@/components/GamePageSearch/GamePageSearch';
 
 import { Text, SimpleGrid, Pagination } from '@mantine/core';
 
@@ -31,6 +33,8 @@ export default function PopularPage() {
   const [length, setLength] = useState("")
   const [loading, setLoading] = useState(true); // State to handle loading
 
+  const [search, setSearch] = useState('');
+
   // States to handle sorting and filtering search results
   const [sortOption, setSortOption] = useState<'first_release_date' | 'total_rating' | 'alphabetical' | ''>('first_release_date'); // State to sort search results from release date/total_rating
   const [selectedType, setSelectedType] = useState<string[]>([]);
@@ -54,54 +58,59 @@ export default function PopularPage() {
   ]);
 
   useEffect(() => {
-      const fetchPopularGames = async () => {
-          try {
-              setLoading(true)
-              const offset = (page - 1) * limit; // calculate offset based on page
+    const fetchPopularGames = async () => {
+      try {
+          setLoading(true)
+          const offset = (page - 1) * limit; // calculate offset based on page
 
-              // Create the params of URL to include the sorting and filters applied
-              const params = new URLSearchParams({
-                  limit: String(limit),
-                  offset: String(offset),
-                  sort: sortOption,
-                  types: selectedType.join(','),
-                  genres: selectedGenre.join(','),
-                  themes: selectedTheme.join(','),
-                  modes: selectedMode.join(','),
-                  platforms: selectedPlatform.join(',')
-              });
+          // Create the params of URL to include the sorting and filters applied
+          const params = new URLSearchParams({
+              limit: String(limit),
+              offset: String(offset),
+              sort: sortOption,
+              types: selectedType.join(','),
+              genres: selectedGenre.join(','),
+              themes: selectedTheme.join(','),
+              modes: selectedMode.join(','),
+              platforms: selectedPlatform.join(',')
+          });
 
-              const res = await fetch(`/api/igdb/popular-games?${params.toString()}`);
+          const res = await fetch(`/api/igdb/popular-games?${params.toString()}`);
 
-              if (!res.ok) {
-                  throw new Error('Failed to fetch games');
-              }
-
-              const data = await res.json();
-
-              setGames(data.games);
-              setLength(data.length);
-              setTotal(data.total)
-
-              console.log("Game Results", data.games)
-              console.log("Total Count", data.total)
-          } catch (error) {
-              console.error('Error fetching games:', error);
-          } finally {
-              setLoading(false);
+          if (!res.ok) {
+              throw new Error('Failed to fetch games');
           }
-      };
 
-      fetchPopularGames();
+          const data = await res.json();
 
-    }, [page,
-        sortOption,
-        selectedGenre,
-        selectedMode,
-        selectedPlatform,
-        selectedTheme,
-        selectedType
-    ]);
+          setGames(data.games);
+          setLength(data.length);
+          setTotal(data.total)
+
+          console.log("Game Results", data.games)
+          console.log("Total Count", data.total)
+      } catch (error) {
+          console.error('Error fetching games:', error);
+      } finally {
+          setLoading(false);
+      }
+    };
+
+    fetchPopularGames();
+
+  }, [page,
+      sortOption,
+      selectedGenre,
+      selectedMode,
+      selectedPlatform,
+      selectedTheme,
+      selectedType
+  ]);
+
+  // Filter the popular games results if using search bar
+  const filteredGames = games.filter((game) =>
+    game.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className={classes.wrapper} >
@@ -114,51 +123,88 @@ export default function PopularPage() {
 
               <div className={classes.titleLogo}>
 
-                <h1 className={classes.titleText}>Popular Games:</h1>
+                <h1 className={classes.titleText}>Popular Games</h1>
 
               </div>
 
-              <Text className={classes.description} size="xl">
+              <Text className={classes.description}>
                 Explore the most popular games that define today’s gaming scene. 
               </Text>
 
             </div>
 
-            <GameFilters
-              variant='default'
-              color='rgb(120, 120, 120)'
-              size={isMobile ? 'md' : 'lg'}
-              radius='md'
-              totalGames={total}
-              sortOption={sortOption}
-              selectedType={selectedType}
-              selectedGenres={selectedGenre}
-              selectedThemes={selectedTheme}
-              selectedModes={selectedMode}
-              selectedPlatforms={selectedPlatform}
-              onSortChange={(v) => setSortOption(v as any)}
-              onTypeChange={(v) => setSelectedType(v as any)}
-              onGenresChange={(v) => setSelectedGenre(v as any)}
-              onThemesChange={(v) => setSelectedTheme(v as any)}
-              onModesChange={(v) => setSelectedMode(v as any)}
-              onPlatformsChange={(v) => setSelectedPlatform(v as any)}
+            <div className={classes.toolbar}>
+
+              <div className={classes.toolbarContainer}>
+                
+                <div className={classes.searchContainer}>
+                  <GamePageSearch size='lg' radius='lg' value={search} onChange={setSearch}/>
+                </div>
+                
+                <div className={classes.filterContainer}>
+                  <GameFilters
+                    variant='small'
+                    color='rgb(58, 57, 57)'
+                    size='xl'
+                    radius='md'
+                    totalGames={total}
+                    sortOption={sortOption}
+                    selectedType={selectedType}
+                    selectedGenres={selectedGenre}
+                    selectedThemes={selectedTheme}
+                    selectedModes={selectedMode}
+                    selectedPlatforms={selectedPlatform}
+                    onSortChange={(v) => setSortOption(v as any)}
+                    onTypeChange={(v) => setSelectedType(v as any)}
+                    onGenresChange={(v) => setSelectedGenre(v as any)}
+                    onThemesChange={(v) => setSelectedTheme(v as any)}
+                    onModesChange={(v) => setSelectedMode(v as any)}
+                    onPlatformsChange={(v) => setSelectedPlatform(v as any)}
+                  />
+                </div>
+
+              </div>
+
+              <ActiveFilters
+                selectedTypes={selectedType}
+                selectedGenres={selectedGenre}
+                selectedThemes={selectedTheme}
+                selectedModes={selectedMode}
+                selectedPlatforms={selectedPlatform}
+                onTypeChange={setSelectedType}
+                onGenresChange={setSelectedGenre}
+                onThemesChange={setSelectedTheme}
+                onModesChange={setSelectedMode}
+                onPlatformsChange={setSelectedPlatform}
+                onClearAll={() => {
+                    setSelectedType([]);
+                    setSelectedGenre([]);
+                    setSelectedTheme([]);
+                    setSelectedMode([]);
+                    setSelectedPlatform([]);
+                }}
             />
+
+            </div>
+
+            <Text className={classes.resultsText}>
+              Showing {filteredGames.length} of {total.toLocaleString()} games
+            </Text>
 
           </div>
 
-
-          <SimpleGrid cols={{ base: 2, xs: 2, sm: 3, md: 4 }} spacing="lg" verticalSpacing='xl' className={classes.gamesGrid}>
-                {loading && games.length === 0
-                  ? skeletons.map((_, i) => (
-                      <GameSkeletonCard
-                      key={i}
-                      variant={isMobile ? "small" : "default"}
-                      />
-                  ))
-                  : games.map((game) =>(
-                      <GameCard key={game.id} game={game} />
-                    )
-                  )}
+          <SimpleGrid spacing="lg" verticalSpacing='xl' className={classes.gamesGrid}>
+            {loading && games.length === 0
+              ? skeletons.map((_, i) => (
+                  <GameSkeletonCard
+                  key={i}
+                  variant={isMobile ? "small" : "default"}
+                  />
+              ))
+              : filteredGames.map((game) =>(
+                  <GameCard key={game.id} game={game} />
+                )
+              )}
             </SimpleGrid>
 
             {total == 0 && (
