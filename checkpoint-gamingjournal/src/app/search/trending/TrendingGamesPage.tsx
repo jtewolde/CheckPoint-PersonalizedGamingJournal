@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useMediaQuery } from '@mantine/hooks';
 
 import GameFilters from '@/components/GameFilters/GameFilters';
+import GamePageSearch from '@/components/GamePageSearch/GamePageSearch';
+import ActiveFilters from '@/components/ActiveFilters/ActiveFilters';
 import GameSkeletonCard from '@/components/GameCard/GameSkeletonCard';
 import GameCard from '@/components/GameCard/GameCard';
 
@@ -24,6 +26,8 @@ export default function TrendingPage() {
   // Calcualte the total number of pages for pagination
   const [total, setTotal] = useState(0)
   const totalPages = Math.ceil(total/limit)
+
+  const [search, setSearch] = useState('');
 
   const isMobile = useMediaQuery('(max-width: 520px)');
 
@@ -104,8 +108,13 @@ export default function TrendingPage() {
       selectedType
   ]);
 
+  // Filter the popular games results if using search bar
+  const filteredGames = games.filter((game) =>
+    game.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
-    <div className={classes.wrapper}>
+    <div className={classes.wrapper} >
 
         <div className={classes.mainContent}>
 
@@ -119,48 +128,88 @@ export default function TrendingPage() {
 
               </div>
 
-              <Text className={classes.description} size="xl">
-                The most popular and buzzworthy games that are currently trending in the gaming community.
+              <Text className={classes.description}>
+                  Explore the hottest games capturing attention today.
+                  From breakout hits to rising favorites, see what's trending across the gaming world.
               </Text>
 
             </div>
 
-            <GameFilters
-              variant='default'
-              totalGames={total}
-              color="#546782ff"
-              size={isMobile ? 'md' : 'lg'}
-              radius='md'
-              sortOption={sortOption}
-              selectedType={selectedType}
-              selectedGenres={selectedGenre}
-              selectedThemes={selectedTheme}
-              selectedModes={selectedMode}
-              selectedPlatforms={selectedPlatform}
-              onSortChange={(v) => setSortOption(v as any)}
-              onTypeChange={(v) => setSelectedType(v as any)}
-              onGenresChange={(v) => setSelectedGenre(v as any)}
-              onThemesChange={(v) => setSelectedTheme(v as any)}
-              onModesChange={(v) => setSelectedMode(v as any)}
-              onPlatformsChange={(v) => setSelectedPlatform(v as any)}
+            <div className={classes.toolbar}>
+
+              <div className={classes.toolbarContainer}>
+                
+                <div className={classes.searchContainer}>
+                  <GamePageSearch size='lg' radius='lg' value={search} onChange={setSearch}/>
+                </div>
+                
+                <div className={classes.filterContainer}>
+                  <GameFilters
+                    variant='small'
+                    color='rgb(58, 57, 57)'
+                    size='xl'
+                    radius='md'
+                    totalGames={total}
+                    sortOption={sortOption}
+                    selectedType={selectedType}
+                    selectedGenres={selectedGenre}
+                    selectedThemes={selectedTheme}
+                    selectedModes={selectedMode}
+                    selectedPlatforms={selectedPlatform}
+                    onSortChange={(v) => setSortOption(v as any)}
+                    onTypeChange={(v) => setSelectedType(v as any)}
+                    onGenresChange={(v) => setSelectedGenre(v as any)}
+                    onThemesChange={(v) => setSelectedTheme(v as any)}
+                    onModesChange={(v) => setSelectedMode(v as any)}
+                    onPlatformsChange={(v) => setSelectedPlatform(v as any)}
+                  />
+                </div>
+
+              </div>
+
+              <ActiveFilters
+                selectedTypes={selectedType}
+                selectedGenres={selectedGenre}
+                selectedThemes={selectedTheme}
+                selectedModes={selectedMode}
+                selectedPlatforms={selectedPlatform}
+                onTypeChange={setSelectedType}
+                onGenresChange={setSelectedGenre}
+                onThemesChange={setSelectedTheme}
+                onModesChange={setSelectedMode}
+                onPlatformsChange={setSelectedPlatform}
+                onClearAll={() => {
+                    setSelectedType([]);
+                    setSelectedGenre([]);
+                    setSelectedTheme([]);
+                    setSelectedMode([]);
+                    setSelectedPlatform([]);
+                }}
             />
+
+            </div>
+
+            <Text className={classes.resultsText}>
+              Showing {filteredGames.length} of {total.toLocaleString()} games
+            </Text>
 
           </div>
 
-          <SimpleGrid cols={{ base: 1, xs: 2, sm: 3, md: 4 }} spacing="lg" verticalSpacing='xl' className={classes.gamesGrid}>
-              {loading && games.length === 0
-                ? skeletons.map((_, i) => (
-                    <GameSkeletonCard
-                    key={i}
-                    variant={isMobile ? "small" : "default"}
-                    />
-                ))
-                : games.map((game) =>
+          <SimpleGrid spacing="lg" verticalSpacing='xl' className={classes.gamesGrid}>
+            {loading && games.length === 0
+              ? skeletons.map((_, i) => (
+                  <GameSkeletonCard
+                  key={i}
+                  variant={isMobile ? "small" : "default"}
+                  />
+              ))
+              : filteredGames.map((game) =>(
                   <GameCard key={game.id} game={game} />
-                )}
-          </SimpleGrid>
+                )
+              )}
+            </SimpleGrid>
 
-          {total == 0 && (
+            {total == 0 && (
                 <p className={classes.noResultsText}>No games were found.</p>
             )}
             
@@ -173,12 +222,12 @@ export default function TrendingPage() {
                       value={page}
                       onChange={(newPage) => {
                           setPage(newPage);
-                          router.push(`/search/trending?&page=${newPage}`);
+                          router.push(`/search/popular?&page=${newPage}`);
                       }}
                   />
               </div>
             )}
-        </div>    
+        </div>
     </div>
   );
 }
