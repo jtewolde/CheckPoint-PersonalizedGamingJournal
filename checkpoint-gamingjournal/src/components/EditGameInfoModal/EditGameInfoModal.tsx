@@ -6,7 +6,7 @@ import { DatePickerInput } from "@mantine/dates";
 
 import toast from "react-hot-toast";
 
-import { Gamepad2, Gamepad, X, CalendarDays, Check, Pause, Clock, Wand } from 'lucide-react';
+import { Gamepad2, CalendarDays, Check, Pause, Clock, Wand, Star, Trophy, Play, PowerOff } from 'lucide-react';
 
 import classes from './EditGameInfoModal.module.css';
 
@@ -55,7 +55,6 @@ export default function EditGameInfoModal({ opened, onClose, libraryGames, game,
         try{
             setLoading(true);
             const token = localStorage.getItem('bearer_token');
-            console.log("Active Game ID", activeGame)
 
             const res = await fetch(`/api/library/${activeGame?.gameId}`, {
                 method: 'PATCH',
@@ -97,38 +96,52 @@ export default function EditGameInfoModal({ opened, onClose, libraryGames, game,
         {
             value: 'Playing',
             label: 'Playing',
-            description: "Currently playing and making progress in the game.",
-            icon: <Gamepad size={25} color='lime' />,
-            color: 'green'
+            description: "Currently playing and actively progressing in the game.",
+            icon: <Play size={25} color='#1969b9'fill="#1969b9" />,
+            color: '#1969b9'
         },
         {
             value: 'Completed',
             label: 'Completed',
-            description: "Finished the game, having completed the main storyline or achieved the end goals.",
-            icon: <Check size={25} color='gold'/>,
-            color: 'gold'
+            description: "Finished the main story or reached the game's primary ending",
+            icon: <Check size={25} color='#27a01c'/>,
+            color: '#27a01c'
+            },
+        {
+            value: '100%',
+            label: '100% Complete',
+            description: 'Completed all major content, achievements, collectibles, and optional objectives',
+            icon: <Trophy size={25} fill="yellow" color="yellow"/>,
+            color: 'yellow'
         },
         {
             value: 'On Hold',
             label: 'On Hold',
-            description: "Temporarily paused playing the game, with the intention to return to it later.",
-            icon: <Pause size={25} color='violet'/>,
+            description: 'Taking a break from the game with plans to return later.',
+            icon: <Pause size={25} color="violet" fill="violet"/>,
             color: 'violet'
         },
         {
             value: 'Dropped',
             label: 'Dropped',
-            description: "Stopped playing the game without the intention to return",
-            icon: <X size={25} color='red'/>,
+            description: 'Stopped playing and do not currently plan to continue.',
+            icon: <PowerOff size={25} color="red"/>,
             color: 'red'
         },
         {
-            value: 'Plan to Play',
-            label: 'Plan to Play',
-            description: "Have intentions to play the game in the future but haven't started yet.",
-            icon: <Clock size={25} color='rgb(20, 147, 231)'/>,
-            color: 'blue'
+            value: 'Wishlist',
+            label: 'Wishlist',
+            description: "Interested in playing this game in the future.",
+            icon: <Star size={25} color='rgb(231, 210, 20)' fill="rgb(231, 210, 20)"/>,
+            color: 'gold'
         },
+        {
+            value: 'Backlog',
+            label: 'Backlog',
+            description: "Own or intend to play this game, but not have started it yet.",
+            icon: <Clock size={25} color="#21eebe"/>,
+            color: 'orange'
+        }
     ]
 
     // Function to render the options in the Select component with their respective icons and descriptions for each game status 
@@ -137,7 +150,7 @@ export default function EditGameInfoModal({ opened, onClose, libraryGames, game,
             return statusItem ? ( 
                 <Group gap='sm'> 
                     {statusItem.icon} 
-                    <Text size='lg' fw={600}>{statusItem.label}</Text> 
+                    <Text size='md' fw={600}>{statusItem.label}</Text> 
                     <Text size='xs' c='dimmed'>{statusItem.description}</Text> 
                 </Group> 
             ) : null; 

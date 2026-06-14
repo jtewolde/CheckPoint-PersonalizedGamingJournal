@@ -122,7 +122,7 @@ export const auth = betterAuth({
             status: {
                 type: "string",
                 required: false,
-                enum: ["playing", "completed", "on_hold", "dropped", "plan_to_play", "wishlist"],
+                enum: ["playing", "completed", "100%", "on_hold", "dropped", "backlog", "wishlist"],
                 defaultValue: "No Status Given",
             },
             platinum: {
