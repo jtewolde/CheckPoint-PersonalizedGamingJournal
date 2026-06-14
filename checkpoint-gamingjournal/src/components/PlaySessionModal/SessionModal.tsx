@@ -68,17 +68,6 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
         setPlatform('');
     };
 
-    // Helper function to parse the date from the date input in the modal to display correct date
-    const parseLocalDate = (dateString: string) => {
-        const date = new Date(dateString);
-
-        return new Date(
-            date.getUTCFullYear(),
-            date.getUTCMonth(),
-            date.getUTCDate()
-        );
-    };
-
     // Fetch the user's library of games to populate the select dropdown
     useEffect(() => {
         if(!gameId && opened){
@@ -352,7 +341,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                         size="md"
                         label="Mood"
                         description="How did you feel during this session?"
-                        placeholder="(e.g. Fun, Frustrating, Relaxing, Nostalgic)"
+                        placeholder="(e.g. Fun, Frustrating, Relaxing)"
                         value={mood}
                         onChange={(value) => {
                             setMood(value || '')

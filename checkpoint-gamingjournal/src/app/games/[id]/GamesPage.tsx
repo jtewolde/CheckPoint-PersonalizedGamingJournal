@@ -621,7 +621,7 @@ export default function GameDetails() {
                             <Rating readOnly size='lg' fractions={2} value={rating}/>
                           </div>
 
-                          <Modal opened={opened} onClose={close} title="Change Game Info" styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #424242', color: 'white', fontFamily: 'Noto Sans'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
+                          <Modal opened={opened} onClose={close} title="Change Game Info" styles={{content: {border: '1px solid #424242', color: 'white', fontFamily: 'Noto Sans'}, close: {color: 'white'}}}>
                             <Stack gap='md'>
 
                               <Select
