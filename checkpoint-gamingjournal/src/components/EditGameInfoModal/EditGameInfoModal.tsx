@@ -82,6 +82,8 @@ export default function EditGameInfoModal({ opened, onClose, libraryGames, game,
             const data = await res.json();
             console.log("PATCH INFO: ", data)
             toast.success('Game info updated to successfully');
+            
+            setLoading(false);
             onSuccess?.();
             onClose();
 
@@ -212,14 +214,10 @@ export default function EditGameInfoModal({ opened, onClose, libraryGames, game,
 
                 <Select
                     className={classes.statusSelect}
-                    label="Status:"
+                    label="Status"
                     placeholder="Select game status"
+                    description="Track your current progress and relationship with this game."
                     size='md'
-                    styles={{
-                        wrapper: { color: '#212121'}, 
-                        input: { color: 'white', background: '#212121'}, 
-                        dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
-                    }}
                     scrollAreaProps={{ scrollbarSize: 16, type: 'auto', scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
                     value={status}
                     onChange={(value) => {
@@ -237,6 +235,7 @@ export default function EditGameInfoModal({ opened, onClose, libraryGames, game,
 
                     <DatePickerInput
                         size='md'
+                        placeholder="(e.g. 5/27/2026)"
                         label="Start Date"
                         description='Select the date that you started playing'
                         clearable
@@ -250,6 +249,7 @@ export default function EditGameInfoModal({ opened, onClose, libraryGames, game,
 
                     <DatePickerInput
                         size='md'
+                        placeholder="(e.g. 6/15/2026)"
                         label="Completion Date"
                         description='Select the date when you completed the game'
                         clearable
@@ -264,11 +264,14 @@ export default function EditGameInfoModal({ opened, onClose, libraryGames, game,
                 </Group>
 
                 <Textarea
+                    size="sm"
                     label="Notes"
                     placeholder="Add notes about this game..."
+                    description="Record thoughts, goals, memorable moments, achievements, or anything you'd like to remember."
                     value={notes}
                     onChange={(e) => setNotes(e.currentTarget.value)}
-                    minRows={4}
+                    minRows={2}
+                    autosize
                     disabled={!activeGame}
                 />
 
