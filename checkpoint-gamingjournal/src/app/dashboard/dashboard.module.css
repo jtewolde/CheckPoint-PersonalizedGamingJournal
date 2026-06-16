@@ -37,29 +37,38 @@
 
 .dashboardHeader{
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
   margin-bottom: 1rem;
   gap: 0.4rem;
 }
 
 .heroContainer{
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: center;
   gap: 1rem;
 }
 
 .welcomeText{
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 400;
   text-align: left;
   font-family: 'Inter';
   font-style: italic;
   color: #dfdcdc;
   width: auto;
+}
+
+.quickActionGroup{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+  margin-top: 1rem;
 }
 
 .dashboardTitle{
@@ -100,26 +109,6 @@
   gap: 0.8rem;
 }
 
-.logButton{
-  width: auto;
-  align-self: center;
-}
-
-.viewMoreIcon{
-  justify-self: flex-end;
-  align-self: center;
-  color: #a7a7a7;
-  font-size: 100%;
-  font-weight: 500;
-  font-family: 'Poppins';
-  margin-top: 0.4rem;
-}
-
-.viewMoreIcon:hover{
-  color: #ffffff;
-  font-weight: 600;
-}
-
 .gamesPlayingText,
 .profileTitle{
   font-family: 'Inter';
@@ -129,13 +118,6 @@
   /* Responsive font size: min 1.2rem, scales with viewport width, max 2rem */
   font-size: clamp(1.8rem, 2vw + 0.5rem, 4rem);
   text-wrap: balance;
-}
-
-.gamesPlayingText:hover{
-  color: white;
-  font-weight: 900;
-  cursor: pointer;
-  border-bottom: 2px solid white;
 }
 
 .statCards {
@@ -485,6 +467,7 @@
   }
 
   .dashboardHeader{
+    flex-direction: column;
     align-items: flex-start;
     text-align: center;
     width: auto;
