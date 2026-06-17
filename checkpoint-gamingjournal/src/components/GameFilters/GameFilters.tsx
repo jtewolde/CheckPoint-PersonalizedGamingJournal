@@ -467,9 +467,7 @@ export default function GameFilters({
                     <Divider color="lightgray" my='md' />
 
                     <div className={classes.buttonActions}>
-                        <Tooltip label='Clear Filters' position="top">
-                            <ActionIcon variant="filled" color="red" size='lg' onClick={handleClearFilters}><RefreshCcw size={20} /></ActionIcon>
-                        </Tooltip>
+                        <Button className={classes.clearButton} variant="filled" color="red" size='md' leftSection={<RefreshCcw size={20} />} onClick={handleClearFilters}>Clear</Button>
 
                         <Button className={classes.saveButton} size="md" onClick={handleApplyFilters}>Update Filters</Button>
                     </div>

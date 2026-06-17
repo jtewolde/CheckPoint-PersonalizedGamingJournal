@@ -22,11 +22,12 @@
 .filterButton{
   width: auto;
   font-family: 'Noto Sans';
-  font-size: 20px;
+  font-weight: 400;
+  font-size: 18px;
   border: 1px solid black;
 }
 
-.saveButton{
+.saveButton, .clearButton{
   font-family: 'Poppins';
   font-weight: 400;
 }
