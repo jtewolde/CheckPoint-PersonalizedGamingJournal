@@ -53,7 +53,15 @@ export default function GamePageSearch({
                 size={size}
                 radius={radius}
                 className={classes.input}
-                leftSection={<IconSearch size={25} />}
+                variant="filled"
+                leftSection={<IconSearch size={25} color="white"/>}
+                styles={{
+                    input:{
+                        backgroundColor: '#1b1b1b',
+                        color: 'white',
+                        border: '1px solid #2a2828'
+                    }
+                }}
             />
         </div>
     )
