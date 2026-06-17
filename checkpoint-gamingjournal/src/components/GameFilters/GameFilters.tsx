@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { MultiSelect, Select, Drawer, Stack, Button, ActionIcon, Tooltip, Divider } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { ListFilter, RefreshCcw } from "lucide-react";
+import { Funnel, RefreshCcw } from "lucide-react";
 import classes from './GameFilters.module.css';
 
 type GameFiltersVariant = 'default' | 'small'
@@ -111,7 +111,7 @@ export default function GameFilters({
                         size={size} 
                         radius={radius} 
                         color={color} 
-                        leftSection={<ListFilter size={30} />} 
+                        leftSection={<Funnel size={30} />} 
                         onClick={toggle}>
                             Filters ({numberOfActiveFilters})
                         </Button>
@@ -126,7 +126,7 @@ export default function GameFilters({
                         color={color}
                         onClick={toggle}
                         >
-                            <ListFilter size={30} />
+                            <Funnel size={30} />
                         </ActionIcon>
                     </Tooltip>
                 )}
@@ -164,46 +164,6 @@ export default function GameFilters({
             >
 
                 <Stack className={classes.drawerFilters} gap='xs' justify='center' mt={20}>
-
-                    {/* Sort By Dropdown */}
-                    <Select
-                        size='md'
-                        label="Sort By:"
-                        placeholder="Select an option"
-                        checkIconPosition='left'
-                        styles={{
-                            dropdown: {
-                                background: '#212121',
-                                color: 'whitesmoke'
-                            },
-                            input: {
-                                background: '#212121',
-                                fontFamily: 'Noto Sans',
-                                color: 'white'
-                            },
-                            option: {
-                                background: '#212121',
-                                fontFamily: 'Noto Sans',
-                                fontSize: '16px',
-                                fontWeight: 330
-                            },
-                            label: {
-                                fontFamily: 'Noto Sans',
-                                color: 'white',
-                                fontSize: '20px',
-                                fontWeight: 300
-                            }
-                        }}
-                        data={[
-                            { value: 'alphabetical', label: 'Alphabetical (A-Z)'},
-                            { value: 'first_release_date', label: 'Release Date' },
-                            { value: 'total_rating', label: "Total Rating"},
-                        ]}
-                        value={sortOption}
-                        onChange={onSortChange}
-                        className={classes.filterDropdown}
-                        mb="md"
-                    />
                     
                     {/* Filter by Game Type with MultiSelect */}
                     <MultiSelect

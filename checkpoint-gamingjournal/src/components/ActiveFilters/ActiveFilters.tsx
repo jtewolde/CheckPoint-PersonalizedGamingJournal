@@ -72,6 +72,8 @@ export default function ActiveFilters({
                         <Pill
                             key={value}
                             withRemoveButton
+                            color="blue"
+                            size="md"
                             onRemove={() => setter(values.filter((v) => v !== value))}
                         >
                             {value}
