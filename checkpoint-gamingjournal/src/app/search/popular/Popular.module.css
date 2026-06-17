@@ -66,41 +66,50 @@
 
 .toolbar {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: 1rem;
 
     width: 100%;
+    margin-top: 0.6rem;
+    margin-bottom: 0.6rem;
 
-    padding: 1rem;
-
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.08);
     border-radius: 12px;
 }
 
-.toolbarContainer{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
+.searchContainer{
     width: 100%;
 }
 
-.searchContainer{
-    flex: 1;
+.actionRow{
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
 }
 
 .filterContainer{
+    display: flex;
+    align-items: flex-end;
     flex-shrink: 0;
+    gap: 1rem;
+}
+
+.resultsContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
 }
 
 .resultsText{
     font-family: 'Inter';
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 300;
-    justify-self: flex-end;
+
+    flex-shrink: 0;
 }
 
 /* Grid layout for game cards */
@@ -157,6 +166,31 @@
 
     .description{
         font-size: 18px;
+    }
+
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    .searchContainer {
+        width: 100%;
+    }
+
+    .sortContainer,
+    .filterContainer {
+        flex: 1;
+    }
+
+    .actionRow {
+        display: flex;
+        gap: 0.75rem;
+        width: 100%;
+    }
+
+    .filterDropdown {
+        width: 100%;
     }
     
 }

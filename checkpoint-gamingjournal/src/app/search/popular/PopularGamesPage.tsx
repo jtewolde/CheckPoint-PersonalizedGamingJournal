@@ -10,7 +10,7 @@ import GameCard from '@/components/GameCard/GameCard';
 import GameSkeletonCard from '@/components/GameCard/GameSkeletonCard';
 import GamePageSearch from '@/components/GamePageSearch/GamePageSearch';
 
-import { Text, SimpleGrid, Pagination } from '@mantine/core';
+import { Text, SimpleGrid, Pagination, Select } from '@mantine/core';
 
 import classes from './Popular.module.css';
 
@@ -134,18 +134,43 @@ export default function PopularPage() {
             </div>
 
             <div className={classes.toolbar}>
+              
+              <div className={classes.searchContainer}>
+                <GamePageSearch size='lg' radius='md' value={search} onChange={setSearch}/>
+              </div>
 
-              <div className={classes.toolbarContainer}>
-                
-                <div className={classes.searchContainer}>
-                  <GamePageSearch size='lg' radius='lg' value={search} onChange={setSearch}/>
+              <div className={classes.actionRow}>
+
+                <div className={classes.sortContainer}>
+                  {/* Sort By Dropdown */}
+                    <Select
+                      className={classes.filterDropdown}
+                      size='lg'
+                      variant='filled'
+                      placeholder="Select an option"
+                      checkIconPosition='left'
+                      data={[
+                          { value: 'alphabetical', label: 'Alphabetical (A-Z)'},
+                          { value: 'first_release_date', label: 'Release Date' },
+                          { value: 'total_rating', label: "Total Rating"},
+                      ]}
+                      value={sortOption}
+                      onChange={(value) => setSortOption(value as 'first_release_date' | 'total_rating' | 'alphabetical' | '')}
+                      styles={{
+                        input:{
+                            backgroundColor: '#1b1b1b',
+                            color: 'white',
+                            border: '1px solid #2a2828'
+                        }
+                      }}
+                    />
                 </div>
                 
                 <div className={classes.filterContainer}>
                   <GameFilters
-                    variant='small'
-                    color='rgb(58, 57, 57)'
-                    size='xl'
+                    variant='default'
+                    color='rgb(49, 48, 48)'
+                    size= 'lg'
                     radius='md'
                     totalGames={total}
                     sortOption={sortOption}
@@ -162,8 +187,15 @@ export default function PopularPage() {
                     onPlatformsChange={(v) => setSelectedPlatform(v as any)}
                   />
                 </div>
-
+                
               </div>
+            </div>
+
+            <div className={classes.resultsContainer}>
+
+              <Text className={classes.resultsText}>
+                Showing {filteredGames.length} of {total.toLocaleString()} games
+              </Text>
 
               <ActiveFilters
                 selectedTypes={selectedType}
@@ -183,13 +215,9 @@ export default function PopularPage() {
                     setSelectedMode([]);
                     setSelectedPlatform([]);
                 }}
-            />
+              />
 
             </div>
-
-            <Text className={classes.resultsText}>
-              Showing {filteredGames.length} of {total.toLocaleString()} games
-            </Text>
 
           </div>
 
