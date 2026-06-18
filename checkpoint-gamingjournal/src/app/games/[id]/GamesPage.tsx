@@ -2,17 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
-import { DateInput } from '@mantine/dates';
 import { useParams, useRouter } from 'next/navigation';
 import { notFound } from 'next/navigation';
 
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 import PlaySessionModal from '@/components/PlaySessionModal/SessionModal';
+import EditGameInfoModal from '@/components/EditGameInfoModal/EditGameInfoModal';
 import SessionCalendar from '@/components/SessionCalendar/SessionCalendar';
 
 import toast from 'react-hot-toast';
 
-import { Button, Modal, Select, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, Rating, Tooltip, ThemeIcon } from '@mantine/core';
+import { Button, Badge, RingProgress, Text, Accordion, SimpleGrid, Group, Stack, Rating, Tooltip, ThemeIcon } from '@mantine/core';
 import Image from 'next/image';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -22,7 +22,7 @@ import { Navigation, Pagination, Thumbs, Keyboard } from 'swiper/modules';
 
 import classes from './game.module.css';
 
-import { NotebookPen, Delete, X, CalendarDays, Trophy, Check, Pause, Clock, Camera, Star, Gamepad, Activity, Pencil } from 'lucide-react';
+import { NotebookPen, Delete, X, CalendarDays, Trophy, Camera, Star, Gamepad, Activity, Pencil } from 'lucide-react';
 
 import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
   IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
@@ -394,57 +394,6 @@ export default function GameDetails() {
     return null; // fallback if no match
   };
 
-  // Define possible game statuses for the Select component in the Modal with descriptions for each status that the user can read
-  const gameStatuses = [
-    {
-      value: 'Playing',
-      label: 'Playing',
-      description: "Currently playing and making progress in the game.",
-      icon: <IconDeviceGamepad2 size={25} color='lime' />,
-      color: 'green'
-    },
-    {
-      value: 'Completed',
-      label: 'Completed',
-      description: "Finished the game, having completed the main storyline or achieved the end goals.",
-      icon: <Check size={25} color='gold'/>,
-      color: 'gold'
-    },
-    {
-      value: 'On Hold',
-      label: 'On Hold',
-      description: "Temporarily paused playing the game, with the intention to return to it later.",
-      icon: <Pause size={25} color='violet'/>,
-      color: 'violet'
-    },
-    {
-      value: 'Dropped',
-      label: 'Dropped',
-      description: "Stopped playing the game without the intention to return",
-      icon: <X size={25} color='red'/>,
-      color: 'red'
-    },
-    {
-      value: 'Plan to Play',
-      label: 'Plan to Play',
-      description: "Have intentions to play the game in the future but haven't started yet.",
-      icon: <Clock size={25} color='rgb(20, 147, 231)'/>,
-      color: 'blue'
-    }
-  ]
-
-  // Function to render the options in the Select component with their respective icons and descriptions for each game status 
-  const renderSelectOption = ({option}: any) => { 
-    const statusItem = gameStatuses.find(s => s.value === option.value); 
-    return statusItem ? ( 
-      <Group gap='sm'> 
-          {statusItem.icon} 
-          <Text size='lg' fw={600}>{statusItem.label}</Text> 
-          <Text size='xs' c='dimmed'>{statusItem.description}</Text> 
-        </Group> 
-        ) : null; 
-    };
-
   // Prepare game information for display on Accordions
   const gameInfo = [
     {
@@ -621,102 +570,12 @@ export default function GameDetails() {
                             <Rating readOnly size='lg' fractions={2} value={rating}/>
                           </div>
 
-                          <Modal opened={opened} onClose={close} title="Change Game Info" styles={{content: {border: '1px solid #424242', color: 'white', fontFamily: 'Noto Sans'}, close: {color: 'white'}}}>
-                            <Stack gap='md'>
-
-                              <Select
-                                className={classes.statusSelect}
-                                label="Status:"
-                                placeholder="Select game status"
-                                size='md'
-                                styles={{
-                                    wrapper: { color: '#212121'}, 
-                                    input: { color: 'white', background: '#212121'}, 
-                                    dropdown: { background: '#212121', color: 'whitesmoke', border: '1px solid #424242', fontWeight:600 },
-                                }}
-                                scrollAreaProps={{ scrollbarSize: 16, type: 'auto', scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
-                                value={status}
-                                onChange={(value) => {
-                                  if(!value) return;
-                                  setStatus(value);
-                                }}
-                                data={gameStatuses.map((status) => ({
-                                  value: status.value,
-                                  label: status.label,
-                                }))}
-                                renderOption={renderSelectOption}
-                              />
-
-                              <DateInput
-                                size='md'
-                                label="Completion Date:"
-                                placeholder='Select completion date'
-                                clearable
-                                leftSection={<CalendarDays size={20} />}
-                                value={completionDate}
-                                disabled={status !== 'Completed'}
-                                maxDate={new Date()}
-                                description={
-                                  status !== 'Completed' ? 'Available when status is set to Completed' : undefined
-                                }
-                                onChange={(date) => {
-                                  const dateObj = date ? new Date(date).toISOString() : null;
-                                  setCompletionDate(dateObj);
-                                }}
-                              />
-
-                              <div className={classes.ratingContainer}>
-
-                                <Text size='md' className={classes.ratingText}>Your Rating:</Text>
-
-                                <div className={classes.ratingWrapper}>
-                                  <Rating
-                                  size='lg' 
-                                  fractions={2} 
-                                  value={rating} 
-                                  onChange={
-                                    (value) => {
-                                      setRating(value);
-                                    }}
-                                  />
-
-                                  <p className={classes.starsCount}>{rating}/5</p>
-                                </div>
-
-                              </div>
-
-                              <div className={classes.ratingContainer}>
-
-                                <Text size='md' className={classes.ratingText}>Platinum Trophy/100% Completed:</Text>
-
-                                <Trophy 
-                                size={30} 
-                                color={isPlatinum ? 'gold' : 'gray'}
-                                fill={isPlatinum ? 'gold' : 'none'}
-                                style={{ transition: 'all 0.2s ease' }}
-                                cursor={'pointer'}
-                                onClick={() => {
-                                  const newValue = !isPlatinum;
-                                  setIsPlatinum(newValue);
-                                }}
-                                />
-
-                              </div>
-
-                              <Button
-                                variant='filled'
-                                color='blue'
-                                size='md'
-                                onClick={() => {
-                                  handleUpdateInfo(status, isPlatinum, rating, completionDate);
-                                  close();
-                                }}
-                              >
-                                Save Changes
-                              </Button>
-                            </Stack>
-                          </Modal>
-
+                          <EditGameInfoModal
+                            opened={opened}
+                            onClose={close}
+                            game={libraryGame}
+                          />
+                          
                           <PlaySessionModal 
                             key={game.id} 
                             opened={playSessionModalOpened}

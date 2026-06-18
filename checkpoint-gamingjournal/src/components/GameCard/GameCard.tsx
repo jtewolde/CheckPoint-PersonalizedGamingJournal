@@ -10,7 +10,7 @@ import PlaySessionModal from '../PlaySessionModal/SessionModal';
 import { Badge, Text, Image, Tooltip, ActionIcon, Rating, Group, OverflowList } from '@mantine/core';
 import toast from 'react-hot-toast';
 
-import { Plus, Minus, Ellipsis, Trophy, ClipboardEdit, Star, Clock } from 'lucide-react';
+import { Plus, Minus, Ellipsis, Trophy, ClipboardEdit, Star, Check, PowerOff, Backpack, Pause, Play } from 'lucide-react';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 import classes from './GameCard.module.css';
@@ -138,6 +138,62 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
 
     }
 
+    // Helper function to style game status badge depending on the status of the game
+    const getStatusInfo = (status?: string) => {
+        switch (status) {
+            case 'Playing':
+                return {
+                    color: 'blue',
+                    icon: <Play size={14} />,
+                };
+
+            case 'Completed':
+                return {
+                    color: 'green',
+                    icon: <Check size={14} />,
+                };
+
+            case '100%':
+                return {
+                    color: 'gold',
+                    icon: <Trophy size={14} />
+                }
+
+            case 'On Hold':
+                return {
+                    color: 'violet',
+                    icon: <Pause size={14} />,
+                };
+
+            case 'Dropped':
+                return {
+                    color: 'red',
+                    icon: <PowerOff size={14} />,
+                };
+
+            case 'Wishlist':
+                return {
+                    color: 'yellow',
+                    icon: <Star size={14} />,
+                };
+
+            case 'Backlog':
+                return {
+                    color: 'orange',
+                    icon: <Backpack size={14} />,
+                };
+
+            default:
+                return {
+                    color: 'gray',
+                    icon: null,
+                };
+        }
+    };
+
+    // Get the correct associating status info for the current game's card
+    const statusInfo = getStatusInfo(libraryMeta?.status)
+
     return (
         <div key={game.id} className={`${classes.gameCard} ${variant === 'compact' ? classes.compact  : variant === 'small' ? classes.small : variant === 'library' ? classes.library : classes.default}`} onClick={() => {if(opened) return;  router.push(`/games/${game.id}`)}}>
 
@@ -215,10 +271,11 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
                     <h3 className={classes.gameTitle}>{game.name}</h3>
 
                     <Badge 
-                        className={classes.badge} 
-                        color={libraryMeta?.status === 'Completed' ? 'green' : libraryMeta?.status === 'Playing' ? 'blue' : libraryMeta?.status === 'On Hold' ? 'red' : libraryMeta?.status === 'Dropped' ? 'red' : libraryMeta?.status === 'Plan to Play' ? 'yellow': libraryMeta?.status === 'No Status Given' ? 'gray' : 'dark'} 
-                        variant='filled'
-                        size='sm'
+                        className={classes.libraryBadge} 
+                        color={statusInfo.color}
+                        leftSection={statusInfo.icon}
+                        variant='outline'
+                        size='md'
                         radius='sm'
                     >
                         {libraryMeta?.status || "No Status"}
@@ -227,24 +284,22 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
                     <div className={classes.ratingSection}>
                     
                         <Rating 
-                        size='md'
-                        color={libraryMeta?.rating && libraryMeta?.rating > 0 ? 'yellow' : '#555'}
-                        fractions={2}
-                        readOnly
-                        value={libraryMeta?.rating} 
+                            size='md'
+                            color={libraryMeta?.rating && libraryMeta?.rating > 0 ? 'yellow' : '#555'}
+                            fractions={2}
+                            readOnly
+                            value={libraryMeta?.rating} 
                         /> 
 
                         <Tooltip label='Platinumed/100%' position='right'>
                             <Trophy 
-                            size={25} 
-                            color={libraryMeta?.platinum ? 'gold' : '#555'}
-                            fill={libraryMeta?.platinum ? 'gold' : 'none'}
-                            cursor={'pointer'}
+                                size={25} 
+                                color={libraryMeta?.platinum ? 'gold' : '#555'}
+                                fill={libraryMeta?.platinum ? 'gold' : 'none'}
+                                cursor={'pointer'}
                             />
                         </Tooltip>
-
                     </div>
-
                 </div>
             )}
 
@@ -269,41 +324,15 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
                         )}
                         renderOverflow={(overflowItems) => (
                             <Badge
-                            size={isMobile ? 'xs' : 'md'}
-                            color='#808080'
-                            variant="light"
-                            radius="lg"
-                            >
-                            +{overflowItems.length} More
+                                size={isMobile ? 'xs' : 'md'}
+                                color='#808080'
+                                variant="light"
+                                radius="lg"
+                                >
+                                +{overflowItems.length} More
                             </Badge>
                         )}
                     />
-                    
-                    {/* <OverflowList
-                        data={game.platforms ?? []}
-                        maxVisibleItems={3}
-                        renderItem={(platform) => (
-                            <Badge
-                            key={platform.abbreviation}
-                            size="md"
-                            variant="filled"
-                            color="#292728"
-                            radius="lg"
-                            >
-                            {platform.abbreviation}
-                            </Badge>
-                        )}
-                        renderOverflow={(overflowItems) => (
-                            <Badge
-                            size="md"
-                            variant="light"
-                            radius="lg"
-                            color='#726d6c'
-                            >
-                            +{overflowItems.length}
-                            </Badge>
-                        )}
-                    /> */}
 
                     <p className={classes.gamePlatforms}>
                         {visiblePlatforms.map((p) => p.abbreviation || p.name).join(' • ')}
@@ -319,7 +348,6 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
                     </p>
                 </div>
             )}
-
         </div>
     )
 }
