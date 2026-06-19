@@ -115,24 +115,18 @@ export default function TrendingPage() {
 
   return (
     <div className={classes.wrapper} >
-
         <div className={classes.mainContent}>
-
           <div className={classes.headerSection}>
-
             <div className={classes.titleDescriptionSection}>
 
               <div className={classes.titleLogo}>
-
                 <h1 className={classes.titleText}>Trending Games</h1>
-
               </div>
 
               <Text className={classes.description}>
                   Explore the hottest games capturing attention today.
                   From breakout hits to rising favorites, see what's trending across the gaming world.
               </Text>
-
             </div>
 
             <div className={classes.toolbar}>
@@ -142,7 +136,6 @@ export default function TrendingPage() {
               </div>
 
               <div className={classes.actionRow}>
-
                 <div className={classes.sortContainer}>
                   {/* Sort By Dropdown */}
                     <Select
@@ -169,7 +162,6 @@ export default function TrendingPage() {
                 </div>
                 
                 <div className={classes.filterContainer}>
-
                   <GameFilters
                     variant='default'
                     color='rgb(49, 48, 48)'
@@ -192,13 +184,10 @@ export default function TrendingPage() {
                 </div>
                 
               </div>
-
             </div>
-
           </div>
 
           <div className={classes.resultsContainer}>
-
             <Text className={classes.resultsText}>
               Showing {filteredGames.length} of {total.toLocaleString()} games
             </Text>
@@ -222,7 +211,6 @@ export default function TrendingPage() {
                   setSelectedPlatform([]);
               }}
             />
-
           </div>
 
           <SimpleGrid spacing="lg" verticalSpacing='xl' className={classes.gamesGrid}>

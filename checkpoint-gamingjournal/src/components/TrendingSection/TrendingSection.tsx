@@ -55,7 +55,7 @@ export default function TrendingSection(){
                     <GameCard
                         key={game.id}
                         game={game}
-                        variant="compact"
+                        variant="default"
                     />
                 ))
             }

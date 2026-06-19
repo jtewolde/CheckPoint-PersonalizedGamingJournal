@@ -23,7 +23,6 @@ import classes from './dashboard.module.css';
 
 export default function Dashboard() {
   const router = useRouter();
-  const isMobile = useMediaQuery('768px')
 
   const [user, setUser] = useState<{ name?: string; image?: string } | null>(null); // State to store user information such as name and profile image
 
@@ -303,9 +302,9 @@ export default function Dashboard() {
 
             <div className={classes.quickActionGroup}>
               <EditGameInfoModal opened={editOpened} onClose={editClose} libraryGames={libraryGames} />
-              <Button style={{fontFamily:'Poppins'}} size='md' radius='md' leftSection={<Edit size={20} />} onClick={editOpen}>Edit Game Info</Button>
+              <Button style={{fontFamily:'Poppins', fontWeight: '400'}} size='md' radius='md' leftSection={<Edit size={20} />} onClick={editOpen}>Edit Game Info</Button>
 
-              <PlaySessionModal opened={logOpened} onClose={logClose} gameId={selectedGame?.gameId} gameName={selectedGame?.title} />
+              <PlaySessionModal opened={logOpened} onClose={logClose} gameId={selectedGame?.gameId} gameName={selectedGame?.title} platforms={selectedGame?.platforms}/>
               <Tooltip label='Log Play Session' position='top'>
                 <ActionIcon color='teal' size='xl' radius='md' onClick={logOpen}><BookText size={25} /></ActionIcon>
               </Tooltip>

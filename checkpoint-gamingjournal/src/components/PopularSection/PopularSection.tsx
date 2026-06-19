@@ -54,7 +54,7 @@ export default function PopularSection(){
                 <GameCard
                     key={game.id}
                     game={game}
-                    variant="compact"
+                    variant="default"
                 />
             ))
         }
