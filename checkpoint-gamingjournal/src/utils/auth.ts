@@ -130,6 +130,11 @@ export const auth = betterAuth({
                 required: false,
                 defaultValue: false
             },
+            hoursPlayed: {
+                type: 'number',
+                required: false,
+                defaultValue: 0
+            },
             startingDate: {
                 type: "date",
                 required: false,

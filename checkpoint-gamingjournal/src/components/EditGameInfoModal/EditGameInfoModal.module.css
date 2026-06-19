@@ -1,4 +1,7 @@
 
+.statusSelect{
+    width: 50%;
+}
 
 .ratingContainer{
     display: flex;
@@ -20,8 +23,8 @@
 }
 
 .ratingText{
-    font-size: 1.0rem;
+    font-size: 16px;
     color: #f0f0f0;
-    text-align: center;
+    text-align: left;
     font-weight: 500;
 }
