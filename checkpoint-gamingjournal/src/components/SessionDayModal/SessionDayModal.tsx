@@ -29,10 +29,9 @@ type SessionDayModalProps = {
     selectedDate: string | null;
     sessions: PlaySession[];
     onEditSession?: (session: PlaySession) => void; // Callback for when a session is selected for editing
-    onDeleteSession?: (sessionId: string) => void; // Callback for when a session is deleted
 };
 
-export default function SessionDayModal({ opened, onClose, selectedDate, sessions, onEditSession, onDeleteSession }: SessionDayModalProps){
+export default function SessionDayModal({ opened, onClose, selectedDate, sessions, onEditSession }: SessionDayModalProps){
 
     const [loading, setLoading] = useState(false);
     const [localSessions, setLocalSessions] = useState<PlaySession[]>(sessions);
@@ -53,8 +52,8 @@ export default function SessionDayModal({ opened, onClose, selectedDate, session
             const res = await fetch(`/api/playSession/${sessionId}`, {
                 method: 'DELETE',
                 headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 }
             });
 
@@ -75,7 +74,7 @@ export default function SessionDayModal({ opened, onClose, selectedDate, session
     }
 
     return (
-        <Modal opened={opened} onClose={onClose} size='xl' title={'Sessions for ' + (selectedDate || "No Date Selected")}>
+        <Modal opened={opened} onClose={onClose} size='lg' title={'Play Sessions on ' + (selectedDate || "No Date Selected")}>
             {/* ✅ LOADING OVERLAY */}
             <LoadingOverlay
                 visible={loading}
@@ -93,52 +92,97 @@ export default function SessionDayModal({ opened, onClose, selectedDate, session
                     const minutes = s.duration % 60
 
                     return (
-                    <Group key={s._id} justify="space-between">
-                        <div className={classes.gameSessionCard}>
+                        <div key={s._id} className={classes.gameSessionCard}>
                             <div className={classes.sessionHeader}>
-                                {/*GAME TITLE */}
-                                <Text fw={600} size="lg">{s.gameName}</Text>
 
-                                {/* DURATION */}
-                                <Text fw={500}>
-                                    {hours}h {minutes}m
-                                </Text>
-                            </div>
+                                <div className={classes.titleDurationGroup}>
+                                    {/*GAME TITLE */}
+                                    <Text className={classes.titleText}>{s.gameName}</Text>
 
-                            {/* NOTES SECTION */}
-                            <Spoiler maxHeight={100} showLabel="Show more" hideLabel="Show less" styles={{ control: { color: '#b9b5b5', fontWeight: 500, fontSize: '14px', marginBottom: '0.5rem'}}}>
-                                <Text size="sm" c="dimmed">
-                                    {s.notes || "No notes"}
-                                </Text>
-                            </Spoiler>
+                                    <Group gap={6} align="center">
+                                        {/* DURATION */}
+                                        <Text className={classes.durationText} c='dimmed'>
+                                            {hours}h {minutes}m
+                                        </Text>
 
-                            <div className={classes.tagContainer}>
-                                {/* ✅ TAGS SECTION */}
-                                {s.sessionType && s.sessionType.length > 0 && (
-                                    <Group className={classes.typeContainer}>
-                                        {s.sessionType.map((type: string, index: number) => (
-                                        <Badge
-                                            key={index}
-                                            variant="filled"
-                                            color="#0d8251"
-                                            radius="md"
-                                            size='md'
-                                        >
-                                            {type}
-                                        </Badge>
-                                        ))}
+                                        {s.platform && (
+                                            <>
+                                                <Text size="sm" c="dimmed">•</Text>
+                                                <Text size="sm" c="dimmed">
+                                                    {s.platform}
+                                                </Text>
+                                            </>
+                                        )}
+
+                                        {s.mood && (
+                                            <>
+                                                <Text size="sm" c="dimmed">•</Text>
+                                                <Text size="sm" c="dimmed">
+                                                    {s.mood}
+                                                </Text>
+                                            </>
+                                        )}
                                     </Group>
-                                )}
 
-                                {s.mood && (
-                                    <div className={classes.moodContainer}>
-                                    {/*MOOD SECTION */}
-                                    <Badge variant="filled" color="#07a2a7" radius='md' size="md">{s.mood}</Badge>
+                                    {/* ✅ TAGS SECTION */}
+                                    {s.sessionType && s.sessionType.length > 0 && (
+                                    <div className={classes.tagContainer}>
+                                            <Group className={classes.typeContainer}>
+                                                {s.sessionType.map((type: string, index: number) => (
+                                                <Badge
+                                                    key={index}
+                                                    variant="light"
+                                                    color="green"
+                                                    radius="md"
+                                                    size='md'
+                                                >
+                                                    {type}
+                                                </Badge>
+                                                ))}
+                                            </Group>
                                     </div>
+                                    )}
+                                </div>
+
+                                <Group gap={4}>
+                                    <Tooltip label="Edit session">
+                                        <ActionIcon
+                                            variant="light"
+                                            size='lg'
+                                            color="blue"
+                                            onClick={() => onEditSession?.(s)}
+                                        >
+                                            <Pencil size={20} />
+                                        </ActionIcon>
+                                    </Tooltip>
+
+                                    <Tooltip label="Delete session">
+                                        <ActionIcon
+                                            variant="light"
+                                            size='lg'
+                                            color="red"
+                                            onClick={() => handleDeleteSession(s._id)}
+                                        >
+                                            <Trash2Icon size={20} />
+                                        </ActionIcon>
+                                    </Tooltip>
+                                </Group>
+                            </div>
+                            
+                            <div className={classes.notesContainer}>
+                                {s.notes ? (
+                                    <Spoiler maxHeight={100} showLabel="Show more" hideLabel="Show less" styles={{ control: { color: '#b9b5b5', fontWeight: 500, fontSize: '14px', marginBottom: '0.5rem'}}}>
+                                        <Text size="sm" c="dimmed">
+                                            {s.notes || "No notes"}
+                                        </Text>
+                                    </Spoiler>
+                                ): (
+                                    <Text size="sm" c='dimmed'>
+                                        No notes recorded.
+                                    </Text>
                                 )}
                             </div>
                         </div>
-                    </Group>
                     )
                 })}
             </Stack>

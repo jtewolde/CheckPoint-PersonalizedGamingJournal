@@ -10,8 +10,27 @@
 .sessionHeader{
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 0.6rem;
+}
+
+.titleDurationGroup{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 5px;
+}
+
+.titleText{
+    font-family: 'Inter';
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.durationText{
+    font-family: 'Inter';
+    font-size: 14px;
+    font-weight: 300;
 }
 
 .actionIcons{
@@ -29,8 +48,10 @@
 .tagContainer{
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 0.3rem;
-    margin-top: 2rem;
+    margin-top: 0.5rem;
 }
 
 .daySession{
