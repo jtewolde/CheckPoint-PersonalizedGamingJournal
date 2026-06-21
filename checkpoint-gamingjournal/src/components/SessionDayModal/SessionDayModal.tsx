@@ -26,7 +26,7 @@ type PlaySession = {
 type SessionDayModalProps = {
     opened: boolean;
     onClose: () => void;
-    selectedDate: Date | null;
+    selectedDate: string | null;
     sessions: PlaySession[];
     onEditSession?: (session: PlaySession) => void; // Callback for when a session is selected for editing
     onDeleteSession?: (sessionId: string) => void; // Callback for when a session is deleted
@@ -43,11 +43,7 @@ export default function SessionDayModal({ opened, onClose, selectedDate, session
     }, [sessions]);
 
     // Get sessions for selected date to display in modal
-    const sessionsForDate = selectedDate
-    ? localSessions.filter((s) =>
-        isSameDay(s.date, selectedDate)
-        )
-    : [];
+    const sessionsForDate = localSessions;
 
     // Function to handle deleting a play session using the session ID
     const handleDeleteSession = async(sessionId: string) => {
@@ -79,7 +75,7 @@ export default function SessionDayModal({ opened, onClose, selectedDate, session
     }
 
     return (
-        <Modal opened={opened} onClose={onClose} size='xl' title={'Sessions for ' + (selectedDate ? formatDate(selectedDate) : "No Date Selected")}>
+        <Modal opened={opened} onClose={onClose} size='xl' title={'Sessions for ' + (selectedDate || "No Date Selected")}>
             {/* ✅ LOADING OVERLAY */}
             <LoadingOverlay
                 visible={loading}

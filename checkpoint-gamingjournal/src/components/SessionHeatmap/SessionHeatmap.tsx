@@ -27,7 +27,7 @@ export default function SessionHeatmap(){
     const [sessions, setSessions] = useState<PlaySession[]>([]);
 
     // States for handling the session day modal
-    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [opened, setOpened] = useState(false);
 
     // Define the date range for the heatmap (e.g., last 90 days) and adjust for mobile view
@@ -113,10 +113,10 @@ export default function SessionHeatmap(){
                     style: {cursor: value ? 'pointer' : 'pointer'},
 
                     onClick: () => {
-                    if (!value) return;
+                        if (!value) return;
 
-                    setSelectedDate(new Date(date));
-                    setOpened(true);
+                        setSelectedDate(date);
+                        setOpened(true);
                     },
                 })}
             />
@@ -125,7 +125,7 @@ export default function SessionHeatmap(){
                 opened={opened}
                 onClose={() => setOpened(false)}
                 selectedDate={selectedDate}
-                sessions={sessions.filter(s => isSameDay(s.date, selectedDate ?? new Date()))}
+                sessions={sessions.filter(s => s.date === selectedDate)}
             />
         </div>
     )
