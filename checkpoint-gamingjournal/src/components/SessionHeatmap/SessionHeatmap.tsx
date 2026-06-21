@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 import SessionDayModal from "../SessionDayModal/SessionDayModal";
-import { formatDate, isSameDay } from "@/utils/dateUtils";
+import PlaySessionModal from "../PlaySessionModal/SessionModal";
 import { Heatmap } from "@mantine/charts";
 import classes from './SessionHeatmap.module.css';
 
@@ -29,6 +29,9 @@ export default function SessionHeatmap(){
     // States for handling the session day modal
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [opened, setOpened] = useState(false);
+
+    const [editModalOpened, setEditModalOpened] = useState(false);
+    const [selectedSession, setSelectedSession] = useState<PlaySession | null>(null);
 
     // Define the date range for the heatmap (e.g., last 90 days) and adjust for mobile view
     const endDate = new Date();
@@ -121,11 +124,35 @@ export default function SessionHeatmap(){
                 })}
             />
 
+            <PlaySessionModal
+                gameName={selectedSession?.gameName}
+                opened={editModalOpened}
+                onClose={() => {
+                    setEditModalOpened(false);
+                    setSelectedSession(null);
+                }}
+                gameId={selectedSession?.gameId ?? ''}
+                session={selectedSession}
+                onSuccess={(updatedSession) => {
+                    // update local state without refetch
+                    setSessions(prev =>
+                        prev.map(s =>
+                            s._id === updatedSession._id ? updatedSession : s
+                        )
+                    );
+                }}
+            />
+
             <SessionDayModal
                 opened={opened}
                 onClose={() => setOpened(false)}
                 selectedDate={selectedDate}
                 sessions={sessions.filter(s => s.date === selectedDate)}
+                onEditSession={(session) => {
+                    setOpened(false)
+                    setSelectedSession(session);
+                    setEditModalOpened(true);
+                }}
             />
         </div>
     )

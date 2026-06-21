@@ -318,40 +318,6 @@ export default function GameDetails() {
     }
   }
 
-  // Function to handle updating the game status, trophy(platinum), and rating.
-  const handleUpdateInfo = async (status?: string, platinum?: boolean, rating?: number, completionDate?: string | null) => {
-    try {
-      const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token
-      const res = await fetch(`/api/library/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`, // Include the Bearer token
-        },
-        body: JSON.stringify({
-          gameDetails: {
-            status,
-            platinum,
-            rating,
-            completionDate
-          },
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to update game status');
-      }
-        
-      const data = await res.json();
-      toast.success('Game info updated to:', data);
-      
-      router.push(`/games/${game.id}`)
-    } catch (error) {
-      console.error('Error updating game status:', error);
-      toast.error('Failed to update game info. Please try again.');
-    }
-  };
-
   // Update local state when the modal opens to reflect the current status, platinum, and rating of the game.
   useEffect(() => {
     if (opened && libraryGame) {
