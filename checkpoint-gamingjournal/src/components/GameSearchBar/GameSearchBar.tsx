@@ -16,7 +16,8 @@ type GameSearchBarProps = {
     radius?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     className?: string;
     autoNavigate?: boolean;
-    initialQuery?: string; 
+    initialQuery?: string;
+    showButton?: boolean;
 };
 
 export default function GameSearchBar({
@@ -26,6 +27,7 @@ export default function GameSearchBar({
     className,
     autoNavigate = true,
     initialQuery = '',
+    showButton = true
 }: GameSearchBarProps) {
 
     // State to manage the current query and search results
@@ -88,9 +90,7 @@ export default function GameSearchBar({
     };
 
     return (
-
         <div className={classes.wrapper} >
-
             <Autocomplete
                 classNames={{ option: classes.option }}
                 className={className}
@@ -126,17 +126,18 @@ export default function GameSearchBar({
                 }
             />
 
-            <Button 
-            className={classes.button} 
-            color= 'white'
-            c='black'
-            size={size}
-            radius={radius}
-            onClick={() => autoNavigate && navigateToSearch(query)}>
-                Search
-            </Button>
-
+            {showButton && (
+                <Button
+                    className={classes.button}
+                    color="white"
+                    c="black"
+                    size={size}
+                    radius={radius}
+                    onClick={() => autoNavigate && navigateToSearch(query)}
+                >
+                    Search
+                </Button>
+            )}
         </div>
-        
     );
 }
