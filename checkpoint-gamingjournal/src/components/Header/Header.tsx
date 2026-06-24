@@ -1,25 +1,28 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { Burger, Group, Drawer, Image, Button, Menu, Divider } from '@mantine/core';
+import { Burger, Group, Drawer, Image, Button, Menu, Divider, ActionIcon } from '@mantine/core';
 import { useDisclosure, useMediaQuery} from '@mantine/hooks';
+import GameSearchBar from '../GameSearchBar/GameSearchBar';
 
 import CheckPointLogo from '../../../public/DesktopLogoNew.png';
 import CheckPointMobileLogo from '../../../public/MobileCheckPointLogo.png';
 
-import classes from './Header.module.css';
-import Link from 'next/link';
-
 import { useAuth } from '@/context/Authcontext';
 import { authClient } from '@/lib/auth-client';
+import Link from 'next/link';
 
 import { IconSearch } from '@tabler/icons-react';
 import { LogIn, UserRoundPlus, LayoutDashboard, Library, Notebook, House, Timer, Star, Flame, Settings, LogOut } from 'lucide-react';
 import AvatarMenu from "../AvatarMenu/AvatarMenu";
+
 import toast from 'react-hot-toast';
+import classes from './Header.module.css';
 
 export function Header() {
-  const [opened, { toggle, close }] = useDisclosure(false); // State for Drawer
+  const [opened, { toggle, close }] = useDisclosure(false); // State for mobile side bar
+  const [searchOpened, { toggle: searchToggle, close: searchClose}] = useDisclosure(false); // State for search drawer
+
   const router = useRouter();
   const pathname = usePathname();
 
@@ -61,20 +64,29 @@ export function Header() {
   // Define the guest navigation links with their labels, icons, and hrefs
   const guestNavLinks = [
       { label: 'Home', icon: <House size={20} />, href: '/' },
-      { label: 'Discover', icon: <IconSearch size={20} />, href: '/search'},
+      { label: 'Discover', icon: <IconSearch size={20} />, href: '/search', links: [
+        { label: 'Popular', icon: <Star size={20} />, href: '/search/popular' },
+        { label: 'Trending', icon: <Flame size={20} />, href: '/search/trending' },
+      ]},
       { label: 'Sign In', icon: <LogIn size={20} />, href: '/auth/signin' },
       { label: 'Register', icon: <UserRoundPlus size={20} />, href: '/auth/signup'},
   ]
   
   // Define the discover links with their labels, icons, and hrefs
-  const mobileGuestLinks = [
-      { label: 'Home', icon: <House size={20} />, href: '/' },
-      { label: 'Sign In', icon: <LogIn size={20} />, href: '/auth/signin' },
-      { label: 'Register', icon: <UserRoundPlus size={20} />, href: '/auth/signup'},
-      { label: 'Search Games', icon: <IconSearch size={20} />, href: '/search' },
-      { label: 'Popular Games', icon: <Star size={20} />, href: '/search/popular' },
-      { label: 'Trending Games', icon: <Flame size={20} />, href: '/search/trending' },
-  ]
+  const mobileGuestLinks = {
+    main: [
+      { label: 'Home', icon: <House size={25} />, href: '/' },
+    ],
+    discover: [
+      { label: 'Discover', icon: <IconSearch size={25} />, href: '/discover' },
+      { label: 'Popular', icon: <Star size={25} />, href: '/search/popular' },
+      { label: 'Trending', icon: <Flame size={25} />, href: '/search/trending' },
+    ],
+    authentication: [
+      { label: 'Sign In', icon: <LogIn size={25} />, href: '/auth/signin' },
+      { label: 'Register', icon: <UserRoundPlus size={25} />, href: '/auth/signup'},
+    ]
+  }
 
   // Define links for when user is on mobile and signed in
   const mobileAuthLinks = {
@@ -112,7 +124,7 @@ export function Header() {
 
         {/* Desktop Links */}
         <div className={classes.links} >
-          <Group gap='lg' visibleFrom='sm' justify='flex-end' className={classes.linkGroup}>
+          <Group gap='lg' visibleFrom='sm' justify='flex-start' className={classes.linkGroup}>
             {isAuthenticated ? (
               <>
               {navLinks.map((link) => {
@@ -129,7 +141,7 @@ export function Header() {
                       <Menu.Target>
                         <div
                           className={`${classes.link} ${
-                            pathname === '/search' ||
+                            pathname === '/discover' ||
                             pathname === '/search/popular' ||
                             pathname === '/search/trending'
                               ? classes.active
@@ -153,16 +165,16 @@ export function Header() {
                       <Menu.Dropdown>
                         <Menu.Item
                           component={Link}
-                          href="/search"
-                          leftSection={<IconSearch size={20} color='white' />}
+                          href="/discover"
+                          leftSection={<IconSearch size={20} color='white'/>}
                         >
-                          Search Games
+                          Discover Games
                         </Menu.Item>
 
                         <Menu.Item
                           component={Link}
                           href="/search/popular"
-                          leftSection={<Star size={20} color='#e4c61d'/>}
+                          leftSection={<Star size={20} color='#e4c61d' fill='#e4c61d'/>}
                         >
                           Popular Games
                         </Menu.Item>
@@ -170,7 +182,7 @@ export function Header() {
                         <Menu.Item
                           component={Link}
                           href="/search/trending"
-                          leftSection={<Flame size={20} color='#ff8c00'/>}
+                          leftSection={<Flame size={20} color='#ff8c00' fill='#ff8c00'/>}
                         >
                           Trending Games
                         </Menu.Item>
@@ -218,7 +230,7 @@ export function Header() {
                           <Menu.Target>
                             <div
                               className={`${classes.link} ${
-                                pathname === '/search' ||
+                                pathname === '/discover' ||
                                 pathname === '/search/popular' ||
                                 pathname === '/search/trending'
                                   ? classes.active
@@ -242,10 +254,10 @@ export function Header() {
                           <Menu.Dropdown>
                             <Menu.Item
                               component={Link}
-                              href="/search"
+                              href="/discover"
                               leftSection={<IconSearch size={20} color='white'/>}
                             >
-                              Search Games
+                              Discover Games
                             </Menu.Item>
 
                             <Menu.Item
@@ -295,7 +307,40 @@ export function Header() {
           </Group>
         </div>
 
-        <Group gap="xs">
+        <Group gap="md">
+          <Drawer
+              opened={searchOpened}
+              onClose={searchClose}
+              position='top'
+              withCloseButton={false}
+              size='150px'
+              className={classes.drawer}
+              styles={{
+                content: {
+                  backgroundColor: '#202020ff',
+                  borderBottom: '2px solid grey'
+                },
+                header: {
+                  backgroundColor: '#202020ff'
+                },
+                close: {
+                  color: 'white'
+                }
+              }}
+            >
+              <GameSearchBar className={classes.searchBar} placeHolder='Search Games...' size='lg' autoNavigate showButton={true} />
+            </Drawer>
+          {!isMobile ? (
+            <div className={classes.searchBarContainer}>
+              <GameSearchBar className={classes.searchBar} placeHolder='Search Games...' size='lg' autoNavigate showButton={false} />
+            </div>
+          ): (
+            <div className={classes.searchButtonContainer}>
+              <ActionIcon size='lg' variant='light' color='white' onClick={searchToggle}>
+                <IconSearch size={30} />
+              </ActionIcon>
+            </div>
+          )}
     
           {isAuthenticated && !isMobile ? <AvatarMenu /> : null}
 
@@ -335,9 +380,7 @@ export function Header() {
             {isAuthenticated ? (
               <>
                 <div className={classes.mobileLinksContainer}>
-
                   <Divider label='Main' labelPosition='left' size='lg' styles={{label: { fontSize: '18px'}}} />
-
                   {mobileAuthLinks.main.map((link) => (
                     <>
                       <Link key={link.href} href={link.href} className={`${classes.link} ${pathname === link.href ? classes.active : ''}`}>
@@ -374,16 +417,39 @@ export function Header() {
                 </div>
               </>
             ) : (
+              <>
                 <div className={classes.guestMobileLinksContainer} >
-                  {mobileGuestLinks.map((link) => (
+                  <Divider label='Main' labelPosition='left' size='lg' styles={{label: { fontSize: '18px'}}} />
+                  {mobileGuestLinks.main.map((link) => (
                     <Link key={link.href} href={link.href} className={`${classes.link} ${pathname === link.href ? classes.active : ''}`}>
-                      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px' }}>
+                      <div className={classes.mobileLink}>
+                        {link.icon}
+                        {link.label}
+                      </div>
+                    </Link>
+                  ))}
+
+                  <Divider label='Discover' labelPosition='left' size='lg' styles={{label: { fontSize: '18px'}}} />
+                  {mobileGuestLinks.discover.map((link) => (
+                    <Link key={link.href} href={link.href} className={`${classes.link} ${pathname === link.href ? classes.active : ''}`}>
+                      <div className={classes.mobileLink}>
+                        {link.icon}
+                        {link.label}
+                      </div>
+                    </Link>
+                  ))}
+
+                  <Divider label='Account' labelPosition='left' size='lg' styles={{label: { fontSize: '18px'}}} />
+                  {mobileGuestLinks.authentication.map((link) => (
+                    <Link key={link.href} href={link.href} className={`${classes.link} ${pathname === link.href ? classes.active : ''}`}>
+                      <div className={classes.mobileLink}>
                         {link.icon}
                         {link.label}
                       </div>
                     </Link>
                   ))}
                 </div>
+              </>
             )}
           </div>
         </Drawer>
