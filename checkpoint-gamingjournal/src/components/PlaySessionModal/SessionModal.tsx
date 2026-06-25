@@ -382,7 +382,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                     />
                 </div>
 
-                <Divider styles={{label: {color: 'white'}}} labelPosition="center" color='dimmed' my="md"  />
+                <Divider styles={{label: {color: 'white'}}} labelPosition="center" color='dimmed' my="sm"  />
 
                 <div className={classes.buttonGroup}>
 

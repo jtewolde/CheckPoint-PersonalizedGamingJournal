@@ -27,7 +27,7 @@ export function Header() {
   const pathname = usePathname();
 
   const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
-  const isMobile = useMediaQuery('(max-width: 520px)');
+  const isMobile = useMediaQuery('(max-width: 650px)');
 
   // Function to handle clicking the logo and redirecting user to dashboard or homepage based on authenication
   const handleLogoClick = async () => {
@@ -98,9 +98,9 @@ export function Header() {
     ],
 
     discover: [
-      { label: 'Search', icon: <IconSearch size={25} />, href: '/search' },
-      { label: 'Popular', icon: <Star size={25} />, href: '/search/popular' },
-      { label: 'Trending', icon: <Flame size={25} />, href: '/search/trending' },
+      { label: 'Discover', icon: <IconSearch size={25} />, href: '/discover' },
+      { label: 'Popular', icon: <Star size={25} color='#e4c61d' fill='#e4c61d'/>, href: '/search/popular' },
+      { label: 'Trending', icon: <Flame size={25} color='#ff8c00' fill='#ff8c00'/>, href: '/search/trending' },
     ],
 
     account: [
