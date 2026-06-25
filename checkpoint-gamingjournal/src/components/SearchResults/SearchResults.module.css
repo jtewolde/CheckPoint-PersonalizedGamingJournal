@@ -6,19 +6,28 @@
     align-items: flex-start;
     gap: 1rem;
     width: 100%;
-    padding-left: 3rem;
+    padding: 2rem;
+    padding-left: 2rem;
     padding-right: 3rem;
 }
 
 .resultsTitle{
-    font-size: 32px;
-    color: white;
-    font-family: 'Inter';
-    font-weight: 400;
-    line-height: 1.5;
+    font-size: 56px;
+    font-weight: 700;
+    color: white; /* Dark text for contrast */
     text-align: left;
-    align-self: flex-start;
-    margin-bottom: 1rem;
+    font-family: 'Noto Sans';
+    letter-spacing: 1px;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.description{
+    color: #bdbbbb;
+    font-weight: 400;
+    text-align: left;
+    font-family: 'Barlow';
+    font-size: 24px;
+    max-width: 900px;
 }
 
 .noResultsText{
@@ -32,15 +41,49 @@
     margin-top: 1rem;
 }
 
-.gameResult{
-    font-size: 34px;
-    font-weight: 700;
+
+.searchContainer{
+    width: 60%;
 }
 
-.resultGamesGrid{
-    gap: 2rem;
+
+.actionRow{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
     width: 100%;
-    box-sizing: border-box;
+}
+
+.filterContainer{
+    display: flex;
+    align-items: flex-end;
+    flex-shrink: 0;
+    gap: 1rem;
+}
+
+.resultsContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+}
+
+.resultsText{
+    font-family: 'Inter';
+    font-size: 16px;
+    font-weight: 300;
+
+    flex-shrink: 0;
+}
+
+/* Grid layout for game cards */
+.resultGamesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(199px, 1fr));
+    gap: 1rem;
+    width: 100%;
 }
 
 .paginationWrapper{
@@ -60,58 +103,32 @@
 
 }
 
-@media screen and (max-width: 570px) {
+@media screen and (max-width: 646px) {
+
+    .gamesGrid{
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    }
+
+    .toolbar{
+        width: 100%;
+    }
 
     .wrapper{
-        width: 100%;
         padding-left: 1rem;
         padding-right: 1rem;
     }
 
-    .titleLogo{
-        margin-bottom: -1rem;
-    }
-
-    .titleDescriptionSection{
-        padding: 0;
-    }
-
-    .gameContainer{
-        padding: 0;
-    }
-
-    .mainContent{
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
-    }
-
-    .gameImage{
+    .searchContainer{
         width: 100%;
     }
 
-    .titleText{
-        font-size: 2.5rem;
+    .resultsTitle{
+        font-size: 32px;
     }
 
     .description{
-        font-size: 16px;
-    }
-
-    .titleLogo{
-        padding: 0.3rem;
-    }
-    
-}
-
-@media screen and (max-width: 520px) {
-
-    .wrapper{
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
-    }
-
-    .gameResult{
-        font-size: 32px;
+        font-size: 18px;
     }
     
 }
