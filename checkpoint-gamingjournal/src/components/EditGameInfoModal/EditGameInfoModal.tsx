@@ -167,7 +167,7 @@ export default function EditGameInfoModal({ opened, onClose, libraryGames, game,
         <Modal
             opened={opened}
             onClose={onClose}
-            size='lg'
+            size='xl'
             title={'Edit Game Info'}
         >
 
