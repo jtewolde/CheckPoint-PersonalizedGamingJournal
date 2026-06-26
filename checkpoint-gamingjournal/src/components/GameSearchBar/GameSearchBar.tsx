@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef } from "react"
-import { Autocomplete, useCombobox, Button } from "@mantine/core"
+import { Autocomplete, useCombobox, Button, ActionIcon } from "@mantine/core"
 import { IconSearch } from "@tabler/icons-react"
 import { useRouter } from "next/navigation"
 
@@ -14,20 +14,24 @@ type GameSearchBarProps = {
     placeHolder?: string;
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     radius?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    iconColor?: string;
     className?: string;
     autoNavigate?: boolean;
     initialQuery?: string;
     showButton?: boolean;
+    showActionIcon?: boolean
 };
 
 export default function GameSearchBar({
     placeHolder = "Search for games...",
-    size = "lg",
-    radius = 'md',
+    iconColor='#211f20',
+    size="lg",
+    radius='md',
     className,
-    autoNavigate = true,
-    initialQuery = '',
-    showButton = true
+    autoNavigate=true,
+    initialQuery='',
+    showButton=false,
+    showActionIcon=false
 }: GameSearchBarProps) {
 
     // State to manage the current query and search results
@@ -138,6 +142,22 @@ export default function GameSearchBar({
                     Search
                 </Button>
             )}
+
+            {showActionIcon && (
+                <ActionIcon
+                    className={classes.iconButton}
+                    variant="filled"
+                    color={iconColor}
+                    c="white"
+                    size='input-lg'
+                    radius={radius}
+                    onClick={() => autoNavigate && navigateToSearch(query)}
+                >
+                    <IconSearch size={25} />
+                </ActionIcon>
+            )}
+
+
         </div>
     );
 }
