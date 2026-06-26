@@ -13,6 +13,7 @@ interface GameFilterProps {
     color: string;
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     radius?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    className: string;
     variant: GameFiltersVariant;
     totalGames: number;
     sortOption: string;
@@ -34,6 +35,7 @@ export default function GameFilters({
     color,
     size = "lg",
     radius = 'md',
+    className,
     variant,
     totalGames,
     sortOption,
@@ -107,7 +109,7 @@ export default function GameFilters({
                 {variant === 'default' && (
                     <Tooltip label='Apply Filters' position="top">
                         <Button 
-                        className={classes.filterButton} 
+                        className={className}
                         size={size} 
                         radius={radius} 
                         color={color} 

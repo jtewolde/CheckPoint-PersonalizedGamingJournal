@@ -138,7 +138,7 @@ export async function GET(req: NextRequest) {
 
     // Construct the query body for getting games
     const body = searchQuery
-      ? `fields name, summary, genres.name, genres.slug, cover.url, version_title, game_type.type, game_modes.slug, screenshots.url, themes.slug, platforms.slug, first_release_date, release_dates.human, total_rating; where ${whereClause}; ${sortClause} limit ${limit}; offset ${offset};`
+      ? `fields name, summary, genres.name, genres.slug, cover.url, version_title, game_type.type, game_modes.slug, screenshots.url, themes.slug, platforms.name, platforms.slug, first_release_date, release_dates.human, total_rating; where ${whereClause}; ${sortClause} limit ${limit}; offset ${offset};`
       : `fields name, summary, genres, cover.url, version_title; where rating >= 80 & first_release_date >= ${thirtyDaysAgo} & first_release_date <= ${Math.floor(now.getTime() / 1000)} & cover != null; sort rating desc; limit 6; offset ${offset};`;
 
     // Call API Request for getting specific info on searched games
