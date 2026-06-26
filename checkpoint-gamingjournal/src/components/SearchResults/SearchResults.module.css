@@ -41,25 +41,37 @@
     margin-top: 1rem;
 }
 
-
-.searchContainer{
-    width: 60%;
+.actionGrid{
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    width: min(100%, 500px);
 }
 
+.searchContainer, .searchBar{
+    width: 100%;
+}
 
 .actionRow{
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     gap: 0.5rem;
     width: 100%;
 }
 
-.filterContainer{
-    display: flex;
-    align-items: flex-end;
-    flex-shrink: 0;
-    gap: 1rem;
+.sortContainer, .filterContainer{
+    flex: 1;
+}
+
+.filterButton{
+    width: 100%;
+    font-family: 'Noto Sans';
+    font-weight: 400;
+    font-size: 18px;
+    border: 1px solid black;
+}
+
+.selectDropdown{
+    width: 100%;
 }
 
 .resultsContainer{
@@ -105,9 +117,15 @@
 
 @media screen and (max-width: 646px) {
 
-    .gamesGrid{
+    .resultGamesGrid{
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+
+    .resultsContainer{
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
     }
 
     .toolbar{
@@ -132,3 +150,4 @@
     }
     
 }
+

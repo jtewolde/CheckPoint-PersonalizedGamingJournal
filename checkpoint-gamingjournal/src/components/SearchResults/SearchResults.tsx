@@ -112,15 +112,17 @@ export default function SearchResults({ query }: SearchResultsProps){
                 </Text>
             </Stack>
 
+            <div className={classes.actionGrid}>
+                
                 <div className={classes.searchContainer}>
-                    <GameSearchBar className={classes.searchBar} initialQuery={query} showButton/>
+                    <GameSearchBar className={classes.searchBar} initialQuery={query} showActionIcon iconColor='#20201d'/>
                 </div>
 
                 <div className={classes.actionRow}>
                     <div className={classes.sortContainer}>
                     {/* Sort By Dropdown */}
                         <Select
-                            className={classes.filterDropdown}
+                            className={classes.selectDropdown}
                             size='lg'
                             variant='filled'
                             placeholder="Select an option"
@@ -145,8 +147,9 @@ export default function SearchResults({ query }: SearchResultsProps){
                     <div className={classes.filterContainer}>
                         <GameFilters
                             variant='default'
+                            className={classes.filterButton}
                             color='rgb(49, 48, 48)'
-                            size= 'lg'
+                            size='md'
                             radius='md'
                             totalGames={total}
                             sortOption={sortOption}
@@ -164,6 +167,8 @@ export default function SearchResults({ query }: SearchResultsProps){
                         />
                     </div>
                 </div>
+
+            </div>
 
             <div className={classes.resultsContainer}>
                 <Text className={classes.resultsText}>
