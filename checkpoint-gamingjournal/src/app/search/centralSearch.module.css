@@ -1,65 +1,26 @@
-
-.background{
-    background: url('/EldenRing.png') top center no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-    position: relative;
-    min-height: 100%; /* Ensure the page takes up the full height */
-    min-width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    z-index: 0;
-}
-
-.noBackground{
-    background: url('/tombRaider.jpg') top center no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-    position: relative;
-    min-height: 100%; /* Ensure the page takes up the full height */
-    min-width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    z-index: 0;
-}
-
-.backgroundOverlay{
-    width: 100%;
-    height: 100%;
-    position: relative;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    /* Fade from transparent to dark */
-    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.45) 0%, #19191e 100%);
-}
-
-.noBackgroundOverlay{
-    width: 100%;
-    height: 100%;
-    position: relative;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    /* Fade from transparent to dark */
-    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.25) 0%, #090909 20%);
-}
-
-.searchPageContainer {
-    padding: 0.8rem; /* Add padding around the content */
-    padding-bottom: 3rem;
+/* Wrapper for the entire search page */
+.wrapper {
+    background: var(--mantine-color-dark-8);
     position: relative;
     min-height: 100vh; /* Ensure the page takes up the full height */
     min-width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
+    z-index: 0;
+}
+
+.mainContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0.4rem;
+    z-index: 1;
     pointer-events: auto;
+
+    width: 100%;
+    height: 100%;
 }
 
 .searchBarContainer{
@@ -76,13 +37,14 @@
     gap: 10px;
 }
 
-.searchTitle{
-    font-size: 32px;
-    color: white;
-    font-family: 'Inter';
+.headerTitle {
+    font-size: 56px;
     font-weight: 700;
-    text-decoration: underline;
-    text-underline-offset: 10px;
+    color: white; /* Dark text for contrast */
+    text-align: left;
+    font-family: 'Noto Sans';
+    letter-spacing: 1px;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
 .sectionsContainer{
@@ -106,52 +68,6 @@
     color: white;/* input text color */
     border: 0.2px solid rgb(148, 148, 148);
     font-family: 'Noto Sans';
-}
-
-.trendingGames,
-.popularGames{
-    width: 100%;
-}
-
-.trendingSection,
-.popularSection{
-    display: flex;
-    flex-direction: row;
-    gap: 0.4rem;
-    width: 100%;
-    font-weight: 800;
-    margin-bottom: 1.2rem;
-    background-color: #272727;
-    border-radius: 8px;
-    border: 1px solid #494949;
-    padding: 0.4rem 0.8rem;
-    align-items: flex-start;
-    justify-content: space-between;
-    font-family: 'Inter';
-    color: #e9e9e9;
-}
-
-.titleLogo{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 0.8rem;
-}
-
-.viewMoreIcon{
-    justify-self: flex-end;
-    align-self: center;
-    color: #a7a7a7;
-    font-size: 100%;
-    font-weight: 500;
-    font-family: 'Poppins';
-    margin-top: 0.4rem;
-}
-
-.viewMoreIcon:hover{
-    color: #ffffff;
-    font-weight: 600;
 }
 
 @media (max-width: 765px){
