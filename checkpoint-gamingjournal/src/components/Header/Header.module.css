@@ -47,8 +47,12 @@
   justify-content: flex-start;
 }
 
+.searchBar{
+  width: 100%;
+}
+
 .searchBar input {
-    background-color: #161616; /* example: dark background */
+    background-color: #25252a;
     color: white;/* input text color */
     border: 0.2px solid rgb(72, 72, 72);
     font-family: 'Noto Sans';

@@ -313,7 +313,7 @@ export function Header() {
               onClose={searchClose}
               position='top'
               withCloseButton={false}
-              size='150px'
+              size='100px'
               className={classes.drawer}
               styles={{
                 content: {
@@ -328,7 +328,7 @@ export function Header() {
                 }
               }}
             >
-              <GameSearchBar className={classes.searchBar} placeHolder='Search Games...' size='lg' autoNavigate showButton={true} />
+              <GameSearchBar className={classes.searchBar} placeHolder='Search Games...' size='lg' iconColor='#5c565c' autoNavigate showActionIcon />
             </Drawer>
           {!isMobile ? (
             <div className={classes.searchBarContainer}>
