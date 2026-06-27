@@ -13,7 +13,7 @@ interface GameFilterProps {
     color: string;
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     radius?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-    className: string;
+    className?: string;
     variant: GameFiltersVariant;
     totalGames: number;
     sortOption: string;
