@@ -339,9 +339,7 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
                     >
                         {entry ? 'Update' : 'Create'}
                     </Button>
-
                 </div>
-
             </Stack>
         </Modal>
     )

@@ -7,10 +7,14 @@ import { useLibraryGame } from '@/hooks/useLibraryGame';
 import { useAuth } from '@/context/Authcontext';
 import PlaySessionModal from '../PlaySessionModal/SessionModal';
 
-import { Badge, Text, Image, Tooltip, ActionIcon, Rating } from '@mantine/core';
+import { Badge, Image, Tooltip, ActionIcon, Rating, Group, OverflowList } from '@mantine/core';
 import toast from 'react-hot-toast';
 
-import { Plus, Minus, Ellipsis, Trophy, ClipboardEdit } from 'lucide-react';
+import { Plus, Minus, Ellipsis, Trophy, ClipboardEdit, Star, Check, PowerOff, Backpack, Pause, Play } from 'lucide-react';
+
+import { FaPlaystation, FaXbox, FaWindows, FaApple, FaAndroid, FaGoogle, FaSteam, FaLinux } from "react-icons/fa";
+import { SiPlaystation, SiPlaystation2, SiPlaystation3, SiPlaystation4, SiPlaystation5, SiPlaystationportable, SiPlaystationvita } from "react-icons/si"
+import { BsNintendoSwitch, BsPc } from "react-icons/bs";
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 import classes from './GameCard.module.css';
@@ -27,7 +31,7 @@ interface GameCardProps {
         cover?: {url: string;};
         game_type?: {type: string;};
         genres?: {name: string;}[];
-        platforms?: {name: string;}[];
+        platforms?: {name: string; abbreviation?: string;}[];
         release_dates?: {human: string;}[];
         first_release_date?: number;
         total_rating?: number;
@@ -38,6 +42,7 @@ interface GameCardProps {
     libraryMeta?: {
         status?: string;
         rating?: number;
+        duration?: number;
         platinum?: boolean;
         completionDate?: string;
     }
@@ -57,7 +62,7 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
     const [opened, {open, close} ] = useDisclosure(false);
 
     const router = useRouter();
-    const isMobile = useMediaQuery('(max-width: 450px)');
+    const isMobile = useMediaQuery('(max-width: 480px)');
 
     // Determine the cover image URL or use a placeholder if not available
     const coverImage = game.cover
@@ -67,6 +72,11 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
     // State variables for determing if current gameCard is in the user's library
     const {isInLibrary, loading} = useLibraryGame(game.id);
     const [addingToLibrary, setAddingtoLibrary] = useState(false)
+
+    // Prepare platform data for display, showing up to 3 platforms and indicating if there are more.
+    const platforms = game.platforms ?? [];
+    const visiblePlatforms = platforms.slice(0, 3);
+    const remainingPlatforms = platforms.length - visiblePlatforms.length;
 
     // Function to handle quick adding and removing games from the user's library.
     const handleQuickToggle = async (gameId: string) => {
@@ -132,6 +142,121 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
 
     }
 
+    // Helper function to style game status badge depending on the status of the game
+    const getStatusInfo = (status?: string) => {
+        switch (status) {
+            case 'Playing':
+                return {
+                    color: 'blue',
+                    icon: <Play size={14} />,
+                };
+
+            case 'Completed':
+                return {
+                    color: 'green',
+                    icon: <Check size={14} />,
+                };
+
+            case '100%':
+                return {
+                    color: 'gold',
+                    icon: <Trophy size={14} />
+                }
+
+            case 'On Hold':
+                return {
+                    color: 'violet',
+                    icon: <Pause size={14} />,
+                };
+
+            case 'Dropped':
+                return {
+                    color: 'red',
+                    icon: <PowerOff size={14} />,
+                };
+
+            case 'Wishlist':
+                return {
+                    color: 'yellow',
+                    icon: <Star size={14} />,
+                };
+
+            case 'Backlog':
+                return {
+                    color: 'orange',
+                    icon: <Backpack size={14} />,
+                };
+
+            default:
+                return {
+                    color: 'gray',
+                    icon: null,
+                };
+        }
+    };
+
+    // Get the correct associating status info for the current game's card
+    const statusInfo = getStatusInfo(libraryMeta?.status)
+
+    // Helper function that maps the specific platform name to the associated logo to put on card
+    const getPlatformIcon = (platform: string) => {
+        const name = platform.toLowerCase();
+
+        // Windows / PC
+        if (name.includes("windows") || name === "pc")
+            return <FaWindows size={18} />;
+
+        // Apple
+        if (name.includes("mac"))
+            return <FaApple size={18} />;
+
+        // Linux
+        if (name.includes("linux"))
+            return <FaLinux size={18} />;
+
+        // Steam
+        if (name.includes("steam"))
+            return <FaSteam size={18} />;
+
+        // Android
+        if (name.includes("android"))
+            return <FaAndroid size={18} />;
+
+        // iOS
+        if (name.includes("ios"))
+            return <FaApple size={18} />;
+
+        // Nintendo
+        if (name.includes("switch"))
+            return <BsNintendoSwitch size={18} />;
+
+        // PlayStation
+        if (name.includes("playstation 5") || name.includes("ps5"))
+            return <SiPlaystation5 size={30} />;
+
+        if (name.includes("playstation 4") || name.includes("ps4"))
+            return <SiPlaystation4 size={30} />;
+
+        if (name.includes("playstation 3") || name.includes("ps3"))
+            return <SiPlaystation3 size={39} />;
+
+        if (name.includes("playstation 2") || name.includes("ps2"))
+            return <SiPlaystation2 size={30} />;
+
+        if (name.includes("playstation"))
+            return <SiPlaystation size={30} />;
+
+        // Xbox
+        if (
+            name.includes("xbox") ||
+            name.includes("series x") ||
+            name.includes("series s")
+        )
+            return <FaXbox size={18} />;
+
+        return null;
+    };
+
     return (
         <div key={game.id} className={`${classes.gameCard} ${variant === 'compact' ? classes.compact  : variant === 'small' ? classes.small : variant === 'library' ? classes.library : classes.default}`} onClick={() => {if(opened) return;  router.push(`/games/${game.id}`)}}>
 
@@ -143,9 +268,23 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
                 className={classes.cover}  
                 />
 
-                <div className={classes.overlay}>
+                {variant === 'default' && (
+                    <Badge 
+                        className={classes.ratingBadge}
+                        variant='dot' 
+                        color={game.total_rating && game.total_rating >= 80 ? '#2b8d08' : game.total_rating && game.total_rating >= 70 ? 'yellow' : '#e30000'}
+                        radius='md'
+                        size='sm'
+                    >
+                        <Group gap={5} align='center' >
+                            <Star size={12} color='gold' fill='gold'/> 
+                            {game.total_rating ? `${Math.round(game.total_rating)}` : 'N/A'}
+                        </Group>
+                        
+                    </Badge>
+                )}
 
-                    <Text className={classes.gameName}>{game.name}</Text>
+                <div className={classes.overlay}>
 
                     <div className={classes.quickButtons}>
 
@@ -168,13 +307,13 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
                         </div>
                         
                         <PlaySessionModal 
-                        key={game.id} 
-                        opened={opened} 
-                        onClose={close} 
-                        gameId={game.id} 
-                        gameName={game.name}
-                        platforms={game.platforms?.map((platform) => platform.name)}
-                        onSuccess={() => close()}  
+                            key={game.id} 
+                            opened={opened} 
+                            onClose={close} 
+                            gameId={game.id} 
+                            gameName={game.name}
+                            platforms={game.platforms?.map((platform) => platform.name)}
+                            onSuccess={() => close()}  
                         />
                         
                         <div className={classes.quickLog}>
@@ -191,12 +330,16 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
 
             {variant === 'library' && (
                 <div className={classes.gameInfo}>
+
+                    <h3 className={classes.gameTitle}>{game.name}</h3>
+
                     <Badge 
-                    className={classes.badge} 
-                    color={libraryMeta?.status === 'Completed' ? 'green' : libraryMeta?.status === 'Playing' ? 'blue' : libraryMeta?.status === 'On Hold' ? 'red' : libraryMeta?.status === 'Dropped' ? 'red' : libraryMeta?.status === 'Plan to Play' ? 'yellow': libraryMeta?.status === 'No Status Given' ? 'gray' : 'dark'} 
-                    variant='filled'
-                    size='md'
-                    radius='sm'
+                        className={classes.libraryBadge} 
+                        color={statusInfo.color}
+                        leftSection={statusInfo.icon}
+                        variant='outline'
+                        size='md'
+                        radius='sm'
                     >
                         {libraryMeta?.status || "No Status"}
                     </Badge>
@@ -204,50 +347,87 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
                     <div className={classes.ratingSection}>
                     
                         <Rating 
-                        size='md'
-                        color={libraryMeta?.rating && libraryMeta?.rating > 0 ? 'yellow' : '#555'}
-                        fractions={2}
-                        readOnly
-                        value={libraryMeta?.rating} 
+                            size='md'
+                            color={libraryMeta?.rating && libraryMeta?.rating > 0 ? 'yellow' : '#555'}
+                            fractions={2}
+                            readOnly
+                            value={libraryMeta?.rating} 
                         /> 
 
                         <Tooltip label='Platinumed/100%' position='right'>
                             <Trophy 
-                            size={25} 
-                            color={libraryMeta?.platinum ? 'gold' : '#555'}
-                            fill={libraryMeta?.platinum ? 'gold' : 'none'}
-                            cursor={'pointer'}
+                                size={25} 
+                                color={libraryMeta?.platinum ? 'gold' : '#555'}
+                                fill={libraryMeta?.platinum ? 'gold' : 'none'}
+                                cursor={'pointer'}
                             />
                         </Tooltip>
-
                     </div>
-
                 </div>
             )}
 
             {variant === 'default' && (
                 <div className={classes.gameInfo}>
-                    <h3 className={classes.gameTitle}>{game.name}</h3>
-                    <div className={classes.ratingTypeSection}>
-                        <Badge size='md' variant='filled' color='#767575'>{game.game_type?.type}</Badge>
-                        <Badge 
-                        className={classes.badge}
-                        variant='filled' 
-                        color={game.total_rating && game.total_rating >= 80 ? 'green' : game.total_rating && game.total_rating >= 70 ? 'yellow' : '#e30000'}
-                        radius='md'
-                        size='md'
-                        >
-                            {game.total_rating ? `${Math.round(game.total_rating)}` : 'N/A'}
-                        </Badge>
-                    </div>
 
-                    <div className={classes.badgeContainer}>
-                        {game.genres?.slice(0, 2).map((genre: { name: string }) => (
-                            <Badge key={genre.name} size="md" variant="filled" color="white" radius='lg' c='black'>
+                    <h3 className={classes.gameTitle}>{game.name}</h3>
+
+                    <OverflowList
+                        data={game.genres ?? []}
+                        maxVisibleItems={3}
+                        renderItem={(genre) => (
+                            <Badge
+                                key={genre.name}
+                                size='xs'
+                                variant="filled"
+                                color="#2e2e2e"
+                                radius="lg"
+                                >
                                 {genre.name}
                             </Badge>
+                        )}
+                        renderOverflow={(overflowItems) => (
+                            <Badge
+                                size={isMobile ? 'xs' : 'md'}
+                                color='#808080'
+                                variant="light"
+                                radius="lg"
+                                >
+                                +{overflowItems.length} More
+                            </Badge>
+                        )}
+                    />
+
+                    <Group gap={8}>
+                        {visiblePlatforms.map((platform) => (
+                            <Tooltip
+                                key={platform.name}
+                                label={platform.name}
+                                withArrow
+                                >
+                                <ActionIcon
+                                    variant="subtle"
+                                    size="md"
+                                >
+                                    {getPlatformIcon(platform.name)}
+                                </ActionIcon>
+                            </Tooltip>
                         ))}
-                    </div>
+
+                        {remainingPlatforms > 0 && (
+                            <Tooltip
+                                withArrow
+                                multiline
+                                label={platforms
+                                    .slice(3)
+                                    .map((p) => p.name)
+                                    .join(", ")}
+                                >
+                                <Badge variant="light" color='gray'>
+                                    +{remainingPlatforms}
+                                </Badge>
+                            </Tooltip>
+                        )}
+                        </Group>
 
                     <p className={classes.gameDate}>{game.first_release_date ? new Date(game.first_release_date * 1000).toLocaleDateString('en-US', {
                         year: 'numeric',
@@ -258,7 +438,6 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
                     </p>
                 </div>
             )}
-
         </div>
     )
 }

@@ -2,37 +2,40 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { authClient } from '@/lib/auth-client';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import Link from 'next/link';
 
-import { SimpleGrid, Image, Paper, Text, ThemeIcon, Badge, Rating, Group, Avatar } from '@mantine/core';
+import { SimpleGrid, Image, Paper, Text, ThemeIcon, Tooltip, Rating, Group, Avatar, Button, ActionIcon } from '@mantine/core';
 import { DonutChart, BarChart, LineChart } from '@mantine/charts';
 
-import { authClient } from '@/lib/auth-client';
 import SessionHeatmap from '@/components/SessionHeatmap/SessionHeatmap';
 import JournalEntryCard from '@/components/JournalEntryCard/EntryCard';
 import PlaySessionModal from '@/components/PlaySessionModal/SessionModal';
+import EditGameInfoModal from '@/components/EditGameInfoModal/EditGameInfoModal';
+import JournalEntryModal from '@/components/JournalEntryModal/EntryModal';
 
 import PlaceHolderImage from "../../../public/no-cover-image.png"
 
-import { Notebook, Gamepad } from 'lucide-react';
-import { Trophy, Star, ClipboardCheck } from 'lucide-react';
+import { Trophy, Star, ClipboardCheck, Edit, Notebook, Gamepad, BookText, NotebookPen } from 'lucide-react';
 
 import classes from './dashboard.module.css';
 
 export default function Dashboard() {
   const router = useRouter();
-  const isMobile = useMediaQuery('768px')
 
   const [user, setUser] = useState<{ name?: string; image?: string } | null>(null); // State to store user information such as name and profile image
 
   const [playingGames, setPlayingGames] = useState<any[]>([]); // State to store games that the user is currently playing
   const [libraryGames, setLibraryGames] = useState<any[]>([]); // State to store all of the games that the user has in their library
 
-  const [playGamesLength, setPlayGamesLength] = useState(0) // State to store length of playing games user has
-  const [noStatusLength, setNoStatusLength] = useState(0) // State to store length of games user has that has no status
-  const [completedLength, setCompletedLength] = useState(0) // State to store length of completed games user has
-  const [planToPlayLength, setPlanToPlayLength] = useState(0) // State to store length of game that the user plans to play
+  // State variables to hold the count of each game's status in the user's library for graph
+  const [playGamesLength, setPlayGamesLength] = useState(0) 
+  const [noStatusLength, setNoStatusLength] = useState(0) 
+  const [completedLength, setCompletedLength] = useState(0) 
+  const [fullyDoneLength, setfullyDoneLength] = useState(0)
+  const [wishlistLength, setWishlistLength] = useState(0)
+  const [backlogLength, setBacklogLength] = useState(0) 
   const [onHoldLength, setOnHoldLength] = useState(0)
 
   // State variables to store data for the profile stats section of the dashboard
@@ -48,14 +51,18 @@ export default function Dashboard() {
   const [journalActivityData, setJournalActivityData] = useState<{ month: string; entries: number }[]>([]); // State to store data from journal entries over time chart
   const [ratingDistributionData, setRatingDistributionData] = useState<{ rating: number; count: number }[]>([]); // State to store data for game ratings distribution chart
 
-  // State variables for quick logging play sessions on the dashboard
+  // State variables for doing quick actions by opening modals for editing, log play session, and create journal entry
   const [opened, {open, close} ] = useDisclosure(false);
+  const [editOpened, {open: editOpen, close: editClose}] = useDisclosure(false)
+  const [logOpened, {open: logOpen, close: logClose}] = useDisclosure(false)
+  const [journalOpened, {open: journalOpen, close: journalClose}] = useDisclosure(false)
+
   const [selectedGame, setSelectedGame] = useState<{
     gameId: string;
     title: string;
     cover: string;
     platforms: string[];
-    } | null>(null);
+  } | null>(null);
 
 
   // Check if the user is authenticated
@@ -108,18 +115,22 @@ export default function Dashboard() {
 
       const totalGames = data.games.length // Store total number of games
       
-      const planToPlay = data.games.filter((game: any) => game.status === 'Plan to Play').length;
+      const backlog = data.games.filter((game: any) => game.status === 'Backlog').length;
+      const wishlist = data.games.filter((game: any) => game.status === 'Wishlist').length;
       const playing = data.games.filter((game: any) => game.status === 'Playing').length;
       const completed = data.games.filter((game: any) => game.status === 'Completed').length;
+      const fullCompleted = data.games.filter((game: any) => game.status === '100%').length;
       const noStatus = data.games.filter((game: any) => game.status === 'No Status Given').length;
       const onHold = data.games.filter((game: any) => game.status === 'On Hold').length;
 
       // Get the completation Rate of the user's completed games compared to total games in their library
       const completationRate = Math.round((completed / totalGames) * 100) 
 
-      setPlanToPlayLength(planToPlay);
+      setBacklogLength(backlog)
       setPlayGamesLength(playing);
       setCompletedLength(completed);
+      setfullyDoneLength(fullCompleted);
+      setWishlistLength(wishlist);
       setNoStatusLength(noStatus);
       setOnHoldLength(onHold);
       setNumOfGames(totalGames);
@@ -284,9 +295,25 @@ export default function Dashboard() {
               </Group>
               
               <p className={classes.welcomeText}> 
-                  Your latest stats, sessions, and milestones — all in one place.
+                Your latest stats, sessions, and milestones — all in one place.
               </p>
               
+            </div>
+
+            <div className={classes.quickActionGroup}>
+              <EditGameInfoModal opened={editOpened} onClose={editClose} libraryGames={libraryGames} />
+              <Button style={{fontFamily:'Poppins', fontWeight: '400'}} size='md' radius='md' leftSection={<Edit size={20} />} onClick={editOpen}>Edit Game Info</Button>
+
+              <PlaySessionModal opened={logOpened} onClose={logClose} gameId={selectedGame?.gameId} gameName={selectedGame?.title} platforms={selectedGame?.platforms}/>
+              <Tooltip label='Log Play Session' position='top'>
+                <ActionIcon color='teal' size='xl' radius='md' onClick={logOpen}><BookText size={25} /></ActionIcon>
+              </Tooltip>
+
+              <JournalEntryModal opened={journalOpened} onClose={journalClose} gameId={selectedGame?.gameId} gameName={selectedGame?.title} />
+              <Tooltip label='Create Journal Entry' position='top'>
+                <ActionIcon color='pink' size='xl' radius='md' onClick={journalOpen}><NotebookPen size={25} /></ActionIcon>
+              </Tooltip>
+
             </div>
           
           </div>
@@ -396,11 +423,13 @@ export default function Dashboard() {
                         }
                       }}
                       data={[
-                        { name: 'Plan to Play', value: planToPlayLength, color: 'blue' },
+                        { name: 'Backlog', value: backlogLength, color: 'orange' },
+                        { name: 'Wishlist', value: wishlistLength, color: 'pink'},
                         { name: 'On Hold', value: onHoldLength, color: 'red' },
-                        { name: 'Playing', value: playGamesLength, color: 'yellow'},
+                        { name: 'Playing', value: playGamesLength, color: 'blue'},
                         { name: 'No Status Given', value: noStatusLength, color: 'lightgrey'},
-                        { name: 'Completed', value: completedLength, color: 'green'}
+                        { name: 'Completed', value: completedLength, color: 'green'},
+                        { name: '100%', value: fullyDoneLength, color: 'gold'}
                       ]}
                     />
 

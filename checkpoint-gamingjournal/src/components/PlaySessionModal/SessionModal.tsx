@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Modal, Divider, Stack, Button, TextInput, LoadingOverlay, NumberInput, Select, MultiSelect, Textarea } from "@mantine/core";
-import { DateInput, DatePickerInput } from "@mantine/dates";
+import { DatePickerInput } from "@mantine/dates";
 
 import toast from "react-hot-toast";
 
@@ -66,17 +66,6 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
         setSessionType([]);
         setMood('');
         setPlatform('');
-    };
-
-    // Helper function to parse the date from the date input in the modal to display correct date
-    const parseLocalDate = (dateString: string) => {
-        const date = new Date(dateString);
-
-        return new Date(
-            date.getUTCFullYear(),
-            date.getUTCMonth(),
-            date.getUTCDate()
-        );
     };
 
     // Fetch the user's library of games to populate the select dropdown
@@ -277,11 +266,11 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                     size="md"
                     minRows={3}
                     maxRows={10}
-                    maxLength={1000}
+                    maxLength={2500}
                     autosize
                     label="Session Summary"
                     placeholder="Enter play session notes... "
-                    description={`${playSessionNotes.length}/1000 characters`}
+                    description={`${playSessionNotes.length}/2500 characters`}
                     value={playSessionNotes}
                     onChange={(e) => setPlaySessionNotes(e.target.value)}
                     style={{ marginTop: "1rem" }}
@@ -345,13 +334,14 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                             "Competitive",
                             "Frustrated",
                             "Excited",
+                            "Fun",
                             "Chill"
                         ]}
                         scrollAreaProps={{ type: 'auto', scrollbarSize: 16, scrollbars: 'y', color:'black',  classNames: { scrollbar: classes.scrollBar }}}
                         size="md"
                         label="Mood"
                         description="How did you feel during this session?"
-                        placeholder="(e.g. Fun, Frustrating, Relaxing, Nostalgic)"
+                        placeholder="(e.g. Fun, Frustrating, Relaxing)"
                         value={mood}
                         onChange={(value) => {
                             setMood(value || '')
@@ -392,7 +382,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                     />
                 </div>
 
-                <Divider styles={{label: {color: 'white'}}} labelPosition="center" color='dimmed' my="md"  />
+                <Divider styles={{label: {color: 'white'}}} labelPosition="center" color='dimmed' my="sm"  />
 
                 <div className={classes.buttonGroup}>
 

@@ -15,26 +15,15 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    gap: 0.4rem;
+    gap: 2rem;
+    padding: 2rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
     z-index: 1;
     pointer-events: auto;
 
     width: 100%;
     height: 100%;
-}
-
-.searchBarContainer{
-    margin-top: 5rem;
-    width: 94%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    background-color: #242424;
-    border: 1px solid #494949;
-    border-radius: 16px;
-    padding: 20px;
-    gap: 10px;
 }
 
 .headerTitle {
@@ -47,13 +36,24 @@
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
-.sectionsContainer{
+.descriptionText{
+    color: #bdbbbb;
+    font-weight: 400;
+    text-align: left;
+    font-family: 'Barlow';
+    font-size: 24px;
+    max-width: 900px;
+}
+
+.searchBarContainer{
+    margin-top: 1rem;
     width: 94%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: flex-start;
-    gap: 3rem;
+    justify-content: center;
+    border-radius: 16px;
+    gap: 10px;
 }
 
 .searchBar {
@@ -70,6 +70,47 @@
     font-family: 'Noto Sans';
 }
 
+.trendingSection,
+.popularSection{
+    display: flex;
+    flex-direction: row;
+    gap: 0.4rem;
+    width: 100%;
+    font-weight: 800;
+    margin-bottom: 1.2rem;
+    background-color: #272727;
+    border-radius: 8px;
+    border: 1px solid #494949;
+    padding: 0.4rem 0.8rem;
+    align-items: flex-start;
+    justify-content: space-between;
+    font-family: 'Inter';
+    color: #e9e9e9;
+}
+
+.titleLogo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+}
+
+.viewMoreIcon{
+    justify-self: flex-end;
+    align-self: center;
+    color: #a7a7a7;
+    font-size: 100%;
+    font-weight: 500;
+    font-family: 'Poppins';
+    margin-top: 0.4rem;
+}
+
+.viewMoreIcon:hover{
+    color: #ffffff;
+    font-weight: 600;
+}
+
 @media (max-width: 765px){
     .sectionsContainer{
         width: 100%;
@@ -80,7 +121,19 @@
     }
 }
 
-@media (max-width: 400px){
+@media (max-width: 560px){
+    .mainContent{
+        padding: 1rem;
+    }
+
+    .headerTitle{
+        font-size: 2.5rem;
+    }
+
+    .descriptionText{
+        font-size: 18px;
+    }
+
     .searchTitle{
         font-size: 24px;
     }

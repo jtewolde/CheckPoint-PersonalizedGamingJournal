@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth-client'
 import { useMediaQuery, useDisclosure } from '@mantine/hooks';
-import PlaySessionModal from '@/components/PlaySessionModal/SessionModal';
 
 import { SimpleGrid, Badge, Image, Select, Popover, Button, Tooltip, Rating, Switch, Stack, LoadingOverlay} from '@mantine/core';
 import { ListFilter, Trophy } from 'lucide-react';
@@ -186,7 +185,8 @@ export default function Library(){
                                         libraryMeta={{
                                             status: game.status,
                                             rating: game.rating,
-                                            platinum: game.platinum
+                                            platinum: game.platinum,
+                                            duration: game.duration
                                         }}
                                     />
                                 ))}

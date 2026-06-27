@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { MultiSelect, Select, Drawer, Stack, Button, Text, ActionIcon, Tooltip, Badge, Group } from "@mantine/core";
+import { MultiSelect, Select, Drawer, Stack, Button, ActionIcon, Tooltip, Divider } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { ListFilter, RefreshCcw } from "lucide-react";
+import { Funnel, RefreshCcw } from "lucide-react";
 import classes from './GameFilters.module.css';
 
 type GameFiltersVariant = 'default' | 'small'
@@ -13,6 +13,7 @@ interface GameFilterProps {
     color: string;
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     radius?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    className?: string;
     variant: GameFiltersVariant;
     totalGames: number;
     sortOption: string;
@@ -34,6 +35,7 @@ export default function GameFilters({
     color,
     size = "lg",
     radius = 'md',
+    className,
     variant,
     totalGames,
     sortOption,
@@ -105,31 +107,31 @@ export default function GameFilters({
             <div className={classes.filterTopRow}>
 
                 {variant === 'default' && (
-                    <Button 
-                    className={classes.filterButton} 
-                    size={size} 
-                    radius={radius} 
-                    color={color} 
-                    leftSection={<ListFilter size={30} />} 
-                    onClick={toggle}>
-                        Filters ({numberOfActiveFilters})
-                    </Button>
+                    <Tooltip label='Apply Filters' position="top">
+                        <Button 
+                        className={className}
+                        size={size} 
+                        radius={radius} 
+                        color={color} 
+                        leftSection={<Funnel size={30} />} 
+                        onClick={toggle}>
+                            Filters ({numberOfActiveFilters})
+                        </Button>
+                    </Tooltip>
                 )}
 
                 {variant === 'small' && (
-                    <ActionIcon
-                    size={size}
-                    radius={radius}
-                    color={color}
-                    onClick={toggle}
-                    >
-                        <ListFilter size={30} />
-                    </ActionIcon>
+                    <Tooltip label='Apply Filters' position="top">
+                        <ActionIcon
+                        size={size}
+                        radius={radius}
+                        color={color}
+                        onClick={toggle}
+                        >
+                            <Funnel size={30} />
+                        </ActionIcon>
+                    </Tooltip>
                 )}
-
-            <Text className={classes.totalFiltersText} color='white'>
-                {totalGames} Games
-            </Text>
 
             </div>
 
@@ -159,49 +161,11 @@ export default function GameFilters({
                         color: 'white'
                     }
                 }}
+                removeScrollProps={{ allowPinchZoom: true }}
+                keepMounted
             >
 
                 <Stack className={classes.drawerFilters} gap='xs' justify='center' mt={20}>
-
-                    {/* Sort By Dropdown */}
-                    <Select
-                        size='md'
-                        label="Sort By:"
-                        placeholder="Select an option"
-                        checkIconPosition='left'
-                        styles={{
-                            dropdown: {
-                                background: '#212121',
-                                color: 'whitesmoke'
-                            },
-                            input: {
-                                background: '#212121',
-                                fontFamily: 'Noto Sans',
-                                color: 'white'
-                            },
-                            option: {
-                                background: '#212121',
-                                fontFamily: 'Noto Sans',
-                                fontSize: '16px',
-                                fontWeight: 330
-                            },
-                            label: {
-                                fontFamily: 'Noto Sans',
-                                color: 'white',
-                                fontSize: '20px',
-                                fontWeight: 300
-                            }
-                        }}
-                        data={[
-                            { value: 'alphabetical', label: 'Alphabetical (A-Z)'},
-                            { value: 'first_release_date', label: 'Release Date' },
-                            { value: 'total_rating', label: "Total Rating"},
-                        ]}
-                        value={sortOption}
-                        onChange={onSortChange}
-                        className={classes.filterDropdown}
-                        mb="md"
-                    />
                     
                     {/* Filter by Game Type with MultiSelect */}
                     <MultiSelect
@@ -502,10 +466,10 @@ export default function GameFilters({
                         mb="md"
                     />
 
+                    <Divider color="lightgray" my='md' />
+
                     <div className={classes.buttonActions}>
-                        <Tooltip label='Clear Filters' position="top">
-                            <ActionIcon variant="filled" color="red" size='lg' onClick={handleClearFilters}><RefreshCcw size={20} /></ActionIcon>
-                        </Tooltip>
+                        <Button className={classes.clearButton} variant="filled" color="red" size='md' leftSection={<RefreshCcw size={20} />} onClick={handleClearFilters}>Clear</Button>
 
                         <Button className={classes.saveButton} size="md" onClick={handleApplyFilters}>Update Filters</Button>
                     </div>
@@ -513,80 +477,6 @@ export default function GameFilters({
                 </Stack>
 
             </Drawer>
-
-            {activeFilters && (
-                <Group className={classes.activeFilters} mt='sm' gap='md' wrap="wrap">
-                    {selectedType.length > 0 && (
-                        <Badge
-                            className={classes.filterBadge}
-                            size="lg"
-                            variant="outline"
-                            color="white"
-                            radius="sm"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => onTypeChange([])}
-                        >
-                            Type: {selectedType.join(", ")} ✕
-                        </Badge>
-                    )}
-
-                    {selectedGenres.length > 0 && (
-                        <Badge
-                            className={classes.filterBadge}
-                            size="lg"
-                            variant="outline"
-                            color="white"
-                            radius="sm"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => onTypeChange([])}
-                        >
-                            Genres: {selectedGenres.join(", ")} ✕
-                        </Badge>
-                    )}
-
-                    {selectedThemes.length > 0 && (
-                        <Badge
-                            className={classes.filterBadge}
-                            size="lg"
-                            variant="outline"
-                            color="white"
-                            radius="sm"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => onTypeChange([])}
-                        >
-                            Themes: {selectedThemes.join(", ")} ✕
-                        </Badge>
-                    )}
-
-                    {selectedModes.length > 0 && (
-                        <Badge
-                            className={classes.filterBadge}
-                            size="lg"
-                            variant="outline"
-                            color="white"
-                            radius="sm"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => onTypeChange([])}
-                        >
-                            Modes: {selectedModes.join(", ")} ✕
-                        </Badge>
-                    )}
-
-                    {selectedPlatforms.length > 0 && (
-                        <Badge
-                            className={classes.filterBadge}
-                            size="lg"
-                            variant="outline"
-                            color="white"
-                            radius="sm"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => onTypeChange([])}
-                        >
-                            Platforms: {selectedPlatforms.join(", ")} ✕
-                        </Badge>
-                    )}
-                </Group>
-            )}
 
         </div>
     )

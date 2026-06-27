@@ -4,14 +4,6 @@
   flex-direction: column;
   gap: 0.5rem;
   width: 100%;
-  margin-bottom: 1rem;
-}
-
-.filterTopRow{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
 }
 
 .filterBadge{
@@ -19,17 +11,10 @@
   font-weight: 500;
 }
 
-.totalFiltersText{
-  font-family: 'Inter';
-  font-size: 20px;
-  font-weight: 300;
-  justify-self: flex-end;
-}
-
 .buttonActions{
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   gap: 1rem;
 }
@@ -37,11 +22,12 @@
 .filterButton{
   width: auto;
   font-family: 'Noto Sans';
-  font-size: 20px;
+  font-weight: 400;
+  font-size: 18px;
   border: 1px solid black;
 }
 
-.saveButton{
+.saveButton, .clearButton{
   font-family: 'Poppins';
   font-weight: 400;
 }
