@@ -7,10 +7,14 @@ import { useLibraryGame } from '@/hooks/useLibraryGame';
 import { useAuth } from '@/context/Authcontext';
 import PlaySessionModal from '../PlaySessionModal/SessionModal';
 
-import { Badge, Text, Image, Tooltip, ActionIcon, Rating, Group, OverflowList } from '@mantine/core';
+import { Badge, Image, Tooltip, ActionIcon, Rating, Group, OverflowList } from '@mantine/core';
 import toast from 'react-hot-toast';
 
 import { Plus, Minus, Ellipsis, Trophy, ClipboardEdit, Star, Check, PowerOff, Backpack, Pause, Play } from 'lucide-react';
+
+import { FaPlaystation, FaXbox, FaWindows, FaApple, FaAndroid, FaGoogle, FaSteam, FaLinux } from "react-icons/fa";
+import { SiPlaystation, SiPlaystation2, SiPlaystation3, SiPlaystation4, SiPlaystation5, SiPlaystationportable, SiPlaystationvita } from "react-icons/si"
+import { BsNintendoSwitch, BsPc } from "react-icons/bs";
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 import classes from './GameCard.module.css';
@@ -194,6 +198,65 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
     // Get the correct associating status info for the current game's card
     const statusInfo = getStatusInfo(libraryMeta?.status)
 
+    // Helper function that maps the specific platform name to the associated logo to put on card
+    const getPlatformIcon = (platform: string) => {
+        const name = platform.toLowerCase();
+
+        // Windows / PC
+        if (name.includes("windows") || name === "pc")
+            return <FaWindows size={18} />;
+
+        // Apple
+        if (name.includes("mac"))
+            return <FaApple size={18} />;
+
+        // Linux
+        if (name.includes("linux"))
+            return <FaLinux size={18} />;
+
+        // Steam
+        if (name.includes("steam"))
+            return <FaSteam size={18} />;
+
+        // Android
+        if (name.includes("android"))
+            return <FaAndroid size={18} />;
+
+        // iOS
+        if (name.includes("ios"))
+            return <FaApple size={18} />;
+
+        // Nintendo
+        if (name.includes("switch"))
+            return <BsNintendoSwitch size={18} />;
+
+        // PlayStation
+        if (name.includes("playstation 5") || name.includes("ps5"))
+            return <SiPlaystation5 size={30} />;
+
+        if (name.includes("playstation 4") || name.includes("ps4"))
+            return <SiPlaystation4 size={30} />;
+
+        if (name.includes("playstation 3") || name.includes("ps3"))
+            return <SiPlaystation3 size={39} />;
+
+        if (name.includes("playstation 2") || name.includes("ps2"))
+            return <SiPlaystation2 size={30} />;
+
+        if (name.includes("playstation"))
+            return <SiPlaystation size={30} />;
+
+        // Xbox
+        if (
+            name.includes("xbox") ||
+            name.includes("series x") ||
+            name.includes("series s")
+        )
+            return <FaXbox size={18} />;
+
+        return null;
+    };
+
     return (
         <div key={game.id} className={`${classes.gameCard} ${variant === 'compact' ? classes.compact  : variant === 'small' ? classes.small : variant === 'library' ? classes.library : classes.default}`} onClick={() => {if(opened) return;  router.push(`/games/${game.id}`)}}>
 
@@ -244,13 +307,13 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
                         </div>
                         
                         <PlaySessionModal 
-                        key={game.id} 
-                        opened={opened} 
-                        onClose={close} 
-                        gameId={game.id} 
-                        gameName={game.name}
-                        platforms={game.platforms?.map((platform) => platform.name)}
-                        onSuccess={() => close()}  
+                            key={game.id} 
+                            opened={opened} 
+                            onClose={close} 
+                            gameId={game.id} 
+                            gameName={game.name}
+                            platforms={game.platforms?.map((platform) => platform.name)}
+                            onSuccess={() => close()}  
                         />
                         
                         <div className={classes.quickLog}>
@@ -313,13 +376,13 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
                         maxVisibleItems={3}
                         renderItem={(genre) => (
                             <Badge
-                            key={genre.name}
-                            size={'sm'}
-                            variant="filled"
-                            color="#2e2e2e"
-                            radius="lg"
-                            >
-                            {genre.name}
+                                key={genre.name}
+                                size='xs'
+                                variant="filled"
+                                color="#2e2e2e"
+                                radius="lg"
+                                >
+                                {genre.name}
                             </Badge>
                         )}
                         renderOverflow={(overflowItems) => (
@@ -334,10 +397,37 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
                         )}
                     />
 
-                    <p className={classes.gamePlatforms}>
-                        {visiblePlatforms.map((p) => p.abbreviation || p.name).join(' • ')}
-                        {remainingPlatforms > 0 && ` +${remainingPlatforms}`}
-                    </p>
+                    <Group gap={8}>
+                        {visiblePlatforms.map((platform) => (
+                            <Tooltip
+                                key={platform.name}
+                                label={platform.name}
+                                withArrow
+                                >
+                                <ActionIcon
+                                    variant="subtle"
+                                    size="md"
+                                >
+                                    {getPlatformIcon(platform.name)}
+                                </ActionIcon>
+                            </Tooltip>
+                        ))}
+
+                        {remainingPlatforms > 0 && (
+                            <Tooltip
+                                withArrow
+                                multiline
+                                label={platforms
+                                    .slice(3)
+                                    .map((p) => p.name)
+                                    .join(", ")}
+                                >
+                                <Badge variant="light" color='gray'>
+                                    +{remainingPlatforms}
+                                </Badge>
+                            </Tooltip>
+                        )}
+                        </Group>
 
                     <p className={classes.gameDate}>{game.first_release_date ? new Date(game.first_release_date * 1000).toLocaleDateString('en-US', {
                         year: 'numeric',

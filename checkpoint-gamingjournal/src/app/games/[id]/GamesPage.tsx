@@ -24,8 +24,11 @@ import classes from './game.module.css';
 
 import { NotebookPen, Delete, X, CalendarDays, Trophy, Camera, Star, Gamepad, Activity, Pencil } from 'lucide-react';
 
-import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, 
-  IconRating18Plus, IconIcons, IconDevicesPc, IconBrandGoogle, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
+import { IconBrandXbox, IconFileDescription, IconBook, IconSwords, IconBrush, IconUsersGroup, IconDeviceGamepad2, IconRating18Plus } from '@tabler/icons-react';
+
+import { FaPlaystation, FaXbox, FaWindows, FaApple, FaAndroid, FaGoogle } from "react-icons/fa";
+import { SiPlaystation, SiPlaystation2, SiPlaystation3, SiPlaystation4, SiPlaystation5, SiPlaystationportable, SiPlaystationvita } from "react-icons/si"
+import { BsNintendoSwitch, BsPc } from "react-icons/bs";
 
 import PlaceHolderImage from '../../../../public/no-cover-image.png';
 import { useAuth } from '@/context/Authcontext';
@@ -341,21 +344,21 @@ export default function GameDetails() {
   // Function to retrieve logos for different platforms that games can be on
   const getPlatformIcon = (platformName: string) => {
 
-    if (platformName.toLowerCase().includes("xbox")) return <IconBrandXbox size={25} />;
+    if (platformName.toLowerCase().includes("xbox")) return <FaXbox size={20} />;
 
-    if (platformName.toLowerCase().includes("playstation")) return <IconIcons size={25} />;
+    if (platformName.toLowerCase().includes("playstation")) return <FaPlaystation size={20} />;
 
     if (platformName.toLowerCase().includes("pc") || platformName.toLowerCase().includes("windows"))
-      return <IconDevicesPc size={25} />;
+      return <BsPc size={20} />;
 
-    if (platformName.toLowerCase().includes("nintendo")) return <IconDeviceNintendo size={25} />;
+    if (platformName.toLowerCase().includes("nintendo")) return <BsNintendoSwitch size={20} />;
 
-    if (platformName.toLowerCase().includes("android")) return <IconBrandAndroid size={25} />;
+    if (platformName.toLowerCase().includes("android")) return <FaAndroid size={20} />;
 
-    if (platformName.toLowerCase().includes("google")) return <IconBrandGoogle size={25} />
+    if (platformName.toLowerCase().includes("google")) return <FaGoogle size={20} />
 
     if (platformName.toLowerCase().includes("ios") || platformName.toLowerCase().includes("mac")) 
-      return <IconBrandApple size={25} />;
+      return <FaApple size={20} />;
 
     return null; // fallback if no match
   };
