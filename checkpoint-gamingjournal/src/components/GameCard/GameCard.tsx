@@ -7,12 +7,12 @@ import { useLibraryGame } from '@/hooks/useLibraryGame';
 import { useAuth } from '@/context/Authcontext';
 import PlaySessionModal from '../PlaySessionModal/SessionModal';
 
-import { Badge, Image, Tooltip, ActionIcon, Rating, Group, OverflowList } from '@mantine/core';
+import { Badge, Image, Tooltip, ActionIcon, Rating, OverflowList, Text, ThemeIcon, Group} from '@mantine/core';
 import toast from 'react-hot-toast';
 
-import { Plus, Minus, Ellipsis, Trophy, ClipboardEdit, Star, Check, PowerOff, Backpack, Pause, Play } from 'lucide-react';
+import { Plus, Minus, Ellipsis, Trophy, ClipboardEdit, Star, Check, PowerOff, Backpack, Pause, Play, Timer } from 'lucide-react';
 
-import { FaPlaystation, FaXbox, FaWindows, FaApple, FaAndroid, FaGoogle, FaSteam, FaLinux } from "react-icons/fa";
+import { FaXbox, FaWindows, FaApple, FaAndroid, FaSteam, FaLinux, FaTrophy } from "react-icons/fa";
 import { SiPlaystation, SiPlaystation2, SiPlaystation3, SiPlaystation4, SiPlaystation5, SiPlaystationportable, SiPlaystationvita } from "react-icons/si"
 import { BsNintendoSwitch, BsPc } from "react-icons/bs";
 
@@ -42,7 +42,7 @@ interface GameCardProps {
     libraryMeta?: {
         status?: string;
         rating?: number;
-        duration?: number;
+        hours?: number;
         platinum?: boolean;
         completionDate?: string;
     }
@@ -64,11 +64,6 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
     const router = useRouter();
     const isMobile = useMediaQuery('(max-width: 480px)');
 
-    // Determine the cover image URL or use a placeholder if not available
-    const coverImage = game.cover
-    ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}`
-    : PlaceHolderImage.src;
-
     // State variables for determing if current gameCard is in the user's library
     const {isInLibrary, loading} = useLibraryGame(game.id);
     const [addingToLibrary, setAddingtoLibrary] = useState(false)
@@ -81,11 +76,6 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
     // Function to handle quick adding and removing games from the user's library.
     const handleQuickToggle = async (gameId: string) => {
         if (loading || addingToLibrary){
-            console.log('[GameCard]', {
-                gameId: game.id,
-                isInLibrary,
-                loading,
-            });
             return;
         } 
 
@@ -148,18 +138,21 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
             case 'Playing':
                 return {
                     color: 'blue',
+                    textColor: '#79b8f3',
                     icon: <Play size={14} />,
                 };
 
             case 'Completed':
                 return {
-                    color: 'green',
+                    color: 'lime',
+                    textColor: '#72eb74',
                     icon: <Check size={14} />,
                 };
 
             case '100%':
                 return {
-                    color: 'gold',
+                    color: '#f2e422',
+                    textColor: '#f9ed83',
                     icon: <Trophy size={14} />
                 }
 
@@ -246,6 +239,12 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
         if (name.includes("playstation"))
             return <SiPlaystation size={30} />;
 
+        if (name.includes("playstation vita"))
+            return <SiPlaystationvita size={30} />
+
+        if (name.includes("playstation portable"))
+            return <SiPlaystationportable size={30} />
+
         // Xbox
         if (
             name.includes("xbox") ||
@@ -263,9 +262,9 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
             <div className={classes.imageWrapper}>
 
                 <Image 
-                src={game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
-                alt={game.name} 
-                className={classes.cover}  
+                    src={game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
+                    alt={game.name} 
+                    className={classes.cover}  
                 />
 
                 {variant === 'default' && (
@@ -274,7 +273,7 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
                         variant='dot' 
                         color={game.total_rating && game.total_rating >= 80 ? '#2b8d08' : game.total_rating && game.total_rating >= 70 ? 'yellow' : '#e30000'}
                         radius='md'
-                        size='sm'
+                        size='md'
                     >
                         <Group gap={5} align='center' >
                             <Star size={12} color='gold' fill='gold'/> 
@@ -282,6 +281,31 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
                         </Group>
                         
                     </Badge>
+                )}
+
+                {variant === 'library' && (
+                    <>
+                        <Badge 
+                            className={classes.libraryBadge} 
+                            color={statusInfo.color}
+                            leftSection={statusInfo.icon}
+                            variant='outline'
+                            size='md'
+                            radius='sm'
+                        >
+                            {libraryMeta?.status || "No Status"}
+                        </Badge>
+
+                        {libraryMeta?.platinum === true && (
+                            <ThemeIcon className={classes.platinumIcon} size='md' radius='sm' variant='outline' color='black'>
+                                <FaTrophy
+                                    size={20} 
+                                    color='gold'
+                                    cursor='pointer'
+                                />
+                            </ThemeIcon>
+                        )}  
+                    </>
                 )}
 
                 <div className={classes.overlay}>
@@ -333,55 +357,46 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
 
                     <h3 className={classes.gameTitle}>{game.name}</h3>
 
-                    <Badge 
-                        className={classes.libraryBadge} 
-                        color={statusInfo.color}
-                        leftSection={statusInfo.icon}
-                        variant='outline'
-                        size='md'
-                        radius='sm'
-                    >
-                        {libraryMeta?.status || "No Status"}
-                    </Badge>
-
                     <div className={classes.ratingSection}>
                     
-                        <Rating 
-                            size='md'
-                            color={libraryMeta?.rating && libraryMeta?.rating > 0 ? 'yellow' : '#555'}
-                            fractions={2}
-                            readOnly
-                            value={libraryMeta?.rating} 
-                        /> 
-
-                        <Tooltip label='Platinumed/100%' position='right'>
-                            <Trophy 
-                                size={25} 
-                                color={libraryMeta?.platinum ? 'gold' : '#555'}
-                                fill={libraryMeta?.platinum ? 'gold' : 'none'}
-                                cursor={'pointer'}
+                        <Group gap={3} align='center'>
+                            <Rating 
+                                size='md'
+                                color={libraryMeta?.rating && libraryMeta?.rating > 0 ? 'yellow' : '#555'}
+                                readOnly
+                                value={libraryMeta?.rating} 
                             />
-                        </Tooltip>
+
+                            <Text className={classes.ratingText}>
+                                {libraryMeta?.rating}/10
+                            </Text>
+                        </Group>
+
+                        <Group gap={4} align='center'>
+                            <Timer size={20} color='gray' />
+                            <Text className={classes.hoursPlayedText}>
+                                {libraryMeta?.hours || 0} Hours Played
+                            </Text>
+                        </Group>
                     </div>
                 </div>
             )}
 
             {variant === 'default' && (
                 <div className={classes.gameInfo}>
-
                     <h3 className={classes.gameTitle}>{game.name}</h3>
 
                     <OverflowList
                         data={game.genres ?? []}
-                        maxVisibleItems={3}
+                        maxVisibleItems={2}
                         renderItem={(genre) => (
                             <Badge
                                 key={genre.name}
-                                size='xs'
+                                size='md'
                                 variant="filled"
                                 color="#2e2e2e"
                                 radius="lg"
-                                >
+                            >
                                 {genre.name}
                             </Badge>
                         )}
