@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "@mantine/hooks";
-import { Modal, Group, Stack, Button, Textarea, LoadingOverlay, Select, Rating, Checkbox, Text, TextInput, NumberInput } from "@mantine/core";
+import { Modal, Group, Stack, Button, Textarea, LoadingOverlay, Select, Rating, Checkbox, Text, TextInput, NumberInput, Slider } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 
 import toast from "react-hot-toast";
@@ -368,29 +368,46 @@ export default function EditGameInfoModal({ opened, onClose, libraryGames, game,
                             <Text size='md' className={classes.ratingText}>Your Rating:</Text>
                             <div className={classes.ratingWrapper}>
                                 <Rating
-                                    size='lg' 
+                                    size='xl' 
                                     fractions={2} 
                                     value={rating} 
-                                    readOnly={!activeGame}
+                                    count={10}
+                                    readOnly
                                     onChange={
                                     (value) => {
                                         setRating(value);
                                     }}
                                 />
-                                <p className={classes.starsCount}>{rating}/5</p>
+                                
+                                <p className={classes.starsCount}>{rating}/10</p>
                             </div>
                         </div>
 
-                        <Checkbox
-                            size="lg"
-                            label={'Platinum Achieved'}
-                            checked={isPlatinum}
-                            onChange={(event) =>
-                                setIsPlatinum(event.currentTarget.checked)
-                            }
-                            disabled={!activeGame}
-                        />
                     </Group>
+
+                    <Slider
+                        size='lg'
+                        radius='xl'
+                        min={0}
+                        max={10}
+                        step={0.5}
+                        value={rating}
+                        onChange={
+                            (value) => {
+                                setRating(value);
+                            }
+                        }
+                    />
+
+                    <Checkbox
+                        size="lg"
+                        label={'Platinum Achieved'}
+                        checked={isPlatinum}
+                        onChange={(event) =>
+                            setIsPlatinum(event.currentTarget.checked)
+                        }
+                        disabled={!activeGame}
+                    />
 
                 </Stack>
 

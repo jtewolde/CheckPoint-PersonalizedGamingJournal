@@ -6,7 +6,7 @@ import { authClient } from '@/lib/auth-client';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import Link from 'next/link';
 
-import { SimpleGrid, Image, Paper, Text, ThemeIcon, Tooltip, Rating, Group, Avatar, Button, ActionIcon } from '@mantine/core';
+import { SimpleGrid, Image, Paper, Text, ThemeIcon, Tooltip, Rating, Group, Avatar, Button, ActionIcon, Stack } from '@mantine/core';
 import { DonutChart, BarChart, LineChart } from '@mantine/charts';
 
 import SessionHeatmap from '@/components/SessionHeatmap/SessionHeatmap';
@@ -213,7 +213,7 @@ export default function Dashboard() {
   const calculateRatingDistribution = (games: any[]) => {
 
     // Initialize ratingBuckets array that have the spread of potential ratings that games can be given
-    const ratingBuckets = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+    const ratingBuckets = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     const distribution: Record<number, number> = {};
 
     // Iterate through array and initialize all count for each rating as zero
@@ -225,9 +225,10 @@ export default function Dashboard() {
     games.forEach(game => {
       const rating = game.rating;
 
-      if(rating >= 0.5 && rating <= 5){
-        const normalized = Math.round(rating * 2) / 2;
-        distribution[normalized]++;
+      // Get the floor for any rating that has .5
+      if(rating >= 0 && rating <= 10){
+        const bucket = Math.floor(rating)
+        distribution[bucket]++;
       }
     })
 
@@ -241,7 +242,7 @@ export default function Dashboard() {
   const calculateAverageRating = (games: any[]) => {
 
     // Filter out unrated games in the user's library to get an accurate average rating.
-    const ratedGames = games.filter(game => game.rating >= 1 && game.rating <= 5);
+    const ratedGames = games.filter(game => game.rating >= 1 && game.rating <= 10);
 
     if(ratedGames.length === 0) {
       return 0;
@@ -257,7 +258,7 @@ export default function Dashboard() {
 
   // Function to calculate the top rated game in the user's library. This will be used to display as a quick stat card
   const calculateTopRatedGame = (games: any[]) => {
-    const ratedGames = games.filter(game => game.rating >= 1 && game.rating <= 5);
+    const ratedGames = games.filter(game => game.rating >= 1 && game.rating <= 10);
 
     if(ratedGames.length === 0) {
       return 0;
@@ -325,14 +326,14 @@ export default function Dashboard() {
               <div className={classes.quickStatItem}>
 
                 <div className={classes.quickStatHeader}>
-                  <ThemeIcon size={42} radius='xl' variant='filled' color='indigo'> <ClipboardCheck size={30} /> </ThemeIcon>
+                  <ThemeIcon size={42} radius='xl' variant='filled' color='indigo'> <ClipboardCheck size={20} /> </ThemeIcon>
                   <Text className={classes.quickStatLabel}>Average Rating</Text>
                 </div>
                 
                 <div className={classes.quickStatBody}>
                   <Text className={classes.quickStatValue}>
                     {avgRating.toFixed(1)}
-                    <span className={classes.quickStatUnit}>/5</span>
+                    <span className={classes.quickStatUnit}>/10</span>
                   </Text>
                   <Text className={classes.quickStatSubtext}>Across rated games</Text>
                 </div>
@@ -342,7 +343,7 @@ export default function Dashboard() {
               <div className={classes.quickStatItem}>
 
                 <div className={classes.quickStatHeader}>
-                  <ThemeIcon size={42} radius='xl' variant='filled' color='teal'> <Trophy size={20} /> </ThemeIcon>
+                  <ThemeIcon size={42} radius='xl' variant='filled' color='#f2c617'> <Trophy size={20} /> </ThemeIcon>
                   <Text className={classes.quickStatLabel}>Games Platinumed</Text>
                 </div>
 
@@ -368,20 +369,24 @@ export default function Dashboard() {
               </div>
 
               <div className={classes.quickStatItem}>
-
                 <div className={classes.quickStatHeader}>
-                  <ThemeIcon size={42} radius='xl' variant='filled' color='#f2c617'> <Star size={20} /> </ThemeIcon>
+                  <ThemeIcon size={42} radius='xl' variant='filled' color='teal'> <Star size={20} /> </ThemeIcon>
                   <Text className={classes.quickStatLabel}>Top Rated Game</Text>
                 </div>
 
                 <div className={classes.ratingWrapper}>
                   <Image src={topRatedGame?.coverImage ? `https:${topRatedGame.coverImage.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src} alt={topRatedGame?.title || "No Image"} className={classes.topRatedCover} />
-                  <Group gap='md' align='center' justify='center'> 
+                  <Stack gap='sm' align='center' justify='center'> 
                     <Link className={classes.ratingValue} href={`/games/${topRatedGame?.gameId}`}>{topRatedGame?.title || 'N/A'}</Link>
-                    <Rating size='md' value={topRatedGame?.rating || 0} readOnly fractions={2} color='yellow' />
-                  </Group>
+                    
+                    <Group gap='md' align='center'>
+                      <Rating size='lg' count={1} value={1} readOnly fractions={2} color='yellow' />
+                      <Text className={classes.ratingValue} fw={600}>
+                          {topRatedGame?.rating}/10
+                      </Text>
+                    </Group>
+                  </Stack>
                 </div>
-                
               </div>
 
             </SimpleGrid>
@@ -503,14 +508,11 @@ export default function Dashboard() {
                       w='95%'
                       dataKey='rating'
                       yAxisLabel='Games'
-                      xAxisLabel='Rating (1-5)'
+                      xAxisLabel='Rating (/10)'
                       data={ratingDistributionData}
                       series={[{ name: 'count', color: 'red' }]}
                       yAxisProps={{
                         allowDecimals: false
-                      }}
-                      xAxisProps={{
-                        allowDecimals: true
                       }}
                       styles={{
                         axisLabel: {

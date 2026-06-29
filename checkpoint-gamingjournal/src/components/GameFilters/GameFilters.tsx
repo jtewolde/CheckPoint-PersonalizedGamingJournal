@@ -466,13 +466,30 @@ export default function GameFilters({
                         mb="md"
                     />
 
-                    <Divider color="lightgray" my='md' />
+                    <Stack gap='sm'>
+                        <div style={{ borderTop: '1px solid #6c6c6c', paddingTop: '0.5rem', gap: '0.5rem'}}>
+                            <Button
+                                fullWidth
+                                variant='subtle'
+                                color='white'
+                                leftSection={<RefreshCcw size={18} />}
+                                mb='sm'
+                                onClick={handleClearFilters}
+                            >
+                                Clear Filters
+                            </Button>
 
-                    <div className={classes.buttonActions}>
-                        <Button className={classes.clearButton} variant="filled" color="red" size='md' leftSection={<RefreshCcw size={20} />} onClick={handleClearFilters}>Clear</Button>
+                            <Button
+                                fullWidth
+                                variant='filled'
+                                color="blue"
+                                onClick={handleApplyFilters}
+                            >
+                                Apply Filters
+                            </Button>
 
-                        <Button className={classes.saveButton} size="md" onClick={handleApplyFilters}>Update Filters</Button>
-                    </div>
+                        </div>
+                    </Stack>
                     
                 </Stack>
 
