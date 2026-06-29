@@ -5,12 +5,14 @@ import { useRouter } from 'next/navigation';
 import { useMediaQuery, useDisclosure } from '@mantine/hooks';
 import { useLibraryGame } from '@/hooks/useLibraryGame';
 import { useAuth } from '@/context/Authcontext';
+
 import PlaySessionModal from '../PlaySessionModal/SessionModal';
+import EditGameInfoModal from '../EditGameInfoModal/EditGameInfoModal';
 
 import { Badge, Image, Tooltip, ActionIcon, Rating, OverflowList, Text, ThemeIcon, Group} from '@mantine/core';
 import toast from 'react-hot-toast';
 
-import { Plus, Minus, Ellipsis, Trophy, ClipboardEdit, Star, Check, PowerOff, Backpack, Pause, Play, Timer } from 'lucide-react';
+import { Plus, Minus, Ellipsis, Trophy, ClipboardEdit, Star, Check, PowerOff, Backpack, Pause, Play, Timer, CalendarDays } from 'lucide-react';
 
 import { FaXbox, FaWindows, FaApple, FaAndroid, FaSteam, FaLinux, FaTrophy } from "react-icons/fa";
 import { SiPlaystation, SiPlaystation2, SiPlaystation3, SiPlaystation4, SiPlaystation5, SiPlaystationportable, SiPlaystationvita } from "react-icons/si"
@@ -47,6 +49,8 @@ interface GameCardProps {
         completionDate?: string;
     }
 
+    libraryGame?: any;
+
     onQuickLog?: (game: {
         gameId: string;
         title: string;
@@ -56,10 +60,11 @@ interface GameCardProps {
     variant?: GameCardVariant;
 }
 
-export default function GameCard({ game, variant = 'default', libraryMeta, onQuickLog }: GameCardProps) {
+export default function GameCard({ game, libraryGame, variant = 'default', libraryMeta, onQuickLog }: GameCardProps) {
 
     const {isAuthenticated, setIsAuthenticated} = useAuth(); // Access global auth state
     const [opened, {open, close} ] = useDisclosure(false);
+    const [editOpened, {open: editOpen, close: editClose}] = useDisclosure(false)
 
     const router = useRouter();
     const isMobile = useMediaQuery('(max-width: 480px)');
@@ -144,7 +149,7 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
 
             case 'Completed':
                 return {
-                    color: 'lime',
+                    color: '#0de40a',
                     textColor: '#72eb74',
                     icon: <Check size={14} />,
                 };
@@ -257,7 +262,7 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
     };
 
     return (
-        <div key={game.id} className={`${classes.gameCard} ${variant === 'compact' ? classes.compact  : variant === 'small' ? classes.small : variant === 'library' ? classes.library : classes.default}`} onClick={() => {if(opened) return;  router.push(`/games/${game.id}`)}}>
+        <div key={game.id} className={`${classes.gameCard} ${variant === 'compact' ? classes.compact  : variant === 'small' ? classes.small : variant === 'library' ? classes.library : classes.default}`} onClick={() => {if(opened || editOpened) return;  router.push(`/games/${game.id}`)}}>
 
             <div className={classes.imageWrapper}>
 
@@ -342,14 +347,23 @@ export default function GameCard({ game, variant = 'default', libraryMeta, onQui
                         
                         <div className={classes.quickLog}>
                             {variant === 'library' && (
-                                <Tooltip label='Quick Log' withArrow>
-                                    <ActionIcon size='lg' radius='xl' variant='filled' color='blue' onClick={(e) => {e.stopPropagation(); open();}}> <ClipboardEdit size={18} /> </ActionIcon>
+                                <Tooltip label='Quick Log' events={{ hover: true, focus: true, touch: true }} withArrow>
+                                    <ActionIcon size='lg' radius='xl' variant='filled' color='blue' onClick={(e) => {e.stopPropagation(); open();}}> <CalendarDays size={18} /> </ActionIcon>
+                                </Tooltip>
+                            )}
+                        </div>
+
+                        <EditGameInfoModal opened={editOpened} onClose={editClose} libraryGame={libraryGame} onSuccess={() => close()}/>
+
+                        <div className={classes.editInfo}>
+                            {variant === 'library' && (
+                                <Tooltip label='Edit Info' events={{ hover: true, focus: true, touch: true }} withArrow>
+                                    <ActionIcon size='lg' radius='xl' variant='filled' color='violet' onClick={(e) => {e.stopPropagation(); editOpen();}}> <ClipboardEdit size={18} /> </ActionIcon>
                                 </Tooltip>
                             )}
                         </div>
                     </div>
                 </div>
-
             </div>
 
             {variant === 'library' && (

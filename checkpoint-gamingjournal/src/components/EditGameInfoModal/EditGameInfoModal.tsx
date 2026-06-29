@@ -17,15 +17,16 @@ interface EditGameInfoModalProps {
     onClose: () => void;
     game?: any;
     libraryGames?: any[];
+    libraryGame?: any;
     onSuccess?: () => void;
 }
 
-export default function EditGameInfoModal({ opened, onClose, libraryGames, game, onSuccess}: EditGameInfoModalProps){
+export default function EditGameInfoModal({ opened, onClose, libraryGames, libraryGame, game, onSuccess}: EditGameInfoModalProps){
 
     // States for storing the selected game's Id when changing game info
     const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
     const [selectedGame, setSelectedGame] = useState<any>(null);
-    const activeGame = game || selectedGame;
+    const activeGame = libraryGame || selectedGame;
 
     // State variables for the info of a game in the user's library 
     // like game status, starting and completion date, rating, hours played, etc
@@ -179,7 +180,7 @@ export default function EditGameInfoModal({ opened, onClose, libraryGames, game,
             />
 
             <Stack gap='lg'>
-                {!game ? (
+                {!libraryGame ? (
                     <Select
                         leftSection={<Gamepad2 size={20} />}
                         maxDropdownHeight={300}
