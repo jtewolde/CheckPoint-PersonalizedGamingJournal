@@ -146,8 +146,11 @@ export default function TrendingPage() {
                       checkIconPosition='left'
                       data={[
                           { value: 'alphabetical', label: 'Alphabetical (A-Z)'},
-                          { value: 'first_release_date', label: 'Release Date' },
-                          { value: 'total_rating', label: "Total Rating"},
+                          { value: 'alphabetical_reverse', label: 'Alphabetical (Z-A)'},
+                          { value: 'first_release_date', label: 'Release Date (Newest)' },
+                          { value: 'first_release_date_oldest', label: 'Release Date (Oldest)'},
+                          { value: 'total_rating', label: "Total Rating (High-Low)"},
+                          { value: 'total_rating_reverse', label: "Total Rating (Low-High)"}
                       ]}
                       value={sortOption}
                       onChange={(value) => setSortOption(value as 'first_release_date' | 'total_rating' | 'alphabetical' | '')}
