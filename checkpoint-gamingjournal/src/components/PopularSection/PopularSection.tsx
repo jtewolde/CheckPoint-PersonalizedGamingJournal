@@ -12,7 +12,7 @@ import GameSkeletonCard from "../GameCard/GameSkeletonCard";
 export default function PopularSection(){
     // States to hold popular games data and loading status
     const [popularGames, setPopularGames] = useState<any[]>([]);
-    const limit = 12; // Set the limit of games on page to 12
+    const limit = 6; // Set the limit of games on page to 12
 
     // Create skeletons array which length is the value of limit
     const skeletons = Array.from({ length: limit });
