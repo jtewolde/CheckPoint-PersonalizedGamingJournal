@@ -11,8 +11,6 @@ import classes from './TrendingCarousel.module.css';
 
 import { CircleArrowRight } from "lucide-react";
 
-import { IconBrandXbox, IconIcons, IconDevicesPc, IconBrandGoogle, IconBrandWindows, IconDeviceNintendo, IconBrandAndroid, IconBrandApple } from '@tabler/icons-react';
-
 import GameCard from "../GameCard/GameCard";
 import GameSkeletonCard from "../GameCard/GameSkeletonCard";
 
@@ -55,31 +53,6 @@ export default function TrendingGamesCarousel() {
         fetchTrendingGames();
         setHasMounted(true);
     }, []);
-
-
-    // Function to retrieve logos for different platforms that games can be on
-    const getPlatformIcon = (platformAbbreviation: string) => {
-
-        if (platformAbbreviation.includes("Series X|S")) return <IconBrandXbox size={25} />;
-
-        if (platformAbbreviation.includes("PS")) return <IconIcons size={25} />;
-
-        if (platformAbbreviation.includes("PC") || platformAbbreviation.includes("win"))
-        return <IconBrandWindows size={25} />;
-
-        if (platformAbbreviation.includes("Linux")) return <IconDevicesPc size={25} />
-
-        if (platformAbbreviation.includes("Switch")) return <IconDeviceNintendo size={25} />;
-
-        if (platformAbbreviation.includes("Android")) return <IconBrandAndroid size={25} />;
-
-        if (platformAbbreviation.includes("ggl")) return <IconBrandGoogle size={25} />
-
-        if (platformAbbreviation.includes("IOS") || platformAbbreviation.includes("mac")) 
-        return <IconBrandApple size={30} />;
-
-        return null; // fallback if no match
-    };
 
     return (
         <div className={classes.trendingSection}>
