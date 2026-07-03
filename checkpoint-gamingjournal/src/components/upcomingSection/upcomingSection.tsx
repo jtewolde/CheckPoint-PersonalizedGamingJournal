@@ -23,25 +23,25 @@ export default function UpcomingSection(){
 
     // Fetch upcoming games data from backend API on component mount
     useEffect(() => {
-      const fetchUpcomingGames = async () => {
+        const fetchUpcomingGames = async () => {
         try {
-              const res = await fetch(`/api/igdb/upcoming-releases?limit=${limit}&sort=first_release_date_oldest`);
-              if (!res.ok) {
-                  throw new Error('Failed to fetch Upcoming games');
-              }
+                const res = await fetch(`/api/igdb/upcoming-releases?limit=${limit}&sort=first_release_date_oldest`);
+                if (!res.ok) {
+                    throw new Error('Failed to fetch Upcoming games');
+                }
 
-              const data = await res.json();
-              setUpcomingGames(data.games); // Store the games data in state
-              console.log("Upcoming Games: ", data.games);
-              
-              } catch (error) {
-                  console.error('Error fetching upcoming games:', error);
-              } finally {
-                  setLoading(false); // Set loading to false after fetching
-          }
-      };
-      fetchUpcomingGames();
-      setHasMounted(true);
+                const data = await res.json();
+                setUpcomingGames(data.games); // Store the games data in state
+                console.log("Upcoming Games: ", data.games);
+                
+                } catch (error) {
+                    console.error('Error fetching upcoming games:', error);
+                } finally {
+                    setLoading(false); // Set loading to false after fetching
+            }
+        };
+        fetchUpcomingGames();
+        setHasMounted(true);
     }, []);
 
     return (
@@ -52,9 +52,9 @@ export default function UpcomingSection(){
                 ))
                 : upcomingGames.map((game) => (
                     <GameCard
-                      key={game.id}
-                      game={game}
-                      variant="default"
+                        key={game.id}
+                        game={game}
+                        variant="upcoming"
                     />
                 ))
             }

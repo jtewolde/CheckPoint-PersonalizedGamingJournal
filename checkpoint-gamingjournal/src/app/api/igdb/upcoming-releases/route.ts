@@ -81,7 +81,7 @@ export async function GET(req: NextRequest) {
     // The initial conditions is for upcoming releases that won't have a rating
     const whereConditions: string[] = [
     `first_release_date >= ${present}`,
-    `hypes >= 20`
+    `hypes >= 10`
   ];
 
   // Add filters to the search query for IGDB games API request if there are any applied to the whereConditions
@@ -103,7 +103,6 @@ export async function GET(req: NextRequest) {
 
     // Create a final whereClause that combines all of the applied filters for the query body
     const whereClause = whereConditions.join(' & ')
-    console.log("Where Conditions", whereConditions)
 
     // Create a sortClause that will store the different ways to sort the game results 
     let sortClause = '';
