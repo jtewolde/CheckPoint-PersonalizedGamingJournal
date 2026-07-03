@@ -23,7 +23,7 @@ import classes from './GameCard.module.css';
 
 // Create type variable to determine which variant of gameCard, default for search results and more info
 // Compact for Popular and Trending games sections with less info
-type GameCardVariant = 'default' | 'compact' | 'small' | 'library';
+type GameCardVariant = 'default' | 'compact' | 'small' | 'library'| 'upcoming'
 
 // Define the GameCard component that takes a game prop and attributes
 interface GameCardProps {
@@ -193,8 +193,11 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
         }
     };
 
+    // Variable to determine if game info should be displayed
+    const showGameInfo = variant === 'default' || variant === 'upcoming';
+
     // Get the correct associating status info for the current game's card
-    const statusInfo = getStatusInfo(libraryMeta?.status)
+    const statusInfo = getStatusInfo(libraryMeta?.status);
 
     // Helper function that maps the specific platform name to the associated logo to put on card
     const getPlatformIcon = (platform: string) => {
@@ -261,6 +264,7 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
         return null;
     };
 
+
     return (
         <div key={game.id} className={`${classes.gameCard} ${variant === 'compact' ? classes.compact  : variant === 'small' ? classes.small : variant === 'library' ? classes.library : classes.default}`} onClick={() => {if(opened || editOpened) return;  router.push(`/games/${game.id}`)}}>
 
@@ -272,20 +276,35 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
                     className={classes.cover}  
                 />
 
-                {variant === 'default' && (
-                    <Badge 
-                        className={classes.ratingBadge}
-                        variant='dot' 
-                        color={game.total_rating && game.total_rating >= 80 ? '#2b8d08' : game.total_rating && game.total_rating >= 70 ? 'yellow' : '#e30000'}
-                        radius='md'
-                        size='md'
-                    >
-                        <Group gap={5} align='center' >
-                            <Star size={12} color='gold' fill='gold'/> 
-                            {game.total_rating ? `${Math.round(game.total_rating)}` : 'N/A'}
-                        </Group>
-                        
-                    </Badge>
+                {showGameInfo && (
+                    <>
+                        {variant === 'default' && (
+                            <Badge 
+                                className={classes.ratingBadge}
+                                variant='dot' 
+                                color={game.total_rating && game.total_rating >= 80 ? '#2b8d08' : game.total_rating && game.total_rating >= 70 ? 'yellow' : '#e30000'}
+                                radius='md'
+                                size='md'
+                            >
+                                <Group gap={5} align='center' >
+                                    <Star size={12} color='gold' fill='gold'/> 
+                                    {game.total_rating ? `${Math.round(game.total_rating)}` : 'N/A'}
+                                </Group>
+                            </Badge>
+                        )}
+
+                        {showGameInfo && game.game_type?.type !== 'Main Game' && (
+                            <Badge
+                                className={classes.gameTypeBadge}
+                                size='sm'
+                                variant="light"
+                                radius="sm"
+                                color={game.game_type?.type == 'Expansion' ? 'grape' : game.game_type?.type == 'Remake' ? 'blue': '#2e2e2e'}
+                            >
+                                {game.game_type?.type }
+                            </Badge>
+                        )}
+                    </>
                 )}
 
                 {variant === 'library' && (
@@ -315,10 +334,37 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
 
                 <div className={classes.overlay}>
 
+                    <div className={classes.quickAdd} onClick={(e) => {e.stopPropagation(); handleQuickToggle(String(game.id))}}>
+                        {(variant === 'default' || variant === 'upcoming') && (
+                            <Tooltip label={loading ? 'Checking library...' : isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile || loading}>
+                                <ActionIcon size='lg' radius='xl' variant='filled' color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} disabled={loading || addingToLibrary}>
+                                    {loading || isInLibrary === null ? (
+                                        <Ellipsis size={18} strokeWidth={2.5} />
+                                    ):
+                                    isInLibrary ? (
+                                        <Minus size={18} strokeWidth={2.5} />
+                                        ) : (
+                                        <Plus size={18} strokeWidth={2.5} />
+                                    )}
+                                </ActionIcon>
+                            </Tooltip>
+                        )}
+                    </div>
+
                     <div className={classes.quickButtons}>
 
+                        <PlaySessionModal 
+                            key={game.id} 
+                            opened={opened} 
+                            onClose={close} 
+                            gameId={game.id} 
+                            gameName={game.name}
+                            platforms={game.platforms?.map((platform) => platform.name)}
+                            onSuccess={() => close()}  
+                        />
+
                         <div className={classes.quickAdd} onClick={(e) => {e.stopPropagation(); handleQuickToggle(String(game.id))}}>
-                            {variant !== 'small' && (
+                            {variant === 'library' && (
                                 <Tooltip label={loading ? 'Checking library...' : isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile || loading}>
                                     <ActionIcon size='lg' radius='xl' variant='filled' color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} disabled={loading || addingToLibrary}>
                                         {loading || isInLibrary === null ? (
@@ -334,16 +380,6 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
                             )}
 
                         </div>
-                        
-                        <PlaySessionModal 
-                            key={game.id} 
-                            opened={opened} 
-                            onClose={close} 
-                            gameId={game.id} 
-                            gameName={game.name}
-                            platforms={game.platforms?.map((platform) => platform.name)}
-                            onSuccess={() => close()}  
-                        />
                         
                         <div className={classes.quickLog}>
                             {variant === 'library' && (
@@ -396,8 +432,9 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
                 </div>
             )}
 
-            {variant === 'default' && (
+            {showGameInfo && (
                 <div className={classes.gameInfo}>
+
                     <h3 className={classes.gameTitle}>{game.name}</h3>
 
                     <OverflowList
