@@ -363,7 +363,7 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
                             onSuccess={() => close()}  
                         />
 
-                        <div className={classes.quickAdd} onClick={(e) => {e.stopPropagation(); handleQuickToggle(String(game.id))}}>
+                        <div className={classes.quickLibraryAdd} onClick={(e) => {e.stopPropagation(); handleQuickToggle(String(game.id))}}>
                             {variant === 'library' && (
                                 <Tooltip label={loading ? 'Checking library...' : isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile || loading}>
                                     <ActionIcon size='lg' radius='xl' variant='filled' color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} disabled={loading || addingToLibrary}>
