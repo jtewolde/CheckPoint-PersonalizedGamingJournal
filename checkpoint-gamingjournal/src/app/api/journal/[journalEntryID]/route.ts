@@ -86,7 +86,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ jo
         // Extract playSessionID from the route parameters
         const { journalEntryID } = await params;
         const body = await req.json();
-        const { gameID, gameName, coverImage, title, content, tags, entryType } = body;
+        const { gameID, gameName, coverImage, title, content, tags, entryType, displayDate } = body;
 
         // Validate required fields
         if (!gameID || !title || !content || !entryType) {
@@ -128,6 +128,12 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ jo
             );
         }
 
+        const displayDateString = existingEntry.createdAt.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        });
+
         // Build update object with only provided fields
         const updateData: any = {};
         if (title !== undefined) updateData.title = title;
@@ -135,6 +141,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ jo
         if (entryType !== undefined) updateData.entryType = entryType;
         if (tags !== undefined) updateData.tags = tags;
         if (coverImage) updateData.coverImage = coverImage;
+        updateData.displayDate = displayDateString
 
         // If no fields are provided for update, return an error
         if (Object.keys(updateData).length === 0) {
