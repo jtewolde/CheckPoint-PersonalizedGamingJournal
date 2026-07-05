@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from "next/navigation"
+import { useMediaQuery } from "@mantine/hooks";
 import { Badge, Text, Image, Tooltip, ActionIcon, Group, Stack } from '@mantine/core';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
@@ -34,39 +35,64 @@ export default function JournalEntryCard({entry, variant =  "journal"}: JournalE
 
     // Determine the cover image URL or use a placeholder if not available
     const coverImage = entry.coverImage
-    ? `https:${entry.coverImage.replace('t_thumb', 't_cover_big')}`
+    ? `https:${entry.coverImage.replace('t_thumb', 't_1080p')}`
     : PlaceHolderImage.src;
+
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
     return (
         <div className={`${classes.entryCard} ${variant === 'dashboard' ? classes.dashboard : variant === 'compact' ? classes.compact: classes.journal}`} onClick={() => router.push(`/journal/${entry._id}`)}>
 
             {/* COVER */}
-            <div className={classes.hoverCover}>
-                <Image
-                    src={coverImage}
-                    alt={entry.gameName}
-                    className={classes.cover}
-                />
-            </div>
+            {variant === 'dashboard' && (
+                <div className={classes.hoverCover}>
+                    <Image
+                        src={coverImage}
+                        alt={entry.gameName}
+                        className={classes.cover}
+                    />
+                </div>
+            )}
+
+            {variant === 'journal' && (
+                <div className={classes.coverWrapper}>
+                    <Image
+                        src={coverImage}
+                        alt={entry.gameName}
+                        className={classes.coverImage}
+                        fit='cover'
+                    />
+                </div>
+            )}
 
             {/*CONTENT*/}
             <div className={classes.contentWrapper}>
-
-                <div className={classes.header}>
+                {/* Top Meta */}
+                <div className={classes.metaRow}>
+                    
                     <Text className={classes.gameName}>
                         {entry.gameName}
                     </Text>
 
-                    {entry.entryType && (
-                        <Badge
-                            variant="light"
-                            color="lime"
-                            radius='xl'
-                            size="md"
-                        >
-                            {entry.entryType}
-                        </Badge>
-                    )}
+                    <Group gap={6} wrap="wrap" className={classes.metaBadges}>
+                        {entry.entryType && (
+                            <Badge color="green" variant="light" size='md' radius='md'>
+                                {entry.entryType}
+                            </Badge>
+                        )}
+
+                        {entry.tags?.map((tag) => (
+                            <Badge
+                                key={tag}
+                                variant="light"
+                                color="blue"
+                                size='md'
+                                radius='md'
+                            >
+                                {tag}
+                            </Badge>
+                        ))}
+                    </Group>
                 </div>
 
                 {/*TITLE*/}
@@ -74,36 +100,13 @@ export default function JournalEntryCard({entry, variant =  "journal"}: JournalE
                     {entry.title}
                 </Text>
 
-                {/* CONTENT */}
+                {/* PREVIEW TEXT */}
                 <Text className={classes.content}>
-                    {entry.content.length >
-                    (variant === 'dashboard' ? 100 : 180)
-                        ? `${entry.content.slice(
-                            0,
-                            variant === 'dashboard'
-                            ? 110
-                            : 150
-                    )}...`
-                        : entry.content}
+                    {entry.content.length > 500 ? `${entry.content.slice(0, 800)}...` : entry.content}
                 </Text>
 
                 {/*FOOTER*/}
                 <div className={classes.footer}>
-                    {entry.tags && entry.tags.length > 0 &&(
-                        <Group gap={6}>
-                            {entry.tags?.slice(0, variant === 'dashboard' ? 2 : 4).map((tag, index) => (
-                                <Badge
-                                    key={index}
-                                    size="md"
-                                    radius="sm"
-                                    variant="dot"
-                                    color="blue"
-                                >
-                                    {tag}
-                                </Badge>
-                            ))}
-                        </Group>
-                    )}
                     <Text className={classes.date}>{entry.displayDate}</Text>
                 </div>
             </div>
