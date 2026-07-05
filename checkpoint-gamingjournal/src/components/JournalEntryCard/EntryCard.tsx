@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useMediaQuery } from "@mantine/hooks";
-import { Badge, Text, Image, Tooltip, ActionIcon, Group, Stack } from '@mantine/core';
+import { Badge, Text, Image, Tooltip, ActionIcon, Group, Stack, OverflowList } from '@mantine/core';
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 import classes from './EntryCard.module.css';
@@ -40,19 +40,14 @@ export default function JournalEntryCard({entry, variant =  "journal"}: JournalE
 
     const isMobile = useMediaQuery('(max-width: 768px)');
 
+    // Combine both the tags and entry type together
+    const metadata = [
+        entry.entryType,
+        ...(entry.tags ?? []),
+    ].filter(Boolean);
+
     return (
         <div className={`${classes.entryCard} ${variant === 'dashboard' ? classes.dashboard : variant === 'compact' ? classes.compact: classes.journal}`} onClick={() => router.push(`/journal/${entry._id}`)}>
-
-            {/* COVER */}
-            {variant === 'dashboard' && (
-                <div className={classes.hoverCover}>
-                    <Image
-                        src={coverImage}
-                        alt={entry.gameName}
-                        className={classes.cover}
-                    />
-                </div>
-            )}
 
             {variant === 'journal' && (
                 <div className={classes.coverWrapper}>
@@ -73,32 +68,18 @@ export default function JournalEntryCard({entry, variant =  "journal"}: JournalE
                     <Text className={classes.gameName}>
                         {entry.gameName}
                     </Text>
+    
+                    {/*TITLE*/}
+                    <Text className={classes.title}>
+                        {entry.title}
+                    </Text>
 
                     <Group gap={6} wrap="wrap" className={classes.metaBadges}>
-                        {entry.entryType && (
-                            <Badge color="green" variant="light" size='md' radius='md'>
-                                {entry.entryType}
-                            </Badge>
-                        )}
-
-                        {entry.tags?.map((tag) => (
-                            <Badge
-                                key={tag}
-                                variant="light"
-                                color="blue"
-                                size='md'
-                                radius='md'
-                            >
-                                {tag}
-                            </Badge>
-                        ))}
+                        <Text className={classes.metadata}>
+                            {metadata.slice(0, 4).join(" • ")}
+                        </Text>
                     </Group>
                 </div>
-
-                {/*TITLE*/}
-                <Text className={classes.title}>
-                    {entry.title}
-                </Text>
 
                 {/* PREVIEW TEXT */}
                 <Text className={classes.content}>
