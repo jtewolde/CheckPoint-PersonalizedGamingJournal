@@ -79,8 +79,8 @@
 
 .ratingBadge, .libraryBadge{
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 5px;
+    left: 5px;
     z-index: 5;
     backdrop-filter: blur(6px);
     font-family: 'Inter';
@@ -98,13 +98,13 @@
 }
 
 .libraryBadge{
-    background-color: #292828;
+    background-color: #171717;
 }
 
 .platinumIcon{
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 5px;
+    right: 5px;
     z-index: 5;
     backdrop-filter: blur(6px);
     background-color: #292828;
