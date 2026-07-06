@@ -11,6 +11,7 @@ import { DonutChart, BarChart, LineChart } from '@mantine/charts';
 
 import SessionHeatmap from '@/components/SessionHeatmap/SessionHeatmap';
 import JournalEntryCard from '@/components/JournalEntryCard/EntryCard';
+import GameCard from '@/components/GameCard/GameCard';
 import PlaySessionModal from '@/components/PlaySessionModal/SessionModal';
 import EditGameInfoModal from '@/components/EditGameInfoModal/EditGameInfoModal';
 import JournalEntryModal from '@/components/JournalEntryModal/EntryModal';
@@ -583,12 +584,12 @@ export default function Dashboard() {
           <div className={classes.playingGames} >
 
             <div className={classes.playingSection}>
-
               <div className={classes.titleLogo}>
-                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: '#e96443', to: '#904e95', deg: 90}}> <Gamepad size={40} /> </ThemeIcon>
+                <ThemeIcon size={40} radius='md' variant='gradient' gradient={{from: '#e96443', to: '#904e95', deg: 90}}> 
+                  <Gamepad size={30} /> 
+                </ThemeIcon>
                 <a className={classes.gamesPlayingText} href='/library'>Playing Games</a>
               </div>
-              
             </div>
 
             {playingGames.length === 0 ? (
@@ -597,26 +598,23 @@ export default function Dashboard() {
                 <>
                   <SimpleGrid cols={5} spacing="lg" className={classes.gamesGrid}>
                     {playingGames.map((game) => (
-                      <div key={game._id} className={classes.gameCard} onClick={() => router.push(`/games/${game.gameId}`)} >
-
-                        <div className={classes.imageWrapper}>
-
-                          <Image 
-                            src={
-                            game.coverImage ? `https:${game.coverImage.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
-                            alt={game.name} 
-                            className={classes.cover} 
-                          />
-
-                          <div className={classes.overlay}>
-
-                            <Text className={classes.gameName}>{game.title}</Text>
-
-                          </div>
-
-                        </div>
-
-                      </div>
+                      <GameCard
+                        variant="library"
+                        key={game._id}
+                        game={{
+                            id: game.gameId,
+                            name: game.title,
+                            cover: { url: game.coverImage },
+                            genres: game.genre
+                        }}
+                        libraryMeta={{
+                            status: game.status,
+                            rating: game.rating,
+                            platinum: game.platinum,
+                            hours: game.hours
+                        }}
+                        libraryGame={game}
+                      />
                     ))}
                   </SimpleGrid>
                 </>
@@ -624,22 +622,21 @@ export default function Dashboard() {
           </div>
 
           <div className={classes.recentEntries}>
-
             <div className={classes.recentEntriesSection}>
-              
               <div className={classes.titleLogo}>
-                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: '#DCE35B', to: '#45B649', deg: 60}}> <Notebook size={40} /> </ThemeIcon>
+                <ThemeIcon size={40} radius='md' variant='gradient' gradient={{ from: '#DCE35B', to: '#45B649', deg: 60}}>
+                  <Notebook size={30} /> 
+                  </ThemeIcon>
                 <a className={classes.gamesPlayingText} href='/journal'>Recent Entries</a>
               </div>
-
             </div>
 
               {recentEntries.length === 0 ? (
                   <p className={classes.noEntriesText}>No recent journal entries found.</p>
               ) : (
-                  <SimpleGrid cols={4} spacing="lg" className={classes.entriesGrid}>
+                  <SimpleGrid cols={2} spacing="lg" className={classes.entriesGrid}>
                       {recentEntries.map((entry) => (
-                        <JournalEntryCard key={entry._id} entry={entry} variant='dashboard'/>
+                        <JournalEntryCard key={entry._id} entry={entry} variant='journal'/>
                       ))}
                   </SimpleGrid>
               )}

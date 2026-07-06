@@ -87,16 +87,16 @@
 .recentEntriesSection{
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
   gap: 0.4rem;
+  width: 100%;
   font-weight: 800;
   margin-bottom: 1.2rem;
-  background-color: #272727;
+  background-color: #1d1c1c;
   border-radius: 8px;
   border: 1px solid #494949;
   padding: 0.4rem 0.8rem;
+  align-items: flex-start;
+  justify-content: space-between;
   font-family: 'Inter';
   color: #e9e9e9;
 }
@@ -278,63 +278,9 @@
   font-weight: 700;
 }
 
-.gameCard{
-  position: relative;
-  cursor: pointer;
-  border-radius: 8px;
-  width: 110%;
-}
-
-.imageWrapper {
-  position: relative;
-  width: 100%;
-  height: auto;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  aspect-ratio: 3 / 4;
-}
-
-.imageWrapper:hover .overlay {
-  opacity: 1;
-  border: 2px solid rgb(77, 76, 76);
-  border-radius: 12px;
-}
-
-.cover {
-  width: 100%;
-  object-fit: cover;
-  border-radius: 16px;
-  cursor: pointer;
-  border: 0.5 solid rgb(74, 74, 74);
-}
-
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(15, 15, 15, 0.7);
-  opacity: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.3s ease;
-}
-
-.gameName{
-  color: white;
-  font-size: 1.3rem;
-  font-family: 'Noto Sans';
-  font-weight: 600;
-  text-align: center;
-  padding: 0 8px;
-}
-
 .gamesGrid{
   display: grid;
-  grid-template-columns: repeat(6, 1fr); /* Default: 5 columns */
+  grid-template-columns: repeat(5, 1fr); /* Default: 5 columns */
   gap: 2.4rem;
   justify-content: center;
   align-content: center;
@@ -378,54 +324,6 @@
   padding: 0;
 }
 
-.entryCard {
-  width: 100%;
-  height: auto;
-  background-color: #272727;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 18px;
-  padding: 1rem;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(10px);
-  cursor: pointer;
-}
-
-.entryCard:hover {
-  transform: translateY(-4px);
-  border-color: rgba(255,255,255,0.18);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
-}
-
-.entryGame{
-  color: white;
-  font-size: 1.3rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  font-family: 'Poppins';
-}
-
-.entryTitle {
-  font-size: 1rem;
-  font-style: italic;
-  color: white;
-  font-weight: 400;
-  margin-bottom: 0.5rem;
-  font-family: 'Poppins';
-}
-
-.entryContent {
-  font-size: 1rem;
-  color: #e0e0e0;
-  margin-bottom: 0.5rem;
-}
-
-.entryDate {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #ffffff;
-}
 
 @media (max-width: 1920px){
   .wrapper{
