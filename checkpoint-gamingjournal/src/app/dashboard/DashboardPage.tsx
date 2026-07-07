@@ -325,7 +325,6 @@ export default function Dashboard() {
             <SimpleGrid cols={{base: 1, sm: 1, md: 2, lg: 4, xl: 4}} spacing="lg" className={classes.quickStatsGrid}>
 
               <div className={classes.quickStatItem}>
-
                 <div className={classes.quickStatHeader}>
                   <ThemeIcon size={42} radius='xl' variant='filled' color='indigo'> <ClipboardCheck size={20} /> </ThemeIcon>
                   <Text className={classes.quickStatLabel}>Average Rating</Text>
@@ -338,7 +337,6 @@ export default function Dashboard() {
                   </Text>
                   <Text className={classes.quickStatSubtext}>Across rated games</Text>
                 </div>
-
               </div>
 
               <div className={classes.quickStatItem}>
