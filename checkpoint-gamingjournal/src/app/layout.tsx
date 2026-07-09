@@ -95,18 +95,18 @@ export default function RootLayout({
             >
 
               <Toaster
-                position='top-center'
+                position='bottom-right'
                 toastOptions={{
                   duration: 5000,
                   success: {
                     style: {
-                      background: "#222121ff",
+                      background: "rgb(24, 23, 23)",
                       color: 'white',
                       fontFamily: 'Poppins',
-                      fontWeight: '500',
+                      fontWeight: '400',
                       borderRadius: '8px',
-                      border: '1px solid #555',
-                      textAlign: 'center',
+                      border: '1px solid #2f2f2f',
+                      textAlign: 'left',
                       width: '100%'
                     },
                     iconTheme: {
@@ -116,13 +116,14 @@ export default function RootLayout({
                   },
                   error: {
                     style: {
-                      background: '#2d2d2dff',
+                      background: 'rgb(23, 23, 23)',
                       color: 'white',
                       fontFamily: 'Poppins',
-                      fontWeight: '500',
+                      fontWeight: '400',
+                      fontSize: '16px',
                       borderRadius: '8px',
                       textAlign: 'left',
-                      width: '80%'
+                      width: '100%'
                     }
                   }  
                 }}
