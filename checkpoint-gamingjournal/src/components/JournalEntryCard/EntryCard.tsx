@@ -27,9 +27,10 @@ interface JournalEntryCardProps {
     };
 
     variant?: EntryCardVariant;
+    color?: string;
 }
 
-export default function JournalEntryCard({entry, variant =  "journal"}: JournalEntryCardProps){
+export default function JournalEntryCard({entry, variant =  "journal", color}: JournalEntryCardProps){
 
     const router = useRouter();
 
@@ -47,7 +48,7 @@ export default function JournalEntryCard({entry, variant =  "journal"}: JournalE
     ].filter(Boolean);
 
     return (
-        <div className={`${classes.entryCard} ${variant === 'dashboard' ? classes.dashboard : variant === 'compact' ? classes.compact: classes.journal}`} onClick={() => router.push(`/journal/${entry._id}`)}>
+        <div className={`${classes.entryCard} ${variant === 'dashboard' ? classes.dashboard : variant === 'compact' ? classes.compact: classes.journal}`} onClick={() => router.push(`/journal/${entry._id}`)} style={{borderLeft: `5px solid ${color || '#c7c7c7'}`}}>
 
             {variant === 'journal' && (
                 <div className={classes.coverWrapper}>
