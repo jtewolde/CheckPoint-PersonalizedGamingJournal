@@ -252,7 +252,7 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
                         "First Impressions",
                         "Progress Update",
                         "Boss Fight",
-                        "Achievement",
+                        "Achievement Hunting",
                         "Story Reaction",
                         "Review",
                         "Ending Thoughts",
