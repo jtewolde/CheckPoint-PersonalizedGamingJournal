@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useMediaQuery } from "@mantine/hooks";
 import { Badge, Text, Image, Tooltip, ActionIcon, Group, Stack, OverflowList } from '@mantine/core';
+import { entryTypeColors } from "@/hooks/getEntryTypeColors";
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 import classes from './EntryCard.module.css';
@@ -75,10 +76,20 @@ export default function JournalEntryCard({entry, variant =  "journal", color}: J
                         {entry.title}
                     </Text>
 
-                    <Group gap={6} wrap="wrap" className={classes.metaBadges}>
-                        <Text className={classes.metadata}>
-                            {metadata.slice(0, 4).join(" • ")}
-                        </Text>
+                    <Group gap={5} wrap="wrap">
+                        <Badge
+                            color={entryTypeColors[entry.entryType ?? "General"]}
+                            variant="light"
+                            radius="md"
+                        >
+                            {entry.entryType}
+                        </Badge>
+
+                        {entry.tags?.map((tag, index) => (
+                            <Badge color='white' radius='md' variant='default' key={index} className={classes.metaBadge}>
+                                {tag}
+                            </Badge>
+                        ))}
                     </Group>
                 </div>
 
