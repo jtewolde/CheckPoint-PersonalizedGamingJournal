@@ -9,6 +9,7 @@ import { authClient } from '@/lib/auth-client';
 import JournalEntryCard from '@/components/JournalEntryCard/EntryCard';
 import JournalEntryModal from '@/components/JournalEntryModal/EntryModal';
 import JournalFilters from '@/components/JournalFilters/JournalFilters';
+import JournalPageSearch from '@/components/JournalPageSearch/JournalPageSearch';
 
 import { Button, Select, SimpleGrid, Pagination, Modal, Group, Stack, Title, 
     Text, Checkbox, ActionIcon, LoadingOverlay, Pill } from '@mantine/core';
@@ -25,6 +26,7 @@ export default function Journal() {
     // State variables for the journal entries
     const [entries, setEntries] = useState<any[]>([]);
     const [totalEntries, setTotalEntries] = useState(0);
+    const [search, setSearch] = useState('');
 
     const [loading, setLoading] = useState(true);
     const [checked, setChecked] = useState(false);
@@ -47,19 +49,24 @@ export default function Journal() {
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-    // 
-    const activeFilters = [
-        ...(gameId !== 'all' ? [gameId] : []),
-        ...(selectedType ? [selectedType] : []),
-        ...selectedTags,
-    ];
-
     // State for opening delete all modal
     const [opened, {open, close}] = useDisclosure(false);
     const [entryModalOpened, {open: openEntryModal, close: closeEntryModal}] = useDisclosure(false);
 
     const isMobile = useMediaQuery('(max-width: 560px)');
     const router = useRouter();
+
+    // Filter the journal entries results if using search bar
+    const filteredEntries = entries.filter((entry) =>
+        entry.title.toLowerCase().includes(search.toLowerCase()) ||
+        entry.gameName.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const activeFilters = [
+        ...(gameId !== 'all' ? [gameId] : []),
+        ...(selectedType ? [selectedType] : []),
+        ...selectedTags,
+    ];
 
     // Check if the user is authenticated, if not redirect to auth page
     const checkAuth = async () => {
@@ -355,147 +362,133 @@ export default function Journal() {
                     </SimpleGrid>
                 </div>
 
-                <div className={classes.buttonsContainer}>
-                    {/* ✅ LOADING OVERLAY */}
-                    <LoadingOverlay
-                        visible={loading}
-                        overlayProps={{ radius: 'sm', blur: 2 }}
-                        loaderProps={{ size: 'lg', color: "white", type: "oval" }}
-                    />
-
-                    <JournalEntryModal
-                        key={selectedGameObject?.gameId ?? 'journal-entry-modal'}
-                        opened={entryModalOpened}
-                        onClose={closeEntryModal}
-                        gameId={selectedGameObject?.gameId ?? ''}
-                        gameName={selectedGameObject?.gameName ?? ''}
-                        onSuccess={() => close()}
-                        onEntryCreated={fetchEntries}
-                    />
-
-                    <div className={classes.buttonGroup} >
-                        <ActionIcon
-                            variant='filled'
-                            color='green'
-                            size='xl'
-                            radius= 'md'
-                            className={classes.addButton}
-                            onClick={openEntryModal}
-                            hiddenFrom='sm'
-                        >
-                            <FilePlus />
-                        </ActionIcon>
-
-                        <ActionIcon
-                            variant='filled'
-                            color='#e01515ff'
-                            size='xl'
-                            radius= 'md'
-                            className={classes.deleteEntriesButton}
-                            onClick={open}
-                            hiddenFrom='sm'
-                        >
-                            <Trash2 />
-                        </ActionIcon>
-
-                        <Button
-                            variant='filled'
-                            color='green'
-                            size='md'
-                            radius= 'md'
-                            className={classes.addButton}
-                            onClick={openEntryModal}
-                            rightSection={<FilePlus />}
-                            visibleFrom='sm'
-                        >
-                            Add Entry
-                        </Button>
-
-                        <Button
-                            variant='filled'
-                            color='#e01515ff'
-                            size='md'
-                            radius= 'md'
-                            className={classes.deleteEntriesButton}
-                            onClick={open}
-                            rightSection={<Trash2 />}
-                            hidden={isMobile}
-                            visibleFrom='sm'
-                        >
-                            Delete All
-                        </Button>
+                <div className={classes.toolbarContainer}>
+                    <div className={classes.toolbar}>
+                        <div className={classes.toolbarTop}>
+                            <div className={classes.searchContainer}>
+                                <JournalPageSearch 
+                                    backgroundColor='#211b2c'
+                                    borderColor='border: 1px solid transparent' 
+                                    size='lg' 
+                                    radius='md' 
+                                    value={search} 
+                                    onChange={setSearch}
+                                />
+                            </div>
                         
-                        <JournalFilters
-                            className={classes.filterButton}
-                            color='indigo'
-                            size='md'
-                            radius='md'
-                            variant='default'
-                            availableGames={games.map((game) => ({ id: game.gameId, name: game.gameName }))}
-                            sortOption={sortOrder}
-                            selectedGameId={gameId}
-                            selectedEntryType={selectedType}
-                            selectedTags={selectedTags}
-                            onSortChange={setSortOrder}
-                            onGameIdChange={setGameId}
-                            onEntryTypeChange={setSelectedType}
-                            onTagsChange={setSelectedTags}
-                        />
+                            <div className={classes.toolbarButtons}>
+                                <JournalEntryModal
+                                    key={selectedGameObject?.gameId ?? 'journal-entry-modal'}
+                                    opened={entryModalOpened}
+                                    onClose={closeEntryModal}
+                                    gameId={selectedGameObject?.gameId ?? ''}
+                                    gameName={selectedGameObject?.gameName ?? ''}
+                                    onSuccess={() => close()}
+                                    onEntryCreated={fetchEntries}
+                                />
+                            
+                                <Button
+                                    variant='outline'
+                                    color='#139609'
+                                    size='md'
+                                    radius= 'md'
+                                    className={classes.addButton}
+                                    onClick={openEntryModal}
+                                    rightSection={<FilePlus />}
+                                >
+                                    Add Entry
+                                </Button>
+
+                                <Button
+                                    variant='outline'
+                                    color='#e01515ff'
+                                    size='md'
+                                    radius= 'md'
+                                    className={classes.removeButton}
+                                    onClick={open}
+                                    rightSection={<Trash2 />}
+                                >
+                                    Delete
+                                </Button>
+                            </div>
+                            
+                            <div className={classes.filterContainer}>
+                                <JournalFilters
+                                    className={classes.filterButton}
+                                    color='indigo'
+                                    size='md'
+                                    radius='md'
+                                    variant='default'
+                                    buttonVariant='outline'
+                                    availableGames={games.map((game) => ({ id: game.gameId, name: game.gameName }))}
+                                    sortOption={sortOrder}
+                                    selectedGameId={gameId}
+                                    selectedEntryType={selectedType}
+                                    selectedTags={selectedTags}
+                                    onSortChange={setSortOrder}
+                                    onGameIdChange={setGameId}
+                                    onEntryTypeChange={setSelectedType}
+                                    onTagsChange={setSelectedTags}
+                                />
+                            </div>
+                            
+                        </div>
+                        
+                        <div className={classes.toolbarBottom}>
+                            {activeFilters.length > 0 && (
+                                <Group className={classes.activeFiltersWrapper}>
+                                    {gameId !== 'all' && (
+                                        <Pill
+                                            size="lg"
+                                            radius="sm"
+                                            style={{ cursor: "pointer" }}
+                                            onClick={() => {
+                                                setGameId('all');
+                                                setPage(1);
+                                            }}
+                                        >
+                                            {`Game: ${games.find(g => g.gameId === gameId)?.gameName}`} ✕
+                                        </Pill>
+                                    )}
+
+                                    {selectedTags.length > 0 && (
+                                        <Pill
+                                            className={classes.filterBadge}
+                                            size="lg"
+                                            radius="sm"
+                                            style={{ cursor: "pointer" }}
+                                            onClick={() => {
+                                                setSelectedTags([]);
+                                                setPage(1);
+                                            }}
+                                        >
+                                            {`Tags: ${selectedTags.join(', ')}`} ✕
+                                        </Pill>
+                                    )}
+
+                                    {selectedType && (
+                                        <Pill
+                                            className={classes.filterBadge}
+                                            size="lg"
+                                            radius="sm"
+                                            style={{ cursor: "pointer" }}
+                                            onClick={() => {
+                                                setSelectedType('');
+                                                setPage(1);
+                                            }}
+                                        >
+                                            {`Type: ${selectedType}`} ✕
+                                        </Pill>
+                                    )}
+                                </Group>
+                            )}
+                        </div>
                     </div>
-
-                    {activeFilters.length > 0 && (
-                        <Group className={classes.activeFiltersWrapper} mb='lg' gap='xs'>
-                            {gameId !== 'all' && (
-                                <Pill
-                                    size="lg"
-                                    radius="sm"
-                                    style={{ cursor: "pointer" }}
-                                    onClick={() => {
-                                        setGameId('all');
-                                        setPage(1);
-                                    }}
-                                >
-                                    {`Game: ${games.find(g => g.gameId === gameId)?.gameName}`} ✕
-                                </Pill>
-                            )}
-
-                            {selectedTags.length > 0 && (
-                                <Pill
-                                    className={classes.filterBadge}
-                                    size="lg"
-                                    radius="sm"
-                                    style={{ cursor: "pointer" }}
-                                    onClick={() => {
-                                        setSelectedTags([]);
-                                        setPage(1);
-                                    }}
-                                >
-                                    {`Tags: ${selectedTags.join(', ')}`} ✕
-                                </Pill>
-                            )}
-
-                            {selectedType && (
-                                <Pill
-                                    className={classes.filterBadge}
-                                    size="lg"
-                                    radius="sm"
-                                    style={{ cursor: "pointer" }}
-                                    onClick={() => {
-                                        setSelectedType('');
-                                        setPage(1);
-                                    }}
-                                >
-                                    {`Type: ${selectedType}`} ✕
-                                </Pill>
-                            )}
-                        </Group>
-                    )}
-
                 </div>
                     
-                {entries.length > 0 && (
+                {filteredEntries.length > 0 && (
                     <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 2}} spacing="lg" className={classes.entriesGrid}>
-                        {entries.map((entry) => (
+                        {filteredEntries.map((entry) => (
                             <JournalEntryCard key={entry._id} entry={entry} variant='journal' color='#7c18ed' />
                         ))}
                     </SimpleGrid>
