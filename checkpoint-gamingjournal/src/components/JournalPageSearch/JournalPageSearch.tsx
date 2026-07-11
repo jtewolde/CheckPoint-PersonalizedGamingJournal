@@ -14,6 +14,9 @@ type JournalPageSearchProps = {
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     radius?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     className?: string;
+    color?: string;
+    backgroundColor?: string;
+    borderColor?: string;
 
     // lets parent control filtering (recommended)
     value?: string;
@@ -23,10 +26,13 @@ type JournalPageSearchProps = {
 };
 
 export default function JournalPageSearch({
-    placeHolder = "Search for entries on this page...",
+    placeHolder = "Search for entries...",
     size = "lg",
     radius = 'md',
     className,
+    color,
+    backgroundColor,
+    borderColor,
     value,
     onChange,
     initialQuery = '',
@@ -54,12 +60,12 @@ export default function JournalPageSearch({
                 radius={radius}
                 className={classes.input}
                 variant="filled"
-                leftSection={<IconSearch size={25} color="white"/>}
+                leftSection={<IconSearch size={25} />}
                 styles={{
                     input:{
-                        backgroundColor: '#1b1b1b',
-                        color: 'white',
-                        border: '1px solid #2a2828'
+                        backgroundColor: backgroundColor,
+                        color: color,
+                        border: `1px solid ${borderColor}`
                     }
                 }}
             />

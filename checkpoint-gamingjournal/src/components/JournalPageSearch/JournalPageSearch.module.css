@@ -9,4 +9,9 @@
 
 .input{
     width: 100%;
+    color: white;
+}
+
+.input :hover{
+    border-color: rgba(139,92,246,.25);
 }
