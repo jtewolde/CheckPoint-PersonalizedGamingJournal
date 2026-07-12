@@ -15,6 +15,7 @@ import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
 import { Suspense } from "react";
 
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
+import { ModalsProvider } from '@mantine/modals';
 
 // Font configurations using next/font
 const geistSans = Geist({
@@ -128,9 +129,9 @@ export default function RootLayout({
                   }  
                 }}
               />
-
+              <ModalsProvider>
+                
               <Header />
-
                 <main className="main-content">
                   <Suspense
                     fallback={
@@ -140,13 +141,11 @@ export default function RootLayout({
                     }
                   >
                     {children}
-                  
                   </Suspense>
-
                 </main>
-
               <Footer />
-                
+
+            </ModalsProvider>
             </MantineProvider>
           </LibraryProvider>
         </AuthProvider>
