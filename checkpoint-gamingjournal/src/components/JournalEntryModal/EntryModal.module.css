@@ -5,6 +5,14 @@
     gap: 1rem;
 }
 
+.tagStack{
+    background: rgb(19, 19, 19);
+    border: 1px solid #504f4f;
+    border-radius: 12px;
+    padding: .5rem;
+    gap: .75rem;
+}
+
 .buttonGroup{
     display: flex;
     flex-direction: row;
