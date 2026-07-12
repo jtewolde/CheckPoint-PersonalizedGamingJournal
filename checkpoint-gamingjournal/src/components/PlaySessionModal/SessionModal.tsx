@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { Modal, Divider, Stack, Button, TextInput, LoadingOverlay, NumberInput, Select, MultiSelect, Textarea } from "@mantine/core";
+import { Modal, Divider, Stack, Button, TextInput, LoadingOverlay, NumberInput, Select, MultiSelect, TagsInput, Textarea } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 
 import toast from "react-hot-toast";
@@ -20,7 +20,7 @@ type PlaySession = {
     duration: number
     notes: string
     sessionType: string[]
-    mood?: string
+    mood?: string[]
     platform?: string
 }
 
@@ -47,7 +47,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
     const [playSessionNotes, setPlaySessionNotes] = useState("");
     const [playSessionDate, setPlaySessionDate] = useState<string | null>(null);
     const [sessionType, setSessionType] = useState<string[]>([]);
-    const [mood, setMood] = useState<string>("");
+    const [mood, setMood] = useState<string[]>([]);
     const [platform, setPlatform] = useState<string>("");
 
     const [loading, setLoading] = useState(false);
@@ -64,7 +64,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
         setPlaySessionNotes("");
         setPlaySessionDate(null);
         setSessionType([]);
-        setMood('');
+        setMood([]);
         setPlatform('');
     };
 
@@ -112,7 +112,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
             setPlaySessionNotes(session.notes || '');
             setPlaySessionDate(session.date ?? null);
             setPlatform(session.platform || '');
-            setMood(session.mood || '');
+            setMood(session.mood || []);
 
             setHours(Math.floor(session.duration / 60));
             setMinutes(session.duration % 60);
@@ -211,10 +211,18 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
             opened={opened} 
             onClose={onClose} 
             size='lg' 
-            title={(gameId ? 'Play Session for ' + gameName : 'Quick Log Session')} 
+            title={(gameId ? `${gameName} - Play Session` : `Quick Log Session`)} 
             withCloseButton 
             closeOnClickOutside={false} 
             closeOnEscape={false}
+            styles={{
+                title: {
+                    fontWeight: 700,
+                    fontFamily: 'Inter',
+                    fontSize: '1.1rem',
+                    color: 'white',
+                }
+            }}
         >
 
             {/* ✅ LOADING OVERLAY */}
@@ -273,25 +281,25 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                     description={`${playSessionNotes.length}/2500 characters`}
                     value={playSessionNotes}
                     onChange={(e) => setPlaySessionNotes(e.target.value)}
-                    style={{ marginTop: "1rem" }}
+                    mt={10}
                 />
 
                 <MultiSelect
                     className={classes.select}
                     leftSection={<LibraryBig size={20} />}
-                    label="Session Type"
-                    placeholder="Add session type (e.g. story, multiplayer)"
-                    description="What type of play session did you have?"
+                    label="Session Focus"
+                    placeholder="Add session focus..."
+                    description="What did you focus on during this session?"
                     data={[
                         "Story Progress",
-                        "Multiplayer",
-                        "Casual Play",
-                        "Ranked",
-                        "Boss Fight",
                         "Exploration",
-                        "Grinding",
+                        "Boss Fight",
                         "Side Quest",
+                        "Grinding",
                         "Achievement Hunting",
+                        "Build Testing",
+                        "Multiplayer",
+                        "Casual Play"
                     ]}
                     value={sessionType}
                     onChange={setSessionType}
@@ -306,9 +314,9 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
 
                 <div className={classes.platformMoodContainer}>
                     <Select
+                        className={classes.platformSelect}
                         leftSection={<IconBrandXbox size={20} />}
                         maxDropdownHeight={300}
-                        className={classes.select}
                         value={platform}
                         data={(platforms ?? []).map((platform) => ({
                             value: platform,
@@ -324,10 +332,10 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                         }}
                     />
 
-                    <Select
+                    <TagsInput
+                        className={classes.moodSelect}
                         leftSection={<Smile size={20} />}
                         maxDropdownHeight={300}
-                        className={classes.select}
                         data={[
                             "Relaxed",
                             "Focused",
@@ -341,10 +349,10 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                         size="md"
                         label="Mood"
                         description="How did you feel during this session?"
-                        placeholder="(e.g. Fun, Frustrating, Relaxing)"
+                        placeholder="(e.g. Fun, Frustrating)"
                         value={mood}
                         onChange={(value) => {
-                            setMood(value || '')
+                            setMood(value || [])
                         }}
                     />
                 </div>

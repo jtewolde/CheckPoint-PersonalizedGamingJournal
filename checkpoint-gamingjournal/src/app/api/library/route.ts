@@ -5,7 +5,10 @@ import { ObjectId } from "mongodb";
 import { auth } from "@/utils/auth";
 import { redis } from "@/utils/redis";
 
+//=================================
+// ADD GAME TO USER'S LIBRARY(POST)
 // This API route is used to add a game to the user's library
+//=================================
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json(); // Parse the request body
@@ -69,7 +72,10 @@ export async function POST(req: NextRequest) {
     }
 }
 
-// This API route is used to get the user's library using the GET method
+//=================================
+// GET GAMES IN USER'S LIBRARY(GET)
+// This API route is used to fetch the games in the user's library
+//=================================
 export async function GET(req: NextRequest){
     try{
         const session = await auth.api.getSession({
