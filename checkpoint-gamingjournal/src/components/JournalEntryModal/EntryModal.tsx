@@ -199,6 +199,7 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
             title={(gameId ? `${gameName} - Journal Entry` : `Create Journal Entry`)} 
             centered 
             withCloseButton
+            withinPortal
             styles={{
                 title: {
                     fontWeight: 700,

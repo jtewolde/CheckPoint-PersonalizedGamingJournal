@@ -3,6 +3,7 @@
 export const TAG_CATEGORIES = [
     {
         title: "Gameplay",
+        color: 'red',
         tags: [
             "Boss Fight",
             "Exploration",
@@ -15,6 +16,7 @@ export const TAG_CATEGORIES = [
     },
     {
         title: "Story",
+        color: 'blue',
         tags: [
             "Main Story",
             "Side Quest",
@@ -25,6 +27,7 @@ export const TAG_CATEGORIES = [
     },
     {
         title: "Character",
+        color: 'green',
         tags: [
             "Build",
             "Weapon",
@@ -35,6 +38,7 @@ export const TAG_CATEGORIES = [
     },
     {
         title: "Experience",
+        color: 'yellow',
         tags: [
             "Challenging",
             "Relaxing",
@@ -43,4 +47,15 @@ export const TAG_CATEGORIES = [
             "Favorite Moment",
         ],
     },
+    {
+        title: 'Discovery',
+        color: 'purple',
+        tags: [
+            "New Area",
+            "Hidden Item",
+            "Easter Egg",
+            "Secret",
+            "Collectible"
+        ],
+    }
 ];

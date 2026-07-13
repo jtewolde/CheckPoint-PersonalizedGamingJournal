@@ -32,7 +32,7 @@
 }
 
 /* CONTENT */
-.contentWrapper{
+.header{
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -40,10 +40,11 @@
     min-width: 0;
 }
 
-.metaRow{
+.headerRow{
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
 }
 
 .gameName {
