@@ -290,7 +290,7 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
                             <Badge 
                                 className={classes.ratingBadge}
                                 classNames={{ root: classes.root}}
-                                variant='outline' 
+                                variant='dot' 
                                 color={game.total_rating && game.total_rating >= 80 ? '#1ace3b' : game.total_rating && game.total_rating >= 70 ? 'yellow' : '#f01e1e'}
                                 radius='md'
                                 size='md'

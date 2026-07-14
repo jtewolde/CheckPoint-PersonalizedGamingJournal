@@ -88,10 +88,6 @@
     background-color: #171717;
 }
 
-.root{
-    outline: 1px solid
-}
-
 .gameTypeBadge{
     position: absolute;
     bottom: 5px;
