@@ -84,6 +84,12 @@
     z-index: 5;
     backdrop-filter: blur(6px);
     font-family: 'Inter';
+    font-weight: 600;
+    background-color: #171717;
+}
+
+.root{
+    outline: 1px solid
 }
 
 .gameTypeBadge{

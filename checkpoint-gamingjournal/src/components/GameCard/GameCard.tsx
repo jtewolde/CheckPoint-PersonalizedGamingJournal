@@ -106,10 +106,18 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
                 gameID: String(gameId),
                 gameDetails: {
                     title: game.name,
-                    genre: game.genres,
+
+                    genre: game.genres?.map(
+                    (genre: any) => genre.name
+                    ) || [],
+
+                    platforms: game.platforms?.map(
+                    (platform: any) => platform.name
+                    ) || [],
+
                     coverImage: game.cover?.url,
                     releaseDate: game.first_release_date
-                    ? new Date(game.first_release_date * 1000).toISOString()
+                    ? new Date(game.first_release_date * 1000).toLocaleDateString()
                     : null,
                     journalEntries: [],
                 },
@@ -281,8 +289,9 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
                         {variant === 'default' && (
                             <Badge 
                                 className={classes.ratingBadge}
-                                variant='dot' 
-                                color={game.total_rating && game.total_rating >= 80 ? '#2b8d08' : game.total_rating && game.total_rating >= 70 ? 'yellow' : '#e30000'}
+                                classNames={{ root: classes.root}}
+                                variant='outline' 
+                                color={game.total_rating && game.total_rating >= 80 ? '#1ace3b' : game.total_rating && game.total_rating >= 70 ? 'yellow' : '#f01e1e'}
                                 radius='md'
                                 size='md'
                             >
@@ -437,31 +446,15 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
 
                     <h3 className={classes.gameTitle}>{game.name}</h3>
 
-                    <OverflowList
-                        data={game.genres ?? []}
-                        maxVisibleItems={2}
-                        renderItem={(genre) => (
-                            <Badge
-                                key={genre.name}
-                                size='md'
-                                variant="filled"
-                                color="#2e2e2e"
-                                radius="lg"
-                            >
-                                {genre.name}
-                            </Badge>
-                        )}
-                        renderOverflow={(overflowItems) => (
-                            <Badge
-                                size={isMobile ? 'xs' : 'md'}
-                                color='#808080'
-                                variant="light"
-                                radius="lg"
-                                >
-                                +{overflowItems.length} More
-                            </Badge>
-                        )}
-                    />
+                    <Badge
+                        size='md'
+                        variant="filled"
+                        color="#2e2e2e"
+                        radius="lg"
+                        fw={500}
+                    >
+                        {game.genres?.[0]?.name || 'N/A'}
+                    </Badge>
 
                     <Group gap={8}>
                         {visiblePlatforms.map((platform) => (
