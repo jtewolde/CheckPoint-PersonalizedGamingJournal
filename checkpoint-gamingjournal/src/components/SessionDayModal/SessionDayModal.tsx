@@ -94,7 +94,6 @@ export default function SessionDayModal({ opened, onClose, selectedDate, session
                     return (
                         <div key={s._id} className={classes.gameSessionCard}>
                             <div className={classes.sessionHeader}>
-
                                 <div className={classes.titleDurationGroup}>
                                     {/*GAME TITLE */}
                                     <Text className={classes.titleText}>{s.gameName}</Text>

@@ -206,7 +206,6 @@ export default function GameDetails() {
         }
 
         const data = await res.json();
-        console.log("All Sessions:", data)
 
         // Retrieve the play sessions of the user only for the selected game
         const gameSessions = data.filter((session: any) => session.gameId === id);
@@ -215,19 +214,14 @@ export default function GameDetails() {
         // Calculate the total playtime of the game based on play sessions
         const totalPlaytime = gameSessions.reduce((total: number, session: any) => total + session.duration, 0);
         const hoursPlayed = (totalPlaytime / 60).toFixed(2)
-        setTotalHoursPlayed(hoursPlayed);
 
         // Calculate the average play session duration that a user has for the game
         const avgSessionDuration = gameSessions.length ? gameSessions.reduce((sum: any, s: { duration: any; }) => sum + s.duration, 0) / gameSessions.length / 60 : 0;
-        console.log("Average", avgSessionDuration)
 
         // Calculate the longest play session that the user has tracked for the specific game
         const longest = gameSessions.length ? Math.max(...gameSessions.map((s: any) => s.duration)) : 0;
-        console.log("Longest", longest)
-
         setStats({avg: Number(avgSessionDuration.toFixed(1)), totalSessions: gameSessions.length, longest: (longest / 60).toFixed(2)})
 
-        console.log("Game Sessions", gameSessions);
     } catch (error) {
       console.error('Error fetching recent play sessions:', error);
     }
@@ -269,7 +263,7 @@ export default function GameDetails() {
 
             coverImage: game.cover.url,
             releaseDate: game.first_release_date
-              ? new Date(game.first_release_date * 1000).toISOString()
+              ? new Date(game.first_release_date * 1000).toLocaleDateString()
               : null,
             status: game.status,
             platinum: game.platinum,
@@ -542,7 +536,7 @@ export default function GameDetails() {
                           <EditGameInfoModal
                             opened={opened}
                             onClose={close}
-                            game={libraryGame}
+                            libraryGame={libraryGame}
                           />
                           
                           <PlaySessionModal 
@@ -586,11 +580,9 @@ export default function GameDetails() {
                             </Tooltip>
 
                               <Tooltip label='Edit Game Info' position="top">
-                                  <Button className={classes.button} variant="filled" color="#eb8111" size='md' radius='md' rightSection={<Pencil size={20} />} onClick={open}>Edit </Button>
+                                  <Button className={classes.button} variant="filled" color="#eb8111" size='md' radius='md' rightSection={<Pencil size={20} />} onClick={open}> Edit </Button>
                               </Tooltip>
                           </div>
-
-
                         </div>
                       ) : (
                         <div className={classes.buttonContainer}>
@@ -621,11 +613,8 @@ export default function GameDetails() {
                         Create an account
                       </Button>
                     )}
-
                   </div>
-
               </div>
-
             </div>
 
             <div className={classes.rightSection}>
@@ -647,13 +636,10 @@ export default function GameDetails() {
                   </Accordion.Item>
                 ))}
               </Accordion>
-
             </div>
-
           </div>
 
           <div className={classes.ratingSection}>
-
             <div className={classes.sectionHeader}>
               <ThemeIcon size={50} variant='gradient' gradient={{ from: '#f7971e', to: '#ffd200', deg: 20}} radius='md'>
                   <Star size={40} />
@@ -662,9 +648,7 @@ export default function GameDetails() {
             </div>
 
             <div className={classes.ratings}>
-
               <div className={classes.igdbRating}>
-
                 <Text className={classes.ratingLabel}>User Score</Text>
 
                 <RingProgress
@@ -683,7 +667,6 @@ export default function GameDetails() {
               </div>
 
               <div className={classes.aggregatedRating}>
-
                 <Text className={classes.ratingLabel}>
                   Critic Score
                 </Text>
@@ -702,9 +685,7 @@ export default function GameDetails() {
                   }
                 />
               </div>
-
             </div>
-
           </div>
 
           {isAuthenticated && isGameInLibrary ? (
@@ -883,14 +864,9 @@ export default function GameDetails() {
                 );
               })}
             </Swiper>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
-
   );
 }
