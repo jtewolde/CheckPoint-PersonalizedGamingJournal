@@ -343,7 +343,7 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
                         ))}
                     </div>
 
-                    <Text fw={500}> Selected Tags </Text>
+                    <Text fw={500}> Selected Tags: </Text>
 
                     <Group gap="xs">
                         {tags.length === 0 ? (
@@ -357,6 +357,7 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
                                     color="blue"
                                     variant="light"
                                     size='lg'
+                                    fw={500}
                                 >
                                     {tag}
                                 </Badge>
@@ -364,6 +365,8 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
                         )}
                     </Group>
                 </Stack>
+
+                <Divider c='#4c4c4c'  />
 
                 <div className={classes.buttonGroup}>
                     <Button 

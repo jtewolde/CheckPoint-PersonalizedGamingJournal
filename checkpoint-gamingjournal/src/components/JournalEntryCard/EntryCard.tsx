@@ -10,7 +10,7 @@ import { modals } from '@mantine/modals';
 import { entryTypeColors } from "@/hooks/getEntryTypeColors";
 import JournalEntryModal from "../JournalEntryModal/EntryModal";
 
-import { EllipsisVertical, Trash, Pencil } from "lucide-react";
+import { EllipsisVertical, Trash, Pencil, Eye } from "lucide-react";
 
 import PlaceHolderImage from '../../../public/no-cover-image.png';
 import toast from 'react-hot-toast';
@@ -119,7 +119,7 @@ export default function JournalEntryCard({entry, variant =  "journal", color}: J
     };
 
     return (
-        <div className={`${classes.entryCard} ${variant === 'dashboard' ? classes.dashboard : variant === 'compact' ? classes.compact: classes.journal}`} onClick={() => router.push(`/journal/${entry._id}`)} style={{borderLeft: `5px solid ${color || '#c7c7c7'}`}}>
+        <div className={`${classes.entryCard} ${variant === 'dashboard' ? classes.dashboard : variant === 'compact' ? classes.compact: classes.journal}`} style={{borderLeft: `5px solid ${color || '#c7c7c7'}`}}>
             {variant === 'journal' && (
                 <div className={classes.coverWrapper}>
                     <Image
@@ -157,7 +157,19 @@ export default function JournalEntryCard({entry, variant =  "journal", color}: J
 
                         <Menu.Dropdown onClick={(e) => e.stopPropagation()}>
                             <Menu.Item
-                                leftSection={<Pencil size={16} />}
+                                leftSection={<Eye size={20} />}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    router.push(`/journal/${entry._id}`);
+                                }}
+                            >
+                                View Entry
+                            </Menu.Item>
+
+                            <Menu.Divider />
+
+                            <Menu.Item
+                                leftSection={<Pencil size={20} />}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     open();
@@ -170,7 +182,7 @@ export default function JournalEntryCard({entry, variant =  "journal", color}: J
 
                             <Menu.Item
                                 color="red"
-                                leftSection={<Trash size={16} />}
+                                leftSection={<Trash size={20} />}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     openDeleteModal(e)
@@ -196,7 +208,7 @@ export default function JournalEntryCard({entry, variant =  "journal", color}: J
                         }}
                         onEntryCreated={() => {
                             close();
-                            router.refresh();
+                            router.push('/journal');
                         }}
                     />
                 </div>
@@ -218,7 +230,7 @@ export default function JournalEntryCard({entry, variant =  "journal", color}: J
 
                     <OverflowList
                         data={entry.tags || []}
-                        maxVisibleItems={2}
+                        maxVisibleItems={isMobile ? 1 : 2}
                         gap={5}
                         renderItem={(tag, index) => (
                             <Badge color='white' radius='md' variant='default' fw={500} key={index} className={classes.metaBadge}>
