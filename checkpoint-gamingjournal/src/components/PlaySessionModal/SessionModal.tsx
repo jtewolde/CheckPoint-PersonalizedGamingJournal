@@ -56,6 +56,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
     const [selectedGameName, setSelectedGameName] = useState(gameName || "");
     const [selectedGameId, setSelectedGameId] = useState(gameId || "");
     const [userGames, setUserGames] = useState<any[]>([]);
+    const [availablePlatforms, setAvailablePlatforms] = useState<string[]>([]);
 
     // Helper function to quickly reset the all of the info on the form
     const resetForm = () => {
@@ -114,14 +115,25 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
             setPlatform(session.platform || '');
             setMood(session.mood || []);
 
+            const game = userGames.find(g => g.gameId === session.gameId);
+            setAvailablePlatforms(game?.platforms ?? platforms ?? []);
+
             setHours(Math.floor(session.duration / 60));
             setMinutes(session.duration % 60);
         } else if(!playSessionNotes) {
             setSelectedGameId(gameId || '')
             setSelectedGameName(gameName || '')
+
         }
         
     }, [opened, gameId, gameName]);
+
+    // If the modal is opened from the game details page, update the available platforms state
+    useEffect(() => {
+        if (gameId && platforms) {
+            setAvailablePlatforms(platforms);
+        }
+    }, [gameId, platforms]);
 
     // Function to handle creating or updating a play session for a game 
     // This will involve opening a modal with a form to input play session details such as duration and notes, 
@@ -202,7 +214,6 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                 return
             }
         }
-
         onClose();
     }
 
@@ -259,6 +270,13 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                         onChange={(value, option) =>{
                             setSelectedGameId(value || '')
                             setSelectedGameName(option?.label || '')
+
+                            const game = userGames.find((g) => g.gameId === value);
+                            setAvailablePlatforms(game?.platforms ?? []);
+
+                            // Reset platform if the previously selected one
+                            // doesn't exist for the newly selected game.
+                            setPlatform('');
                         }}
                         searchable
                         required
@@ -318,7 +336,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                         leftSection={<IconBrandXbox size={20} />}
                         maxDropdownHeight={300}
                         value={platform}
-                        data={(platforms ?? []).map((platform) => ({
+                        data={(availablePlatforms ?? []).map((platform) => ({
                             value: platform,
                             label: platform
                         }))}
