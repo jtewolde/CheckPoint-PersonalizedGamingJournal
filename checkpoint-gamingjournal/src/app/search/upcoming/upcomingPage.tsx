@@ -36,7 +36,7 @@ export default function UpcomingPage() {
   const [loading, setLoading] = useState(true); // State to handle loading
 
   // States to handle sorting and filtering search results
-  const [sortOption, setSortOption] = useState<'first_release_date' | 'total_rating' | 'alphabetical' | ''>('first_release_date'); // State to sort search results from release date/total_rating
+  const [sortOption, setSortOption] = useState<'first_release_date' | 'total_rating' | 'alphabetical' | 'first_release_date_oldest' | ''>('first_release_date_oldest'); // State to sort search results from release date/total_rating
   const [selectedType, setSelectedType] = useState<string[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<string[]>([]);
   const [selectedTheme, setSelectedTheme] = useState<string[]>([]);
