@@ -260,10 +260,10 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
             return <SiPlaystation size={30} />;
 
         if (name.includes("playstation vita"))
-            return <SiPlaystationvita size={30} />
+            return <SiPlaystationvita size={18} />
 
         if (name.includes("playstation portable"))
-            return <SiPlaystationportable size={30} />
+            return <SiPlaystationportable size={18} />
 
         // Xbox
         if (
@@ -417,11 +417,9 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
 
             {variant === 'library' && (
                 <div className={classes.gameInfo}>
-
                     <h3 className={classes.gameTitle}>{game.name}</h3>
 
                     <div className={classes.ratingSection}>
-                    
                         <Group gap={3} align='center'>
                             <Rating 
                                 size='md'
@@ -447,13 +445,12 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
 
             {showGameInfo && (
                 <div className={classes.gameInfo}>
-
                     <h3 className={classes.gameTitle}>{game.name}</h3>
 
                     <Badge
                         size='md'
                         variant="filled"
-                        color="#2e2e2e"
+                        color="#321f51"
                         radius="lg"
                         fw={500}
                     >

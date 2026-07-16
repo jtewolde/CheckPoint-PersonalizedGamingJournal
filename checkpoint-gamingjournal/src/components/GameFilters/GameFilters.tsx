@@ -110,7 +110,7 @@ export default function GameFilters({
                         size={size} 
                         radius={radius} 
                         color={color} 
-                        leftSection={<Funnel size={30} />} 
+                        leftSection={<Funnel size={20} />} 
                         onClick={toggle}>
                             Filters ({numberOfActiveFilters})
                         </Button>
