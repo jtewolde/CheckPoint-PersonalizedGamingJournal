@@ -14,7 +14,7 @@ import toast from 'react-hot-toast';
 
 import { Plus, Minus, Ellipsis, Trophy, ClipboardEdit, Star, Check, PowerOff, Backpack, Pause, Play, Timer, CalendarDays } from 'lucide-react';
 
-import { FaXbox, FaWindows, FaApple, FaAndroid, FaSteam, FaLinux, FaTrophy } from "react-icons/fa";
+import { FaXbox, FaWindows, FaApple, FaAndroid, FaSteam, FaLinux, FaTrophy, FaGoogle } from "react-icons/fa";
 import { SiPlaystation, SiPlaystation2, SiPlaystation3, SiPlaystation4, SiPlaystation5, SiPlaystationportable, SiPlaystationvita } from "react-icons/si"
 import { BsNintendoSwitch, BsPc } from "react-icons/bs";
 
@@ -218,6 +218,10 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
         // Apple
         if (name.includes("mac"))
             return <FaApple size={18} />;
+
+        // Google Stadia
+        if (name.includes("google stadia"))
+            return <FaGoogle size={18} />;
 
         // Linux
         if (name.includes("linux"))

@@ -10,7 +10,7 @@ type GameFiltersVariant = 'default' | 'small'
 
 // Define the props for the GameFilter component
 interface GameFilterProps {
-    color: string;
+    color?: string;
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     radius?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     className?: string;
@@ -101,11 +101,8 @@ export default function GameFilters({
     }, [opened]);
 
     return (
-
         <div className={classes.filterContainer}>
-
             <div className={classes.filterTopRow}>
-
                 {variant === 'default' && (
                     <Tooltip label='Apply Filters' position="top">
                         <Button 
@@ -144,13 +141,6 @@ export default function GameFilters({
                 title='Sort and Filter'
                 className={classes.drawer}
                 styles={{
-                    content: {
-                        backgroundColor: '#252525ff'
-                    },
-                    header: {
-                        backgroundColor: '#252525ff',
-                        borderBottom: '1px solid gray'
-                    },
                     title: {
                         fontSize: '24px',
                         color: 'white',
@@ -164,7 +154,6 @@ export default function GameFilters({
                 removeScrollProps={{ allowPinchZoom: true }}
                 keepMounted
             >
-
                 <Stack className={classes.drawerFilters} gap='xs' justify='center' mt={20}>
                     
                     {/* Filter by Game Type with MultiSelect */}
@@ -490,12 +479,8 @@ export default function GameFilters({
 
                         </div>
                     </Stack>
-                    
                 </Stack>
-
             </Drawer>
-
         </div>
     )
-
 }

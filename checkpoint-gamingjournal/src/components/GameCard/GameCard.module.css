@@ -1,6 +1,6 @@
 .gameCard{
-    background-color: #181818;
-    border: 1px solid #2d2c2c;
+    background:#262235;
+    border:1px solid #3d3853;
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -21,8 +21,8 @@
 }
 
 .library{
-    background-color: #181818;
-    border: 1px solid #2d2c2c;
+    background:#262235;
+    border:1px solid #3d3853;
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -186,12 +186,10 @@
 }
 
 .gameDate{
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
-    color: rgb(157, 154, 154);
+    color: rgb(231, 229, 229);
     font-family: 'Barlow';
-    cursor: default;
-    margin: 0;
     width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
