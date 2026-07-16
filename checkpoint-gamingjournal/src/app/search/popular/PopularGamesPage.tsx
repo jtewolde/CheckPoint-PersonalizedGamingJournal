@@ -114,37 +114,28 @@ export default function PopularPage() {
 
   return (
     <div className={classes.wrapper} >
-
         <div className={classes.mainContent}>
-
           <div className={classes.headerSection}>
-
             <div className={classes.titleDescriptionSection}>
-
               <div className={classes.titleLogo}>
-
                 <h1 className={classes.titleText}>Popular Games</h1>
-
               </div>
 
               <Text className={classes.description}>
                 Explore the most popular games that define today’s gaming scene. 
               </Text>
-
             </div>
 
             <div className={classes.toolbar}>
-              
               <div className={classes.searchContainer}>
                 <GamePageSearch size='lg' radius='md' value={search} onChange={setSearch}/>
               </div>
 
               <div className={classes.actionRow}>
-
                 <div className={classes.sortContainer}>
                   {/* Sort By Dropdown */}
                     <Select
-                      className={classes.filterDropdown}
+                      className={classes.sortSelect}
                       size='lg'
                       variant='filled'
                       placeholder="Select an option"
@@ -159,20 +150,13 @@ export default function PopularPage() {
                       ]}
                       value={sortOption}
                       onChange={(value) => setSortOption(value as 'first_release_date' | 'total_rating' | 'alphabetical' | '')}
-                      styles={{
-                        input:{
-                            backgroundColor: '#1b1b1b',
-                            color: 'white',
-                            border: '1px solid #2a2828'
-                        }
-                      }}
                     />
                 </div>
                 
                 <div className={classes.filterContainer}>
                   <GameFilters
+                    className={classes.gameFilters}
                     variant='default'
-                    color='rgb(49, 48, 48)'
                     size= 'lg'
                     radius='md'
                     totalGames={total}
@@ -190,12 +174,10 @@ export default function PopularPage() {
                     onPlatformsChange={(v) => setSelectedPlatform(v as any)}
                   />
                 </div>
-                
               </div>
             </div>
 
             <div className={classes.resultsContainer}>
-
               <Text className={classes.resultsText}>
                 Showing {filteredGames.length} of {total.toLocaleString()} games
               </Text>
@@ -219,9 +201,7 @@ export default function PopularPage() {
                     setSelectedPlatform([]);
                 }}
               />
-
             </div>
-
           </div>
 
           <SimpleGrid spacing="lg" verticalSpacing='xl' className={classes.gamesGrid}>

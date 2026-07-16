@@ -87,9 +87,6 @@ export default function TrendingPage() {
             setGames(data.games);
             setLength(data.length);
             setTotal(data.total)
-
-            console.log("Game Results", data.games)
-            console.log("Total Count", data.total)
         } catch (error) {
             console.error('Error fetching games:', error);
         } finally {
@@ -154,20 +151,13 @@ export default function TrendingPage() {
                       ]}
                       value={sortOption}
                       onChange={(value) => setSortOption(value as 'first_release_date' | 'total_rating' | 'alphabetical' | '')}
-                      styles={{
-                        input:{
-                            backgroundColor: '#1b1b1b',
-                            color: 'white',
-                            border: '1px solid #2a2828'
-                        }
-                      }}
                     />
                 </div>
                 
                 <div className={classes.filterContainer}>
                   <GameFilters
+                    className={classes.gameFilters}
                     variant='default'
-                    color='rgb(49, 48, 48)'
                     size= 'lg'
                     radius='md'
                     totalGames={total}
