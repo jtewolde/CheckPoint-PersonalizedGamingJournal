@@ -101,7 +101,6 @@ export default function SearchResults({ query }: SearchResultsProps){
 
     return (
         <div className={classes.wrapper}>
-
             <Stack gap='xs' align='flex-start'>
                 <Text className={classes.resultsTitle}>
                     Search Results
@@ -113,7 +112,6 @@ export default function SearchResults({ query }: SearchResultsProps){
             </Stack>
 
             <div className={classes.actionGrid}>
-                
                 <div className={classes.searchContainer}>
                     <GameSearchBar className={classes.searchBar} initialQuery={query} showActionIcon iconColor='#20201d'/>
                 </div>
@@ -134,13 +132,6 @@ export default function SearchResults({ query }: SearchResultsProps){
                             ]}
                             value={sortOption}
                             onChange={(value) => setSortOption(value as 'first_release_date' | 'total_rating' | 'alphabetical' | '')}
-                            styles={{
-                                input:{
-                                    backgroundColor: '#1b1b1b',
-                                    color: 'white',
-                                    border: '1px solid #2a2828'
-                                }
-                            }}
                         />
                     </div>
                     
@@ -148,8 +139,7 @@ export default function SearchResults({ query }: SearchResultsProps){
                         <GameFilters
                             variant='default'
                             className={classes.filterButton}
-                            color='rgb(49, 48, 48)'
-                            size='md'
+                            size='lg'
                             radius='md'
                             totalGames={total}
                             sortOption={sortOption}
@@ -205,7 +195,7 @@ export default function SearchResults({ query }: SearchResultsProps){
                         />
                     ))
                     : games.map((game) =>(
-                        <GameCard key={game.id} game={game} />
+                        <GameCard key={game.id} game={game} variant='default' />
                     )
                 )}
             </SimpleGrid>
