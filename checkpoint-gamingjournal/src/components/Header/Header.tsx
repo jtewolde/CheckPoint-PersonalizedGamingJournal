@@ -58,6 +58,7 @@ export function Header() {
       { label: 'Discover', icon: <IconSearch size={20} />, href: '/search', links: [
         { label: 'Popular', icon: <Star size={20} />, href: '/search/popular' },
         { label: 'Trending', icon: <Flame size={20} />, href: '/search/trending' },
+        { label: 'Upcoming', icon: <Timer size={20} />, href: '/search/upcoming' }
       ]},
   ]
 
@@ -67,6 +68,7 @@ export function Header() {
       { label: 'Discover', icon: <IconSearch size={20} />, href: '/search', links: [
         { label: 'Popular', icon: <Star size={20} />, href: '/search/popular' },
         { label: 'Trending', icon: <Flame size={20} />, href: '/search/trending' },
+        { label: 'Upcoming', icon: <Timer size={20} />, href: '/search/upcoming' }
       ]},
       { label: 'Sign In', icon: <LogIn size={20} />, href: '/auth/signin' },
       { label: 'Register', icon: <UserRoundPlus size={20} />, href: '/auth/signup'},
@@ -81,6 +83,7 @@ export function Header() {
       { label: 'Discover', icon: <IconSearch size={25} />, href: '/discover' },
       { label: 'Popular', icon: <Star size={25} />, href: '/search/popular' },
       { label: 'Trending', icon: <Flame size={25} />, href: '/search/trending' },
+      { label: 'Upcoming', icon: <Timer size={25} />, href: '/search/upcoming' },
     ],
     authentication: [
       { label: 'Sign In', icon: <LogIn size={25} />, href: '/auth/signin' },
@@ -101,6 +104,7 @@ export function Header() {
       { label: 'Discover', icon: <IconSearch size={25} />, href: '/discover' },
       { label: 'Popular', icon: <Star size={25} color='#e4c61d' fill='#e4c61d'/>, href: '/search/popular' },
       { label: 'Trending', icon: <Flame size={25} color='#ff8c00' fill='#ff8c00'/>, href: '/search/trending' },
+      { label: 'Upcoming', icon: <Timer size={20} color='#00c3ff' fill='#00c3ff'/>, href: '/search/upcoming' },
     ],
 
     account: [
@@ -185,6 +189,14 @@ export function Header() {
                           leftSection={<Flame size={20} color='#ff8c00' fill='#ff8c00'/>}
                         >
                           Trending Games
+                        </Menu.Item>
+
+                        <Menu.Item
+                          component={Link}
+                          href="/search/upcoming"
+                          leftSection={<Timer size={20} color='#00c3ff' fill='#00c3ff'/>}
+                        >
+                          Upcoming Games
                         </Menu.Item>
                       </Menu.Dropdown>
                     </Menu>
@@ -356,18 +368,6 @@ export function Header() {
           withCloseButton={false}
           size={isMobile ? (isAuthenticated ? '270px' : '280px') : '300px'} // Adjust size based on conditions
           className={classes.drawer}
-          styles={{
-            content: {
-              backgroundColor: '#202020ff',
-              borderBottom: '2px solid grey'
-            },
-            header: {
-              backgroundColor: '#202020ff'
-            },
-            close: {
-              color: 'white'
-            }
-          }}
         >
 
           <div className={classes.logoContainer}>

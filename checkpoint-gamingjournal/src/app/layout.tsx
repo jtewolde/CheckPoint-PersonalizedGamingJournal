@@ -77,21 +77,83 @@ export default function RootLayout({
               defaultColorScheme="dark"
               withGlobalClasses
               theme={{
+                primaryColor: 'violet',
                 colors: {
                   dark: [
-                    '#C1C2C5', // 0 (text on dark)
-                    '#A6A7AB',
-                    '#909296',
-                    '#5C5F66',
-                    '#373A40',
-                    '#2C2E33',
-                    '#212121',
-                    '#1A1B1E',
-                    '#141517',
-                    '#101113', // 9 (deepest background)
+                    '#d9d6e6', // text
+                    '#c4bfd7',
+                    '#ada7c3',
+                    '#8b85a3',
+                    '#5b5672',
+                    '#343043',
+                    '#262235', // cards
+                    '#1f1b2c', // sections
+                    '#17151f', // app background
+                    '#121019', // deepest
+                  ],
+
+                  brand:[
+                    '#f3ecff',
+                    '#e4d3ff',
+                    '#d2b6ff',
+                    '#bc95ff',
+                    '#a774ff',
+                    '#8b5cf6',
+                    '#7c3aed',
+                    '#6d28d9',
+                    '#5b21b6',
+                    '#4c1d95',
                   ]
                 },
+                primaryShade: 5,
                 defaultRadius: 'md',
+                components: {
+                  Paper: {
+                    defaultProps: {
+                      bg: "dark.6"
+                    }
+                  },
+
+                  Card: {
+                    defaultProps: {
+                      bg: "dark.6"
+                    }
+                  },
+
+                  AppShell: {
+                    styles: {
+                      main: {
+                        background: "#17151f"
+                      }
+                    }
+                  },
+
+                  Button: {
+                    defaultProps: {
+                      color: "brand"
+                    }
+                  },
+
+                  Modal: {
+                    styles: {
+                      content: {
+                        background: "#1f1b2c",
+                      },
+
+                      header: {
+                        background: "#1f1b2c",
+                      },
+                    },
+                  },
+
+                  Drawer: {
+                    styles: {
+                      content: {
+                        background: "#1f1b2c",
+                      },
+                    },
+                  },
+                },
               }}
             >
 
