@@ -221,7 +221,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
         <Modal 
             opened={opened} 
             onClose={onClose} 
-            size='lg' 
+            size='xl' 
             title={(gameId ? `${gameName} - Play Session` : `Quick Log Session`)} 
             withCloseButton 
             closeOnClickOutside={false} 
@@ -285,10 +285,6 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
 
                 <Textarea
                     className={classes.textInput}
-                    styles={{
-                        wrapper: { color: '#212121'}, 
-                        input: { color: 'white', background: '#212121'}, 
-                    }}
                     size="md"
                     minRows={3}
                     maxRows={10}
@@ -323,10 +319,6 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                     onChange={setSessionType}
                     searchable
                     size="md"
-                    styles={{
-                        input: { color: "white", background: "#212121" },
-                        dropdown: { background: "#212121", color: "whitesmoke" },
-                    }}
                     style={{ marginTop: "1rem" }}
                 />
 

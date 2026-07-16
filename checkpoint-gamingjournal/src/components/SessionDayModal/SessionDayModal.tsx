@@ -18,7 +18,7 @@ type PlaySession = {
     duration: number;
     notes: string;
     sessionType: string[];
-    mood?: string;
+    mood?: string[];
     platform?: string;
 };
 
@@ -74,7 +74,7 @@ export default function SessionDayModal({ opened, onClose, selectedDate, session
     }
 
     return (
-        <Modal opened={opened} onClose={onClose} size='lg' title={'Play Sessions on ' + (selectedDate || "No Date Selected")}>
+        <Modal opened={opened} onClose={onClose} size='xl' title={'Play Sessions on ' + (selectedDate || "No Date Selected")}>
             {/* ✅ LOADING OVERLAY */}
             <LoadingOverlay
                 visible={loading}
@@ -113,33 +113,37 @@ export default function SessionDayModal({ opened, onClose, selectedDate, session
                                             </>
                                         )}
 
-                                        {s.mood && (
-                                            <>
-                                                <Text size="sm" c="dimmed">•</Text>
-                                                <Text size="sm" c="dimmed">
-                                                    {s.mood}
-                                                </Text>
-                                            </>
+                                        {s.mood && s.mood.length > 0 && (
+                                            <Group gap={6} align="center" justify="center">
+                                                {s.mood.map((mood: string, index: number) => (
+                                                    <>
+                                                        <Text size="sm" c="dimmed">•</Text>
+                                                        <Text key={index} size="sm" c="dimmed">
+                                                            {mood}
+                                                        </Text>
+                                                    </>
+                                                ))}
+                                            </Group>
                                         )}
                                     </Group>
 
-                                    {/* ✅ TAGS SECTION */}
+                                    {/* ✅ SESSION TYPES */}
                                     {s.sessionType && s.sessionType.length > 0 && (
-                                    <div className={classes.tagContainer}>
-                                            <Group className={classes.typeContainer}>
-                                                {s.sessionType.map((type: string, index: number) => (
-                                                <Badge
-                                                    key={index}
-                                                    variant="light"
-                                                    color="green"
-                                                    radius="md"
-                                                    size='md'
-                                                >
-                                                    {type}
-                                                </Badge>
-                                                ))}
-                                            </Group>
-                                    </div>
+                                        <div className={classes.tagContainer}>
+                                                <Group className={classes.typeContainer}>
+                                                    {s.sessionType.map((type: string, index: number) => (
+                                                    <Badge
+                                                        key={index}
+                                                        variant="light"
+                                                        color="green"
+                                                        radius="md"
+                                                        size='md'
+                                                    >
+                                                        {type}
+                                                    </Badge>
+                                                    ))}
+                                                </Group>
+                                        </div>
                                     )}
                                 </div>
 

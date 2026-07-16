@@ -156,8 +156,6 @@ export default function GameSearchBar({
                     <IconSearch size={25} />
                 </ActionIcon>
             )}
-
-
         </div>
     );
 }
