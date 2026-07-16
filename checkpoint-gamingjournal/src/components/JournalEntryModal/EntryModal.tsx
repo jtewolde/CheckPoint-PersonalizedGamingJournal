@@ -287,19 +287,11 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
                     value={entryType}
                     onChange={(value) => setEntryType(value || '')}
                     searchable
-                    styles={{
-                        input: { color: "white", background: "#212121" },
-                        dropdown: { background: "#212121", color: "whitesmoke" },
-                    }}
                     style={{ marginTop: "1rem" }}
                 />
 
                 <Textarea
                     className={classes.textInput}
-                    styles={{
-                        wrapper: { color: '#212121'}, 
-                        input: { color: 'white', background: '#212121'}, 
-                    }}
                     size="md"
                     minRows={3}
                     autosize
