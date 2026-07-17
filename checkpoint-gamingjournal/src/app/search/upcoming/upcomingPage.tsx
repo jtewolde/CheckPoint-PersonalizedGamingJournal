@@ -29,7 +29,7 @@ export default function UpcomingPage() {
 
   const [search, setSearch] = useState('');
 
-  const isMobile = useMediaQuery('(max-width: 520px)');
+  const isMobile = useMediaQuery('(max-width: 645px)');
 
   const [games, setGames] = useState<any[]>([]); // State to store games data
   const [length, setLength] = useState("")
@@ -129,7 +129,6 @@ export default function UpcomingPage() {
             </div>
 
             <div className={classes.toolbar}>
-              
               <div className={classes.searchContainer}>
                 <GamePageSearch size='lg' radius='md' value={search} onChange={setSearch}/>
               </div>
@@ -153,21 +152,14 @@ export default function UpcomingPage() {
                       ]}
                       value={sortOption}
                       onChange={(value) => setSortOption(value as 'first_release_date' | 'total_rating' | 'alphabetical' | '')}
-                      styles={{
-                        input:{
-                            backgroundColor: '#1b1b1b',
-                            color: 'white',
-                            border: '1px solid #2a2828'
-                        }
-                      }}
                     />
                 </div>
                 
                 <div className={classes.filterContainer}>
                   <GameFilters
-                    variant='default'
-                    color='rgb(49, 48, 48)'
-                    size= 'lg'
+                    className={classes.gameFilters}
+                    variant={isMobile ? 'small' : 'default'}
+                    size={isMobile ? 'xl' : 'lg'}
                     radius='md'
                     totalGames={total}
                     sortOption={sortOption}
@@ -184,7 +176,6 @@ export default function UpcomingPage() {
                     onPlatformsChange={(v) => setSelectedPlatform(v as any)}
                   />
                 </div>
-                
               </div>
             </div>
           </div>

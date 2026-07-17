@@ -125,7 +125,7 @@ export default function GameFilters({
                         color={color}
                         onClick={toggle}
                         >
-                            <Funnel size={30} />
+                            <Funnel size={20} />
                         </ActionIcon>
                     </Tooltip>
                 )}
@@ -459,10 +459,11 @@ export default function GameFilters({
                         <div style={{ borderTop: '1px solid #6c6c6c', paddingTop: '0.5rem', gap: '0.5rem'}}>
                             <Button
                                 fullWidth
-                                variant='subtle'
-                                color='white'
+                                variant='filled'
+                                color='red'
                                 leftSection={<RefreshCcw size={18} />}
                                 mb='sm'
+                                mt='md'
                                 onClick={handleClearFilters}
                             >
                                 Clear Filters
