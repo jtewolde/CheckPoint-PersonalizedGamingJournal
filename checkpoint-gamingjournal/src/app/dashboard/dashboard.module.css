@@ -1,7 +1,9 @@
 .background{
-  background: #4a4a4a;
-  background-size: cover;
-  background-attachment: fixed;
+  background: linear-gradient(
+    180deg,
+    #1a1724 0%,
+    #15131d 100%
+  );
   position: relative;
   min-height: 100%; /* Ensure the page takes up the full height */
   min-width: 100%;
@@ -90,10 +92,12 @@
   gap: 0.4rem;
   width: 100%;
   font-weight: 800;
+
+  background: #1f1b2c;
+  border: 1px solid #37324a;
+  border-radius: 12px;
+
   margin-bottom: 1.2rem;
-  background-color: #1d1c1c;
-  border-radius: 8px;
-  border: 1px solid #494949;
   padding: 0.4rem 0.8rem;
   align-items: flex-start;
   justify-content: space-between;
@@ -120,6 +124,14 @@
   text-wrap: balance;
 }
 
+.quickStatItem:hover,
+.statusCard:hover{
+    transform: translateY(-3px);
+    border-color:#452f79;
+    box-shadow:
+        0 10px 28px rgba(139,92,246,.15);
+}
+
 .statCards {
   width: 100%;
   max-width: 100%;
@@ -142,9 +154,8 @@
   padding: 1rem;
   gap: 1rem;
   border-radius: 12px;
-  background-color: #272727;
-
-  border: 1px solid #3a3a3a;
+  background: #262235;
+  border: 1px solid #3d3853;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -155,8 +166,19 @@
   margin-bottom: 1rem;
   color: #ffffff;
   font-family: 'Inter';
-  text-decoration: underline;
-  text-underline-offset: 10px;
+}
+
+.statusTitle::after{
+    content:"";
+    display:block;
+
+    width:48px;
+    height:3px;
+
+    margin-top:10px;
+
+    background:#8b5cf6;
+    border-radius:999px;
 }
 
 .statusCount {
@@ -209,9 +231,8 @@
   min-height: 100px;
   padding: 1.25rem;
   border-radius: 18px;
-  background-color: #272727;
-
-  border: 1px solid #3a3a3a;
+  background: #1f1b2c;
+  border: 1px solid #37324a;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition:
     transform 0.2s ease,

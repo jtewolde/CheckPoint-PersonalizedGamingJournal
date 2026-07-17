@@ -281,15 +281,10 @@ export default function Dashboard() {
   }, []);
 
   return (
-
     <div className={classes.background}>
-
       <div className={classes.backgroundOverlay}>
-
         <div className={classes.wrapper}>
-
           <div className={classes.dashboardHeader}>
-
             <div className={classes.heroContainer}>
               <Group gap={10} align='center'>
                 <Avatar radius='xl' size={45} src={user?.image || undefined} alt={user?.name || "User"} onClick={() => router.push('/settings/profile')} />
@@ -299,7 +294,6 @@ export default function Dashboard() {
               <p className={classes.welcomeText}> 
                 Your latest stats, sessions, and milestones — all in one place.
               </p>
-              
             </div>
 
             <div className={classes.quickActionGroup}>
@@ -315,15 +309,11 @@ export default function Dashboard() {
               <Tooltip label='Create Journal Entry' position='top'>
                 <ActionIcon color='pink' size='xl' radius='md' onClick={journalOpen}><NotebookPen size={25} /></ActionIcon>
               </Tooltip>
-
             </div>
-          
           </div>
 
           <div className={classes.statCards}>
-
             <SimpleGrid cols={{base: 1, sm: 1, md: 2, lg: 4, xl: 4}} spacing="lg" className={classes.quickStatsGrid}>
-
               <div className={classes.quickStatItem}>
                 <div className={classes.quickStatHeader}>
                   <ThemeIcon size={42} radius='xl' variant='filled' color='indigo'> <ClipboardCheck size={20} /> </ThemeIcon>
@@ -387,170 +377,153 @@ export default function Dashboard() {
                   </Stack>
                 </div>
               </div>
-
             </SimpleGrid>
 
             <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 2, xl: 2}} spacing="sm" className={classes.statusGrid}>
-
               <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-                  <p className={classes.statusTitle}>Game Status Breakdown</p>
-
-                  <div className={classes.chartWrapper}>
-
-                    <DonutChart
-                      size={260}
-                      strokeColor='black'
-                      strokeWidth={2}
-                      thickness={24}
-                      paddingAngle={3}
-                      chartLabel={`${numOfGames} Games Tracked`}
-                      styles={{
-                        label:{
-                          color: 'white',
-                          fontFamily: 'Poppins',
-                          fill: 'white',
-                          fontSize: '18px'
-                        },
-                        tooltip:{
-                          border: '1px solid black'
-                        },
-                        tooltipBody:{
-                          backgroundColor: '#2b2b2b',
-                          color: 'white'
-                        },
-                        tooltipItemName:{
-                          color: 'white'
-                        },
-                        tooltipItemData: {
-                          color: 'white'
-                        }
-                      }}
-                      data={[
-                        { name: 'Backlog', value: backlogLength, color: 'orange' },
-                        { name: 'Wishlist', value: wishlistLength, color: 'pink'},
-                        { name: 'On Hold', value: onHoldLength, color: 'red' },
-                        { name: 'Playing', value: playGamesLength, color: 'blue'},
-                        { name: 'No Status Given', value: noStatusLength, color: 'lightgrey'},
-                        { name: 'Completed', value: completedLength, color: 'green'},
-                        { name: '100%', value: fullyDoneLength, color: 'gold'}
-                      ]}
-                    />
-
-                  </div>
-
+                <p className={classes.statusTitle}>Game Status Breakdown</p>
+                <div className={classes.chartWrapper}>
+                  <DonutChart
+                    size={260}
+                    strokeColor='black'
+                    strokeWidth={2}
+                    thickness={24}
+                    paddingAngle={3}
+                    chartLabel={`${numOfGames} Games Tracked`}
+                    styles={{
+                      label:{
+                        color: 'white',
+                        fontFamily: 'Poppins',
+                        fill: 'white',
+                        fontSize: '18px'
+                      },
+                      tooltip:{
+                        border: '1px solid black'
+                      },
+                      tooltipBody:{
+                        backgroundColor: '#2b2b2b',
+                        color: 'white'
+                      },
+                      tooltipItemName:{
+                        color: 'white'
+                      },
+                      tooltipItemData: {
+                        color: 'white'
+                      }
+                    }}
+                    data={[
+                      { name: 'Backlog', value: backlogLength, color: 'orange' },
+                      { name: 'Wishlist', value: wishlistLength, color: 'pink'},
+                      { name: 'On Hold', value: onHoldLength, color: 'red' },
+                      { name: 'Playing', value: playGamesLength, color: 'blue'},
+                      { name: 'No Status Given', value: noStatusLength, color: 'lightgrey'},
+                      { name: 'Completed', value: completedLength, color: 'green'},
+                      { name: '100%', value: fullyDoneLength, color: 'gold'}
+                    ]}
+                  />
+                </div>
               </Paper>
 
               <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-                  <p className={classes.statusTitle}>Journal Entries Activity</p>
-
-                  <div className={classes.chartWrapper}>
-
-                    <LineChart
-                      h={260}
-                      w='95%'
-                      dataKey='month'
-                      yAxisLabel='# of Entries'
-                      xAxisLabel='Months'
-                      strokeWidth={2}
-                      data={journalActivityData}
-                      series={[{ name: 'entries', color: 'blue' }]}
-                      styles={{
-                        axisLabel: {
-                          fill: 'white',
-                          fontFamily: 'Inter',
-                          fontSize: '14px',
-                        },
-                        axis: {
-                          fill: 'white',
-                          fontSize: '12px',
-                          fontWeight: 'bold'
-                        },
-                        tooltip:{
-                          backgroundColor: '#2b2b2b',
-                          color: 'white',
-                          border: '1px solid #424242'
-                        },
-                        tooltipBody:{
-                          backgroundColor: '#2b2b2b',
-                          color: 'white'
-                        },
-                        tooltipLabel:{
-                          color: 'white'
-                        },
-                        tooltipItemName:{
-                          color: 'white',
-                          fontFamily: 'Poppins',
-                          fontSize: '16px'
-                        },
-                        tooltipItemData: {
-                          color: 'white',
-                          fontFamily: 'Poppins',
-                          fontSize: '16px'
-                        }
-                      }}
-                    />
-
-                  </div>
-
+                <p className={classes.statusTitle}>Journal Entries Activity</p>
+                <div className={classes.chartWrapper}>
+                  <LineChart
+                    h={260}
+                    w='95%'
+                    dataKey='month'
+                    yAxisLabel='# of Entries'
+                    xAxisLabel='Months'
+                    strokeWidth={2}
+                    data={journalActivityData}
+                    series={[{ name: 'entries', color: 'blue' }]}
+                    styles={{
+                      axisLabel: {
+                        fill: 'white',
+                        fontFamily: 'Inter',
+                        fontSize: '14px',
+                      },
+                      axis: {
+                        fill: 'white',
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                      },
+                      tooltip:{
+                        backgroundColor: '#2b2b2b',
+                        color: 'white',
+                        border: '1px solid #424242'
+                      },
+                      tooltipBody:{
+                        backgroundColor: '#2b2b2b',
+                        color: 'white'
+                      },
+                      tooltipLabel:{
+                        color: 'white'
+                      },
+                      tooltipItemName:{
+                        color: 'white',
+                        fontFamily: 'Poppins',
+                        fontSize: '16px'
+                      },
+                      tooltipItemData: {
+                        color: 'white',
+                        fontFamily: 'Poppins',
+                        fontSize: '16px'
+                      }
+                    }}
+                  />
+                </div>
               </Paper>
 
               <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-                  <p className={classes.statusTitle}>Game Ratings</p>
-
-                  <div className={classes.chartWrapper}>
-
-                    <BarChart
-                      h={260}
-                      w='95%'
-                      dataKey='rating'
-                      yAxisLabel='Games'
-                      xAxisLabel='Rating (/10)'
-                      data={ratingDistributionData}
-                      series={[{ name: 'count', color: 'red' }]}
-                      yAxisProps={{
-                        allowDecimals: false
-                      }}
-                      styles={{
-                        axisLabel: {
-                          fill: 'white',
-                          fontFamily: 'Inter',
-                          fontSize: '14px',
-                        },
-                        axis: {
-                          fill: 'white',
-                          fontSize: '12px',
-                          fontWeight: 'bold'
-                        },
-                        tooltip:{
-                          backgroundColor: '#2b2b2b',
-                          color: 'white',
-                          border: '1px solid #424242'
-                        },
-                        tooltipBody:{
-                          backgroundColor: '#2b2b2b',
-                          color: 'white'
-                        },
-                        tooltipLabel:{
-                          color: 'white'
-                        },
-                        tooltipItemName:{
-                          color: 'white',
-                          fontFamily: 'Poppins',
-                          fontSize: '16px'
-                        },
-                        tooltipItemData: {
-                          color: 'white',
-                          fontFamily: 'Poppins',
-                          fontSize: '16px'
-                        }
-                      }}
-                    />
-
-                  </div>
-
+                <p className={classes.statusTitle}>Game Ratings</p>
+                <div className={classes.chartWrapper}>
+                  <BarChart
+                    h={260}
+                    w='95%'
+                    dataKey='rating'
+                    yAxisLabel='Games'
+                    xAxisLabel='Rating (/10)'
+                    data={ratingDistributionData}
+                    series={[{ name: 'count', color: 'red' }]}
+                    yAxisProps={{
+                      allowDecimals: false
+                    }}
+                    styles={{
+                      axisLabel: {
+                        fill: 'white',
+                        fontFamily: 'Inter',
+                        fontSize: '14px',
+                      },
+                      axis: {
+                        fill: 'white',
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                      },
+                      tooltip:{
+                        backgroundColor: '#2b2b2b',
+                        color: 'white',
+                        border: '1px solid #424242'
+                      },
+                      tooltipBody:{
+                        backgroundColor: '#2b2b2b',
+                        color: 'white'
+                      },
+                      tooltipLabel:{
+                        color: 'white'
+                      },
+                      tooltipItemName:{
+                        color: 'white',
+                        fontFamily: 'Poppins',
+                        fontSize: '16px'
+                      },
+                      tooltipItemData: {
+                        color: 'white',
+                        fontFamily: 'Poppins',
+                        fontSize: '16px'
+                      }
+                    }}
+                  />
+                </div>
               </Paper>
 
               <Paper shadow='md' radius='lg' className={classes.statusCard}>
@@ -559,9 +532,7 @@ export default function Dashboard() {
                     <SessionHeatmap />
                   </div>
               </Paper>
-
             </SimpleGrid>
-
           </div>
 
           {/*QUICK LOG SESSION MODAL*/}
@@ -579,8 +550,7 @@ export default function Dashboard() {
             }}
           />
 
-          <div className={classes.playingGames} >
-
+          <div className={classes.playingGames}>
             <div className={classes.playingSection}>
               <div className={classes.titleLogo}>
                 <ThemeIcon size={40} radius='md' variant='gradient' gradient={{from: '#e96443', to: '#904e95', deg: 90}}> 
@@ -634,17 +604,13 @@ export default function Dashboard() {
               ) : (
                   <SimpleGrid cols={2} spacing="lg" className={classes.entriesGrid}>
                       {recentEntries.map((entry) => (
-                        <JournalEntryCard key={entry._id} entry={entry} variant='journal'/>
+                        <JournalEntryCard key={entry._id} entry={entry} variant='journal' color='#7c18ed'/>
                       ))}
                   </SimpleGrid>
               )}
           </div>
-
         </div>
-
       </div>
-
     </div>
-
   );
 }
