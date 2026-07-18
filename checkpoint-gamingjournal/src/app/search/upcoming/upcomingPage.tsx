@@ -233,7 +233,7 @@ export default function UpcomingPage() {
                       value={page}
                       onChange={(newPage) => {
                           setPage(newPage);
-                          router.push(`/search/popular?&page=${newPage}`);
+                          router.push(`/search/upcoming?&page=${newPage}`);
                       }}
                   />
               </div>

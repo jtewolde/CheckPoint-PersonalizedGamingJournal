@@ -233,7 +233,7 @@ export default function TrendingPage() {
                       value={page}
                       onChange={(newPage) => {
                           setPage(newPage);
-                          router.push(`/search/popular?&page=${newPage}`);
+                          router.push(`/search/trending?&page=${newPage}`);
                       }}
                   />
               </div>
