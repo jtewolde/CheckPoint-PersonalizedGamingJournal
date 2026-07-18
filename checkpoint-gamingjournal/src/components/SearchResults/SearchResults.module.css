@@ -43,31 +43,42 @@
 
 .actionGrid{
     display: flex;
-    flex-direction: column;
-    gap: .75rem;
-    width: min(100%, 500px);
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    width: 100%;
+    margin-top: 0.6rem;
+    margin-bottom: 0.6rem;
+
+    border-radius: 12px;
 }
 
-.searchContainer, .searchBar{
-    width: 100%;
+.searchContainer{
+    width: 50%;
 }
 
 .actionRow{
     display: flex;
+    align-items: flex-start;
     gap: 0.5rem;
     width: 100%;
 }
 
-.sortContainer, .filterContainer{
-    flex: 1;
+.filterContainer{
+    display: flex;
+    align-items: flex-end;
+    flex-shrink: 0;
+    gap: 1rem;
 }
 
 .filterButton{
     width: 100%;
-    font-family: 'Noto Sans';
+    flex-shrink: 0;
+    font-family: 'Inter';
+    font-size: 16px;
     font-weight: 400;
-    font-size: 18px;
-    border: 1px solid black;
 }
 
 .selectDropdown{
@@ -120,6 +131,7 @@
     .resultGamesGrid{
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1rem;
     }
 
     .resultsContainer{
@@ -128,25 +140,42 @@
         align-items: flex-start;
     }
 
-    .toolbar{
-        width: 100%;
+    .actionGrid{
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
     }
 
     .wrapper{
-        padding-left: 1rem;
-        padding-right: 1rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
     }
 
-    .searchContainer{
+    .searchContainer {
+        width: 100%;
+    }
+
+    .sortContainer{
+        width: 85%;
+    }
+
+    .filterDropdown {
         width: 100%;
     }
 
     .resultsTitle{
-        font-size: 32px;
+        font-size: 2.3rem;
     }
 
     .description{
         font-size: 18px;
+    }
+
+    .actionRow {
+        display: flex;
+        flex-direction: row;
+        gap: 0.75rem;
+        width: 100%;
     }
     
 }
