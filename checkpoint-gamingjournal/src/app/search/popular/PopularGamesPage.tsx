@@ -27,7 +27,7 @@ export default function PopularPage() {
   const [total, setTotal] = useState(0)
   const totalPages = Math.ceil(total/limit)
 
-  const isMobile = useMediaQuery('(max-width: 520px)');
+  const isMobile = useMediaQuery('(max-width: 646px)');
 
   const [games, setGames] = useState<any[]>([]); // State to store games data
   const [length, setLength] = useState("")
