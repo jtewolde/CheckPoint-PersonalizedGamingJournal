@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { Burger, Group, Drawer, Image, Button, Menu, Divider, ActionIcon } from '@mantine/core';
+import { Burger, Group, Drawer, Image, Modal, Menu, Divider, ActionIcon } from '@mantine/core';
 import { useDisclosure, useMediaQuery} from '@mantine/hooks';
 import GameSearchBar from '../GameSearchBar/GameSearchBar';
 
@@ -320,28 +320,22 @@ export function Header() {
         </div>
 
         <Group gap="md">
-          <Drawer
+          <Modal
               opened={searchOpened}
               onClose={searchClose}
-              position='top'
-              withCloseButton={false}
-              size='100px'
+              centered
+              withCloseButton
+              title="Search Games"
               className={classes.drawer}
               styles={{
-                content: {
-                  backgroundColor: '#202020ff',
-                  borderBottom: '2px solid grey'
-                },
-                header: {
-                  backgroundColor: '#202020ff'
-                },
                 close: {
                   color: 'white'
                 }
               }}
             >
-              <GameSearchBar className={classes.searchBar} placeHolder='Search Games...' size='lg' iconColor='#5c565c' autoNavigate showActionIcon />
-            </Drawer>
+              <GameSearchBar className={classes.searchBar} placeHolder='Search Games...' size='lg' autoNavigate showActionIcon iconColor='#812fcf' />
+          </Modal>
+
           {!isMobile ? (
             <div className={classes.searchBarContainer}>
               <GameSearchBar className={classes.searchBar} placeHolder='Search Games...' size='lg' autoNavigate showButton={false} />
