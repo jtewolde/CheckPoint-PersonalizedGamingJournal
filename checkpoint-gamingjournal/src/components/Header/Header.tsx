@@ -13,7 +13,7 @@ import { authClient } from '@/lib/auth-client';
 import Link from 'next/link';
 
 import { IconSearch } from '@tabler/icons-react';
-import { LogIn, UserRoundPlus, LayoutDashboard, Library, Notebook, House, Timer, Star, Flame, Settings, LogOut } from 'lucide-react';
+import { LogIn, UserRoundPlus, LayoutDashboard, Library, Notebook, House, Timer, Star, Flame, Settings, LogOut, Megaphone } from 'lucide-react';
 import AvatarMenu from "../AvatarMenu/AvatarMenu";
 
 import toast from 'react-hot-toast';
@@ -58,7 +58,8 @@ export function Header() {
       { label: 'Discover', icon: <IconSearch size={20} />, href: '/search', links: [
         { label: 'Popular', icon: <Star size={20} />, href: '/search/popular' },
         { label: 'Trending', icon: <Flame size={20} />, href: '/search/trending' },
-        { label: 'Upcoming', icon: <Timer size={20} />, href: '/search/upcoming' }
+        { label: 'Upcoming', icon: <Timer size={20} />, href: '/search/upcoming' },
+        { label: 'Most Anticipated', icon: <Megaphone size={20} />, href: '/search/most-anticipated' }
       ]},
   ]
 
@@ -68,7 +69,8 @@ export function Header() {
       { label: 'Discover', icon: <IconSearch size={20} />, href: '/search', links: [
         { label: 'Popular', icon: <Star size={20} />, href: '/search/popular' },
         { label: 'Trending', icon: <Flame size={20} />, href: '/search/trending' },
-        { label: 'Upcoming', icon: <Timer size={20} />, href: '/search/upcoming' }
+        { label: 'Upcoming', icon: <Timer size={20} />, href: '/search/upcoming' },
+        { label: 'Most Anticipated', icon: <Megaphone size={20} />, href: '/search/most-anticipated' }
       ]},
       { label: 'Sign In', icon: <LogIn size={20} />, href: '/auth/signin' },
       { label: 'Register', icon: <UserRoundPlus size={20} />, href: '/auth/signup'},
@@ -84,6 +86,7 @@ export function Header() {
       { label: 'Popular', icon: <Star size={25} />, href: '/search/popular' },
       { label: 'Trending', icon: <Flame size={25} />, href: '/search/trending' },
       { label: 'Upcoming', icon: <Timer size={25} />, href: '/search/upcoming' },
+      { label: 'Most Anticipated', icon: <Megaphone size={20} />, href: '/search/most-anticipated' }
     ],
     authentication: [
       { label: 'Sign In', icon: <LogIn size={25} />, href: '/auth/signin' },
@@ -105,6 +108,7 @@ export function Header() {
       { label: 'Popular', icon: <Star size={25} color='#e4c61d' fill='#e4c61d'/>, href: '/search/popular' },
       { label: 'Trending', icon: <Flame size={25} color='#ff8c00' fill='#ff8c00'/>, href: '/search/trending' },
       { label: 'Upcoming', icon: <Timer size={20} color='#00c3ff' fill='#00c3ff'/>, href: '/search/upcoming' },
+      { label: 'Most Anticipated', icon: <Megaphone size={20} color='#45e629' fill='#24e848'/>, href: '/search/most-anticipated' }
     ],
 
     account: [
@@ -117,7 +121,6 @@ export function Header() {
   return (
     <header className={classes.header}>
       <div className={classes.inner}>
-
         <div className={classes.logoContainer} onClick={handleLogoClick}>
           {isMobile ? (
             <Image src={CheckPointMobileLogo.src} alt="CheckPoint Logo" className={classes.mobileLogo} style={{cursor: 'pointer'}} />
@@ -198,6 +201,14 @@ export function Header() {
                         >
                           Upcoming Games
                         </Menu.Item>
+                        
+                        <Menu.Item
+                          component={Link}
+                          href="/search/most-anticipated"
+                          leftSection={<Megaphone size={20} color='#45e629' fill='#24e848'/>}
+                        >
+                          Most Anticipated Games
+                        </Menu.Item>  
                       </Menu.Dropdown>
                     </Menu>
                   );
@@ -287,6 +298,22 @@ export function Header() {
                             >
                               Trending Games
                             </Menu.Item>
+
+                            <Menu.Item
+                              component={Link}
+                              href="/search/upcoming"
+                              leftSection={<Timer size={20} color='#00c3ff' fill='#00c3ff'/>}
+                            >
+                              Upcoming Games
+                            </Menu.Item>
+                            
+                            <Menu.Item
+                              component={Link}
+                              href="/search/most-anticipated"
+                              leftSection={<Megaphone size={20} color='#45e629' fill='#24e848'/>}
+                            >
+                              Most Anticipated Games
+                            </Menu.Item>
                           </Menu.Dropdown>
                         </Menu>
                       );
@@ -360,7 +387,7 @@ export function Header() {
           onClose={close}
           position='left'
           withCloseButton={false}
-          size={isMobile ? (isAuthenticated ? '270px' : '280px') : '300px'} // Adjust size based on conditions
+          size={isMobile ? (isAuthenticated ? '290px' : '290px') : '300px'} // Adjust size based on conditions
           className={classes.drawer}
         >
 
