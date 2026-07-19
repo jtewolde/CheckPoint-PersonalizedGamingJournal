@@ -28,6 +28,7 @@ export function Header() {
 
   const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
   const isMobile = useMediaQuery('(max-width: 650px)');
+  const isMobileSearch = useMediaQuery('(max-width: 1100px');
 
   // Function to handle clicking the logo and redirecting user to dashboard or homepage based on authenication
   const handleLogoClick = async () => {
@@ -363,7 +364,7 @@ export function Header() {
               <GameSearchBar className={classes.searchBar} placeHolder='Search Games...' size='lg' autoNavigate showActionIcon iconColor='#812fcf' />
           </Modal>
 
-          {!isMobile ? (
+          {!isMobileSearch ? (
             <div className={classes.searchBarContainer}>
               <GameSearchBar className={classes.searchBar} placeHolder='Search Games...' size='lg' autoNavigate showButton={false} />
             </div>

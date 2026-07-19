@@ -170,6 +170,14 @@ export default function EditGameInfoModal({ opened, onClose, libraryGames, libra
             onClose={onClose}
             size='xl'
             title={'Edit Game Info'}
+            styles={{
+                title: {
+                    fontWeight: 700,
+                    fontFamily: 'Inter',
+                    fontSize: '1.1rem',
+                    color: 'white',
+                }
+            }}
         >
 
             {/* ✅ LOADING OVERLAY */}
