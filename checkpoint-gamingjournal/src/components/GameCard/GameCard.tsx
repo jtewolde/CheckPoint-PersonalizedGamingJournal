@@ -150,7 +150,7 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
         switch (status) {
             case 'Playing':
                 return {
-                    color: 'blue',
+                    color: '#67baea',
                     textColor: '#79b8f3',
                     icon: <Play size={14} />,
                 };
@@ -171,7 +171,7 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
 
             case 'On Hold':
                 return {
-                    color: 'violet',
+                    color: '#c88cf3',
                     icon: <Pause size={14} />,
                 };
 
@@ -189,7 +189,7 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
 
             case 'Backlog':
                 return {
-                    color: 'orange',
+                    color: '#f7bf5e',
                     icon: <Backpack size={14} />,
                 };
 
@@ -240,15 +240,15 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
             return <FaApple size={18} />;
 
         // Nintendo
-        if (name.includes("switch"))
+        if (name.includes("switch") || name.includes("nintendo"))
             return <BsNintendoSwitch size={18} />;
 
         // PlayStation
         if (name.includes("playstation 5") || name.includes("ps5"))
-            return <SiPlaystation5 size={30} />;
+            return <SiPlaystation5 size={39} />;
 
         if (name.includes("playstation 4") || name.includes("ps4"))
-            return <SiPlaystation4 size={30} />;
+            return <SiPlaystation4 size={39} />;
 
         if (name.includes("playstation 3") || name.includes("ps3"))
             return <SiPlaystation3 size={39} />;
@@ -434,7 +434,7 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
                         </Group>
 
                         <Group gap={4} align='center'>
-                            <Timer size={20} color='gray' />
+                            <Timer size={20} color='white' />
                             <Text className={classes.hoursPlayedText}>
                                 {libraryMeta?.hours || 0} Hours Played
                             </Text>
