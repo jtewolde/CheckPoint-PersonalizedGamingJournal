@@ -123,16 +123,12 @@ export async function GET(req: NextRequest) {
       sortClause = 'sort first_release_date asc;';
     }
 
-    if (sort === 'total_rating') {
-      sortClause = 'sort total_rating desc;';
-    }
-
-    if (sort === 'total_rating_reverse'){
-      sortClause = 'sort total_rating asc;';
-    }
-
     if (sort === 'hypes'){
       sortClause = 'sort hypes desc;'
+    }
+
+    if (sort === 'hypes_reverse'){
+      sortClause = 'sort hypes asc;'
     }
 
     // Step 2: Fetch the game details like name and cover images for those IDs
