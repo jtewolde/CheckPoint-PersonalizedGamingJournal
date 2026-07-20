@@ -403,7 +403,6 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                 <Divider styles={{label: {color: 'white'}}} labelPosition="center" color='dimmed' my="sm"  />
 
                 <div className={classes.buttonGroup}>
-
                     <Button 
                     className={classes.cancelButton}
                     color="red"
@@ -427,9 +426,7 @@ export default function PlaySessionModal({ opened, onClose, gameId, session, gam
                     >
                         {session ? 'Update' : 'Create'}
                     </Button>
-
                 </div>
-
             </Stack>
         </Modal>
     )

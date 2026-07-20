@@ -35,3 +35,10 @@
     font-family: 'Poppins';
     font-weight: 400;
 }
+
+@media (max-width: 768px) {
+
+    .platformMoodContainer{
+        flex-direction: column;
+    }
+}
