@@ -118,7 +118,6 @@ export default function MostAnticipated() {
         <div className={classes.mainContent}>
           <div className={classes.headerSection}>
             <div className={classes.titleDescriptionSection}>
-
               <div className={classes.titleLogo}>
                 <h1 className={classes.titleText}>Most Anticipated</h1>
               </div>

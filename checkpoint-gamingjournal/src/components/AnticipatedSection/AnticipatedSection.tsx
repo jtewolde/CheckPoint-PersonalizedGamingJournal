@@ -32,7 +32,6 @@ export default function AnticipatedSection(){
 
                 const data = await res.json();
                 setAnticipatedGames(data.games); // Store the games data in state
-                console.log("Anticipated Games: ", data.games);
                 
                 } catch (error) {
                     console.error('Error fetching anticipated games:', error);
