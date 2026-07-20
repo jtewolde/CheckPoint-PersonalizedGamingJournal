@@ -24,6 +24,7 @@ import classes from './dashboard.module.css';
 
 export default function Dashboard() {
   const router = useRouter();
+  const isMobile = useMediaQuery('(max-width: 768px)'); // Check if the screen width is less than or equal to 768px to determine if the user is on a mobile device
 
   const [user, setUser] = useState<{ name?: string; image?: string } | null>(null); // State to store user information such as name and profile image
 
@@ -144,30 +145,30 @@ export default function Dashboard() {
 
   // Use API call to fetch most recent journal entries
   const fetchRecentJournalEntries = async () => {
-      try {
-          const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
-          const res = await fetch('/api/journal?limit=100', {
-              method: 'GET',
-              headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${token}`,
-              },
-          });
+    try {
+        const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
+        const res = await fetch('/api/journal?limit=100', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        });
 
-          if (!res.ok) {
-              throw new Error('Failed to fetch journal entries');
-          }
+        if (!res.ok) {
+            throw new Error('Failed to fetch journal entries');
+        }
 
-          const data = await res.json();
-          setNumEntries(data.pagination.totalEntries) // Store total number of journal entries
-          
-          const sortedEntries = data.journalEntries.slice(0, 4); // Limit to the 5 most recent entries
-          setRecentEntries(sortedEntries); // Store the recent entries in state
+        const data = await res.json();
+        setNumEntries(data.pagination.totalEntries) // Store total number of journal entries
+        
+        const sortedEntries = data.journalEntries.slice(0, 4); // Limit to the 5 most recent entries
+        setRecentEntries(sortedEntries); // Store the recent entries in state
 
-          setJournalActivityData(buildJournalEntriesOverTimeData(data.journalEntries)) // Build the data for the journal entries over time chart using the user's journal entries
-      } catch (error) {
-          console.error('Error fetching recent journal entries:', error);
-      }
+        setJournalActivityData(buildJournalEntriesOverTimeData(data.journalEntries)) // Build the data for the journal entries over time chart using the user's journal entries
+    } catch (error) {
+        console.error('Error fetching recent journal entries:', error);
+    }
   };
 
   // Function to build out the data for the journal entries activity over time chart.
@@ -287,27 +288,29 @@ export default function Dashboard() {
           <div className={classes.dashboardHeader}>
             <div className={classes.heroContainer}>
               <Group gap={10} align='center'>
-                <Avatar radius='xl' size={45} src={user?.image || undefined} alt={user?.name || "User"} onClick={() => router.push('/settings/profile')} />
+                <Avatar radius='xl' size={isMobile ? 40 : 45} src={user?.image || undefined} alt={user?.name || "User"} onClick={() => router.push('/settings/profile')} />
                 <p className={classes.dashboardTitle}> Welcome back, <span className={classes.username}>{user?.name}! </span> </p>
               </Group>
               
               <p className={classes.welcomeText}> 
-                Your latest stats, sessions, and milestones — all in one place.
+                Track your gaming progress, review your latest activity, and jump back into your library.
               </p>
             </div>
 
             <div className={classes.quickActionGroup}>
               <EditGameInfoModal opened={editOpened} onClose={editClose} libraryGames={libraryGames} />
-              <Button style={{fontFamily:'Poppins', fontWeight: '400'}} size='md' radius='md' leftSection={<Edit size={20} />} onClick={editOpen}>Edit Game Info</Button>
-
-              <PlaySessionModal opened={logOpened} onClose={logClose} gameId={selectedGame?.gameId} gameName={selectedGame?.title} platforms={selectedGame?.platforms}/>
-              <Tooltip label='Log Play Session' position='top'>
-                <ActionIcon color='teal' size='xl' radius='md' onClick={logOpen}><BookText size={25} /></ActionIcon>
+              <Tooltip label='Edit Game Info' position='top' events={{ hover: true, focus: true, touch: true }}>
+                <Button className={classes.quickActionBtn} size='md' radius='md' leftSection={<Edit size={20} />} onClick={editOpen}>Edit</Button>
               </Tooltip>
 
+              <PlaySessionModal opened={logOpened} onClose={logClose} gameId={selectedGame?.gameId} gameName={selectedGame?.title} platforms={selectedGame?.platforms}/>
+              <Tooltip label='Log Play Session' position='top' events={{ hover: true, focus: true, touch: true }}>
+                <Button className={classes.quickActionBtn} color='teal' size='md' radius='md' leftSection={<BookText size={20} />} onClick={logOpen}>Log</Button>
+              </Tooltip>
+                
               <JournalEntryModal opened={journalOpened} onClose={journalClose} gameId={selectedGame?.gameId} gameName={selectedGame?.title} />
-              <Tooltip label='Create Journal Entry' position='top'>
-                <ActionIcon color='pink' size='xl' radius='md' onClick={journalOpen}><NotebookPen size={25} /></ActionIcon>
+              <Tooltip label='Create Journal Entry' position='top' events={{ hover: true, focus: true, touch: true }}>
+                <Button className={classes.quickActionBtn} color='pink' size='md' radius='md' leftSection={<NotebookPen size={20} />} onClick={journalOpen}>Journal</Button>
               </Tooltip>
             </div>
           </div>
@@ -330,7 +333,6 @@ export default function Dashboard() {
               </div>
 
               <div className={classes.quickStatItem}>
-
                 <div className={classes.quickStatHeader}>
                   <ThemeIcon size={42} radius='xl' variant='filled' color='#f2c617'> <Trophy size={20} /> </ThemeIcon>
                   <Text className={classes.quickStatLabel}>Games Platinumed</Text>
@@ -340,11 +342,9 @@ export default function Dashboard() {
                   <Text className={classes.quickStatValue}>{numPlatinumedGames}</Text>
                   <Text className={classes.quickStatSubtext}>Games you've earned a platinum trophy on</Text>
                 </div>
-                
               </div>
 
               <div className={classes.quickStatItem}>
-
                 <div className={classes.quickStatHeader}>
                   <ThemeIcon size={42} radius='xl' variant='filled' color='red'> <Notebook size={20} /> </ThemeIcon>
                   <Text className={classes.quickStatLabel}>Total Entries</Text>
@@ -354,7 +354,6 @@ export default function Dashboard() {
                   <Text className={classes.quickStatValue}>{numEntries}</Text>
                   <Text className={classes.quickStatSubtext}>Journal entries made</Text>
                 </div>
-        
               </div>
 
               <div className={classes.quickStatItem}>
