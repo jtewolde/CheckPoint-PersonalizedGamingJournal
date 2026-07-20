@@ -96,7 +96,7 @@ export default function DiscoverPage() {
                             </div>
 
                             <Tooltip label='View More Anticipated Games' position="top" events={{ hover: true, focus: true, touch: true }}>
-                                <a className={classes.viewMoreIcon} href='/search/anticipated'> <CircleArrowRight size={35} /> </a>
+                                <a className={classes.viewMoreIcon} href='/search/most-anticipated'> <CircleArrowRight size={35} /> </a>
                             </Tooltip>
                         </div>
                         {/* Use AnticipatedSection component to display anticipated games */}

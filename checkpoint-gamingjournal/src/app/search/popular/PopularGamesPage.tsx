@@ -156,8 +156,8 @@ export default function PopularPage() {
                 <div className={classes.filterContainer}>
                   <GameFilters
                     className={classes.gameFilters}
-                    variant='default'
-                    size= 'lg'
+                    variant={isMobile ? 'small' : 'default'}
+                    size={isMobile ? 'xl' : 'lg'}
                     radius='md'
                     totalGames={total}
                     sortOption={sortOption}

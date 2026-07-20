@@ -157,8 +157,8 @@ export default function TrendingPage() {
                 <div className={classes.filterContainer}>
                   <GameFilters
                     className={classes.gameFilters}
-                    variant='default'
-                    size= 'lg'
+                    variant={isMobile ? 'small' : 'default'}
+                    size={isMobile ? 'xl' : 'lg'}
                     radius='md'
                     totalGames={total}
                     sortOption={sortOption}
@@ -175,7 +175,6 @@ export default function TrendingPage() {
                     onPlatformsChange={(v) => setSelectedPlatform(v as any)}
                   />
                 </div>
-                
               </div>
             </div>
           </div>

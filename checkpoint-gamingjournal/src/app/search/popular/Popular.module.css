@@ -56,7 +56,7 @@
 }
 
 .description {
-    color: #cdcbcb;
+    color: #bdbbbb;
     font-weight: 400;
     text-align: left;
     font-family: 'Barlow';
@@ -84,7 +84,8 @@
 
 .actionRow{
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: flex-start;
     gap: 0.5rem;
     width: 100%;
 }
@@ -155,7 +156,7 @@
 @media screen and (max-width: 646px) {
 
     .titleText{
-        font-size: 2.5rem;
+        font-size: 2.3rem;
     }
 
     .description{
@@ -171,6 +172,7 @@
     .gamesGrid{
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+        gap: 1rem;
     }
 
     .titleDescriptionSection{
@@ -189,16 +191,14 @@
     .searchContainer {
         width: 100%;
     }
+
+    .actionRow{
+        width: 100%;
+        gap: 0.25rem;
+    }
     
     .filterContainer, .sortContainer{
-        width: 100%;
-    }
-
-    .actionRow {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        width: 100%;
+        width: 89%;
     }
 
     .filterDropdown {
