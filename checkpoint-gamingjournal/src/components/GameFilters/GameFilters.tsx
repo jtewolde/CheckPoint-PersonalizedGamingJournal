@@ -10,7 +10,7 @@ type GameFiltersVariant = 'default' | 'small'
 
 // Define the props for the GameFilter component
 interface GameFilterProps {
-    color: string;
+    color?: string;
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     radius?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     className?: string;
@@ -101,11 +101,8 @@ export default function GameFilters({
     }, [opened]);
 
     return (
-
         <div className={classes.filterContainer}>
-
             <div className={classes.filterTopRow}>
-
                 {variant === 'default' && (
                     <Tooltip label='Apply Filters' position="top">
                         <Button 
@@ -113,7 +110,7 @@ export default function GameFilters({
                         size={size} 
                         radius={radius} 
                         color={color} 
-                        leftSection={<Funnel size={30} />} 
+                        leftSection={<Funnel size={20} />} 
                         onClick={toggle}>
                             Filters ({numberOfActiveFilters})
                         </Button>
@@ -128,7 +125,7 @@ export default function GameFilters({
                         color={color}
                         onClick={toggle}
                         >
-                            <Funnel size={30} />
+                            <Funnel size={20} />
                         </ActionIcon>
                     </Tooltip>
                 )}
@@ -144,13 +141,6 @@ export default function GameFilters({
                 title='Sort and Filter'
                 className={classes.drawer}
                 styles={{
-                    content: {
-                        backgroundColor: '#252525ff'
-                    },
-                    header: {
-                        backgroundColor: '#252525ff',
-                        borderBottom: '1px solid gray'
-                    },
                     title: {
                         fontSize: '24px',
                         color: 'white',
@@ -164,7 +154,6 @@ export default function GameFilters({
                 removeScrollProps={{ allowPinchZoom: true }}
                 keepMounted
             >
-
                 <Stack className={classes.drawerFilters} gap='xs' justify='center' mt={20}>
                     
                     {/* Filter by Game Type with MultiSelect */}
@@ -466,19 +455,33 @@ export default function GameFilters({
                         mb="md"
                     />
 
-                    <Divider color="lightgray" my='md' />
+                    <Stack gap='sm'>
+                        <div style={{ borderTop: '1px solid #6c6c6c', paddingTop: '0.5rem', gap: '0.5rem'}}>
+                            <Button
+                                fullWidth
+                                variant='filled'
+                                color='red'
+                                leftSection={<RefreshCcw size={18} />}
+                                mb='sm'
+                                mt='md'
+                                onClick={handleClearFilters}
+                            >
+                                Clear Filters
+                            </Button>
 
-                    <div className={classes.buttonActions}>
-                        <Button className={classes.clearButton} variant="filled" color="red" size='md' leftSection={<RefreshCcw size={20} />} onClick={handleClearFilters}>Clear</Button>
+                            <Button
+                                fullWidth
+                                variant='filled'
+                                color="blue"
+                                onClick={handleApplyFilters}
+                            >
+                                Apply Filters
+                            </Button>
 
-                        <Button className={classes.saveButton} size="md" onClick={handleApplyFilters}>Update Filters</Button>
-                    </div>
-                    
+                        </div>
+                    </Stack>
                 </Stack>
-
             </Drawer>
-
         </div>
     )
-
 }

@@ -114,12 +114,24 @@ export async function GET(req: NextRequest) {
       sortClause = 'sort name asc;';
     }
 
+    if (sort === 'alphabetical_reverse'){
+      sortClause = 'sort name desc;';
+    }
+
     if (sort === 'first_release_date') {
       sortClause = 'sort first_release_date desc;';
     }
 
+    if (sort === 'first_release_date_oldest'){
+      sortClause = 'sort first_release_date asc;';
+    }
+
     if (sort === 'total_rating') {
       sortClause = 'sort total_rating desc;';
+    }
+
+    if (sort === 'total_rating_reverse'){
+      sortClause = 'sort total_rating asc;';
     }
 
     // Step 2: Fetch the game details like name and cover images for those IDs

@@ -35,7 +35,7 @@ export default function SettingsLayout({ children }: { children: ReactNode}) {
             h={{ base: '100%'}}
             w={{ base: '100%', sm: 270 }}
             p="md"
-            style={{ background: 'linear-gradient(to bottom, #2e2e2e, #3e3e3e)', border: '1px solid black', borderRight: '1px solid white'}}
+            style={{ border: '1px solid black', borderRight: '1px solid white'}}
             >
                 <Stack gap="xl">
 
@@ -129,7 +129,7 @@ export default function SettingsLayout({ children }: { children: ReactNode}) {
         )}
 
         {/* Main Content */}
-        <Box p="xl" style={{ flex: 1, background: 'linear-gradient(to top, #444444, #333333)' }}>
+        <Box p="xl" style={{ flex: 1 }}>
             {children}
         </Box>
     </Flex>

@@ -16,7 +16,7 @@ type PlaySession = {
     duration: number
     notes: string
     sessionType: string[]
-    mood?: string
+    mood?: string[]
     platform?: string
 }
 

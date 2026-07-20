@@ -1,6 +1,6 @@
 .gameCard{
-    background-color: #181818;
-    border: 1px solid #2d2c2c;
+    background:#262235;
+    border:1px solid #3d3853;
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -8,7 +8,7 @@
     align-self: center;
     margin: 0 auto;
     height: auto;
-    width: 110%;
+    width: 105%;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -21,14 +21,12 @@
 }
 
 .library{
-    background-color: #181818;
-    border: 1px solid #2d2c2c;
+    background:#262235;
+    border:1px solid #3d3853;
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    align-self: center;
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -38,9 +36,24 @@
 
 .ratingSection{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    gap: 8px;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+.ratingText{
+    font-family: 'Inter';
+    font-weight: 300;
+    font-size: 14px;
+    color: white;
+}
+
+.hoursPlayedText{
+    font-family: 'Inter';
+    font-weight: 300;
+    font-size: 14px;
+    color: rgb(244, 244, 244);
 }
 
 .imageWrapper {
@@ -64,12 +77,39 @@
     border-radius: 8px 8px 0 0;
 }
 
-.ratingBadge{
+.ratingBadge, .libraryBadge{
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 5px;
+    left: 5px;
     z-index: 5;
     backdrop-filter: blur(6px);
+    font-family: 'Inter';
+    font-weight: 600;
+    background-color: #171717;
+}
+
+.gameTypeBadge{
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    z-index: 5;
+    backdrop-filter: blur(6px);
+
+    font-family: 'Inter';
+    font-weight: 600;
+}
+
+.libraryBadge{
+    background-color: #171717;
+}
+
+.platinumIcon{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 5;
+    backdrop-filter: blur(6px);
+    background-color: #292828;
 }
 
 .overlay {
@@ -88,8 +128,20 @@
 
 .quickButtons{
     position: absolute;
-    top: 10px;
+    bottom: 10px;
     right: 10px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    z-index: 2;
+}
+
+.quickAdd{
+    position: absolute;
+    top: 5px;
+    right: 5px;
 
     display: flex;
     flex-direction: column;
@@ -133,25 +185,11 @@
     margin: 0;
 }
 
-.gamePlatforms{
-    font-size: 13px;
-    font-weight: 500;
-    color: rgb(206, 204, 204);
-    font-family: 'Barlow';
-    cursor: default;
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .gameDate{
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
-    color: rgb(157, 154, 154);
+    color: rgb(231, 229, 229);
     font-family: 'Barlow';
-    cursor: default;
-    margin: 0;
     width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;

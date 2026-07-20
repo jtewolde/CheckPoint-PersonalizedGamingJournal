@@ -6,11 +6,12 @@ import { authClient } from '@/lib/auth-client';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import Link from 'next/link';
 
-import { SimpleGrid, Image, Paper, Text, ThemeIcon, Tooltip, Rating, Group, Avatar, Button, ActionIcon } from '@mantine/core';
+import { SimpleGrid, Image, Paper, Text, ThemeIcon, Tooltip, Rating, Group, Avatar, Button, ActionIcon, Stack } from '@mantine/core';
 import { DonutChart, BarChart, LineChart } from '@mantine/charts';
 
 import SessionHeatmap from '@/components/SessionHeatmap/SessionHeatmap';
 import JournalEntryCard from '@/components/JournalEntryCard/EntryCard';
+import GameCard from '@/components/GameCard/GameCard';
 import PlaySessionModal from '@/components/PlaySessionModal/SessionModal';
 import EditGameInfoModal from '@/components/EditGameInfoModal/EditGameInfoModal';
 import JournalEntryModal from '@/components/JournalEntryModal/EntryModal';
@@ -23,6 +24,7 @@ import classes from './dashboard.module.css';
 
 export default function Dashboard() {
   const router = useRouter();
+  const isMobile = useMediaQuery('(max-width: 768px)'); // Check if the screen width is less than or equal to 768px to determine if the user is on a mobile device
 
   const [user, setUser] = useState<{ name?: string; image?: string } | null>(null); // State to store user information such as name and profile image
 
@@ -143,30 +145,30 @@ export default function Dashboard() {
 
   // Use API call to fetch most recent journal entries
   const fetchRecentJournalEntries = async () => {
-      try {
-          const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
-          const res = await fetch('/api/journal?limit=100', {
-              method: 'GET',
-              headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${token}`,
-              },
-          });
+    try {
+        const token = localStorage.getItem('bearer_token'); // Retrieve Bearer Token from local storage
+        const res = await fetch('/api/journal?limit=100', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        });
 
-          if (!res.ok) {
-              throw new Error('Failed to fetch journal entries');
-          }
+        if (!res.ok) {
+            throw new Error('Failed to fetch journal entries');
+        }
 
-          const data = await res.json();
-          setNumEntries(data.pagination.totalEntries) // Store total number of journal entries
-          
-          const sortedEntries = data.journalEntries.slice(0, 4); // Limit to the 5 most recent entries
-          setRecentEntries(sortedEntries); // Store the recent entries in state
+        const data = await res.json();
+        setNumEntries(data.pagination.totalEntries) // Store total number of journal entries
+        
+        const sortedEntries = data.journalEntries.slice(0, 4); // Limit to the 5 most recent entries
+        setRecentEntries(sortedEntries); // Store the recent entries in state
 
-          setJournalActivityData(buildJournalEntriesOverTimeData(data.journalEntries)) // Build the data for the journal entries over time chart using the user's journal entries
-      } catch (error) {
-          console.error('Error fetching recent journal entries:', error);
-      }
+        setJournalActivityData(buildJournalEntriesOverTimeData(data.journalEntries)) // Build the data for the journal entries over time chart using the user's journal entries
+    } catch (error) {
+        console.error('Error fetching recent journal entries:', error);
+    }
   };
 
   // Function to build out the data for the journal entries activity over time chart.
@@ -213,7 +215,7 @@ export default function Dashboard() {
   const calculateRatingDistribution = (games: any[]) => {
 
     // Initialize ratingBuckets array that have the spread of potential ratings that games can be given
-    const ratingBuckets = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+    const ratingBuckets = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     const distribution: Record<number, number> = {};
 
     // Iterate through array and initialize all count for each rating as zero
@@ -225,9 +227,10 @@ export default function Dashboard() {
     games.forEach(game => {
       const rating = game.rating;
 
-      if(rating >= 0.5 && rating <= 5){
-        const normalized = Math.round(rating * 2) / 2;
-        distribution[normalized]++;
+      // Get the floor for any rating that has .5
+      if(rating >= 0 && rating <= 10){
+        const bucket = Math.floor(rating)
+        distribution[bucket]++;
       }
     })
 
@@ -241,7 +244,7 @@ export default function Dashboard() {
   const calculateAverageRating = (games: any[]) => {
 
     // Filter out unrated games in the user's library to get an accurate average rating.
-    const ratedGames = games.filter(game => game.rating >= 1 && game.rating <= 5);
+    const ratedGames = games.filter(game => game.rating >= 1 && game.rating <= 10);
 
     if(ratedGames.length === 0) {
       return 0;
@@ -257,7 +260,7 @@ export default function Dashboard() {
 
   // Function to calculate the top rated game in the user's library. This will be used to display as a quick stat card
   const calculateTopRatedGame = (games: any[]) => {
-    const ratedGames = games.filter(game => game.rating >= 1 && game.rating <= 5);
+    const ratedGames = games.filter(game => game.rating >= 1 && game.rating <= 10);
 
     if(ratedGames.length === 0) {
       return 0;
@@ -279,70 +282,59 @@ export default function Dashboard() {
   }, []);
 
   return (
-
     <div className={classes.background}>
-
       <div className={classes.backgroundOverlay}>
-
         <div className={classes.wrapper}>
-
           <div className={classes.dashboardHeader}>
-
             <div className={classes.heroContainer}>
               <Group gap={10} align='center'>
-                <Avatar radius='xl' size={45} src={user?.image || undefined} alt={user?.name || "User"} onClick={() => router.push('/settings/profile')} />
+                <Avatar radius='xl' size={isMobile ? 40 : 45} src={user?.image || undefined} alt={user?.name || "User"} onClick={() => router.push('/settings/profile')} />
                 <p className={classes.dashboardTitle}> Welcome back, <span className={classes.username}>{user?.name}! </span> </p>
               </Group>
               
               <p className={classes.welcomeText}> 
-                Your latest stats, sessions, and milestones — all in one place.
+                Track your gaming progress, review your latest activity, and jump back into your library.
               </p>
-              
             </div>
 
             <div className={classes.quickActionGroup}>
               <EditGameInfoModal opened={editOpened} onClose={editClose} libraryGames={libraryGames} />
-              <Button style={{fontFamily:'Poppins', fontWeight: '400'}} size='md' radius='md' leftSection={<Edit size={20} />} onClick={editOpen}>Edit Game Info</Button>
+              <Tooltip label='Edit Game Info' position='top' events={{ hover: true, focus: true, touch: true }}>
+                <Button className={classes.quickActionBtn} size='md' radius='md' leftSection={<Edit size={20} />} onClick={editOpen}>Edit</Button>
+              </Tooltip>
 
               <PlaySessionModal opened={logOpened} onClose={logClose} gameId={selectedGame?.gameId} gameName={selectedGame?.title} platforms={selectedGame?.platforms}/>
-              <Tooltip label='Log Play Session' position='top'>
-                <ActionIcon color='teal' size='xl' radius='md' onClick={logOpen}><BookText size={25} /></ActionIcon>
+              <Tooltip label='Log Play Session' position='top' events={{ hover: true, focus: true, touch: true }}>
+                <Button className={classes.quickActionBtn} color='teal' size='md' radius='md' leftSection={<BookText size={20} />} onClick={logOpen}>Log</Button>
               </Tooltip>
-
+                
               <JournalEntryModal opened={journalOpened} onClose={journalClose} gameId={selectedGame?.gameId} gameName={selectedGame?.title} />
-              <Tooltip label='Create Journal Entry' position='top'>
-                <ActionIcon color='pink' size='xl' radius='md' onClick={journalOpen}><NotebookPen size={25} /></ActionIcon>
+              <Tooltip label='Create Journal Entry' position='top' events={{ hover: true, focus: true, touch: true }}>
+                <Button className={classes.quickActionBtn} color='pink' size='md' radius='md' leftSection={<NotebookPen size={20} />} onClick={journalOpen}>Journal</Button>
               </Tooltip>
-
             </div>
-          
           </div>
 
           <div className={classes.statCards}>
-
             <SimpleGrid cols={{base: 1, sm: 1, md: 2, lg: 4, xl: 4}} spacing="lg" className={classes.quickStatsGrid}>
-
               <div className={classes.quickStatItem}>
-
                 <div className={classes.quickStatHeader}>
-                  <ThemeIcon size={42} radius='xl' variant='filled' color='indigo'> <ClipboardCheck size={30} /> </ThemeIcon>
+                  <ThemeIcon size={42} radius='xl' variant='filled' color='indigo'> <ClipboardCheck size={20} /> </ThemeIcon>
                   <Text className={classes.quickStatLabel}>Average Rating</Text>
                 </div>
                 
                 <div className={classes.quickStatBody}>
                   <Text className={classes.quickStatValue}>
                     {avgRating.toFixed(1)}
-                    <span className={classes.quickStatUnit}>/5</span>
+                    <span className={classes.quickStatUnit}>/10</span>
                   </Text>
                   <Text className={classes.quickStatSubtext}>Across rated games</Text>
                 </div>
-
               </div>
 
               <div className={classes.quickStatItem}>
-
                 <div className={classes.quickStatHeader}>
-                  <ThemeIcon size={42} radius='xl' variant='filled' color='teal'> <Trophy size={20} /> </ThemeIcon>
+                  <ThemeIcon size={42} radius='xl' variant='filled' color='#f2c617'> <Trophy size={20} /> </ThemeIcon>
                   <Text className={classes.quickStatLabel}>Games Platinumed</Text>
                 </div>
 
@@ -350,11 +342,9 @@ export default function Dashboard() {
                   <Text className={classes.quickStatValue}>{numPlatinumedGames}</Text>
                   <Text className={classes.quickStatSubtext}>Games you've earned a platinum trophy on</Text>
                 </div>
-                
               </div>
 
               <div className={classes.quickStatItem}>
-
                 <div className={classes.quickStatHeader}>
                   <ThemeIcon size={42} radius='xl' variant='filled' color='red'> <Notebook size={20} /> </ThemeIcon>
                   <Text className={classes.quickStatLabel}>Total Entries</Text>
@@ -364,192 +354,175 @@ export default function Dashboard() {
                   <Text className={classes.quickStatValue}>{numEntries}</Text>
                   <Text className={classes.quickStatSubtext}>Journal entries made</Text>
                 </div>
-        
               </div>
 
               <div className={classes.quickStatItem}>
-
                 <div className={classes.quickStatHeader}>
-                  <ThemeIcon size={42} radius='xl' variant='filled' color='#f2c617'> <Star size={20} /> </ThemeIcon>
+                  <ThemeIcon size={42} radius='xl' variant='filled' color='teal'> <Star size={20} /> </ThemeIcon>
                   <Text className={classes.quickStatLabel}>Top Rated Game</Text>
                 </div>
 
                 <div className={classes.ratingWrapper}>
                   <Image src={topRatedGame?.coverImage ? `https:${topRatedGame.coverImage.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src} alt={topRatedGame?.title || "No Image"} className={classes.topRatedCover} />
-                  <Group gap='md' align='center' justify='center'> 
+                  <Stack gap='sm' align='center' justify='center'> 
                     <Link className={classes.ratingValue} href={`/games/${topRatedGame?.gameId}`}>{topRatedGame?.title || 'N/A'}</Link>
-                    <Rating size='md' value={topRatedGame?.rating || 0} readOnly fractions={2} color='yellow' />
-                  </Group>
+                    
+                    <Group gap='md' align='center'>
+                      <Rating size='lg' count={1} value={1} readOnly fractions={2} color='yellow' />
+                      <Text className={classes.ratingValue} fw={600}>
+                          {topRatedGame?.rating}/10
+                      </Text>
+                    </Group>
+                  </Stack>
                 </div>
-                
               </div>
-
             </SimpleGrid>
 
             <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 2, xl: 2}} spacing="sm" className={classes.statusGrid}>
-
               <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-                  <p className={classes.statusTitle}>Game Status Breakdown</p>
-
-                  <div className={classes.chartWrapper}>
-
-                    <DonutChart
-                      size={260}
-                      strokeColor='black'
-                      strokeWidth={2}
-                      thickness={24}
-                      paddingAngle={3}
-                      chartLabel={`${numOfGames} Games Tracked`}
-                      styles={{
-                        label:{
-                          color: 'white',
-                          fontFamily: 'Poppins',
-                          fill: 'white',
-                          fontSize: '18px'
-                        },
-                        tooltip:{
-                          border: '1px solid black'
-                        },
-                        tooltipBody:{
-                          backgroundColor: '#2b2b2b',
-                          color: 'white'
-                        },
-                        tooltipItemName:{
-                          color: 'white'
-                        },
-                        tooltipItemData: {
-                          color: 'white'
-                        }
-                      }}
-                      data={[
-                        { name: 'Backlog', value: backlogLength, color: 'orange' },
-                        { name: 'Wishlist', value: wishlistLength, color: 'pink'},
-                        { name: 'On Hold', value: onHoldLength, color: 'red' },
-                        { name: 'Playing', value: playGamesLength, color: 'blue'},
-                        { name: 'No Status Given', value: noStatusLength, color: 'lightgrey'},
-                        { name: 'Completed', value: completedLength, color: 'green'},
-                        { name: '100%', value: fullyDoneLength, color: 'gold'}
-                      ]}
-                    />
-
-                  </div>
-
+                <p className={classes.statusTitle}>Game Status Breakdown</p>
+                <div className={classes.chartWrapper}>
+                  <DonutChart
+                    size={260}
+                    strokeColor='black'
+                    strokeWidth={2}
+                    thickness={24}
+                    paddingAngle={3}
+                    chartLabel={`${numOfGames} Games Tracked`}
+                    styles={{
+                      label:{
+                        color: 'white',
+                        fontFamily: 'Poppins',
+                        fill: 'white',
+                        fontSize: '18px'
+                      },
+                      tooltip:{
+                        border: '1px solid black'
+                      },
+                      tooltipBody:{
+                        backgroundColor: '#2b2b2b',
+                        color: 'white'
+                      },
+                      tooltipItemName:{
+                        color: 'white'
+                      },
+                      tooltipItemData: {
+                        color: 'white'
+                      }
+                    }}
+                    data={[
+                      { name: 'Backlog', value: backlogLength, color: 'orange' },
+                      { name: 'Wishlist', value: wishlistLength, color: 'pink'},
+                      { name: 'On Hold', value: onHoldLength, color: 'red' },
+                      { name: 'Playing', value: playGamesLength, color: 'blue'},
+                      { name: 'No Status Given', value: noStatusLength, color: 'lightgrey'},
+                      { name: 'Completed', value: completedLength, color: 'green'},
+                      { name: '100%', value: fullyDoneLength, color: 'gold'}
+                    ]}
+                  />
+                </div>
               </Paper>
 
               <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-                  <p className={classes.statusTitle}>Journal Entries Activity</p>
-
-                  <div className={classes.chartWrapper}>
-
-                    <LineChart
-                      h={260}
-                      w='95%'
-                      dataKey='month'
-                      yAxisLabel='# of Entries'
-                      xAxisLabel='Months'
-                      strokeWidth={2}
-                      data={journalActivityData}
-                      series={[{ name: 'entries', color: 'blue' }]}
-                      styles={{
-                        axisLabel: {
-                          fill: 'white',
-                          fontFamily: 'Inter',
-                          fontSize: '14px',
-                        },
-                        axis: {
-                          fill: 'white',
-                          fontSize: '12px',
-                          fontWeight: 'bold'
-                        },
-                        tooltip:{
-                          backgroundColor: '#2b2b2b',
-                          color: 'white',
-                          border: '1px solid #424242'
-                        },
-                        tooltipBody:{
-                          backgroundColor: '#2b2b2b',
-                          color: 'white'
-                        },
-                        tooltipLabel:{
-                          color: 'white'
-                        },
-                        tooltipItemName:{
-                          color: 'white',
-                          fontFamily: 'Poppins',
-                          fontSize: '16px'
-                        },
-                        tooltipItemData: {
-                          color: 'white',
-                          fontFamily: 'Poppins',
-                          fontSize: '16px'
-                        }
-                      }}
-                    />
-
-                  </div>
-
+                <p className={classes.statusTitle}>Journal Entries Activity</p>
+                <div className={classes.chartWrapper}>
+                  <LineChart
+                    h={260}
+                    w='95%'
+                    dataKey='month'
+                    yAxisLabel='# of Entries'
+                    xAxisLabel='Months'
+                    strokeWidth={2}
+                    data={journalActivityData}
+                    series={[{ name: 'entries', color: 'blue' }]}
+                    styles={{
+                      axisLabel: {
+                        fill: 'white',
+                        fontFamily: 'Inter',
+                        fontSize: '14px',
+                      },
+                      axis: {
+                        fill: 'white',
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                      },
+                      tooltip:{
+                        backgroundColor: '#2b2b2b',
+                        color: 'white',
+                        border: '1px solid #424242'
+                      },
+                      tooltipBody:{
+                        backgroundColor: '#2b2b2b',
+                        color: 'white'
+                      },
+                      tooltipLabel:{
+                        color: 'white'
+                      },
+                      tooltipItemName:{
+                        color: 'white',
+                        fontFamily: 'Poppins',
+                        fontSize: '16px'
+                      },
+                      tooltipItemData: {
+                        color: 'white',
+                        fontFamily: 'Poppins',
+                        fontSize: '16px'
+                      }
+                    }}
+                  />
+                </div>
               </Paper>
 
               <Paper shadow="md" radius="lg" className={classes.statusCard}>
-
-                  <p className={classes.statusTitle}>Game Ratings</p>
-
-                  <div className={classes.chartWrapper}>
-
-                    <BarChart
-                      h={260}
-                      w='95%'
-                      dataKey='rating'
-                      yAxisLabel='Games'
-                      xAxisLabel='Rating (1-5)'
-                      data={ratingDistributionData}
-                      series={[{ name: 'count', color: 'red' }]}
-                      yAxisProps={{
-                        allowDecimals: false
-                      }}
-                      xAxisProps={{
-                        allowDecimals: true
-                      }}
-                      styles={{
-                        axisLabel: {
-                          fill: 'white',
-                          fontFamily: 'Inter',
-                          fontSize: '14px',
-                        },
-                        axis: {
-                          fill: 'white',
-                          fontSize: '12px',
-                          fontWeight: 'bold'
-                        },
-                        tooltip:{
-                          backgroundColor: '#2b2b2b',
-                          color: 'white',
-                          border: '1px solid #424242'
-                        },
-                        tooltipBody:{
-                          backgroundColor: '#2b2b2b',
-                          color: 'white'
-                        },
-                        tooltipLabel:{
-                          color: 'white'
-                        },
-                        tooltipItemName:{
-                          color: 'white',
-                          fontFamily: 'Poppins',
-                          fontSize: '16px'
-                        },
-                        tooltipItemData: {
-                          color: 'white',
-                          fontFamily: 'Poppins',
-                          fontSize: '16px'
-                        }
-                      }}
-                    />
-
-                  </div>
-
+                <p className={classes.statusTitle}>Game Ratings</p>
+                <div className={classes.chartWrapper}>
+                  <BarChart
+                    h={260}
+                    w='95%'
+                    dataKey='rating'
+                    yAxisLabel='Games'
+                    xAxisLabel='Rating (/10)'
+                    data={ratingDistributionData}
+                    series={[{ name: 'count', color: 'red' }]}
+                    yAxisProps={{
+                      allowDecimals: false
+                    }}
+                    styles={{
+                      axisLabel: {
+                        fill: 'white',
+                        fontFamily: 'Inter',
+                        fontSize: '14px',
+                      },
+                      axis: {
+                        fill: 'white',
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                      },
+                      tooltip:{
+                        backgroundColor: '#2b2b2b',
+                        color: 'white',
+                        border: '1px solid #424242'
+                      },
+                      tooltipBody:{
+                        backgroundColor: '#2b2b2b',
+                        color: 'white'
+                      },
+                      tooltipLabel:{
+                        color: 'white'
+                      },
+                      tooltipItemName:{
+                        color: 'white',
+                        fontFamily: 'Poppins',
+                        fontSize: '16px'
+                      },
+                      tooltipItemData: {
+                        color: 'white',
+                        fontFamily: 'Poppins',
+                        fontSize: '16px'
+                      }
+                    }}
+                  />
+                </div>
               </Paper>
 
               <Paper shadow='md' radius='lg' className={classes.statusCard}>
@@ -558,9 +531,7 @@ export default function Dashboard() {
                     <SessionHeatmap />
                   </div>
               </Paper>
-
             </SimpleGrid>
-
           </div>
 
           {/*QUICK LOG SESSION MODAL*/}
@@ -578,15 +549,14 @@ export default function Dashboard() {
             }}
           />
 
-          <div className={classes.playingGames} >
-
+          <div className={classes.playingGames}>
             <div className={classes.playingSection}>
-
               <div className={classes.titleLogo}>
-                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{from: '#e96443', to: '#904e95', deg: 90}}> <Gamepad size={40} /> </ThemeIcon>
+                <ThemeIcon size={40} radius='md' variant='gradient' gradient={{from: '#e96443', to: '#904e95', deg: 90}}> 
+                  <Gamepad size={30} /> 
+                </ThemeIcon>
                 <a className={classes.gamesPlayingText} href='/library'>Playing Games</a>
               </div>
-              
             </div>
 
             {playingGames.length === 0 ? (
@@ -595,26 +565,23 @@ export default function Dashboard() {
                 <>
                   <SimpleGrid cols={5} spacing="lg" className={classes.gamesGrid}>
                     {playingGames.map((game) => (
-                      <div key={game._id} className={classes.gameCard} onClick={() => router.push(`/games/${game.gameId}`)} >
-
-                        <div className={classes.imageWrapper}>
-
-                          <Image 
-                            src={
-                            game.coverImage ? `https:${game.coverImage.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
-                            alt={game.name} 
-                            className={classes.cover} 
-                          />
-
-                          <div className={classes.overlay}>
-
-                            <Text className={classes.gameName}>{game.title}</Text>
-
-                          </div>
-
-                        </div>
-
-                      </div>
+                      <GameCard
+                        variant="library"
+                        key={game._id}
+                        game={{
+                            id: game.gameId,
+                            name: game.title,
+                            cover: { url: game.coverImage },
+                            genres: game.genre
+                        }}
+                        libraryMeta={{
+                            status: game.status,
+                            rating: game.rating,
+                            platinum: game.platinum,
+                            hours: game.hours
+                        }}
+                        libraryGame={game}
+                      />
                     ))}
                   </SimpleGrid>
                 </>
@@ -622,32 +589,27 @@ export default function Dashboard() {
           </div>
 
           <div className={classes.recentEntries}>
-
             <div className={classes.recentEntriesSection}>
-              
               <div className={classes.titleLogo}>
-                <ThemeIcon size={50} radius='md' variant='gradient' gradient={{ from: '#DCE35B', to: '#45B649', deg: 60}}> <Notebook size={40} /> </ThemeIcon>
+                <ThemeIcon size={40} radius='md' variant='gradient' gradient={{ from: '#DCE35B', to: '#45B649', deg: 60}}>
+                  <Notebook size={30} /> 
+                  </ThemeIcon>
                 <a className={classes.gamesPlayingText} href='/journal'>Recent Entries</a>
               </div>
-
             </div>
 
               {recentEntries.length === 0 ? (
                   <p className={classes.noEntriesText}>No recent journal entries found.</p>
               ) : (
-                  <SimpleGrid cols={4} spacing="lg" className={classes.entriesGrid}>
+                  <SimpleGrid cols={2} spacing="lg" className={classes.entriesGrid}>
                       {recentEntries.map((entry) => (
-                        <JournalEntryCard key={entry._id} entry={entry} variant='dashboard'/>
+                        <JournalEntryCard key={entry._id} entry={entry} variant='journal' color='#7c18ed'/>
                       ))}
                   </SimpleGrid>
               )}
           </div>
-
         </div>
-
       </div>
-
     </div>
-
   );
 }

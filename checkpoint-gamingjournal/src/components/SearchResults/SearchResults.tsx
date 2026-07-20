@@ -7,7 +7,7 @@ import { SimpleGrid, Text, Pagination, Select, Stack } from '@mantine/core';
 
 import GameFilters from '@/components/GameFilters/GameFilters';
 import ActiveFilters from '../ActiveFilters/ActiveFilters';
-import GameSearchBar from '../GameSearchBar/GameSearchBar';
+import GamePageSearch from '../GamePageSearch/GamePageSearch';
 import GameCard from '../GameCard/GameCard';
 import GameSkeletonCard from '../GameCard/GameSkeletonCard';
 
@@ -19,13 +19,14 @@ interface SearchResultsProps {
 }
 
 export default function SearchResults({ query }: SearchResultsProps){
-    const router = useRouter(); 
+    const router = useRouter();
+    const [search, setSearch] = useState('');
 
     const [games, setGames] = useState<any[]>([]); // State to store games data
     const [length, setLength] = useState("");
 
     const [loading, setLoading] = useState(true);
-    const isMobile = useMediaQuery('(max-width: 490px)');
+    const isMobile = useMediaQuery('(max-width: 646px)');
 
     const [page, setPage] = useState(1) // start with page 1 for pagination
     const limit = 36; // Set the limit of games on page to 36
@@ -99,9 +100,13 @@ export default function SearchResults({ query }: SearchResultsProps){
         selectedType
     ]);
 
+    // Filter the games results if using search bar using the name of the game
+    const filteredGames = games.filter((game) =>
+        game.name.toLowerCase().includes(search.toLowerCase())
+    );
+
     return (
         <div className={classes.wrapper}>
-
             <Stack gap='xs' align='flex-start'>
                 <Text className={classes.resultsTitle}>
                     Search Results
@@ -113,9 +118,8 @@ export default function SearchResults({ query }: SearchResultsProps){
             </Stack>
 
             <div className={classes.actionGrid}>
-                
                 <div className={classes.searchContainer}>
-                    <GameSearchBar className={classes.searchBar} initialQuery={query} showActionIcon iconColor='#20201d'/>
+                    <GamePageSearch size='lg' radius='md' value={search} onChange={setSearch}/>
                 </div>
 
                 <div className={classes.actionRow}>
@@ -129,27 +133,22 @@ export default function SearchResults({ query }: SearchResultsProps){
                             checkIconPosition='left'
                             data={[
                                 { value: 'alphabetical', label: 'Alphabetical (A-Z)'},
-                                { value: 'first_release_date', label: 'Release Date' },
-                                { value: 'total_rating', label: "Total Rating"},
+                                { value: 'alphabetical_reverse', label: 'Alphabetical (Z-A)'},
+                                { value: 'first_release_date', label: 'Release Date (Newest)' },
+                                { value: 'first_release_date_oldest', label: 'Release Date (Oldest)'},
+                                { value: 'total_rating', label: "Total Rating (High-Low)"},
+                                { value: 'total_rating_reverse', label: "Total Rating (Low-High)"}
                             ]}
                             value={sortOption}
                             onChange={(value) => setSortOption(value as 'first_release_date' | 'total_rating' | 'alphabetical' | '')}
-                            styles={{
-                                input:{
-                                    backgroundColor: '#1b1b1b',
-                                    color: 'white',
-                                    border: '1px solid #2a2828'
-                                }
-                            }}
                         />
                     </div>
                     
                     <div className={classes.filterContainer}>
                         <GameFilters
-                            variant='default'
+                            variant={isMobile ? "small" : "default"}
                             className={classes.filterButton}
-                            color='rgb(49, 48, 48)'
-                            size='md'
+                            size={isMobile ? "xl" : "lg"}
                             radius='md'
                             totalGames={total}
                             sortOption={sortOption}
@@ -204,8 +203,8 @@ export default function SearchResults({ query }: SearchResultsProps){
                         variant={isMobile ? "small" : "default"}
                         />
                     ))
-                    : games.map((game) =>(
-                        <GameCard key={game.id} game={game} />
+                    : filteredGames.map((game) =>(
+                        <GameCard key={game.id} game={game} variant='default' />
                     )
                 )}
             </SimpleGrid>

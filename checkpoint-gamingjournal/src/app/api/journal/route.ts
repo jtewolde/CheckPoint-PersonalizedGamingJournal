@@ -19,10 +19,10 @@ export async function POST(req: NextRequest) {
 
         // Validate required fields
         if (!gameID || !title || !content) {
-        return NextResponse.json(
-            { error: "Missing required fields" },
-            { status: 400 }
-        );
+            return NextResponse.json(
+                { error: "Missing required fields" },
+                { status: 400 }
+            );
         }
 
         // Get the authenticated user's session
@@ -56,14 +56,9 @@ export async function POST(req: NextRequest) {
 
         // Convert createdAt date to user-friendly string
         const displayDate = createdAt.toLocaleString("en-US", {
-            timeZone: "UTC", // Use UTC timezone
             year: "numeric",
             month: "long",
             day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            timeZoneName: "short", // Include timezone abbreviation
         });
 
         // Create the journal entry

@@ -1,10 +1,10 @@
 .header {
   height: 69px;
-  background-color: #29292b;
+  background: var(--header);
+  border-color: var(--border);
   display: flex; /* Ensure flexbox is applied */
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid rgb(50, 50, 50);
   padding: 0;
   position: relative;
   z-index: 20;
@@ -52,10 +52,9 @@
 }
 
 .searchBar input {
-    background-color: #25252a;
-    color: white;/* input text color */
-    border: 0.2px solid rgb(72, 72, 72);
-    font-family: 'Noto Sans';
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
 }
 
 @media screen and (max-width: 868px) {
@@ -146,13 +145,13 @@
 
   width: 100%;
 
-  padding: 8px 12px;
+  padding: 6px 12px;
 
   border-radius: 10px;
 
-  font-size: 28px;
+  font-size: 20px;
   font-family: 'Poppins';
-  font-weight: 500;
+  font-weight: 400;
 
   transition: background-color 0.15s ease;
 }
@@ -179,8 +178,8 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 18px;
-  padding: 1rem;
+  gap: 7px;
+  padding: 0.2rem;
 }
 
 .link {

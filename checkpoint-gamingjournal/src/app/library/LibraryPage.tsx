@@ -186,8 +186,9 @@ export default function Library(){
                                             status: game.status,
                                             rating: game.rating,
                                             platinum: game.platinum,
-                                            duration: game.duration
+                                            hours: game.hours
                                         }}
+                                        libraryGame={game}
                                     />
                                 ))}
                             </SimpleGrid>

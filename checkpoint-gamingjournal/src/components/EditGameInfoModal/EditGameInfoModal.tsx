@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "@mantine/hooks";
-import { Modal, Group, Stack, Button, Textarea, LoadingOverlay, Select, Rating, Checkbox, Text, TextInput, NumberInput } from "@mantine/core";
+import { Modal, Group, Stack, Button, Textarea, LoadingOverlay, Select, Rating, Checkbox, Text, TextInput, NumberInput, Slider } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 
 import toast from "react-hot-toast";
@@ -17,15 +17,16 @@ interface EditGameInfoModalProps {
     onClose: () => void;
     game?: any;
     libraryGames?: any[];
+    libraryGame?: any;
     onSuccess?: () => void;
 }
 
-export default function EditGameInfoModal({ opened, onClose, libraryGames, game, onSuccess}: EditGameInfoModalProps){
+export default function EditGameInfoModal({ opened, onClose, libraryGames, libraryGame, game, onSuccess}: EditGameInfoModalProps){
 
     // States for storing the selected game's Id when changing game info
     const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
     const [selectedGame, setSelectedGame] = useState<any>(null);
-    const activeGame = game || selectedGame;
+    const activeGame = libraryGame || selectedGame;
 
     // State variables for the info of a game in the user's library 
     // like game status, starting and completion date, rating, hours played, etc
@@ -169,6 +170,14 @@ export default function EditGameInfoModal({ opened, onClose, libraryGames, game,
             onClose={onClose}
             size='xl'
             title={'Edit Game Info'}
+            styles={{
+                title: {
+                    fontWeight: 700,
+                    fontFamily: 'Inter',
+                    fontSize: '1.1rem',
+                    color: 'white',
+                }
+            }}
         >
 
             {/* ✅ LOADING OVERLAY */}
@@ -179,7 +188,7 @@ export default function EditGameInfoModal({ opened, onClose, libraryGames, game,
             />
 
             <Stack gap='lg'>
-                {!game ? (
+                {!libraryGame ? (
                     <Select
                         leftSection={<Gamepad2 size={20} />}
                         maxDropdownHeight={300}
@@ -368,29 +377,46 @@ export default function EditGameInfoModal({ opened, onClose, libraryGames, game,
                             <Text size='md' className={classes.ratingText}>Your Rating:</Text>
                             <div className={classes.ratingWrapper}>
                                 <Rating
-                                    size='lg' 
+                                    size='xl' 
                                     fractions={2} 
                                     value={rating} 
-                                    readOnly={!activeGame}
+                                    count={10}
+                                    readOnly
                                     onChange={
                                     (value) => {
                                         setRating(value);
                                     }}
                                 />
-                                <p className={classes.starsCount}>{rating}/5</p>
+                                
+                                <p className={classes.starsCount}>{rating}/10</p>
                             </div>
                         </div>
 
-                        <Checkbox
-                            size="lg"
-                            label={'Platinum Achieved'}
-                            checked={isPlatinum}
-                            onChange={(event) =>
-                                setIsPlatinum(event.currentTarget.checked)
-                            }
-                            disabled={!activeGame}
-                        />
                     </Group>
+
+                    <Slider
+                        size='lg'
+                        radius='xl'
+                        min={0}
+                        max={10}
+                        step={0.5}
+                        value={rating}
+                        onChange={
+                            (value) => {
+                                setRating(value);
+                            }
+                        }
+                    />
+
+                    <Checkbox
+                        size="lg"
+                        label={'Platinum Achieved'}
+                        checked={isPlatinum}
+                        onChange={(event) =>
+                            setIsPlatinum(event.currentTarget.checked)
+                        }
+                        disabled={!activeGame}
+                    />
 
                 </Stack>
 

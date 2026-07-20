@@ -1,15 +1,14 @@
 'use client'
 
 import { useSearchParams } from "next/navigation";
-import { Divider, ThemeIcon, Title, Tooltip, Group, Stack, Text } from "@mantine/core";
+import { ThemeIcon, Title, Tooltip, Group, Stack, Text } from "@mantine/core";
 
-import { Flame, Star } from "lucide-react"
-import { CircleArrowRight, ScanSearch } from "lucide-react";
+import { Flame, Star, CircleArrowRight, CalendarClock, Megaphone } from "lucide-react"
 
-import SearchResults from "@/components/SearchResults/SearchResults";
 import PopularSection from "@/components/PopularSection/PopularSection";
 import TrendingSection from "@/components/TrendingSection/TrendingSection";
-import GameSearchBar from "@/components/GameSearchBar/GameSearchBar";
+import UpcomingSection from "@/components/upcomingSection/upcomingSection";
+import AnticipatedSection from "@/components/AnticipatedSection/AnticipatedSection";
 
 import classes from './discoverPage.module.css';
 
@@ -34,17 +33,6 @@ export default function DiscoverPage() {
                     </Text>
                 </Stack>
 
-                {/* Search Bar at the top of the page
-                <div className={classes.searchBarContainer}>
-                    <GameSearchBar
-                        className={classes.searchBar}
-                        size='xl'
-                        radius='md'
-                        placeHolder='Search for Games...'
-                        autoNavigate={true}
-                    />
-                </div> */}
-
                 <Stack gap='xl' align="center">
                     <div className={classes.trendingGames}>
                         <div className={classes.trendingSection}>
@@ -66,8 +54,8 @@ export default function DiscoverPage() {
                     <div className={classes.popularGames}>
                         <div className={classes.popularSection}>
                             <div className={classes.titleLogo}>
-                                <ThemeIcon size={50} variant='gradient' gradient={{ from: '#f7971e', to: '#ffd200', deg: 20}} radius='md'>
-                                    <Star size={40} />
+                                <ThemeIcon size={40} variant='gradient' gradient={{ from: '#f7971e', to: '#ffd200', deg: 20}} radius='md'>
+                                    <Star size={30} />
                                 </ThemeIcon>
                                 <h1 className={classes.gamesPlayingText}>Popular</h1>
                             </div>
@@ -79,6 +67,40 @@ export default function DiscoverPage() {
                         
                         {/* Use PopularSection component to display popular games */}
                         <PopularSection />
+                    </div>
+
+                    <div className={classes.upcomingGames}>
+                        <div className={classes.upcomingSection}>
+                            <div className={classes.titleLogo}>
+                                <ThemeIcon variant='gradient' gradient={{ from: '#05ca0b', to: '#18c973', deg: 90}} size={40}>
+                                    <CalendarClock size={30} color='white'/> 
+                                </ThemeIcon>
+                                <h1 className={classes.gamesPlayingText}>Upcoming</h1>
+                            </div>
+
+                            <Tooltip label='View More Upcoming Games' position="top" events={{ hover: true, focus: true, touch: true }}>
+                                <a className={classes.viewMoreIcon} href='/search/upcoming'> <CircleArrowRight size={35} /> </a>
+                            </Tooltip>
+                        </div>
+                        {/* Use UpcomingSection component to display upcoming games */}
+                        <UpcomingSection />
+                    </div>
+
+                    <div className={classes.anticipatedGames}>
+                        <div className={classes.anticipatedSection}>
+                            <div className={classes.titleLogo}>
+                                <ThemeIcon variant='gradient' gradient={{ from: '#2c1ef7', to: '#5b22e1', deg: 20}} size={40}>
+                                    <Megaphone size={30} color='white'/> 
+                                </ThemeIcon>
+                                <h1 className={classes.gamesPlayingText}>Most Anticipated</h1>
+                            </div>
+
+                            <Tooltip label='View More Anticipated Games' position="top" events={{ hover: true, focus: true, touch: true }}>
+                                <a className={classes.viewMoreIcon} href='/search/anticipated'> <CircleArrowRight size={35} /> </a>
+                            </Tooltip>
+                        </div>
+                        {/* Use AnticipatedSection component to display anticipated games */}
+                        <AnticipatedSection />
                     </div>
                 </Stack>
             </div>

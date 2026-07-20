@@ -87,9 +87,6 @@ export default function TrendingPage() {
             setGames(data.games);
             setLength(data.length);
             setTotal(data.total)
-
-            console.log("Game Results", data.games)
-            console.log("Total Count", data.total)
         } catch (error) {
             console.error('Error fetching games:', error);
         } finally {
@@ -146,25 +143,21 @@ export default function TrendingPage() {
                       checkIconPosition='left'
                       data={[
                           { value: 'alphabetical', label: 'Alphabetical (A-Z)'},
-                          { value: 'first_release_date', label: 'Release Date' },
-                          { value: 'total_rating', label: "Total Rating"},
+                          { value: 'alphabetical_reverse', label: 'Alphabetical (Z-A)'},
+                          { value: 'first_release_date', label: 'Release Date (Newest)' },
+                          { value: 'first_release_date_oldest', label: 'Release Date (Oldest)'},
+                          { value: 'total_rating', label: "Total Rating (High-Low)"},
+                          { value: 'total_rating_reverse', label: "Total Rating (Low-High)"}
                       ]}
                       value={sortOption}
                       onChange={(value) => setSortOption(value as 'first_release_date' | 'total_rating' | 'alphabetical' | '')}
-                      styles={{
-                        input:{
-                            backgroundColor: '#1b1b1b',
-                            color: 'white',
-                            border: '1px solid #2a2828'
-                        }
-                      }}
                     />
                 </div>
                 
                 <div className={classes.filterContainer}>
                   <GameFilters
+                    className={classes.gameFilters}
                     variant='default'
-                    color='rgb(49, 48, 48)'
                     size= 'lg'
                     radius='md'
                     totalGames={total}
@@ -240,7 +233,7 @@ export default function TrendingPage() {
                       value={page}
                       onChange={(newPage) => {
                           setPage(newPage);
-                          router.push(`/search/popular?&page=${newPage}`);
+                          router.push(`/search/trending?&page=${newPage}`);
                       }}
                   />
               </div>

@@ -1,18 +1,24 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { authClient } from '@/lib/auth-client';
 
 import JournalEntryCard from '@/components/JournalEntryCard/EntryCard';
 import JournalEntryModal from '@/components/JournalEntryModal/EntryModal';
+import JournalFilters from '@/components/JournalFilters/JournalFilters';
+import JournalPageSearch from '@/components/JournalPageSearch/JournalPageSearch';
 
-import { Badge, Button, Select, SimpleGrid, Pagination, SegmentedControl, Modal, Group, Stack, Title, 
-    Text, Checkbox, ActionIcon, MultiSelect, LoadingOverlay, Drawer, Tooltip} from '@mantine/core';
+import { Button, Select, SimpleGrid, Pagination, Modal, Group, Stack, Title, 
+    Text, Checkbox, ActionIcon, LoadingOverlay, Pill } from '@mantine/core';
 
 import toast from 'react-hot-toast';
-import { FilePlus, ListFilter, Trash2, Eye, RotateCcw } from 'lucide-react';
+import { FilePlus, Bookmark, Trash2, ClipboardCheck, Gamepad, NotebookText, Link } from 'lucide-react';
+
+import PlaceHolderImage from "../../../public/no-cover-image.png";
+import HeroImage from "../../../public/cyberpunkWallpaper.jpg";
 
 import classes from './journal.module.css';
 
@@ -20,6 +26,7 @@ export default function Journal() {
     // State variables for the journal entries
     const [entries, setEntries] = useState<any[]>([]);
     const [totalEntries, setTotalEntries] = useState(0);
+    const [search, setSearch] = useState('');
 
     const [loading, setLoading] = useState(true);
     const [checked, setChecked] = useState(false);
@@ -29,6 +36,11 @@ export default function Journal() {
     const [totalPages, setTotalPages] = useState(1);
 
     const [games, setGames] = useState<{ gameId: string, gameName: string }[]>([]);
+    const [totalGames, setTotalGames] = useState(0);
+    
+    // State variables for the most journaled game and last journal entry for the stat cards
+    const [mostJournaledGame, setMostJournaledGame] = useState<any>(null);
+    const [favoriteEntryType, setFavoriteEntryType] = useState<any>(null);
 
     // State variables for filters based on game, entry type, tags, and sorting order
     const [gameId, setGameId] = useState('all')
@@ -37,26 +49,24 @@ export default function Journal() {
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-    // Draft filters (inside the drawer)
-    const [draftGameId, setDraftGameId] = useState('all');
-    const [draftType, setDraftType] = useState("")
-    const [draftTags, setDraftTags] = useState<string[]>([]);
-
-    // Compute active filters for display in the UI
-    const activeFilters = (gameId !== 'all'? [`Game: ${games.find(g => g.gameId === gameId)?.gameName}`]: []).concat(
-        selectedType ? [`Type: ${selectedType}`] : [],
-        selectedTags.length > 0
-            ? [`Tags: ${selectedTags.join(', ')}`]
-            : []
-    );
-
     // State for opening delete all modal
     const [opened, {open, close}] = useDisclosure(false);
     const [entryModalOpened, {open: openEntryModal, close: closeEntryModal}] = useDisclosure(false);
-    const [drawerOpened, { toggle, close: closeDrawer }] = useDisclosure(false);
 
     const isMobile = useMediaQuery('(max-width: 560px)');
     const router = useRouter();
+
+    // Filter the journal entries results if using search bar
+    const filteredEntries = entries.filter((entry) =>
+        entry.title.toLowerCase().includes(search.toLowerCase()) ||
+        entry.gameName.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const activeFilters = [
+        ...(gameId !== 'all' ? [gameId] : []),
+        ...(selectedType ? [selectedType] : []),
+        ...selectedTags,
+    ];
 
     // Check if the user is authenticated, if not redirect to auth page
     const checkAuth = async () => {
@@ -84,7 +94,12 @@ export default function Journal() {
 
             const data = await res.json();
             setGames(data.games);
+            setTotalGames(data.games.length);
+            setMostJournaledGame(data.mostJournaled[0] || null);
+            setFavoriteEntryType(data.favoriteEntryType[0] || null);
             console.log('Games with journal entries:', data.games);
+            console.log('Most journaled game:', data.mostJournaled);
+            console.log("Favorite Entry Type", data.favoriteEntryType[0] || null);
         } catch (error) {
             console.log('Error fetching games with journal entries', error);
         }
@@ -216,38 +231,41 @@ export default function Journal() {
     const selectedGameObject = entries.find(e => e.gameName === selectedGame);
 
     return (
-        <div className={classes.background}>
+        <div className={classes.pageWrapper}>
+            <div className={classes.journalWrapper}>
+                <div className={classes.hero}>
+                    <Image
+                        src={HeroImage.src}
+                        className={classes.heroImage}
+                        alt='Gaming Journal Hero'
+                        fill
+                        priority
+                    />
 
-            <div className={classes.backgroundOverlay}>
+                    <div className={classes.heroOverlay}>
+                        <Stack className={classes.heroContent} gap='sm' justify='center'>
+                            <h2 className={classes.journalTitle}>Gaming Journal</h2>
 
-                <div className={classes.journalWrapper}>
+                            <Text className={classes.description}>
+                                Capture memorable moments, strategies, acheivements, endings, and more from you gaming adventures.
+                            </Text>
+                        </Stack>
+                    </div>
+                </div>
 
-                    <div className={classes.journalHeader}>
+                {/* Delete Entries By Game Modal */}
+                <Modal opened={opened} onClose={close} centered styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #545454ff'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
+                    <Group className={classes.modalText} mb={20} ta='left'>
+                        <Title className={classes.modalTitle} order={3} ta='center'>
+                            Delete All Entries of a Game
+                        </Title>
 
-                        <div className={classes.titleLogo}>
-                            <h2 className={classes.journalTitle}>Your Journal</h2>
-                        </div>
-
-                        <Text className={classes.description} size="xl">
-                            Track and revisit your gaming experiences by creating journal entries for each game you play.
+                        <Text c="white" fz="md" ta="center" mb={10}>
+                            This will permanently delete <b>all</b> journal entries assoicated with the selected game.  
+                            This action cannot be undone.
                         </Text>
 
-                    </div>
-
-                    {/* Delete Entries By Game Modal */}
-                    <Modal opened={opened} onClose={close} centered styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #545454ff'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
-
-                        <Group className={classes.modalText} mb={20} ta='left'>
-                            <Title className={classes.modalTitle} order={3} ta='center'>
-                                Delete All Entries of a Game
-                            </Title>
-
-                            <Text c="white" fz="md" ta="center" mb={10}>
-                                This will permanently delete <b>all</b> journal entries assoicated with the selected game.  
-                                This action cannot be undone.
-                            </Text>
-
-                            <Select
+                        <Select
                             label="Select Game"
                             size='lg'
                             width={200}
@@ -263,11 +281,11 @@ export default function Journal() {
                             }}
                             mb="lg"
                             error={error}
-                            />
+                        />
 
-                            <Checkbox radius='md' color='blue' c='white' size='md' label='I understand that I am permanently deleting my journal entries for this game' checked={checked} error={error} onChange={(event) => setChecked(event.currentTarget.checked)} />
-                
-                            <Button
+                        <Checkbox radius='md' color='blue' c='white' size='md' label='I understand that I am permanently deleting my journal entries for this game' checked={checked} error={error} onChange={(event) => setChecked(event.currentTarget.checked)} />
+            
+                        <Button
                             className={classes.deleteEntriesButton}
                             color="#d8070b"
                             size="md"
@@ -293,424 +311,208 @@ export default function Journal() {
                                     return;
                                 }
 
-                                console.log("Game Id", selectedGameObject.gameId)
-
                                 await deleteEntriesByGame(selectedGameObject.gameId); // ✅ Call your helper function
                                 setChecked(false);
                                 setSelectedGame('');
                                 close(); // ✅ Close modal
                             }}
-                            >
-                            Delete Entries
-                            </Button>
+                        >
+                        Delete Entries
+                        </Button>
+                    </Group>
+                </Modal>
 
-                        </Group>
-
-                    </Modal>
-
-                    <div className={classes.mainSection}>
-
-                        {/* ✅ LOADING OVERLAY */}
-                        <LoadingOverlay
-                            visible={loading}
-                            overlayProps={{ radius: 'sm', blur: 2 }}
-                            loaderProps={{ size: 'lg', color: "grape", type: "bars" }}
-                        />
-
-                        <JournalEntryModal
-                            key={selectedGameObject?.gameId ?? 'journal-entry-modal'}
-                            opened={entryModalOpened}
-                            onClose={closeEntryModal}
-                            gameId={selectedGameObject?.gameId ?? ''}
-                            gameName={selectedGameObject?.gameName ?? ''}
-                            onSuccess={() => close()}
-                            onEntryCreated={fetchEntries}
-                        />
-
-                        <div className={classes.buttonGroup} >
-                            <ActionIcon
-                                variant='filled'
-                                color='green'
-                                size='xl'
-                                radius= 'md'
-                                className={classes.addButton}
-                                onClick={openEntryModal}
-                                hiddenFrom='sm'
-                            >
-                                <FilePlus />
-                            </ActionIcon>
-                            
-                            <ActionIcon
-                                variant='filled'
-                                color='#854bcb'
-                                size='xl'
-                                radius= 'md'
-                                className={classes.filterButton}
-                                onClick={toggle}
-                                hiddenFrom='sm'
-                            >
-                                <ListFilter />
-                            </ActionIcon>
-
-                            <ActionIcon
-                                variant='filled'
-                                color='#e01515ff'
-                                size='xl'
-                                radius= 'md'
-                                className={classes.deleteEntriesButton}
-                                onClick={open}
-                                hiddenFrom='sm'
-                            >
-                                <Trash2 />
-                            </ActionIcon>
-
-                            <Button
-                                variant='filled'
-                                color='green'
-                                size='md'
-                                radius= 'md'
-                                className={classes.addButton}
-                                onClick={openEntryModal}
-                                rightSection={<FilePlus />}
-                                visibleFrom='sm'
-                            >
-                                Add Entry
-                            </Button>
-                            
-                            <Button 
-                                className={classes.filterButton} 
-                                size='md' 
-                                color='#854bcb' 
-                                radius='md' 
-                                variant="filled" 
-                                rightSection={<ListFilter />}
-                                onClick={toggle}
-                                hidden={!isMobile}
-                                visibleFrom='sm'
-                            >
-                            Filters
-                            </Button>
-
-                            <Button
-                                variant='filled'
-                                color='#e01515ff'
-                                size='md'
-                                radius= 'md'
-                                className={classes.deleteEntriesButton}
-                                onClick={open}
-                                rightSection={<Trash2 />}
-                                hidden={isMobile}
-                                visibleFrom='sm'
-                            >
-                                Delete All
-                            </Button>
-
-                            {/* Drawer component to hold the filter options, slides in from left */}
-                            <Drawer
-                                opened={drawerOpened}
-                                onClose={closeDrawer}
-                                position='left'
-                                size="300px"
-                                title='Sort and Filter'
-                                className={classes.drawer}
-                                styles={{
-                                    header: {
-                                        borderBottom: '1px solid gray',
-                                        marginBottom: '10px'
-                                    },
-                                    body: {
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        height: '90%',
-                                    },
-                                    title: {
-                                        fontSize: '24px',
-                                        color: 'white',
-                                        fontFamily: 'Noto Sans',
-                                        fontWeight: 300
-                                    },
-                                    close: {
-                                        color: 'white'
-                                    }
-                                }}
-                            >
-                                <Stack justify='space-between' h='100%'>
-                                    <Stack gap='md'>
-                                        <Select
-                                            styles={{
-                                                dropdown: {
-                                                    background: '#212121',
-                                                    color: 'whitesmoke'
-                                                },
-                                                input: {
-                                                    background: '#212121',
-                                                    fontFamily: 'Noto Sans',
-                                                    color: 'white'
-                                                },
-                                                option: {
-                                                    fontFamily: 'Noto Sans',
-                                                    fontSize: '16px',
-                                                    fontWeight: 330
-                                                },
-                                                label: {
-                                                    fontFamily: 'Noto Sans',
-                                                    color: 'white',
-                                                    fontSize: '20px',
-                                                    fontWeight: 300
-                                                }
-                                            }}
-                                            label="Filter by Game"
-                                            placeholder="Select Game"
-                                            checkIconPosition='right'
-                                            scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
-                                            data={[
-                                                { value: 'all', label: 'All Games' },
-                                                ...games.map((game) => ({
-                                                    value: game.gameId,
-                                                    label: game.gameName
-                                                }))
-                                            ]}
-                                            value={draftGameId}
-                                            onChange={(value) => setDraftGameId(value || 'all')}
-                                            className={classes.filterDropdown}
-                                            mb="md"
-                                        />
-
-                                        <Select
-                                            label="Filter by Entry Type"
-                                            placeholder="Select Entry Type"
-                                            styles={{
-                                                dropdown: {
-                                                    background: '#212121',
-                                                    color: 'whitesmoke'
-                                                },
-                                                input: {
-                                                    background: '#212121',
-                                                    fontFamily: 'Noto Sans',
-                                                    color: 'white'
-                                                },
-                                                option: {
-                                                    fontFamily: 'Noto Sans',
-                                                    fontSize: '16px',
-                                                    fontWeight: 330
-                                                },
-                                                label: {
-                                                    fontFamily: 'Noto Sans',
-                                                    color: 'white',
-                                                    fontSize: '20px',
-                                                    fontWeight: 300
-                                                }
-                                            }}
-                                            data={[
-                                                "First Impressions",
-                                                "Progress Update",
-                                                "Boss Fight",
-                                                "Achievement",
-                                                "Story Reaction",
-                                                "Review",
-                                                "Ending Thoughts",
-                                                "General",
-                                            ]}
-                                            value={draftType}
-                                            onChange={(value) => setDraftType(value || '')}
-                                            className={classes.filterDropdown}
-                                            mb="md"
-                                            clearable
-                                        />
-
-                                        <MultiSelect
-                                            label="Filter by Tags"
-                                            placeholder="Select Tags"
-                                            styles={{
-                                                dropdown: {
-                                                    background: '#212121',
-                                                    color: 'whitesmoke'
-                                                },
-                                                input: {
-                                                    background: '#212121',
-                                                    fontFamily: 'Noto Sans',
-                                                    color: 'white'
-                                                },
-                                                option: {
-                                                    fontFamily: 'Noto Sans',
-                                                    fontSize: '16px',
-                                                    fontWeight: 330
-                                                },
-                                                label: {
-                                                    fontFamily: 'Noto Sans',
-                                                    color: 'white',
-                                                    fontSize: '20px',
-                                                    fontWeight: 300
-                                                }
-                                                }}
-                                                checkIconPosition='left'
-                                                data={[
-                                                    "Story",
-                                                    "Boss Fight",
-                                                    "Exploration",
-                                                    "Multiplayer",
-                                                    "Grinding",
-                                                    "Side Quest",
-                                                    "Achievement",
-                                                    "Review",
-                                                ]}
-                                                value={draftTags}
-                                                onChange={(value) => setDraftTags(value || 'all')}
-                                                scrollAreaProps={{ type: 'auto', scrollbarSize: 10, scrollbars: 'y', classNames: { scrollbar: classes.scrollBar }}}
-                                                className={classes.filterDropdown}
-                                                mb="md"
-                                        />
-
-                                        <SegmentedControl
-                                            fullWidth
-                                            value={sortOrder}
-                                            size='md'
-                                            mb="md"
-                                            onChange={(value) => setSortOrder(value as 'asc' | 'desc')}
-                                            data={[
-                                                { label: 'Newest', value: 'desc' },
-                                                { label: 'Oldest', value: 'asc' }
-                                            ]}
-                                        >
-                                            Sort: {sortOrder === 'desc' ? 'Newest → Oldest' : 'Oldest → Newest'}
-                                        </SegmentedControl>
-                                    </Stack>
-                                    
-                                    <Stack gap='sm'>
-                                        <div style={{ borderTop: '1px solid #6c6c6c', paddingTop: '0.5rem', gap: '0.5rem'}}>
-                                            <Button
-                                                fullWidth
-                                                variant='subtle'
-                                                color='white'
-                                                leftSection={<RotateCcw size={18} />}
-                                                mb='sm'
-                                                onClick={() => {
-                                                    setGameId('all');
-                                                    setSelectedType('');
-                                                    setSelectedTags([]);
-
-                                                    setDraftGameId('all');
-                                                    setDraftType('');
-                                                    setDraftTags([]);
-
-                                                    setPage(1);
-                                                }}
-                                            >
-                                                Clear Filters
-                                            </Button>
-
-                                            <Button
-                                                fullWidth
-                                                variant='filled'
-                                                color="blue"
-                                                onClick={() => {
-                                                    setGameId(draftGameId);
-                                                    setSelectedTags(draftTags);
-                                                    setSelectedType(draftType)
-                                                    setPage(1);
-                                                    closeDrawer();
-                                                }}
-                                            >
-                                                Apply Filters
-                                            </Button>
-
-                                        </div>
-                                    </Stack>
-                                </Stack>
-                            </Drawer>
+                <div className={classes.statsContainer}>
+                    <SimpleGrid cols={{base: 2, sm: 2, md: 2, lg: 2, xl: 4}} spacing="lg" className={classes.quickStatsGrid}>
+                        <div className={classes.quickStatItem}>
+                            <div className={classes.quickStatContent}>
+                                <ClipboardCheck size={40} color='#7c18ed' />
+                                <Text className={classes.quickStatValue}>{totalEntries}</Text>
+                                <Text className={classes.quickStatSubtext}>Total Entries</Text>
+                            </div>
                         </div>
 
-                        {activeFilters.length > 0 && (
-                            <Group className={classes.activeFiltersWrapper} mb='lg' gap='xs'>
-                                {gameId !== 'all' && (
-                                    <Badge
-                                        className={classes.filterBadge}
-                                        size="lg"
-                                        variant="outline"
-                                        color='#f0f1f2'
-                                        radius="sm"
-                                        style={{ cursor: "pointer" }}
-                                        onClick={() => {
-                                            setGameId('all');
-                                            setPage(1);
-                                        }}
-                                    >
-                                        {`Game: ${games.find(g => g.gameId === gameId)?.gameName}`} ✕
-                                    </Badge>
-                                )}
-
-                                {draftTags.length > 0 && (
-                                    <Badge
-                                        className={classes.filterBadge}
-                                        size="lg"
-                                        variant="outline"
-                                        color='#f0f1f2'
-                                        radius="sm"
-                                        style={{ cursor: "pointer" }}
-                                        onClick={() => {
-                                            setDraftTags([]);
-                                            setSelectedTags([]);
-                                            setPage(1);
-                                        }}
-                                    >
-                                        {`Tags: ${draftTags.join(', ')}`} ✕
-                                    </Badge>
-                                )}
-
-                                {selectedType && (
-                                    <Badge
-                                        className={classes.filterBadge}
-                                        size="lg"
-                                        variant="outline"
-                                        color='#f0f1f2'
-                                        radius="sm"
-                                        style={{ cursor: "pointer" }}
-                                        onClick={() => {
-                                            setSelectedType('');
-                                            setDraftType('');
-                                            setPage(1);
-                                        }}
-                                    >
-                                        {`Type: ${selectedType}`} ✕
-                                    </Badge>
-                                )}
-                            </Group>
-                        )}
-                        
-                        {entries.length > 0 && (
-                            <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 3}} spacing="lg" className={classes.entriesGrid}>
-                                {entries.map((entry) => (
-                                    <JournalEntryCard key={entry._id} entry={entry} variant='journal'/>
-                                ))}
-                            </SimpleGrid>
-                        
-                        )}
-
-                    </div>
-
-                    {!loading && entries.length === 0 && (
-                        <p className={classes.noGamesText}>No games found for the selected tags.</p>
-                    )}
-
-                    {entries.length !== 0 &&(
-                        <div className={classes.paginationWrapper}>
-                            <Pagination
-                                classNames={{
-                                    control: classes.paginationControl
-                                }}
-                                size='xl'
-                                radius='xs'
-                                total={totalPages}
-                                value={page}
-                                onChange={setPage}
-                            />
+                        <div className={classes.quickStatItem}>
+                            <div className={classes.quickStatContent}>
+                                <Gamepad size={40} color='#7c18ed' />
+                                <Text className={classes.quickStatValue}>{totalGames}</Text>
+                                <Text className={classes.quickStatSubtext}>Games Journaled</Text>
+                            </div>
                         </div>
-                    )}
 
+                        <div className={classes.quickStatItem}>
+                            <div className={classes.quickStatContent}>
+                                <NotebookText size={40} color='#7c18ed' />
+                                <div className={classes.mostJournaledContent}>
+                                    <Text className={classes.mostJournaledName}>{mostJournaledGame?.gameName || 'N/A'}</Text>
+                                </div>
+                                <Text className={classes.quickStatSubtext}>Most Journaled Game</Text>
+                            </div>
+                        </div>
+
+                        <div className={classes.quickStatItem}>
+                            <div className={classes.quickStatContent}>
+                                <Bookmark size={40} color='#7c18ed' />
+                                <div className={classes.favoriteEntryContent}>
+                                    <Text className={classes.favoriteEntryName}>{favoriteEntryType?._id || 'N/A'}</Text>
+                                </div>
+                                <Text className={classes.quickStatSubtext}>Favorite Entry Type</Text>
+                            </div>
+                        </div>
+                    </SimpleGrid>
                 </div>
 
-            </div>
+                <div className={classes.toolbarContainer}>
+                    <div className={classes.toolbar}>
+                        <div className={classes.toolbarTop}>
+                            <div className={classes.searchContainer}>
+                                <JournalPageSearch 
+                                    backgroundColor='#211b2c'
+                                    borderColor='border: 1px solid transparent' 
+                                    size='lg' 
+                                    radius='md' 
+                                    value={search} 
+                                    onChange={setSearch}
+                                />
+                            </div>
+                        
+                            <div className={classes.toolbarButtons}>
+                                <JournalEntryModal
+                                    key={selectedGameObject?.gameId ?? 'journal-entry-modal'}
+                                    opened={entryModalOpened}
+                                    onClose={closeEntryModal}
+                                    gameId={selectedGameObject?.gameId ?? ''}
+                                    gameName={selectedGameObject?.gameName ?? ''}
+                                    onSuccess={() => close()}
+                                    onEntryCreated={fetchEntries}
+                                />
+                            
+                                <Button
+                                    variant='outline'
+                                    color='#139609'
+                                    size='md'
+                                    radius= 'md'
+                                    className={classes.addButton}
+                                    onClick={openEntryModal}
+                                    rightSection={<FilePlus />}
+                                >
+                                    Add Entry
+                                </Button>
 
+                                <Button
+                                    variant='outline'
+                                    color='#e01515ff'
+                                    size='md'
+                                    radius= 'md'
+                                    className={classes.removeButton}
+                                    onClick={open}
+                                    rightSection={<Trash2 />}
+                                >
+                                    Delete
+                                </Button>
+                            </div>
+                            
+                            <div className={classes.filterContainer}>
+                                <JournalFilters
+                                    className={classes.filterButton}
+                                    color='indigo'
+                                    size='md'
+                                    radius='md'
+                                    variant='default'
+                                    buttonVariant='outline'
+                                    availableGames={games.map((game) => ({ id: game.gameId, name: game.gameName }))}
+                                    sortOption={sortOrder}
+                                    selectedGameId={gameId}
+                                    selectedEntryType={selectedType}
+                                    selectedTags={selectedTags}
+                                    onSortChange={setSortOrder}
+                                    onGameIdChange={setGameId}
+                                    onEntryTypeChange={setSelectedType}
+                                    onTagsChange={setSelectedTags}
+                                />
+                            </div>
+                            
+                        </div>
+                        
+                        <div className={classes.toolbarBottom}>
+                            {activeFilters.length > 0 && (
+                                <Group className={classes.activeFiltersWrapper}>
+                                    {gameId !== 'all' && (
+                                        <Pill
+                                            size="lg"
+                                            radius="sm"
+                                            style={{ cursor: "pointer" }}
+                                            onClick={() => {
+                                                setGameId('all');
+                                                setPage(1);
+                                            }}
+                                        >
+                                            {`Game: ${games.find(g => g.gameId === gameId)?.gameName}`} ✕
+                                        </Pill>
+                                    )}
+
+                                    {selectedTags.length > 0 && (
+                                        <Pill
+                                            className={classes.filterBadge}
+                                            size="lg"
+                                            radius="sm"
+                                            style={{ cursor: "pointer" }}
+                                            onClick={() => {
+                                                setSelectedTags([]);
+                                                setPage(1);
+                                            }}
+                                        >
+                                            {`Tags: ${selectedTags.join(', ')}`} ✕
+                                        </Pill>
+                                    )}
+
+                                    {selectedType && (
+                                        <Pill
+                                            className={classes.filterBadge}
+                                            size="lg"
+                                            radius="sm"
+                                            style={{ cursor: "pointer" }}
+                                            onClick={() => {
+                                                setSelectedType('');
+                                                setPage(1);
+                                            }}
+                                        >
+                                            {`Type: ${selectedType}`} ✕
+                                        </Pill>
+                                    )}
+                                </Group>
+                            )}
+                        </div>
+                    </div>
+                </div>
+                    
+                {filteredEntries.length > 0 && (
+                    <SimpleGrid cols={{base: 1, sm: 2, md: 2, lg: 2}} spacing="lg" className={classes.entriesGrid}>
+                        {filteredEntries.map((entry) => (
+                            <JournalEntryCard key={entry._id} entry={entry} variant='journal' color='#7c18ed' />
+                        ))}
+                    </SimpleGrid>
+                )}
+
+                {!loading && entries.length === 0 && (
+                    <p className={classes.noGamesText}>No games found for the selected tags.</p>
+                )}
+
+                {entries.length !== 0 &&(
+                    <div className={classes.paginationWrapper}>
+                        <Pagination
+                            classNames={{
+                                control: classes.paginationControl
+                            }}
+                            size='xl'
+                            radius='xs'
+                            total={totalPages}
+                            value={page}
+                            onChange={setPage}
+                        />
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

@@ -51,10 +51,9 @@ export default function AvatarMenu(){
 
             <Menu.Dropdown styles={{
                 dropdown: {
-                    backgroundColor: '#232526',
-                    border: '1px solid #464646ff',
+                    border: '1px solid rgb(36, 17, 66)',
                     fontFamily: 'Poppins',
-                    fontWeight: 500,
+                    fontWeight: 400,
                 }
             }}>
                 <Menu.Item leftSection={<User size={30}/>} color="white" >

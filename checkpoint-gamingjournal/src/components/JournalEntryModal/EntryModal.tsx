@@ -1,7 +1,9 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { Modal, Divider, Stack, Button, TextInput, LoadingOverlay, Select, MultiSelect, Textarea } from "@mantine/core";
+import { Modal, Divider, Stack, Button, TextInput, LoadingOverlay, Select, MultiSelect, Textarea, Text, Group, Chip, Badge } from "@mantine/core";
+
+import { TAG_CATEGORIES } from "@/hooks/getTagsCategories";
 
 import toast from "react-hot-toast";
 
@@ -180,8 +182,33 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
         }
     }
 
+    // Function to help with toggling multiple tags that user wants on entry
+    const toggleTag = (tag: string) => {
+        setTags((current) =>
+            current.includes(tag)
+                ? current.filter((t) => t !== tag)
+                : [...current, tag]
+        );
+    };
+
     return (
-        <Modal opened={opened} onClose={onClose} size='xl' title={entry ? "Edit Journal Entry" : "Create Journal Entry"} centered withCloseButton>
+        <Modal 
+            opened={opened} 
+            onClose={onClose} 
+            size='xl' 
+            title={(gameId ? `${gameName} - Journal Entry` : `Create Journal Entry`)} 
+            centered 
+            withCloseButton
+            withinPortal
+            styles={{
+                title: {
+                    fontWeight: 700,
+                    fontFamily: 'Inter',
+                    fontSize: '1.1rem',
+                    color: 'white',
+                }
+            }}
+        >
 
             {/* ✅ LOADING OVERLAY */}
             <LoadingOverlay
@@ -250,30 +277,21 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
                     placeholder="Select an entry type"
                     data={[
                         "First Impressions",
-                        "Progress Update",
-                        "Boss Fight",
-                        "Achievement",
+                        "Progress Milestone",
+                        "Reflection",
                         "Story Reaction",
+                        "Build & Strategy",
+                        "Game Completion",
                         "Review",
-                        "Ending Thoughts",
-                        "General",
                     ]}
                     value={entryType}
                     onChange={(value) => setEntryType(value || '')}
                     searchable
-                    styles={{
-                        input: { color: "white", background: "#212121" },
-                        dropdown: { background: "#212121", color: "whitesmoke" },
-                    }}
                     style={{ marginTop: "1rem" }}
                 />
 
                 <Textarea
                     className={classes.textInput}
-                    styles={{
-                        wrapper: { color: '#212121'}, 
-                        input: { color: 'white', background: '#212121'}, 
-                    }}
                     size="md"
                     minRows={3}
                     autosize
@@ -286,36 +304,63 @@ export default function JournalEntryModal({ opened, onClose, gameId, gameName, e
                     style={{ marginTop: "1rem" }}
                 />
 
-                <MultiSelect
-                    className={classes.select}
-                    leftSection={<LibraryBig size={20} />}
-                    label="Tags"
-                    description="Add keywords to organize your entries"
-                    placeholder="(e.g. boss fight, story, multiplayer)"
-                    data={[
-                        "Story",
-                        "Boss Fight",
-                        "Exploration",
-                        "Multiplayer",
-                        "Grinding",
-                        "Side Quest",
-                        "Achievement",
-                    ]}
-                    value={tags}
-                    onChange={setTags}
-                    searchable
-                    size="md"
-                    styles={{
-                    input: { color: "white", background: "#212121" },
-                    dropdown: { background: "#212121", color: "whitesmoke" },
-                    }}
-                    style={{ marginTop: "1rem" }}
-                />
+                <Stack gap="md">
+                    <Stack gap={1}>
+                        <Text fw={600}>Tags</Text>
+                        <Text size="sm" c="dimmed">
+                            Choose the topics covered in this entry.
+                        </Text>
+                    </Stack>
+                    
+                    <div className={classes.tagStack}>
+                        {TAG_CATEGORIES.map((category) => (
+                            <Stack key={category.title} gap="sm">
+                                <Text fw={500} c={category.color}>
+                                    {category.title}
+                                </Text>
 
-                <Divider styles={{label: {color: 'white'}}} labelPosition="center" color='dimmed' my="md"  />
+                                <Group gap="xs" mb='md'>
+                                    {category.tags.map((tag) => (
+                                        <Chip
+                                            color={category.color}
+                                            key={tag}
+                                            checked={tags.includes(tag)}
+                                            onChange={() => toggleTag(tag)}
+                                        >
+                                            {tag}
+                                        </Chip>
+                                    ))}
+                                </Group>
+                            </Stack>
+                        ))}
+                    </div>
+
+                    <Text fw={500}> Selected Tags: </Text>
+
+                    <Group gap="xs">
+                        {tags.length === 0 ? (
+                            <Text c="dimmed">
+                                No tags selected
+                            </Text>
+                        ) : (
+                            tags.map((tag) => (
+                                <Badge
+                                    key={tag}
+                                    color="blue"
+                                    variant="light"
+                                    size='lg'
+                                    fw={500}
+                                >
+                                    {tag}
+                                </Badge>
+                            ))
+                        )}
+                    </Group>
+                </Stack>
+
+                <Divider c='#4c4c4c'  />
 
                 <div className={classes.buttonGroup}>
-
                     <Button 
                     className={classes.cancelButton}
                     color="red"

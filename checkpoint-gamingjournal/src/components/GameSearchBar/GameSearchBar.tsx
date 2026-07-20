@@ -149,15 +149,13 @@ export default function GameSearchBar({
                     variant="filled"
                     color={iconColor}
                     c="white"
-                    size='input-lg'
+                    size='input-md'
                     radius={radius}
                     onClick={() => autoNavigate && navigateToSearch(query)}
                 >
                     <IconSearch size={25} />
                 </ActionIcon>
             )}
-
-
         </div>
     );
 }

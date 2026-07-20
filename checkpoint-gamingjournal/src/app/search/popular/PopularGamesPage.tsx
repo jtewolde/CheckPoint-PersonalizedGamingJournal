@@ -27,7 +27,7 @@ export default function PopularPage() {
   const [total, setTotal] = useState(0)
   const totalPages = Math.ceil(total/limit)
 
-  const isMobile = useMediaQuery('(max-width: 520px)');
+  const isMobile = useMediaQuery('(max-width: 646px)');
 
   const [games, setGames] = useState<any[]>([]); // State to store games data
   const [length, setLength] = useState("")
@@ -114,62 +114,49 @@ export default function PopularPage() {
 
   return (
     <div className={classes.wrapper} >
-
         <div className={classes.mainContent}>
-
           <div className={classes.headerSection}>
-
             <div className={classes.titleDescriptionSection}>
-
               <div className={classes.titleLogo}>
-
                 <h1 className={classes.titleText}>Popular Games</h1>
-
               </div>
 
               <Text className={classes.description}>
                 Explore the most popular games that define today’s gaming scene. 
               </Text>
-
             </div>
 
             <div className={classes.toolbar}>
-              
               <div className={classes.searchContainer}>
                 <GamePageSearch size='lg' radius='md' value={search} onChange={setSearch}/>
               </div>
 
               <div className={classes.actionRow}>
-
                 <div className={classes.sortContainer}>
                   {/* Sort By Dropdown */}
                     <Select
-                      className={classes.filterDropdown}
+                      className={classes.sortSelect}
                       size='lg'
                       variant='filled'
                       placeholder="Select an option"
                       checkIconPosition='left'
                       data={[
                           { value: 'alphabetical', label: 'Alphabetical (A-Z)'},
-                          { value: 'first_release_date', label: 'Release Date' },
-                          { value: 'total_rating', label: "Total Rating"},
+                          { value: 'alphabetical_reverse', label: 'Alphabetical (Z-A)'},
+                          { value: 'first_release_date', label: 'Release Date (Newest)' },
+                          { value: 'first_release_date_oldest', label: 'Release Date (Oldest)'},
+                          { value: 'total_rating', label: "Total Rating (High-Low)"},
+                          { value: 'total_rating_reverse', label: "Total Rating (Low-High)"}
                       ]}
                       value={sortOption}
                       onChange={(value) => setSortOption(value as 'first_release_date' | 'total_rating' | 'alphabetical' | '')}
-                      styles={{
-                        input:{
-                            backgroundColor: '#1b1b1b',
-                            color: 'white',
-                            border: '1px solid #2a2828'
-                        }
-                      }}
                     />
                 </div>
                 
                 <div className={classes.filterContainer}>
                   <GameFilters
+                    className={classes.gameFilters}
                     variant='default'
-                    color='rgb(49, 48, 48)'
                     size= 'lg'
                     radius='md'
                     totalGames={total}
@@ -187,12 +174,10 @@ export default function PopularPage() {
                     onPlatformsChange={(v) => setSelectedPlatform(v as any)}
                   />
                 </div>
-                
               </div>
             </div>
 
             <div className={classes.resultsContainer}>
-
               <Text className={classes.resultsText}>
                 Showing {filteredGames.length} of {total.toLocaleString()} games
               </Text>
@@ -216,9 +201,7 @@ export default function PopularPage() {
                     setSelectedPlatform([]);
                 }}
               />
-
             </div>
-
           </div>
 
           <SimpleGrid spacing="lg" verticalSpacing='xl' className={classes.gamesGrid}>
