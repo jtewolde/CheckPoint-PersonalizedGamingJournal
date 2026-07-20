@@ -1,9 +1,5 @@
 .background{
-  background: linear-gradient(
-    180deg,
-    #1a1724 0%,
-    #15131d 100%
-  );
+  background: var(--background);
   position: relative;
   min-height: 100%; /* Ensure the page takes up the full height */
   min-width: 100%;
