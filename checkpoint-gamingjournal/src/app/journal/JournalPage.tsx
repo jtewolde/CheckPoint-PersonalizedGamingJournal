@@ -234,27 +234,17 @@ export default function Journal() {
         <div className={classes.pageWrapper}>
             <div className={classes.journalWrapper}>
                 <div className={classes.hero}>
-                    <Image
-                        src={HeroImage.src}
-                        className={classes.heroImage}
-                        alt='Gaming Journal Hero'
-                        fill
-                        priority
-                    />
+                    <Stack className={classes.heroContent} gap='sm' justify='center'>
+                        <h2 className={classes.journalTitle}>Gaming Journal</h2>
 
-                    <div className={classes.heroOverlay}>
-                        <Stack className={classes.heroContent} gap='sm' justify='center'>
-                            <h2 className={classes.journalTitle}>Gaming Journal</h2>
-
-                            <Text className={classes.description}>
-                                Capture memorable moments, strategies, acheivements, endings, and more from you gaming adventures.
-                            </Text>
-                        </Stack>
-                    </div>
+                        <Text className={classes.description}>
+                            Capture memorable moments, strategies, acheivements, endings, and more from you gaming adventures.
+                        </Text>
+                    </Stack>
                 </div>
 
                 {/* Delete Entries By Game Modal */}
-                <Modal opened={opened} onClose={close} centered styles={{content: {backgroundColor: '#2c2c2dff', border: '1px solid #545454ff'}, header: {backgroundColor: '#2c2c2fff'}, close: {color: 'white'}}}>
+                <Modal opened={opened} onClose={close} centered styles={{content: {border: '1px solid #545454ff'}, close: {color: 'white'}}}>
                     <Group className={classes.modalText} mb={20} ta='left'>
                         <Title className={classes.modalTitle} order={3} ta='center'>
                             Delete All Entries of a Game
@@ -268,7 +258,6 @@ export default function Journal() {
                         <Select
                             label="Select Game"
                             size='lg'
-                            width={200}
                             placeholder="Choose a game to delete its entries"
                             data={gameNames.map((game) => ({ value: game, label: game }))}
                             value={selectedGame}
@@ -504,7 +493,7 @@ export default function Journal() {
                             classNames={{
                                 control: classes.paginationControl
                             }}
-                            size='xl'
+                            size={isMobile ? 'sm' : 'md'}
                             radius='xs'
                             total={totalPages}
                             value={page}

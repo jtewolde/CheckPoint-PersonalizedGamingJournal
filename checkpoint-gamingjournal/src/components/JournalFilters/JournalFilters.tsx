@@ -87,18 +87,17 @@ export default function JournalFilters({
         <div className={classes.filterContainer}>
             <div className={classes.filterTopRow}>
                 {variant === 'default' && (
-                <Tooltip label='Apply Filters' position="top">
-                    <Button 
+                <Button 
                     className={className}
                     size={size} 
                     radius={radius} 
                     color={color} 
                     variant={buttonVariant}
                     leftSection={<Funnel size={30} />} 
-                    onClick={toggle}>
-                        Filters ({numberOfActiveFilters})
-                    </Button>
-                </Tooltip>
+                    onClick={toggle}
+                >
+                    Filters ({numberOfActiveFilters})
+                </Button>
             )}
 
             {variant === 'small' && (
@@ -288,8 +287,8 @@ export default function JournalFilters({
                         <div style={{ borderTop: '1px solid #6c6c6c', paddingTop: '0.5rem', gap: '0.5rem'}}>
                             <Button
                                 fullWidth
-                                variant='subtle'
-                                color='white'
+                                variant='filled'
+                                color='red'
                                 leftSection={<RotateCcw size={18} />}
                                 mb='sm'
                                 onClick={handleClearFilters}

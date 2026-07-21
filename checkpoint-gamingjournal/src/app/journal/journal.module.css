@@ -20,59 +20,12 @@
 }
 
 .hero{
-    position: relative;
-    min-height: 280px;
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
 
     overflow: hidden;
-}
-
-.hero::after{
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    height: 50px;
-
-    background: linear-gradient(
-        to bottom,
-        rgba(17,17,22,0),
-        #111116
-    );
-
-    z-index: 2;
-    pointer-events: none;
-}
-
-.heroImage{
-    object-fit: cover;
-    object-position: 0% 60%;
-    z-index: 0;
-}
-
-.heroOverlay{
-    position: absolute;
-    inset: 0;
-    background:
-        linear-gradient(
-            90deg,
-            rgba(17,17,22,.98) 0%,
-            rgba(17,17,22,.9) 50%,
-            rgba(17,17,22,.55) 70%,
-            rgba(17,17,22,.65) 100%
-        );
-    z-index: 1;
-}
-
-.heroContent{
-    position: relative;
-    z-index: 3;
-
-    padding: 2rem 1.5rem 3rem;
-    max-width: 650px;
 }
 
 .journalTitle{
@@ -86,8 +39,8 @@
 }
 
 .description {
-    color: #bdbbbb;
-    font-weight: 400;
+    color: #e5e4e4;
+    font-weight: 300;
     text-align: left;
     font-family: 'Barlow';
     font-size: 22px;
@@ -203,20 +156,20 @@
 }
 
 .addButton{
-    background: #182419;
-    border: 1px solid rgba(94, 239, 68, 0.25);
+    background: #1f3020;
+    border: 1.6px solid rgba(94, 239, 68, 0.696);
     color :#44ef44;
 }
 
 .removeButton{
     background: #24181b;
-    border: 1px solid rgba(239,68,68,.25);
+    border: 1.6px solid rgba(239, 68, 68, 0.634);
     color :#ef4444;
 }
 
 .filterButton{
     background: #1d1824;
-    border: 1px solid rgba(139, 92, 246, 0.25);
+    border: 1.6px solid rgba(138, 92, 246, 0.648);
     color: #8b5cf6;
 }
 
@@ -229,7 +182,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     gap: 20px;
 }
 
@@ -309,28 +262,11 @@
 @media (max-width: 650px){
 
     .hero{
-        min-height: 240px;
-        padding: 1.5rem;
-        align-items: flex-end;
-    }
-
-    .heroContent{
-        max-width: 100%;
-    }
-
-    .heroOverlay{
-        background:
-        linear-gradient(
-            90deg,
-            rgba(17,17,22,.98) 30%,
-            rgba(17,17,22,.9) 50%,
-            rgba(17,17,22,.55) 70%,
-            rgba(17,17,22,.65) 100%
-        );
+        padding: 1rem;
     }
 
     .journalTitle{
-        font-size: 2rem;
+        font-size: 2.3rem;
     }
 
     .description{
