@@ -183,6 +183,9 @@
     font-family: 'Inter';
     line-height: 1.2;
     margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .gameDate{

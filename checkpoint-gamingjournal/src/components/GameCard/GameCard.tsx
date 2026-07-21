@@ -449,8 +449,9 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
 
                     <Badge
                         size='md'
-                        variant="filled"
-                        color="#321f51"
+                        variant="default"
+                        color="#784ac3"
+                        c='white'
                         radius="lg"
                         fw={500}
                     >
