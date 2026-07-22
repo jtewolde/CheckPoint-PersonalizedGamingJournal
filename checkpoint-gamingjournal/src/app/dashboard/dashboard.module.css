@@ -50,12 +50,22 @@
   gap: 1rem;
 }
 
-.welcomeText{
-  font-size: 18px;
-  font-weight: 400;
+.dashboardTitle{
+  font-size: 32px;
+  font-weight: 700;
+  color: white; /* Dark text for contrast */
   text-align: left;
-  font-family: 'Inter';
-  font-style: italic;
+  font-family: 'Barlow';
+  letter-spacing: 1px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  line-height: 1.2;
+}
+
+.welcomeText{
+  font-size: 20px;
+  font-weight: 300;
+  text-align: left;
+  font-family: 'Barlow';
   color: #e7e5e5;
   width: auto;
 }
@@ -74,17 +84,6 @@
   font-weight: 400;
   font-size: 16px;
   padding: 0.5rem 1rem;
-}
-
-.dashboardTitle{
-  font-size: 28px;
-  font-weight: 700;
-  color: white; /* Dark text for contrast */
-  text-align: left;
-  font-family: 'Barlow';
-  letter-spacing: 1px;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-  line-height: 1.2;
 }
 
 .profileStatSection,
