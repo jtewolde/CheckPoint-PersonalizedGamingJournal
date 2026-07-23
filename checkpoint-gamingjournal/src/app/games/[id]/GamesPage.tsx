@@ -8,6 +8,7 @@ import { notFound } from 'next/navigation';
 import GlobalLoader from '@/components/GlobalLoader/GlobalLoader';
 import PlaySessionModal from '@/components/PlaySessionModal/SessionModal';
 import EditGameInfoModal from '@/components/EditGameInfoModal/EditGameInfoModal';
+import AddToLibraryModal from '@/components/AddToLibraryModal/AddToLibraryModal';
 import SessionCalendar from '@/components/SessionCalendar/SessionCalendar';
 
 import toast from 'react-hot-toast';
@@ -64,6 +65,7 @@ export default function GameDetails() {
 
   const [opened, {open, close} ] = useDisclosure(false);
   const [playSessionModalOpened, {open: openPlaySessionModal, close: closePlaySessionModal}] = useDisclosure(false);
+  const [AddOpened, {open: openAddModal, close: closeAddModal}] = useDisclosure(false);
 
   const [screenshots, setScreensShots] = useState<any[]>([]); // State to store screenshots
   const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null); // State to handle selected screenshot for modal
@@ -233,57 +235,6 @@ export default function GameDetails() {
       fetchPlaySessions();
     }
   }, [id, isAuthenticated]);
-
-  // Function to handle adding the game to the user's library
-  const handleAddToLibrary = async () => {
-    if (!game) return;
-
-    setAddingToLibrary(true);
-
-    try {
-      const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token from localStorage
-      const res = await fetch('/api/library', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`, // Include the Bearer token
-        },
-        body: JSON.stringify({
-          gameID: id,
-          gameDetails: {
-            title: game.name,
-
-            genre: game.genres?.map(
-              (genre: any) => genre.name
-            ) || [],
-
-            platforms: game.platforms?.map(
-              (platform: any) => platform.name
-            ) || [],
-
-            coverImage: game.cover.url,
-            releaseDate: game.first_release_date
-              ? new Date(game.first_release_date * 1000).toLocaleDateString()
-              : null,
-            status: game.status,
-            platinum: game.platinum,
-          },
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to add game to library');
-      }
-
-      toast.success('Game added to your library!')
-      setIsInLibrary(true); // Update the state to show that the game is in the user's library
-    } catch (error) {
-      console.error('Error adding game to library:', error);
-      toast.error('Failed to add game to your library. Please try again.');
-    } finally {
-      setAddingToLibrary(false);
-    }
-  };
 
   // Function to handle removing the game from the user's library
   const handleRemoveFromLibrary = async () => {
@@ -586,6 +537,13 @@ export default function GameDetails() {
                         </div>
                       ) : (
                         <div className={classes.buttonContainer}>
+
+                          <AddToLibraryModal
+                            opened={AddOpened}
+                            onClose={closeAddModal}
+                            game={game}
+                          />
+
                           <Button
                             variant="filled"
                             color="#2bdd66"
@@ -593,7 +551,7 @@ export default function GameDetails() {
                             radius="xl"
                             className={classes.button}
                             rightSection={<NotebookPen />}
-                            onClick={handleAddToLibrary}
+                            onClick={openAddModal}
                             loading={addingToLibrary}
                           >
                             Add to Library
