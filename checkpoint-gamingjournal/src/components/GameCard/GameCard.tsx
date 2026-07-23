@@ -8,6 +8,7 @@ import { useAuth } from '@/context/Authcontext';
 
 import PlaySessionModal from '../PlaySessionModal/SessionModal';
 import EditGameInfoModal from '../EditGameInfoModal/EditGameInfoModal';
+import AddToLibraryModal from '../AddToLibraryModal/AddToLibraryModal';
 
 import { Badge, Image, Tooltip, ActionIcon, Rating, OverflowList, Text, ThemeIcon, Group} from '@mantine/core';
 import toast from 'react-hot-toast';
@@ -56,21 +57,25 @@ interface GameCardProps {
         title: string;
         cover?: string;
     }) => void;
-
+    onAddToLibrary?: (game: any) => void;
+    onSuccess?: () => void;
     variant?: GameCardVariant;
 }
 
-export default function GameCard({ game, libraryGame, variant = 'default', libraryMeta, onQuickLog }: GameCardProps) {
+export default function GameCard({ game, libraryGame, variant = 'default', libraryMeta, onQuickLog, onSuccess }: GameCardProps) {
 
     const {isAuthenticated, setIsAuthenticated} = useAuth(); // Access global auth state
     const [opened, {open, close} ] = useDisclosure(false);
     const [editOpened, {open: editOpen, close: editClose}] = useDisclosure(false)
+    const [AddOpened, {open: openAddModal, close: closeAddModal}] = useDisclosure(false);
+    const anyModalOpen = opened || editOpened || AddOpened;
 
     const router = useRouter();
     const isMobile = useMediaQuery('(max-width: 480px)');
 
     // State variables for determing if current gameCard is in the user's library
-    const {isInLibrary, loading} = useLibraryGame(game.id);
+    const {isInLibrary} = useLibraryGame(game.id);
+    const [loading, setLoading] = useState(false);
     const [addingToLibrary, setAddingtoLibrary] = useState(false)
 
     // Prepare platform data for display, showing up to 3 platforms and indicating if there are more.
@@ -78,72 +83,33 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
     const visiblePlatforms = platforms.slice(0, 3);
     const remainingPlatforms = platforms.length - visiblePlatforms.length;
 
-    // Function to handle quick adding and removing games from the user's library.
-    const handleQuickToggle = async (gameId: string) => {
-        if (loading || addingToLibrary){
-            return;
-        } 
+    // Function to handle removing the game from the user's library
+    const handleRemoveFromLibrary = async () => {
+        try {
+            setLoading(true);
 
-        setAddingtoLibrary(true);
-        
-        const wasInLibrary = isInLibrary
+            const token = localStorage.getItem("bearer_token");
 
-        try{
-            if(!isAuthenticated){
-                toast.error("You must be logged in to manage your library!")
-                setAddingtoLibrary(false)
-                return
+            const res = await fetch(`/api/library/${libraryGame.gameId}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!res.ok) {
+                throw new Error("Failed to remove game.");
             }
 
-            const token = localStorage.getItem('bearer_token'); // Retrieve the Bearer token from localStorage
-            const res = await fetch(wasInLibrary ? `/api/library/${gameId}` : '/api/library', {
-                method: wasInLibrary ? 'DELETE' : 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`, // Include the Bearer token
-                },
-                body: JSON.stringify({
-                gameID: String(gameId),
-                gameDetails: {
-                    title: game.name,
+            toast.success("Game Removed from library!");
 
-                    genre: game.genres?.map(
-                    (genre: any) => genre.name
-                    ) || [],
-
-                    platforms: game.platforms?.map(
-                    (platform: any) => platform.name
-                    ) || [],
-
-                    coverImage: game.cover?.url,
-                    releaseDate: game.first_release_date
-                    ? new Date(game.first_release_date * 1000).toLocaleDateString()
-                    : null,
-                    journalEntries: [],
-                },
-            }),
-        });
-
-        if(res.status === 409){
-            toast.error('The game already exists in your library!')
-        } 
-        
-        if (!res.ok){
-            throw new Error('Failed to update library');
-        }
-
-        toast.success(
-            wasInLibrary ? 'Game has been removed from your library!' : 'Game has been added to your library!'
-        );
-
-        } catch(error) {
-            console.error('Error updating game library', error)
-            toast.error('An error has occured!')
+            onSuccess?.();
+        } catch (err) {
+            toast.error("Failed to remove game.");
         } finally {
-            setAddingtoLibrary(false);
+            setLoading(false);
         }
-
-    }
+    };
 
     // Helper function to style game status badge depending on the status of the game
     const getStatusInfo = (status?: string) => {
@@ -278,10 +244,8 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
 
 
     return (
-        <div key={game.id} className={`${classes.gameCard} ${variant === 'compact' ? classes.compact  : variant === 'small' ? classes.small : variant === 'library' ? classes.library : classes.default}`} onClick={() => {if(opened || editOpened) return;  router.push(`/games/${game.id}`)}}>
-
+        <div key={game.id} className={`${classes.gameCard} ${variant === 'compact' ? classes.compact  : variant === 'small' ? classes.small : variant === 'library' ? classes.library : classes.default}`} onClick={() => {if(anyModalOpen) return;  router.push(`/games/${game.id}`)}}>
             <div className={classes.imageWrapper}>
-
                 <Image 
                     src={game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
                     alt={game.name} 
@@ -346,11 +310,25 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
                 )}
 
                 <div className={classes.overlay}>
-
-                    <div className={classes.quickAdd} onClick={(e) => {e.stopPropagation(); handleQuickToggle(String(game.id))}}>
+                    <div className={classes.quickAdd}>
                         {(variant === 'default' || variant === 'upcoming') && (
                             <Tooltip label={loading ? 'Checking library...' : isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile || loading}>
-                                <ActionIcon size='lg' radius='xl' variant='filled' color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} disabled={loading || addingToLibrary}>
+                                <ActionIcon 
+                                    size='lg' 
+                                    radius='xl' 
+                                    variant='filled' 
+                                    color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} 
+                                    disabled={loading || addingToLibrary} 
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+
+                                        if (isInLibrary) {
+                                            handleRemoveFromLibrary();
+                                        } else {
+                                            openAddModal();
+                                        }
+                                    }}
+                                >
                                     {loading || isInLibrary === null ? (
                                         <Ellipsis size={18} strokeWidth={2.5} />
                                     ):
@@ -365,7 +343,6 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
                     </div>
 
                     <div className={classes.quickButtons}>
-
                         <PlaySessionModal 
                             key={game.id} 
                             opened={opened} 
@@ -376,10 +353,31 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
                             onSuccess={() => close()}  
                         />
 
-                        <div className={classes.quickLibraryAdd} onClick={(e) => {e.stopPropagation(); handleQuickToggle(String(game.id))}}>
+                        <AddToLibraryModal
+                            opened={AddOpened}
+                            onClose={closeAddModal}
+                            game={game}
+                        />
+
+                        <div className={classes.quickLibraryAdd}>
                             {variant === 'library' && (
                                 <Tooltip label={loading ? 'Checking library...' : isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile || loading}>
-                                    <ActionIcon size='lg' radius='xl' variant='filled' color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} disabled={loading || addingToLibrary}>
+                                    <ActionIcon 
+                                        size='lg' 
+                                        radius='xl' 
+                                        variant='filled' 
+                                        color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} 
+                                        disabled={loading || addingToLibrary} 
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+
+                                            if (isInLibrary) {
+                                                handleRemoveFromLibrary();
+                                            } else {
+                                                openAddModal();
+                                            }
+                                        }}
+                                    >
                                         {loading || isInLibrary === null ? (
                                             <Ellipsis size={18} strokeWidth={2.5} />
                                         ):
@@ -391,7 +389,6 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
                                     </ActionIcon>
                                 </Tooltip>
                             )}
-
                         </div>
                         
                         <div className={classes.quickLog}>

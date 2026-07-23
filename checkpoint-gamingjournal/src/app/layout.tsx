@@ -163,10 +163,12 @@ export default function RootLayout({
                   duration: 5000,
                   success: {
                     style: {
+                      background: "rgb(40, 26, 55)",
                       color: 'white',
                       fontFamily: 'Poppins',
                       fontWeight: '400',
                       borderRadius: '8px',
+                      border: '1px solid #2f2f2f',
                       textAlign: 'left',
                       width: '100%'
                     },
