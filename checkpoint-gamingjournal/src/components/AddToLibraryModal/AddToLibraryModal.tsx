@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "@mantine/hooks";
-import { Modal, Group, Stack, Button, Chip, Text, Paper, SimpleGrid, Select, Fieldset } from "@mantine/core";
+import { useAuth } from '@/context/Authcontext';
+import { Modal, Group, Stack, Button, Chip, Text, Paper, SimpleGrid, Image, Fieldset, Badge } from "@mantine/core";
 
 import toast from "react-hot-toast";
 
-import { Gamepad2, CalendarDays, Check, Pause, Clock, SaveAll, Star, Trophy, Play, PowerOff, Backpack } from 'lucide-react';
+import { Check, Pause, SaveAll, Star, Trophy, Play, PowerOff, Backpack } from 'lucide-react';
 
 import classes from './AddToLibrary.module.css';
 
@@ -24,6 +25,8 @@ export default function AddToLibraryModal({
   onSuccess
 }: AddToLibraryModalProps){
 
+	const isMobile = useMediaQuery('(max-width: 646px)');
+  const {isAuthenticated, setIsAuthenticated} = useAuth(); // Access global auth state
   const [status, setStatus] = useState('Backlog');
   const [platform, setPlatform] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -90,6 +93,11 @@ export default function AddToLibraryModal({
 
   // Function to add the selected game to the user's library with the initial status and info
   const handleAddToLibrary = async () => {
+    if(!isAuthenticated){
+      toast.error("You need to be signed in!")
+      return;
+    }
+
     if (!platform) {
         toast.error('Please select a platform.');
         return;
@@ -114,10 +122,12 @@ export default function AddToLibraryModal({
                 (genre: any) => genre.name
               ) || [],
               platform: platform,
+
               coverImage: game.cover.url,
               releaseDate: game.first_release_date
                 ? new Date(game.first_release_date * 1000).toLocaleDateString()
                 : null,
+                
               status: status,
               platinum: game.platinum,
             },
@@ -146,7 +156,7 @@ export default function AddToLibraryModal({
       opened={opened}
       onClose={onClose}
       size='xl'
-      title={game?.name}
+      title='Add to Library'
       styles={{
           title: {
               fontWeight: 700,
@@ -156,6 +166,90 @@ export default function AddToLibraryModal({
           }
       }}
     >
+			{isMobile ? (
+				<Stack align="center" gap='md' mb="lg">
+					<Image
+							src={game?.cover?.url?.replace("t_thumb", "t_cover_big")}
+							w={180}
+							radius="md"
+              className={classes.imageCover}
+					/>
+
+					<Stack gap={6} flex={1}>
+							<Group gap='lg' align="center">
+								<Text fw={700} size="xl">
+										{game.name}
+								</Text>
+
+								<Text size="lg" c="dimmed">
+										{new Date(game.first_release_date * 1000).getFullYear()}
+								</Text>
+							</Group>
+
+							<Text size="sm" c="dimmed" mb='sm'>
+									{game.summary}
+							</Text>
+
+							{/* Genres */}
+							<Group gap={6}>
+								{game.genres?.map((genre: any) => (
+										<Badge
+												key={genre.id}
+												variant="light"
+												radius="xl"
+										>
+												{genre.name}
+										</Badge>
+								))}
+							</Group>
+
+							{/* Themes */}
+
+							{/* Modes */}
+					</Stack>
+				</Stack>
+			):(
+			<Group align="flex-start" wrap="nowrap" mb="lg">
+				<Image
+						src={game?.cover?.url?.replace("t_thumb", "t_cover_big")}
+						w={159}
+						radius="md"
+				/>
+
+				<Stack gap={6} flex={1}>
+						<Group gap='lg' align="center">
+							<Text fw={700} size="xl">
+									{game.name}
+							</Text>
+
+							<Text size="lg" c="dimmed">
+									{new Date(game.first_release_date * 1000).getFullYear()}
+							</Text>
+						</Group>
+
+						<Text size="sm" c="dimmed" mb='sm'>
+								{game.summary}
+						</Text>
+
+						{/* Genres */}
+						<Group gap={6}>
+							{game.genres?.map((genre: any) => (
+									<Badge
+											key={genre.id}
+											variant="light"
+											radius="xl"
+									>
+											{genre.name}
+									</Badge>
+							))}
+						</Group>
+
+						{/* Themes */}
+
+						{/* Modes */}
+				</Stack>
+			</Group>
+		)}
       <Fieldset
         legend="Platform Played On:"
         radius="lg"
@@ -187,29 +281,29 @@ export default function AddToLibraryModal({
         </Chip.Group>
     </Fieldset>
 
-      <div className={classes.statusSection}>
-        <Fieldset legend="Game Status" radius='lg' variant="filled" styles={{ legend: { fontWeight: 500, fontSize: '18px' }}}>
-          <SimpleGrid cols={{base: 2, sm: 2, md: 3}} spacing="sm">
+    <div className={classes.statusSection}>
+			<Fieldset legend="Game Status:" radius='lg' variant="filled" styles={{ legend: { fontWeight: 500, fontSize: '18px' }}}>
+        <SimpleGrid cols={{base: 2, sm: 2, md: 3}} spacing="sm">
             {gameStatuses.map((statusItem) => (
-                <Paper
-                    key={statusItem.value}
-                    radius="md"
-                    withBorder
-                    onClick={() => setStatus(statusItem.value)}
-                    className={
-                        status === statusItem.value
-                            ? classes.selectedCard
-                            : classes.card
-                    }
-                >
-                  <Stack gap={3} align="center" justify="center" ta='center'>
-                    {statusItem.icon}
-                    <div>
-                        <Text className={classes.statusText}>{statusItem.label}</Text>
-                    </div>
-                  </Stack>
-                </Paper>
-              ))}
+              <Paper
+                  key={statusItem.value}
+                  radius="md"
+                  withBorder
+                  onClick={() => setStatus(statusItem.value)}
+                  className={
+                      status === statusItem.value
+                          ? classes.selectedCard
+                          : classes.card
+                  }
+              >
+                <Stack gap={3} align="center" justify="center" ta='center'>
+                  {statusItem.icon}
+                  <div>
+                      <Text className={classes.statusText}>{statusItem.label}</Text>
+                  </div>
+                </Stack>
+              </Paper>
+            ))}
           </SimpleGrid>
         </Fieldset>
       </div>

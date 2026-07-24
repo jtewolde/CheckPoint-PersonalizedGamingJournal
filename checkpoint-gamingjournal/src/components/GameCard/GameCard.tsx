@@ -113,58 +113,58 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
 
     // Helper function to style game status badge depending on the status of the game
     const getStatusInfo = (status?: string) => {
-        switch (status) {
-            case 'Playing':
-                return {
-                    color: '#67baea',
-                    textColor: '#79b8f3',
-                    icon: <Play size={14} />,
-                };
+      switch (status) {
+          case 'Playing':
+              return {
+                  color: '#67baea',
+                  textColor: '#79b8f3',
+                  icon: <Play size={14} />,
+              };
 
-            case 'Completed':
-                return {
-                    color: '#0de40a',
-                    textColor: '#72eb74',
-                    icon: <Check size={14} />,
-                };
+          case 'Completed':
+              return {
+                  color: '#0de40a',
+                  textColor: '#72eb74',
+                  icon: <Check size={14} />,
+              };
 
-            case '100%':
-                return {
-                    color: '#f2e422',
-                    textColor: '#f9ed83',
-                    icon: <Trophy size={14} />
-                }
+          case '100%':
+              return {
+                  color: '#f2e422',
+                  textColor: '#f9ed83',
+                  icon: <Trophy size={14} />
+              }
 
-            case 'On Hold':
-                return {
-                    color: '#c88cf3',
-                    icon: <Pause size={14} />,
-                };
+          case 'On Hold':
+              return {
+                  color: '#c88cf3',
+                  icon: <Pause size={14} />,
+              };
 
-            case 'Dropped':
-                return {
-                    color: 'red',
-                    icon: <PowerOff size={14} />,
-                };
+          case 'Dropped':
+              return {
+                  color: 'red',
+                  icon: <PowerOff size={14} />,
+              };
 
-            case 'Wishlist':
-                return {
-                    color: 'yellow',
-                    icon: <Star size={14} />,
-                };
+          case 'Wishlist':
+              return {
+                  color: 'yellow',
+                  icon: <Star size={14} />,
+              };
 
-            case 'Backlog':
-                return {
-                    color: '#f7bf5e',
-                    icon: <Backpack size={14} />,
-                };
+          case 'Backlog':
+              return {
+                  color: '#f7bf5e',
+                  icon: <Backpack size={14} />,
+              };
 
-            default:
-                return {
-                    color: 'gray',
-                    icon: null,
-                };
-        }
+          default:
+              return {
+                  color: 'gray',
+                  icon: null,
+              };
+      }
     };
 
     // Variable to determine if game info should be displayed
@@ -242,260 +242,269 @@ export default function GameCard({ game, libraryGame, variant = 'default', libra
         return null;
     };
 
+    // Function to help with identifying whether user is authenticated or not and whether to open add modal depending on it
+    const handleQuickLibraryAction = (e: React.MouseEvent) => {
+      e.stopPropagation();
+
+      if (!isAuthenticated) {
+          toast.error("You must be signed in to add games to your library.");
+          return;
+      }
+
+      if (isInLibrary) {
+          handleRemoveFromLibrary();
+      } else {
+          openAddModal();
+      }
+    };
 
     return (
-        <div key={game.id} className={`${classes.gameCard} ${variant === 'compact' ? classes.compact  : variant === 'small' ? classes.small : variant === 'library' ? classes.library : classes.default}`} onClick={() => {if(anyModalOpen) return;  router.push(`/games/${game.id}`)}}>
-            <div className={classes.imageWrapper}>
-                <Image 
-                    src={game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
-                    alt={game.name} 
-                    className={classes.cover}  
+      <div key={game.id} className={`${classes.gameCard} ${variant === 'compact' ? classes.compact  : variant === 'small' ? classes.small : variant === 'library' ? classes.library : classes.default}`} onClick={() => {if(anyModalOpen) return;  router.push(`/games/${game.id}`)}}>
+          <div className={classes.imageWrapper}>
+              <Image 
+                  src={game.cover ? `https:${game.cover.url.replace('t_thumb', 't_1080p')}` : PlaceHolderImage.src } 
+                  alt={game.name} 
+                  className={classes.cover}  
+              />
+
+              {showGameInfo && (
+                  <>
+                      {variant === 'default' && (
+                          <Badge 
+                              className={classes.ratingBadge}
+                              classNames={{ root: classes.root}}
+                              variant='dot' 
+                              color={game.total_rating && game.total_rating >= 80 ? '#1ace3b' : game.total_rating && game.total_rating >= 70 ? 'yellow' : '#f01e1e'}
+                              radius='md'
+                              size='md'
+                          >
+                              <Group gap={5} align='center' >
+                                  <Star size={12} color='gold' fill='gold'/> 
+                                  {game.total_rating ? `${Math.round(game.total_rating)}` : 'N/A'}
+                              </Group>
+                          </Badge>
+                      )}
+
+                      {showGameInfo && game.game_type?.type !== 'Main Game' && (
+                          <Badge
+                              className={classes.gameTypeBadge}
+                              size='sm'
+                              variant="light"
+                              radius="sm"
+                              color={game.game_type?.type == 'Expansion' ? 'grape' : game.game_type?.type == 'Remake' ? 'blue': '#2e2e2e'}
+                          >
+                              {game.game_type?.type }
+                          </Badge>
+                      )}
+                  </>
+              )}
+
+              {variant === 'library' && (
+                <>
+                  <Badge 
+                      className={classes.libraryBadge} 
+                      color={statusInfo.color}
+                      leftSection={statusInfo.icon}
+                      variant='outline'
+                      size='md'
+                      radius='sm'
+                  >
+                      {libraryMeta?.status || "No Status"}
+                  </Badge>
+
+                  {libraryMeta?.platinum === true && (
+                    <ThemeIcon className={classes.platinumIcon} size='md' radius='sm' variant='outline' color='black'>
+                        <FaTrophy
+                            size={20} 
+                            color='gold'
+                            cursor='pointer'
+                        />
+                    </ThemeIcon>
+                  )}  
+                </>
+              )}
+              
+              <div className={classes.overlay}>
+                
+                <AddToLibraryModal
+                  opened={AddOpened}
+                  onClose={closeAddModal}
+                  game={game}
+                  onSuccess={() => {
+                      closeAddModal();
+                      onSuccess?.();
+                  }}
                 />
 
-                {showGameInfo && (
-                    <>
-                        {variant === 'default' && (
-                            <Badge 
-                                className={classes.ratingBadge}
-                                classNames={{ root: classes.root}}
-                                variant='dot' 
-                                color={game.total_rating && game.total_rating >= 80 ? '#1ace3b' : game.total_rating && game.total_rating >= 70 ? 'yellow' : '#f01e1e'}
-                                radius='md'
-                                size='md'
-                            >
-                                <Group gap={5} align='center' >
-                                    <Star size={12} color='gold' fill='gold'/> 
-                                    {game.total_rating ? `${Math.round(game.total_rating)}` : 'N/A'}
-                                </Group>
-                            </Badge>
+                <div className={classes.quickAdd}>
+                    {(variant === 'default' || variant === 'upcoming') && (
+                      <Tooltip label={loading ? 'Checking library...' : isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile || loading}>
+                          <ActionIcon 
+                            size='lg' 
+                            radius='xl' 
+                            variant='filled' 
+                            color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} 
+                            disabled={loading || addingToLibrary} 
+                            onClick={handleQuickLibraryAction}
+                          >
+                            {loading || isInLibrary === null ? (
+                                <Ellipsis size={18} strokeWidth={2.5} />
+                            ):
+                            isInLibrary ? (
+                                <Minus size={18} strokeWidth={2.5} />
+                                ) : (
+                                <Plus size={18} strokeWidth={2.5} />
+                            )}
+                          </ActionIcon>
+                      </Tooltip>
+                    )}
+                </div>
+
+                <div className={classes.quickButtons}>
+                    <PlaySessionModal 
+                      key={game.id} 
+                      opened={opened} 
+                      onClose={close} 
+                      gameId={game.id} 
+                      gameName={game.name}
+                      platforms={game.platforms?.map((platform) => platform.name)}
+                      onSuccess={() => close()}  
+                    />
+
+                    <div className={classes.quickLibraryAdd}>
+                        {variant === 'library' && (
+                          <Tooltip label={loading ? 'Checking library...' : isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile || loading}>
+                              <ActionIcon 
+                                  size='lg' 
+                                  radius='xl' 
+                                  variant='filled' 
+                                  color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} 
+                                  disabled={loading || addingToLibrary} 
+                                  onClick={handleQuickLibraryAction}
+                              >
+                                  {loading || isInLibrary === null ? (
+                                      <Ellipsis size={18} strokeWidth={2.5} />
+                                  ):
+                                  isInLibrary ? (
+                                      <Minus size={18} strokeWidth={2.5} />
+                                      ) : (
+                                      <Plus size={18} strokeWidth={2.5} />
+                                  )}
+                              </ActionIcon>
+                          </Tooltip>
                         )}
-
-                        {showGameInfo && game.game_type?.type !== 'Main Game' && (
-                            <Badge
-                                className={classes.gameTypeBadge}
-                                size='sm'
-                                variant="light"
-                                radius="sm"
-                                color={game.game_type?.type == 'Expansion' ? 'grape' : game.game_type?.type == 'Remake' ? 'blue': '#2e2e2e'}
-                            >
-                                {game.game_type?.type }
-                            </Badge>
-                        )}
-                    </>
-                )}
-
-                {variant === 'library' && (
-                    <>
-                        <Badge 
-                            className={classes.libraryBadge} 
-                            color={statusInfo.color}
-                            leftSection={statusInfo.icon}
-                            variant='outline'
-                            size='md'
-                            radius='sm'
-                        >
-                            {libraryMeta?.status || "No Status"}
-                        </Badge>
-
-                        {libraryMeta?.platinum === true && (
-                            <ThemeIcon className={classes.platinumIcon} size='md' radius='sm' variant='outline' color='black'>
-                                <FaTrophy
-                                    size={20} 
-                                    color='gold'
-                                    cursor='pointer'
-                                />
-                            </ThemeIcon>
-                        )}  
-                    </>
-                )}
-
-                <div className={classes.overlay}>
-                    <div className={classes.quickAdd}>
-                        {(variant === 'default' || variant === 'upcoming') && (
-                            <Tooltip label={loading ? 'Checking library...' : isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile || loading}>
-                                <ActionIcon 
-                                    size='lg' 
-                                    radius='xl' 
-                                    variant='filled' 
-                                    color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} 
-                                    disabled={loading || addingToLibrary} 
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-
-                                        if (isInLibrary) {
-                                            handleRemoveFromLibrary();
-                                        } else {
-                                            openAddModal();
-                                        }
-                                    }}
-                                >
-                                    {loading || isInLibrary === null ? (
-                                        <Ellipsis size={18} strokeWidth={2.5} />
-                                    ):
-                                    isInLibrary ? (
-                                        <Minus size={18} strokeWidth={2.5} />
-                                        ) : (
-                                        <Plus size={18} strokeWidth={2.5} />
-                                    )}
-                                </ActionIcon>
-                            </Tooltip>
+                    </div>
+                    
+                    <div className={classes.quickLog}>
+                        {variant === 'library' && (
+                          <Tooltip label='Quick Log' events={{ hover: true, focus: true, touch: true }} withArrow>
+                              <ActionIcon size='lg' radius='xl' variant='filled' color='blue' onClick={(e) => {e.stopPropagation(); open();}}> <CalendarDays size={18} /> </ActionIcon>
+                          </Tooltip>
                         )}
                     </div>
 
-                    <div className={classes.quickButtons}>
-                        <PlaySessionModal 
-                            key={game.id} 
-                            opened={opened} 
-                            onClose={close} 
-                            gameId={game.id} 
-                            gameName={game.name}
-                            platforms={game.platforms?.map((platform) => platform.name)}
-                            onSuccess={() => close()}  
-                        />
+                    <EditGameInfoModal 
+                      opened={editOpened} 
+                      onClose={editClose} 
+                      libraryGame={libraryGame} 
+                      onSuccess={() => close()}
+                    />
 
-                        <AddToLibraryModal
-                            opened={AddOpened}
-                            onClose={closeAddModal}
-                            game={game}
-                        />
-
-                        <div className={classes.quickLibraryAdd}>
-                            {variant === 'library' && (
-                                <Tooltip label={loading ? 'Checking library...' : isInLibrary ? 'Remove from Library': 'Add to Library'} withArrow disabled={isMobile || loading}>
-                                    <ActionIcon 
-                                        size='lg' 
-                                        radius='xl' 
-                                        variant='filled' 
-                                        color={loading ? 'gray' : isInLibrary ? 'red' : 'green'} 
-                                        disabled={loading || addingToLibrary} 
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-
-                                            if (isInLibrary) {
-                                                handleRemoveFromLibrary();
-                                            } else {
-                                                openAddModal();
-                                            }
-                                        }}
-                                    >
-                                        {loading || isInLibrary === null ? (
-                                            <Ellipsis size={18} strokeWidth={2.5} />
-                                        ):
-                                        isInLibrary ? (
-                                            <Minus size={18} strokeWidth={2.5} />
-                                            ) : (
-                                            <Plus size={18} strokeWidth={2.5} />
-                                        )}
-                                    </ActionIcon>
-                                </Tooltip>
-                            )}
-                        </div>
-                        
-                        <div className={classes.quickLog}>
-                            {variant === 'library' && (
-                                <Tooltip label='Quick Log' events={{ hover: true, focus: true, touch: true }} withArrow>
-                                    <ActionIcon size='lg' radius='xl' variant='filled' color='blue' onClick={(e) => {e.stopPropagation(); open();}}> <CalendarDays size={18} /> </ActionIcon>
-                                </Tooltip>
-                            )}
-                        </div>
-
-                        <EditGameInfoModal opened={editOpened} onClose={editClose} libraryGame={libraryGame} onSuccess={() => close()}/>
-
-                        <div className={classes.editInfo}>
-                            {variant === 'library' && (
-                                <Tooltip label='Edit Info' events={{ hover: true, focus: true, touch: true }} withArrow>
-                                    <ActionIcon size='lg' radius='xl' variant='filled' color='violet' onClick={(e) => {e.stopPropagation(); editOpen();}}> <ClipboardEdit size={18} /> </ActionIcon>
-                                </Tooltip>
-                            )}
-                        </div>
+                    <div className={classes.editInfo}>
+                        {variant === 'library' && (
+                            <Tooltip label='Edit Info' events={{ hover: true, focus: true, touch: true }} withArrow>
+                                <ActionIcon size='lg' radius='xl' variant='filled' color='violet' onClick={(e) => {e.stopPropagation(); editOpen();}}> <ClipboardEdit size={18} /> </ActionIcon>
+                            </Tooltip>
+                        )}
                     </div>
                 </div>
             </div>
+          </div>
 
-            {variant === 'library' && (
-                <div className={classes.gameInfo}>
-                    <h3 className={classes.gameTitle}>{game.name}</h3>
+          {variant === 'library' && (
+            <div className={classes.gameInfo}>
+                <h3 className={classes.gameTitle}>{game.name}</h3>
 
-                    <div className={classes.ratingSection}>
-                        <Group gap={3} align='center'>
-                            <Rating 
-                                size='md'
-                                color={libraryMeta?.rating && libraryMeta?.rating > 0 ? 'yellow' : '#555'}
-                                readOnly
-                                value={libraryMeta?.rating} 
-                            />
+                <div className={classes.ratingSection}>
+                    <Group gap={3} align='center'>
+                        <Rating 
+                            size='md'
+                            color={libraryMeta?.rating && libraryMeta?.rating > 0 ? 'yellow' : '#555'}
+                            readOnly
+                            value={libraryMeta?.rating} 
+                        />
 
-                            <Text className={classes.ratingText}>
-                                {libraryMeta?.rating}/10
-                            </Text>
-                        </Group>
+                        <Text className={classes.ratingText}>
+                            {libraryMeta?.rating}/10
+                        </Text>
+                    </Group>
 
-                        <Group gap={4} align='center'>
-                            <Timer size={20} color='white' />
-                            <Text className={classes.hoursPlayedText}>
-                                {libraryMeta?.hours || 0} Hours Played
-                            </Text>
-                        </Group>
-                    </div>
+                    <Group gap={4} align='center'>
+                      <Timer size={20} color='white' />
+                      <Text className={classes.hoursPlayedText}>
+                          {libraryMeta?.hours || 0} Hours Played
+                      </Text>
+                    </Group>
                 </div>
-            )}
+            </div>
+          )}
 
-            {showGameInfo && (
-                <div className={classes.gameInfo}>
-                    <h3 className={classes.gameTitle}>{game.name}</h3>
+          {showGameInfo && (
+            <div className={classes.gameInfo}>
+                <h3 className={classes.gameTitle}>{game.name}</h3>
 
-                    <Badge
-                        size='md'
-                        variant="default"
-                        color="#784ac3"
-                        c='white'
-                        radius="lg"
-                        fw={500}
-                    >
-                        {game.genres?.[0]?.name || 'N/A'}
-                    </Badge>
+                <Badge
+                  size='md'
+                  variant="default"
+                  color="#784ac3"
+                  c='white'
+                  radius="lg"
+                  fw={500}
+                >
+                    {game.genres?.[0]?.name || 'N/A'}
+                </Badge>
 
-                    <Group gap={8}>
-                        {visiblePlatforms.map((platform) => (
-                            <Tooltip
-                                key={platform.name}
-                                label={platform.name}
-                                withArrow
-                                >
-                                <ActionIcon
-                                    variant="subtle"
-                                    size="md"
-                                >
-                                    {getPlatformIcon(platform.name)}
-                                </ActionIcon>
-                            </Tooltip>
-                        ))}
+                <Group gap={8}>
+                    {visiblePlatforms.map((platform) => (
+                        <Tooltip
+                            key={platform.name}
+                            label={platform.name}
+                            withArrow
+                            >
+                            <ActionIcon
+                                variant="subtle"
+                                size="md"
+                            >
+                                {getPlatformIcon(platform.name)}
+                            </ActionIcon>
+                        </Tooltip>
+                    ))}
 
-                        {remainingPlatforms > 0 && (
-                            <Tooltip
-                                withArrow
-                                multiline
-                                label={platforms
-                                    .slice(3)
-                                    .map((p) => p.name)
-                                    .join(", ")}
-                                >
-                                <Badge variant="light" color='gray'>
-                                    +{remainingPlatforms}
-                                </Badge>
-                            </Tooltip>
-                        )}
-                        </Group>
+                    {remainingPlatforms > 0 && (
+                        <Tooltip
+                            withArrow
+                            multiline
+                            label={platforms
+                                .slice(3)
+                                .map((p) => p.name)
+                                .join(", ")}
+                            >
+                            <Badge variant="light" color='gray'>
+                                +{remainingPlatforms}
+                            </Badge>
+                        </Tooltip>
+                    )}
+                    </Group>
 
-                    <p className={classes.gameDate}>{game.first_release_date ? new Date(game.first_release_date * 1000).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                    })
-                    : 'N/A'}
-                    </p>
-                </div>
-            )}
-        </div>
+                <p className={classes.gameDate}>{game.first_release_date ? new Date(game.first_release_date * 1000).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                })
+                : 'N/A'}
+                </p>
+            </div>
+          )}
+      </div>
     )
 }
