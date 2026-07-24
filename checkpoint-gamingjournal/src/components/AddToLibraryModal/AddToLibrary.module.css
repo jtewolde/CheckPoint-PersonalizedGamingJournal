@@ -1,25 +1,25 @@
 .card {
-    cursor: pointer;
-    transition: 150ms ease;
-    border: 1px solid var(--mantine-color-dark-4);
-    padding: 0.5rem;
+  cursor: pointer;
+  transition: 150ms ease;
+  border: 1px solid var(--mantine-color-dark-4);
+  padding: 0.5rem;
 }
 
 .card:hover {
-    border-color: var(--mantine-primary-color-filled);
+  border-color: var(--mantine-primary-color-filled);
 }
 
 .selectedCard {
-    cursor: pointer;
-    border: 2px solid var(--mantine-primary-color-filled);
-    background: rgba(34,139,230,.12);
+  cursor: pointer;
+  border: 2px solid var(--mantine-primary-color-filled);
+  background: rgba(34, 139, 230, 0.12);
 }
 
-.statusText{
-  font-family: 'Inter';
+.statusText {
+  font-family: "Inter";
   font-weight: 300;
 }
 
-.imageCover{
+.imageCover {
   border: 1px solid #796886;
 }
