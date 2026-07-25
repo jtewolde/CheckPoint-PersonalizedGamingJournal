@@ -64,7 +64,7 @@ export default function AddToLibraryModal({
       value: "Playing",
       label: "Playing",
       description: "Currently playing and actively progressing in the game.",
-      icon: <Play size={20} color="#1969b9" fill="#1969b9" />,
+      icon: <Play size={25} color="#1969b9" fill="#1969b9" />,
       color: "#1969b9",
     },
     {
@@ -72,7 +72,7 @@ export default function AddToLibraryModal({
       label: "Completed",
       description:
         "Finished the main story or reached the game's primary ending",
-      icon: <Check size={20} color="#27a01c" />,
+      icon: <Check size={25} color="#27a01c" />,
       color: "#27a01c",
     },
     {
@@ -80,21 +80,21 @@ export default function AddToLibraryModal({
       label: "100% Complete",
       description:
         "Completed all major content, achievements, collectibles, and optional objectives",
-      icon: <Trophy size={20} fill="yellow" color="yellow" />,
+      icon: <Trophy size={25} fill="yellow" color="yellow" />,
       color: "yellow",
     },
     {
       value: "On Hold",
       label: "On Hold",
       description: "Taking a break from the game with plans to return later.",
-      icon: <Pause size={20} color="violet" fill="violet" />,
+      icon: <Pause size={25} color="violet" fill="violet" />,
       color: "violet",
     },
     {
       value: "Dropped",
       label: "Dropped",
       description: "Stopped playing and do not currently plan to continue.",
-      icon: <PowerOff size={20} color="red" />,
+      icon: <PowerOff size={25} color="red" />,
       color: "red",
     },
     {
@@ -102,7 +102,7 @@ export default function AddToLibraryModal({
       label: "Wishlist",
       description: "Interested in playing this game in the future.",
       icon: (
-        <Star size={20} color="rgb(231, 210, 20)" fill="rgb(231, 210, 20)" />
+        <Star size={25} color="rgb(231, 210, 20)" fill="rgb(231, 210, 20)" />
       ),
       color: "gold",
     },
@@ -111,7 +111,7 @@ export default function AddToLibraryModal({
       label: "Backlog",
       description:
         "Own or intend to play this game, but not have started it yet.",
-      icon: <Backpack size={20} color="#21eebe" />,
+      icon: <Backpack size={25} color="#21eebe" />,
       color: "orange",
     },
   ];
@@ -151,6 +151,7 @@ export default function AddToLibraryModal({
               ? new Date(game.first_release_date * 1000).toLocaleDateString()
               : null,
 
+            dateAdded: new Date().toLocaleDateString(),
             status: status,
             platinum: game.platinum,
           },
@@ -164,6 +165,7 @@ export default function AddToLibraryModal({
 
       toast.success("Game added to your library!");
 
+      setLoading(false);
       onSuccess?.();
       onClose();
     } catch (error) {
@@ -187,10 +189,13 @@ export default function AddToLibraryModal({
           fontSize: "1.1rem",
           color: "white",
         },
+        header: {
+          borderBottom: "1px solid #a595b7",
+        },
       }}
     >
       {isMobile ? (
-        <Stack align="center" gap="md" mb="lg">
+        <Stack align="center" gap="md" mb="lg" mt="lg">
           <Image
             src={game?.cover?.url?.replace("t_thumb", "t_cover_big")}
             w={180}
@@ -213,22 +218,29 @@ export default function AddToLibraryModal({
               {game.summary}
             </Text>
 
-            {/* Genres */}
-            <Group gap={6}>
-              {game.genres?.map((genre: any) => (
-                <Badge key={genre.id} variant="light" radius="xl">
-                  {genre.name}
-                </Badge>
-              ))}
+            <Group gap={8}>
+              {/* Modes */}
+              <Group gap={6}>
+                {game.game_modes?.map((mode: any) => (
+                  <Badge key={mode.id} variant="light" radius="xl" fw={500}>
+                    {mode.name}
+                  </Badge>
+                ))}
+              </Group>
+
+              {/* Genres */}
+              <Group gap={6}>
+                {game.genres?.map((genre: any) => (
+                  <Badge key={genre.id} variant="light" radius="xl" fw={500}>
+                    {genre.name}
+                  </Badge>
+                ))}
+              </Group>
             </Group>
-
-            {/* Themes */}
-
-            {/* Modes */}
           </Stack>
         </Stack>
       ) : (
-        <Group align="flex-start" wrap="nowrap" mb="lg">
+        <Group align="flex-start" wrap="nowrap" mb="lg" mt="md">
           <Image
             src={game?.cover?.url?.replace("t_thumb", "t_cover_big")}
             w={159}
@@ -250,18 +262,33 @@ export default function AddToLibraryModal({
               {game.summary}
             </Text>
 
-            {/* Genres */}
-            <Group gap={6}>
-              {game.genres?.map((genre: any) => (
-                <Badge key={genre.id} variant="light" radius="xl">
-                  {genre.name}
-                </Badge>
-              ))}
+            <Group gap={10}>
+              {/* Modes */}
+              <Group gap={6}>
+                {game.game_modes?.map((mode: any) => (
+                  <Badge
+                    key={mode.id}
+                    variant="light"
+                    color="blue"
+                    radius="xl"
+                    fw={500}
+                  >
+                    {mode.name}
+                  </Badge>
+                ))}
+              </Group>
+
+              {/* Genres */}
+              <Group gap={6}>
+                {game.genres?.map((genre: any) => (
+                  <Badge key={genre.id} variant="light" radius="xl" fw={500}>
+                    {genre.name}
+                  </Badge>
+                ))}
+              </Group>
+
+              {/* Themes */}
             </Group>
-
-            {/* Themes */}
-
-            {/* Modes */}
           </Stack>
         </Group>
       )}
@@ -335,6 +362,7 @@ export default function AddToLibraryModal({
         size="md"
         radius="md"
         mt="md"
+        loading={loading}
         leftSection={<SaveAll size={20} />}
         onClick={handleAddToLibrary}
       >
