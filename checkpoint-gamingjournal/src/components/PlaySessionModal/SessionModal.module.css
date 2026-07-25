@@ -1,44 +1,42 @@
-
-.durationContainer{
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
+.durationContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
 }
 
-.buttonGroup{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
+.buttonGroup {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }
 
-.platformMoodContainer{
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
+.platformMoodContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
 }
 
 .platformSelect,
-.moodSelect{
-    flex: 1;
+.moodSelect {
+  flex: 1;
 }
 
-.logButton{
-    width: auto;
-    font-family: 'Poppins';
-    font-weight: 400;
+.logButton {
+  width: auto;
+  font-family: "Poppins";
+  font-weight: 400;
 }
 
-.cancelButton{
-    width: auto;
-    font-family: 'Poppins';
-    font-weight: 400;
+.cancelButton {
+  width: auto;
+  font-family: "Poppins";
+  font-weight: 400;
 }
 
 @media (max-width: 768px) {
-
-    .platformMoodContainer{
-        flex-direction: column;
-    }
+  .platformMoodContainer {
+    flex-direction: column;
+  }
 }
