@@ -10,113 +10,132 @@ import { redis } from "@/utils/redis";
 // This API route is used to add a game to the user's library
 //=================================
 export async function POST(req: NextRequest) {
-    try {
-        const body = await req.json(); // Parse the request body
-        const { gameID, gameDetails } = body;
+  try {
+    const body = await req.json(); // Parse the request body
+    const { gameID, gameDetails } = body;
 
-        // If there is no gameId or gameDetails, return error for missing fields
-        if (!gameID || !gameDetails) {
-            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
-        }
-
-        // Get the authenticated user's session
-        const session = await auth.api.getSession({
-            headers: req.headers,
-        });
-
-        if (!session || !session.user) {
-            return NextResponse.json({ error: "Unauthorized", session }, { status: 401 });
-        }
-
-        const userId = session.user.id; // Extract userId from the session
-
-        // Check if the game is already in the user's library
-        const existingGame = await GameCollection.findOne({ userId, gameId: gameID });
-        if (existingGame) {
-            console.log("Game exists in your library!")
-            return NextResponse.json({ error: "Game already in library" }, {status: 409});
-        }
-
-        // Ensure that the status of a game in library is defaulted to "plan to play"
-        if(!gameDetails.status){
-            gameDetails.status = "No Status Given"; // Default status of game if not provided
-        }
-
-        // Ensure that the default value of platinum attribute of a game is false.
-        if(!gameDetails.platinum){
-            gameDetails.platinum = false;
-        }
-
-        // Create a game with the user's ID
-        const game = {
-            userId: userId,
-            gameId: gameID,
-            ...gameDetails
-        }
-
-        // Add game to the games collection
-        const gameResult = await GameCollection.insertOne(game);
-        const insertedGameId = gameResult.insertedId
-
-        // Invalidate/clear the cache for the user's library
-        await redis.del(`user_library:${userId}`);
-
-        return NextResponse.json({
-            message: "Game added to library successfully",
-            gameResult,
-        });
-        
-    } catch (error) {
-        console.error("Error adding game to library:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    // If there is no gameId or gameDetails, return error for missing fields
+    if (!gameID || !gameDetails) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 },
+      );
     }
+
+    // Get the authenticated user's session
+    const session = await auth.api.getSession({
+      headers: req.headers,
+    });
+
+    if (!session || !session.user) {
+      return NextResponse.json(
+        { error: "Unauthorized", session },
+        { status: 401 },
+      );
+    }
+
+    const userId = session.user.id; // Extract userId from the session
+
+    // Check if the game is already in the user's library
+    const existingGame = await GameCollection.findOne({
+      userId,
+      gameId: gameID,
+    });
+    if (existingGame) {
+      console.log("Game exists in your library!");
+      return NextResponse.json(
+        { error: "Game already in library" },
+        { status: 409 },
+      );
+    }
+
+    // Ensure that the status of a game in library is defaulted to "plan to play"
+    if (!gameDetails.status) {
+      gameDetails.status = "No Status Given"; // Default status of game if not provided
+    }
+
+    // Ensure that the default value of platinum attribute of a game is false.
+    if (!gameDetails.platinum) {
+      gameDetails.platinum = false;
+    }
+
+    // Create a game with the user's ID
+    const game = {
+      userId: userId,
+      gameId: gameID,
+      ...gameDetails,
+    };
+
+    // Add game to the games collection
+    const gameResult = await GameCollection.insertOne(game);
+    const insertedGameId = gameResult.insertedId;
+
+    // Invalidate/clear the cache for the user's library
+    await redis.del(`user_library:${userId}`);
+
+    return NextResponse.json({
+      message: "Game added to library successfully",
+      gameResult,
+    });
+  } catch (error) {
+    console.error("Error adding game to library:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
+  }
 }
 
 //=================================
 // GET GAMES IN USER'S LIBRARY(GET)
 // This API route is used to fetch the games in the user's library
 //=================================
-export async function GET(req: NextRequest){
-    try{
-        const session = await auth.api.getSession({
-            headers: req.headers,
-        });
+export async function GET(req: NextRequest) {
+  try {
+    const session = await auth.api.getSession({
+      headers: req.headers,
+    });
 
-        if(!session?.user) {
-            console.log("Unauthorized access attempt to get user's library");
-            return NextResponse.json({ error: "Unauthorized"}, {status: 401});
-        }
-
-        // Get user Id from session
-        const userId = session.user.id
-
-        // Find the user in the collection of users
-        const user = await UserCollection.findOne({ _id: new ObjectId(userId)})
-
-        if (!user){
-            return NextResponse.json({error: "User not found"}, {status: 404});
-        }
-
-        // Create unique cache key based on user ID
-        const cacheKey = `user_library:${userId}`;
-
-        // Attempt to get cached data from Redis
-        const cachedData = await redis.get(cacheKey);
-        if (cachedData) {
-            console.log('Returning cached user library for: ', cacheKey);
-            return NextResponse.json({ games: JSON.parse(cachedData) }, { status: 200 });
-        }
-
-        // Fetch the game details from the `games` collection
-        const games = await GameCollection.find({ userId: userId }).toArray();
-
-        // Cache the games data in Redis for 30 minutes
-        await redis.set(cacheKey, JSON.stringify([ ...games]), 'EX', 1800);
-
-        return NextResponse.json({ games }, { status: 200 });
-
-    } catch (error) {
-        console.error("Error fetching user's library:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    if (!session?.user) {
+      console.log("Unauthorized access attempt to get user's library");
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
+    // Get user Id from session
+    const userId = session.user.id;
+
+    // Find the user in the collection of users
+    const user = await UserCollection.findOne({ _id: new ObjectId(userId) });
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    // Create unique cache key based on user ID
+    const cacheKey = `user_library:${userId}`;
+
+    // Attempt to get cached data from Redis
+    const cachedData = await redis.get(cacheKey);
+    if (cachedData) {
+      console.log("Returning cached user library for: ", cacheKey);
+      return NextResponse.json(
+        { games: JSON.parse(cachedData) },
+        { status: 200 },
+      );
+    }
+
+    // Fetch the game details from the `games` collection
+    const games = await GameCollection.find({ userId: userId }).toArray();
+
+    // Cache the games data in Redis for 30 minutes
+    await redis.set(cacheKey, JSON.stringify([...games]), "EX", 1800);
+
+    return NextResponse.json({ games }, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching user's library:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
+  }
 }
