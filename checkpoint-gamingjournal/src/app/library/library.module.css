@@ -1,29 +1,15 @@
-
 .background {
+  background: var(--mantine-color-dark-8);
+  position: relative;
+  min-height: 100vh; /* Ensure the page takes up the full height */
+  min-width: 100%;
   display: flex;
   flex-direction: column;
-  position: relative;
-  min-height: 100vh;
-  background-size: cover;
-  background-position: center 0%;
-  background-image: url('/GTA6Background.jpg');
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  gap: 0.5rem;
   z-index: 0;
 }
 
-.overlay{
-  position: relative;
-  height: 100%;
-  width: 100%;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.6) 0%, #18181b 100%);
-}
-
-.wrapper{
+.wrapper {
   display: flex;
   flex-direction: column;
   padding-top: 1rem;
@@ -35,10 +21,10 @@
   position: relative;
   z-index: 1;
   pointer-events: auto;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
-.libraryHeader{
+.libraryHeader {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -46,7 +32,7 @@
   gap: 0.5rem;
 }
 
-.titleLogo{
+.titleLogo {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -54,55 +40,61 @@
   width: auto;
 }
 
-.title{
-  font-size: 3rem;
+.title {
+  font-size: 56px;
   font-weight: 700;
   color: white; /* Dark text for contrast */
-  margin-bottom: 0.1rem;
   text-align: left;
-  font-family: 'Barlow';
-  text-decoration: underline;
-  text-underline-offset: 10px;
-  margin: 0;
+  font-family: "Noto Sans";
   letter-spacing: 1px;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
-.subTitle{
+.subtitle {
   font-size: 20px;
   font-weight: 300;
-  color: rgb(251, 245, 245); /* Dark text for contrast */
-  font-family: 'Inter';
-  font-style: italic;
+  text-align: left;
+  font-family: "Barlow";
+  color: #e7e5e5;
+  width: auto;
 }
 
-.totalGames{
+.totalGames {
   font-weight: 400;
   color: white;
-  font-family: 'Inter';
+  font-family: "Inter";
 }
 
-.filterButton{
-  width: 140px;
+.toolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+
+  width: 100%;
+  margin-top: 0.6rem;
   margin-bottom: 0.6rem;
-  border: 1px solid black;
-  font-family: 'Noto Sans';
-  font-size: 18px;
-  font-weight: 500;
+
+  border-radius: 12px;
 }
 
-.noGamesText{
+.searchBarContainer {
+  width: 50%;
+}
+
+.noGamesText {
   font-size: 1.5rem;
   font-weight: 200;
   color: rgb(208, 205, 205); /* Dark text for contrast */
   margin-bottom: 2.5rem;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: italic;
   text-align: center;
   margin-top: 2rem;
 }
 
-.imageContainer{
+.imageContainer {
   position: relative;
   width: 100%;
   height: auto;
@@ -111,14 +103,14 @@
   aspect-ratio: 3 / 4;
 }
 
-.image{
+.image {
   width: 100%;
   margin-bottom: 0.5rem;
   border-bottom: 1px solid #585757;
   border-radius: 8px 8px 0 0;
 }
 
-.libraryCard:hover{
+.libraryCard:hover {
   transform: translateY(-5px); /* Slight lift on hover */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
   cursor: pointer;
@@ -128,46 +120,38 @@
   gap: 16px; /* Adjust spacing between items */
 }
 
-
 @media (max-width: 1200px) {
-
-  .wrapper{
+  .wrapper {
     padding-left: 2rem;
     padding-right: 2rem;
   }
-
 }
 
 @media (max-width: 768px) {
-
-  .wrapper{
+  .wrapper {
     padding-left: 1rem;
     padding-right: 1rem;
   }
-
 }
 
 @media (max-width: 530px) {
-
-  .wrapper{
+  .wrapper {
     padding-left: 1rem;
     padding-right: 1rem;
   }
 
-  .subTitle{
+  .subTitle {
     font-size: 1.3rem;
   }
-
 }
 
 @media (max-width: 440px) {
-  .titleLogo{
+  .titleLogo {
     width: auto;
     font-size: 1.4rem;
   }
 
-  .image{
+  .image {
     width: 100%;
   }
-  
 }
