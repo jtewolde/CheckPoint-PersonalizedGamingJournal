@@ -1,208 +1,207 @@
 /* Wrapper for the entire search page */
 .wrapper {
-    background: var(--mantine-color-dark-8);
-    position: relative;
-    min-height: 100vh; /* Ensure the page takes up the full height */
-    min-width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    z-index: 0;
+  background: var(--mantine-color-dark-8);
+  position: relative;
+  min-height: 100vh; /* Ensure the page takes up the full height */
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 0;
 }
 
-.mainContent{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 0.4rem;
-    padding: 2rem;
-    padding-left: 3rem;
-    padding-right: 3rem;
-    z-index: 1;
-    pointer-events: auto;
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.4rem;
+  padding: 2rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  z-index: 1;
+  pointer-events: auto;
 
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
-.headerSection{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 1rem;
+.headerSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1rem;
 }
 
 /* Search results heading */
 .titleText {
-    font-size: 56px;
-    font-weight: 700;
-    color: white; /* Dark text for contrast */
-    text-align: left;
-    font-family: 'Noto Sans';
-    letter-spacing: 1px;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  font-size: 56px;
+  font-weight: 700;
+  color: white; /* Dark text for contrast */
+  text-align: left;
+  font-family: "Noto Sans";
+  letter-spacing: 1px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
-.titleDescriptionSection{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 5px;
+.titleDescriptionSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5px;
 }
 
 .description {
-    color: #bdbbbb;
-    font-weight: 400;
-    text-align: left;
-    font-family: 'Barlow';
-    font-size: 24px;
-    max-width: 900px;
+  color: #bdbbbb;
+  font-weight: 400;
+  text-align: left;
+  font-family: "Barlow";
+  font-size: 24px;
+  max-width: 900px;
 }
 
 .toolbar {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 
-    width: 100%;
-    margin-top: 0.6rem;
-    margin-bottom: 0.6rem;
+  width: 100%;
+  margin-top: 0.6rem;
+  margin-bottom: 0.6rem;
 
-    border-radius: 12px;
+  border-radius: 12px;
 }
 
-.searchContainer{
-    width: 50%;
+.searchContainer {
+  width: 50%;
 }
 
-.actionRow{
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0.5rem;
-    width: 100%;
+.actionRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  width: 100%;
 }
 
-.filterContainer{
-    display: flex;
-    align-items: flex-end;
-    flex-shrink: 0;
-    gap: 1rem;
+.filterContainer {
+  display: flex;
+  align-items: flex-end;
+  flex-shrink: 0;
+  gap: 1rem;
 }
 
-.gameFilters{
-    width: 100%;
-    flex-shrink: 0;
-    font-family: 'Inter';
-    font-size: 16px;
-    font-weight: 400;
+.gameFilters {
+  width: 100%;
+  flex-shrink: 0;
+  font-family: "Inter";
+  font-size: 16px;
+  font-weight: 400;
 }
 
-.sortContainer{
-    flex-shrink: 0;
+.sortContainer {
+  flex-shrink: 0;
 }
 
-.resultsContainer{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    width: 100%;
+.resultsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
 }
 
-.resultsText{
-    font-family: 'Inter';
-    font-size: 16px;
-    font-weight: 300;
+.resultsText {
+  font-family: "Inter";
+  font-size: 16px;
+  font-weight: 300;
 
-    flex-shrink: 0;
+  flex-shrink: 0;
 }
 
 /* Grid layout for game cards */
 .gamesGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(193px, 1fr));
-    gap: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(193px, 1fr));
+  gap: 2rem;
 }
 
 /* Pagination */
 .pagination {
-    margin-top: 2rem;
-    display: flex;
-    justify-content: center;
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
 }
 
 .pagination .mantine-Pagination-root {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 0.5rem 1rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
 }
 
-.paginationWrapper{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 1.4rem;
+.paginationWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.4rem;
 }
 
 @media screen and (max-width: 646px) {
+  .titleText {
+    font-size: 2.3rem;
+  }
 
-    .titleText{
-        font-size: 2.3rem;
-    }
+  .description {
+    font-size: 18px;
+  }
 
-    .description{
-        font-size: 18px;
-    }
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
 
-    .toolbar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.75rem;
-    }
+  .gamesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 1rem;
+  }
 
-    .gamesGrid{
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-        gap: 1rem;
-    }
+  .titleDescriptionSection {
+    padding: 0;
+  }
 
-    .titleDescriptionSection{
-        padding: 0;
-    }
+  .gameContainer {
+    padding: 0;
+  }
 
-    .gameContainer{
-        padding: 0;
-    }
+  .mainContent {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
 
-    .mainContent{
-        padding-left: 0.75rem;
-        padding-right: 0.75rem;
-    }
+  .searchContainer {
+    width: 100%;
+  }
 
-    .searchContainer {
-        width: 100%;
-    }
+  .actionRow {
+    width: 100%;
+    gap: 0.25rem;
+  }
 
-    .actionRow{
-        width: 100%;
-        gap: 0.25rem;
-    }
-    
-    .filterContainer, .sortContainer{
-        width: 89%;
-    }
+  .filterContainer,
+  .sortContainer {
+    width: 89%;
+  }
 
-    .filterDropdown {
-        width: 100%;
-    }
-    
+  .filterDropdown {
+    width: 100%;
+  }
 }
