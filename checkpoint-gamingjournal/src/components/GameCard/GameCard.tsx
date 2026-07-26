@@ -87,6 +87,7 @@ interface GameCardProps {
     status?: string;
     rating?: number;
     hours?: number;
+    platform: string;
     platinum?: boolean;
     completionDate?: string;
   };
@@ -135,7 +136,8 @@ export default function GameCard({
   const shouldRenderAddModal = variant !== "library";
 
   // Function to handle removing the game from the user's library
-  const handleRemoveFromLibrary = async () => {
+  const handleRemoveFromLibrary = async (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     try {
       setLoading(true);
 
@@ -153,6 +155,7 @@ export default function GameCard({
       }
 
       toast.success("Game Removed from library!");
+      router.push("/library");
 
       onSuccess?.();
     } catch (err) {
@@ -284,6 +287,26 @@ export default function GameCard({
       return <FaXbox size={18} />;
 
     return null;
+  };
+
+  const PLATFORM_ICONS: Record<string, React.ReactNode> = {
+    PC: <FaWindows size={18} />,
+    Steam: <FaSteam size={18} />,
+    "PlayStation 5": <SiPlaystation5 size={18} />,
+    "PlayStation 4": <SiPlaystation4 size={18} />,
+    "PlayStation 3": <SiPlaystation3 size={18} />,
+    "PlayStation 2": <SiPlaystation2 size={18} />,
+    "PlayStation Vita": <SiPlaystationvita size={18} />,
+    "PlayStation Portable": <SiPlaystationportable size={18} />,
+    "Xbox Series X|S": <FaXbox size={18} />,
+    "Xbox One": <FaXbox size={18} />,
+    "Xbox 360": <FaXbox size={18} />,
+    "Nintendo Switch": <BsNintendoSwitch size={18} />,
+    Windows: <FaWindows size={18} />,
+    Linux: <FaLinux size={18} />,
+    macOS: <FaApple size={18} />,
+    Android: <FaAndroid size={18} />,
+    iOS: <FaApple size={18} />,
   };
 
   // Function to help with identifying whether user is authenticated or not and whether to open add modal depending on it
@@ -548,21 +571,27 @@ export default function GameCard({
           <h3 className={classes.gameTitle}>{game.name}</h3>
 
           <div className={classes.ratingSection}>
-            <Group gap={3} align="center">
-              <Rating
-                size="md"
-                color={
-                  libraryMeta?.rating && libraryMeta?.rating > 0
-                    ? "yellow"
-                    : "#555"
-                }
-                readOnly
-                value={libraryMeta?.rating}
-              />
+            <Group justify="space-between" align="center" wrap="nowrap">
+              <Group gap={6} align="center" wrap="nowrap">
+                <Tooltip label={libraryMeta?.platform}>
+                  <ActionIcon variant="transparent" size="lg">
+                    {getPlatformIcon(libraryMeta?.platform ?? "")}
+                  </ActionIcon>
+                </Tooltip>
+              </Group>
 
-              <Text className={classes.ratingText}>
-                {libraryMeta?.rating}/10
-              </Text>
+              <Group gap={6} align="center" wrap="nowrap">
+                <Rating
+                  value={(libraryMeta?.rating ?? 0) / 2}
+                  readOnly
+                  fractions={2}
+                  size="sm"
+                />
+
+                <Text className={classes.ratingText}>
+                  {libraryMeta?.rating}/10
+                </Text>
+              </Group>
             </Group>
 
             <Group gap={4} align="center">

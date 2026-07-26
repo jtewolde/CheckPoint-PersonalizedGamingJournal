@@ -144,6 +144,8 @@ export default function AddToLibraryModal({
             title: game.name,
 
             genre: game.genres?.map((genre: any) => genre.name) || [],
+            availablePlatforms:
+              game.platforms?.map((platform: any) => platform.name) || [],
             platform: platform,
 
             coverImage: game.cover.url,
@@ -286,8 +288,6 @@ export default function AddToLibraryModal({
                   </Badge>
                 ))}
               </Group>
-
-              {/* Themes */}
             </Group>
           </Stack>
         </Group>

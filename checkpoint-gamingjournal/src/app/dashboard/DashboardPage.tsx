@@ -785,6 +785,7 @@ export default function Dashboard() {
                         rating: game.rating,
                         platinum: game.platinum,
                         hours: game.hours,
+                        platform: game.platform,
                       }}
                       libraryGame={game}
                     />
