@@ -16,6 +16,8 @@ import {
   TextInput,
   NumberInput,
   Slider,
+  Fieldset,
+  Chip,
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 
@@ -64,8 +66,14 @@ export default function EditGameInfoModal({
   const [status, setStatus] = useState("");
   const [notes, setNotes] = useState("");
   const [isPlatinum, setIsPlatinum] = useState(false);
+  const [platform, setPlatform] = useState("");
   const [hours, setHours] = useState(0);
   const [rating, setRating] = useState(0);
+
+  const availablePlatforms =
+    activeGame?.availablePlatforms ??
+    game?.platforms?.map((p: any) => p.name) ??
+    [];
 
   const [startingDate, setStartingDate] = useState<string | null>(null);
   const [completionDate, setCompletionDate] = useState<string | null>(null);
@@ -80,6 +88,7 @@ export default function EditGameInfoModal({
     setStatus(activeGame.status ?? "");
     setNotes(activeGame.notes ?? "");
     setIsPlatinum(activeGame.platinum ?? false);
+    setPlatform(activeGame.platform ?? "");
     setRating(activeGame.rating ?? 0);
     setHours(activeGame.hours ?? "");
     setStartingDate(activeGame.startingDate ?? null);
@@ -102,6 +111,7 @@ export default function EditGameInfoModal({
           gameDetails: {
             status,
             notes,
+            platform,
             platinum: isPlatinum,
             rating,
             startingDate,
@@ -262,12 +272,27 @@ export default function EditGameInfoModal({
         ) : (
           <TextInput
             label="Game"
+            size="md"
             required
             value={activeGame?.title}
             readOnly
             leftSection={<Gamepad2 size={20} />}
           />
         )}
+
+        <Select
+          label="Platform"
+          size="md"
+          description="Select the platform you played this game on."
+          placeholder="Choose a platform"
+          data={availablePlatforms.map((platform: string) => ({
+            value: platform,
+            label: platform,
+          }))}
+          value={platform}
+          onChange={(value) => setPlatform(value || "")}
+          searchable
+        />
 
         {!isMobile ? (
           <>
