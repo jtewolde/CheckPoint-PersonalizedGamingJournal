@@ -25,8 +25,7 @@ export default function Library() {
   const [filterPlatinum, setFilterPlatinum] = useState(false);
   const [sortOption, setSortOption] = useState("recent");
 
-  const isMobile = useMediaQuery("(max-width: 450px)");
-  const [opened, { open, close }] = useDisclosure(false);
+  const isMobile = useMediaQuery("(max-width: 646px)");
   const router = useRouter();
   const [search, setSearch] = useState("");
 
@@ -61,6 +60,7 @@ export default function Library() {
 
         const data = await res.json();
         setGames(data.games);
+        console.log(data.games);
         setTotalGames(data.games.length);
       } catch (error) {
         console.log("Error fetching user library", error);
@@ -103,11 +103,32 @@ export default function Library() {
         case "alphabetical":
           return a.title.localeCompare(b.title);
 
-        case "rating":
+        case "alphabetical_reverse":
+          return b.title.localeCompare(a.title);
+
+        case "release_date_newest":
+          return (
+            new Date(b.releaseDate ?? 0).getTime() -
+            new Date(a.releaseDate ?? 0).getTime()
+          );
+
+        case "release_date_oldest":
+          return (
+            new Date(a.releaseDate ?? 0).getTime() -
+            new Date(b.releaseDate ?? 0).getTime()
+          );
+
+        case "rating_high":
           return (b.rating ?? 0) - (a.rating ?? 0);
 
-        case "hours":
+        case "rating_low":
+          return (a.rating ?? 0) - (b.rating ?? 0);
+
+        case "hours_high":
           return (b.hours ?? 0) - (a.hours ?? 0);
+
+        case "hours_low":
+          return (a.hours ?? 0) - (b.hours ?? 0);
 
         case "recent":
         default:
@@ -129,7 +150,7 @@ export default function Library() {
         </div>
 
         <div className={classes.toolbar}>
-          <div className={classes.searchBarContainer}>
+          <div className={classes.searchContainer}>
             <GamePageSearch
               size="lg"
               radius="md"
@@ -138,55 +159,60 @@ export default function Library() {
             />
           </div>
 
-          <div className={classes.sortContainer}>
-            {/* Sort By Dropdown */}
-            <Select
-              className={classes.filterDropdown}
-              size="lg"
-              variant="filled"
-              placeholder="Select an option"
-              checkIconPosition="left"
-              data={[
-                { value: "alphabetical", label: "Alphabetical (A-Z)" },
-                { value: "alphabetical_reverse", label: "Alphabetical (Z-A)" },
-                { value: "first_release_date", label: "Release Date (Newest)" },
-                {
-                  value: "first_release_date_oldest",
-                  label: "Release Date (Oldest)",
-                },
-                { value: "total_rating", label: "Total Rating (High-Low)" },
-                {
-                  value: "total_rating_reverse",
-                  label: "Total Rating (Low-High)",
-                },
-              ]}
-              value={sortOption}
-              onChange={(value) =>
-                setSortOption(
-                  value as
-                    | "first_release_date"
-                    | "total_rating"
-                    | "alphabetical"
-                    | "",
-                )
-              }
-            />
-          </div>
+          <div className={classes.actionRow}>
+            <div className={classes.sortContainer}>
+              {/* Sort By Dropdown */}
+              <Select
+                className={classes.filterDropdown}
+                size="lg"
+                variant="filled"
+                placeholder="Select an option"
+                checkIconPosition="left"
+                data={[
+                  { value: "alphabetical", label: "Alphabetical (A-Z)" },
+                  {
+                    value: "alphabetical_reverse",
+                    label: "Alphabetical (Z-A)",
+                  },
+                  {
+                    value: "release_date_newest",
+                    label: "Release Date (Newest)",
+                  },
+                  {
+                    value: "release_date_oldest",
+                    label: "Release Date (Oldest)",
+                  },
+                  { value: "rating_high", label: "Your Rating (High-Low)" },
+                  {
+                    value: "rating_low",
+                    label: "Your Rating (Low-High)",
+                  },
+                  { value: "hours_high", label: "Hours Played (High-Low)" },
+                  { value: "hours_low", label: "Hours Played (Low-High)" },
+                ]}
+                value={sortOption}
+                onChange={(value) => setSortOption(value || "recent")}
+              />
+            </div>
 
-          <LibraryFilters
-            size="lg"
-            variant="default"
-            buttonVariant="filled"
-            totalGames={totalGames}
-            status={selectedStatus}
-            ratedOnly={filterRating}
-            platinumOnly={filterPlatinum}
-            sort={sortOption}
-            onStatusChange={setSelectedStatus}
-            onRatedChange={setFilterRating}
-            onPlatinumChange={setFilterPlatinum}
-            onSortChange={setSortOption}
-          />
+            <div className={classes.filterContainer}>
+              <LibraryFilters
+                className={classes.filterButton}
+                size={isMobile ? "xl" : "lg"}
+                variant={isMobile ? "small" : "default"}
+                buttonVariant="filled"
+                totalGames={totalGames}
+                status={selectedStatus}
+                ratedOnly={filterRating}
+                platinumOnly={filterPlatinum}
+                sort={sortOption}
+                onStatusChange={setSelectedStatus}
+                onRatedChange={setFilterRating}
+                onPlatinumChange={setFilterPlatinum}
+                onSortChange={setSortOption}
+              />
+            </div>
+          </div>
         </div>
 
         {filteredGames.length > 0 && (

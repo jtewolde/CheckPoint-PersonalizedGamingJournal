@@ -32,14 +32,6 @@
   gap: 0.5rem;
 }
 
-.titleLogo {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  color: white;
-  width: auto;
-}
-
 .title {
   font-size: 56px;
   font-weight: 700;
@@ -69,7 +61,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 1rem;
 
   width: 100%;
@@ -79,8 +71,27 @@
   border-radius: 12px;
 }
 
-.searchBarContainer {
-  width: 50%;
+.searchContainer {
+  width: 30%;
+}
+
+.actionRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.filterContainer {
+  display: flex;
+  align-items: flex-end;
+  flex-shrink: 0;
+  gap: 1rem;
+}
+
+.sortContainer {
+  flex-shrink: 0;
 }
 
 .noGamesText {
@@ -127,31 +138,41 @@
   }
 }
 
-@media (max-width: 768px) {
-  .wrapper {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-}
-
-@media (max-width: 530px) {
+@media (max-width: 646px) {
   .wrapper {
     padding-left: 1rem;
     padding-right: 1rem;
   }
 
-  .subTitle {
-    font-size: 1.3rem;
-  }
-}
-
-@media (max-width: 440px) {
-  .titleLogo {
-    width: auto;
-    font-size: 1.4rem;
+  .title {
+    font-size: 2.3rem;
   }
 
-  .image {
+  .subtitle {
+    font-size: 18px;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .searchContainer {
+    width: 100%;
+  }
+
+  .actionRow {
+    width: 100%;
+    gap: 0.25rem;
+  }
+
+  .filterContainer,
+  .sortContainer {
+    width: 89%;
+  }
+
+  .filterDropdown {
     width: 100%;
   }
 }
