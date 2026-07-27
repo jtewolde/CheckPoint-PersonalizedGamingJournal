@@ -90,6 +90,14 @@
   gap: 1rem;
 }
 
+.filterButton {
+  width: 100%;
+  flex-shrink: 0;
+  font-family: "Inter";
+  font-size: 16px;
+  font-weight: 400;
+}
+
 .sortContainer {
   flex-shrink: 0;
 }

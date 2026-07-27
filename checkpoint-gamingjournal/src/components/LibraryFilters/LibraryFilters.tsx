@@ -1,18 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import {
   Modal,
   Select,
-  Drawer,
   Stack,
   Button,
   ActionIcon,
   Tooltip,
-  Divider,
   Group,
-  Text,
   Switch,
+  Chip,
+  Fieldset,
+  SimpleGrid,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Funnel, RefreshCcw } from "lucide-react";
@@ -34,12 +33,13 @@ interface LibraryFilterProps {
   status: string;
   ratedOnly: boolean;
   platinumOnly: boolean;
-  sort: string;
+  platform: string;
+  platforms: string[];
 
   onStatusChange: (value: string) => void;
   onRatedChange: (value: boolean) => void;
   onPlatinumChange: (value: boolean) => void;
-  onSortChange: (value: string) => void;
+  onPlatformChange: (value: string) => void;
 }
 
 export default function LibraryFilters({
@@ -54,12 +54,13 @@ export default function LibraryFilters({
   status,
   ratedOnly,
   platinumOnly,
-  sort,
+  platform,
+  platforms,
 
   onStatusChange,
   onRatedChange,
   onPlatinumChange,
-  onSortChange,
+  onPlatformChange,
 }: LibraryFilterProps) {
   // States for managing the drawer visibility
   const [opened, { toggle, close }] = useDisclosure(false);
@@ -69,14 +70,14 @@ export default function LibraryFilters({
     status !== "all",
     ratedOnly,
     platinumOnly,
-    sort !== "recent",
+    platform !== "all",
   ].filter(Boolean).length;
 
   const resetFilters = () => {
     onStatusChange("all");
     onRatedChange(false);
     onPlatinumChange(false);
-    onSortChange("recent");
+    onPlatformChange("all");
   };
 
   return (
@@ -178,51 +179,29 @@ export default function LibraryFilters({
               mb="sm"
             />
 
-            <Select
+            <Fieldset
+              legend="Sort by Platform:"
+              radius="lg"
+              variant="filled"
               styles={{
-                option: {
-                  fontFamily: "Noto Sans",
-                  fontSize: "16px",
-                  fontWeight: 330,
-                },
-                label: {
+                legend: {
                   fontFamily: "Noto Sans",
                   color: "white",
                   fontSize: "20px",
                   fontWeight: 300,
                 },
               }}
-              label="Sort By"
-              checkIconPosition="right"
-              scrollAreaProps={{
-                type: "auto",
-                scrollbarSize: 10,
-                scrollbars: "y",
-                classNames: { scrollbar: classes.scrollBar },
-              }}
-              data={[
-                {
-                  value: "recent",
-                  label: "Recently Added",
-                },
-                {
-                  value: "alphabetical",
-                  label: "Alphabetical",
-                },
-                {
-                  value: "rating",
-                  label: "Highest Rating",
-                },
-                {
-                  value: "hours",
-                  label: "Most Hours Played",
-                },
-              ]}
-              value={sort}
-              onChange={(value) => onSortChange(value || "recent")}
-              className={classes.filterDropdown}
-              mb="sm"
-            />
+            >
+              <Chip.Group value={platform} onChange={onPlatformChange}>
+                <Group gap="lg" justify="center">
+                  {platforms.map((platform) => (
+                    <Chip key={platform} value={platform}>
+                      {platform}
+                    </Chip>
+                  ))}
+                </Group>
+              </Chip.Group>
+            </Fieldset>
 
             <Switch
               label="Rated Games Only"

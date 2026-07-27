@@ -21,9 +21,10 @@ export default function Library() {
 
   // State variables for filtering library based on status, rating, and platinum
   const [selectedStatus, setSelectedStatus] = useState("all");
+  const [selectedPlatform, setSelectedPlatform] = useState("all");
   const [filterRating, setFilterRating] = useState(false);
   const [filterPlatinum, setFilterPlatinum] = useState(false);
-  const [sortOption, setSortOption] = useState("recent");
+  const [sortOption, setSortOption] = useState("release_date_newest");
 
   const isMobile = useMediaQuery("(max-width: 646px)");
   const router = useRouter();
@@ -96,6 +97,10 @@ export default function Library() {
         return false;
       }
 
+      if (selectedPlatform !== "all" && game.platform !== selectedPlatform) {
+        return false;
+      }
+
       return true;
     })
     .sort((a, b) => {
@@ -135,6 +140,11 @@ export default function Library() {
           return 0;
       }
     });
+
+  // Helper function to get all of the available platforms that the user played their games in their library
+  const availablePlatforms = [
+    ...new Set(games.map((game) => game.platform).filter(Boolean)),
+  ].sort();
 
   return (
     <div className={classes.background}>
@@ -205,11 +215,12 @@ export default function Library() {
                 status={selectedStatus}
                 ratedOnly={filterRating}
                 platinumOnly={filterPlatinum}
-                sort={sortOption}
+                platform={selectedPlatform}
+                platforms={availablePlatforms}
                 onStatusChange={setSelectedStatus}
                 onRatedChange={setFilterRating}
                 onPlatinumChange={setFilterPlatinum}
-                onSortChange={setSortOption}
+                onPlatformChange={setSelectedPlatform}
               />
             </div>
           </div>
