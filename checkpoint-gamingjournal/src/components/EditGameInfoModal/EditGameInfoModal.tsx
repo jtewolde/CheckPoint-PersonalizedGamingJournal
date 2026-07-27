@@ -21,7 +21,7 @@ import {
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 import {
   Gamepad2,

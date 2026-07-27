@@ -11,7 +11,7 @@ import EditGameInfoModal from "@/components/EditGameInfoModal/EditGameInfoModal"
 import AddToLibraryModal from "@/components/AddToLibraryModal/AddToLibraryModal";
 import SessionCalendar from "@/components/SessionCalendar/SessionCalendar";
 
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 import {
   Button,

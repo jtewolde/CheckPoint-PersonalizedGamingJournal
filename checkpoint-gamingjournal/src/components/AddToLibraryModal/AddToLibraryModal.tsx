@@ -17,7 +17,7 @@ import {
   Badge,
 } from "@mantine/core";
 
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 import {
   Check,

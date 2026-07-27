@@ -21,7 +21,7 @@ import {
   ThemeIcon,
   Group,
 } from "@mantine/core";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 import {
   Plus,
