@@ -1,17 +1,18 @@
 .wrapper {
-    min-height: 88vh;
-    background-size: cover;
-    background-image: url('../../../../public/signupImage.jpg');
-    z-index: 0;
-  }
-  
+  min-height: 88vh;
+  background-size: cover;
+  background-image: url("../../../../public/signupImage.jpg");
+  z-index: 0;
+}
+
 .form {
-  border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
+  border-right: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
   min-height: 88vh;
   max-width: 450px;
   padding-top: 80px;
   background-color: #303134;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   z-index: 2;
 
   @media (max-width: $mantine-breakpoint-sm) {
@@ -21,42 +22,42 @@
 
 .title {
   color: white;
-  font-family: 'Poppins';
+  font-family: "Poppins";
 }
 
-.emailInput input{
+.emailInput input {
   background-color: #181818ff;
   color: white;
 }
 
-.emailInput label{
+.emailInput label {
   color: white;
   font-weight: 600;
 }
 
-.passwordInput input{
+.passwordInput input {
   background-color: #181818ff;
   color: white;
 }
 
-.modalText{
+.modalText {
   margin-top: -0.4rem;
   text-align: center;
   justify-content: center;
 }
 
-.modalTitle{
-  font-family: 'Poppins';
+.modalTitle {
+  font-family: "Poppins";
   font-size: 26;
   text-align: center;
 }
 
-.modalButton{
+.modalButton {
   justify-self: center;
   align-self: center;
   align-items: center;
   flex-direction: column;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-weight: 400;
   margin-top: 1rem;
 }

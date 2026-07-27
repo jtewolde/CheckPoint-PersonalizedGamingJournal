@@ -4,7 +4,7 @@
   justify-content: center;
   min-height: 90vh;
   position: relative;
-  background-image: url('../../../../public/Battlefield6Art.jpg');
+  background-image: url("../../../../public/Battlefield6Art.jpg");
   background-size: cover;
   background-position-y: bottom;
   justify-content: center;
@@ -22,7 +22,7 @@
 .title {
   font-size: 40px;
   font-weight: bold;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   margin-bottom: 0.5rem;
   color: white;
   z-index: 1;
@@ -30,10 +30,10 @@
   text-align: center;
 }
 
-.description{
+.description {
   font-size: 22px;
   font-weight: 300;
-  font-family: 'Noto Sans';
+  font-family: "Noto Sans";
   text-align: center;
   color: rgb(255, 251, 251);
   z-index: 1;
@@ -49,16 +49,16 @@
   width: 500px;
 }
 
-.message{
+.message {
   font-size: 18px;
   font-weight: 400;
-  font-family: 'Inter';
+  font-family: "Inter";
   text-align: center;
   color: rgb(213, 212, 212);
   z-index: 1;
 }
 
-@media screen and (max-width: 540px){
+@media screen and (max-width: 540px) {
   .container {
     padding: 1rem;
   }
@@ -68,7 +68,7 @@
     padding: 1rem;
   }
 
-  .actions{
+  .actions {
     width: auto;
   }
 }

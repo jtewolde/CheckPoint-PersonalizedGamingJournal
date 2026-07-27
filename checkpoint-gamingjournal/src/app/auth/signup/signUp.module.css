@@ -2,12 +2,13 @@
   min-height: 84.5vh;
   background-size: cover;
   position: relative;
-  background-image: url('../../../../public/video_games_art_background.jpg');
+  background-image: url("../../../../public/video_games_art_background.jpg");
   background-position: center;
 }
 
 .form {
-  border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
+  border-right: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
   min-height: 87vh;
   max-width: 450px;
   padding-top: 40px;
@@ -15,7 +16,7 @@
   padding-left: 40px;
   padding-bottom: 40px;
   background-color: #303134;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   justify-content: center;
   z-index: 1;
 
@@ -26,34 +27,34 @@
 
 .title {
   color: white;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   z-index: 1;
   margin-bottom: -1.5rem;
 }
 
-.usernameInput input{
+.usernameInput input {
   background-color: #181818ff;
-  color: white
-}
-
-.usernameInput label{
   color: white;
 }
 
-.emailInput input{
+.usernameInput label {
+  color: white;
+}
+
+.emailInput input {
   background-color: #181818ff;
-  color: white
+  color: white;
 }
 
-.emailInput label{
-  color: white
+.emailInput label {
+  color: white;
 }
 
-.passwordInput input{
+.passwordInput input {
   background-color: #181818ff;
-  color: white
+  color: white;
 }
 
-.passwordInput label{
-  color: white
+.passwordInput label {
+  color: white;
 }
