@@ -121,7 +121,7 @@ export default function GameCard({
   const anyModalOpen = opened || editOpened || AddOpened;
 
   const router = useRouter();
-  const isMobile = useMediaQuery("(max-width: 480px)");
+  const isMobile = useMediaQuery("(max-width: 646px)");
 
   // State variables for determing if current gameCard is in the user's library
   const { isInLibrary } = useLibraryGame(game.id);
@@ -586,6 +586,7 @@ export default function GameCard({
                   readOnly
                   fractions={2}
                   size="sm"
+                  count={1}
                 />
 
                 <Text className={classes.ratingText}>

@@ -56,12 +56,12 @@
 }
 
 .description {
-  color: #bdbbbb;
-  font-weight: 400;
+  font-size: 20px;
+  font-weight: 300;
   text-align: left;
   font-family: "Barlow";
-  font-size: 24px;
-  max-width: 900px;
+  color: #e7e5e5;
+  width: auto;
 }
 
 .toolbar {
