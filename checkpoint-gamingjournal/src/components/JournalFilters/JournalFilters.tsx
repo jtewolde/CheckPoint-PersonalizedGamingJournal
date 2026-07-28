@@ -5,11 +5,13 @@ import {
   MultiSelect,
   Select,
   Drawer,
+  Group,
   Stack,
   Button,
   ActionIcon,
   Tooltip,
   Divider,
+  Modal,
   SegmentedControl,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -120,11 +122,11 @@ export default function JournalFilters({
       </div>
 
       {/* Drawer component to hold the filter options, slides in from left */}
-      <Drawer
+      <Modal
         opened={opened}
         onClose={close}
-        position="left"
-        size="300px"
+        centered
+        size="lg"
         title="Sort and Filter"
         className={classes.drawer}
         styles={{
@@ -298,37 +300,28 @@ export default function JournalFilters({
             />
           </Stack>
 
-          <Stack gap="sm">
-            <div
-              style={{
-                borderTop: "1px solid #6c6c6c",
-                paddingTop: "0.5rem",
-                gap: "0.5rem",
-              }}
+          <div className={classes.buttonContainer}>
+            <Button
+              fullWidth
+              variant="filled"
+              color="red"
+              leftSection={<RotateCcw size={18} />}
+              onClick={handleClearFilters}
             >
-              <Button
-                fullWidth
-                variant="filled"
-                color="red"
-                leftSection={<RotateCcw size={18} />}
-                mb="sm"
-                onClick={handleClearFilters}
-              >
-                Clear Filters
-              </Button>
+              Clear Filters
+            </Button>
 
-              <Button
-                fullWidth
-                variant="filled"
-                color="blue"
-                onClick={handleApplyFilters}
-              >
-                Apply Filters
-              </Button>
-            </div>
-          </Stack>
+            <Button
+              fullWidth
+              variant="filled"
+              color="blue"
+              onClick={handleApplyFilters}
+            >
+              Apply Filters
+            </Button>
+          </div>
         </Stack>
-      </Drawer>
+      </Modal>
     </div>
   );
 }
