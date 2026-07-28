@@ -17,6 +17,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { Funnel, RefreshCcw } from "lucide-react";
 
 import classes from "./LibraryFilters.module.css";
+import { useState } from "react";
 
 type LibraryFiltersVariant = "default" | "small";
 
@@ -64,6 +65,7 @@ export default function LibraryFilters({
 }: LibraryFilterProps) {
   // States for managing the drawer visibility
   const [opened, { toggle, close }] = useDisclosure(false);
+  const [selectedPlatform, setSelectedPlatform] = useState("all");
 
   // Get the active filters
   const activeFilters = [
@@ -192,8 +194,13 @@ export default function LibraryFilters({
                 },
               }}
             >
-              <Chip.Group value={platform} onChange={onPlatformChange}>
+              <Chip.Group
+                value={platform}
+                onChange={onPlatformChange}
+                multiple={false}
+              >
                 <Group gap="lg" justify="center">
+                  <Chip value="all">All Platforms</Chip>
                   {platforms.map((platform) => (
                     <Chip key={platform} value={platform}>
                       {platform}
