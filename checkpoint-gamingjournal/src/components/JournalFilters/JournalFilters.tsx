@@ -79,16 +79,18 @@ export default function JournalFilters({
 
   // Function to clear all of the filters/sorting to be used in clear filters button
   const handleClearFilters = () => {
-    setDraftSort("asc");
+    setDraftSort("desc");
     setDraftEntryType("");
     setDraftTags([]);
-    setDraftGameId("");
+    setDraftGameId("all");
   };
 
-  // Determine if any filters are active and count them
-  const activeFilters = draftEntryType.length > 0 || draftTags.length > 0;
-
-  const numberOfActiveFilters = draftEntryType.length + draftTags.length;
+  useEffect(() => {
+    setDraftSort(sortOption);
+    setDraftGameId(selectedGameId);
+    setDraftEntryType(selectedEntryType);
+    setDraftTags(selectedTags);
+  }, [sortOption, selectedGameId, selectedEntryType, selectedTags]);
 
   return (
     <div className={classes.filterContainer}>
@@ -121,7 +123,7 @@ export default function JournalFilters({
         )}
       </div>
 
-      {/* Drawer component to hold the filter options, slides in from left */}
+      {/* Modal component to hold the filter options, slides in from left */}
       <Modal
         opened={opened}
         onClose={close}
@@ -131,7 +133,6 @@ export default function JournalFilters({
         className={classes.drawer}
         styles={{
           header: {
-            borderBottom: "1px solid gray",
             marginBottom: "10px",
           },
           body: {
@@ -154,15 +155,6 @@ export default function JournalFilters({
           <Stack gap="md">
             <Select
               styles={{
-                dropdown: {
-                  background: "#212121",
-                  color: "whitesmoke",
-                },
-                input: {
-                  background: "#212121",
-                  fontFamily: "Noto Sans",
-                  color: "white",
-                },
                 option: {
                   fontFamily: "Noto Sans",
                   fontSize: "16px",
@@ -194,6 +186,7 @@ export default function JournalFilters({
               value={draftGameId}
               onChange={(value) => setDraftGameId(value || "all")}
               className={classes.filterDropdown}
+              size="md"
               mb="md"
             />
 
@@ -201,15 +194,6 @@ export default function JournalFilters({
               label="Filter by Entry Type"
               placeholder="Select Entry Type"
               styles={{
-                dropdown: {
-                  background: "#212121",
-                  color: "whitesmoke",
-                },
-                input: {
-                  background: "#212121",
-                  fontFamily: "Noto Sans",
-                  color: "white",
-                },
                 option: {
                   fontFamily: "Noto Sans",
                   fontSize: "16px",
@@ -235,6 +219,7 @@ export default function JournalFilters({
               value={draftEntryType}
               onChange={(value) => setDraftEntryType(value || "")}
               className={classes.filterDropdown}
+              size="md"
               mb="md"
               clearable
             />
@@ -243,15 +228,6 @@ export default function JournalFilters({
               label="Filter by Tags"
               placeholder="Select Tags"
               styles={{
-                dropdown: {
-                  background: "#212121",
-                  color: "whitesmoke",
-                },
-                input: {
-                  background: "#212121",
-                  fontFamily: "Noto Sans",
-                  color: "white",
-                },
                 option: {
                   fontFamily: "Noto Sans",
                   fontSize: "16px",
@@ -284,6 +260,7 @@ export default function JournalFilters({
                 classNames: { scrollbar: classes.scrollBar },
               }}
               className={classes.filterDropdown}
+              size="md"
               mb="md"
             />
 
@@ -304,6 +281,7 @@ export default function JournalFilters({
             <Button
               fullWidth
               variant="filled"
+              radius="sm"
               color="red"
               leftSection={<RotateCcw size={18} />}
               onClick={handleClearFilters}
@@ -315,6 +293,7 @@ export default function JournalFilters({
               fullWidth
               variant="filled"
               color="blue"
+              radius="sm"
               onClick={handleApplyFilters}
             >
               Apply Filters
