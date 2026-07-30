@@ -22,22 +22,20 @@
 
 .logoContainer {
   display: inline-flex;
-  width: fit-content;   /* ensures no extra space */
+  width: fit-content; /* ensures no extra space */
   height: fit-content;
   cursor: pointer;
 }
 
 .logo {
   display: inline-block;
-  width: 180px;
+  width: 200px;
   height: auto;
   object-fit: contain;
-  justify-self: flex-start;
   justify-content: flex-start;
-  margin-left: 1rem;
 }
 
-.mobileLogo{
+.mobileLogo {
   width: 90px;
   height: auto;
   object-fit: contain;
@@ -47,7 +45,7 @@
   justify-content: flex-start;
 }
 
-.searchBar{
+.searchBar {
   width: 100%;
 }
 
@@ -58,34 +56,32 @@
 }
 
 @media screen and (max-width: 868px) {
-
-  .inner{
+  .inner {
     flex-wrap: nowrap;
     padding: 0 1rem;
   }
 
-  .logo{
+  .logo {
     width: 180px;
     height: auto;
     object-fit: contain;
     margin-left: 0.3rem; /* Keep consistent margin */
   }
 
-  .burger{
+  .burger {
     margin-left: auto;
     margin-right: 0;
   }
 }
 
-@media screen and (max-width: 510px){
-
-  .header{
+@media screen and (max-width: 510px) {
+  .header {
     flex-direction: column;
     align-items: stretch;
     padding: 0;
   }
 
-  .inner{
+  .inner {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -93,12 +89,11 @@
     padding: 0 1rem;
   }
 
-  .mobileLogo{
+  .mobileLogo {
     margin-left: -1rem;
-    
   }
 
-  .burger{
+  .burger {
     margin-left: auto;
     margin-right: 0;
   }
@@ -112,7 +107,7 @@
   flex-grow: 1;
 }
 
-.guestLinks{
+.guestLinks {
   display: flex;
   align-items: center;
   gap: 20px;
@@ -120,7 +115,7 @@
   flex-grow: 1;
 }
 
-.linkGroup{
+.linkGroup {
   display: flex;
   flex-direction: row;
   align-items: center; /* Center horizontally */
@@ -150,30 +145,31 @@
   border-radius: 10px;
 
   font-size: 20px;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-weight: 400;
 
   transition: background-color 0.15s ease;
 }
 
 .mobileLink:hover {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
 }
 
-.mobileLink:active{
+.mobileLink:active {
   border-bottom: 2px solid black;
   border-radius: 0;
   font-weight: bold;
 }
 
-.drawer{
+.drawer {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
 }
 
-.mobileLinksContainer, .guestMobileLinksContainer{
+.mobileLinksContainer,
+.guestMobileLinksContainer {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -192,8 +188,10 @@
   color: rgb(227, 227, 227);
   font-size: 18px;
   font-weight: 340;
-  font-family: 'Poppins';
-  transition: background-color 0.3s, color 0.3s;
+  font-family: "Poppins";
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 .link:hover {
@@ -213,5 +211,5 @@
 .guestActive {
   border-bottom: 2px solid rgb(0, 0, 0);
   color: rgb(0, 0, 0);
-  font-weight: 799
+  font-weight: 799;
 }
