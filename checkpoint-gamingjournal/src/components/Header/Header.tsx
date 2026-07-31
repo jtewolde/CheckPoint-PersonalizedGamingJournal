@@ -15,7 +15,7 @@ import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import GameSearchBar from "../GameSearchBar/GameSearchBar";
 
 import CheckPointLogo from "../../../public/DesktopCheckPointNewLogo.png";
-import CheckPointMobileLogo from "../../../public/MobileCheckPointLogo.png";
+import CheckPointMobileLogo from "../../../public/LandingPageLogoFinal.png";
 
 import { useAuth } from "@/context/Authcontext";
 import { authClient } from "@/lib/auth-client";
@@ -147,20 +147,24 @@ export function Header() {
     main: [{ label: "Home", icon: <House size={25} />, href: "/" }],
     discover: [
       { label: "Discover", icon: <IconSearch size={25} />, href: "/discover" },
-      { label: "Popular", icon: <Star size={25} />, href: "/search/popular" },
+      {
+        label: "Popular",
+        icon: <Star size={25} color="#e4c61d" fill="#e4c61d" />,
+        href: "/search/popular",
+      },
       {
         label: "Trending",
-        icon: <Flame size={25} />,
+        icon: <Flame size={25} color="#ff8c00" fill="#ff8c00" />,
         href: "/search/trending",
       },
       {
         label: "Upcoming",
-        icon: <Timer size={25} />,
+        icon: <Timer size={20} color="#00c3ff" fill="#00c3ff" />,
         href: "/search/upcoming",
       },
       {
         label: "Most Anticipated",
-        icon: <Megaphone size={20} />,
+        icon: <Megaphone size={20} color="#45e629" fill="#24e848" />,
         href: "/search/most-anticipated",
       },
     ],
@@ -575,9 +579,9 @@ export function Header() {
         >
           <div className={classes.logoContainer}>
             <Image
-              src={CheckPointLogo.src}
+              src={CheckPointMobileLogo.src}
               alt="CheckPoint Logo"
-              className={classes.logo}
+              className={classes.drawerLogo}
               style={{ cursor: "pointer" }}
             />
           </div>
