@@ -1,9 +1,7 @@
 .hero {
-  background: url('/Expedition33Wallpaper.jpg') top center no-repeat;
+  background: url("/cyberpunkWallpaper.jpg") top center no-repeat;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centers content vertically */
-  justify-content: center; /* Centers content horizontally */
   background-size: cover;
   background-attachment: fixed;
   position: relative;
@@ -13,7 +11,7 @@
   pointer-events: auto;
 }
 
-.backgroundOverlay{
+.backgroundOverlay {
   width: 100%;
   height: 100%;
   position: relative;
@@ -21,111 +19,147 @@
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 10%, #18181b 50%);
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 0%, #191320 15%);
 }
 
-.container {
+.contentContainer {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.mainContent {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-top: 6rem;
-  width: 100%;
-  z-index: 1;
-  position: relative;
+  gap: 2rem;
+  padding: 3rem 1rem 0rem 1rem;
   pointer-events: auto;
 }
 
-@media (max-width: $mantine-breakpoint-sm) {
-  .container {
-    margin-top: -4rem;
-  }
-}
-
-.landingPageHeader{
+.landingPageHeader {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
-  padding-left: 0rem;
-  gap: 10rem;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
-.leftSectionHeader{
+.heroSection {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+.landingLogo {
+  display: inline-block;
+  width: 300px;
+  height: auto;
+  object-fit: contain;
+  justify-content: flex-start;
+}
+
+.logoContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
-  align-self: flex-start;
-}
-
-.titleContainer{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
 }
 
 .title {
-  color: var(--mantine-color-white);
-  font-family: 'Inter';
-  font-size: 65px;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(3.5rem, 6vw, 4.75rem);
   font-weight: 900;
-  line-height: 1.1;
-  text-align: left;
-  text-decoration: underline;
-  text-underline-offset: 14px;
-
-  @media (max-width: $mantine-breakpoint-sm) {
-    font-size: 44px;
-    line-height: 1.2;
-  }
-
-  @media (max-width: $mantine-breakpoint-xs) {
-    font-size: 40px;
-    line-height: 1.3;
-  }
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: white;
+  max-width: 12ch;
 }
 
-.subtitle{
+.subtitle {
   color: rgb(234, 232, 232);
-  font-family: 'Inter';
-  font-size: 28px;
+  font-family: "Barlow";
+  font-size: 3.6rem;
   font-weight: 700;
+  line-height: 1.3;
 }
 
 .description {
   color: var(--mantine-color-white);
   max-width: 600px;
-  font-weight: 300;
-  text-align: left;
-  font-family: 'Poppins';
+  font-size: 1.125rem;
+  font-weight: 400;
+  text-align: center;
+  font-family: "Poppins";
 
   @media (max-width: $mantine-breakpoint-sm) {
     max-width: 100%;
-    font-size: 18px;
-    padding-left: 30px;
-    padding-right: 30px;
+    font-size: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
   }
 }
 
-.buttonContainer{
+.buttonContainer {
   display: flex;
-  width: 100%;
-  justify-content: flex-start;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  gap: 1rem;
+  pointer-events: auto;
 }
 
-.createAccountButton {
-  margin-top: calc(var(--mantine-spacing-xl) * 1.5);
+.createAccountButton,
+.discoverButton {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  font-family: 'Poppins';
-  border: 1px solid #6b6b6b;
+  font-family: "Poppins";
+  font-weight: 400;
 }
 
-.FeatureSection{
-  width: 100%;
+.discoverButton {
+  background-color: rgb(25, 24, 26);
+  border: 1px solid rgb(255, 255, 255);
+}
+
+.trendingHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-bottom: 4px solid white;
+}
+
+.trendingText {
+  font-family: "Inter";
+  font-weight: 800;
+  font-size: 2.5rem;
+  color: #e9e9e9;
+}
+
+.FeatureSection {
   position: relative;
-  margin-top: 3rem; /* Moves it closer to the text */
+  z-index: 0;
+  margin-bottom: 4rem;
+}
+
+.trendingSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  gap: 1rem;
+  margin-bottom: 4rem;
+  width: 100%;
 }
 
 .imageContainer {
@@ -137,7 +171,7 @@
   padding: 0 20px; /* Padding for the container */
 }
 
-.imageReverseContainer{
+.imageReverseContainer {
   display: flex;
   justify-content: center; /* Centers images horizontally */
   flex-direction: row-reverse;
@@ -146,49 +180,51 @@
   padding: 0 20px; /* Padding for the container */
 }
 
-.image{
+.image {
   width: 850px;
   height: auto;
   border-radius: 10px; /* Optional: rounded corners for images */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Optional: subtle shadow for depth */
-  border: 1px solid #6b6b6b
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow for depth */
+  border: 1px solid #484257;
 }
 
 .imageTextContainer {
   display: flex;
   flex-direction: column;
+  align-items: center; /* centers the inline-block title */
   justify-content: center;
   min-width: 500px;
-  margin-top: -8rem;
 }
 
 .libraryImageTitle,
 .gameDetailsTitle,
-.chatRoomTitle{
+.chatRoomTitle {
+  display: inline-block;
+  border-bottom: 4px solid #fcfcfc;
+  padding-bottom: 0.35rem;
+
   color: var(--mantine-color-white);
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 700;
-  border-bottom: 2px solid lightgray;
   text-align: center;
-  margin-top: 2rem; /* Space between image and text */
   max-width: 800px; /* Limit width for better readability */
-  font-family: 'Poppins';
+  font-family: "Poppins";
 }
 
 .libraryImageText,
 .gameDetailsText,
-.chatRoomText{
+.chatRoomText {
   color: lightgray;
   font-size: 20px;
   font-weight: 500;
   text-align: center;
   margin-top: 1rem; /* Space between image and text */
   max-width: 800px; /* Limit width for better readability */
-  font-family: 'Inter';
+  font-family: "Inter";
 }
 
 .gameDetailsSection,
-.librarySection{
+.librarySection {
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
@@ -199,7 +235,7 @@
 }
 
 .journalSection,
-.chatRoomSection{
+.chatRoomSection {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -218,20 +254,33 @@
   margin-bottom: 3rem;
 }
 
-.faqTitle{
-  font-family: 'Poppins';
-  font-size: 32px;
+.faqTitle {
+  font-family: "Inter";
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1.2;
   text-align: center;
-  border-bottom: 3px solid white;
   color: white;
+  padding: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.faqSubtitle {
+  font-family: "Poppins";
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.5;
+  text-align: center;
+  color: rgb(170, 169, 169);
 }
 
 @media (max-width: 1245px) {
-  .image{
+  .image {
     width: 100%;
   }
 
-  .imageContainer, .imageReverseContainer {
+  .imageContainer,
+  .imageReverseContainer {
     flex-direction: column; /* Stack images vertically on smaller screens */
     align-items: center; /* Center images */
   }
@@ -243,59 +292,81 @@
 }
 
 @media (max-width: 968px) {
-
-  .container{
-    padding-top: 10rem;
+  .mainContent {
+    padding: 2rem 1rem 0rem 1rem;
   }
 
-  .landingPageHeader{
-    margin-top: -3rem;
+  .landingPageHeader {
     flex-direction: column;
     align-items: center;
     justify-content: center;
   }
 
-  .title{
+  .title {
     font-size: 60px;
   }
 
-  .leftSectionHeader{
+  .subtitle {
+    text-align: center;
+    font-size: 40px;
+  }
+
+  .leftSectionHeader {
     align-items: center;
     text-align: center;
   }
 
-  .buttonContainer{
+  .buttonContainer {
     justify-content: center;
   }
 
-  .titleContainer{
+  .titleContainer {
     align-items: center;
     text-align: center;
   }
 
-  .description{
+  .description {
     text-align: center;
   }
-
 }
 
-@media (max-width: 500px) {
+@media (max-width: 646px) {
+  .hero {
+    background: var(--mantine-color-dark-8);
+  }
+
+  .mainContent {
+    padding: 2rem 1rem 0rem 1rem;
+  }
 
   .title {
     font-size: 49px;
     line-height: 1.2;
   }
 
-  .subtitle{
-    font-size: 24px;
+  .subtitle {
+    font-size: 35px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
-  .image{
-    width: 120%;
-    height: auto;
+  .description {
+    font-size: 18px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
-  .imageContainer, .imageReverseContainer {
+  .buttonContainer {
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 1rem; /* Space between buttons */
+  }
+
+  .image {
+    width: 110%;
+  }
+
+  .imageContainer,
+  .imageReverseContainer {
     flex-direction: column; /* Stack images vertically on smaller screens */
     align-items: center; /* Center images */
   }
