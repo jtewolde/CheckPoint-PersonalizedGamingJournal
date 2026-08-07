@@ -9,14 +9,15 @@ import {
   TextInput,
   Title,
   Group,
+  Checkbox,
+  Stack,
   Divider,
-  Overlay,
+  Image,
 } from "@mantine/core";
 import { toast } from "react-toastify";
 
 import { useState, useEffect } from "react";
 import { useRouter, redirect } from "next/navigation";
-import React from "react";
 import { authClient } from "@/lib/auth-client";
 
 import classes from "./signUp.module.css";
@@ -26,6 +27,7 @@ import { DiscordButton } from "@/components/DiscordButton/DiscordButton";
 
 import { Lock, Mail, CircleUser } from "lucide-react";
 import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
+import CheckpointLogo from "../../../../public/MobileCheckPointLanding.png";
 
 export default function signInPage() {
   const [email, setEmail] = useState("");
@@ -35,6 +37,7 @@ export default function signInPage() {
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const router = useRouter();
 
@@ -58,6 +61,12 @@ export default function signInPage() {
     // Validate password and confirm password
     if (password !== confirmPassword) {
       setPasswordError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
+
+    if (!termsAccepted) {
+      setError("You must accept the Terms of Service and Privacy Policy");
       setLoading(false);
       return;
     }
@@ -122,89 +131,116 @@ export default function signInPage() {
 
   return (
     <div className={classes.wrapper}>
-      <Paper className={classes.form} radius={0}>
-        <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
-          Welcome to CheckPoint!
+      <Paper className={classes.form} radius="lg">
+        <div className={classes.logoContainer}>
+          <Image
+            src={CheckpointLogo.src}
+            alt="CheckPoint Logo"
+            className={classes.landingLogo}
+          />
+        </div>
+        <Title className={classes.title} order={2} ta="center" c="white">
+          Create an Account
         </Title>
 
-        <Text ta="center" c="white" mt="lg" size="lg">
-          Register by using
+        <Text c="dimmed" ta="center" mt={8} fz="sm">
+          By creating an account, you agree to our Terms of Service and Privacy
+          Policy.
         </Text>
 
-        <Group grow mb="md" mt="md">
-          <GoogleButton radius="xl" onClick={handleGoogleSignIn}>
-            Google
+        <Stack gap="md" mt="md">
+          <GoogleButton radius="md" onClick={handleGoogleSignIn}>
+            Continue With Google
           </GoogleButton>
-          <DiscordButton radius="xl" onClick={handleDiscordSignIn}>
-            Discord
+          <DiscordButton radius="md" onClick={handleDiscordSignIn}>
+            Continue with Discord
           </DiscordButton>
-        </Group>
+        </Stack>
 
         <Divider
           styles={{ label: { color: "white" } }}
           label="Or continue with email"
           labelPosition="center"
           color="white"
-          my="lg"
+          my="md"
         />
 
-        <TextInput
-          className={classes.usernameInput}
-          label="Username"
-          placeholder="Jin_Sakai"
-          required
-          size="md"
-          leftSection={<CircleUser size={20} />}
-          mt="md"
-          value={name}
-          onChange={(e) => setName(e.currentTarget.value)}
-        />
-        <TextInput
-          className={classes.emailInput}
-          label="Email Address"
-          placeholder="JSakai@gmail.com"
-          required
-          size="md"
-          leftSection={<Mail size={20} />}
-          mt="md"
-          value={email}
-          onChange={(e) => setEmail(e.currentTarget.value)}
-          error={error}
-        />
-        <PasswordInput
-          className={classes.passwordInput}
-          label="Password"
-          placeholder="Your Password"
-          required
-          leftSection={<Lock size={20} />}
-          mt="md"
-          size="md"
-          value={password}
-          onChange={(e) => setPassword(e.currentTarget.value)}
-          error={passwordError}
-        />
-        <PasswordInput
-          className={classes.passwordInput}
-          label="Confirm Password"
-          placeholder="Confim Password"
-          required
-          leftSection={<Lock size={20} />}
-          mt="md"
-          size="md"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.currentTarget.value)}
-          error={passwordError}
-        />
-        <Button
-          fullWidth
-          mt="xl"
-          size="md"
-          loading={loading}
-          rightSection={<UserRoundPlus size={25} />}
-          onClick={handleEmailSignUp}
-        >
-          Register Account
-        </Button>
+        <div className={classes.inputWrapper}>
+          <TextInput
+            className={classes.usernameInput}
+            label="Username"
+            placeholder="An_Example01"
+            required
+            size="md"
+            leftSection={<CircleUser size={20} />}
+            value={name}
+            onChange={(e) => setName(e.currentTarget.value)}
+          />
+          <TextInput
+            className={classes.emailInput}
+            label="Email Address"
+            placeholder="AExample@gmail.com"
+            required
+            size="md"
+            leftSection={<Mail size={20} />}
+            value={email}
+            onChange={(e) => setEmail(e.currentTarget.value)}
+            error={error}
+          />
+          <PasswordInput
+            className={classes.passwordInput}
+            label="Password"
+            placeholder="Your Password"
+            required
+            leftSection={<Lock size={20} />}
+            size="md"
+            value={password}
+            onChange={(e) => setPassword(e.currentTarget.value)}
+            error={passwordError}
+          />
+          <PasswordInput
+            className={classes.passwordInput}
+            label="Confirm Password"
+            placeholder="Confim Password"
+            required
+            leftSection={<Lock size={20} />}
+            size="md"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.currentTarget.value)}
+            error={passwordError}
+          />
+
+          <Checkbox
+            label={
+              <>
+                I agree to the{" "}
+                <Anchor<"a"> href="/about/terms" target="_blank">
+                  Terms of Service
+                </Anchor>{" "}
+                and{" "}
+                <Anchor<"a"> href="/about/privacy" target="_blank">
+                  Privacy Policy
+                </Anchor>
+              </>
+            }
+            required
+            size="md"
+            mt="md"
+            checked={termsAccepted}
+            onChange={(e) => setTermsAccepted(e.currentTarget.checked)}
+          />
+
+          <Button
+            fullWidth
+            size="md"
+            mt="md"
+            loading={loading}
+            rightSection={<UserRoundPlus size={25} />}
+            onClick={handleEmailSignUp}
+          >
+            Register Account
+          </Button>
+        </div>
 
         <Text ta="center" mt="lg" c="white">
           Already have an account?{" "}
