@@ -59,8 +59,7 @@ export default function EmailVerificationPage() {
             className={classes.resendButton}
             variant="filled"
             size="md"
-            radius="lg"
-            color="blue"
+            radius="md"
             loading={loading}
             leftSection={<Send size={20} />}
             onClick={sendVerificationEmail}
