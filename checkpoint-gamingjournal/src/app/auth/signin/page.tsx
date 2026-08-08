@@ -12,6 +12,8 @@ import {
   Group,
   Divider,
   Modal,
+  Stack,
+  Image,
 } from "@mantine/core";
 import { redirect, useRouter } from "next/navigation";
 
@@ -26,6 +28,7 @@ import { LogIn, Lock, Mail } from "lucide-react";
 
 import { toast } from "react-toastify";
 
+import CheckpointLogo from "../../../../public/MobileCheckPointLanding.png";
 import classes from "./signIn.module.css";
 
 export default function signInPage() {
@@ -151,30 +154,37 @@ export default function signInPage() {
 
   return (
     <div className={classes.wrapper}>
-      <Paper className={classes.form} radius={0} p={30}>
-        <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
-          Welcome Back!
+      <Paper className={classes.form} radius="lg">
+        <div className={classes.logoContainer}>
+          <Image
+            src={CheckpointLogo.src}
+            alt="CheckPoint Logo"
+            className={classes.landingLogo}
+          />
+        </div>
+        <Title className={classes.title} order={2} ta="center" c="white">
+          Sign In
         </Title>
 
-        <Text ta="center" c="white" mt="sm" fw={500} size="lg">
-          Sign in with
+        <Text c="dimmed" ta="center" mt={8} fz="sm">
+          to access your personalized gaming journal.
         </Text>
 
-        <Group grow mb="md" mt="md">
-          <GoogleButton radius="xl" onClick={handleGoogleSignIn}>
-            Google
+        <Stack gap="sm" mt="md">
+          <GoogleButton radius="md" onClick={handleGoogleSignIn}>
+            Continue With Google
           </GoogleButton>
-          <DiscordButton radius="xl" onClick={handleDiscordSignIn}>
-            Discord{" "}
+          <DiscordButton radius="md" onClick={handleDiscordSignIn}>
+            Continue with Discord
           </DiscordButton>
-        </Group>
+        </Stack>
 
         <Divider
           styles={{ label: { color: "white" } }}
           label="Or continue with email"
           labelPosition="center"
           color="white"
-          my="lg"
+          my="md"
         />
 
         <TextInput
@@ -198,7 +208,7 @@ export default function signInPage() {
             c="white"
             htmlFor="password"
             size="md"
-            fw={600}
+            fw={400}
           >
             Password
           </Text>
@@ -212,55 +222,47 @@ export default function signInPage() {
             opened={opened}
             onClose={close}
             centered
+            size="md"
             styles={{
+              header: { backgroundColor: "#20162d" },
               content: {
-                backgroundColor: "#2c2c2dff",
-                border: "1px solid white",
+                backgroundColor: "#20162d",
+                paddingLeft: "20px",
+                paddingRight: "20px",
               },
-              header: { backgroundColor: "#2c2c2fff" },
-              close: { color: "white" },
             }}
+            className={classes.modal}
           >
-            <Group className={classes.modalText} mb={20} ta="center">
+            <Group className={classes.modalText} ta="center">
               <Title className={classes.modalTitle} ta="center" c="white">
-                Forgot your password?
+                Reset Password
               </Title>
 
-              <Text c="whitesmoke" fz="md" ta="center" mb={10}>
-                Enter your email to get a reset link
+              <Text c="dimmed" fz="sm" ta="center" mb={10}>
+                Enter your email and we will send you a reset link.
               </Text>
             </Group>
 
             <TextInput
-              styles={{
-                input: {
-                  backgroundColor: "#232526",
-                  color: "white",
-                },
-                label: {
-                  color: "white",
-                  fontFamily: "Noto Sans",
-                },
-              }}
               label="Email Address"
               placeholder="Enter Your Email"
               leftSection={<Mail size={20} />}
               size="md"
               required
-              mt="sm"
-              mb="sm"
               value={resetEmail}
               onChange={(e) => setResetEmail(e.currentTarget.value)}
               error={modalError}
+              styles={{
+                label: { color: "white", fontWeight: 400 },
+              }}
             />
 
             <Flex justify="center">
               <Button
                 className={classes.modalButton}
                 variant="filled"
-                color="blue"
                 radius="md"
-                size="md"
+                fullWidth
                 loading={loading}
                 disabled={!resetEmail}
                 onClick={handleForgotPassword}
@@ -274,19 +276,20 @@ export default function signInPage() {
         <PasswordInput
           className={classes.passwordInput}
           placeholder="Your Password"
-          id="password"
           size="md"
           leftSection={<Lock size={20} />}
-          required
           value={password}
           onChange={(e) => setPassword(e.currentTarget.value)}
           error={error}
+          styles={{
+            label: { color: "white", fontWeight: 300 },
+          }}
         />
 
         <Button
           fullWidth
-          mt="xl"
           size="md"
+          mt="lg"
           loading={loading}
           rightSection={<LogIn size={25} />}
           onClick={handleEmailLogin}
