@@ -1,62 +1,109 @@
 .wrapper {
-    min-height: 88vh;
-    background-size: cover;
-    background-image: url('../../../../public/signupImage.jpg');
-    z-index: 0;
-  }
-  
-.form {
-  border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
-  min-height: 88vh;
-  max-width: 450px;
-  padding-top: 80px;
-  background-color: #303134;
-  font-family: 'Poppins';
-  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-  @media (max-width: $mantine-breakpoint-sm) {
-    max-width: 100%;
-  }
+  background:
+    linear-gradient(rgba(14, 14, 18, 0.82), rgba(14, 14, 18, 0.82)),
+    url("/EldenRing.png");
+
+  background-size: contain;
+  background-position: center;
+}
+
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.landingLogo {
+  display: inline-block;
+  width: 75px;
+  height: auto;
+  object-fit: contain;
+}
+
+.form {
+  border-radius: 18px;
+  background: #232427;
+
+  border: 1px solid rgba(112, 93, 136, 0.363);
+  font-family: "Poppins";
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+
+  width: 100%;
+  max-width: 440px;
+  padding-top: 40px;
+  padding-right: 40px;
+  padding-left: 40px;
+  padding-bottom: 40px;
+
+  margin-top: 40px;
+  margin-bottom: 40px;
 }
 
 .title {
   color: white;
-  font-family: 'Poppins';
+  font-family: "Inter";
+  font-weight: 700;
+  font-size: 1.5rem;
+  z-index: 1;
 }
 
-.emailInput input{
+.socialButtons {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.emailInput input {
   background-color: #181818ff;
   color: white;
 }
 
-.emailInput label{
+.emailInput label {
   color: white;
-  font-weight: 600;
+  font-weight: 300;
 }
 
-.passwordInput input{
+.passwordInput input {
   background-color: #181818ff;
   color: white;
 }
 
-.modalText{
+.passwordInput label {
+  color: white;
+  font-weight: 300;
+}
+
+.modalText {
   margin-top: -0.4rem;
   text-align: center;
   justify-content: center;
 }
 
-.modalTitle{
-  font-family: 'Poppins';
-  font-size: 26;
+.modalTitle {
+  font-family: "Poppins";
+  font-size: 26px;
   text-align: center;
 }
 
-.modalButton{
-  justify-self: center;
-  align-self: center;
-  align-items: center;
+.modalButton {
   flex-direction: column;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-weight: 400;
   margin-top: 1rem;
 }

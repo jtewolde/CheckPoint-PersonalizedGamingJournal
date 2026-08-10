@@ -1,4 +1,3 @@
-
 .background {
   display: flex;
   flex-direction: column;
@@ -11,13 +10,17 @@
   z-index: 0;
 }
 
-.backgroundOverlay{
+.backgroundOverlay {
   position: relative;
   inset: 0;
   z-index: 1;
   pointer-events: none;
   /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.55) 0%, #0a0a0a 40%);
+  background: linear-gradient(
+    to bottom,
+    rgba(20, 20, 20, 0.55) 0%,
+    #0a0a0a 40%
+  );
 }
 
 .wrapper {
@@ -28,23 +31,23 @@
   background: transparent;
   pointer-events: auto;
 }
-  
+
 .title {
   font-size: 2.2rem;
   font-weight: bold;
   text-align: center;
-  font-family: 'Inter';
+  font-family: "Inter";
   color: white;
   justify-self: center;
   word-wrap: break-word;
   white-space: normal;
 }
 
-.gameTypeBadge{
+.gameTypeBadge {
   border: 0.5px solid #454444;
 }
 
-.titleType{
+.titleType {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -53,7 +56,7 @@
   gap: 1rem;
 }
 
-.sectionHeader{
+.sectionHeader {
   width: 100%;
   margin-top: 2rem;
   margin-bottom: 1rem;
@@ -69,10 +72,10 @@
   align-items: center;
 }
 
-.sectionTitle{
+.sectionTitle {
   font-size: 2.1rem;
   font-weight: 500;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   color: white;
   justify-self: center;
 }
@@ -84,12 +87,12 @@
   justify-content: center;
   margin-bottom: 2rem;
   padding-left: 2rem;
-  font-family: 'Noto Sans';
+  font-family: "Noto Sans";
   color: whitesmoke;
   gap: 7rem;
 }
 
-.leftSection{
+.leftSection {
   margin-top: 1rem;
   display: flex;
   flex-direction: column;
@@ -107,7 +110,7 @@
   border-radius: 8px;
 }
 
-.gameCover{
+.gameCover {
   width: 90%;
   object-fit: contain;
 }
@@ -120,14 +123,14 @@
   gap: 1rem;
 }
 
-.coverInfoContainer{
+.coverInfoContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.cardActive{
+.cardActive {
   background-color: #181717;
   border: 1px solid #454545;
   border-radius: 8px;
@@ -135,7 +138,7 @@
   padding: 1rem;
 }
 
-.cardMinimal{
+.cardMinimal {
   background: transparent;
   border: none;
   box-shadow: none;
@@ -143,7 +146,7 @@
   align-items: center;
 }
 
-.rightSection{
+.rightSection {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -152,12 +155,12 @@
   margin-bottom: 3rem;
 }
 
-.gameInfoText{
-  font-family: 'Poppins';
+.gameInfoText {
+  font-family: "Poppins";
   font-weight: 400;
 }
 
-.buttonContainer{
+.buttonContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -165,7 +168,7 @@
   gap: 1rem;
 }
 
-.buttonActions{
+.buttonActions {
   display: flex;
   flex-direction: row-reverse;
   justify-content: center;
@@ -173,23 +176,23 @@
   gap: 1rem;
 }
 
-.button{
+.button {
   width: auto;
   align-self: center;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-weight: 400;
 }
 
-.accordion{
+.accordion {
   display: flex;
   flex-direction: column;
-  font-family: 'Noto Sans';
+  font-family: "Noto Sans";
   font-weight: 400;
   width: 100%;
   margin-top: 1rem;
 }
 
-.ratingSection{
+.ratingSection {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -212,14 +215,14 @@
   gap: 0.5rem;
   font-size: 1.2rem;
   color: #f0f0f0;
-  font-family: 'Poppins';
+  font-family: "Poppins";
 }
 
-.ratingLabel{
+.ratingLabel {
   font-weight: 500;
   color: #f0f0f0;
   text-align: center;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-size: 1.7rem;
 }
 
@@ -227,11 +230,11 @@
   font-weight: 500;
   color: #f0f0f0;
   text-align: center;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-size: 4rem;
 }
 
-.ratingContainer{
+.ratingContainer {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -239,36 +242,36 @@
   gap: 0.2rem;
 }
 
-.ratingWrapper{
+.ratingWrapper {
   display: flex;
   flex-direction: row;
   gap: 0.4rem;
 }
 
-.starsCount{
+.starsCount {
   font-size: 1.3rem;
-  font-family: 'Poppins';
+  font-family: "Poppins";
 }
 
-.ratingText{
-  font-size: 1.0rem;
+.ratingText {
+  font-size: 1rem;
   color: #f0f0f0;
   text-align: center;
   font-weight: 500;
 }
 
 .scrollBar {
-    &,
-    &:hover {
-        background-color: #555555;
-    }
+  &,
+  &:hover {
+    background-color: #555555;
+  }
 
-    &[data-orientation='vertical'] .thumb {
-        background-color: black;
-    }
+  &[data-orientation="vertical"] .thumb {
+    background-color: black;
+  }
 }
 
-.activitySection{
+.activitySection {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -277,7 +280,7 @@
   margin-bottom: 2rem;
 }
 
-.activityLayout{
+.activityLayout {
   width: 95%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -297,7 +300,7 @@
   gap: 1rem;
 }
 
-.titleLogo{
+.titleLogo {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -305,7 +308,7 @@
   gap: 0.8rem;
 }
 
-.activityItem{
+.activityItem {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -317,9 +320,9 @@
   background: linear-gradient(145deg, #1f1f1f, #171717);
   border: 1px solid #2f2e2e;
 
-  box-shadow: 
-    0 4px 12px rgba(0,0,0,0.25),
-    inset 0 1px 0 rgba(255,255,255,0.03);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
 
   transition: all 0.25s ease;
 }
@@ -328,25 +331,25 @@
   transform: translateY(-4px);
   border-color: #3a3a3a;
 
-  box-shadow: 
-    0 8px 20px rgba(0,0,0,0.4),
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.4),
     0 0 10px rgba(131, 47, 173, 0.15); /* subtle purple glow */
 }
 
-.activityLabel{
+.activityLabel {
   font-size: 22px;
-  font-family: 'Inter';
+  font-family: "Inter";
   font-weight: 500;
   color: white;
   margin-top: 0.5rem;
   text-align: center;
 }
 
-.activityStat{
+.activityStat {
   color: #e0e0e0;
   font-size: 20px;
   font-weight: 600;
-  font-family: 'Inter';
+  font-family: "Inter";
   align-self: center;
 }
 
@@ -354,17 +357,17 @@
   width: 100%;
 }
 
-.carouselSlide{
+.carouselSlide {
   width: 100%;
   margin-bottom: 1rem;
 }
 
-.carouselSlide :hover{
-  filter: brightness(70%)
+.carouselSlide :hover {
+  filter: brightness(70%);
 }
 
-.thumbnailSlide :hover{
-  filter: brightness(70%)
+.thumbnailSlide :hover {
+  filter: brightness(70%);
 }
 
 .screenshot {
@@ -391,19 +394,19 @@
   padding: 2rem;
 }
 
-.fullScreenSwiper{
+.fullScreenSwiper {
   width: 100%;
   height: 100%;
 }
 
-.closeButton{
+.closeButton {
   position: absolute; /* pin it relative to .fullScreenOverlay */
   top: 1rem;
   right: 1rem;
   z-index: 2100;
 }
 
-.fullScreenImage{
+.fullScreenImage {
   max-width: 100%;
   max-height: 90vh;
   object-fit: contain;
@@ -411,7 +414,7 @@
   align-items: center;
 }
 
-.gameSeries{
+.gameSeries {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -421,7 +424,7 @@
   justify-content: center;
 }
 
-.seriesGrid{
+.seriesGrid {
   justify-content: center;
   justify-self: center;
   align-items: center;
@@ -430,7 +433,7 @@
   padding-right: 1rem;
 }
 
-.nameButtonContainer{
+.nameButtonContainer {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -439,19 +442,19 @@
   margin-bottom: 0.2rem;
 }
 
-.viewMoreText{
+.viewMoreText {
   justify-self: flex-end;
   font-size: 1.2rem;
   color: #a7a7a7;
   font-weight: 500;
 }
 
-.viewMoreText:hover{
+.viewMoreText:hover {
   color: #ffffff;
   font-weight: 600;
 }
 
-.similarGameSlide{
+.similarGameSlide {
   position: relative;
   width: 100%;
   justify-content: center;
@@ -459,21 +462,21 @@
 }
 
 .similarGamesName,
-.gameSeriesName{
+.gameSeriesName {
   font-size: 1.8rem;
   font-weight: 500;
   margin-bottom: 1rem;
   margin-top: 3rem;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   color: white;
   justify-self: center;
 }
 
 .swiper-button-prev,
-.swiper-button-next{
+.swiper-button-next {
   background: rgba(0, 0, 0, 0.5); /* dark overlay */
   border-radius: 50%;
-  backdrop-filter: blur(4px);     /* 🔥 nice glass effect */
+  backdrop-filter: blur(4px); /* 🔥 nice glass effect */
   transition: all 0.2s ease;
 
   /* Optional: slightly smaller than default */
@@ -494,12 +497,12 @@
   font-weight: bold;
 }
 
-@media screen and (max-width: 1000px){
-  .cover{
-    width: 330px
+@media screen and (max-width: 1000px) {
+  .cover {
+    width: 330px;
   }
 
-  .titleType{
+  .titleType {
     padding-left: 2rem;
   }
 }
@@ -517,7 +520,7 @@
     margin-bottom: 0.5rem;
   }
 
-  .titleType{
+  .titleType {
     align-items: center;
     padding: 0;
   }
@@ -530,25 +533,25 @@
     padding: 0;
   }
 
-  .rightSection{
+  .rightSection {
     margin-top: 4rem;
   }
 
-  .media{
+  .media {
     align-items: center;
   }
 
-  .rightSection{
+  .rightSection {
     width: 80%;
   }
 
-  .gameInfo{
+  .gameInfo {
     width: 50%;
     margin-top: 1rem;
     padding: 0;
   }
 
-  .accordion{
+  .accordion {
     width: 120%;
   }
 
@@ -558,7 +561,7 @@
     margin-bottom: 1rem;
   }
 
-  .cardActive{
+  .cardActive {
     width: 75%;
   }
 
@@ -572,7 +575,7 @@
     margin-bottom: 2rem;
   }
 
-  .carouselSlide{
+  .carouselSlide {
     width: 100%;
   }
 
@@ -581,11 +584,11 @@
     height: auto;
   }
 
-  .thumbnailImage{
-    width: 100%
+  .thumbnailImage {
+    width: 100%;
   }
 
-  .fullScreenOverlay{
+  .fullScreenOverlay {
     padding: 0.5rem;
   }
 
@@ -604,20 +607,20 @@
   }
 }
 
-@media screen and (max-width: 540px){
-  .activityLayout{
+@media screen and (max-width: 540px) {
+  .activityLayout {
     display: flex;
     flex-direction: column;
     width: 90%;
   }
 
-  .activityItem{
+  .activityItem {
     width: 100%;
   }
 }
 
-@media screen and (max-width: 470px){
-  .sectionTitle{
+@media screen and (max-width: 470px) {
+  .sectionTitle {
     font-size: 1.8rem;
   }
 }

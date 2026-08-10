@@ -1,6 +1,6 @@
-import { Button, ButtonProps } from '@mantine/core';
+import { Button, ButtonProps } from "@mantine/core";
 
-function GoogleIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+function GoogleIcon(props: React.ComponentPropsWithoutRef<"svg">) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -29,6 +29,22 @@ function GoogleIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   );
 }
 
-export function GoogleButton(props: ButtonProps & React.ComponentPropsWithoutRef<'button'>) {
-  return <Button size='md' style={{border: '0.5px solid #969492'}} color='#191919ff' leftSection={<GoogleIcon />} variant="filled" {...props} />;
+export function GoogleButton(
+  props: ButtonProps & React.ComponentPropsWithoutRef<"button">,
+) {
+  return (
+    <Button
+      size="md"
+      style={{
+        border: "1px solid #342b3a",
+        fontWeight: 500,
+        textAlign: "left",
+        fontSize: "14px",
+      }}
+      color="#191919ff"
+      leftSection={<GoogleIcon />}
+      variant="filled"
+      {...props}
+    />
+  );
 }

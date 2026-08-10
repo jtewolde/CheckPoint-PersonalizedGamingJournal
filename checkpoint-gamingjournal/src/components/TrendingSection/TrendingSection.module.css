@@ -1,6 +1,15 @@
-.trendingGamesGrid{
-    gap: 2.4rem;
+.trendingGamesGrid {
+  gap: 2.4rem;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
+@media (max-width: 646px) {
+  .trendingGamesGrid {
+    gap: 1rem;
     justify-content: center;
     align-content: center;
     align-items: center;
+  }
 }

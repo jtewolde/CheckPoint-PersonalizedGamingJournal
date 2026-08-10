@@ -1,59 +1,100 @@
 .wrapper {
-  min-height: 84.5vh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background:
+    linear-gradient(rgba(14, 14, 18, 0.82), rgba(14, 14, 18, 0.82)),
+    url("/CyberpunkWallpaper1.jpg");
+
   background-size: cover;
-  position: relative;
-  background-image: url('../../../../public/video_games_art_background.jpg');
   background-position: center;
 }
 
-.form {
-  border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
-  min-height: 87vh;
-  max-width: 450px;
-  padding-top: 40px;
-  padding-right: 60px;
-  padding-left: 40px;
-  padding-bottom: 40px;
-  background-color: #303134;
-  font-family: 'Poppins';
+.logoContainer {
+  display: flex;
   justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.landingLogo {
+  display: inline-block;
+  width: 75px;
+  height: auto;
+  object-fit: contain;
+}
+
+.form {
+  border-radius: 18px;
+  background: #232427;
+
+  border: 1px solid rgba(112, 93, 136, 0.363);
+  font-family: "Poppins";
+  justify-content: center;
+  align-items: center;
   z-index: 1;
 
-  @media (max-width: $mantine-breakpoint-sm) {
-    max-width: 100%;
-  }
+  width: 100%;
+  max-width: 440px;
+  padding-top: 40px;
+  padding-right: 40px;
+  padding-left: 40px;
+  padding-bottom: 40px;
+
+  margin-top: 40px;
+  margin-bottom: 40px;
 }
 
 .title {
   color: white;
-  font-family: 'Poppins';
+  font-family: "Inter";
+  font-weight: 700;
+  font-size: 1.5rem;
   z-index: 1;
-  margin-bottom: -1.5rem;
 }
 
-.usernameInput input{
+.socialButtons {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.usernameInput input {
   background-color: #181818ff;
-  color: white
-}
-
-.usernameInput label{
   color: white;
 }
 
-.emailInput input{
+.usernameInput label {
+  color: white;
+  font-weight: 300;
+}
+
+.emailInput input {
   background-color: #181818ff;
-  color: white
+  color: white;
 }
 
-.emailInput label{
-  color: white
+.emailInput label {
+  color: white;
+  font-weight: 300;
 }
 
-.passwordInput input{
+.passwordInput input {
   background-color: #181818ff;
-  color: white
+  color: white;
 }
 
-.passwordInput label{
-  color: white
+.passwordInput label {
+  color: white;
+  font-weight: 300;
 }

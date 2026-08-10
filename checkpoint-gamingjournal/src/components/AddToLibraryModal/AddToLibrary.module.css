@@ -1,0 +1,27 @@
+.card {
+  cursor: pointer;
+  transition: 150ms ease;
+  border: 2px solid var(--mantine-color-dark-4);
+  padding: 1rem;
+}
+
+.card:hover {
+  border-color: var(--mantine-primary-color-filled);
+}
+
+.selectedCard {
+  cursor: pointer;
+  border: 2px solid var(--mantine-primary-color-filled);
+  background: rgba(34, 139, 230, 0.12);
+  padding: 1rem;
+}
+
+.statusText {
+  font-family: "Inter";
+  font-weight: 400;
+  font-size: 18px;
+}
+
+.imageCover {
+  border: 1px solid #796886;
+}

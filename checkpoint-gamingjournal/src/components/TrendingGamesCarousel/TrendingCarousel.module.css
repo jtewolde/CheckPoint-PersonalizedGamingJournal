@@ -1,65 +1,69 @@
-
 .trendingSection {
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
+  width: 100%;
+  margin: 0 auto;
 }
 
-.trendingLogo{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 8px;
+.trendingLogo {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
 }
 
-.sectionTitle{
-    font-size: 2.5rem;
-    font-weight: 800;
-    font-family: 'Barlow';
-    color: white;
-    text-align: center;
+.sectionTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  font-family: "Barlow";
+  color: white;
+  text-align: center;
 }
 
-.viewMoreIcon{
-    justify-self: flex-end;
-    align-self: center;
-    color: #ebebeb;
-    font-size: 100%;
-    font-weight: 500;
-    font-family: 'Poppins';
-    margin-top: 0.4rem;
+.viewMoreIcon {
+  justify-self: flex-end;
+  align-self: center;
+  color: #ebebeb;
+  font-size: 100%;
+  font-weight: 500;
+  font-family: "Poppins";
+  margin-top: 0.4rem;
 }
 
-.viewMoreIcon:hover{
-    color: #ffffff;
-    font-weight: 600;
+.viewMoreIcon:hover {
+  color: #ffffff;
+  font-weight: 600;
 }
 
-.carousel{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+.carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
-.carouselSlide{
-    margin-bottom: 2rem;
+.swiperSlide {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.2rem;
 }
 
-.swiperContainer{
-    margin-bottom: 1rem;
+.cardWrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+.swiperContainer {
+  margin-bottom: 1rem;
 }
 
 @media (max-width: 970px) {
+  .gameTitle {
+    font-size: 1.5rem;
+  }
 
-    .gameTitle{
-        font-size: 1.5rem;
-    }
-
-    .gameDate{
-        font-size: 1rem;
-    }
+  .gameDate {
+    font-size: 1rem;
+  }
 }
