@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { formatDate, isSameDay } from "@/utils/dateUtils";
 
-import PlaySessionModal from "../Modals/PlaySessionModal/SessionModal";
+import PlaySessionModal from "../../Modals/PlaySessionModal/SessionModal";
 import SessionDayModal from "../SessionDayModal/SessionDayModal";
 
 import { Calendar } from "@mantine/dates";

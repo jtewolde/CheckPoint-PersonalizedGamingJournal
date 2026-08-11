@@ -9,7 +9,7 @@ import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
 import PlaySessionModal from "@/components/Modals/PlaySessionModal/SessionModal";
 import EditGameInfoModal from "@/components/Modals/EditGameInfoModal/EditGameInfoModal";
 import AddToLibraryModal from "@/components/Modals/AddToLibraryModal/AddToLibraryModal";
-import SessionCalendar from "@/components/SessionCalendar/SessionCalendar";
+import SessionCalendar from "@/components/SessionComponents/SessionCalendar/SessionCalendar";
 
 import { toast } from "react-toastify";
 

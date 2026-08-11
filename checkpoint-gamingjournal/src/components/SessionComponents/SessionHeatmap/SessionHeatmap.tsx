@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 import SessionDayModal from "../SessionDayModal/SessionDayModal";
-import PlaySessionModal from "../Modals/PlaySessionModal/SessionModal";
+import PlaySessionModal from "../../Modals/PlaySessionModal/SessionModal";
 import { Heatmap } from "@mantine/charts";
 import classes from "./SessionHeatmap.module.css";
 
