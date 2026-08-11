@@ -14,7 +14,7 @@ import { motion } from "motion/react";
 import classes from "./page.module.css";
 
 import Questions from "@/components/FrequentQuestions/FrequentQuestions";
-import TrendingSection from "@/components/TrendingSection/TrendingSection";
+import TrendingSection from "@/components/Sections/TrendingSection/TrendingSection";
 import CheckpointLogo from "../../public/LandingPageLogoFinal.png";
 
 export default function Home() {

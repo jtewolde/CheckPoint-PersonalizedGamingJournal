@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SimpleGrid } from "@mantine/core";
 
-import GameCard from "../Cards/GameCard/GameCard";
-import GameSkeletonCard from "../Cards/GameCard/GameSkeletonCard";
+import GameCard from "../../Cards/GameCard/GameCard";
+import GameSkeletonCard from "../../Cards/GameCard/GameSkeletonCard";
 
-import classes from "./TrendingSection.module.css";
+import classes from "./upcomingSection.module.css";
 
-export default function TrendingSection() {
-  // States to hold trending games data and loading status
-  const [trendingGames, setTrendingGames] = useState<any[]>([]);
+export default function UpcomingSection() {
+  // States to hold upcoming games data and loading status
+  const [upcomingGames, setUpcomingGames] = useState<any[]>([]);
   const limit = 6; // Set the limit of games on page to 12
 
   // Create skeletons array which length is the value of limit
@@ -21,41 +21,41 @@ export default function TrendingSection() {
   const [hasMounted, setHasMounted] = useState(false);
   const router = useRouter();
 
-  // Fetch trending games data from backend API on component mount
+  // Fetch upcoming games data from backend API on component mount
   useEffect(() => {
-    const fetchTrendingGames = async () => {
+    const fetchUpcomingGames = async () => {
       try {
         const res = await fetch(
-          `/api/igdb/trending-games?limit=${limit}&sort=first_release_date`,
+          `/api/igdb/upcoming-releases?limit=${limit}&sort=first_release_date_oldest`,
         );
         if (!res.ok) {
-          throw new Error("Failed to fetch Trending games");
+          throw new Error("Failed to fetch Upcoming games");
         }
 
         const data = await res.json();
-        setTrendingGames(data.games); // Store the games data in state
-        console.log("Trending Games: ", data.games);
+        setUpcomingGames(data.games); // Store the games data in state
+        console.log("Upcoming Games: ", data.games);
       } catch (error) {
-        console.error("Error fetching trending games:", error);
+        console.error("Error fetching upcoming games:", error);
       } finally {
         setLoading(false); // Set loading to false after fetching
       }
     };
-    fetchTrendingGames();
+    fetchUpcomingGames();
     setHasMounted(true);
   }, []);
 
   return (
     <SimpleGrid
       cols={{ base: 2, sm: 3, md: 4, lg: 5, xl: 6 }}
-      className={classes.trendingGamesGrid}
+      className={classes.upcomingGamesGrid}
     >
       {loading
         ? skeletons.map((_, i) => (
             <GameSkeletonCard key={i} variant="compact" />
           ))
-        : trendingGames.map((game) => (
-            <GameCard key={game.id} game={game} variant="default" />
+        : upcomingGames.map((game) => (
+            <GameCard key={game.id} game={game} variant="upcoming" />
           ))}
     </SimpleGrid>
   );

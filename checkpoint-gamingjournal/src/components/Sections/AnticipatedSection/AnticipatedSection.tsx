@@ -4,15 +4,15 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SimpleGrid } from "@mantine/core";
 
-import GameCard from "../Cards/GameCard/GameCard";
-import GameSkeletonCard from "../Cards/GameCard/GameSkeletonCard";
+import GameCard from "../../Cards/GameCard/GameCard";
+import GameSkeletonCard from "../../Cards/GameCard/GameSkeletonCard";
 
-import classes from "./upcomingSection.module.css";
+import classes from "./AnticipatedSection.module.css";
 
-export default function UpcomingSection() {
-  // States to hold upcoming games data and loading status
-  const [upcomingGames, setUpcomingGames] = useState<any[]>([]);
-  const limit = 6; // Set the limit of games on page to 12
+export default function AnticipatedSection() {
+  // States to hold anticipated games data and loading status
+  const [anticipatedGames, setAnticipatedGames] = useState<any[]>([]);
+  const limit = 6; // Set the limit of games on page to 6
 
   // Create skeletons array which length is the value of limit
   const skeletons = Array.from({ length: limit });
@@ -21,40 +21,39 @@ export default function UpcomingSection() {
   const [hasMounted, setHasMounted] = useState(false);
   const router = useRouter();
 
-  // Fetch upcoming games data from backend API on component mount
+  // Fetch anticipated games data from backend API on component mount
   useEffect(() => {
-    const fetchUpcomingGames = async () => {
+    const fetchAnticipatedGames = async () => {
       try {
         const res = await fetch(
-          `/api/igdb/upcoming-releases?limit=${limit}&sort=first_release_date_oldest`,
+          `/api/igdb/most-anticipated?limit=${limit}&sort=hypes`,
         );
         if (!res.ok) {
-          throw new Error("Failed to fetch Upcoming games");
+          throw new Error("Failed to fetch anticipated games");
         }
 
         const data = await res.json();
-        setUpcomingGames(data.games); // Store the games data in state
-        console.log("Upcoming Games: ", data.games);
+        setAnticipatedGames(data.games); // Store the games data in state
       } catch (error) {
-        console.error("Error fetching upcoming games:", error);
+        console.error("Error fetching anticipated games:", error);
       } finally {
         setLoading(false); // Set loading to false after fetching
       }
     };
-    fetchUpcomingGames();
+    fetchAnticipatedGames();
     setHasMounted(true);
   }, []);
 
   return (
     <SimpleGrid
       cols={{ base: 2, sm: 3, md: 4, lg: 5, xl: 6 }}
-      className={classes.upcomingGamesGrid}
+      className={classes.anticipatedGamesGrid}
     >
       {loading
         ? skeletons.map((_, i) => (
             <GameSkeletonCard key={i} variant="compact" />
           ))
-        : upcomingGames.map((game) => (
+        : anticipatedGames.map((game) => (
             <GameCard key={game.id} game={game} variant="upcoming" />
           ))}
     </SimpleGrid>

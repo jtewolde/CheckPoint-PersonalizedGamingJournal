@@ -11,10 +11,10 @@ import {
   Megaphone,
 } from "lucide-react";
 
-import PopularSection from "@/components/PopularSection/PopularSection";
-import TrendingSection from "@/components/TrendingSection/TrendingSection";
-import UpcomingSection from "@/components/upcomingSection/upcomingSection";
-import AnticipatedSection from "@/components/AnticipatedSection/AnticipatedSection";
+import PopularSection from "@/components/Sections/PopularSection/PopularSection";
+import TrendingSection from "@/components/Sections/TrendingSection/TrendingSection";
+import UpcomingSection from "@/components/Sections/upcomingSection/upcomingSection";
+import AnticipatedSection from "@/components/Sections/AnticipatedSection/AnticipatedSection";
 
 import classes from "./discoverPage.module.css";
 

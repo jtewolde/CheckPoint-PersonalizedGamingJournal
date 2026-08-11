@@ -6,8 +6,8 @@ import { SimpleGrid } from "@mantine/core";
 
 import classes from "./PopularSection.module.css";
 
-import GameCard from "../Cards/GameCard/GameCard";
-import GameSkeletonCard from "../Cards/GameCard/GameSkeletonCard";
+import GameCard from "../../Cards/GameCard/GameCard";
+import GameSkeletonCard from "../../Cards/GameCard/GameSkeletonCard";
 
 export default function PopularSection() {
   // States to hold popular games data and loading status
