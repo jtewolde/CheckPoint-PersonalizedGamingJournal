@@ -8,7 +8,7 @@ export function DiscordButton(
     <Button
       size="md"
       style={{
-        border: "1px solid #342b3a",
+        border: "1px solid #6a686b",
         fontWeight: 500,
         textAlign: "left",
         fontSize: "14px",
