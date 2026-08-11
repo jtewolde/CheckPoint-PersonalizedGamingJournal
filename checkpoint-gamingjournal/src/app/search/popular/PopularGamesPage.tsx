@@ -6,8 +6,8 @@ import { useMediaQuery } from "@mantine/hooks";
 
 import GameFilters from "@/components/GameFilters/GameFilters";
 import ActiveFilters from "@/components/ActiveFilters/ActiveFilters";
-import GameCard from "@/components/GameCard/GameCard";
-import GameSkeletonCard from "@/components/GameCard/GameSkeletonCard";
+import GameCard from "@/components/Cards/GameCard/GameCard";
+import GameSkeletonCard from "@/components/Cards/GameCard/GameSkeletonCard";
 import GamePageSearch from "@/components/GamePageSearch/GamePageSearch";
 
 import { Text, SimpleGrid, Pagination, Select } from "@mantine/core";

@@ -11,7 +11,7 @@ import LibraryFilters from "@/components/LibraryFilters/LibraryFilters";
 import { SimpleGrid, LoadingOverlay, Select } from "@mantine/core";
 
 import classes from "./library.module.css";
-import GameCard from "@/components/GameCard/GameCard";
+import GameCard from "@/components/Cards/GameCard/GameCard";
 
 export default function Library() {
   // State variables for going through user's games and loading state

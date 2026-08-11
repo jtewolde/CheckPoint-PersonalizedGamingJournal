@@ -6,9 +6,9 @@ import { useMediaQuery, useDisclosure } from "@mantine/hooks";
 import { useLibraryGame } from "@/hooks/useLibraryGame";
 import { useAuth } from "@/context/Authcontext";
 
-import PlaySessionModal from "../PlaySessionModal/SessionModal";
-import EditGameInfoModal from "../EditGameInfoModal/EditGameInfoModal";
-import AddToLibraryModal from "../AddToLibraryModal/AddToLibraryModal";
+import PlaySessionModal from "../../PlaySessionModal/SessionModal";
+import EditGameInfoModal from "../../EditGameInfoModal/EditGameInfoModal";
+import AddToLibraryModal from "../../AddToLibraryModal/AddToLibraryModal";
 
 import {
   Badge,
@@ -60,7 +60,7 @@ import {
 } from "react-icons/si";
 import { BsNintendoSwitch, BsPc } from "react-icons/bs";
 
-import PlaceHolderImage from "../../../public/no-cover-image.png";
+import PlaceHolderImage from "../../../../public/no-cover-image.png";
 import classes from "./GameCard.module.css";
 
 // Create type variable to determine which variant of gameCard, default for search results and more info

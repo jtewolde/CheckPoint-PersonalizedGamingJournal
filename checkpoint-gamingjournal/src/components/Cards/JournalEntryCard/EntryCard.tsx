@@ -18,11 +18,11 @@ import {
 import { modals } from "@mantine/modals";
 
 import { entryTypeColors } from "@/hooks/getEntryTypeColors";
-import JournalEntryModal from "../JournalEntryModal/EntryModal";
+import JournalEntryModal from "../../JournalEntryModal/EntryModal";
 
 import { EllipsisVertical, Trash, Pencil, Eye } from "lucide-react";
 
-import PlaceHolderImage from "../../../public/no-cover-image.png";
+import PlaceHolderImage from "../../../../public/no-cover-image.png";
 import toast from "react-hot-toast";
 import classes from "./EntryCard.module.css";
 

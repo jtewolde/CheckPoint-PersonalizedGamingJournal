@@ -9,8 +9,8 @@ import { Navigation, Pagination, Scrollbar } from "swiper/modules";
 
 import classes from "./TrendingCarousel.module.css";
 
-import GameCard from "../GameCard/GameCard";
-import GameSkeletonCard from "../GameCard/GameSkeletonCard";
+import GameCard from "../Cards/GameCard/GameCard";
+import GameSkeletonCard from "../Cards/GameCard/GameSkeletonCard";
 
 export default function TrendingGamesCarousel() {
   // States to hold trending games data and loading status

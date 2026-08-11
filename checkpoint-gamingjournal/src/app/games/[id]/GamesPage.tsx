@@ -80,7 +80,7 @@ import { BsNintendoSwitch, BsPc } from "react-icons/bs";
 
 import PlaceHolderImage from "../../../../public/no-cover-image.png";
 import { useAuth } from "@/context/Authcontext";
-import GameCard from "@/components/GameCard/GameCard";
+import GameCard from "@/components/Cards/GameCard/GameCard";
 
 export default function GameDetails() {
   const { id } = useParams(); // Get the game ID from the URL

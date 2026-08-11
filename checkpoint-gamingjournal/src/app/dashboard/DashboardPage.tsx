@@ -23,8 +23,8 @@ import {
 import { DonutChart, BarChart, LineChart } from "@mantine/charts";
 
 import SessionHeatmap from "@/components/SessionHeatmap/SessionHeatmap";
-import JournalEntryCard from "@/components/JournalEntryCard/EntryCard";
-import GameCard from "@/components/GameCard/GameCard";
+import JournalEntryCard from "@/components/Cards/JournalEntryCard/EntryCard";
+import GameCard from "@/components/Cards/GameCard/GameCard";
 import PlaySessionModal from "@/components/PlaySessionModal/SessionModal";
 import EditGameInfoModal from "@/components/EditGameInfoModal/EditGameInfoModal";
 import JournalEntryModal from "@/components/JournalEntryModal/EntryModal";
