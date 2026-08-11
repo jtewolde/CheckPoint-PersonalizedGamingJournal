@@ -9,7 +9,7 @@
     linear-gradient(rgba(14, 14, 18, 0.82), rgba(14, 14, 18, 0.82)),
     url("/EldenRing.png");
 
-  background-size: contain;
+  background-size: cover;
   background-position: center;
 }
 
@@ -17,7 +17,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .landingLogo {
@@ -43,9 +43,6 @@
   padding-right: 40px;
   padding-left: 40px;
   padding-bottom: 40px;
-
-  margin-top: 40px;
-  margin-bottom: 40px;
 }
 
 .title {
@@ -69,6 +66,16 @@
   width: 100%;
 }
 
+.usernameInput input {
+  background-color: #181818ff;
+  color: white;
+}
+
+.usernameInput label {
+  color: white;
+  font-weight: 300;
+}
+
 .emailInput input {
   background-color: #181818ff;
   color: white;
@@ -89,21 +96,10 @@
   font-weight: 300;
 }
 
-.modalText {
-  margin-top: -0.4rem;
-  text-align: center;
-  justify-content: center;
-}
-
-.modalTitle {
-  font-family: "Poppins";
-  font-size: 26px;
-  text-align: center;
-}
-
-.modalButton {
-  flex-direction: column;
-  font-family: "Poppins";
-  font-weight: 400;
-  margin-top: 1rem;
+@media (max-width: 480px) {
+  .form {
+    width: 90%;
+    padding: 20px;
+    margin: 0px 0;
+  }
 }

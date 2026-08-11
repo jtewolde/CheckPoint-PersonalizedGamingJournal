@@ -267,18 +267,25 @@ export default function Home() {
               </div>
             </motion.div>
 
-            <div className={classes.faqSection}>
-              <Title className={classes.faqTitle} c="white" size="xl">
-                Frequently Asked Questions
-              </Title>
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            >
+              <div className={classes.faqSection}>
+                <Title className={classes.faqTitle} c="white" size="xl">
+                  Frequently Asked Questions
+                </Title>
 
-              <Text className={classes.faqSubtitle} c="white">
-                Everything you need to know before starting your gaming journey
-                with CheckPoint.
-              </Text>
+                <Text className={classes.faqSubtitle} c="white">
+                  Everything you need to know before starting your gaming
+                  journey with CheckPoint.
+                </Text>
 
-              <Questions />
-            </div>
+                <Questions />
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>

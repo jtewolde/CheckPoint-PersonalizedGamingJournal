@@ -148,7 +148,7 @@ export default function signInPage() {
           Policy.
         </Text>
 
-        <Stack gap="md" mt="md">
+        <Stack gap="xs" mt="md">
           <GoogleButton radius="md" onClick={handleGoogleSignIn}>
             Continue With Google
           </GoogleButton>
