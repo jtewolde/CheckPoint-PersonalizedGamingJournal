@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMediaQuery } from "@mantine/hooks";
 
-import GameFilters from "@/components/GameFilters/GameFilters";
+import GameFilters from "@/components/Filters/GameFilters/GameFilters";
 import GamePageSearch from "@/components/GamePageSearch/GamePageSearch";
-import ActiveFilters from "@/components/ActiveFilters/ActiveFilters";
+import ActiveFilters from "@/components/Filters/ActiveFilters/ActiveFilters";
 import GameSkeletonCard from "@/components/Cards/GameCard/GameSkeletonCard";
 import GameCard from "@/components/Cards/GameCard/GameCard";
 

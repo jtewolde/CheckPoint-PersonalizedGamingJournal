@@ -6,7 +6,7 @@ import { authClient } from "@/lib/auth-client";
 import { useMediaQuery, useDisclosure } from "@mantine/hooks";
 
 import GamePageSearch from "@/components/GamePageSearch/GamePageSearch";
-import LibraryFilters from "@/components/LibraryFilters/LibraryFilters";
+import LibraryFilters from "@/components/Filters/LibraryFilters/LibraryFilters";
 
 import { SimpleGrid, LoadingOverlay, Select } from "@mantine/core";
 

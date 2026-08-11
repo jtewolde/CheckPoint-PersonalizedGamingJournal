@@ -6,9 +6,9 @@ import Image from "next/image";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { authClient } from "@/lib/auth-client";
 
-import JournalEntryCard from "@/components/JournalEntryCard/EntryCard";
+import JournalEntryCard from "@/components/Cards/JournalEntryCard/EntryCard";
 import JournalEntryModal from "@/components/JournalEntryModal/EntryModal";
-import JournalFilters from "@/components/JournalFilters/JournalFilters";
+import JournalFilters from "@/components/Filters/JournalFilters/JournalFilters";
 import JournalPageSearch from "@/components/JournalPageSearch/JournalPageSearch";
 
 import {

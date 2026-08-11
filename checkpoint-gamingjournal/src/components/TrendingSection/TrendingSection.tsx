@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SimpleGrid } from "@mantine/core";
 
-import GameCard from "../GameCard/GameCard";
-import GameSkeletonCard from "../GameCard/GameSkeletonCard";
+import GameCard from "../Cards/GameCard/GameCard";
+import GameSkeletonCard from "../Cards/GameCard/GameSkeletonCard";
 
 import classes from "./TrendingSection.module.css";
 
