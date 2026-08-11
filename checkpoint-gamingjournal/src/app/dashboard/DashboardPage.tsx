@@ -25,9 +25,9 @@ import { DonutChart, BarChart, LineChart } from "@mantine/charts";
 import SessionHeatmap from "@/components/SessionHeatmap/SessionHeatmap";
 import JournalEntryCard from "@/components/Cards/JournalEntryCard/EntryCard";
 import GameCard from "@/components/Cards/GameCard/GameCard";
-import PlaySessionModal from "@/components/PlaySessionModal/SessionModal";
-import EditGameInfoModal from "@/components/EditGameInfoModal/EditGameInfoModal";
-import JournalEntryModal from "@/components/JournalEntryModal/EntryModal";
+import PlaySessionModal from "@/components/Modals/PlaySessionModal/SessionModal";
+import EditGameInfoModal from "@/components/Modals/EditGameInfoModal/EditGameInfoModal";
+import JournalEntryModal from "@/components/Modals/JournalEntryModal/EntryModal";
 
 import PlaceHolderImage from "../../../public/no-cover-image.png";
 

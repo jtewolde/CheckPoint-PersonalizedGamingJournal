@@ -6,9 +6,9 @@ import { useParams, useRouter } from "next/navigation";
 import { notFound } from "next/navigation";
 
 import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
-import PlaySessionModal from "@/components/PlaySessionModal/SessionModal";
-import EditGameInfoModal from "@/components/EditGameInfoModal/EditGameInfoModal";
-import AddToLibraryModal from "@/components/AddToLibraryModal/AddToLibraryModal";
+import PlaySessionModal from "@/components/Modals/PlaySessionModal/SessionModal";
+import EditGameInfoModal from "@/components/Modals/EditGameInfoModal/EditGameInfoModal";
+import AddToLibraryModal from "@/components/Modals/AddToLibraryModal/AddToLibraryModal";
 import SessionCalendar from "@/components/SessionCalendar/SessionCalendar";
 
 import { toast } from "react-toastify";

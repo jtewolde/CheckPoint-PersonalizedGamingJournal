@@ -18,7 +18,7 @@ import {
 import { modals } from "@mantine/modals";
 
 import { entryTypeColors } from "@/hooks/getEntryTypeColors";
-import JournalEntryModal from "../../JournalEntryModal/EntryModal";
+import JournalEntryModal from "../../Modals/JournalEntryModal/EntryModal";
 
 import { EllipsisVertical, Trash, Pencil, Eye } from "lucide-react";
 

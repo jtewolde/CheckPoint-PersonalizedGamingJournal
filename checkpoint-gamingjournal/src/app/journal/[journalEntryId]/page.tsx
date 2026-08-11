@@ -16,7 +16,7 @@ import {
 import toast from "react-hot-toast";
 
 import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
-import JournalEntryModal from "@/components/JournalEntryModal/EntryModal";
+import JournalEntryModal from "@/components/Modals/JournalEntryModal/EntryModal";
 
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import classes from "./viewJournal.module.css";

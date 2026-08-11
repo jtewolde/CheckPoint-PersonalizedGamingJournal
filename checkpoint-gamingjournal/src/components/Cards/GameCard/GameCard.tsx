@@ -6,9 +6,9 @@ import { useMediaQuery, useDisclosure } from "@mantine/hooks";
 import { useLibraryGame } from "@/hooks/useLibraryGame";
 import { useAuth } from "@/context/Authcontext";
 
-import PlaySessionModal from "../../PlaySessionModal/SessionModal";
-import EditGameInfoModal from "../../EditGameInfoModal/EditGameInfoModal";
-import AddToLibraryModal from "../../AddToLibraryModal/AddToLibraryModal";
+import PlaySessionModal from "../../Modals/PlaySessionModal/SessionModal";
+import EditGameInfoModal from "../../Modals/EditGameInfoModal/EditGameInfoModal";
+import AddToLibraryModal from "../../Modals/AddToLibraryModal/AddToLibraryModal";
 
 import {
   Badge,
