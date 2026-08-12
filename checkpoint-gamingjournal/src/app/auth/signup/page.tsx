@@ -22,8 +22,8 @@ import { authClient } from "@/lib/auth-client";
 
 import classes from "./signUp.module.css";
 import { UserRoundPlus } from "lucide-react";
-import { GoogleButton } from "@/components/GoogleButton/GoogleButton";
-import { DiscordButton } from "@/components/DiscordButton/DiscordButton";
+import { GoogleButton } from "@/components/SocialButtons/GoogleButton/GoogleButton";
+import { DiscordButton } from "@/components/SocialButtons/DiscordButton/DiscordButton";
 
 import { Lock, Mail, CircleUser } from "lucide-react";
 import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
