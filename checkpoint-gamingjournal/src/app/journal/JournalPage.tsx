@@ -28,18 +28,7 @@ import {
 } from "@mantine/core";
 
 import toast from "react-hot-toast";
-import {
-  FilePlus,
-  Bookmark,
-  Trash2,
-  ClipboardCheck,
-  Gamepad,
-  NotebookText,
-  Link,
-} from "lucide-react";
-
-import PlaceHolderImage from "../../../public/no-cover-image.png";
-import HeroImage from "../../../public/cyberpunkWallpaper.jpg";
+import { FilePlus, Trash2 } from "lucide-react";
 
 import classes from "./journal.module.css";
 
@@ -249,11 +238,9 @@ export default function Journal() {
     }
   };
 
-  // Get unique game names from entries for the dropdown
-  const gameNames = Array.from(new Set(entries.map((entry) => entry.gameName)));
-
-  // Find the selected game's object in the journal entries to get the gameID
-  const selectedGameObject = entries.find((e) => e.gameName === selectedGame);
+  const selectedGameObject = games.find(
+    (game) => game.gameName === selectedGame,
+  );
 
   return (
     <div className={classes.pageWrapper}>
@@ -274,39 +261,64 @@ export default function Journal() {
           opened={opened}
           onClose={close}
           centered
+          size="md"
+          title="Delete All Entries of a Game"
+          className={classes.drawer}
           styles={{
-            content: { border: "1px solid #545454ff" },
-            close: { color: "white" },
+            header: {
+              marginBottom: "10px",
+            },
+            body: {
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+              width: "100%",
+            },
+            title: {
+              fontSize: "24px",
+              color: "white",
+              fontFamily: "Noto Sans",
+              fontWeight: 300,
+            },
+            content: {
+              fontSize: "18px",
+              color: "white",
+              fontFamily: "Poppins",
+              fontWeight: 400,
+            },
+            close: {
+              color: "white",
+            },
           }}
         >
-          <Group className={classes.modalText} mb={20} ta="left">
-            <Title className={classes.modalTitle} order={3} ta="center">
-              Delete All Entries of a Game
-            </Title>
-
-            <Text c="white" fz="md" ta="center" mb={10}>
+          <Stack gap="md" ta="left">
+            <Text c="white" fz="md" ta="left">
               This will permanently delete <b>all</b> journal entries assoicated
               with the selected game. This action cannot be undone.
             </Text>
 
             <Select
               label="Select Game"
-              size="lg"
+              size="md"
               placeholder="Choose a game to delete its entries"
-              data={gameNames.map((game) => ({ value: game, label: game }))}
+              data={games.map((game) => ({
+                value: game.gameName,
+                label: game.gameName,
+              }))}
               value={selectedGame}
               onChange={(value) => setSelectedGame(value || "")}
               styles={{
                 input: { backgroundColor: "#212121", color: "white" },
                 dropdown: { backgroundColor: "#2c2c2fff", color: "white" },
                 label: {
-                  fontFamily: "Noto Sans",
-                  color: "white",
                   fontSize: "18px",
+                  color: "white",
+                  fontFamily: "Noto Sans",
+                  fontWeight: 300,
                 },
                 option: { background: "#212121" },
               }}
-              mb="lg"
+              mb="sm"
               error={error}
             />
 
@@ -324,11 +336,10 @@ export default function Journal() {
             <Button
               className={classes.deleteEntriesButton}
               color="#d8070b"
-              size="md"
-              mt={15}
-              radius="lg"
+              fullWidth
+              radius="md"
               variant="filled"
-              rightSection={<Trash2 />}
+              rightSection={<Trash2 size={16} />}
               disabled={!checked || !selectedGame}
               loading={loading}
               onClick={async () => {
@@ -355,7 +366,7 @@ export default function Journal() {
             >
               Delete Entries
             </Button>
-          </Group>
+          </Stack>
         </Modal>
 
         <div className={classes.toolbarContainer}>
@@ -363,7 +374,6 @@ export default function Journal() {
             <div className={classes.toolbarTop}>
               <div className={classes.searchContainer}>
                 <JournalPageSearch
-                  backgroundColor="#211b2c"
                   borderColor="border: 1px solid transparent"
                   size="lg"
                   radius="md"
