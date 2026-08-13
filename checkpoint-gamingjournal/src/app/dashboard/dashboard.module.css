@@ -5,7 +5,6 @@
   min-width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 0.5rem;
   z-index: 0;
 }
@@ -220,7 +219,7 @@
 
 .quickStatsContainer {
   width: 100%;
-  max-width: 98%;
+  max-width: 100%;
 }
 
 .quickStatHeader {
@@ -341,7 +340,6 @@
 
 .recentEntries {
   width: 100%;
-  max-width: 100%;
   padding: 1rem 0;
   display: block;
 }
@@ -353,17 +351,12 @@
 
 @media (max-width: 1920px) {
   .wrapper {
-    padding-left: 3.4rem;
-    padding-right: 3.4rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }
 
 @media (max-width: 1248px) {
-  .wrapper {
-    padding-left: 3rem;
-    padding-right: 3rem;
-  }
-
   .gamesGrid,
   .popularGamesGrid,
   .trendingGamesGrid {

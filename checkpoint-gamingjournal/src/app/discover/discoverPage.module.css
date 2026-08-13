@@ -17,8 +17,6 @@
   justify-content: flex-start;
   gap: 2rem;
   padding: 2rem;
-  padding-left: 3rem;
-  padding-right: 3rem;
   z-index: 1;
   pointer-events: auto;
 
@@ -43,31 +41,6 @@
   font-family: "Barlow";
   color: #e7e5e5;
   width: auto;
-}
-
-.searchBarContainer {
-  margin-top: 1rem;
-  width: 94%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  border-radius: 16px;
-  gap: 10px;
-}
-
-.searchBar {
-  width: 100%; /* Ensure it spans the available width */
-  max-width: 100%; /* Limit the maximum width */
-  padding: 0.5rem; /* Add padding for better spacing */
-  border-radius: 8px; /* Add rounded corners */
-}
-
-.searchBar input {
-  background-color: #232526; /* example: dark background */
-  color: white; /* input text color */
-  border: 0.2px solid rgb(148, 148, 148);
-  font-family: "Noto Sans";
 }
 
 .trendingSection,

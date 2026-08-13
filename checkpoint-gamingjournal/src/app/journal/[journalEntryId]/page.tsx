@@ -95,7 +95,7 @@ export default function ViewJournalEntry() {
             leftSection={<ArrowLeft size={18} />}
             onClick={() => router.back()}
           >
-            Back to Journal
+            Back
           </Button>
 
           <JournalEntryModal
