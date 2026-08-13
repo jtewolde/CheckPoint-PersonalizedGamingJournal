@@ -1,0 +1,515 @@
+.hero {
+  position: relative;
+  min-height: 600px;
+  overflow: hidden;
+
+  background-image: var(--hero-background);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  color: white;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(7, 8, 12, 0.3) 0%,
+      rgba(7, 8, 12, 0.5) 42%,
+      rgba(7, 8, 12, 0.65) 75%,
+      rgba(7, 8, 12, 0.92) 100%
+    ),
+    linear-gradient(180deg, rgba(7, 8, 12, 0.25) 0%, rgba(7, 8, 12, 0.95) 100%);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+
+  width: min(1400px, calc(100% - 48px));
+  margin: 0 auto;
+
+  padding: 28px 0 56px;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+
+  margin-bottom: 32px;
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition:
+    color 150ms ease,
+    transform 150ms ease;
+}
+
+.backButton:hover {
+  color: white;
+  transform: translateX(-2px);
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr) 340px;
+  gap: 32px;
+  align-items: center;
+}
+
+.coverWrapper {
+  width: 100%;
+}
+
+.cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+
+.gameInformation {
+  min-width: 0;
+  align-self: center;
+}
+
+.titleRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+  gap: 12px;
+}
+
+.title {
+  margin: 0;
+  max-width: 800px;
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.typeBadge {
+  margin-top: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.metadata {
+  margin-top: 18px;
+}
+
+.metadataText {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 16px;
+}
+
+.separator {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.ratingGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(110px, 1fr));
+
+  max-width: 600px;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.ratingCard {
+  min-height: 95px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  padding: 14px 16px;
+
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 9px;
+
+  background: rgba(8, 9, 13, 0.55);
+
+  backdrop-filter: blur(12px);
+}
+
+.ratingNumber {
+  margin: 0;
+
+  color: #a875ff;
+
+  font-size: 27px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.ratingValue {
+  margin-top: 6px;
+
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ratingLabel {
+  margin-top: 7px;
+
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 12px;
+}
+
+.platformSection {
+  margin-top: 24px;
+}
+
+.platformLabel {
+  margin-bottom: 10px;
+
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+}
+
+.platformIcon,
+.platformMore {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.platformMore {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+}
+
+/* ------------------------------------------------ */
+/* YOUR GAME CARD                                  */
+/* ------------------------------------------------ */
+
+.yourGameCard {
+  align-self: center;
+
+  padding: 22px;
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+
+  background: rgba(10, 11, 16, 0.78);
+
+  backdrop-filter: blur(18px);
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.cardHeader {
+  padding-bottom: 16px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cardTitle {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  color: #b47cff;
+
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cardDot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #9b5cff;
+  box-shadow: 0 0 10px rgba(155, 92, 255, 0.8);
+}
+
+.statusRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 16px;
+}
+
+.statLabel {
+  margin-bottom: 5px;
+
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.statusIcons {
+  display: flex;
+  gap: 6px;
+}
+
+.iconStatus {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 7px;
+
+  color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.05);
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.iconStatusActive {
+  color: #ffc62d;
+  background: rgba(255, 198, 45, 0.08);
+  border-color: rgba(255, 198, 45, 0.2);
+}
+
+.yourRating {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 14px 0;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 18px 14px;
+}
+
+.statValue {
+  min-height: 22px;
+
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.primaryButton {
+  min-height: 44px;
+
+  background: #7c3aed;
+  border: none;
+
+  transition:
+    background 150ms ease,
+    transform 150ms ease;
+}
+
+.primaryButton:hover {
+  background: #8b5cf6;
+  transform: translateY(-1px);
+}
+
+.secondaryActions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+
+  gap: 8px;
+}
+
+.editButton {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.removeButton {
+  padding-inline: 12px;
+}
+
+/* ------------------------------------------------ */
+/* EMPTY STATE                                     */
+/* ------------------------------------------------ */
+
+.emptyTitle {
+  color: white;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.emptyDescription {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* ------------------------------------------------ */
+/* RESPONSIVE                                      */
+/* ------------------------------------------------ */
+
+@media (max-width: 1100px) {
+  .heroGrid {
+    grid-template-columns: 210px minmax(0, 1fr);
+  }
+
+  .yourGameCard {
+    grid-column: 1 / -1;
+  }
+
+  .yourGameCard {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 750px) {
+  .heroContent {
+    width: min(100% - 32px, 650px);
+    padding-top: 20px;
+  }
+
+  .heroGrid {
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .metadataText {
+    font-size: 14px;
+  }
+
+  .ratingGrid {
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+    margin-top: 20px;
+  }
+
+  .yourGameCard {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 520px) {
+  .hero {
+    min-height: 0;
+  }
+
+  .heroOverlay {
+    background: linear-gradient(
+      180deg,
+      rgba(7, 8, 12, 0.68) 0%,
+      rgba(7, 8, 12, 0.96) 55%,
+      rgba(7, 8, 12, 1) 100%
+    );
+  }
+
+  .heroContent {
+    width: min(100% - 24px, 500px);
+    padding-bottom: 32px;
+  }
+
+  .heroGrid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .coverWrapper {
+    width: 180px;
+    margin: 0 auto;
+  }
+
+  .gameInformation {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .platformIcons {
+    justify-content: center;
+  }
+
+  .title {
+    font-size: 1.65rem;
+    letter-spacing: -0.02em;
+  }
+
+  .titleRow {
+    gap: 6px;
+  }
+
+  .typeBadge {
+    display: none;
+  }
+
+  .metadata {
+    margin-top: 10px;
+  }
+
+  .metadataText {
+    font-size: 12px;
+  }
+
+  .ratingGrid {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, 1fr);
+    max-width: none;
+    margin-top: 8px;
+    justify-content: center;
+  }
+
+  .ratingCard {
+    min-height: 75px;
+    padding: 10px;
+  }
+
+  .ratingNumber {
+    font-size: 21px;
+  }
+
+  .ratingLabel {
+    font-size: 10px;
+  }
+
+  .platformSection {
+    grid-column: 1 / -1;
+  }
+
+  .yourGameCard {
+    padding: 18px;
+  }
+}
