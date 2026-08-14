@@ -84,6 +84,7 @@ interface GameCardProps {
 
   // Optional props for if the game is in the user's library
   libraryMeta?: {
+    title?: string;
     status?: string;
     rating?: number;
     hours?: number;
@@ -430,6 +431,10 @@ export default function GameCard({
               }}
             />
           )}
+
+          <div className={classes.gameName}>
+            <Text className={classes.gameNameText}>{game.name}</Text>
+          </div>
 
           <div className={classes.quickAdd}>
             {(variant === "default" || variant === "upcoming") && (

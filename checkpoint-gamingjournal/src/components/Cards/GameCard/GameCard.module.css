@@ -69,6 +69,14 @@
   border: 2px solid rgb(77, 76, 76);
 }
 
+.gameNameText {
+  font-family: "Inter";
+  font-weight: 500;
+  font-size: 21px;
+  color: white;
+  text-align: center;
+}
+
 .cover {
   width: 100%;
   height: 100%;
@@ -220,7 +228,7 @@
 }
 
 .gameCard:hover {
-  border-color: #dedce4;
+  border-color: #826dc1;
 }
 
 .gameCard:hover .gameName {
