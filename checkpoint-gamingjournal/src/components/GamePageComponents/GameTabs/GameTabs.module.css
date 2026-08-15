@@ -1,0 +1,43 @@
+.list {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.list::-webkit-scrollbar {
+  display: none;
+}
+
+.root {
+  align-items: center;
+  background-color: rgba(7, 8, 12, 0.92);
+  padding: 1rem;
+  width: 100%;
+}
+
+.tab {
+  flex: 0 0 auto;
+  font-size: 1.25rem;
+  font-weight: 400;
+  font-family: "Noto Sans";
+  margin: 0 1rem;
+  color: white;
+}
+
+.list {
+  border-bottom: 1px solid #372b3b;
+}
+
+@media (max-width: 646px) {
+  .list {
+    justify-content: flex-start;
+  }
+
+  .tab {
+    padding: 13px 14px;
+    font-size: 14px;
+  }
+}

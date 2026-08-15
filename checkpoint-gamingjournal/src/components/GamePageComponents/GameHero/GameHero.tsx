@@ -28,12 +28,24 @@ import {
 } from "lucide-react";
 
 import {
-  FaAndroid,
-  FaApple,
-  FaGoogle,
-  FaPlaystation,
   FaXbox,
+  FaWindows,
+  FaApple,
+  FaAndroid,
+  FaSteam,
+  FaLinux,
+  FaTrophy,
+  FaGoogle,
 } from "react-icons/fa";
+import {
+  SiPlaystation,
+  SiPlaystation2,
+  SiPlaystation3,
+  SiPlaystation4,
+  SiPlaystation5,
+  SiPlaystationportable,
+  SiPlaystationvita,
+} from "react-icons/si";
 import { BsNintendoSwitch, BsPc } from "react-icons/bs";
 
 import classes from "./GameHero.module.css";
@@ -103,40 +115,64 @@ export default function GameHero({
     return `https:${url.replace("t_thumb", "t_1080p")}`;
   };
 
-  const getPlatformIcon = (platformName: string) => {
-    const platform = platformName.toLowerCase();
+  // Helper function that maps the specific platform name to the associated logo to put on card
+  const getPlatformIcon = (platform: string) => {
+    const name = platform.toLowerCase();
 
-    if (platform.includes("xbox")) {
-      return <FaXbox size={17} />;
-    }
+    // Windows / PC
+    if (name.includes("windows") || name === "pc")
+      return <FaWindows size={18} />;
 
-    if (platform.includes("playstation")) {
-      return <FaPlaystation size={17} />;
-    }
+    // Apple
+    if (name.includes("mac")) return <FaApple size={18} />;
 
+    // Google Stadia
+    if (name.includes("google stadia")) return <FaGoogle size={18} />;
+
+    // Linux
+    if (name.includes("linux")) return <FaLinux size={18} />;
+
+    // Steam
+    if (name.includes("steam")) return <FaSteam size={18} />;
+
+    // Android
+    if (name.includes("android")) return <FaAndroid size={18} />;
+
+    // iOS
+    if (name.includes("ios")) return <FaApple size={18} />;
+
+    // Nintendo
+    if (name.includes("switch") || name.includes("nintendo"))
+      return <BsNintendoSwitch size={18} />;
+
+    // PlayStation
+    if (name.includes("playstation 5") || name.includes("ps5"))
+      return <SiPlaystation5 size={30} />;
+
+    if (name.includes("playstation 4") || name.includes("ps4"))
+      return <SiPlaystation4 size={30} />;
+
+    if (name.includes("playstation 3") || name.includes("ps3"))
+      return <SiPlaystation3 size={30} />;
+
+    if (name.includes("playstation 2") || name.includes("ps2"))
+      return <SiPlaystation2 size={30} />;
+
+    if (name.includes("playstation")) return <SiPlaystation size={30} />;
+
+    if (name.includes("playstation vita"))
+      return <SiPlaystationvita size={18} />;
+
+    if (name.includes("playstation portable"))
+      return <SiPlaystationportable size={18} />;
+
+    // Xbox
     if (
-      platform.includes("pc") ||
-      platform.includes("windows") ||
-      platform.includes("steam")
-    ) {
-      return <BsPc size={17} />;
-    }
-
-    if (platform.includes("nintendo")) {
-      return <BsNintendoSwitch size={17} />;
-    }
-
-    if (platform.includes("android")) {
-      return <FaAndroid size={17} />;
-    }
-
-    if (platform.includes("google")) {
-      return <FaGoogle size={17} />;
-    }
-
-    if (platform.includes("ios") || platform.includes("mac")) {
-      return <FaApple size={17} />;
-    }
+      name.includes("xbox") ||
+      name.includes("series x") ||
+      name.includes("series s")
+    )
+      return <FaXbox size={18} />;
 
     return null;
   };
