@@ -348,7 +348,7 @@ export default function GameHero({
               </div>
 
               <div className={classes.ratingCard}>
-                <Text className={classes.ratingNumber}>
+                <Text className={classes.criticRatingNumber}>
                   {game.aggregated_rating
                     ? Math.round(game.aggregated_rating)
                     : "—"}
