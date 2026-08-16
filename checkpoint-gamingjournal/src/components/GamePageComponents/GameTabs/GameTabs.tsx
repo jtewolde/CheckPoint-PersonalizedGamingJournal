@@ -13,7 +13,7 @@ export default function GameTabs({ value, onTabChange }: GameTabsProps) {
   return (
     <Tabs
       value={value}
-      variant="pills"
+      variant="default"
       onChange={onTabChange}
       classNames={{
         root: classes.root,

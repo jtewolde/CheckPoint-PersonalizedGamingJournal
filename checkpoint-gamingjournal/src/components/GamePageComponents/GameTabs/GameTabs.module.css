@@ -1,3 +1,10 @@
+.root {
+  align-items: center;
+  background-color: rgba(7, 8, 12, 0.92);
+  padding: 1rem;
+  width: 100%;
+}
+
 .list {
   display: flex;
   flex-wrap: nowrap;
@@ -11,27 +18,27 @@
   display: none;
 }
 
-.root {
-  align-items: center;
-  background-color: rgba(7, 8, 12, 0.92);
-  padding: 1rem;
-  width: 100%;
-}
-
 .tab {
   flex: 0 0 auto;
   font-size: 1.25rem;
   font-weight: 400;
   font-family: "Noto Sans";
   margin: 0 1rem;
-  color: white;
+  color: rgb(189, 189, 189);
 }
 
-.list {
-  border-bottom: 1px solid #372b3b;
+.tab[data-active] {
+  color: #fff;
+  background-color: transparent;
+  border-bottom: 5px solid #8b10ef;
+  border-radius: 0;
 }
 
 @media (max-width: 646px) {
+  .root {
+    width: 100%;
+  }
+
   .list {
     justify-content: flex-start;
   }
