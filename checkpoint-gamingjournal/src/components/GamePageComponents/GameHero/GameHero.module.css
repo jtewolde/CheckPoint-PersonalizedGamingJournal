@@ -8,6 +8,7 @@
   background-size: cover;
   background-repeat: no-repeat;
 
+  padding: 0 2rem;
   color: white;
 }
 
@@ -407,6 +408,10 @@
 }
 
 @media (max-width: 750px) {
+  .hero {
+    padding: 0rem;
+  }
+
   .heroContent {
     width: min(100% - 32px, 650px);
     padding-top: 20px;
