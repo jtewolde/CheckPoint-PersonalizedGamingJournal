@@ -1,8 +1,6 @@
 "use client";
 
-import { Badge, Group, Paper, Stack, Text, Title } from "@mantine/core";
-
-import { CalendarDays, Gamepad2 } from "lucide-react";
+import { Group, Stack, Text, Title } from "@mantine/core";
 
 import classes from "./GameOverview.module.css";
 
