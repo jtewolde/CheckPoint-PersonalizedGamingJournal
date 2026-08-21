@@ -1,0 +1,243 @@
+.wrapper {
+  width: 100%;
+  padding: 10px 0;
+  justify-content: center;
+}
+
+.header {
+  margin-bottom: 20px;
+  padding-left: 1rem;
+}
+
+.title {
+  margin: 0;
+
+  color: white;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.description {
+  margin-top: 6px;
+
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 14px;
+}
+
+.screenshotGrid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  padding: 0px 15px;
+}
+
+.screenshotButton {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.screenshot {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 10px;
+  transition:
+    transform 180ms ease,
+    filter 180ms ease;
+}
+
+.screenshotButton:hover .screenshot {
+  transform: scale(1.03);
+  filter: brightness(0.75);
+}
+
+.activeScreenshot {
+  border: 2px solid #7c3aed;
+  box-shadow: 0 0 0 1px rgba(124, 58, 237, 0.25);
+}
+
+.screenshotOverlay {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 28px;
+  height: 28px;
+
+  border-radius: 6px;
+
+  background: rgba(30, 24, 34, 0.85);
+  color: white;
+
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.screenshotButton:hover .screenshotOverlay {
+  opacity: 1;
+}
+
+.screenshotOverlay p {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.thumbnailContainer {
+  margin-top: 14px;
+  width: 100%;
+}
+
+.thumbnailSwiper {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.fullscreenSwiper :global(.swiper-button-prev),
+.fullscreenSwiper :global(.swiper-button-next) {
+  width: 50px;
+  height: 50px;
+
+  background: #151317;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.thumbnailSlide {
+  height: 100px;
+
+  opacity: 0.75;
+  border: 1px solid #342342;
+
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease;
+}
+
+.thumbnailSlide:hover {
+  opacity: 0.85;
+}
+
+.thumbnailButton {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 2px solid transparent;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    opacity 150ms ease;
+}
+
+.activeThumbnail {
+  border-color: #7c3aed;
+}
+
+.thumbnail {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.fullScreenOverlay {
+  position: fixed;
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px;
+
+  background: rgba(0, 0, 0, 0.96);
+}
+
+.fullscreenSwiper {
+  width: 100%;
+  height: 100%;
+}
+
+.fullScreenImage {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+}
+
+.closeButton {
+  position: absolute;
+
+  top: 20px;
+  right: 20px;
+
+  z-index: 10;
+}
+
+@media (max-width: 600px) {
+  .screenshotGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .fullscreenSwiper :global(.swiper-button-prev),
+  .fullscreenSwiper :global(.swiper-button-next) {
+    width: 40px;
+    height: 40px;
+
+    background: #151317;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .wrapper {
+    padding: 24px 0;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .description {
+    font-size: 13px;
+  }
+
+  .thumbnailSlide {
+    height: 60px;
+  }
+
+  .fullScreenOverlay {
+    padding: 16px;
+  }
+
+  .closeButton {
+    top: 10px;
+    right: 10px;
+  }
+}
