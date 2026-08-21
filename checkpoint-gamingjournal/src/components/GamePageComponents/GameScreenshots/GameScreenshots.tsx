@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 
-import { Button, Text, Title, ActionIcon } from "@mantine/core";
+import { Button, Text, Title, ActionIcon, Skeleton } from "@mantine/core";
 import { X } from "lucide-react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -20,7 +20,17 @@ interface GameScreenshotsProps {
 export default function GameScreenshots({ game }: GameScreenshotsProps) {
   const screenshots = game.screenshots ?? [];
 
+  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
   const [selectedScreenshotIndex, setSelectedScreenshotIndex] = useState(0);
+
+  // Helper function to handle loading screenshots and counting the amount of images that needs skeletons
+  const handleImageLoad = (index: number) => {
+    setLoadedImages((prev) => {
+      const next = new Set(prev);
+      next.add(index);
+      return next;
+    });
+  };
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -67,13 +77,19 @@ export default function GameScreenshots({ game }: GameScreenshotsProps) {
                 setModalOpen(true);
               }}
             >
+              {!loadedImages.has(index) && (
+                <Skeleton className={classes.screenshotSkeleton} radius="md" />
+              )}
               <Image
                 src={imageUrl}
                 alt={`Screenshot of ${game.name} ${index + 1}`}
                 width={1280}
                 height={720}
-                className={classes.screenshot}
+                className={`${classes.screenshot} ${
+                  loadedImages.has(index) ? classes.screenshotLoaded : ""
+                }`}
                 loading="lazy"
+                onLoad={() => handleImageLoad(index)}
               />
 
               <div className={classes.screenshotOverlay}>
