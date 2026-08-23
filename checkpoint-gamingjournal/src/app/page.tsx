@@ -83,7 +83,8 @@ export default function Home() {
 
                     <Button
                       className={classes.discoverButton}
-                      variant="outline"
+                      variant="filled"
+                      autoContrast
                       size="lg"
                       radius="md"
                       fullWidth={isMobile}
