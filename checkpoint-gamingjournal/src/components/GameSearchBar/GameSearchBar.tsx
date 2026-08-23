@@ -130,7 +130,7 @@ export default function GameSearchBar({
             close();
           }
         }}
-        leftSection={<IconSearch size={30} />}
+        leftSection={<IconSearch size={20} />}
       />
 
       {showButton && (

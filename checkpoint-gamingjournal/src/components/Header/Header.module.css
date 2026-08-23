@@ -1,8 +1,8 @@
 .header {
-  height: 69px;
+  height: 58px;
   background: var(--header);
   border-color: var(--border);
-  border-bottom: 2px solid #9c86d873;
+  border-bottom: 1px solid #9c86d873;
   display: flex; /* Ensure flexbox is applied */
   justify-content: center;
   align-items: center;
@@ -12,28 +12,25 @@
 }
 
 .inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   width: 100%;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  gap: 2rem;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 1rem;
 }
 
 .logoContainer {
-  display: inline-flex;
-  width: fit-content; /* ensures no extra space */
-  height: fit-content;
-  cursor: pointer;
+  justify-self: start;
+  display: flex;
+  align-items: center;
 }
 
 .logo {
   display: inline-block;
-  width: 200px;
+  width: 160px;
   height: auto;
   object-fit: contain;
-  justify-content: flex-start;
 }
 
 .mobileLogo {
@@ -44,6 +41,13 @@
   margin-left: -3rem; /* Remove negative margin */
   justify-self: flex-start;
   justify-content: flex-start;
+}
+
+.actions {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .searchBar {
@@ -99,12 +103,40 @@
   }
 }
 
-.links {
+.navItem {
   display: flex;
   align-items: center;
-  gap: 20px;
-  justify-content: flex-start;
-  flex-grow: 1;
+  gap: 6px;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+
+  padding: 7px 12px;
+  border-radius: 8px;
+
+  color: #b8b0aa;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: "Poppins";
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.link:hover {
+  background: rgba(129, 47, 207, 0.18);
+  color: #d3b6f2;
+  font-weight: 600;
+}
+
+.links {
+  justify-self: center;
+  display: flex;
+  align-items: center;
 }
 
 .guestLinks {
@@ -119,9 +151,8 @@
   display: flex;
   flex-direction: row;
   align-items: center; /* Center horizontally */
-  justify-content: flex-start;
-  gap: 20px;
-  text-align: center;
+  justify-content: center;
+  gap: 25px;
 }
 
 .linkSpacing {
@@ -178,34 +209,10 @@
   padding: 0.2rem;
 }
 
-.link {
-  margin-top: 0.4rem;
-  display: block;
-  line-height: 1;
-  padding: 8px 12px;
-  border-radius: var(--mantine-radius-sm);
-  text-decoration: none;
-  color: rgb(227, 227, 227);
-  font-size: 18px;
-  font-weight: 340;
-  font-family: "Poppins";
-  transition:
-    background-color 0.3s,
-    color 0.3s;
-}
-
-.link:hover {
-  background-color: rgba(226, 223, 223, 0.1);
-  color: white;
-  border-bottom: 3px solid rgb(255, 255, 255);
-  border-radius: 0;
-  font-weight: bold;
-}
-
 .active {
-  border-bottom: 4px solid rgb(255, 255, 255);
-  color: rgb(255, 255, 255);
-  font-weight: 700;
+  background: rgba(129, 47, 207, 0.18);
+  color: #bf98e9;
+  font-weight: 600;
 }
 
 .guestActive {
