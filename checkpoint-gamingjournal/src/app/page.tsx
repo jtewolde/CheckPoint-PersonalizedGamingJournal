@@ -83,7 +83,7 @@ export default function Home() {
 
                     <Button
                       className={classes.discoverButton}
-                      variant="filled"
+                      variant="white"
                       autoContrast
                       size="lg"
                       radius="md"
@@ -175,7 +175,7 @@ export default function Home() {
               <div className={classes.gameDetailsSection}>
                 <div className={classes.imageReverseContainer}>
                   <Image
-                    src="/GameDetailsPage.png"
+                    src="/GameDetails.png"
                     alt="Game Details Page"
                     className={classes.image}
                     width={650}
