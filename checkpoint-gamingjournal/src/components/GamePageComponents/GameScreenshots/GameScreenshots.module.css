@@ -28,7 +28,7 @@
 .screenshotGrid {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 14px;
   padding: 0px 15px;
 }
@@ -209,10 +209,6 @@
 }
 
 @media (max-width: 600px) {
-  .screenshotGrid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
   .fullscreenSwiper :global(.swiper-button-prev),
   .fullscreenSwiper :global(.swiper-button-next) {
     width: 40px;

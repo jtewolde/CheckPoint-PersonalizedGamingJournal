@@ -27,7 +27,8 @@ export default function GameTabs({ value, onTabChange }: GameTabsProps) {
         <Tabs.Tab value="activity">Activity</Tabs.Tab>
         <Tabs.Tab value="sessions">Sessions</Tabs.Tab>
         <Tabs.Tab value="journal">Journal</Tabs.Tab>
-        <Tabs.Tab value="media">Media</Tabs.Tab>
+        <Tabs.Tab value="screenshots">Screenshots</Tabs.Tab>
+        <Tabs.Tab value="videos">Videos</Tabs.Tab>
         <Tabs.Tab value="achievements">Achievements</Tabs.Tab>
       </Tabs.List>
     </Tabs>
