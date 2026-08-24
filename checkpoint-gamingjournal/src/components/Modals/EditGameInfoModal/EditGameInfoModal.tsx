@@ -226,6 +226,10 @@ export default function EditGameInfoModal({
           fontSize: "1.1rem",
           color: "white",
         },
+        header: {
+          borderBottom: "1px solid #533c69",
+          marginBottom: "10px",
+        },
       }}
     >
       {/* ✅ LOADING OVERLAY */}
