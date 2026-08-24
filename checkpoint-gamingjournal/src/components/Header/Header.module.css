@@ -1,5 +1,5 @@
 .header {
-  height: 58px;
+  height: 64px;
   background: var(--header);
   border-color: var(--border);
   border-bottom: 1px solid #9c86d873;
@@ -48,6 +48,10 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.searchBarContainer {
+  width: 260px;
 }
 
 .searchBar {
@@ -118,7 +122,7 @@
   border-radius: 8px;
 
   color: #b8b0aa;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   font-family: "Poppins";
 
