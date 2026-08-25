@@ -130,22 +130,24 @@
 
 .ratingGrid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(110px, 1fr));
+  grid-template-columns: repeat(4, minmax(110px, 1fr));
 
   max-width: 600px;
   gap: 12px;
   margin-top: 28px;
 }
 
-.ratingCard {
+.ratingCard,
+.timeCard {
   min-height: 95px;
 
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
 
-  padding: 14px 16px;
+  padding: 8px 12px;
+  gap: 0.5rem;
 
   border: 1px solid rgba(255, 255, 255, 0.13);
   border-radius: 9px;
@@ -163,6 +165,7 @@
   font-size: 27px;
   line-height: 1;
   font-weight: 700;
+  text-align: center;
 }
 
 .criticRatingNumber {
@@ -173,21 +176,34 @@
   font-size: 27px;
   line-height: 1;
   font-weight: 700;
+  text-align: center;
+}
+
+.timeToBeatNumber {
+  margin: 0;
+
+  color: #f7f7f7;
+
+  font-size: 27px;
+  line-height: 1;
+  font-weight: 700;
+  text-align: center;
 }
 
 .ratingValue {
-  margin-top: 6px;
+  margin-top: 4px;
 
   color: rgba(255, 255, 255, 0.92);
-  font-size: 14px;
+  font-size: 21px;
   font-weight: 600;
 }
 
 .ratingLabel {
-  margin-top: 7px;
+  margin-top: 3px;
 
+  text-align: center;
   color: rgba(255, 255, 255, 0.55);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .platformSection {
@@ -501,13 +517,14 @@
 
   .ratingGrid {
     grid-column: 1 / -1;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     max-width: none;
     margin-top: 8px;
     justify-content: center;
   }
 
-  .ratingCard {
+  .ratingCard,
+  .timeCard {
     min-height: 75px;
     padding: 10px;
   }

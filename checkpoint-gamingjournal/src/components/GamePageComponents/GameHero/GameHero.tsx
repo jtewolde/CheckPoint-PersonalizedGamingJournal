@@ -1,7 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
 import {
   Badge,
@@ -11,6 +9,7 @@ import {
   Stack,
   Text,
   Tooltip,
+  RingProgress,
 } from "@mantine/core";
 
 import {
@@ -25,6 +24,7 @@ import {
   Star,
   Backpack,
   Play,
+  Timer,
 } from "lucide-react";
 
 import {
@@ -92,14 +92,6 @@ export default function GameHero({
 }: GameHeroProps) {
   const router = useRouter();
 
-  const [opened, { open, close }] = useDisclosure(false);
-  const [
-    playSessionModalOpened,
-    { open: openPlaySessionModal, close: closePlaySessionModal },
-  ] = useDisclosure(false);
-  const [AddOpened, { open: openAddModal, close: closeAddModal }] =
-    useDisclosure(false);
-
   // Format the completion date into a human-readable string for "Your Game" Section
   const completionDateString = completionDate
     ? new Date(completionDate).toLocaleDateString("en-US", {
@@ -108,6 +100,24 @@ export default function GameHero({
         year: "numeric",
       })
     : null;
+
+  // Format the time to beat time codes into a hour/min that can be read
+  const formatTimeToBeat = (seconds?: number | null) => {
+    if (!seconds) return "—";
+
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.round((seconds % 3600) / 60);
+
+    if (hours === 0) {
+      return `${minutes}m`;
+    }
+
+    if (minutes === 0) {
+      return `${hours}h`;
+    }
+
+    return `${hours} Hrs`;
+  };
 
   const getImageUrl = (url?: string) => {
     if (!url) return "/no-cover-image.png";
@@ -329,32 +339,59 @@ export default function GameHero({
             <div className={classes.ratingGrid}>
               {isGameInLibrary && (
                 <div className={classes.ratingCard}>
-                  <Rating value={rating} readOnly fractions={2} size="sm" />
+                  <Rating value={rating} readOnly fractions={2} size="md" />
 
                   <Text className={classes.ratingValue}>
                     {rating > 0 ? `${rating}/10` : "Not rated"}
                   </Text>
-
                   <Text className={classes.ratingLabel}>Your Rating</Text>
                 </div>
               )}
 
               <div className={classes.ratingCard}>
-                <Text className={classes.ratingNumber}>
-                  {game.rating ? Math.round(game.rating) : "—"}
-                </Text>
-
+                <RingProgress
+                  size={80}
+                  thickness={5}
+                  sections={[
+                    { value: game.rating || 0, color: "#782fbd" },
+                    { value: 100 - (game.rating || 0), color: "gray" },
+                  ]}
+                  label={
+                    <Text className={classes.ratingNumber}>
+                      {game.rating ? Math.round(game.rating) : "—"}
+                    </Text>
+                  }
+                />
                 <Text className={classes.ratingLabel}>User Score</Text>
               </div>
 
               <div className={classes.ratingCard}>
-                <Text className={classes.criticRatingNumber}>
-                  {game.aggregated_rating
-                    ? Math.round(game.aggregated_rating)
-                    : "—"}
+                <RingProgress
+                  size={80}
+                  thickness={5}
+                  sections={[
+                    { value: game.rating || 0, color: "#f4cb13" },
+                    { value: 100 - (game.rating || 0), color: "gray" },
+                  ]}
+                  label={
+                    <Text className={classes.criticRatingNumber}>
+                      {game.aggregated_rating
+                        ? Math.round(game.aggregated_rating)
+                        : "—"}
+                    </Text>
+                  }
+                />
+                <Text className={classes.ratingLabel}>Critic Score</Text>
+              </div>
+
+              <div className={classes.timeCard}>
+                <Timer size={30} color="white" />
+
+                <Text className={classes.timeToBeatNumber}>
+                  {formatTimeToBeat(game.time_to_beats?.normally)}
                 </Text>
 
-                <Text className={classes.ratingLabel}>Critic Score</Text>
+                <Text className={classes.ratingLabel}>Avg Time to Beat</Text>
               </div>
             </div>
 

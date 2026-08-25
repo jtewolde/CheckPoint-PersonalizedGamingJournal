@@ -71,6 +71,10 @@ export async function GET(req: NextRequest) {
 
     const accessToken = await getAccessToken();
 
+    // -----------------------------------------------------------
+    // 1. Get game information like name, rating, screenshots, etc
+    // -----------------------------------------------------------
+
     const igdbRes = await fetch(IGDB_URL, {
       method: "POST",
       headers: {
@@ -92,9 +96,6 @@ export async function GET(req: NextRequest) {
 
     const game = await igdbRes.json();
 
-    // Cache the response in Redis for 5 minutes
-    await redis.set(cacheKey, JSON.stringify(game[0]), "EX", 300);
-
     if (!game || game.length === 0) {
       return NextResponse.json(
         { message: "Game not found from IGDB." },
@@ -102,7 +103,52 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    return NextResponse.json(game[0], { status: 200 });
+    // -----------------------------------------------------
+    // 2. Get time-to-beat information for the specific game
+    // -----------------------------------------------------
+
+    const timeToBeatRes = await fetch(
+      "https://api.igdb.com/v4/game_time_to_beats",
+      {
+        method: "POST",
+        headers: {
+          "Client-ID": process.env.IGDB_API_CLIENT_ID!,
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "text/plain",
+        },
+        body: `fields completely, count, game_id, hastily, normally; where game_id = ${id};`,
+      },
+    );
+
+    let timeToBeat = null;
+
+    if (timeToBeatRes.ok) {
+      const timeToBeatData = await timeToBeatRes.json();
+
+      if (timeToBeatData.length > 0) {
+        timeToBeat = timeToBeatData[0];
+      }
+    } else {
+      console.error(
+        "Failed to fetch time-to-beat data:",
+        await timeToBeatRes.text(),
+      );
+    }
+
+    // ----------------------------------------------------------------------
+    // 3. Combine both responses from game infomation and time to beat stats
+    // 4. Cache the combined result
+    // ----------------------------------------------------------------------
+
+    const gameDetails = {
+      ...game[0],
+      time_to_beats: timeToBeat,
+    };
+
+    // Cache the response in Redis for 5 minutes
+    await redis.set(cacheKey, JSON.stringify(gameDetails), "EX", 300);
+
+    return NextResponse.json(gameDetails, { status: 200 });
   } catch (err: any) {
     console.error("Error", err);
     return NextResponse.json(
