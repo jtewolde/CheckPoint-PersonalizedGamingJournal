@@ -1,6 +1,6 @@
 .footer {
   background: var(--header);
-  border-color: var(--border);
+  border-top: var(--border);
   width: 100%;
 }
 
@@ -13,36 +13,36 @@
   flex-wrap: wrap;
 }
 
-.footerText{
+.footerText {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   gap: 0px;
   text-align: left;
-  font-family: 'Noto Sans';
+  font-family: "Noto Sans";
 }
 
-.igdbText{
+.igdbText {
   font-size: 14px;
   font-weight: 450;
   align-self: center;
   justify-self: flex-end;
   color: rgb(255, 255, 255);
-  font-family: 'Poppins';
+  font-family: "Poppins";
   text-align: left;
 }
 
-.igdbLink{
+.igdbLink {
   font-weight: bold;
 }
 
-.igdbLink:hover{
+.igdbLink:hover {
   font-weight: bolder;
   border-bottom: 2px solid rgb(255, 255, 255);
   font-size: 16px;
 }
 
-.center{
+.center {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -52,18 +52,18 @@
   gap: 20px;
 }
 
-.FAQLink{
+.FAQLink {
   font-size: 16px;
   font-weight: 450;
   align-self: center;
   justify-self: center;
   color: rgb(255, 255, 255);
-  font-family: 'Poppins';
+  font-family: "Poppins";
   text-align: center;
   border-bottom: 1px solid rgb(255, 255, 255);
 }
 
-.FAQLink:hover{
+.FAQLink:hover {
   font-size: 18px;
   font-weight: 650;
   border-bottom: 2px solid rgb(255, 255, 255);
@@ -83,7 +83,7 @@
     gap: 8px;
   }
 
-  .igdbText{
+  .igdbText {
     text-align: center;
   }
 
@@ -106,7 +106,7 @@
     justify-content: center;
   }
 
-  .links{
+  .links {
     justify-content: center;
   }
 }

@@ -1,35 +1,49 @@
-
 import { Mail } from "lucide-react";
 import { IconBrandLinkedin, IconBrandGithub } from "@tabler/icons-react";
 import { ActionIcon, Group, Text } from "@mantine/core";
 import Link from "next/link";
-import classes from './Footer.module.css';
+import classes from "./Footer.module.css";
 
 export function Footer() {
-
   return (
     <div className={classes.footer}>
-      
       <div className={classes.inner}>
-
         {/* Left side: IGDB + copyright */}
         <div className={classes.left}>
-
           <Group gap="xs" className={classes.footerText}>
             <Text size="sm" color="dimmed" className={classes.igdbText}>
-              Data provided by <Link href="https://www.igdb.com" target="_blank" className={classes.igdbLink}>IGDB</Link>.
-              <br /> © {new Date().getFullYear()} Checkpoint. All rights reserved.
+              Data provided by{" "}
+              <Link
+                href="https://www.igdb.com"
+                target="_blank"
+                className={classes.igdbLink}
+              >
+                IGDB
+              </Link>
+              .
+              <br /> © {new Date().getFullYear()} Checkpoint. All rights
+              reserved.
             </Text>
           </Group>
         </div>
 
         {/* Center: FAQ */}
         <div className={classes.center}>
-          <Link href='/about' className={classes.FAQLink}>About</Link>
-          <Link href='/about/terms' className={classes.FAQLink}>Terms</Link>
-          <Link href='/about/privacy' className={classes.FAQLink}>Privacy</Link>
-          <Link href='/about/contact' className={classes.FAQLink}>Contact</Link>
-          <Link href="/about/FAQ" className={classes.FAQLink}>FAQ</Link>
+          <Link href="/about" className={classes.FAQLink}>
+            About
+          </Link>
+          <Link href="/about/terms" className={classes.FAQLink}>
+            Terms
+          </Link>
+          <Link href="/about/privacy" className={classes.FAQLink}>
+            Privacy
+          </Link>
+          <Link href="/about/contact" className={classes.FAQLink}>
+            Contact
+          </Link>
+          <Link href="/about/FAQ" className={classes.FAQLink}>
+            FAQ
+          </Link>
         </div>
 
         {/* Right side: Socials */}
