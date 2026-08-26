@@ -48,7 +48,7 @@ export default function AvatarMenu() {
       <Menu.Target>
         <Avatar
           radius="xl"
-          size={50}
+          size={40}
           src={user?.image || undefined}
           alt={user?.name || "User"}
           style={{ cursor: "pointer", border: "2px solid black" }}
