@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 
-import { Button, Text, Title, ActionIcon, Skeleton } from "@mantine/core";
+import { Text, Title, ActionIcon, Skeleton } from "@mantine/core";
 import { X } from "lucide-react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
