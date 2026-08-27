@@ -292,7 +292,19 @@ export default function GameHero({
           {/* Main Game Information */}
           <div className={classes.gameInformation}>
             <div className={classes.titleRow}>
-              <h1 className={classes.title}>{game.name}</h1>
+              <Stack gap={1} justify="center" align="flex-start">
+                <Text className={classes.developerName}>
+                  {game.involved_companies?.length
+                    ? game.involved_companies
+                        .filter((company: any) => company.developer)
+                        .map((company: any) => company.company?.name)
+                        .filter(Boolean)
+                        .join(", ") || "N/A"
+                    : "N/A"}
+                </Text>
+
+                <h1 className={classes.title}>{game.name}</h1>
+              </Stack>
 
               {game.game_type?.type && (
                 <Badge

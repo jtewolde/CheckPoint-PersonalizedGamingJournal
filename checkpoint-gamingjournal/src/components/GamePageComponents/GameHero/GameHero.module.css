@@ -99,6 +99,12 @@
   gap: 12px;
 }
 
+.developerName {
+  font-family: "Inter";
+  font-size: 14px;
+  color: #c4c4c2;
+}
+
 .title {
   margin: 0;
   max-width: 800px;
@@ -122,6 +128,7 @@
 .metadataText {
   color: rgba(255, 255, 255, 0.78);
   font-size: 16px;
+  font-family: "Inter";
 }
 
 .separator {
