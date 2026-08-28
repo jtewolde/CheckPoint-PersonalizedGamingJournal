@@ -3,7 +3,16 @@
 import { useEffect, useState } from "react";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { useParams, useRouter } from "next/navigation";
+import { useAuth } from "@/context/Authcontext";
 import { notFound } from "next/navigation";
+
+import GameHero from "@/components/GamePageComponents/GameHero/GameHero";
+import GameCard from "@/components/Cards/GameCard/GameCard";
+import GameTabs from "@/components/GamePageComponents/GameTabs/GameTabs";
+import GameOverview from "@/components/GamePageComponents/GameOverview/GameOverview";
+import GameScreenshots from "@/components/GamePageComponents/GameScreenshots/GameScreenshots";
+import GameVideos from "@/components/GamePageComponents/GameVideos/GameVideos";
+import GameMedia from "@/components/GamePageComponents/GameMedia/GameMedia";
 
 import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
 import PlaySessionModal from "@/components/Modals/PlaySessionModal/SessionModal";
@@ -13,74 +22,28 @@ import SessionCalendar from "@/components/SessionComponents/SessionCalendar/Sess
 
 import { toast } from "react-toastify";
 
-import {
-  Button,
-  Badge,
-  RingProgress,
-  Text,
-  Accordion,
-  SimpleGrid,
-  Group,
-  Stack,
-  Rating,
-  Tooltip,
-  ThemeIcon,
-} from "@mantine/core";
-import Image from "next/image";
+import { Text, SimpleGrid, ThemeIcon } from "@mantine/core";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper/types";
 
-import { Navigation, Pagination, Thumbs, Keyboard } from "swiper/modules";
+import { Navigation, Pagination } from "swiper/modules";
 
 import classes from "./game.module.css";
 
-import {
-  NotebookPen,
-  Delete,
-  X,
-  CalendarDays,
-  Trophy,
-  Camera,
-  Star,
-  Gamepad,
-  Activity,
-  Pencil,
-} from "lucide-react";
-
-import {
-  IconBrandXbox,
-  IconFileDescription,
-  IconBook,
-  IconSwords,
-  IconBrush,
-  IconUsersGroup,
-  IconDeviceGamepad2,
-  IconRating18Plus,
-} from "@tabler/icons-react";
+import { Gamepad, Activity } from "lucide-react";
 
 import {
   FaPlaystation,
   FaXbox,
-  FaWindows,
   FaApple,
   FaAndroid,
   FaGoogle,
 } from "react-icons/fa";
-import {
-  SiPlaystation,
-  SiPlaystation2,
-  SiPlaystation3,
-  SiPlaystation4,
-  SiPlaystation5,
-  SiPlaystationportable,
-  SiPlaystationvita,
-} from "react-icons/si";
+
 import { BsNintendoSwitch, BsPc } from "react-icons/bs";
 
 import PlaceHolderImage from "../../../../public/no-cover-image.png";
-import { useAuth } from "@/context/Authcontext";
-import GameCard from "@/components/Cards/GameCard/GameCard";
 
 export default function GameDetails() {
   const { id } = useParams(); // Get the game ID from the URL
@@ -137,6 +100,14 @@ export default function GameDetails() {
 
   const [thumbsSwiper, setThumbSwiper] = useState<SwiperType | null>(null);
   const showCardUI = isAuthenticated && isGameInLibrary;
+  const [activeTab, setActiveTab] = useState<string>("overview");
+
+  // Handler for tab change in GameTabs component
+  const handleTabChange = (value: string | null) => {
+    if (value) {
+      setActiveTab(value);
+    }
+  };
 
   // Helper function to combining all screenshots and artworks of game in single array for different backgrounds
   const getAllImages = (gameData: any) => {
@@ -167,6 +138,7 @@ export default function GameDetails() {
         }
         const data = await res.json();
         setGame(data); // Store the game details in state
+        console.log("Game Details Fetched:", data);
         setBackgroundImage(getRandomImage(data));
         setStatus(data.status);
         setScreensShots(data.screenshots || []);
@@ -395,697 +367,210 @@ export default function GameDetails() {
     return null; // fallback if no match
   };
 
-  // Prepare game information for display on Accordions
-  const gameInfo = [
-    {
-      label: "Description",
-      content: game.summary || "No description available.",
-      icon: <IconFileDescription size={30} color="white" />,
-    },
-    {
-      label: "Storyline",
-      content: game.storyline || "No storyline available.",
-      icon: <IconBook size={30} color="white" />,
-    },
-    {
-      label: "Release Dates",
-      content: game.release_dates ? (
-        <Stack gap="xs">
-          {game.release_dates.map((release: any) => (
-            <div key={release.id} className={classes.releaseDate}>
-              <strong>{release.platform?.name} - </strong>
-              {release.human || "N/A"}
-            </div>
-          ))}
-        </Stack>
-      ) : (
-        "N/A"
-      ),
-      icon: <CalendarDays size={30} color="white" />,
-    },
-    {
-      label: "Genres",
-      content: game.genres ? (
-        <Group gap="xs">
-          {game.genres.map((genre: any) => (
-            <Badge key={genre.id} color="blue" radius="lg" size="lg">
-              {genre.name}
-            </Badge>
-          ))}
-        </Group>
-      ) : (
-        "N/A"
-      ),
-      icon: <IconSwords size={30} color="white" />,
-    },
-    {
-      label: "Themes",
-      content: game.themes ? (
-        <Group gap="sm">
-          {game.themes.map((theme: any) => (
-            <Badge
-              size="lg"
-              className={classes.badge}
-              key={theme.id}
-              color="grape"
-              radius="lg"
-            >
-              {theme.name}
-            </Badge>
-          ))}
-        </Group>
-      ) : (
-        "N/A"
-      ),
-      icon: <IconBrush size={30} color="white" />,
-    },
-    {
-      label: "Game Modes",
-      content: game.game_modes ? (
-        <Group gap="xs">
-          {game.game_modes.map((mode: any) => (
-            <Badge
-              className={classes.badge}
-              key={mode.id}
-              color="teal"
-              radius="lg"
-              size="lg"
-            >
-              {mode.name}
-            </Badge>
-          ))}
-        </Group>
-      ) : (
-        "N/A"
-      ),
-      icon: <IconUsersGroup size={30} color="white" />,
-    },
-    {
-      label: "Platforms",
-      content: game.platforms ? (
-        <Group gap="sm">
-          {game.platforms.map((platform: any) => (
-            <Badge
-              size="lg"
-              className={classes.badge}
-              key={platform.id}
-              color="cyan"
-              radius="lg"
-              leftSection={getPlatformIcon(platform.name)}
-            >
-              {platform.name}
-            </Badge>
-          ))}
-        </Group>
-      ) : (
-        "N/A"
-      ),
-      icon: <IconBrandXbox size={30} color="white" />,
-    },
-    {
-      label: "Companies Involved",
-      content:
-        game.involved_companies
-          ?.map((involved_companies: any) => involved_companies.company.name)
-          .join(", ") || "N/A",
-      icon: <IconDeviceGamepad2 size={30} color="white" />,
-    },
-    {
-      label: "Age Ratings",
-      content: game.age_ratings ? (
-        <Group gap="sm">
-          {game.age_ratings
-            .filter(
-              (rating: any) =>
-                rating.rating_category.organization.name === "ESRB" ||
-                rating.rating_category.organization.name === "PEGI",
-            )
-            .map(
-              (
-                rating: any, // ESRB and PEGI ratings only
-              ) => (
-                <div key={rating.id} className={classes.releaseDate}>
-                  <strong>
-                    {rating.rating_category.organization.name || "N/A"} -{" "}
-                  </strong>
-                  {rating.rating_category.rating}
-                </div>
-              ),
-            )}
-        </Group>
-      ) : (
-        "N/A"
-      ),
-      icon: <IconRating18Plus size={30} color="white" />,
-    },
-  ];
-
   // Sort the collection games by total rating in descending order
   const sortedCollections = game.collections?.[0]?.games.sort(
     (a: any, b: any) => b.total_rating - a.total_rating,
   );
 
   return (
-    <div
-      className={classes.background}
-      style={{ backgroundImage: `url(${backgroundImage})` }}
-    >
-      <div className={classes.backgroundOverlay}>
-        <div className={classes.wrapper}>
-          <div className={classes.titleType}>
-            <h1 className={classes.title}>{game.name}</h1>
-            <Badge
-              className={classes.gameTypeBadge}
-              color="#717171"
-              size="xl"
-              radius="lg"
-              variant="filled"
-              c="white"
-            >
-              {game.game_type.type}
-            </Badge>
-          </div>
+    <div className={classes.background}>
+      <div className={classes.wrapper}>
+        <div className={classes.gameHeroContainer}>
+          <GameHero
+            game={game}
+            libraryGame={libraryGame}
+            backgroundImage={backgroundImage}
+            isAuthenticated={isAuthenticated}
+            isGameInLibrary={isGameInLibrary}
+            isPlatinum={isPlatinum}
+            rating={rating}
+            completionDate={completionDate}
+            sessionStats={stats}
+            numOfEntries={numOfEntries}
+            addingToLibrary={addingToLibrary}
+            onAddToLibrary={openAddModal}
+            onLogSession={openPlaySessionModal}
+            onEditGame={open}
+            onRemoveFromLibrary={handleRemoveFromLibrary}
+          />
+        </div>
 
-          <div className={classes.details}>
-            <div className={classes.leftSection}>
-              <div className={classes.media}>
-                <img
-                  src={
-                    game.cover
-                      ? `https:${game.cover.url.replace("t_thumb", "t_1080p")}`
-                      : PlaceHolderImage.src
-                  }
-                  alt={game.name}
-                  className={classes.cover}
-                />
-                <div
-                  className={`${classes.coverInfoContainer} ${showCardUI ? classes.cardActive : classes.cardMinimal}`}
-                >
-                  {isAuthenticated ? (
-                    isGameInLibrary ? (
-                      <div className={classes.buttonContainer}>
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "center",
-                            gap: "1rem",
-                          }}
-                        >
-                          <Badge color="green" size="xl" radius="xl">
-                            {libraryGame?.status || "No Status"}
-                          </Badge>
+        <GameTabs value={activeTab} onTabChange={handleTabChange} />
 
-                          {/* Platinum */}
-                          <Tooltip
-                            label={
-                              isPlatinum ? "Platinum Achieved" : "Not Completed"
-                            }
-                            position="top"
-                            events={{ hover: true, focus: true, touch: true }}
-                          >
-                            <ThemeIcon
-                              size="lg"
-                              variant="subtle"
-                              color={isPlatinum ? "yellow" : "gray"}
-                            >
-                              <Trophy
-                                size={30}
-                                color={isPlatinum ? "gold" : "gray"}
-                                fill={isPlatinum ? "gold" : "none"}
-                                style={{ transition: "all 0.2s ease" }}
-                              />
-                            </ThemeIcon>
-                          </Tooltip>
+        {activeTab === "overview" && <GameOverview game={game} />}
 
-                          {/*Completion Date */}
-                          <Tooltip
-                            label={completionDateString}
-                            position="top"
-                            events={{ hover: true, focus: true, touch: true }}
-                          >
-                            <ThemeIcon variant="subtle" size="lg" radius="md">
-                              <CalendarDays
-                                size={30}
-                                color={completionDate ? "white" : "gray"}
-                              />
-                            </ThemeIcon>
-                          </Tooltip>
-                        </div>
+        {activeTab === "activity" && <div>Activity content</div>}
 
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            gap: "1rem",
-                          }}
-                        >
-                          <Rating
-                            readOnly
-                            size="lg"
-                            fractions={2}
-                            value={rating}
-                          />
-                        </div>
+        {activeTab === "sessions" && <div>Sessions content</div>}
 
-                        <EditGameInfoModal
-                          opened={opened}
-                          onClose={close}
-                          libraryGame={libraryGame}
-                          game={game}
-                        />
+        {activeTab === "journal" && <div>Journal content</div>}
 
-                        <PlaySessionModal
-                          key={game.id}
-                          opened={playSessionModalOpened}
-                          onClose={closePlaySessionModal}
-                          gameId={game.id}
-                          gameName={game.name}
-                          platforms={game.platforms?.map(
-                            (platform: { name: string }) => platform.name,
-                          )}
-                          onSuccess={() => close()}
-                          onSessionCreated={fetchPlaySessions}
-                        />
+        {activeTab === "achievements" && <div>Achievements content</div>}
 
-                        <Tooltip label="Log a new play session" position="top">
-                          <Button
-                            className={classes.button}
-                            variant="filled"
-                            color="#832fad"
-                            size="md"
-                            leftSection={<NotebookPen size={20} />}
-                            onClick={openPlaySessionModal}
-                          >
-                            Log Play Session
-                          </Button>
-                        </Tooltip>
+        {activeTab === "screenshots" && <GameScreenshots game={game} />}
 
-                        <div className={classes.buttonActions}>
-                          <Tooltip
-                            label="Remove game from library"
-                            position="top"
-                          >
-                            <Button
-                              variant="filled"
-                              color="#d8070b"
-                              size="md"
-                              radius="md"
-                              className={classes.button}
-                              rightSection={<Delete />}
-                              onClick={handleRemoveFromLibrary}
-                              loading={addingToLibrary}
-                            >
-                              Remove
-                            </Button>
-                          </Tooltip>
+        {activeTab === "videos" && <GameVideos game={game} />}
 
-                          <Tooltip label="Edit Game Info" position="top">
-                            <Button
-                              className={classes.button}
-                              variant="filled"
-                              color="#eb8111"
-                              size="md"
-                              radius="md"
-                              rightSection={<Pencil size={20} />}
-                              onClick={open}
-                            >
-                              {" "}
-                              Edit{" "}
-                            </Button>
-                          </Tooltip>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className={classes.buttonContainer}>
-                        <AddToLibraryModal
-                          opened={AddOpened}
-                          onClose={closeAddModal}
-                          game={game}
-                        />
+        {activeTab === "media" && <GameMedia game={game} />}
 
-                        <Button
-                          variant="filled"
-                          color="#2bdd66"
-                          size="lg"
-                          radius="xl"
-                          className={classes.button}
-                          rightSection={<NotebookPen />}
-                          onClick={openAddModal}
-                          loading={addingToLibrary}
-                        >
-                          Add to Library
-                        </Button>
-                      </div>
-                    )
-                  ) : (
-                    <Button
-                      variant="filled"
-                      color="#2bdd66"
-                      size="lg"
-                      radius="xl"
-                      className={classes.button}
-                      rightSection={<NotebookPen />}
-                      onClick={() => router.push("/auth/signup")}
-                    >
-                      Create an account
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
+        <EditGameInfoModal
+          opened={opened}
+          onClose={close}
+          libraryGame={libraryGame}
+          game={game}
+        />
 
-            <div className={classes.rightSection}>
-              <Accordion
-                className={classes.accordion}
-                styles={{
-                  item: {
-                    background: "#181717",
-                    color: "white",
-                    border: "0.5px solid #5a5a59",
-                  },
-                  label: {
-                    color: "white",
-                    paddingRight: "0.7rem",
-                    fontSize: "18px",
-                    fontWeight: 550,
-                  },
-                  chevron: { color: "white" },
-                  panel: { color: "white", fontSize: "18px" },
-                }}
-                radius="md"
-                variant="contained"
-                multiple
-                defaultValue={["Description"]}
-              >
-                {gameInfo.map((item) => (
-                  <Accordion.Item key={item.label} value={item.label}>
-                    <Accordion.Control icon={item.icon}>
-                      {item.label}
-                    </Accordion.Control>
-                    <Accordion.Panel>{item.content}</Accordion.Panel>
-                  </Accordion.Item>
-                ))}
-              </Accordion>
-            </div>
-          </div>
+        <PlaySessionModal
+          key={game.id}
+          opened={playSessionModalOpened}
+          onClose={closePlaySessionModal}
+          gameId={game.id}
+          gameName={game.name}
+          platforms={game.platforms?.map(
+            (platform: { name: string }) => platform.name,
+          )}
+          onSuccess={() => close()}
+        />
 
-          <div className={classes.ratingSection}>
+        <AddToLibraryModal
+          opened={AddOpened}
+          onClose={closeAddModal}
+          game={game}
+        />
+
+        {isAuthenticated && isGameInLibrary ? (
+          <div className={classes.activitySection}>
             <div className={classes.sectionHeader}>
               <ThemeIcon
                 size={50}
                 variant="gradient"
-                gradient={{ from: "#f7971e", to: "#ffd200", deg: 20 }}
+                gradient={{ from: "#e70e0e", to: "#ca1118", deg: 20 }}
                 radius="md"
               >
-                <Star size={40} />
+                <Activity size={40} />
               </ThemeIcon>
-              <h2 className={classes.sectionTitle}>Ratings: </h2>
+              <h2 className={classes.sectionTitle}>Your Activity</h2>
             </div>
 
-            <div className={classes.ratings}>
-              <div className={classes.igdbRating}>
-                <Text className={classes.ratingLabel}>User Score</Text>
-
-                <RingProgress
-                  size={300}
-                  thickness={18}
-                  sections={[
-                    { value: game.rating || 0, color: "blue" },
-                    { value: 100 - (game.rating || 0), color: "gray" },
-                  ]}
-                  label={
-                    <Text
-                      size="xl"
-                      fw={600}
-                      c="white"
-                      className={classes.ratingScore}
-                    >
-                      {game.rating ? `${Math.round(game.rating)}%` : "N/A"}
-                    </Text>
-                  }
-                />
+            <div className={classes.activityLayout}>
+              <div className={classes.calendarCard}>
+                <SessionCalendar gameId={game.id} sessions={sessions} />
               </div>
 
-              <div className={classes.aggregatedRating}>
-                <Text className={classes.ratingLabel}>Critic Score</Text>
-
-                <RingProgress
-                  size={300}
-                  thickness={18}
-                  sections={[
-                    { value: game.aggregated_rating || 0, color: "red" },
-                    {
-                      value: 100 - (game.aggregated_rating || 0),
-                      color: "gray",
-                    },
-                  ]}
-                  label={
-                    <Text
-                      size="xl"
-                      fw={600}
-                      c="white"
-                      className={classes.ratingScore}
-                    >
-                      {game.aggregated_rating
-                        ? `${Math.round(game.aggregated_rating)}%`
-                        : "N/A"}
+              <div className={classes.statsColumn}>
+                <div className={classes.activityItem}>
+                  <div className={classes.titleLogo}>
+                    <Text className={classes.activityLabel}>
+                      Total Journal Entries
                     </Text>
-                  }
-                />
+                  </div>
+                  <Text className={classes.activityStat}>{numOfEntries}</Text>
+                </div>
+
+                <div className={classes.activityItem}>
+                  <div className={classes.titleLogo}>
+                    <Text className={classes.activityLabel}>
+                      Total Playtime Tracked
+                    </Text>
+                  </div>
+                  <Text className={classes.activityStat}>
+                    {totalHoursPlayed} Hours
+                  </Text>
+                </div>
+
+                <div className={classes.activityItem}>
+                  <div className={classes.titleLogo}>
+                    <Text className={classes.activityLabel}>
+                      Average Session Duration
+                    </Text>
+                  </div>
+                  <Text className={classes.activityStat}>
+                    {stats.avg} Hours
+                  </Text>
+                </div>
+
+                <div className={classes.activityItem}>
+                  <div className={classes.titleLogo}>
+                    <Text className={classes.activityLabel}>
+                      Longest Session
+                    </Text>
+                  </div>
+                  <Text className={classes.activityStat}>
+                    {stats.longest} Hours
+                  </Text>
+                </div>
               </div>
             </div>
           </div>
+        ) : (
+          <></>
+        )}
 
-          {isAuthenticated && isGameInLibrary ? (
-            <div className={classes.activitySection}>
+        <div className={classes.gameSeries}>
+          {game.collections?.[0]?.games.length > 4 && (
+            <>
               <div className={classes.sectionHeader}>
-                <ThemeIcon
-                  size={50}
-                  variant="gradient"
-                  gradient={{ from: "#e70e0e", to: "#ca1118", deg: 20 }}
-                  radius="md"
-                >
-                  <Activity size={40} />
-                </ThemeIcon>
-                <h2 className={classes.sectionTitle}>Your Activity</h2>
+                <h2 className={classes.sectionTitle}>
+                  Games in the Same Series:
+                </h2>
               </div>
 
-              <div className={classes.activityLayout}>
-                <div className={classes.calendarCard}>
-                  <SessionCalendar gameId={game.id} sessions={sessions} />
-                </div>
-
-                <div className={classes.statsColumn}>
-                  <div className={classes.activityItem}>
-                    <div className={classes.titleLogo}>
-                      <Text className={classes.activityLabel}>
-                        Total Journal Entries
-                      </Text>
-                    </div>
-                    <Text className={classes.activityStat}>{numOfEntries}</Text>
-                  </div>
-
-                  <div className={classes.activityItem}>
-                    <div className={classes.titleLogo}>
-                      <Text className={classes.activityLabel}>
-                        Total Playtime Tracked
-                      </Text>
-                    </div>
-                    <Text className={classes.activityStat}>
-                      {totalHoursPlayed} Hours
-                    </Text>
-                  </div>
-
-                  <div className={classes.activityItem}>
-                    <div className={classes.titleLogo}>
-                      <Text className={classes.activityLabel}>
-                        Average Session Duration
-                      </Text>
-                    </div>
-                    <Text className={classes.activityStat}>
-                      {stats.avg} Hours
-                    </Text>
-                  </div>
-
-                  <div className={classes.activityItem}>
-                    <div className={classes.titleLogo}>
-                      <Text className={classes.activityLabel}>
-                        Longest Session
-                      </Text>
-                    </div>
-                    <Text className={classes.activityStat}>
-                      {stats.longest} Hours
-                    </Text>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <></>
+              <SimpleGrid
+                cols={{ base: 2, sm: 3, md: 5 }}
+                spacing="lg"
+                verticalSpacing="lg"
+                className={classes.seriesGrid}
+              >
+                {sortedCollections.slice(0, 10).map((collection: any) => (
+                  <GameCard
+                    variant="compact"
+                    key={collection.id}
+                    game={collection}
+                  />
+                ))}
+              </SimpleGrid>
+            </>
           )}
+        </div>
 
-          <div className={classes.sectionHeader}>
-            <ThemeIcon
-              size={50}
-              variant="gradient"
-              gradient={{ from: "#3ecb1b", to: "#10912a", deg: 20 }}
-              radius="md"
-            >
-              <Camera size={40} />
-            </ThemeIcon>
-            <h2 className={classes.sectionTitle}>
-              Screenshots ({game.screenshots.length}):
-            </h2>
-          </div>
+        <div className={classes.sectionHeader}>
+          <ThemeIcon
+            size={50}
+            variant="gradient"
+            gradient={{ from: "#0e6ce7", to: "#1d4ee2", deg: 20 }}
+            radius="md"
+          >
+            <Gamepad size={40} />
+          </ThemeIcon>
+          <h2 className={classes.sectionTitle}>Similar Games: </h2>
+        </div>
 
-          <div className={classes.screenshotsContainer}>
-            <Swiper
-              centeredSlides={true}
-              loop={true}
-              navigation={true}
-              pagination={{ type: "progressbar" }}
-              scrollbar={isMobile ? true : false}
-              thumbs={{ swiper: thumbsSwiper }}
-              modules={[Pagination, Navigation, Thumbs]}
-              slidesPerView={isMobile ? 1 : 1.5}
-              spaceBetween={20}
-              className={classes.swiperContainer}
-            >
-              {screenshots.map((screenshot: any, index: number) => (
+        <div className={classes.similarGames}>
+          <Swiper
+            centeredSlides={isMobile ? true : false}
+            navigation={true}
+            pagination={{ clickable: true }}
+            modules={[Navigation, Pagination]}
+            slidesPerView={isMobile ? 1.4 : 5}
+            spaceBetween={20}
+            className={classes.swiperContainer}
+          >
+            {game.similar_games?.map((similarGame: any) => {
+              return (
                 <SwiperSlide
-                  key={screenshot.id}
-                  className={classes.carouselSlide}
+                  key={similarGame.id}
+                  className={classes.similarGameSlide}
+                  onClick={() => router.push(`/games/${similarGame.id}`)} // Navigate to the similar game's details page
                 >
-                  <Image
-                    src={`https:${screenshot.url.replace("t_thumb", "t_1080p")}`}
-                    alt={`Screenshot of ${game.name}`}
-                    className={classes.screenshot}
-                    width={900}
-                    height={400}
-                    loading="lazy"
-                    onClick={() => {
-                      setSelectedScreenshot(
-                        `https:${screenshot.url.replace("t_thumb", "t_1080p")}`,
-                      );
-                      setSelectedScreenshotIndex(index);
-                      console.log("Selected Screenshot Index:", index);
-                      setModalOpen(true);
-                    }}
+                  <GameCard
+                    variant="default"
+                    key={similarGame.id}
+                    game={similarGame}
                   />
                 </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-
-          {modalOpen && (
-            <div className={classes.fullScreenOverlay}>
-              <div className={classes.carouselButtons}>
-                <Button
-                  className={classes.closeButton}
-                  variant="light"
-                  color="white"
-                  size="sm"
-                  onClick={() => setModalOpen(false)}
-                >
-                  <X size={40} />
-                </Button>
-              </div>
-
-              <Swiper
-                initialSlide={selectedScreenshotIndex}
-                navigation
-                loop
-                pagination={{ clickable: true, type: "bullets" }}
-                keyboard={{ enabled: true }}
-                modules={[Navigation, Pagination, Keyboard]}
-                className={classes.fullscreenSwiper}
-              >
-                {screenshots.map((screenshot: any, index: number) => (
-                  <SwiperSlide key={screenshot.id}>
-                    <Image
-                      src={`https:${screenshot.url.replace("t_thumb", "t_1080p")}`}
-                      alt={`Screenshot ${index}`}
-                      className={classes.fullScreenImage}
-                      width={1200}
-                      height={700}
-                      style={{
-                        objectFit: "contain",
-                        width: "100%",
-                        height: "100vh",
-                      }}
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-          )}
-          <div className={classes.gameSeries}>
-            {game.collections?.[0]?.games.length > 4 && (
-              <>
-                <div className={classes.sectionHeader}>
-                  <h2 className={classes.sectionTitle}>
-                    Games in the Same Series:
-                  </h2>
-                </div>
-
-                <SimpleGrid
-                  cols={{ base: 2, sm: 3, md: 5 }}
-                  spacing="lg"
-                  verticalSpacing="lg"
-                  className={classes.seriesGrid}
-                >
-                  {sortedCollections.slice(0, 10).map((collection: any) => (
-                    <GameCard
-                      variant="compact"
-                      key={collection.id}
-                      game={collection}
-                    />
-                  ))}
-                </SimpleGrid>
-              </>
-            )}
-          </div>
-
-          <div className={classes.sectionHeader}>
-            <ThemeIcon
-              size={50}
-              variant="gradient"
-              gradient={{ from: "#0e6ce7", to: "#1d4ee2", deg: 20 }}
-              radius="md"
-            >
-              <Gamepad size={40} />
-            </ThemeIcon>
-            <h2 className={classes.sectionTitle}>Similar Games: </h2>
-          </div>
-
-          <div className={classes.similarGames}>
-            <Swiper
-              centeredSlides={isMobile ? true : false}
-              navigation={true}
-              pagination={{ clickable: true }}
-              modules={[Navigation, Pagination]}
-              slidesPerView={isMobile ? 1.4 : 5}
-              spaceBetween={20}
-              className={classes.swiperContainer}
-            >
-              {game.similar_games?.map((similarGame: any) => {
-                return (
-                  <SwiperSlide
-                    key={similarGame.id}
-                    className={classes.similarGameSlide}
-                    onClick={() => router.push(`/games/${similarGame.id}`)} // Navigate to the similar game's details page
-                  >
-                    <GameCard
-                      variant="default"
-                      key={similarGame.id}
-                      game={similarGame}
-                    />
-                  </SwiperSlide>
-                );
-              })}
-            </Swiper>
-          </div>
+              );
+            })}
+          </Swiper>
         </div>
       </div>
     </div>
