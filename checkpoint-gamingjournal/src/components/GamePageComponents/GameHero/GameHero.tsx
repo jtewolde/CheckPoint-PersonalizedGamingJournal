@@ -403,8 +403,20 @@ export default function GameHero({
                   {formatTimeToBeat(game.time_to_beats?.normally)}
                 </Text>
 
-                <Text className={classes.ratingLabel}>Avg Time to Beat</Text>
+                <Text className={classes.ratingLabel}>Average Run</Text>
               </div>
+
+              {!isGameInLibrary && (
+                <div className={classes.timeCard}>
+                  <Timer size={30} color="white" />
+
+                  <Text className={classes.timeToBeatNumber}>
+                    {formatTimeToBeat(game.time_to_beats?.completely)}
+                  </Text>
+
+                  <Text className={classes.ratingLabel}>Completionist Run</Text>
+                </div>
+              )}
             </div>
 
             {/* Platforms */}
