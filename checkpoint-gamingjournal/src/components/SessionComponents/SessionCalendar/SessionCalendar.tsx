@@ -5,23 +5,11 @@ import { formatDate, isSameDay } from "@/utils/dateUtils";
 
 import PlaySessionModal from "../../Modals/PlaySessionModal/SessionModal";
 import SessionDayModal from "../SessionDayModal/SessionDayModal";
+import { PlaySession } from "@/app/types/PlaySession";
 
 import { Calendar } from "@mantine/dates";
 import { Indicator } from "@mantine/core";
 import classes from "./SessionCalendar.module.css";
-
-// Define the playSession object used on both calendar and modal with props
-type PlaySession = {
-  _id: string;
-  gameId: string;
-  gameName: string;
-  date: string;
-  duration: number;
-  notes: string;
-  sessionType: string[];
-  mood?: string[];
-  platform?: string;
-};
 
 export default function SessionCalendar({
   gameId,

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { formatDate, isSameDay } from "@/utils/dateUtils";
 import {
   ActionIcon,
   Modal,
@@ -17,20 +16,9 @@ import {
 import { Trash2Icon, Pencil } from "lucide-react";
 import toast from "react-hot-toast";
 
-import classes from "./SessionDayModal.module.css";
+import { PlaySession } from "@/app/types/PlaySession";
 
-// Define the playSession object used on both calendar and modal with props
-type PlaySession = {
-  _id: string;
-  gameId: string;
-  gameName: string;
-  date: string;
-  duration: number;
-  notes: string;
-  sessionType: string[];
-  mood?: string[];
-  platform?: string;
-};
+import classes from "./SessionDayModal.module.css";
 
 // Define the props for the SessionDayModal component
 type SessionDayModalProps = {
@@ -109,6 +97,8 @@ export default function SessionDayModal({
           const hours = Math.floor(s.duration / 60);
           const minutes = s.duration % 60;
 
+          const moods = Array.isArray(s.mood) ? s.mood : s.mood ? [s.mood] : [];
+
           return (
             <div key={s._id} className={classes.gameSessionCard}>
               <div className={classes.sessionHeader}>
@@ -133,17 +123,17 @@ export default function SessionDayModal({
                       </>
                     )}
 
-                    {s.mood && s.mood.length > 0 && (
+                    {moods.length > 0 && (
                       <Group gap={6} align="center" justify="center">
-                        {s.mood.map((mood: string, index: number) => (
-                          <>
+                        {moods.map((mood, index) => (
+                          <Group key={`${s._id}-mood-${index}`} gap={6}>
                             <Text size="sm" c="dimmed">
                               •
                             </Text>
-                            <Text key={index} size="sm" c="dimmed">
+                            <Text size="sm" c="dimmed">
                               {mood}
                             </Text>
-                          </>
+                          </Group>
                         ))}
                       </Group>
                     )}
