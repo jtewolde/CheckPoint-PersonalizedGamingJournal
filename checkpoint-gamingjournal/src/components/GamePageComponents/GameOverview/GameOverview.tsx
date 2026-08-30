@@ -1,6 +1,6 @@
 "use client";
 
-import { Group, Stack, Text, Title } from "@mantine/core";
+import { Group, Stack, Text, Title, Spoiler } from "@mantine/core";
 
 import classes from "./GameOverview.module.css";
 
@@ -14,13 +14,23 @@ export default function GameOverview({ game }: GameOverviewProps) {
       <section className={classes.section}>
         <Title className={classes.sectionTitle}>ABOUT THIS GAME</Title>
 
-        <Stack gap="xl">
+        <Stack gap="sm">
           <div className={classes.infoContainer}>
             <Title className={classes.subTitle}>Description</Title>
 
             <Text className={classes.description}>
               {game.summary || "No description available."}
             </Text>
+          </div>
+
+          <div className={classes.infoContainer}>
+            <Title className={classes.subTitle}>Storyline</Title>
+
+            <Spoiler maxHeight={50} showLabel="Show More" hideLabel="Hide">
+              <Text className={classes.description}>
+                {game.storyline || "No description available."}
+              </Text>
+            </Spoiler>
           </div>
         </Stack>
       </section>
