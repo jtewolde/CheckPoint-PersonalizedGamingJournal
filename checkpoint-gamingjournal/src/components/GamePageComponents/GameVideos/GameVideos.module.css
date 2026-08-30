@@ -3,7 +3,7 @@
 }
 
 .header {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding-left: 1rem;
 }
 
@@ -34,7 +34,6 @@
 
 .thumbnailSwiper {
   width: 100%;
-  margin-top: 2rem;
 }
 
 .thumbnailSlide {
@@ -128,7 +127,7 @@
   transform: translate(-50%, -50%);
 
   border-radius: 50%;
-  background: rgba(20, 16, 24, 0.85);
+  background: rgba(36, 8, 64, 0.85);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.2);
 

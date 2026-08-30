@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 
-import { Text, Title, ActionIcon, Skeleton } from "@mantine/core";
-import { X } from "lucide-react";
+import { Text, Title, ActionIcon, Skeleton, Group } from "@mantine/core";
+import { X, Camera } from "lucide-react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper/types";
@@ -33,7 +33,6 @@ export default function GameScreenshots({ game }: GameScreenshotsProps) {
   };
 
   const [modalOpen, setModalOpen] = useState(false);
-
   const [fullScreenSwiper, setFullScreenSwiper] = useState<SwiperType | null>(
     null,
   );
@@ -41,7 +40,9 @@ export default function GameScreenshots({ game }: GameScreenshotsProps) {
   if (!screenshots.length) {
     return (
       <div className={classes.emptyState}>
-        <Title order={2}>SCREENSHOTS</Title>
+        <Title className={classes.title} order={2}>
+          Screenshots
+        </Title>
 
         <Text>No screenshots are available for this game.</Text>
       </div>
@@ -52,53 +53,94 @@ export default function GameScreenshots({ game }: GameScreenshotsProps) {
     <div className={classes.wrapper}>
       {/* Header */}
       <div className={classes.header}>
-        <Title className={classes.title}>SCREENSHOTS</Title>
+        <Group gap={8} align="center">
+          <Camera size={25} color="white" />
+
+          <Title className={classes.title}>
+            Screenshots{" "}
+            <span className={classes.videoCount}>({screenshots.length})</span>
+          </Title>
+        </Group>
 
         <Text className={classes.description}>
           Explore screenshots from {game.name}.
         </Text>
       </div>
 
-      {/* Screenshot Grid */}
-      <div className={classes.screenshotGrid}>
-        {screenshots.map((screenshot: any, index: number) => {
-          const imageUrl = `https:${screenshot.url.replace(
-            "t_thumb",
-            "t_1080p",
-          )}`;
+      {/* =========================================================
+    NORMAL PAGE SCREENSHOT SWIPER
+    ========================================================= */}
+      {screenshots.length > 1 && (
+        <div className={classes.normalContainer}>
+          <Swiper
+            navigation
+            keyboard
+            loop
+            slidesPerView={2}
+            spaceBetween={12}
+            breakpoints={{
+              900: {
+                slidesPerView: 3,
+              },
+              1200: {
+                slidesPerView: 4,
+              },
+            }}
+            modules={[Navigation, Keyboard]}
+            className={classes.normalSwiper}
+          >
+            {screenshots.map((screenshot: any, index: number) => {
+              const imageUrl = `https:${screenshot.url.replace(
+                "t_thumb",
+                "t_1080p",
+              )}`;
 
-          return (
-            <button
-              key={screenshot.id}
-              type="button"
-              className={classes.screenshotButton}
-              onClick={() => {
-                setSelectedScreenshotIndex(index);
-                setModalOpen(true);
-              }}
-            >
-              {!loadedImages.has(index) && (
-                <Skeleton className={classes.screenshotSkeleton} radius="md" />
-              )}
-              <Image
-                src={imageUrl}
-                alt={`Screenshot of ${game.name} ${index + 1}`}
-                width={1280}
-                height={720}
-                className={`${classes.screenshot} ${
-                  loadedImages.has(index) ? classes.screenshotLoaded : ""
-                }`}
-                loading="lazy"
-                onLoad={() => handleImageLoad(index)}
-              />
+              return (
+                <SwiperSlide
+                  key={screenshot.id}
+                  className={classes.normalSlide}
+                >
+                  <button
+                    type="button"
+                    className={classes.thumbnailButton}
+                    onClick={() => {
+                      setSelectedScreenshotIndex(index);
+                      setModalOpen(true);
+                    }}
+                  >
+                    <div className={classes.normalWrapper}>
+                      {!loadedImages.has(index) && (
+                        <Skeleton
+                          className={classes.screenshotSkeleton}
+                          radius="md"
+                        />
+                      )}
 
-              <div className={classes.screenshotOverlay}>
-                <Text>{index + 1}</Text>
-              </div>
-            </button>
-          );
-        })}
-      </div>
+                      <Image
+                        src={imageUrl}
+                        alt={`Screenshot of ${game.name} ${index + 1}`}
+                        width={1280}
+                        height={720}
+                        className={`${classes.thumbnail} ${
+                          loadedImages.has(index)
+                            ? classes.screenshotLoaded
+                            : ""
+                        }`}
+                        loading="lazy"
+                        onLoad={() => handleImageLoad(index)}
+                      />
+
+                      <div className={classes.screenshotOverlay}>
+                        <Text>{index + 1}</Text>
+                      </div>
+                    </div>
+                  </button>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+        </div>
+      )}
 
       {/* Fullscreen Viewer */}
       {modalOpen && (
@@ -152,10 +194,11 @@ export default function GameScreenshots({ game }: GameScreenshotsProps) {
           <div className={classes.thumbnailContainer}>
             <Swiper
               onSwiper={setFullScreenSwiper}
+              loop
               watchSlidesProgress
               modules={[Thumbs]}
               spaceBetween={10}
-              slidesPerView={4}
+              slidesPerView={2.5}
               breakpoints={{
                 1024: {
                   slidesPerView: 6,
@@ -172,7 +215,7 @@ export default function GameScreenshots({ game }: GameScreenshotsProps) {
                 return (
                   <SwiperSlide
                     key={screenshot.id}
-                    className={classes.thumbnailSlide}
+                    className={classes.modalSlide}
                   >
                     <button
                       type="button"
