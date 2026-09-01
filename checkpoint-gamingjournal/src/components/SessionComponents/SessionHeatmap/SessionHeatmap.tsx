@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMediaQuery } from "@mantine/hooks";
+import { Heatmap } from "@mantine/charts";
+
 import SessionDayModal from "../SessionDayModal/SessionDayModal";
 import PlaySessionModal from "../../Modals/PlaySessionModal/SessionModal";
-import { Heatmap } from "@mantine/charts";
+
 import classes from "./SessionHeatmap.module.css";
 
-// Define the playSession object used on both calendar and modal with props
 type PlaySession = {
   _id: string;
   gameId: string;
@@ -20,91 +21,122 @@ type PlaySession = {
   platform?: string;
 };
 
-export default function SessionHeatmap() {
-  // State to hold the heatmap data as a record of date to total duration
-  const [heatmapData, setHeatmapData] = useState<Record<string, number>>({});
-  // Fetch play sessions data for the user and store it in state
-  const [sessions, setSessions] = useState<PlaySession[]>([]);
+interface SessionHeatmapProps {
+  sessions: PlaySession[];
+  days?: number;
+  mobileDays?: number;
+  rectSize?: number;
+  dateRange?: "days" | "year";
+  page?: "dashboard" | "gamePage";
+}
+
+export default function SessionHeatmap({
+  sessions,
+  days = 90,
+  mobileDays,
+  dateRange = "days",
+  page = "dashboard",
+}: SessionHeatmapProps) {
+  // Sessions used internally so edits can immediately update the heatmap
+  const [localSessions, setLocalSessions] = useState<PlaySession[]>(sessions);
+
+  // Keep local sessions synchronized with the sessions passed from the parent
+  useEffect(() => {
+    setLocalSessions(sessions);
+  }, [sessions]);
 
   // States for handling the session day modal
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [opened, setOpened] = useState(false);
 
+  // States for handling the edit session modal
   const [editModalOpened, setEditModalOpened] = useState(false);
   const [selectedSession, setSelectedSession] = useState<PlaySession | null>(
     null,
   );
-
-  // Define the date range for the heatmap (e.g., last 90 days) and adjust for mobile view
-  const endDate = new Date();
-  const startDate = new Date();
-  const mobileStartDate = new Date();
-  startDate.setDate(endDate.getDate() - 90); // Show last 90 days
-  mobileStartDate.setDate(endDate.getDate() - 60); // Show last 30 days on mobile
 
   // Responsive design breakpoints
   const isSmallMobile = useMediaQuery("(max-width: 500px)");
   const isTablet = useMediaQuery("(max-width: 768px)");
   const isLaptop = useMediaQuery("(max-width: 1000px)");
 
-  useEffect(() => {
-    // Function to fetch play sessions for the game to display on calendar and calculate total tracked playtime.
-    const fetchPlaySessions = async () => {
-      try {
-        const token = localStorage.getItem("bearer_token"); // Retrieve Bearer Token from local storage
-        const res = await fetch(`/api/playSession`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  // Determine how many days to display on mobile
+  const effectiveDays = isSmallMobile || isTablet ? (mobileDays ?? days) : days;
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch play sessions");
-        }
+  const today = new Date();
 
-        const data = await res.json();
-        console.log("All Sessions:", data);
-        setSessions(data);
-      } catch (error) {
-        console.error("Error fetching recent play sessions:", error);
-      }
-    };
-    fetchPlaySessions();
-  }, []);
+  let startDate: Date;
+  let endDate: Date;
 
-  // Process the sessions data to aggregate total duration for each date
-  useEffect(() => {
+  if (dateRange === "year") {
+    startDate = new Date(today.getFullYear(), 0, 1);
+    endDate = new Date(today.getFullYear(), 11, 31);
+  } else {
+    endDate = today;
+
+    startDate = new Date(today);
+    startDate.setDate(startDate.getDate() - effectiveDays);
+  }
+  // Aggregate total playtime by date
+  const heatmapData = useMemo(() => {
     const durationByDate: Record<string, number> = {};
 
-    sessions.forEach((session) => {
-      const dateKey = session.date; // already YYYY-MM-DD
+    localSessions.forEach((session) => {
+      const dateKey = session.date;
 
       durationByDate[dateKey] =
         (durationByDate[dateKey] || 0) + session.duration;
     });
 
-    setHeatmapData(durationByDate);
-  }, [sessions]);
+    return durationByDate;
+  }, [localSessions]);
 
-  // Determine rectSize and gap based on screen size
-  const rectSize = isSmallMobile ? 23 : isTablet ? 24 : isLaptop ? 28 : 30;
-  const gap = isSmallMobile ? 6 : isTablet ? 7 : isLaptop ? 8 : 10;
+  // Determine color scaling
+  const maxDuration = Math.max(...Object.values(heatmapData), 60);
+
+  // Determine cell size and spacing based on screen size and page context
+  const dashboardRectSize = isSmallMobile
+    ? 23
+    : isTablet
+      ? 24
+      : isLaptop
+        ? 28
+        : 32;
+  const dashboardGap = isSmallMobile ? 6 : isTablet ? 7 : isLaptop ? 8 : 10;
+
+  const gamePageRectSize = 22;
+  const gamePageGap = 5;
+
+  // Format duration for tooltip
+  const formatDuration = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+
+    if (hours === 0) {
+      return `${remainingMinutes}m`;
+    }
+
+    if (remainingMinutes === 0) {
+      return `${hours}h`;
+    }
+
+    return `${hours}h ${remainingMinutes}m`;
+  };
 
   return (
     <div className={classes.heatmapContainer}>
       <Heatmap
         data={heatmapData}
-        domain={[0, Math.max(...Object.values(heatmapData), 60)]} // Set domain based on max duration, with a minimum of 60 minutes for better color scaling
-        startDate={isSmallMobile ? mobileStartDate : startDate}
+        domain={[0, maxDuration]}
+        startDate={startDate}
         endDate={endDate}
         withMonthLabels
         withWeekdayLabels
         withTooltip
-        rectSize={rectSize}
-        rectRadius={10}
-        gap={gap}
+        withLegend
+        rectSize={page === "dashboard" ? dashboardRectSize : gamePageRectSize}
+        gap={page === "dashboard" ? dashboardGap : gamePageGap}
+        rectRadius={page === "dashboard" ? 4 : 2}
         colors={[
           "var(--mantine-color-yellow-1)",
           "var(--mantine-color-yellow-2)",
@@ -113,10 +145,12 @@ export default function SessionHeatmap() {
           "var(--mantine-color-yellow-5)",
         ]}
         getTooltipLabel={({ date, value }) =>
-          `${date}: ${Math.floor((value ?? 0) / 60)} hours`
+          `${date}: ${formatDuration(value ?? 0)}`
         }
         getRectProps={({ date, value }) => ({
-          style: { cursor: value ? "pointer" : "pointer" },
+          style: {
+            cursor: value ? "pointer" : "default",
+          },
 
           onClick: () => {
             if (!value) return;
@@ -137,10 +171,9 @@ export default function SessionHeatmap() {
         gameId={selectedSession?.gameId ?? ""}
         session={selectedSession}
         onSuccess={(updatedSession) => {
-          // update local state without refetch
-          setSessions((prev) =>
-            prev.map((s) =>
-              s._id === updatedSession._id ? updatedSession : s,
+          setLocalSessions((prev) =>
+            prev.map((session) =>
+              session._id === updatedSession._id ? updatedSession : session,
             ),
           );
         }}
@@ -150,7 +183,9 @@ export default function SessionHeatmap() {
         opened={opened}
         onClose={() => setOpened(false)}
         selectedDate={selectedDate}
-        sessions={sessions.filter((s) => s.date === selectedDate)}
+        sessions={localSessions.filter(
+          (session) => session.date === selectedDate,
+        )}
         onEditSession={(session) => {
           setOpened(false);
           setSelectedSession(session);
