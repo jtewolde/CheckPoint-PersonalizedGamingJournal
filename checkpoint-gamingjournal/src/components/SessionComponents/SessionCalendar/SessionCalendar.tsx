@@ -8,14 +8,16 @@ import SessionDayModal from "../SessionDayModal/SessionDayModal";
 import { PlaySession } from "@/app/types/PlaySession";
 
 import { Calendar } from "@mantine/dates";
-import { Indicator } from "@mantine/core";
+import { Image } from "@mantine/core";
 import classes from "./SessionCalendar.module.css";
 
 export default function SessionCalendar({
   gameId,
+  gameCover,
   sessions,
 }: {
   gameId: string;
+  gameCover: string;
   sessions: PlaySession[];
 }) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -43,8 +45,6 @@ export default function SessionCalendar({
     <>
       <Calendar
         fullWidth
-        highlightToday={true}
-        withCellSpacing
         maxDate={new Date()}
         getDayProps={(date) => ({
           onClick: () => {
@@ -58,14 +58,16 @@ export default function SessionCalendar({
 
           const hasSession = localSessions.some((s) => isSameDay(s.date, date));
 
-          return hasSession ? (
-            <div className={classes.daySession}>
-              <Indicator size={15} color="green">
-                <div>{date.getDate()}</div>
-              </Indicator>
+          return (
+            <div className={classes.day}>
+              <div className={classes.dayNumber}>{date.getDate()}</div>
+
+              {hasSession && (
+                <div className={classes.sessionIndicator}>
+                  <Image src={gameCover} alt="" width={32} height={44} />
+                </div>
+              )}
             </div>
-          ) : (
-            <div>{date.getDate()}</div>
           );
         }}
       />
