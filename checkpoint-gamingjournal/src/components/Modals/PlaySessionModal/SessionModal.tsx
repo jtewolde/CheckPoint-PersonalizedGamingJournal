@@ -450,13 +450,13 @@ export default function PlaySessionModal({
           styles={{ label: { color: "white" } }}
           labelPosition="center"
           color="dimmed"
-          my="sm"
+          mt="md"
         />
 
         <div className={classes.buttonGroup}>
           <Button
             className={classes.cancelButton}
-            color="red"
+            color="#cf1b1b"
             size="md"
             variant="filled"
             onClick={handleClose}
@@ -467,7 +467,7 @@ export default function PlaySessionModal({
           <Button
             className={classes.logButton}
             variant="filled"
-            color="green"
+            color="#009c10"
             leftSection={<NotebookPen size={20} />}
             size="md"
             disabled={!selectedGameId || !playSessionDate || duration <= 0}

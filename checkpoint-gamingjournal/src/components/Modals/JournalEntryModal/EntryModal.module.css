@@ -20,14 +20,9 @@
   gap: 1rem;
 }
 
-.logButton {
-  width: auto;
-  font-family: "Poppins";
-  font-weight: 400;
-}
-
+.logButton,
 .cancelButton {
   width: auto;
-  font-family: "Poppins";
-  font-weight: 400;
+  font-family: "Inter";
+  font-weight: 600;
 }

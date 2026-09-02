@@ -391,7 +391,7 @@ export default function JournalEntryModal({
         <div className={classes.buttonGroup}>
           <Button
             className={classes.cancelButton}
-            color="red"
+            color="#cf1b1b"
             size="md"
             variant="filled"
             onClick={onClose}
@@ -402,7 +402,7 @@ export default function JournalEntryModal({
           <Button
             className={classes.logButton}
             variant="filled"
-            color="green"
+            color="#009c10"
             leftSection={<NotebookPen size={20} />}
             size="md"
             disabled={!selectedGameId || !content || !title}
