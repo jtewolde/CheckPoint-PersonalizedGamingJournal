@@ -1,0 +1,78 @@
+.wrapper {
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem 1rem;
+}
+
+/* Activity statistics section */
+.statsSection {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+/* Statistics grid */
+.activityGrid {
+  width: 100%;
+}
+
+/* Individual statistic card */
+.statCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 110px;
+  padding: 1rem;
+  gap: 10px;
+
+  background: #1f1b2c;
+  border: 1px solid #37324a;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+
+  text-align: center;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  font-family: "Inter";
+}
+
+.statLabel {
+  margin-top: 0.4rem;
+
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-family: "Inter";
+
+  color: var(--mantine-color-dimmed);
+}
+
+.heatmapContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heatmapWrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.heatmapTitle {
+  width: 100%;
+  margin-bottom: 0.7rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  font-family: "Inter";
+}
