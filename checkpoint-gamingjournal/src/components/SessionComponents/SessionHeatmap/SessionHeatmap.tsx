@@ -23,15 +23,17 @@ type PlaySession = {
 
 interface SessionHeatmapProps {
   sessions: PlaySession[];
+  className?: string;
   days?: number;
   mobileDays?: number;
   rectSize?: number;
-  dateRange?: "days" | "year";
+  dateRange?: "days" | "year" | "game";
   page?: "dashboard" | "gamePage";
 }
 
 export default function SessionHeatmap({
   sessions,
+  className,
   days = 90,
   mobileDays,
   dateRange = "days",
@@ -63,20 +65,38 @@ export default function SessionHeatmap({
   // Determine how many days to display on mobile
   const effectiveDays = isSmallMobile || isTablet ? (mobileDays ?? days) : days;
 
+  // Determine the start and end dates based on the selected date range
   const today = new Date();
-
   let startDate: Date;
   let endDate: Date;
 
+  // If the date range is "year", set the start and end dates to the beginning and end of the current year.
   if (dateRange === "year") {
     startDate = new Date(today.getFullYear(), 0, 1);
     endDate = new Date(today.getFullYear(), 11, 31);
+
+    // If it's "game", set the start and end dates based on the earliest and latest session dates.
+  } else if (dateRange === "game") {
+    if (localSessions.length > 0) {
+      const sessionDates = localSessions
+        .map((session) => new Date(session.date))
+        .sort((a, b) => a.getTime() - b.getTime());
+
+      startDate = sessionDates[0];
+      endDate = sessionDates[sessionDates.length - 1];
+    } else {
+      // Fallback if the game has no sessions
+      startDate = today;
+      endDate = today;
+    }
+    // Otherwise, set the start date to a number of days before today based on the effectiveDays value.
   } else {
     endDate = today;
 
     startDate = new Date(today);
     startDate.setDate(startDate.getDate() - effectiveDays);
   }
+
   // Aggregate total playtime by date
   const heatmapData = useMemo(() => {
     const durationByDate: Record<string, number> = {};
@@ -104,8 +124,8 @@ export default function SessionHeatmap({
         : 32;
   const dashboardGap = isSmallMobile ? 6 : isTablet ? 7 : isLaptop ? 8 : 10;
 
-  const gamePageRectSize = 22;
-  const gamePageGap = 5;
+  const gamePageRectSize = 32;
+  const gamePageGap = 10;
 
   // Format duration for tooltip
   const formatDuration = (minutes: number) => {
@@ -126,6 +146,7 @@ export default function SessionHeatmap({
   return (
     <div className={classes.heatmapContainer}>
       <Heatmap
+        className={className}
         data={heatmapData}
         domain={[0, maxDuration]}
         startDate={startDate}
@@ -149,7 +170,7 @@ export default function SessionHeatmap({
         }
         getRectProps={({ date, value }) => ({
           style: {
-            cursor: value ? "pointer" : "default",
+            cursor: "pointer",
           },
 
           onClick: () => {

@@ -8,5 +8,8 @@
 .heatmap {
   width: max-content;
   min-width: max-content;
+  justify-self: center;
+  align-self: center;
+  margin: 0 auto;
   cursor: pointer;
 }
