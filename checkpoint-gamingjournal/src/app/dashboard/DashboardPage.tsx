@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
@@ -73,6 +73,7 @@ export default function Dashboard() {
 
   const [completedPercentage, setCompletedPercentage] = useState(0);
 
+  const [sessions, setSessions] = useState<any[]>([]);
   const [recentEntries, setRecentEntries] = useState<any[]>([]); // State to store recent journal entries
   const [journalActivityData, setJournalActivityData] = useState<
     { month: string; entries: number }[]
@@ -184,6 +185,29 @@ export default function Dashboard() {
       setCompletedPercentage(completationRate);
     } catch (error) {
       console.error("Error fetching playing games: ", error);
+    }
+  };
+
+  // Function to fetch play sessions for the game to display on calendar and calculate total tracked playtime.
+  const fetchPlaySessions = async () => {
+    try {
+      const token = localStorage.getItem("bearer_token"); // Retrieve Bearer Token from local storage
+      const res = await fetch(`/api/playSession`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch play sessions");
+      }
+
+      const data = await res.json();
+      setSessions(data);
+    } catch (error) {
+      console.error("Error fetching recent play sessions:", error);
     }
   };
 
@@ -323,10 +347,11 @@ export default function Dashboard() {
     return topRatedGame;
   };
 
-  // useEffect to call both fetchPlayingGames and fetchRecentJournalEntries when the component mounts.
+  // useEffect to fetch journal entries, playing games, and play sessions when the component mounts.
   useEffect(() => {
     fetchPlayingGames();
     fetchRecentJournalEntries();
+    fetchPlaySessions();
   }, []);
 
   return (
@@ -725,7 +750,7 @@ export default function Dashboard() {
               <Paper shadow="md" radius="lg" className={classes.statusCard}>
                 <p className={classes.statusTitle}>Session Heatmap</p>
                 <div className={classes.heatmapWrapper}>
-                  <SessionHeatmap />
+                  <SessionHeatmap sessions={sessions} page="dashboard" />
                 </div>
               </Paper>
             </SimpleGrid>

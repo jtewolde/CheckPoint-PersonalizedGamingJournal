@@ -25,12 +25,13 @@
 }
 
 .wrapper {
-  padding-bottom: 2rem;
-  padding-top: 1.4rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 28px 32px;
   z-index: 0;
   gap: 1rem;
   pointer-events: auto;
