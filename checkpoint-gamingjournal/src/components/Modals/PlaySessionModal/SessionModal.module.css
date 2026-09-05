@@ -26,8 +26,8 @@
 .logButton,
 .cancelButton {
   width: auto;
-  font-family: "Inter";
-  font-weight: 600;
+  font-family: "Barlow";
+  font-weight: 500;
 }
 
 @media (max-width: 768px) {
