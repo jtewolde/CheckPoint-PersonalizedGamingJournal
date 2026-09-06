@@ -67,8 +67,9 @@ export default function SessionHeatmap({
 
   // Determine the start and end dates based on the selected date range
   const today = new Date();
-  let startDate: Date;
-  let endDate: Date;
+  let startDate = new Date(today);
+  startDate.setDate(startDate.getDate() - effectiveDays + 1);
+  let endDate = new Date(today);
 
   // If the date range is "year", set the start and end dates to the beginning and end of the current year.
   if (dateRange === "year") {
@@ -82,19 +83,30 @@ export default function SessionHeatmap({
         .map((session) => new Date(session.date))
         .sort((a, b) => a.getTime() - b.getTime());
 
-      startDate = sessionDates[0];
-      endDate = sessionDates[sessionDates.length - 1];
+      const firstSession = sessionDates[0];
+      const lastSession = sessionDates[sessionDates.length - 1];
+
+      const gameDuration =
+        (lastSession.getTime() - firstSession.getTime()) /
+        (1000 * 60 * 60 * 24);
+
+      const minimumDays = 90;
+
+      if (gameDuration < minimumDays) {
+        startDate = new Date(firstSession);
+        endDate = new Date(firstSession);
+
+        endDate.setDate(endDate.getDate() + minimumDays);
+      } else {
+        // Fallback if the game has no sessions
+        startDate = firstSession;
+        endDate = lastSession;
+      }
+      // Otherwise, set the start date to a number of days before today based on the effectiveDays value.
     } else {
-      // Fallback if the game has no sessions
       startDate = today;
       endDate = today;
     }
-    // Otherwise, set the start date to a number of days before today based on the effectiveDays value.
-  } else {
-    endDate = today;
-
-    startDate = new Date(today);
-    startDate.setDate(startDate.getDate() - effectiveDays);
   }
 
   // Aggregate total playtime by date
@@ -124,8 +136,14 @@ export default function SessionHeatmap({
         : 32;
   const dashboardGap = isSmallMobile ? 6 : isTablet ? 7 : isLaptop ? 8 : 10;
 
-  const gamePageRectSize = 32;
-  const gamePageGap = 10;
+  const gamePageRectSize = isSmallMobile
+    ? 23
+    : isTablet
+      ? 24
+      : isLaptop
+        ? 28
+        : 32;
+  const gamePageGap = isSmallMobile ? 6 : isTablet ? 7 : isLaptop ? 8 : 10;
 
   // Format duration for tooltip
   const formatDuration = (minutes: number) => {
