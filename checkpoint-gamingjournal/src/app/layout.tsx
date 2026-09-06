@@ -175,7 +175,7 @@ export default function RootLayout({
                 autoClose={5000}
                 hideProgressBar={false}
                 newestOnTop={false}
-                closeOnClick={false}
+                closeOnClick={true}
                 rtl={false}
                 pauseOnFocusLoss
                 draggable

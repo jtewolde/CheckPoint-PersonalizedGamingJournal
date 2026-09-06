@@ -122,8 +122,6 @@ export default function JournalEntryModal({
         const matchingGame = userGames.find(
           (game) => game.gameId === entry.gameId,
         );
-        console.log("Games:", userGames);
-        console.log("Matching Game for Cover Image: ", matchingGame);
 
         if (matchingGame?.coverImage) {
           setGameCover(matchingGame.coverImage);

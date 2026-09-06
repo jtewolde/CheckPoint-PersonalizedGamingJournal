@@ -8,12 +8,11 @@ import {
   Badge,
   Text,
   Image,
-  Tooltip,
   ActionIcon,
   Group,
-  Stack,
   Menu,
   OverflowList,
+  LoadingOverlay,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
 
@@ -23,7 +22,7 @@ import JournalEntryModal from "../../Modals/JournalEntryModal/EntryModal";
 import { EllipsisVertical, Trash, Pencil, Eye } from "lucide-react";
 
 import PlaceHolderImage from "../../../../public/no-cover-image.png";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import classes from "./EntryCard.module.css";
 
 // Create type variable to determine which variant of entryCard, dashboard for recent entries section
@@ -75,9 +74,9 @@ export default function JournalEntryCard({
       zIndex: 1000,
 
       children: (
-        <Text size="sm">
-          Are you sure you want to delete <strong>{entry.title}</strong>?
-          <br />
+        <Text size="md" mt="lg">
+          Are you sure you want to delete the following entry:{" "}
+          <strong>{entry.title}</strong>?
           <br />
           This action cannot be undone.
         </Text>
@@ -97,6 +96,17 @@ export default function JournalEntryCard({
         variant: "default",
       },
 
+      styles: {
+        header: {
+          borderBottom: "1px solid #5e427b",
+        },
+        title: {
+          fontSize: "18px",
+          fontWeight: 600,
+          fontFamily: "Barlow",
+        },
+      },
+
       onConfirm: () => deleteJournalEntry(entry._id, entry.gameId),
     });
   };
@@ -105,6 +115,9 @@ export default function JournalEntryCard({
   const deleteJournalEntry = async (journalEntryId: string, gameID: string) => {
     try {
       setLoading(true);
+
+      const toastID = toast.info("Deleting journal entry...");
+
       const res = await fetch(`/api/journal/${journalEntryId}`, {
         method: "DELETE",
         headers: {
@@ -119,8 +132,11 @@ export default function JournalEntryCard({
         throw new Error(data.error || "Failed to delete journal entry");
       }
 
-      toast.success("Journal entry deleted");
-      router.refresh();
+      toast.update(toastID, {
+        render: "Journal entry deleted successfully",
+        type: "success",
+      });
+      router.push("/journal");
     } catch (error) {
       console.error("Error deleting journal entry:", error);
       toast.error("Error deleting journal entry");
