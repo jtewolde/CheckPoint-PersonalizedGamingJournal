@@ -14,7 +14,7 @@ import {
 } from "@mantine/core";
 
 import { Trash2Icon, Pencil } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 import { PlaySession } from "@/app/types/PlaySession";
 

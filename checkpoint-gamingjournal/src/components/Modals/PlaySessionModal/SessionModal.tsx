@@ -35,6 +35,7 @@ type PlaySession = {
   _id: string;
   gameName: string;
   gameId: string;
+  gameCover: string;
   date: string;
   duration: number;
   notes: string;
@@ -81,6 +82,7 @@ export default function PlaySessionModal({
 
   // State variables to hold selected game and user's game library for the select dropdown in the modal
   const [selectedGameName, setSelectedGameName] = useState(gameName || "");
+  const [gameCover, setGameCover] = useState("");
   const [selectedGameId, setSelectedGameId] = useState(gameId || "");
   const [userGames, setUserGames] = useState<any[]>([]);
   const [availablePlatforms, setAvailablePlatforms] = useState<string[]>([]);
@@ -144,13 +146,38 @@ export default function PlaySessionModal({
       const game = userGames.find((g) => g.gameId === session.gameId);
       setAvailablePlatforms(game?.platforms ?? platforms ?? []);
 
+      // If the session has a game cover, set it for the entry
+      // Otherwise, find the matching game from library and set cover image for entry
+      if (session.gameCover) {
+        setGameCover(session.gameCover);
+      } else {
+        const matchingGame = userGames.find(
+          (game) => game.gameId === session.gameId,
+        );
+
+        console.log("Matching Game for Cover Image:", matchingGame);
+        console.log("User Games:", userGames);
+
+        if (matchingGame?.coverImage) {
+          setGameCover(matchingGame.coverImage);
+        }
+      }
+
       setHours(Math.floor(session.duration / 60));
       setMinutes(session.duration % 60);
     } else if (!playSessionNotes) {
       setSelectedGameId(gameId || "");
       setSelectedGameName(gameName || "");
     }
-  }, [opened, gameId, gameName]);
+  }, [
+    opened,
+    gameId,
+    gameName,
+    session,
+    userGames,
+    platforms,
+    playSessionNotes,
+  ]);
 
   // If the modal is opened from the game details page, update the available platforms state
   useEffect(() => {
@@ -191,6 +218,7 @@ export default function PlaySessionModal({
         body: JSON.stringify({
           gameID: String(selectedGameId),
           gameName: selectedGameName,
+          coverImage: gameCover,
           duration,
           notes: playSessionNotes,
           sessionType: sessionType,
@@ -311,6 +339,8 @@ export default function PlaySessionModal({
               // Reset platform if the previously selected one
               // doesn't exist for the newly selected game.
               setPlatform("");
+
+              setGameCover(game?.coverImage || "");
             }}
             searchable
             required
