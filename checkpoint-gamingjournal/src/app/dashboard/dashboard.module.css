@@ -9,21 +9,6 @@
   z-index: 0;
 }
 
-.backgroundOverlay {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  /* Fade from transparent to dark */
-  background: linear-gradient(
-    to bottom,
-    rgba(20, 20, 20, 0.8) 0%,
-    #121213 100%
-  );
-}
-
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -31,7 +16,7 @@
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 28px 32px;
+  padding: 28px 16px;
   z-index: 0;
   gap: 1rem;
   pointer-events: auto;

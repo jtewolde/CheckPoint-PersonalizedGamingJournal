@@ -243,306 +243,308 @@ export default function Journal() {
   );
 
   return (
-    <div className={classes.pageWrapper}>
-      <div className={classes.journalWrapper}>
-        <div className={classes.hero}>
-          <Stack className={classes.heroContent} gap="sm" justify="center">
-            <h2 className={classes.journalTitle}>Gaming Journal</h2>
+    <div className={classes.background}>
+      <div className={classes.pageWrapper}>
+        <div className={classes.journalWrapper}>
+          <div className={classes.hero}>
+            <Stack className={classes.heroContent} gap="sm" justify="center">
+              <h2 className={classes.journalTitle}>Gaming Journal</h2>
 
-            <Text className={classes.description}>
-              Capture memorable moments, strategies, acheivements, endings, and
-              more from you gaming adventures.
-            </Text>
-          </Stack>
-        </div>
-
-        {/* Delete Entries By Game Modal */}
-        <Modal
-          opened={opened}
-          onClose={close}
-          centered
-          size="md"
-          title="Delete All Entries of a Game"
-          className={classes.drawer}
-          styles={{
-            header: {
-              marginBottom: "10px",
-            },
-            body: {
-              display: "flex",
-              flexDirection: "column",
-              height: "100%",
-              width: "100%",
-            },
-            title: {
-              fontSize: "24px",
-              color: "white",
-              fontFamily: "Noto Sans",
-              fontWeight: 300,
-            },
-            content: {
-              fontSize: "18px",
-              color: "white",
-              fontFamily: "Poppins",
-              fontWeight: 400,
-            },
-            close: {
-              color: "white",
-            },
-          }}
-        >
-          <Stack gap="md" ta="left">
-            <Text c="white" fz="md" ta="left">
-              This will permanently delete <b>all</b> journal entries assoicated
-              with the selected game. This action cannot be undone.
-            </Text>
-
-            <Select
-              label="Select Game"
-              size="md"
-              placeholder="Choose a game to delete its entries"
-              data={games.map((game) => ({
-                value: game.gameName,
-                label: game.gameName,
-              }))}
-              value={selectedGame}
-              onChange={(value) => setSelectedGame(value || "")}
-              styles={{
-                input: { backgroundColor: "#212121", color: "white" },
-                dropdown: { backgroundColor: "#2c2c2fff", color: "white" },
-                label: {
-                  fontSize: "18px",
-                  color: "white",
-                  fontFamily: "Noto Sans",
-                  fontWeight: 300,
-                },
-                option: { background: "#212121" },
-              }}
-              mb="sm"
-              error={error}
-            />
-
-            <Checkbox
-              radius="md"
-              color="blue"
-              c="white"
-              size="md"
-              label="I understand that I am permanently deleting my journal entries for this game"
-              checked={checked}
-              error={error}
-              onChange={(event) => setChecked(event.currentTarget.checked)}
-            />
-
-            <Button
-              className={classes.deleteEntriesButton}
-              color="#d8070b"
-              fullWidth
-              radius="md"
-              variant="filled"
-              rightSection={<Trash2 size={16} />}
-              disabled={!checked || !selectedGame}
-              loading={loading}
-              onClick={async () => {
-                if (!selectedGame) {
-                  setError("Please select a game");
-                  return;
-                }
-
-                if (!checked) {
-                  setError("Please confirm before deleting");
-                  return;
-                }
-
-                if (!selectedGameObject) {
-                  toast.error("Invalid game selection");
-                  return;
-                }
-
-                await deleteEntriesByGame(selectedGameObject.gameId); // ✅ Call your helper function
-                setChecked(false);
-                setSelectedGame("");
-                close(); // ✅ Close modal
-              }}
-            >
-              Delete Entries
-            </Button>
-          </Stack>
-        </Modal>
-
-        <div className={classes.toolbarContainer}>
-          <div className={classes.toolbar}>
-            <div className={classes.toolbarTop}>
-              <div className={classes.searchContainer}>
-                <JournalPageSearch
-                  borderColor="border: 1px solid transparent"
-                  size="lg"
-                  radius="md"
-                  value={search}
-                  onChange={setSearch}
-                />
-              </div>
-
-              <div className={classes.toolbarButtons}>
-                <JournalEntryModal
-                  key={selectedGameObject?.gameId ?? "journal-entry-modal"}
-                  opened={entryModalOpened}
-                  onClose={closeEntryModal}
-                  gameId={selectedGameObject?.gameId ?? ""}
-                  gameName={selectedGameObject?.gameName ?? ""}
-                  onSuccess={() => close()}
-                  onEntryCreated={fetchEntries}
-                />
-
-                <Button
-                  variant="outline"
-                  color="#139609"
-                  size="md"
-                  radius="md"
-                  className={classes.addButton}
-                  onClick={openEntryModal}
-                  rightSection={<FilePlus />}
-                >
-                  Add Entry
-                </Button>
-
-                <Button
-                  variant="outline"
-                  color="#e01515ff"
-                  size="md"
-                  radius="md"
-                  className={classes.removeButton}
-                  onClick={open}
-                  rightSection={<Trash2 />}
-                >
-                  Delete
-                </Button>
-              </div>
-
-              <div className={classes.filterContainer}>
-                <JournalFilters
-                  className={classes.filterButton}
-                  color="indigo"
-                  size="md"
-                  radius="md"
-                  variant="default"
-                  buttonVariant="outline"
-                  availableGames={games.map((game) => ({
-                    id: game.gameId,
-                    name: game.gameName,
-                  }))}
-                  sortOption={sortOrder}
-                  selectedGameId={gameId}
-                  selectedEntryType={selectedType}
-                  selectedTags={selectedTags}
-                  onSortChange={setSortOrder}
-                  onGameIdChange={setGameId}
-                  onEntryTypeChange={setSelectedType}
-                  onTagsChange={setSelectedTags}
-                />
-              </div>
-            </div>
-
-            <div className={classes.toolbarBottom}>
-              <div className={classes.resultsContainer}>
-                <Text className={classes.resultsText}>
-                  Showing {filteredEntries.length} of{" "}
-                  {totalEntries.toLocaleString()} entries
-                </Text>
-              </div>
-
-              {activeFilters.length > 0 && (
-                <Group className={classes.activeFiltersWrapper}>
-                  {gameId !== "all" && (
-                    <Pill
-                      size="md"
-                      c="white"
-                      radius="sm"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        setGameId("all");
-                        setPage(1);
-                      }}
-                    >
-                      {`Game: ${games.find((g) => g.gameId === gameId)?.gameName}`}{" "}
-                      ✕
-                    </Pill>
-                  )}
-
-                  {selectedTags.length > 0 && (
-                    <Pill
-                      className={classes.filterBadge}
-                      size="md"
-                      c="white"
-                      radius="sm"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        setSelectedTags([]);
-                        setPage(1);
-                      }}
-                    >
-                      {`Tags: ${selectedTags.join(", ")}`} ✕
-                    </Pill>
-                  )}
-
-                  {selectedType && (
-                    <Pill
-                      className={classes.filterBadge}
-                      size="md"
-                      variant="outline"
-                      c="white"
-                      radius="sm"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        setSelectedType("");
-                        setPage(1);
-                      }}
-                    >
-                      {`Type: ${selectedType}`} ✕
-                    </Pill>
-                  )}
-                </Group>
-              )}
-            </div>
+              <Text className={classes.description}>
+                Capture memorable moments, strategies, acheivements, endings,
+                and more from you gaming adventures.
+              </Text>
+            </Stack>
           </div>
-        </div>
 
-        {filteredEntries.length > 0 && (
-          <SimpleGrid
-            cols={{ base: 1, sm: 2, md: 2, lg: 2 }}
-            spacing="lg"
-            className={classes.entriesGrid}
+          {/* Delete Entries By Game Modal */}
+          <Modal
+            opened={opened}
+            onClose={close}
+            centered
+            size="md"
+            title="Delete All Entries of a Game"
+            className={classes.drawer}
+            styles={{
+              header: {
+                marginBottom: "10px",
+              },
+              body: {
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+                width: "100%",
+              },
+              title: {
+                fontSize: "24px",
+                color: "white",
+                fontFamily: "Noto Sans",
+                fontWeight: 300,
+              },
+              content: {
+                fontSize: "18px",
+                color: "white",
+                fontFamily: "Poppins",
+                fontWeight: 400,
+              },
+              close: {
+                color: "white",
+              },
+            }}
           >
-            {filteredEntries.map((entry) => (
-              <JournalEntryCard
-                key={entry._id}
-                entry={entry}
-                variant="journal"
-                color="#7c18ed"
+            <Stack gap="md" ta="left">
+              <Text c="white" fz="md" ta="left">
+                This will permanently delete <b>all</b> journal entries
+                assoicated with the selected game. This action cannot be undone.
+              </Text>
+
+              <Select
+                label="Select Game"
+                size="md"
+                placeholder="Choose a game to delete its entries"
+                data={games.map((game) => ({
+                  value: game.gameName,
+                  label: game.gameName,
+                }))}
+                value={selectedGame}
+                onChange={(value) => setSelectedGame(value || "")}
+                styles={{
+                  input: { backgroundColor: "#212121", color: "white" },
+                  dropdown: { backgroundColor: "#2c2c2fff", color: "white" },
+                  label: {
+                    fontSize: "18px",
+                    color: "white",
+                    fontFamily: "Noto Sans",
+                    fontWeight: 300,
+                  },
+                  option: { background: "#212121" },
+                }}
+                mb="sm"
+                error={error}
               />
-            ))}
-          </SimpleGrid>
-        )}
 
-        {!loading && entries.length === 0 && (
-          <p className={classes.noGamesText}>
-            No games found for the selected tags.
-          </p>
-        )}
+              <Checkbox
+                radius="md"
+                color="blue"
+                c="white"
+                size="md"
+                label="I understand that I am permanently deleting my journal entries for this game"
+                checked={checked}
+                error={error}
+                onChange={(event) => setChecked(event.currentTarget.checked)}
+              />
 
-        {entries.length !== 0 && (
-          <div className={classes.paginationWrapper}>
-            <Pagination
-              classNames={{
-                control: classes.paginationControl,
-              }}
-              size={isMobile ? "sm" : "xl"}
-              radius="xs"
-              total={totalPages}
-              value={page}
-              onChange={setPage}
-            />
+              <Button
+                className={classes.deleteEntriesButton}
+                color="#d8070b"
+                fullWidth
+                radius="md"
+                variant="filled"
+                rightSection={<Trash2 size={16} />}
+                disabled={!checked || !selectedGame}
+                loading={loading}
+                onClick={async () => {
+                  if (!selectedGame) {
+                    setError("Please select a game");
+                    return;
+                  }
+
+                  if (!checked) {
+                    setError("Please confirm before deleting");
+                    return;
+                  }
+
+                  if (!selectedGameObject) {
+                    toast.error("Invalid game selection");
+                    return;
+                  }
+
+                  await deleteEntriesByGame(selectedGameObject.gameId); // ✅ Call your helper function
+                  setChecked(false);
+                  setSelectedGame("");
+                  close(); // ✅ Close modal
+                }}
+              >
+                Delete Entries
+              </Button>
+            </Stack>
+          </Modal>
+
+          <div className={classes.toolbarContainer}>
+            <div className={classes.toolbar}>
+              <div className={classes.toolbarTop}>
+                <div className={classes.searchContainer}>
+                  <JournalPageSearch
+                    borderColor="border: 1px solid transparent"
+                    size="lg"
+                    radius="md"
+                    value={search}
+                    onChange={setSearch}
+                  />
+                </div>
+
+                <div className={classes.toolbarButtons}>
+                  <JournalEntryModal
+                    key={selectedGameObject?.gameId ?? "journal-entry-modal"}
+                    opened={entryModalOpened}
+                    onClose={closeEntryModal}
+                    gameId={selectedGameObject?.gameId ?? ""}
+                    gameName={selectedGameObject?.gameName ?? ""}
+                    onSuccess={() => close()}
+                    onEntryCreated={fetchEntries}
+                  />
+
+                  <Button
+                    variant="outline"
+                    color="#139609"
+                    size="md"
+                    radius="md"
+                    className={classes.addButton}
+                    onClick={openEntryModal}
+                    rightSection={<FilePlus />}
+                  >
+                    Add Entry
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    color="#e01515ff"
+                    size="md"
+                    radius="md"
+                    className={classes.removeButton}
+                    onClick={open}
+                    rightSection={<Trash2 />}
+                  >
+                    Delete
+                  </Button>
+                </div>
+
+                <div className={classes.filterContainer}>
+                  <JournalFilters
+                    className={classes.filterButton}
+                    color="indigo"
+                    size="md"
+                    radius="md"
+                    variant="default"
+                    buttonVariant="outline"
+                    availableGames={games.map((game) => ({
+                      id: game.gameId,
+                      name: game.gameName,
+                    }))}
+                    sortOption={sortOrder}
+                    selectedGameId={gameId}
+                    selectedEntryType={selectedType}
+                    selectedTags={selectedTags}
+                    onSortChange={setSortOrder}
+                    onGameIdChange={setGameId}
+                    onEntryTypeChange={setSelectedType}
+                    onTagsChange={setSelectedTags}
+                  />
+                </div>
+              </div>
+
+              <div className={classes.toolbarBottom}>
+                <div className={classes.resultsContainer}>
+                  <Text className={classes.resultsText}>
+                    Showing {filteredEntries.length} of{" "}
+                    {totalEntries.toLocaleString()} entries
+                  </Text>
+                </div>
+
+                {activeFilters.length > 0 && (
+                  <Group className={classes.activeFiltersWrapper}>
+                    {gameId !== "all" && (
+                      <Pill
+                        size="md"
+                        c="white"
+                        radius="sm"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          setGameId("all");
+                          setPage(1);
+                        }}
+                      >
+                        {`Game: ${games.find((g) => g.gameId === gameId)?.gameName}`}{" "}
+                        ✕
+                      </Pill>
+                    )}
+
+                    {selectedTags.length > 0 && (
+                      <Pill
+                        className={classes.filterBadge}
+                        size="md"
+                        c="white"
+                        radius="sm"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          setSelectedTags([]);
+                          setPage(1);
+                        }}
+                      >
+                        {`Tags: ${selectedTags.join(", ")}`} ✕
+                      </Pill>
+                    )}
+
+                    {selectedType && (
+                      <Pill
+                        className={classes.filterBadge}
+                        size="md"
+                        variant="outline"
+                        c="white"
+                        radius="sm"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          setSelectedType("");
+                          setPage(1);
+                        }}
+                      >
+                        {`Type: ${selectedType}`} ✕
+                      </Pill>
+                    )}
+                  </Group>
+                )}
+              </div>
+            </div>
           </div>
-        )}
+
+          {filteredEntries.length > 0 && (
+            <SimpleGrid
+              cols={{ base: 1, sm: 2, md: 2, lg: 2 }}
+              spacing="lg"
+              className={classes.entriesGrid}
+            >
+              {filteredEntries.map((entry) => (
+                <JournalEntryCard
+                  key={entry._id}
+                  entry={entry}
+                  variant="journal"
+                  color="#7c18ed"
+                />
+              ))}
+            </SimpleGrid>
+          )}
+
+          {!loading && entries.length === 0 && (
+            <p className={classes.noGamesText}>
+              No games found for the selected tags.
+            </p>
+          )}
+
+          {entries.length !== 0 && (
+            <div className={classes.paginationWrapper}>
+              <Pagination
+                classNames={{
+                  control: classes.paginationControl,
+                }}
+                size={isMobile ? "sm" : "xl"}
+                radius="xs"
+                total={totalPages}
+                value={page}
+                onChange={setPage}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
