@@ -15,6 +15,7 @@ import {
   Textarea,
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
+import { PlaySession } from "@/app/types/PlaySession";
 
 import { toast } from "react-toastify";
 
@@ -29,20 +30,6 @@ import {
   LibraryBig,
 } from "lucide-react";
 import { IconBrandXbox } from "@tabler/icons-react";
-
-// Define the playSession object used on both calendar and modal with the props
-type PlaySession = {
-  _id: string;
-  gameName: string;
-  gameId: string;
-  gameCover: string;
-  date: string;
-  duration: number;
-  notes: string;
-  sessionType: string[];
-  mood?: string[];
-  platform?: string;
-};
 
 // Define the props for the PlaySessionModal component
 type PlaySessionModalProps = {
@@ -148,8 +135,8 @@ export default function PlaySessionModal({
 
       // If the session has a game cover, set it for the entry
       // Otherwise, find the matching game from library and set cover image for entry
-      if (session.gameCover) {
-        setGameCover(session.gameCover);
+      if (session.coverImage) {
+        setGameCover(session.coverImage);
       } else {
         const matchingGame = userGames.find(
           (game) => game.gameId === session.gameId,

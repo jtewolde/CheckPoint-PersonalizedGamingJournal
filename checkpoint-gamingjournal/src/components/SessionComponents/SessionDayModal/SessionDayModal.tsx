@@ -1,20 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  ActionIcon,
-  Modal,
-  Text,
-  Tooltip,
-  LoadingOverlay,
-  Stack,
-  Group,
-  Badge,
-  Spoiler,
-} from "@mantine/core";
-
-import { Trash2Icon, Pencil } from "lucide-react";
-import { toast } from "react-toastify";
+import { Modal, Text, LoadingOverlay, Stack } from "@mantine/core";
 
 import { PlaySession } from "@/app/types/PlaySession";
 import PlaySessionCard from "@/components/Cards/SessionCard/SessionCard";
@@ -75,7 +62,7 @@ export default function SessionDayModal({
         {sessionsForDate.map((s) => {
           return (
             <div key={s._id} className={classes.cardsWrapper}>
-              <PlaySessionCard session={s} variant="sessions" />
+              <PlaySessionCard session={s} variant="compact" />
             </div>
           );
         })}
