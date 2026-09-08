@@ -17,6 +17,7 @@ import { Trash2Icon, Pencil } from "lucide-react";
 import { toast } from "react-toastify";
 
 import { PlaySession } from "@/app/types/PlaySession";
+import PlaySessionCard from "@/components/Cards/SessionCard/SessionCard";
 
 import classes from "./SessionDayModal.module.css";
 
@@ -47,41 +48,19 @@ export default function SessionDayModal({
   // Get sessions for selected date to display in modal
   const sessionsForDate = localSessions;
 
-  // Function to handle deleting a play session using the session ID
-  const handleDeleteSession = async (sessionId: string) => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("bearer_token"); // Retrieve the Bearer token from localStorage
-      const res = await fetch(`/api/playSession/${sessionId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to delete the play session");
-      }
-
-      setLocalSessions((prev) => prev.filter((s) => s._id !== sessionId)); // ✅ remove locally
-      toast.success("Play Session has been removed!");
-      console.log("Play Session has been removed!");
-
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.error("Error removing play session!:", error);
-      toast.error("Failed to remove the play session. Please try again.");
-    }
-  };
-
   return (
     <Modal
       opened={opened}
       onClose={onClose}
       size="xl"
       title={"Play Sessions on " + (selectedDate || "No Date Selected")}
+      styles={{
+        title: {
+          fontFamily: "Barlow",
+          fontSize: "18px",
+          fontWeight: "600",
+        },
+      }}
     >
       {/* ✅ LOADING OVERLAY */}
       <LoadingOverlay
@@ -94,121 +73,9 @@ export default function SessionDayModal({
         {sessionsForDate.length === 0 && <Text c="dimmed">No sessions</Text>}
 
         {sessionsForDate.map((s) => {
-          const hours = Math.floor(s.duration / 60);
-          const minutes = s.duration % 60;
-
-          const moods = Array.isArray(s.mood) ? s.mood : s.mood ? [s.mood] : [];
-
           return (
-            <div key={s._id} className={classes.gameSessionCard}>
-              <div className={classes.sessionHeader}>
-                <div className={classes.titleDurationGroup}>
-                  {/*GAME TITLE */}
-                  <Text className={classes.titleText}>{s.gameName}</Text>
-
-                  <Group gap={6} align="center">
-                    {/* DURATION */}
-                    <Text className={classes.durationText} c="dimmed">
-                      {hours}h {minutes}m
-                    </Text>
-
-                    {s.platform && (
-                      <>
-                        <Text size="sm" c="dimmed">
-                          •
-                        </Text>
-                        <Text size="sm" c="dimmed">
-                          {s.platform}
-                        </Text>
-                      </>
-                    )}
-
-                    {moods.length > 0 && (
-                      <Group gap={6} align="center" justify="center">
-                        {moods.map((mood, index) => (
-                          <Group key={`${s._id}-mood-${index}`} gap={6}>
-                            <Text size="sm" c="dimmed">
-                              •
-                            </Text>
-                            <Text size="sm" c="dimmed">
-                              {mood}
-                            </Text>
-                          </Group>
-                        ))}
-                      </Group>
-                    )}
-                  </Group>
-
-                  {/* ✅ SESSION TYPES */}
-                  {s.sessionType && s.sessionType.length > 0 && (
-                    <div className={classes.tagContainer}>
-                      <Group className={classes.typeContainer}>
-                        {s.sessionType.map((type: string, index: number) => (
-                          <Badge
-                            key={index}
-                            variant="light"
-                            color="green"
-                            radius="md"
-                            size="md"
-                          >
-                            {type}
-                          </Badge>
-                        ))}
-                      </Group>
-                    </div>
-                  )}
-                </div>
-
-                <Group gap={4}>
-                  <Tooltip label="Edit session">
-                    <ActionIcon
-                      variant="light"
-                      size="lg"
-                      color="blue"
-                      onClick={() => onEditSession?.(s)}
-                    >
-                      <Pencil size={20} />
-                    </ActionIcon>
-                  </Tooltip>
-
-                  <Tooltip label="Delete session">
-                    <ActionIcon
-                      variant="light"
-                      size="lg"
-                      color="red"
-                      onClick={() => handleDeleteSession(s._id)}
-                    >
-                      <Trash2Icon size={20} />
-                    </ActionIcon>
-                  </Tooltip>
-                </Group>
-              </div>
-
-              <div className={classes.notesContainer}>
-                {s.notes ? (
-                  <Spoiler
-                    maxHeight={100}
-                    showLabel="Show more"
-                    hideLabel="Show less"
-                    styles={{
-                      control: {
-                        color: "#b9b5b5",
-                        fontWeight: 500,
-                        fontSize: "14px",
-                        marginBottom: "0.5rem",
-                      },
-                    }}
-                  >
-                    <Text size="sm" c="dimmed">
-                      {s.notes || "No notes"}
-                    </Text>
-                  </Spoiler>
-                ) : (
-                  <Text size="sm" c="dimmed">
-                    No notes recorded.
-                  </Text>
-                )}
-              </div>
+            <div key={s._id} className={classes.cardsWrapper}>
+              <PlaySessionCard session={s} variant="sessions" />
             </div>
           );
         })}
