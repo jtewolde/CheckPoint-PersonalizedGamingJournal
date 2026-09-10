@@ -464,7 +464,7 @@
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 630px) {
   .hero {
     min-height: 0;
   }
@@ -479,7 +479,7 @@
   }
 
   .heroContent {
-    width: min(100% - 24px, 500px);
+    width: 90%;
     padding-bottom: 32px;
   }
 

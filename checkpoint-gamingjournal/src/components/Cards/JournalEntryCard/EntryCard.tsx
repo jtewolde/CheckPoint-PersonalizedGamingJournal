@@ -12,14 +12,13 @@ import {
   Group,
   Menu,
   OverflowList,
-  LoadingOverlay,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
 
 import { entryTypeColors } from "@/hooks/getEntryTypeColors";
 import JournalEntryModal from "../../Modals/JournalEntryModal/EntryModal";
 
-import { EllipsisVertical, Trash, Pencil, Eye } from "lucide-react";
+import { EllipsisVertical, Trash, Pencil, Eye, Calendar } from "lucide-react";
 
 import PlaceHolderImage from "../../../../public/no-cover-image.png";
 import { toast } from "react-toastify";

@@ -142,8 +142,8 @@ export default function SessionHeatmap({
       ? 24
       : isLaptop
         ? 28
-        : 32;
-  const gamePageGap = isSmallMobile ? 6 : isTablet ? 7 : isLaptop ? 8 : 10;
+        : 30;
+  const gamePageGap = isSmallMobile ? 6 : isTablet ? 7 : isLaptop ? 8 : 12;
 
   // Format duration for tooltip
   const formatDuration = (minutes: number) => {
