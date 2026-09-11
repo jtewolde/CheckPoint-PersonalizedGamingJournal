@@ -195,9 +195,15 @@ export default function SessionHeatmap({
             if (!value) return;
 
             setSelectedDate(date);
+            console.log("Test press");
             setOpened(true);
           },
         })}
+        styles={{
+          rect: {
+            cursor: "pointer",
+          },
+        }}
       />
 
       <PlaySessionModal
