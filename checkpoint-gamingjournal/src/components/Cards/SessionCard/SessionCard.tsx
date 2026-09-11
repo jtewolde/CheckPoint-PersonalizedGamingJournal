@@ -13,6 +13,7 @@ import {
   Group,
   Menu,
   OverflowList,
+  Spoiler,
 } from "@mantine/core";
 
 import { modals } from "@mantine/modals";
@@ -330,10 +331,10 @@ export default function PlaySessionCard({
 
           {/* NOTES PREVIEW */}
           {session.notes && (
-            <Text className={classes.content}>
-              {session.notes.length > 500
-                ? `${session.notes.slice(0, 500)}...`
-                : session.notes}
+            <Text component="div" className={classes.content}>
+              <Spoiler maxHeight={40} showLabel="Show More" hideLabel="Hide">
+                {session.notes}
+              </Spoiler>
             </Text>
           )}
         </div>
