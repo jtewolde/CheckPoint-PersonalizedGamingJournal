@@ -47,6 +47,9 @@ export default function SessionDayModal({
           fontSize: "18px",
           fontWeight: "600",
         },
+        header: {
+          marginBottom: "0.5rem",
+        },
       }}
     >
       {/* ✅ LOADING OVERLAY */}

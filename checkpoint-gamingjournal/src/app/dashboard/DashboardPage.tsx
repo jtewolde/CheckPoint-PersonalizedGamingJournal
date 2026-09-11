@@ -699,8 +699,8 @@ export default function Dashboard() {
                 <p className={classes.statusTitle}>Game Ratings</p>
                 <div className={classes.chartWrapper}>
                   <BarChart
-                    h={260}
-                    w="95%"
+                    h={320}
+                    w="100%"
                     dataKey="rating"
                     yAxisLabel="Games"
                     xAxisLabel="Rating (/10)"
