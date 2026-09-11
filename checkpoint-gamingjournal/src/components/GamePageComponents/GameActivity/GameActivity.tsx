@@ -2,11 +2,12 @@
 
 import { useMemo } from "react";
 import { useMediaQuery } from "@mantine/hooks";
-import { SimpleGrid, Stack, Text, Title } from "@mantine/core";
+import { SimpleGrid, Stack, Text, Title, EmptyState } from "@mantine/core";
 import { DonutChart } from "@mantine/charts";
 import { Gamepad, Timer, Calendar, Hourglass, Flame } from "lucide-react";
 
 import SessionHeatmap from "@/components/SessionComponents/SessionHeatmap/SessionHeatmap";
+import PlaySessionCard from "@/components/Cards/SessionCard/SessionCard";
 import { calculateCurrentStreak } from "@/utils/dateUtils";
 
 import classes from "./GameActivity.module.css";
@@ -27,7 +28,7 @@ export default function GameActivity({
   sessions,
   sessionStats,
 }: GameActivityProps) {
-  const isMobile = useMediaQuery("(max-width: 646px)");
+  const isMobile = useMediaQuery("(max-width: 748px)");
 
   // Create stat for tracking unique days played/made a play session for specific game
   const uniqueDays = new Set(
@@ -84,13 +85,19 @@ export default function GameActivity({
       }));
   }, [sessions]);
 
+  const recentSessions = useMemo(() => {
+    return [...sessions]
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 3);
+  }, [sessions]);
+
   return (
     <div className={classes.wrapper}>
       <section className={classes.statsSection}>
         <SimpleGrid
           className={classes.activityGrid}
           spacing="md"
-          cols={{ base: 3, sm: 3, md: 6 }}
+          cols={{ base: 2, sm: 3, md: 6 }}
         >
           <div className={classes.statCard}>
             <Gamepad size={30} />
@@ -156,71 +163,94 @@ export default function GameActivity({
         </SimpleGrid>
       </section>
 
-      <SimpleGrid
-        className={classes.activityGrid}
-        spacing="md"
-        cols={{ base: 1, sm: 2, md: 2 }}
-      >
-        <div className={classes.heatmapContainer}>
-          <Title className={classes.heatmapTitle}>Last 90 Days Heatmap</Title>
-
-          <div className={classes.heatmapWrapper}>
-            <SessionHeatmap
-              sessions={sessions}
-              page="gamePage"
-              dateRange="days"
-              days={90}
-            />
-          </div>
+      {sessions.length === 0 ? (
+        <div className={classes.emptyStateContainer}>
+          <EmptyState
+            icon={<Gamepad />}
+            size="lg"
+            withIndicatorBackground
+            title="No session data yet"
+            description="Create play sessions to see your activity patterns, session types, and play history here."
+          />
         </div>
+      ) : (
+        <SimpleGrid
+          className={classes.activityGrid}
+          spacing="md"
+          cols={{ base: 1, sm: 2, md: 2 }}
+        >
+          <div className={classes.heatmapContainer}>
+            <Title className={classes.heatmapTitle}>
+              Game Sessions Heatmap
+            </Title>
+            <div className={classes.heatmapWrapper}>
+              <SessionHeatmap
+                sessions={sessions}
+                page="gamePage"
+                dateRange="game"
+                days={120}
+              />
+            </div>
+          </div>
 
-        <div className={classes.sessionStatsContainer}>
-          <div className={classes.sessionStatsWrapper}>
-            <Stack gap={10} align="flex-start" justify="flex-start">
-              <Title className={classes.heatmapTitle}>Session Types</Title>
+          <div className={classes.sessionsContainer}>
+            {/* Session Types */}
+            <Title className={classes.heatmapTitle}>Session Types</Title>
+            <div className={classes.sessionStatsWrapper}>
+              {" "}
               <DonutChart
                 data={sessionTypeData}
-                size={isMobile ? 200 : 250}
+                size={250}
                 thickness={45}
                 paddingAngle={3}
                 withTooltip
                 chartLabel={`${sessionStats.totalSessions}`}
+                styles={{
+                  label: {
+                    fontFamily: "Barlow",
+                    fontSize: "24px",
+                    fontWeight: "600",
+                  },
+                }}
               />
-            </Stack>
+              {!isMobile ? (
+                <div className={classes.sessionTypeLegend}>
+                  {sessionTypeData.map((item) => {
+                    const total = sessionTypeData.reduce(
+                      (sum, type) => sum + type.value,
+                      0,
+                    );
 
-            <div className={classes.sessionTypeLegend}>
-              {sessionTypeData.map((item) => {
-                const total = sessionTypeData.reduce(
-                  (sum, type) => sum + type.value,
-                  0,
-                );
+                    const percentage =
+                      total > 0 ? Math.round((item.value / total) * 100) : 0;
 
-                const percentage =
-                  total > 0 ? Math.round((item.value / total) * 100) : 0;
+                    return (
+                      <div key={item.name} className={classes.legendItem}>
+                        <div className={classes.legendName}>
+                          <span
+                            className={classes.legendDot}
+                            style={{
+                              backgroundColor: item.cssColor,
+                            }}
+                          />
 
-                return (
-                  <div key={item.name} className={classes.legendItem}>
-                    <div className={classes.legendName}>
-                      <span
-                        className={classes.legendDot}
-                        style={{
-                          backgroundColor: item.cssColor,
-                        }}
-                      />
+                          <Text>{item.name}</Text>
+                        </div>
 
-                      <Text>{item.name}</Text>
-                    </div>
-
-                    <Text className={classes.legendValue}>
-                      {item.value} ({percentage}%)
-                    </Text>
-                  </div>
-                );
-              })}
+                        <Text className={classes.legendValue}>
+                          {item.value} ({percentage}%)
+                        </Text>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
-        </div>
-      </SimpleGrid>
+        </SimpleGrid>
+      )}
     </div>
   );
 }
