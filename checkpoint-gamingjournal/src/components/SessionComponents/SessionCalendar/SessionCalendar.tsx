@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { formatDate, isSameDay } from "@/utils/dateUtils";
+import { useEffect, useState } from "react";
+import { isSameDay } from "@/utils/dateUtils";
 
 import PlaySessionModal from "../../Modals/PlaySessionModal/SessionModal";
 import SessionDayModal from "../SessionDayModal/SessionDayModal";
@@ -11,15 +11,21 @@ import { Calendar } from "@mantine/dates";
 import { Image } from "@mantine/core";
 import classes from "./SessionCalendar.module.css";
 
-export default function SessionCalendar({
-  gameId,
-  gameCover,
-  sessions,
-}: {
-  gameId: string;
-  gameCover: string;
+interface SessionCalendarProps {
   sessions: PlaySession[];
-}) {
+  className?: string;
+  displayCover?: boolean;
+  gameCover?: string;
+  fullWidth?: boolean;
+}
+
+export default function SessionCalendar({
+  sessions,
+  className,
+  displayCover = true,
+  gameCover,
+  fullWidth = true,
+}: SessionCalendarProps) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [localSessions, setLocalSessions] = useState<PlaySession[]>(sessions);
 
@@ -29,9 +35,8 @@ export default function SessionCalendar({
   );
 
   const [opened, setOpened] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  // Sync up current play sessions of game when parent changes
+  // Sync local sessions when parent changes
   useEffect(() => {
     setLocalSessions(sessions);
   }, [sessions]);
@@ -44,7 +49,8 @@ export default function SessionCalendar({
   return (
     <>
       <Calendar
-        fullWidth
+        className={className}
+        fullWidth={fullWidth}
         maxDate={new Date()}
         getDayProps={(date) => ({
           onClick: () => {
@@ -54,17 +60,31 @@ export default function SessionCalendar({
         })}
         renderDay={(dateString) => {
           const [year, month, day] = dateString.split("-").map(Number);
-          const date = new Date(year, month - 1, day); // local date, no UTC shift
+          const date = new Date(year, month - 1, day);
 
-          const hasSession = localSessions.some((s) => isSameDay(s.date, date));
+          const sessionsForDay = localSessions.filter((s) =>
+            isSameDay(s.date, date),
+          );
 
           return (
             <div className={classes.day}>
               <div className={classes.dayNumber}>{date.getDate()}</div>
 
-              {hasSession && (
-                <div className={classes.sessionIndicator}>
-                  <Image src={gameCover} alt="" width={32} height={44} />
+              {sessionsForDay.length > 0 && (
+                <div className={classes.sessionActivity}>
+                  {displayCover ? (
+                    sessionsForDay.map((session) => (
+                      <Image
+                        key={session._id}
+                        src={session?.coverImage}
+                        alt=""
+                        width={24}
+                        height={32}
+                      />
+                    ))
+                  ) : (
+                    <div className={classes.sessionIndicator} />
+                  )}
                 </div>
               )}
             </div>
@@ -79,13 +99,12 @@ export default function SessionCalendar({
           setEditModalOpened(false);
           setSelectedSession(null);
         }}
-        gameId={gameId}
+        gameId={selectedSession?.gameId}
         session={selectedSession}
         onSuccess={(updatedSession) => {
-          // update local state without refetch
           setLocalSessions((prev) =>
-            prev.map((s) =>
-              s._id === updatedSession._id ? updatedSession : s,
+            prev.map((session) =>
+              session._id === updatedSession._id ? updatedSession : session,
             ),
           );
         }}
@@ -99,7 +118,6 @@ export default function SessionCalendar({
         onEditSession={(session) => {
           setSelectedSession(session);
           setEditModalOpened(true);
-
           setOpened(false);
         }}
       />
