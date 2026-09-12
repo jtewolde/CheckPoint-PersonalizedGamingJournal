@@ -5,21 +5,10 @@ import { useMediaQuery } from "@mantine/hooks";
 import { Heatmap } from "@mantine/charts";
 
 import SessionDayModal from "../SessionDayModal/SessionDayModal";
+import { PlaySession } from "@/app/types/PlaySession";
 import PlaySessionModal from "../../Modals/PlaySessionModal/SessionModal";
 
 import classes from "./SessionHeatmap.module.css";
-
-type PlaySession = {
-  _id: string;
-  gameId: string;
-  gameName: string;
-  date: string;
-  duration: number;
-  notes: string;
-  sessionType: string[];
-  mood?: string[];
-  platform?: string;
-};
 
 interface SessionHeatmapProps {
   sessions: PlaySession[];

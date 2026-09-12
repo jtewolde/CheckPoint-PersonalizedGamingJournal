@@ -7,10 +7,11 @@ import { DonutChart } from "@mantine/charts";
 import { Gamepad, Timer, Calendar, Hourglass, Flame } from "lucide-react";
 
 import SessionHeatmap from "@/components/SessionComponents/SessionHeatmap/SessionHeatmap";
-import PlaySessionCard from "@/components/Cards/SessionCard/SessionCard";
+import SessionCalendar from "@/components/SessionComponents/SessionCalendar/SessionCalendar";
 import { calculateCurrentStreak } from "@/utils/dateUtils";
 
 import classes from "./GameActivity.module.css";
+import { Session } from "inspector/promises";
 
 interface GameActivityProps {
   game: any;
@@ -190,6 +191,15 @@ export default function GameActivity({
                 dateRange="game"
                 days={120}
               />
+            </div>
+          </div>
+
+          <div className={classes.heatmapContainer}>
+            <Title className={classes.heatmapTitle}>
+              Game Sessions Heatmap
+            </Title>
+            <div className={classes.heatmapWrapper}>
+              <SessionCalendar sessions={sessions} displayCover={true} />
             </div>
           </div>
 

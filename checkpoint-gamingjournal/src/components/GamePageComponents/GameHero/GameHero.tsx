@@ -351,7 +351,7 @@ export default function GameHero({
             <div className={classes.ratingGrid}>
               {isGameInLibrary && (
                 <div className={classes.ratingCard}>
-                  <Rating value={rating} readOnly fractions={2} size="md" />
+                  <Rating value={rating / 2} readOnly fractions={4} size="md" />
 
                   <Text className={classes.ratingValue}>
                     {rating > 0 ? `${rating}/10` : "Not rated"}
@@ -509,7 +509,12 @@ export default function GameHero({
                 {/* Your Rating */}
                 {rating > 0 && (
                   <div className={classes.yourRating}>
-                    <Rating value={rating} readOnly fractions={2} size="sm" />
+                    <Rating
+                      value={rating / 2}
+                      readOnly
+                      fractions={4}
+                      size="sm"
+                    />
 
                     <Text className={classes.ratingValue}>{rating}/10</Text>
                   </div>
