@@ -13,35 +13,25 @@ import GameOverview from "@/components/GamePageComponents/GameOverview/GameOverv
 import GameScreenshots from "@/components/GamePageComponents/GameScreenshots/GameScreenshots";
 import GameVideos from "@/components/GamePageComponents/GameVideos/GameVideos";
 import GameMedia from "@/components/GamePageComponents/GameMedia/GameMedia";
+import GameActivity from "@/components/GamePageComponents/GameActivity/GameActivity";
 
 import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
 import PlaySessionModal from "@/components/Modals/PlaySessionModal/SessionModal";
 import EditGameInfoModal from "@/components/Modals/EditGameInfoModal/EditGameInfoModal";
 import AddToLibraryModal from "@/components/Modals/AddToLibraryModal/AddToLibraryModal";
-import SessionCalendar from "@/components/SessionComponents/SessionCalendar/SessionCalendar";
+import SessionCalendar from "@/components/ActivityComponents/SessionCalendar/SessionCalendar";
 
 import { toast } from "react-toastify";
 
 import { Text, SimpleGrid, ThemeIcon } from "@mantine/core";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import type { Swiper as SwiperType } from "swiper/types";
 
 import { Navigation, Pagination } from "swiper/modules";
 
 import classes from "./game.module.css";
 
-import { Gamepad, Activity } from "lucide-react";
-
-import {
-  FaPlaystation,
-  FaXbox,
-  FaApple,
-  FaAndroid,
-  FaGoogle,
-} from "react-icons/fa";
-
-import { BsNintendoSwitch, BsPc } from "react-icons/bs";
+import { Gamepad } from "lucide-react";
 
 import PlaceHolderImage from "../../../../public/no-cover-image.png";
 
@@ -70,9 +60,9 @@ export default function GameDetails() {
     avg: 0,
     longest: "",
     totalSessions: 0,
+    totalHours: 0,
   });
 
-  const [totalHoursPlayed, setTotalHoursPlayed] = useState("");
   const [sessions, setSessions] = useState<any[]>([]);
 
   const [opened, { open, close }] = useDisclosure(false);
@@ -83,22 +73,14 @@ export default function GameDetails() {
   const [AddOpened, { open: openAddModal, close: closeAddModal }] =
     useDisclosure(false);
 
-  const [screenshots, setScreensShots] = useState<any[]>([]); // State to store screenshots
-  const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(
-    null,
-  ); // State to handle selected screenshot for modal
-  const [selectedScreenshotIndex, setSelectedScreenshotIndex] = useState(0); // State to track index of selected screenshot
   const [backgroundImage, setBackgroundImage] = useState<string>(
     PlaceHolderImage.src,
   );
-
-  const [modalOpen, setModalOpen] = useState(false); // State to handle modal open/close
 
   const { isAuthenticated } = useAuth(); // Access global auth state
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width: 650px)");
 
-  const [thumbsSwiper, setThumbSwiper] = useState<SwiperType | null>(null);
   const showCardUI = isAuthenticated && isGameInLibrary;
   const [activeTab, setActiveTab] = useState<string>("overview");
 
@@ -141,7 +123,6 @@ export default function GameDetails() {
         console.log("Game Details Fetched:", data);
         setBackgroundImage(getRandomImage(data));
         setStatus(data.status);
-        setScreensShots(data.screenshots || []);
       } catch (error) {
         console.error("Error fetching game details:", error);
       } finally {
@@ -252,7 +233,7 @@ export default function GameDetails() {
         (total: number, session: any) => total + session.duration,
         0,
       );
-      const hoursPlayed = (totalPlaytime / 60).toFixed(2);
+      const hoursPlayed = (totalPlaytime / 60).toFixed(1);
 
       // Calculate the average play session duration that a user has for the game
       const avgSessionDuration = gameSessions.length
@@ -272,6 +253,7 @@ export default function GameDetails() {
         avg: Number(avgSessionDuration.toFixed(1)),
         totalSessions: gameSessions.length,
         longest: (longest / 60).toFixed(2),
+        totalHours: Number(hoursPlayed),
       });
     } catch (error) {
       console.error("Error fetching recent play sessions:", error);
@@ -335,38 +317,6 @@ export default function GameDetails() {
     return notFound();
   }
 
-  // Function to retrieve logos for different platforms that games can be on
-  const getPlatformIcon = (platformName: string) => {
-    if (platformName.toLowerCase().includes("xbox"))
-      return <FaXbox size={20} />;
-
-    if (platformName.toLowerCase().includes("playstation"))
-      return <FaPlaystation size={20} />;
-
-    if (
-      platformName.toLowerCase().includes("pc") ||
-      platformName.toLowerCase().includes("windows")
-    )
-      return <BsPc size={20} />;
-
-    if (platformName.toLowerCase().includes("nintendo"))
-      return <BsNintendoSwitch size={20} />;
-
-    if (platformName.toLowerCase().includes("android"))
-      return <FaAndroid size={20} />;
-
-    if (platformName.toLowerCase().includes("google"))
-      return <FaGoogle size={20} />;
-
-    if (
-      platformName.toLowerCase().includes("ios") ||
-      platformName.toLowerCase().includes("mac")
-    )
-      return <FaApple size={20} />;
-
-    return null; // fallback if no match
-  };
-
   // Sort the collection games by total rating in descending order
   const sortedCollections = game.collections?.[0]?.games.sort(
     (a: any, b: any) => b.total_rating - a.total_rating,
@@ -399,17 +349,18 @@ export default function GameDetails() {
 
         {activeTab === "overview" && <GameOverview game={game} />}
 
-        {activeTab === "activity" && <div>Activity content</div>}
-
-        {activeTab === "sessions" && <div>Sessions content</div>}
+        {activeTab === "sessions" && isAuthenticated && isGameInLibrary && (
+          <GameActivity
+            game={game}
+            sessions={sessions}
+            numOfEntries={numOfEntries}
+            sessionStats={stats}
+          />
+        )}
 
         {activeTab === "journal" && <div>Journal content</div>}
 
         {activeTab === "achievements" && <div>Achievements content</div>}
-
-        {activeTab === "screenshots" && <GameScreenshots game={game} />}
-
-        {activeTab === "videos" && <GameVideos game={game} />}
 
         {activeTab === "media" && <GameMedia game={game} />}
 
@@ -437,74 +388,6 @@ export default function GameDetails() {
           onClose={closeAddModal}
           game={game}
         />
-
-        {isAuthenticated && isGameInLibrary ? (
-          <div className={classes.activitySection}>
-            <div className={classes.sectionHeader}>
-              <ThemeIcon
-                size={50}
-                variant="gradient"
-                gradient={{ from: "#e70e0e", to: "#ca1118", deg: 20 }}
-                radius="md"
-              >
-                <Activity size={40} />
-              </ThemeIcon>
-              <h2 className={classes.sectionTitle}>Your Activity</h2>
-            </div>
-
-            <div className={classes.activityLayout}>
-              <div className={classes.calendarCard}>
-                <SessionCalendar gameId={game.id} sessions={sessions} />
-              </div>
-
-              <div className={classes.statsColumn}>
-                <div className={classes.activityItem}>
-                  <div className={classes.titleLogo}>
-                    <Text className={classes.activityLabel}>
-                      Total Journal Entries
-                    </Text>
-                  </div>
-                  <Text className={classes.activityStat}>{numOfEntries}</Text>
-                </div>
-
-                <div className={classes.activityItem}>
-                  <div className={classes.titleLogo}>
-                    <Text className={classes.activityLabel}>
-                      Total Playtime Tracked
-                    </Text>
-                  </div>
-                  <Text className={classes.activityStat}>
-                    {totalHoursPlayed} Hours
-                  </Text>
-                </div>
-
-                <div className={classes.activityItem}>
-                  <div className={classes.titleLogo}>
-                    <Text className={classes.activityLabel}>
-                      Average Session Duration
-                    </Text>
-                  </div>
-                  <Text className={classes.activityStat}>
-                    {stats.avg} Hours
-                  </Text>
-                </div>
-
-                <div className={classes.activityItem}>
-                  <div className={classes.titleLogo}>
-                    <Text className={classes.activityLabel}>
-                      Longest Session
-                    </Text>
-                  </div>
-                  <Text className={classes.activityStat}>
-                    {stats.longest} Hours
-                  </Text>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <></>
-        )}
 
         <div className={classes.gameSeries}>
           {game.collections?.[0]?.games.length > 4 && (

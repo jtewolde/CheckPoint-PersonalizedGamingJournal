@@ -22,7 +22,7 @@ import {
 } from "@mantine/core";
 import { DonutChart, BarChart, LineChart } from "@mantine/charts";
 
-import SessionHeatmap from "@/components/SessionComponents/SessionHeatmap/SessionHeatmap";
+import SessionHeatmap from "@/components/ActivityComponents/SessionHeatmap/SessionHeatmap";
 import JournalEntryCard from "@/components/Cards/JournalEntryCard/EntryCard";
 import GameCard from "@/components/Cards/GameCard/GameCard";
 import PlaySessionModal from "@/components/Modals/PlaySessionModal/SessionModal";

@@ -22,7 +22,6 @@ export default function SessionDayModal({
   onClose,
   selectedDate,
   sessions,
-  onEditSession,
 }: SessionDayModalProps) {
   const [loading, setLoading] = useState(false);
   const [localSessions, setLocalSessions] = useState<PlaySession[]>(sessions);
