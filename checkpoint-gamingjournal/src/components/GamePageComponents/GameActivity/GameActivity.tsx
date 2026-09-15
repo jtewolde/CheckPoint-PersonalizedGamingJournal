@@ -194,15 +194,6 @@ export default function GameActivity({
             </div>
           </div>
 
-          <div className={classes.heatmapContainer}>
-            <Title className={classes.heatmapTitle}>
-              Game Sessions Heatmap
-            </Title>
-            <div className={classes.heatmapWrapper}>
-              <SessionCalendar sessions={sessions} displayCover={true} />
-            </div>
-          </div>
-
           <div className={classes.sessionsContainer}>
             {/* Session Types */}
             <Title className={classes.heatmapTitle}>Session Types</Title>

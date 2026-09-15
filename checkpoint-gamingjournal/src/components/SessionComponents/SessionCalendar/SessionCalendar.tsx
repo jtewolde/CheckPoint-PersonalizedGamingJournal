@@ -15,7 +15,6 @@ interface SessionCalendarProps {
   sessions: PlaySession[];
   className?: string;
   displayCover?: boolean;
-  gameCover?: string;
   fullWidth?: boolean;
 }
 
@@ -23,7 +22,6 @@ export default function SessionCalendar({
   sessions,
   className,
   displayCover = true,
-  gameCover,
   fullWidth = true,
 }: SessionCalendarProps) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -51,13 +49,18 @@ export default function SessionCalendar({
       <Calendar
         className={className}
         fullWidth={fullWidth}
+        highlightToday={true}
         maxDate={new Date()}
-        getDayProps={(date) => ({
-          onClick: () => {
-            setSelectedDate(date);
-            setOpened(true);
-          },
-        })}
+        getDayProps={(date) => {
+          const today = isSameDay(date, new Date());
+          return {
+            onClick: () => {
+              setSelectedDate(date);
+              setOpened(true);
+            },
+            className: today ? classes.today : undefined,
+          };
+        }}
         renderDay={(dateString) => {
           const [year, month, day] = dateString.split("-").map(Number);
           const date = new Date(year, month - 1, day);
@@ -78,8 +81,7 @@ export default function SessionCalendar({
                         key={session._id}
                         src={session?.coverImage}
                         alt=""
-                        width={24}
-                        height={32}
+                        className={classes.sessionCover}
                       />
                     ))
                   ) : (
