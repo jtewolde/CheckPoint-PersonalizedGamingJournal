@@ -13,7 +13,6 @@
   position: relative;
   min-height: 100vh; /* Ensure the page takes up the full height */
   padding: 15px 0px;
-  max-width: 1440px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -173,7 +172,6 @@
   display: flex;
   justify-content: center;
   margin-top: 1.4rem;
-  margin-bottom: 1.4rem;
 }
 
 @media (max-width: 1248px) {
