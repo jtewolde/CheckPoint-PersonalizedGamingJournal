@@ -10,8 +10,6 @@ import GameHero from "@/components/GamePageComponents/GameHero/GameHero";
 import GameCard from "@/components/Cards/GameCard/GameCard";
 import GameTabs from "@/components/GamePageComponents/GameTabs/GameTabs";
 import GameOverview from "@/components/GamePageComponents/GameOverview/GameOverview";
-import GameScreenshots from "@/components/GamePageComponents/GameScreenshots/GameScreenshots";
-import GameVideos from "@/components/GamePageComponents/GameVideos/GameVideos";
 import GameMedia from "@/components/GamePageComponents/GameMedia/GameMedia";
 import GameActivity from "@/components/GamePageComponents/GameActivity/GameActivity";
 
@@ -19,14 +17,11 @@ import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
 import PlaySessionModal from "@/components/Modals/PlaySessionModal/SessionModal";
 import EditGameInfoModal from "@/components/Modals/EditGameInfoModal/EditGameInfoModal";
 import AddToLibraryModal from "@/components/Modals/AddToLibraryModal/AddToLibraryModal";
-import SessionCalendar from "@/components/ActivityComponents/SessionCalendar/SessionCalendar";
 
 import { toast } from "react-toastify";
-
 import { Text, SimpleGrid, ThemeIcon } from "@mantine/core";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import { Navigation, Pagination } from "swiper/modules";
 
 import classes from "./game.module.css";
