@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   Modal,
   Divider,
+  Group,
   Stack,
   Button,
   TextInput,
@@ -37,7 +38,6 @@ type PlaySessionModalProps = {
   onClose: () => void;
   gameId?: string;
   gameName?: string;
-  platforms?: string[];
   session?: PlaySession | null;
   onSuccess?: (session: PlaySession) => void;
   onSessionCreated?: () => void;
@@ -49,7 +49,6 @@ export default function PlaySessionModal({
   gameId,
   session,
   gameName,
-  platforms,
   onSuccess,
   onSessionCreated,
 }: PlaySessionModalProps) {
@@ -63,7 +62,6 @@ export default function PlaySessionModal({
   const [playSessionDate, setPlaySessionDate] = useState<string | null>(null);
   const [sessionType, setSessionType] = useState<string[]>([]);
   const [mood, setMood] = useState<string[]>([]);
-  const [platform, setPlatform] = useState<string>("");
 
   const [loading, setLoading] = useState(false);
 
@@ -82,7 +80,6 @@ export default function PlaySessionModal({
     setPlaySessionDate(null);
     setSessionType([]);
     setMood([]);
-    setPlatform("");
   };
 
   // Fetch the user's library of games to populate the select dropdown
@@ -127,11 +124,9 @@ export default function PlaySessionModal({
       setSessionType(session.sessionType || []);
       setPlaySessionNotes(session.notes || "");
       setPlaySessionDate(session.date ?? null);
-      setPlatform(session.platform || "");
       setMood(session.mood || []);
 
       const game = userGames.find((g) => g.gameId === session.gameId);
-      setAvailablePlatforms(game?.platforms ?? platforms ?? []);
 
       // If the session has a game cover, set it for the entry
       // Otherwise, find the matching game from library and set cover image for entry
@@ -156,22 +151,7 @@ export default function PlaySessionModal({
       setSelectedGameId(gameId || "");
       setSelectedGameName(gameName || "");
     }
-  }, [
-    opened,
-    gameId,
-    gameName,
-    session,
-    userGames,
-    platforms,
-    playSessionNotes,
-  ]);
-
-  // If the modal is opened from the game details page, update the available platforms state
-  useEffect(() => {
-    if (gameId && platforms) {
-      setAvailablePlatforms(platforms);
-    }
-  }, [gameId, platforms]);
+  }, [opened, gameId, gameName, session, userGames, playSessionNotes]);
 
   // Function to handle creating or updating a play session for a game
   // This will involve opening a modal with a form to input play session details such as duration and notes,
@@ -210,7 +190,6 @@ export default function PlaySessionModal({
           notes: playSessionNotes,
           sessionType: sessionType,
           mood,
-          platform,
           date: playSessionDate,
         }),
       });
@@ -241,7 +220,6 @@ export default function PlaySessionModal({
       playSessionDate ||
       sessionType.length > 0 ||
       mood ||
-      platform ||
       hours > 0 ||
       minutes > 0;
 
@@ -287,52 +265,73 @@ export default function PlaySessionModal({
       />
 
       <Stack gap="lg">
-        {gameId ? (
-          <TextInput
-            label="Game"
-            required
-            value={gameName}
-            readOnly
-            leftSection={<Gamepad2 size={20} />}
-          />
-        ) : (
-          <Select
-            leftSection={<Gamepad2 size={20} />}
-            maxDropdownHeight={300}
+        <div className={classes.fieldRow}>
+          {gameId ? (
+            <TextInput
+              label="Game"
+              required
+              value={gameName}
+              readOnly
+              leftSection={<Gamepad2 size={20} />}
+            />
+          ) : (
+            <Select
+              leftSection={<Gamepad2 size={20} />}
+              maxDropdownHeight={300}
+              className={classes.select}
+              data={userGames.map((game: any) => ({
+                value: game.gameId,
+                label: game.title,
+              }))}
+              scrollAreaProps={{
+                type: "auto",
+                scrollbarSize: 16,
+                scrollbars: "y",
+                color: "black",
+                classNames: { scrollbar: classes.scrollBar },
+              }}
+              size="md"
+              label="Game"
+              description="Choose a game from your library"
+              placeholder="(e.g. God of War)"
+              value={selectedGameId}
+              onChange={(value, option) => {
+                setSelectedGameId(value || "");
+                setSelectedGameName(option?.label || "");
+
+                const game = userGames.find((g) => g.gameId === value);
+
+                setGameCover(game?.coverImage || "");
+              }}
+              searchable
+              required
+            />
+          )}
+
+          <MultiSelect
             className={classes.select}
-            data={userGames.map((game: any) => ({
-              value: game.gameId,
-              label: game.title,
-            }))}
-            scrollAreaProps={{
-              type: "auto",
-              scrollbarSize: 16,
-              scrollbars: "y",
-              color: "black",
-              classNames: { scrollbar: classes.scrollBar },
-            }}
-            size="md"
-            label="Game"
-            description="Choose a game from your library"
-            placeholder="(e.g. God of War)"
-            value={selectedGameId}
-            onChange={(value, option) => {
-              setSelectedGameId(value || "");
-              setSelectedGameName(option?.label || "");
-
-              const game = userGames.find((g) => g.gameId === value);
-              setAvailablePlatforms(game?.platforms ?? []);
-
-              // Reset platform if the previously selected one
-              // doesn't exist for the newly selected game.
-              setPlatform("");
-
-              setGameCover(game?.coverImage || "");
-            }}
+            leftSection={<LibraryBig size={20} />}
+            label="Session Focus"
+            placeholder="Add session focus..."
+            description="What did you focus on during this session?"
+            data={[
+              "Story Progress",
+              "Exploration",
+              "Boss Fight",
+              "Side Quest",
+              "Grinding",
+              "Achievement Hunting",
+              "Build Testing",
+              "Multiplayer",
+              "Casual Play",
+            ]}
+            value={sessionType}
+            onChange={setSessionType}
             searchable
-            required
+            size="md"
+            style={{ marginTop: "1rem" }}
           />
-        )}
+        </div>
 
         <Textarea
           className={classes.textInput}
@@ -349,56 +348,7 @@ export default function PlaySessionModal({
           mt={10}
         />
 
-        <MultiSelect
-          className={classes.select}
-          leftSection={<LibraryBig size={20} />}
-          label="Session Focus"
-          placeholder="Add session focus..."
-          description="What did you focus on during this session?"
-          data={[
-            "Story Progress",
-            "Exploration",
-            "Boss Fight",
-            "Side Quest",
-            "Grinding",
-            "Achievement Hunting",
-            "Build Testing",
-            "Multiplayer",
-            "Casual Play",
-          ]}
-          value={sessionType}
-          onChange={setSessionType}
-          searchable
-          size="md"
-          style={{ marginTop: "1rem" }}
-        />
-
-        <div className={classes.platformMoodContainer}>
-          <Select
-            className={classes.platformSelect}
-            leftSection={<IconBrandXbox size={20} />}
-            maxDropdownHeight={300}
-            value={platform}
-            data={(availablePlatforms ?? []).map((platform) => ({
-              value: platform,
-              label: platform,
-            }))}
-            scrollAreaProps={{
-              type: "auto",
-              scrollbarSize: 16,
-              scrollbars: "y",
-              color: "black",
-              classNames: { scrollbar: classes.scrollBar },
-            }}
-            size="md"
-            label="Platform"
-            description="Where did you play?"
-            placeholder="(e.g. PC, PS5, Xbox)"
-            onChange={(value) => {
-              setPlatform(value || "");
-            }}
-          />
-
+        <div className={classes.fieldRow}>
           <TagsInput
             className={classes.moodSelect}
             leftSection={<Smile size={20} />}
@@ -428,20 +378,21 @@ export default function PlaySessionModal({
               setMood(value || []);
             }}
           />
-        </div>
 
-        <DatePickerInput
-          size="md"
-          label="Session Date"
-          placeholder="Select session date"
-          clearable
-          required
-          leftSection={<CalendarDays size={20} />}
-          maxDate={new Date()}
-          // Convert stored string → Date ONLY for display
-          value={playSessionDate}
-          onChange={setPlaySessionDate}
-        />
+          <DatePickerInput
+            className={classes.dateField}
+            size="md"
+            label="Session Date"
+            placeholder="Select session date"
+            description="When did you play?"
+            clearable
+            required
+            leftSection={<CalendarDays size={20} />}
+            maxDate={new Date()}
+            value={playSessionDate}
+            onChange={setPlaySessionDate}
+          />
+        </div>
 
         <div className={classes.durationContainer}>
           <NumberInput

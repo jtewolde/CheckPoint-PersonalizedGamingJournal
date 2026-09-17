@@ -9,13 +9,14 @@ import {
   TextInput,
   LoadingOverlay,
   Select,
-  MultiSelect,
   Textarea,
   Text,
   Group,
   Chip,
   Badge,
 } from "@mantine/core";
+
+import { JournalEntry } from "@/app/types/JournalEntry";
 
 import { TAG_CATEGORIES } from "@/hooks/getTagsCategories";
 
@@ -24,18 +25,6 @@ import { toast } from "react-toastify";
 import { NotebookPen, Gamepad2, Captions, LibraryBig } from "lucide-react";
 
 import classes from "./EntryModal.module.css";
-
-// Define the Journal Entry object used on both Journal Page and modal with the props
-type JournalEntry = {
-  _id: string;
-  gameId: string;
-  gameName: string;
-  coverImage?: string;
-  title: string;
-  content: string;
-  entryType: string;
-  tags: string[];
-};
 
 // Define the props for the JournalEntryModal component
 type JournalEntryModalProps = {
@@ -240,49 +229,74 @@ export default function JournalEntryModal({
       />
 
       <Stack gap="lg">
-        {entry ? (
-          <TextInput
-            label="Game"
-            required
-            value={selectedGameName}
-            readOnly
-            leftSection={<Gamepad2 size={20} />}
-          />
-        ) : (
+        <div className={classes.fieldRow}>
+          {entry ? (
+            <TextInput
+              label="Game"
+              required
+              value={selectedGameName}
+              readOnly
+              leftSection={<Gamepad2 size={20} />}
+            />
+          ) : (
+            <Select
+              leftSection={<Gamepad2 size={20} />}
+              maxDropdownHeight={300}
+              className={classes.select}
+              data={userGames.map((game: any) => ({
+                value: game.gameId,
+                label: game.title,
+              }))}
+              scrollAreaProps={{
+                type: "auto",
+                scrollbarSize: 16,
+                scrollbars: "y",
+                color: "black",
+                classNames: { scrollbar: classes.scrollBar },
+              }}
+              size="md"
+              label="Game"
+              description="Choose a game from your library"
+              placeholder="(e.g. God of War)"
+              value={selectedGameId}
+              onChange={(value, option) => {
+                setSelectedGameId(value || "");
+                setSelectedGameName(option?.label || "");
+
+                const selectedGame = userGames.find(
+                  (game) => game.gameId === value,
+                );
+
+                setGameCover(selectedGame?.coverImage || "");
+              }}
+              searchable
+              required
+            />
+          )}
+
           <Select
-            leftSection={<Gamepad2 size={20} />}
-            maxDropdownHeight={300}
             className={classes.select}
-            data={userGames.map((game: any) => ({
-              value: game.gameId,
-              label: game.title,
-            }))}
-            scrollAreaProps={{
-              type: "auto",
-              scrollbarSize: 16,
-              scrollbars: "y",
-              color: "black",
-              classNames: { scrollbar: classes.scrollBar },
-            }}
+            leftSection={<LibraryBig size={20} />}
             size="md"
-            label="Game"
-            description="Choose a game from your library"
-            placeholder="(e.g. God of War)"
-            value={selectedGameId}
-            onChange={(value, option) => {
-              setSelectedGameId(value || "");
-              setSelectedGameName(option?.label || "");
-
-              const selectedGame = userGames.find(
-                (game) => game.gameId === value,
-              );
-
-              setGameCover(selectedGame?.coverImage || "");
-            }}
-            searchable
             required
+            label="Entry Type"
+            description="Choose the kind of experience you're documenting"
+            placeholder="Select an entry type"
+            data={[
+              "First Impressions",
+              "Progress Milestone",
+              "Reflection",
+              "Story Reaction",
+              "Build & Strategy",
+              "Game Completion",
+              "Review",
+            ]}
+            value={entryType}
+            onChange={(value) => setEntryType(value || "")}
+            searchable
+            style={{ marginTop: "1rem" }}
           />
-        )}
+        </div>
 
         <TextInput
           size="md"
@@ -293,29 +307,6 @@ export default function JournalEntryModal({
           onChange={(e) => setTitle(e.target.value)}
           leftSection={<Captions size={18} />}
           required
-        />
-
-        <Select
-          className={classes.select}
-          leftSection={<LibraryBig size={20} />}
-          size="md"
-          required
-          label="Entry Type"
-          description="Choose the kind of experience you're documenting"
-          placeholder="Select an entry type"
-          data={[
-            "First Impressions",
-            "Progress Milestone",
-            "Reflection",
-            "Story Reaction",
-            "Build & Strategy",
-            "Game Completion",
-            "Review",
-          ]}
-          value={entryType}
-          onChange={(value) => setEntryType(value || "")}
-          searchable
-          style={{ marginTop: "1rem" }}
         />
 
         <Textarea

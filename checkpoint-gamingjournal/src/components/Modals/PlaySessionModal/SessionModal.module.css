@@ -15,12 +15,26 @@
 .platformMoodContainer {
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 1rem;
 }
 
-.platformSelect,
-.moodSelect {
-  flex: 1;
+.fieldRow {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  align-items: flex-end;
+}
+
+.fieldRow > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.moodSelect,
+.dateField {
+  flex: 1 1 0;
+  width: 100%;
 }
 
 .logButton,
@@ -31,7 +45,8 @@
 }
 
 @media (max-width: 768px) {
-  .platformMoodContainer {
+  .platformMoodContainer,
+  .fieldRow {
     flex-direction: column;
   }
 }

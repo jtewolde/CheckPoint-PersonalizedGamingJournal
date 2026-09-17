@@ -4,6 +4,18 @@
   gap: 1rem;
 }
 
+.fieldRow {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  align-items: flex-end;
+}
+
+.fieldRow > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
 .tagStack {
   background: rgb(29, 21, 45);
   border: 1px solid #504f4f;
