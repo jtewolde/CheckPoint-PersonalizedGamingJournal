@@ -10,6 +10,7 @@ import JournalEntryModal from "../../Modals/JournalEntryModal/EntryModal";
 import JournalDayModal from "../JournalDayModal/JournalDayModal";
 import { JournalEntry } from "@/app/types/JournalEntry";
 
+import { CircleCheck } from "lucide-react";
 import classes from "./JournalCalendar.module.css";
 
 interface JournalCalendarProps {
@@ -60,15 +61,28 @@ export default function JournalCalendar({
         className={className}
         fullWidth={fullWidth}
         highlightToday={true}
+        defaultDate={initialMonth}
+        headerControlsOrder={["previous", "level", "next"]}
+        withCellSpacing
+        maxLevel="month"
         maxDate={new Date()}
         getDayProps={(date) => {
           const today = isSameDay(date, new Date());
+
+          const hasEntry = localEntries.some((entry) =>
+            isSameDay(new Date(entry.displayDate), date),
+          );
           return {
             onClick: () => {
               setSelectedDate(date);
               setOpened(true);
             },
-            className: today ? classes.today : undefined,
+            className: [
+              hasEntry ? classes.hasEntry : "",
+              today ? classes.today : "",
+            ]
+              .filter(Boolean)
+              .join(" "),
           };
         }}
         renderDay={(dateString) => {
@@ -84,23 +98,30 @@ export default function JournalCalendar({
               <div className={classes.dayNumber}>{date.getDate()}</div>
 
               {entriesForDay.length > 0 && (
-                <div className={classes.sessionActivity}>
+                <div className={classes.journalActivity}>
                   {displayCover ? (
                     entriesForDay.map((entry) => (
                       <Image
                         key={entry._id}
                         src={entry?.coverImage}
                         alt=""
-                        className={classes.sessionCover}
+                        className={classes.journalCover}
                       />
                     ))
                   ) : (
-                    <div className={classes.sessionIndicator} />
+                    <CircleCheck size={25} color="#b46bf4" />
                   )}
                 </div>
               )}
             </div>
           );
+        }}
+        styles={{
+          calendarHeader: {
+            fontSize: "1.4rem",
+            color: "white",
+            fontFamily: "Inter",
+          },
         }}
       />
 
