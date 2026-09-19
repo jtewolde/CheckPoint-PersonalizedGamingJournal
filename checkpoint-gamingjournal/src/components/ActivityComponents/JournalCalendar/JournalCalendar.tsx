@@ -37,9 +37,22 @@ export default function JournalCalendar({
     setLocalEntries(entries);
   }, [entries]);
 
+  // Get all of the journal entries on a specific date
   const entriesForDate = selectedDate
-    ? localEntries.filter((entry) => isSameDay(entry.displayDate, selectedDate))
+    ? localEntries.filter((entry) =>
+        isSameDay(new Date(entry.displayDate), selectedDate),
+      )
     : [];
+
+  // Get the initial month where the entries for a specific game was created
+  const initialMonth =
+    localEntries.length > 0
+      ? localEntries.reduce((earliest, entry) => {
+          const entryDate = new Date(entry.displayDate);
+
+          return entryDate < earliest ? entryDate : earliest;
+        }, new Date(localEntries[0].displayDate))
+      : new Date();
 
   return (
     <>
@@ -62,21 +75,21 @@ export default function JournalCalendar({
           const [year, month, day] = dateString.split("-").map(Number);
           const date = new Date(year, month - 1, day);
 
-          const sessionsForDay = localEntries.filter((entry) =>
-            isSameDay(entry.displayDate, date),
+          const entriesForDay = localEntries.filter((entry) =>
+            isSameDay(new Date(entry.displayDate), date),
           );
 
           return (
             <div className={classes.day}>
               <div className={classes.dayNumber}>{date.getDate()}</div>
 
-              {sessionsForDay.length > 0 && (
+              {entriesForDay.length > 0 && (
                 <div className={classes.sessionActivity}>
                   {displayCover ? (
-                    sessionsForDay.map((session) => (
+                    entriesForDay.map((entry) => (
                       <Image
-                        key={session._id}
-                        src={session?.coverImage}
+                        key={entry._id}
+                        src={entry?.coverImage}
                         alt=""
                         className={classes.sessionCover}
                       />

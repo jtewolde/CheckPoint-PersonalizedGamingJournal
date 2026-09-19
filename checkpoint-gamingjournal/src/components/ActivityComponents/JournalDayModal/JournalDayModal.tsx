@@ -6,7 +6,7 @@ import { Modal, Text, LoadingOverlay, Stack } from "@mantine/core";
 import JournalEntryCard from "@/components/Cards/JournalEntryCard/EntryCard";
 import { JournalEntry } from "@/app/types/JournalEntry";
 
-import classes from "./EntryDayModal.module.css";
+import classes from "./JournalDayModal.module.css";
 
 // Define the props for the EntryDayModal component
 type EntryDayModalProps = {
@@ -39,7 +39,7 @@ export default function JournalDayModal({
       opened={opened}
       onClose={onClose}
       size="xl"
-      title={"Play Sessions on " + (selectedDate || "No Date Selected")}
+      title={"Journal Entries on " + (selectedDate || "No Date Selected")}
       styles={{
         title: {
           fontFamily: "Barlow",
