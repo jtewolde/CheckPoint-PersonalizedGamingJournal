@@ -7,11 +7,9 @@ import { DonutChart } from "@mantine/charts";
 import { Gamepad, Timer, Calendar, Hourglass, Flame } from "lucide-react";
 
 import SessionHeatmap from "@/components/ActivityComponents/SessionHeatmap/SessionHeatmap";
-import SessionCalendar from "@/components/ActivityComponents/SessionCalendar/SessionCalendar";
 import { calculateCurrentStreak } from "@/utils/dateUtils";
 
 import classes from "./GameActivity.module.css";
-import { Session } from "inspector/promises";
 
 interface GameActivityProps {
   game: any;
