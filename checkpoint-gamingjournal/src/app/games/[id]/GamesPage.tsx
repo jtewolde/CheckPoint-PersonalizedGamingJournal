@@ -12,6 +12,7 @@ import GameTabs from "@/components/GamePageComponents/GameTabs/GameTabs";
 import GameOverview from "@/components/GamePageComponents/GameOverview/GameOverview";
 import GameMedia from "@/components/GamePageComponents/GameMedia/GameMedia";
 import GameActivity from "@/components/GamePageComponents/GameActivity/GameActivity";
+import GameJournal from "@/components/GamePageComponents/GameJournal/GameJournal";
 
 import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
 import PlaySessionModal from "@/components/Modals/PlaySessionModal/SessionModal";
@@ -45,10 +46,6 @@ export default function GameDetails() {
   const [isPlatinum, setIsPlatinum] = useState(false); // State to handle platinum of game
   const [rating, setRating] = useState(0); // State to handling rating of game given by user from 0-5 stars
   const [completionDate, setCompletionDate] = useState<string | null>(null); // State to handle completion date of game
-  const completionDateString = completionDate
-    ? new Date(completionDate).toLocaleDateString("en-US")
-    : "N/A";
-  const [numOfEntries, setNumOfEntries] = useState(0);
 
   // State variable that holds a dictionary of stats used in 'Your Activity' section
   const [stats, setStats] = useState({
@@ -59,6 +56,8 @@ export default function GameDetails() {
   });
 
   const [sessions, setSessions] = useState<any[]>([]);
+  const [numOfEntries, setNumOfEntries] = useState(0);
+  const [entries, setEntries] = useState<any[]>([]);
 
   const [opened, { open, close }] = useDisclosure(false);
   const [
@@ -76,7 +75,6 @@ export default function GameDetails() {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width: 650px)");
 
-  const showCardUI = isAuthenticated && isGameInLibrary;
   const [activeTab, setActiveTab] = useState<string>("overview");
 
   // Handler for tab change in GameTabs component
@@ -130,7 +128,7 @@ export default function GameDetails() {
     const fetchRecentJournalEntries = async () => {
       try {
         const token = localStorage.getItem("bearer_token"); // Retrieve Bearer Token from local storage
-        const res = await fetch(`/api/journal/count?gameID=${id}`, {
+        const res = await fetch(`/api/journal/game?gameID=${id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -143,8 +141,8 @@ export default function GameDetails() {
         }
         const data = await res.json();
 
-        console.log("Entries: ", data.count);
-
+        setEntries(data.entries);
+        console.log("Entries: ", data);
         setNumOfEntries(data.count);
       } catch (error) {
         console.error("Error fetching recent journal entries:", error);
@@ -175,7 +173,6 @@ export default function GameDetails() {
         const currentGame = data.games.find(
           (libraryGame: any) => libraryGame.gameId === id,
         );
-        console.log("Current Game", currentGame);
 
         setIsInLibrary(isGameInLibrary); // Update the state
         setLibraryGame(currentGame || null); // Store the current game details in state
@@ -353,7 +350,9 @@ export default function GameDetails() {
           />
         )}
 
-        {activeTab === "journal" && <div>Journal content</div>}
+        {activeTab === "journal" && (
+          <GameJournal game={game} entries={entries} />
+        )}
 
         {activeTab === "achievements" && <div>Achievements content</div>}
 
@@ -372,9 +371,6 @@ export default function GameDetails() {
           onClose={closePlaySessionModal}
           gameId={game.id}
           gameName={game.name}
-          platforms={game.platforms?.map(
-            (platform: { name: string }) => platform.name,
-          )}
           onSuccess={() => close()}
         />
 
