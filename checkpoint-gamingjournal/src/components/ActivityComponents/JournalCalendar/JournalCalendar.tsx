@@ -18,6 +18,7 @@ interface JournalCalendarProps {
   className?: string;
   displayCover?: boolean;
   fullWidth?: boolean;
+  variant?: "compact" | "full";
 }
 
 export default function JournalCalendar({
@@ -25,6 +26,7 @@ export default function JournalCalendar({
   className,
   displayCover = true,
   fullWidth = true,
+  variant = "full",
 }: JournalCalendarProps) {
   const [localEntries, setLocalEntries] = useState<JournalEntry[]>(entries);
 
@@ -58,13 +60,13 @@ export default function JournalCalendar({
   return (
     <>
       <Calendar
-        className={className}
+        className={`${classes.calendar} ${classes[variant]} ${className ?? ""}`}
         fullWidth={fullWidth}
         highlightToday={true}
         defaultDate={initialMonth}
         headerControlsOrder={["previous", "level", "next"]}
-        withCellSpacing
         maxLevel="month"
+        weekdayFormat="ddd"
         maxDate={new Date()}
         getDayProps={(date) => {
           const today = isSameDay(date, new Date());
@@ -92,6 +94,8 @@ export default function JournalCalendar({
           const entriesForDay = localEntries.filter((entry) =>
             isSameDay(new Date(entry.displayDate), date),
           );
+          const visibleEntries = entriesForDay.slice(0, 2);
+          const remainingEntries = entriesForDay.length - visibleEntries.length;
 
           return (
             <div className={classes.day}>
@@ -100,14 +104,22 @@ export default function JournalCalendar({
               {entriesForDay.length > 0 && (
                 <div className={classes.journalActivity}>
                   {displayCover ? (
-                    entriesForDay.map((entry) => (
-                      <Image
-                        key={entry._id}
-                        src={entry?.coverImage}
-                        alt=""
-                        className={classes.journalCover}
-                      />
-                    ))
+                    <>
+                      {visibleEntries.map((entry) => (
+                        <Image
+                          key={entry._id}
+                          src={entry.coverImage}
+                          alt=""
+                          className={classes.journalCover}
+                        />
+                      ))}
+
+                      {remainingEntries > 0 && (
+                        <span className={classes.moreEntries}>
+                          +{remainingEntries}
+                        </span>
+                      )}
+                    </>
                   ) : (
                     <CircleCheck size={25} color="#b46bf4" />
                   )}
@@ -119,6 +131,16 @@ export default function JournalCalendar({
         styles={{
           calendarHeader: {
             fontSize: "1.4rem",
+            color: "white",
+            fontFamily: "Inter",
+          },
+          weekday: {
+            fontSize: "1rem",
+            color: "white",
+            fontFamily: "Inter",
+          },
+          day: {
+            fontSize: "1rem",
             color: "white",
             fontFamily: "Inter",
           },

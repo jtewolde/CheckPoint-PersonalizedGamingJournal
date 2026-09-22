@@ -51,6 +51,7 @@ export default function GameJournal({ game, entries = [] }: GameJournalProps) {
                 className={classes.calendar}
                 entries={entries}
                 displayCover={false}
+                variant="compact"
               />
             </div>
           </div>

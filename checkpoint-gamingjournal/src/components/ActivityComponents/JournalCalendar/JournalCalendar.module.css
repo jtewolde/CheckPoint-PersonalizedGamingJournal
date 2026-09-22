@@ -1,44 +1,73 @@
 .day {
   width: 100%;
-  height: 60px;
+  height: 100px;
+  min-height: 100px;
 
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 
   padding: 8px;
-  box-sizing: border-box;
+
+  border: 1px solid var(--mantine-color-dark-4);
+  border-radius: 0;
+
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+.day:hover {
+  background-color: var(--mantine-color-dark-6);
+  border-color: var(--mantine-color-dark-3);
+}
+
+.compact .day {
+  height: 70px;
+  min-height: 70px;
+
+  padding: 5px;
+}
+
+.compact .dayNumber {
+  font-size: 0.8rem;
+}
+
+.compact .journalCover {
+  width: 22px;
+  height: 30px;
+}
+
+.compact .journalActivity {
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.full {
+  width: 100%;
 }
 
 .dayNumber {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 1.1rem;
+  font-weight: 500;
   line-height: 1;
 }
 
 .journalActivity {
   display: flex;
-  align-items: flex-start;
+  flex-wrap: wrap;
   gap: 4px;
 
+  width: 100%;
   margin-top: 8px;
 }
 
-.journalIndicator {
-  width: 15px;
-  height: 15px;
-  border-radius: 2px;
-  margin-top: 3px;
-  background-color: var(--mantine-color-green-filled);
-}
-
 .journalCover {
-  width: 22px;
-  height: 30px;
+  width: 50px;
+  height: 60px;
+
   object-fit: cover;
   border-radius: 4px;
-
-  flex-shrink: 0;
 }
 
 .today {
@@ -49,6 +78,55 @@
 
 .hasEntry {
   background-color: var(--mantine-color-violet-light);
-  opacity: 0.65;
+  opacity: 0.95;
   border-radius: var(--mantine-radius-md);
+}
+
+.today .dayNumber {
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .full .day {
+    height: 100px;
+    min-height: 85px;
+    padding: 6px;
+  }
+
+  .full .dayNumber {
+    font-size: 0.8rem;
+  }
+
+  .full .journalCover {
+    width: 22px;
+    height: 30px;
+  }
+
+  .full .journalActivity {
+    gap: 2px;
+    margin-top: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .full .day {
+    height: 100px;
+    min-height: 65px;
+    padding: 4px;
+  }
+
+  .full .dayNumber {
+    font-size: 0.9rem;
+  }
+
+  .full .journalCover {
+    width: 22px;
+    height: 28px;
+    border-radius: 2px;
+  }
+
+  .full .journalActivity {
+    gap: 2px;
+    margin-top: 3px;
+  }
 }
