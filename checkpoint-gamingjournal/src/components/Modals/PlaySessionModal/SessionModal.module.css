@@ -12,25 +12,17 @@
   gap: 1rem;
 }
 
-.platformMoodContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 1rem;
-}
-
 .fieldRow {
   display: flex;
   gap: 1rem;
   width: 100%;
-  align-items: flex-end;
+  align-items: flex-start;
+  flex-direction: row;
+  margin-top: 0.4rem;
 }
 
-.fieldRow > * {
-  flex: 1 1 0;
-  min-width: 0;
-}
-
+.gameSelect,
+.focusSelect,
 .moodSelect,
 .dateField {
   flex: 1 1 0;
@@ -45,7 +37,6 @@
 }
 
 @media (max-width: 768px) {
-  .platformMoodContainer,
   .fieldRow {
     flex-direction: column;
   }

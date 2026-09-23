@@ -264,11 +264,14 @@ export default function PlaySessionModal({
         loaderProps={{ size: "lg", color: "white", type: "oval" }}
       />
 
-      <Stack gap="lg">
+      <Stack gap="md">
         <div className={classes.fieldRow}>
           {gameId ? (
             <TextInput
+              className={classes.gameSelect}
+              size="md"
               label="Game"
+              description="Game you're logging a session for"
               required
               value={gameName}
               readOnly
@@ -278,7 +281,7 @@ export default function PlaySessionModal({
             <Select
               leftSection={<Gamepad2 size={20} />}
               maxDropdownHeight={300}
-              className={classes.select}
+              className={classes.gameSelect}
               data={userGames.map((game: any) => ({
                 value: game.gameId,
                 label: game.title,
@@ -309,7 +312,7 @@ export default function PlaySessionModal({
           )}
 
           <MultiSelect
-            className={classes.select}
+            className={classes.focusSelect}
             leftSection={<LibraryBig size={20} />}
             label="Session Focus"
             placeholder="Add session focus..."
@@ -329,7 +332,6 @@ export default function PlaySessionModal({
             onChange={setSessionType}
             searchable
             size="md"
-            style={{ marginTop: "1rem" }}
           />
         </div>
 
