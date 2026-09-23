@@ -24,7 +24,7 @@ interface GameActivityProps {
 }
 
 export default function GameActivity({
-  sessions,
+  sessions = [],
   sessionStats,
 }: GameActivityProps) {
   const isMobile = useMediaQuery("(max-width: 748px)");
@@ -92,76 +92,6 @@ export default function GameActivity({
 
   return (
     <div className={classes.wrapper}>
-      <section className={classes.statsSection}>
-        <SimpleGrid
-          className={classes.activityGrid}
-          spacing="md"
-          cols={{ base: 2, sm: 3, md: 6 }}
-        >
-          <div className={classes.statCard}>
-            <Gamepad size={30} />
-
-            <Stack gap={1}>
-              <Text className={classes.statValue}>
-                {sessionStats.totalSessions}
-              </Text>
-              <Text className={classes.statLabel}>Sessions</Text>
-            </Stack>
-          </div>
-
-          <div className={classes.statCard}>
-            <Calendar size={30} />
-
-            <Stack gap={1}>
-              <Text className={classes.statValue}>{daysPlayed}</Text>
-              <Text className={classes.statLabel}>Total Days Played</Text>
-            </Stack>
-          </div>
-
-          <div className={classes.statCard}>
-            <Timer size={30} />
-
-            <Stack gap={1}>
-              <Text className={classes.statValue}>{sessionStats.avg} Hrs</Text>
-              <Text className={classes.statLabel}>Avg. Session</Text>
-            </Stack>
-          </div>
-
-          <div className={classes.statCard}>
-            <Hourglass size={25} />
-
-            <Stack gap={1}>
-              <Text className={classes.statValue}>
-                {sessionStats.longest} Hrs
-              </Text>
-
-              <Text className={classes.statLabel}>Longest Session</Text>
-            </Stack>
-          </div>
-
-          <div className={classes.statCard}>
-            <Hourglass size={25} />
-
-            <Stack gap={1}>
-              <Text className={classes.statValue}>
-                {sessionStats.totalHours} Hrs
-              </Text>
-
-              <Text className={classes.statLabel}>Total Hours Tracked</Text>
-            </Stack>
-          </div>
-
-          <div className={classes.streakCard}>
-            <Flame size={25} color="#ff8c00" fill="#ff8c00" />
-
-            <Stack gap={1}>
-              <Text className={classes.statValue}>{currentStreak}</Text>
-              <Text className={classes.statLabel}>Day Streak</Text>
-            </Stack>
-          </div>
-        </SimpleGrid>
-      </section>
-
       {sessions.length === 0 ? (
         <div className={classes.emptyStateContainer}>
           <EmptyState
@@ -173,82 +103,155 @@ export default function GameActivity({
           />
         </div>
       ) : (
-        <SimpleGrid
-          className={classes.activityGrid}
-          spacing="md"
-          cols={{ base: 1, sm: 2, md: 2 }}
-        >
-          <div className={classes.heatmapContainer}>
-            <Title className={classes.heatmapTitle}>
-              Game Sessions Heatmap
-            </Title>
-            <div className={classes.heatmapWrapper}>
-              <SessionHeatmap
-                sessions={sessions}
-                page="gamePage"
-                dateRange="game"
-                days={120}
-              />
+        <>
+          <section className={classes.statsSection}>
+            <SimpleGrid
+              className={classes.activityGrid}
+              spacing="md"
+              cols={{ base: 2, sm: 3, md: 6 }}
+            >
+              <div className={classes.statCard}>
+                <Gamepad size={30} />
+
+                <Stack gap={1}>
+                  <Text className={classes.statValue}>
+                    {sessionStats.totalSessions}
+                  </Text>
+                  <Text className={classes.statLabel}>Sessions</Text>
+                </Stack>
+              </div>
+
+              <div className={classes.statCard}>
+                <Calendar size={30} />
+
+                <Stack gap={1}>
+                  <Text className={classes.statValue}>{daysPlayed}</Text>
+                  <Text className={classes.statLabel}>Total Days Played</Text>
+                </Stack>
+              </div>
+
+              <div className={classes.statCard}>
+                <Timer size={30} />
+
+                <Stack gap={1}>
+                  <Text className={classes.statValue}>
+                    {sessionStats.avg} Hrs
+                  </Text>
+                  <Text className={classes.statLabel}>Avg. Session</Text>
+                </Stack>
+              </div>
+
+              <div className={classes.statCard}>
+                <Hourglass size={25} />
+
+                <Stack gap={1}>
+                  <Text className={classes.statValue}>
+                    {sessionStats.longest} Hrs
+                  </Text>
+
+                  <Text className={classes.statLabel}>Longest Session</Text>
+                </Stack>
+              </div>
+
+              <div className={classes.statCard}>
+                <Hourglass size={25} />
+
+                <Stack gap={1}>
+                  <Text className={classes.statValue}>
+                    {sessionStats.totalHours} Hrs
+                  </Text>
+
+                  <Text className={classes.statLabel}>Total Hours Tracked</Text>
+                </Stack>
+              </div>
+
+              <div className={classes.streakCard}>
+                <Flame size={25} color="#ff8c00" fill="#ff8c00" />
+
+                <Stack gap={1}>
+                  <Text className={classes.statValue}>{currentStreak}</Text>
+                  <Text className={classes.statLabel}>Day Streak</Text>
+                </Stack>
+              </div>
+            </SimpleGrid>
+          </section>
+          <SimpleGrid
+            className={classes.activityGrid}
+            spacing="md"
+            cols={{ base: 1, sm: 2, md: 2 }}
+          >
+            <div className={classes.heatmapContainer}>
+              <Title className={classes.heatmapTitle}>
+                Game Sessions Heatmap
+              </Title>
+              <div className={classes.heatmapWrapper}>
+                <SessionHeatmap
+                  sessions={sessions}
+                  page="gamePage"
+                  dateRange="game"
+                  days={120}
+                />
+              </div>
             </div>
-          </div>
 
-          <div className={classes.sessionsContainer}>
-            {/* Session Types */}
-            <Title className={classes.heatmapTitle}>Session Types</Title>
-            <div className={classes.sessionStatsWrapper}>
-              {" "}
-              <DonutChart
-                data={sessionTypeData}
-                size={250}
-                thickness={45}
-                paddingAngle={3}
-                withTooltip
-                chartLabel={`${sessionStats.totalSessions}`}
-                styles={{
-                  label: {
-                    fontFamily: "Barlow",
-                    fontSize: "24px",
-                    fontWeight: "600",
-                  },
-                }}
-              />
-              {!isMobile ? (
-                <div className={classes.sessionTypeLegend}>
-                  {sessionTypeData.map((item) => {
-                    const total = sessionTypeData.reduce(
-                      (sum, type) => sum + type.value,
-                      0,
-                    );
+            <div className={classes.sessionsContainer}>
+              {/* Session Types */}
+              <Title className={classes.heatmapTitle}>Session Types</Title>
+              <div className={classes.sessionStatsWrapper}>
+                {" "}
+                <DonutChart
+                  data={sessionTypeData}
+                  size={250}
+                  thickness={45}
+                  paddingAngle={3}
+                  withTooltip
+                  chartLabel={`${sessionStats.totalSessions}`}
+                  styles={{
+                    label: {
+                      fontFamily: "Barlow",
+                      fontSize: "24px",
+                      fontWeight: "600",
+                    },
+                  }}
+                />
+                {!isMobile ? (
+                  <div className={classes.sessionTypeLegend}>
+                    {sessionTypeData.map((item) => {
+                      const total = sessionTypeData.reduce(
+                        (sum, type) => sum + type.value,
+                        0,
+                      );
 
-                    const percentage =
-                      total > 0 ? Math.round((item.value / total) * 100) : 0;
+                      const percentage =
+                        total > 0 ? Math.round((item.value / total) * 100) : 0;
 
-                    return (
-                      <div key={item.name} className={classes.legendItem}>
-                        <div className={classes.legendName}>
-                          <span
-                            className={classes.legendDot}
-                            style={{
-                              backgroundColor: item.cssColor,
-                            }}
-                          />
+                      return (
+                        <div key={item.name} className={classes.legendItem}>
+                          <div className={classes.legendName}>
+                            <span
+                              className={classes.legendDot}
+                              style={{
+                                backgroundColor: item.cssColor,
+                              }}
+                            />
 
-                          <Text>{item.name}</Text>
+                            <Text>{item.name}</Text>
+                          </div>
+
+                          <Text className={classes.legendValue}>
+                            {item.value} ({percentage}%)
+                          </Text>
                         </div>
-
-                        <Text className={classes.legendValue}>
-                          {item.value} ({percentage}%)
-                        </Text>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <></>
-              )}
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </div>
             </div>
-          </div>
-        </SimpleGrid>
+          </SimpleGrid>
+        </>
       )}
     </div>
   );

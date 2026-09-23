@@ -341,7 +341,7 @@ export default function GameDetails() {
 
         {activeTab === "overview" && <GameOverview game={game} />}
 
-        {activeTab === "sessions" && isAuthenticated && isGameInLibrary && (
+        {activeTab === "sessions" && (
           <GameActivity
             game={game}
             sessions={sessions}

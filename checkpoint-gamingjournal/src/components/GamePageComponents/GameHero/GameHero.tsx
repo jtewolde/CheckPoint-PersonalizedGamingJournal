@@ -113,7 +113,7 @@ export default function GameHero({
     }
 
     if (minutes === 0) {
-      return `${hours}h`;
+      return `${hours} Hrs`;
     }
 
     return `${hours} Hrs`;
