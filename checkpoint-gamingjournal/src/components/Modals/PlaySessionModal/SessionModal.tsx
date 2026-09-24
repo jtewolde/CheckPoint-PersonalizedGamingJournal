@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useMediaQuery } from "@mantine/hooks";
 import {
   Modal,
   Divider,
-  Group,
   Stack,
   Button,
   TextInput,
@@ -30,7 +30,6 @@ import {
   Clock,
   LibraryBig,
 } from "lucide-react";
-import { IconBrandXbox } from "@tabler/icons-react";
 
 // Define the props for the PlaySessionModal component
 type PlaySessionModalProps = {
@@ -64,6 +63,7 @@ export default function PlaySessionModal({
   const [mood, setMood] = useState<string[]>([]);
 
   const [loading, setLoading] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 650px)");
 
   // State variables to hold selected game and user's game library for the select dropdown in the modal
   const [selectedGameName, setSelectedGameName] = useState(gameName || "");
@@ -240,6 +240,7 @@ export default function PlaySessionModal({
       opened={opened}
       onClose={onClose}
       size="xl"
+      centered
       title={gameId ? `${gameName} - Play Session` : `Quick Log Session`}
       withCloseButton
       closeOnClickOutside={false}
@@ -426,6 +427,7 @@ export default function PlaySessionModal({
         <div className={classes.buttonGroup}>
           <Button
             className={classes.cancelButton}
+            fullWidth
             color="#cf1b1b"
             size="md"
             variant="filled"
@@ -436,6 +438,7 @@ export default function PlaySessionModal({
 
           <Button
             className={classes.logButton}
+            fullWidth
             variant="filled"
             color="#009c10"
             leftSection={<NotebookPen size={20} />}
