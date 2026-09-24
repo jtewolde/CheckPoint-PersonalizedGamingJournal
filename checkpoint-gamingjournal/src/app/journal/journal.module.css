@@ -13,7 +13,6 @@
   position: relative;
   min-height: 100vh; /* Ensure the page takes up the full height */
   padding: 15px 0px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -90,7 +89,7 @@
 }
 
 .searchContainer {
-  width: 40%;
+  width: 30%;
 }
 
 .toolbarButtons {
@@ -147,6 +146,16 @@
   margin-top: 2rem;
 }
 
+.calendarContainer {
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.calendar :global(.mantine-Calendar-day) {
+  height: 80px;
+  min-height: 100px;
+}
+
 .paginationControl {
   margin-top: auto;
   display: flex;
@@ -187,7 +196,8 @@
   }
 
   .hero {
-    padding: 1rem;
+    padding: 0.4rem;
+    margin-top: 0.7rem;
   }
 
   .journalTitle {
@@ -227,6 +237,10 @@
     text-align: center;
   }
 
+  .toolbar {
+    padding: 0.5rem;
+  }
+
   .toolbarTop {
     flex-direction: column;
     align-items: stretch;
@@ -260,14 +274,13 @@
   .activeFiltersWrapper {
     margin-left: 0;
   }
+
+  .calendarContainer {
+    padding: 4px;
+  }
 }
 
 @media (max-width: 560px) {
-  .heroSection {
-    padding: 0.8rem;
-    padding-bottom: 0;
-  }
-
   .mainSection {
     padding-left: 0.5rem;
     padding-right: 0.5rem;

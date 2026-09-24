@@ -10,31 +10,32 @@ import JournalEntryCard from "@/components/Cards/JournalEntryCard/EntryCard";
 import JournalEntryModal from "@/components/Modals/JournalEntryModal/EntryModal";
 import JournalFilters from "@/components/Filters/JournalFilters/JournalFilters";
 import JournalPageSearch from "@/components/JournalPageSearch/JournalPageSearch";
+import JournalCalendar from "@/components/ActivityComponents/JournalCalendar/JournalCalendar";
 
 import {
   Button,
-  ThemeIcon,
   Select,
   SimpleGrid,
   Pagination,
   Modal,
   Group,
   Stack,
-  Title,
   Text,
   Checkbox,
-  Divider,
   Pill,
+  SegmentedControl,
+  Tooltip,
 } from "@mantine/core";
 
 import toast from "react-hot-toast";
-import { FilePlus, Trash2 } from "lucide-react";
+import { FilePlus, Trash2, List, Calendar } from "lucide-react";
 
 import classes from "./journal.module.css";
 
 export default function Journal() {
   // State variables for the journal entries
   const [entries, setEntries] = useState<any[]>([]);
+  const [calendarEntries, setCalendarEntries] = useState<any[]>([]);
   const [totalEntries, setTotalEntries] = useState(0);
   const [search, setSearch] = useState("");
 
@@ -50,16 +51,15 @@ export default function Journal() {
   );
   const [totalGames, setTotalGames] = useState(0);
 
-  // State variables for the most journaled game and last journal entry for the stat cards
-  const [mostJournaledGame, setMostJournaledGame] = useState<any>(null);
-  const [favoriteEntryType, setFavoriteEntryType] = useState<any>(null);
-
   // State variables for filters based on game, entry type, tags, and sorting order
   const [gameId, setGameId] = useState("all");
   const [selectedGame, setSelectedGame] = useState("");
   const [selectedType, setSelectedType] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+
+  // Create state variable for changing the view of the journal entries, whether with 2x2 grid or calendar
+  const [view, setView] = useState<"list" | "calendar">("list");
 
   // State for opening delete all modal
   const [opened, { open, close }] = useDisclosure(false);
@@ -71,6 +71,13 @@ export default function Journal() {
 
   // Filter the journal entries results if using search bar
   const filteredEntries = entries.filter(
+    (entry) =>
+      entry.title.toLowerCase().includes(search.toLowerCase()) ||
+      entry.gameName.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  // Filter the entries for the journal calendar
+  const filteredCalendarEntries = calendarEntries.filter(
     (entry) =>
       entry.title.toLowerCase().includes(search.toLowerCase()) ||
       entry.gameName.toLowerCase().includes(search.toLowerCase()),
@@ -109,14 +116,12 @@ export default function Journal() {
       const data = await res.json();
       setGames(data.games);
       setTotalGames(data.games.length);
-      setMostJournaledGame(data.mostJournaled[0] || null);
-      setFavoriteEntryType(data.favoriteEntryType[0] || null);
     } catch (error) {
       console.log("Error fetching games with journal entries", error);
     }
   };
 
-  // Function to fetch journal entries
+  // Function to fetch journal entries with pagination support
   const fetchEntries = async (pageNum = 1) => {
     setLoading(true);
     try {
@@ -154,44 +159,37 @@ export default function Journal() {
     }
   };
 
-  useEffect(() => {
-    fetchGames(); // Fetch games for filter dropdown
-    checkAuth(); // Check authentication on component mount
-  }, [router]);
-
-  // Refetch journal entries whenenver the page number changes
-  useEffect(() => {
-    fetchEntries(page);
-  }, [page, gameId, selectedTags, selectedType, sortOrder]);
-
-  // Function to delete a journal entry
-  const deleteJournalEntry = async (journalEntryId: string, gameID: string) => {
+  // Function to fetch all of the journal entries that the user has to put on the journal calendar view
+  const fetchCalendarEntries = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const res = await fetch(`/api/journal/${journalEntryId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("bearer_token")}`,
-        },
-        body: JSON.stringify({ journalEntryId, gameID }),
+      const token = localStorage.getItem("bearer_token"); // Retrieve Bearer Token
+
+      const params = new URLSearchParams({
+        gameId: gameId !== "all" ? gameId : "",
+        type: selectedType,
+        tag: selectedTags.length > 0 ? selectedTags.join(",") : "",
+        order: sortOrder,
       });
 
-      const data = await res.json();
+      const res = await fetch(`/api/journal/calendar?${params.toString()}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       if (!res.ok) {
-        throw new Error(data.error || "Failed to delete journal entry");
+        throw new Error("Failed to fetch user journal entries");
       }
 
-      console.log("Journal entry deleted successfully:", data.message);
-      toast.success("Journal entry deleted successfully");
-
-      // Re-fetch the journal entries to update the list
-      setLoading(false);
-      fetchEntries();
+      const data = await res.json();
+      setCalendarEntries(data.journalEntries);
     } catch (error) {
-      setLoading(false);
-      console.error("Error deleting journal entry:", error);
-      toast.error("Error deleting journal entry");
+      console.log("Error fetching user journal entries", error);
+    } finally {
+      setLoading(false); // Hide loading overlay after fetching data
     }
   };
 
@@ -238,6 +236,22 @@ export default function Journal() {
     }
   };
 
+  useEffect(() => {
+    fetchGames(); // Fetch games for filter dropdown
+    checkAuth(); // Check authentication on component mount
+  }, [router]);
+
+  useEffect(() => {
+    if (view === "calendar") {
+      fetchCalendarEntries();
+    }
+  }, [view, gameId, selectedTags, selectedType, sortOrder]);
+
+  // Refetch journal entries whenenver the page number changes
+  useEffect(() => {
+    fetchEntries(page);
+  }, [page, gameId, selectedTags, selectedType, sortOrder]);
+
   const selectedGameObject = games.find(
     (game) => game.gameName === selectedGame,
   );
@@ -247,7 +261,7 @@ export default function Journal() {
       <div className={classes.pageWrapper}>
         <div className={classes.journalWrapper}>
           <div className={classes.hero}>
-            <Stack className={classes.heroContent} gap="sm" justify="center">
+            <Stack className={classes.heroContent} gap="xs" justify="center">
               <h2 className={classes.journalTitle}>Gaming Journal</h2>
 
               <Text className={classes.description}>
@@ -451,96 +465,138 @@ export default function Journal() {
                   </Text>
                 </div>
 
-                {activeFilters.length > 0 && (
-                  <Group className={classes.activeFiltersWrapper}>
-                    {gameId !== "all" && (
-                      <Pill
-                        size="md"
-                        c="white"
-                        radius="sm"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          setGameId("all");
-                          setPage(1);
-                        }}
-                      >
-                        {`Game: ${games.find((g) => g.gameId === gameId)?.gameName}`}{" "}
-                        ✕
-                      </Pill>
-                    )}
-
-                    {selectedTags.length > 0 && (
-                      <Pill
-                        className={classes.filterBadge}
-                        size="md"
-                        c="white"
-                        radius="sm"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          setSelectedTags([]);
-                          setPage(1);
-                        }}
-                      >
-                        {`Tags: ${selectedTags.join(", ")}`} ✕
-                      </Pill>
-                    )}
-
-                    {selectedType && (
-                      <Pill
-                        className={classes.filterBadge}
-                        size="md"
-                        variant="outline"
-                        c="white"
-                        radius="sm"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          setSelectedType("");
-                          setPage(1);
-                        }}
-                      >
-                        {`Type: ${selectedType}`} ✕
-                      </Pill>
-                    )}
-                  </Group>
-                )}
+                <SegmentedControl
+                  size="md"
+                  value={view}
+                  onChange={(value) => setView(value as "list" | "calendar")}
+                  data={[
+                    {
+                      label: (
+                        <Tooltip label="List View" withArrow>
+                          <span>
+                            <List size={25} />
+                          </span>
+                        </Tooltip>
+                      ),
+                      value: "list",
+                    },
+                    {
+                      label: (
+                        <Tooltip label="Calendar View" withArrow>
+                          <span>
+                            <Calendar size={25} />
+                          </span>
+                        </Tooltip>
+                      ),
+                      value: "calendar",
+                    },
+                  ]}
+                />
               </div>
+
+              {activeFilters.length > 0 && (
+                <Group className={classes.activeFiltersWrapper}>
+                  {gameId !== "all" && (
+                    <Pill
+                      size="md"
+                      c="white"
+                      radius="sm"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setGameId("all");
+                        setPage(1);
+                      }}
+                    >
+                      {`Game: ${games.find((g) => g.gameId === gameId)?.gameName}`}{" "}
+                      ✕
+                    </Pill>
+                  )}
+
+                  {selectedTags.length > 0 && (
+                    <Pill
+                      className={classes.filterBadge}
+                      size="md"
+                      c="white"
+                      radius="sm"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setSelectedTags([]);
+                        setPage(1);
+                      }}
+                    >
+                      {`Tags: ${selectedTags.join(", ")}`} ✕
+                    </Pill>
+                  )}
+
+                  {selectedType && (
+                    <Pill
+                      className={classes.filterBadge}
+                      size="md"
+                      variant="outline"
+                      c="white"
+                      radius="sm"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setSelectedType("");
+                        setPage(1);
+                      }}
+                    >
+                      {`Type: ${selectedType}`} ✕
+                    </Pill>
+                  )}
+                </Group>
+              )}
             </div>
           </div>
 
-          {filteredEntries.length > 0 && (
-            <SimpleGrid
-              cols={{ base: 1, sm: 2, md: 2, lg: 2 }}
-              spacing="lg"
-              className={classes.entriesGrid}
-            >
-              {filteredEntries.map((entry) => (
-                <JournalEntryCard
-                  key={entry._id}
-                  entry={entry}
-                  variant="journal"
-                  color="#7c18ed"
-                />
-              ))}
-            </SimpleGrid>
-          )}
+          {view === "list" ? (
+            <>
+              {filteredEntries.length > 0 && (
+                <SimpleGrid
+                  cols={{ base: 1, sm: 2, md: 2, lg: 2 }}
+                  spacing="lg"
+                  className={classes.entriesGrid}
+                >
+                  {filteredEntries.map((entry) => (
+                    <JournalEntryCard
+                      key={entry._id}
+                      entry={entry}
+                      variant="journal"
+                      color="#7c18ed"
+                    />
+                  ))}
+                </SimpleGrid>
+              )}
 
-          {!loading && entries.length === 0 && (
-            <p className={classes.noGamesText}>
-              No games found for the selected tags.
-            </p>
-          )}
+              {!loading && entries.length === 0 && (
+                <p className={classes.noGamesText}>
+                  No games found for the selected tags.
+                </p>
+              )}
 
-          {entries.length !== 0 && (
-            <div className={classes.paginationWrapper}>
-              <Pagination
-                classNames={{
-                  control: classes.paginationControl,
-                }}
-                size={isMobile ? "sm" : "xl"}
-                radius="xs"
-                total={totalPages}
-                value={page}
-                onChange={setPage}
+              {entries.length !== 0 && (
+                <div className={classes.paginationWrapper}>
+                  <Pagination
+                    classNames={{
+                      control: classes.paginationControl,
+                    }}
+                    size={isMobile ? "sm" : "xl"}
+                    radius="xs"
+                    total={totalPages}
+                    value={page}
+                    onChange={setPage}
+                  />
+                </div>
+              )}
+            </>
+          ) : (
+            <div className={classes.calendarContainer}>
+              <JournalCalendar
+                className={classes.calendar}
+                entries={filteredCalendarEntries}
+                fullWidth={true}
+                displayCover
+                variant="full"
               />
             </div>
           )}
