@@ -8,12 +8,15 @@
   display: flex;
   gap: 1rem;
   width: 100%;
-  align-items: flex-end;
+  align-items: flex-start;
+  flex-direction: row;
+  margin-top: 0.4rem;
 }
 
-.fieldRow > * {
+.gameSelect,
+.entrySelect {
   flex: 1 1 0;
-  min-width: 0;
+  width: 100%;
 }
 
 .tagStack {
@@ -30,11 +33,17 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  padding: 1rem 1rem;
 }
 
 .logButton,
 .cancelButton {
-  width: auto;
   font-family: "Barlow";
   font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .fieldRow {
+    flex-direction: column;
+  }
 }

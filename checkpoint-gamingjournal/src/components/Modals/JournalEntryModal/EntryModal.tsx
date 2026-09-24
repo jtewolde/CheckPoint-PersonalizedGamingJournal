@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useMediaQuery } from "@mantine/hooks";
 import {
   Modal,
   Divider,
@@ -13,7 +14,7 @@ import {
   Text,
   Group,
   Chip,
-  Badge,
+  Pill,
 } from "@mantine/core";
 
 import { JournalEntry } from "@/app/types/JournalEntry";
@@ -51,8 +52,10 @@ export default function JournalEntryModal({
   const [content, setContent] = useState("");
   const [entryType, setEntryType] = useState("");
   const [tags, setTags] = useState<string[]>([]);
+  const [customTag, setCustomTag] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 650px)");
 
   // State variables to hold selected game and user's game library for the select dropdown in the modal
   const [selectedGameName, setSelectedGameName] = useState(gameName || "");
@@ -199,11 +202,28 @@ export default function JournalEntryModal({
     );
   };
 
+  // Function for users to create their own custom tag if no tags are available.
+  const addCustomTag = () => {
+    const newTag = customTag.trim();
+
+    if (!newTag) return;
+
+    // Prevent duplicate tags
+    if (tags.some((tag) => tag.toLowerCase() === newTag.toLowerCase())) {
+      toast.info("This tag has already been added.");
+      return;
+    }
+
+    setTags((current) => [...current, newTag]);
+    setCustomTag("");
+  };
+
   return (
     <Modal
       opened={opened}
       onClose={onClose}
-      size="xl"
+      size={900}
+      fullScreen={isMobile}
       title={gameId ? `${gameName} - Journal Entry` : `Create Journal Entry`}
       centered
       withCloseButton
@@ -228,11 +248,14 @@ export default function JournalEntryModal({
         loaderProps={{ size: "lg", color: "white", type: "oval" }}
       />
 
-      <Stack gap="lg">
+      <Stack gap="sm">
         <div className={classes.fieldRow}>
           {entry ? (
             <TextInput
+              className={classes.gameSelect}
+              size="md"
               label="Game"
+              description="Game you're creating an entry for"
               required
               value={selectedGameName}
               readOnly
@@ -242,7 +265,7 @@ export default function JournalEntryModal({
             <Select
               leftSection={<Gamepad2 size={20} />}
               maxDropdownHeight={300}
-              className={classes.select}
+              className={classes.gameSelect}
               data={userGames.map((game: any) => ({
                 value: game.gameId,
                 label: game.title,
@@ -275,7 +298,7 @@ export default function JournalEntryModal({
           )}
 
           <Select
-            className={classes.select}
+            className={classes.entrySelect}
             leftSection={<LibraryBig size={20} />}
             size="md"
             required
@@ -294,7 +317,6 @@ export default function JournalEntryModal({
             value={entryType}
             onChange={(value) => setEntryType(value || "")}
             searchable
-            style={{ marginTop: "1rem" }}
           />
         </div>
 
@@ -323,7 +345,7 @@ export default function JournalEntryModal({
           style={{ marginTop: "1rem" }}
         />
 
-        <Stack gap="md">
+        <Stack gap="lg">
           <Stack gap={1}>
             <Text fw={600}>Tags</Text>
             <Text size="sm" c="dimmed">
@@ -354,22 +376,64 @@ export default function JournalEntryModal({
             ))}
           </div>
 
-          <Text fw={500}> Selected Tags: </Text>
+          {/* Custom Tags */}
+          <Stack gap="sm">
+            <Stack gap={1}>
+              <Text fw={500} c="gray">
+                Custom Tag
+              </Text>
+
+              <Text size="xs" c="dimmed">
+                Add a tag that isn't included in the predefined categories.
+              </Text>
+            </Stack>
+
+            <Group align="flex-end" gap="xs">
+              <TextInput
+                flex={1}
+                size="sm"
+                placeholder="Create your own tag..."
+                value={customTag}
+                onChange={(event) => setCustomTag(event.currentTarget.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    addCustomTag();
+                  }
+                }}
+              />
+
+              <Button
+                size="sm"
+                variant="filled"
+                onClick={addCustomTag}
+                disabled={!customTag.trim()}
+              >
+                Add Tag
+              </Button>
+            </Group>
+          </Stack>
+
+          <Text fw={500}>Selected Tags:</Text>
 
           <Group gap="xs">
             {tags.length === 0 ? (
               <Text c="dimmed">No tags selected</Text>
             ) : (
               tags.map((tag) => (
-                <Badge
+                <Pill
                   key={tag}
                   color="blue"
                   variant="light"
                   size="lg"
                   fw={500}
+                  withRemoveButton
+                  onRemove={() =>
+                    setTags((current) => current.filter((t) => t !== tag))
+                  }
                 >
                   {tag}
-                </Badge>
+                </Pill>
               ))
             )}
           </Group>
@@ -383,6 +447,7 @@ export default function JournalEntryModal({
             color="#cf1b1b"
             size="md"
             variant="filled"
+            fullWidth
             onClick={onClose}
           >
             Cancel
@@ -391,6 +456,7 @@ export default function JournalEntryModal({
           <Button
             className={classes.logButton}
             variant="filled"
+            fullWidth
             color="#009c10"
             leftSection={<NotebookPen size={20} />}
             size="md"
