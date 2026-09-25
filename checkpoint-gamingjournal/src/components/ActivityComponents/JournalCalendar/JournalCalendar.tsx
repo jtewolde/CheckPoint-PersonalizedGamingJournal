@@ -30,7 +30,7 @@ export default function JournalCalendar({
 }: JournalCalendarProps) {
   const [localEntries, setLocalEntries] = useState<JournalEntry[]>(entries);
 
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [opened, setOpened] = useState(false);
 
   const [editModalOpened, setEditModalOpened] = useState(false);
@@ -40,65 +40,122 @@ export default function JournalCalendar({
     setLocalEntries(entries);
   }, [entries]);
 
-  // Get all of the journal entries on a specific date
+  /*
+   * Convert a Date into a local calendar date.
+   *
+   * This removes the time portion so that calendar comparisons
+   * are based only on year/month/day.
+   */
+  const normalizeDate = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  };
+
+  /*
+   * Get the local calendar date for a journal entry.
+   */
+  const getEntryDate = (entry: JournalEntry) => {
+    return normalizeDate(new Date(entry.createdAt));
+  };
+
+  /*
+   * Convert a calendar date into YYYY-MM-DD.
+   *
+   * This is used as the single source of truth for matching
+   * calendar cells to journal entries.
+   */
+  const getDateKey = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
+
+  /*
+   * Get the YYYY-MM-DD key for a journal entry.
+   */
+  const getEntryDateKey = (entry: JournalEntry) => {
+    return getDateKey(getEntryDate(entry));
+  };
+
+  /*
+   * Get the entries for the currently selected calendar day.
+   */
   const entriesForDate = selectedDate
-    ? localEntries.filter((entry) =>
-        isSameDay(new Date(entry.displayDate), selectedDate),
+    ? localEntries.filter(
+        (entry) => getEntryDateKey(entry) === getDateKey(selectedDate),
       )
     : [];
 
-  // Get the initial month where the entries for a specific game was created
+  /*
+   * Open the calendar to the month containing the earliest entry.
+   */
   const initialMonth =
     localEntries.length > 0
       ? localEntries.reduce((earliest, entry) => {
-          const entryDate = new Date(entry.displayDate);
+          const entryDate = getEntryDate(entry);
 
           return entryDate < earliest ? entryDate : earliest;
-        }, new Date(localEntries[0].displayDate))
+        }, getEntryDate(localEntries[0]))
       : new Date();
+
+  /*
+   * Handle clicking a calendar day.
+   *
+   * The date comes directly from Mantine's renderDay dateString,
+   * which guarantees that the date we display is the date we select.
+   */
+  const handleDayClick = (dateString: string) => {
+    const [year, month, day] = dateString.split("-").map(Number);
+
+    const clickedDate = new Date(year, month - 1, day);
+
+    setSelectedDate(clickedDate);
+    setOpened(true);
+  };
 
   return (
     <>
       <Calendar
         className={`${classes.calendar} ${classes[variant]} ${className ?? ""}`}
         fullWidth={fullWidth}
-        highlightToday={true}
+        highlightToday
         defaultDate={initialMonth}
         headerControlsOrder={["previous", "level", "next"]}
         maxLevel="month"
         weekdayFormat="ddd"
         maxDate={new Date()}
-        getDayProps={(date) => {
-          const today = isSameDay(date, new Date());
-
-          const hasEntry = localEntries.some((entry) =>
-            isSameDay(new Date(entry.displayDate), date),
-          );
-          return {
-            onClick: () => {
-              setSelectedDate(date);
-              setOpened(true);
-            },
-            className: [
-              hasEntry ? classes.hasEntry : "",
-              today ? classes.today : "",
-            ]
-              .filter(Boolean)
-              .join(" "),
-          };
-        }}
         renderDay={(dateString) => {
           const [year, month, day] = dateString.split("-").map(Number);
+
+          // Exact date represented by this calendar cell
           const date = new Date(year, month - 1, day);
 
-          const entriesForDay = localEntries.filter((entry) =>
-            isSameDay(new Date(entry.displayDate), date),
+          // Use the exact dateString as the source of truth
+          const dateKey = dateString;
+
+          const entriesForDay = localEntries.filter(
+            (entry) => getEntryDateKey(entry) === dateKey,
           );
+
+          const today = getDateKey(new Date()) === dateKey;
+          const hasEntry = entriesForDay.length > 0;
+
           const visibleEntries = entriesForDay.slice(0, 2);
+
           const remainingEntries = entriesForDay.length - visibleEntries.length;
 
           return (
-            <div className={classes.day}>
+            <div
+              className={[
+                classes.day,
+                hasEntry ? classes.hasEntry : "",
+                today ? classes.today : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+              onClick={() => handleDayClick(dateString)}
+            >
               <div className={classes.dayNumber}>{date.getDate()}</div>
 
               {entriesForDay.length > 0 && (
@@ -134,11 +191,13 @@ export default function JournalCalendar({
             color: "white",
             fontFamily: "Inter",
           },
+
           weekday: {
             fontSize: "1rem",
             color: "white",
             fontFamily: "Inter",
           },
+
           day: {
             fontSize: "1rem",
             color: "white",
@@ -169,7 +228,10 @@ export default function JournalCalendar({
 
       <JournalDayModal
         opened={opened}
-        onClose={() => setOpened(false)}
+        onClose={() => {
+          setOpened(false);
+          setSelectedDate(null);
+        }}
         selectedDate={selectedDate}
         entries={entriesForDate}
         onEditEntry={(entry) => {

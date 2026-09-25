@@ -79,7 +79,6 @@
 .hasEntry {
   background-color: var(--mantine-color-violet-light);
   opacity: 0.95;
-  border-radius: var(--mantine-radius-md);
 }
 
 .today .dayNumber {

@@ -7,6 +7,7 @@ export type JournalEntry = {
   coverImage?: string;
   title: string;
   displayDate: string;
+  createdAt: Date;
   content: string;
   entryType: string;
   tags: string[];
