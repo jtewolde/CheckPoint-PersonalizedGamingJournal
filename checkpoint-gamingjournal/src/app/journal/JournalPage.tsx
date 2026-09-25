@@ -282,6 +282,7 @@ export default function Journal() {
             styles={{
               header: {
                 marginBottom: "10px",
+                borderBottom: "1px solid #5f4670",
               },
               body: {
                 display: "flex",
@@ -307,7 +308,7 @@ export default function Journal() {
             }}
           >
             <Stack gap="md" ta="left">
-              <Text c="white" fz="md" ta="left">
+              <Text c="white" fz="md" ta="left" fw={300}>
                 This will permanently delete <b>all</b> journal entries
                 assoicated with the selected game. This action cannot be undone.
               </Text>
@@ -323,15 +324,12 @@ export default function Journal() {
                 value={selectedGame}
                 onChange={(value) => setSelectedGame(value || "")}
                 styles={{
-                  input: { backgroundColor: "#212121", color: "white" },
-                  dropdown: { backgroundColor: "#2c2c2fff", color: "white" },
                   label: {
                     fontSize: "18px",
                     color: "white",
                     fontFamily: "Noto Sans",
                     fontWeight: 300,
                   },
-                  option: { background: "#212121" },
                 }}
                 mb="sm"
                 error={error}
@@ -342,6 +340,7 @@ export default function Journal() {
                 color="blue"
                 c="white"
                 size="md"
+                fw={300}
                 label="I understand that I am permanently deleting my journal entries for this game"
                 checked={checked}
                 error={error}

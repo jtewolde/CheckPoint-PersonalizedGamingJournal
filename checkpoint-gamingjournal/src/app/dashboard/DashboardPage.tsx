@@ -408,7 +408,6 @@ export default function Dashboard() {
                 onClose={logClose}
                 gameId={selectedGame?.gameId}
                 gameName={selectedGame?.title}
-                platforms={selectedGame?.platforms}
               />
               <Tooltip
                 label="Log Play Session"
@@ -765,7 +764,6 @@ export default function Dashboard() {
             }}
             gameId={selectedGame?.gameId || ""}
             gameName={selectedGame?.title || ""}
-            platforms={selectedGame?.platforms}
             onSuccess={() => {
               close();
             }}
