@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useMediaQuery } from "@mantine/hooks";
 import { Modal, Text, LoadingOverlay, Stack } from "@mantine/core";
 
 import JournalEntryCard from "@/components/Cards/JournalEntryCard/EntryCard";
@@ -12,7 +13,7 @@ import classes from "./JournalDayModal.module.css";
 type EntryDayModalProps = {
   opened: boolean;
   onClose: () => void;
-  selectedDate: string | null;
+  selectedDate: Date | null;
   entries: JournalEntry[];
   onEditEntry?: (entry: JournalEntry) => void; // Callback for when an entry is selected for editing
 };
@@ -24,6 +25,7 @@ export default function JournalDayModal({
   entries,
 }: EntryDayModalProps) {
   const [loading, setLoading] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 650px)");
   const [localEntries, setLocalEntries] = useState<JournalEntry[]>(entries);
 
   // Sync localEntries with entries prop whenever it changes
@@ -39,15 +41,24 @@ export default function JournalDayModal({
       opened={opened}
       onClose={onClose}
       size="xl"
-      title={"Journal Entries on " + (selectedDate || "No Date Selected")}
+      fullScreen={isMobile}
+      title={
+        selectedDate
+          ? selectedDate.toLocaleDateString("en-US", {
+              dateStyle: "full",
+            })
+          : "No Date Selected"
+      }
       styles={{
         title: {
           fontFamily: "Barlow",
           fontSize: "18px",
           fontWeight: "600",
+          color: "white",
         },
         header: {
           marginBottom: "0.5rem",
+          borderBottom: "1px solid #533c69",
         },
       }}
     >

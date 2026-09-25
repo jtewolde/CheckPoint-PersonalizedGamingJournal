@@ -51,7 +51,7 @@
  * excessively large on very wide screens.
  */
 .calendarWrapper > * {
-  width: 92%;
+  width: 98%;
   max-width: 1200px;
 }
 
