@@ -30,7 +30,7 @@ export const TAG_CATEGORIES = [
   },
   {
     title: "Discovery",
-    color: "purple",
+    color: "violet",
     tags: ["New Area", "Hidden Item", "Easter Egg", "Secret", "Collectible"],
   },
 ];

@@ -236,7 +236,6 @@ export default function JournalEntryModal({
           color: "white",
         },
         header: {
-          borderBottom: "1px solid #533c69",
           marginBottom: "10px",
         },
       }}
