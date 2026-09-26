@@ -1,8 +1,6 @@
 .header {
   height: 60px;
-  background: var(--header);
-  border-color: var(--border);
-  border-bottom: 1px solid #9c86d873;
+  border-bottom: 1px solid var(--border);
   display: flex; /* Ensure flexbox is applied */
   justify-content: center;
   align-items: center;

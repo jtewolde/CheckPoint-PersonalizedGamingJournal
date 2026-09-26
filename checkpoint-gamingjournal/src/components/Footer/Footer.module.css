@@ -1,6 +1,5 @@
 .footer {
-  background: var(--header);
-  border-top: var(--border);
+  border-top: 1px solid var(--border);
   width: 100%;
 }
 
