@@ -1,5 +1,4 @@
 .gameCard {
-  background: #262235;
   border: 1px solid #3d3853;
   object-fit: contain;
   border-radius: 8px;
@@ -21,7 +20,6 @@
 }
 
 .library {
-  background: #262235;
   border: 1px solid #3d3853;
   object-fit: contain;
   border-radius: 8px;

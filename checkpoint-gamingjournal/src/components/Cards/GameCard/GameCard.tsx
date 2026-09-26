@@ -476,7 +476,6 @@ export default function GameCard({
               onClose={close}
               gameId={game.id}
               gameName={game.name}
-              platforms={game.platforms?.map((platform) => platform.name)}
               onSuccess={() => close()}
             />
 

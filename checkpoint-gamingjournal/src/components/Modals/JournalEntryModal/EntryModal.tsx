@@ -248,7 +248,7 @@ export default function JournalEntryModal({
         loaderProps={{ size: "lg", color: "white", type: "oval" }}
       />
 
-      <Stack gap="sm">
+      <Stack gap="md">
         <div className={classes.fieldRow}>
           {entry ? (
             <TextInput
@@ -345,7 +345,7 @@ export default function JournalEntryModal({
           style={{ marginTop: "1rem" }}
         />
 
-        <Stack gap="lg">
+        <Stack gap="sm">
           <Stack gap={1}>
             <Text fw={600}>Tags</Text>
             <Text size="sm" c="dimmed">
