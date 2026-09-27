@@ -457,7 +457,7 @@ export default function Dashboard() {
               spacing="lg"
               className={classes.quickStatsGrid}
             >
-              <div className={classes.quickStatItem}>
+              <Paper shadow="md" radius="lg" className={classes.quickStatItem}>
                 <div className={classes.quickStatHeader}>
                   <ThemeIcon
                     size={42}
@@ -480,9 +480,9 @@ export default function Dashboard() {
                     Across rated games
                   </Text>
                 </div>
-              </div>
+              </Paper>
 
-              <div className={classes.quickStatItem}>
+              <Paper shadow="md" radius="lg" className={classes.quickStatItem}>
                 <div className={classes.quickStatHeader}>
                   <ThemeIcon
                     size={42}
@@ -506,9 +506,9 @@ export default function Dashboard() {
                     Games you've earned a platinum trophy on
                   </Text>
                 </div>
-              </div>
+              </Paper>
 
-              <div className={classes.quickStatItem}>
+              <Paper shadow="md" radius="lg" className={classes.quickStatItem}>
                 <div className={classes.quickStatHeader}>
                   <ThemeIcon size={42} radius="xl" variant="filled" color="red">
                     {" "}
@@ -523,9 +523,9 @@ export default function Dashboard() {
                     Journal entries made
                   </Text>
                 </div>
-              </div>
+              </Paper>
 
-              <div className={classes.quickStatItem}>
+              <Paper shadow="md" radius="lg" className={classes.quickStatItem}>
                 <div className={classes.quickStatHeader}>
                   <ThemeIcon
                     size={42}
@@ -572,7 +572,7 @@ export default function Dashboard() {
                     </Group>
                   </Stack>
                 </div>
-              </div>
+              </Paper>
             </SimpleGrid>
 
             <SimpleGrid
