@@ -193,6 +193,42 @@
   height: 100%;
 }
 
+.sessionTypeLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 50%;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.legendName {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
+  font-family: "Inter";
+  font-weight: 300;
+}
+
+.legendDot {
+  width: 10px;
+  height: 10px;
+  min-width: 10px;
+  border-radius: 50%;
+}
+
+.legendValue {
+  white-space: nowrap;
+  font-weight: 500;
+}
+
 .heatmapWrapper {
   width: 100%;
   height: 100%;

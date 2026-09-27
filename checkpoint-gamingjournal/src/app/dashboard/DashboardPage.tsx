@@ -347,6 +347,63 @@ export default function Dashboard() {
     return topRatedGame;
   };
 
+  // Calcualte the data for the game status donut chart legend
+  const gameStatusData = useMemo(
+    () => [
+      {
+        name: "Backlog",
+        value: backlogLength,
+        color: "orange",
+        cssColor: "var(--mantine-color-orange-6)",
+      },
+      {
+        name: "Wishlist",
+        value: wishlistLength,
+        color: "pink",
+        cssColor: "var(--mantine-color-pink-6)",
+      },
+      {
+        name: "On Hold",
+        value: onHoldLength,
+        color: "red",
+        cssColor: "var(--mantine-color-red-6)",
+      },
+      {
+        name: "Playing",
+        value: playGamesLength,
+        color: "blue",
+        cssColor: "var(--mantine-color-blue-6)",
+      },
+      {
+        name: "No Status Given",
+        value: noStatusLength,
+        color: "lightgrey",
+        cssColor: "var(--mantine-color-gray-4)",
+      },
+      {
+        name: "Completed",
+        value: completedLength,
+        color: "green",
+        cssColor: "var(--mantine-color-green-6)",
+      },
+      {
+        name: "100%",
+        value: fullyDoneLength,
+        color: "gold",
+        cssColor: "var(--mantine-color-yellow-5)",
+      },
+    ],
+    [
+      backlogLength,
+      wishlistLength,
+      onHoldLength,
+      playGamesLength,
+      noStatusLength,
+      completedLength,
+      fullyDoneLength,
+    ],
+  );
+
   // useEffect to fetch journal entries, playing games, and play sessions when the component mounts.
   useEffect(() => {
     fetchPlayingGames();
@@ -584,25 +641,22 @@ export default function Dashboard() {
                 <p className={classes.statusTitle}>Game Status Breakdown</p>
                 <div className={classes.chartWrapper}>
                   <DonutChart
-                    size={260}
+                    size={240}
                     strokeColor="black"
                     strokeWidth={2}
-                    thickness={24}
+                    thickness={45}
                     paddingAngle={3}
-                    chartLabel={`${numOfGames} Games Tracked`}
+                    chartLabel={`${numOfGames} Games`}
+                    data={gameStatusData}
                     styles={{
                       label: {
                         color: "white",
-                        fontFamily: "Poppins",
-                        fill: "white",
+                        fontFamily: "Inter",
+                        fontWeight: 600,
                         fontSize: "18px",
                       },
                       tooltip: {
                         border: "1px solid black",
-                      },
-                      tooltipBody: {
-                        backgroundColor: "#2b2b2b",
-                        color: "white",
                       },
                       tooltipItemName: {
                         color: "white",
@@ -611,36 +665,41 @@ export default function Dashboard() {
                         color: "white",
                       },
                     }}
-                    data={[
-                      {
-                        name: "Backlog",
-                        value: backlogLength,
-                        color: "orange",
-                      },
-                      {
-                        name: "Wishlist",
-                        value: wishlistLength,
-                        color: "pink",
-                      },
-                      { name: "On Hold", value: onHoldLength, color: "red" },
-                      {
-                        name: "Playing",
-                        value: playGamesLength,
-                        color: "blue",
-                      },
-                      {
-                        name: "No Status Given",
-                        value: noStatusLength,
-                        color: "lightgrey",
-                      },
-                      {
-                        name: "Completed",
-                        value: completedLength,
-                        color: "green",
-                      },
-                      { name: "100%", value: fullyDoneLength, color: "gold" },
-                    ]}
                   />
+
+                  {!isMobile ? (
+                    <div className={classes.sessionTypeLegend}>
+                      {gameStatusData
+                        .filter((item) => item.value > 0)
+                        .map((item) => {
+                          const percentage =
+                            numOfGames > 0
+                              ? Math.round((item.value / numOfGames) * 100)
+                              : 0;
+
+                          return (
+                            <div key={item.name} className={classes.legendItem}>
+                              <div className={classes.legendName}>
+                                <span
+                                  className={classes.legendDot}
+                                  style={{
+                                    backgroundColor: item.cssColor,
+                                  }}
+                                />
+
+                                <Text className={classes.legendName}>
+                                  {item.name}
+                                </Text>
+                              </div>
+
+                              <Text className={classes.legendValue}>
+                                {item.value} ({percentage}%)
+                              </Text>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  ) : null}
                 </div>
               </Paper>
 
@@ -666,15 +725,6 @@ export default function Dashboard() {
                         fill: "white",
                         fontSize: "12px",
                         fontWeight: "bold",
-                      },
-                      tooltip: {
-                        backgroundColor: "#2b2b2b",
-                        color: "white",
-                        border: "1px solid #424242",
-                      },
-                      tooltipBody: {
-                        backgroundColor: "#2b2b2b",
-                        color: "white",
                       },
                       tooltipLabel: {
                         color: "white",
@@ -718,15 +768,6 @@ export default function Dashboard() {
                         fill: "white",
                         fontSize: "12px",
                         fontWeight: "bold",
-                      },
-                      tooltip: {
-                        backgroundColor: "#2b2b2b",
-                        color: "white",
-                        border: "1px solid #424242",
-                      },
-                      tooltipBody: {
-                        backgroundColor: "#2b2b2b",
-                        color: "white",
                       },
                       tooltipLabel: {
                         color: "white",
