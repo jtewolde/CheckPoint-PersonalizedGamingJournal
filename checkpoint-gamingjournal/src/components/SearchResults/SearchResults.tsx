@@ -3,7 +3,15 @@
 import { useEffect, useState, useMemo } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
-import { SimpleGrid, Text, Pagination, Select, Stack } from "@mantine/core";
+import { Gamepad } from "lucide-react";
+import {
+  SimpleGrid,
+  Text,
+  Pagination,
+  Select,
+  Stack,
+  EmptyState,
+} from "@mantine/core";
 
 import GameFilters from "@/components/Filters/GameFilters/GameFilters";
 import ActiveFilters from "../Filters/ActiveFilters/ActiveFilters";
@@ -231,7 +239,15 @@ export default function SearchResults({ query }: SearchResultsProps) {
       </SimpleGrid>
 
       {total == 0 && (
-        <p className={classes.noResultsText}>No games were found.</p>
+        <div className={classes.emptySearch}>
+          <EmptyState
+            icon={<Gamepad />}
+            size="lg"
+            withIndicatorBackground
+            title="No games found"
+            description="No games were found based on the search results."
+          />
+        </div>
       )}
 
       {totalPages > 1 && (
