@@ -58,7 +58,6 @@ export default function JournalDayModal({
         },
         header: {
           marginBottom: "0.5rem",
-          borderBottom: "1px solid #533c69",
         },
       }}
     >

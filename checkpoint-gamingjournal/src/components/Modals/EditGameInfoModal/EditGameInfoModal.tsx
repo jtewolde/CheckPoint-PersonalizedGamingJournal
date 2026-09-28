@@ -13,18 +13,14 @@ import {
   Rating,
   Checkbox,
   Text,
-  TextInput,
   NumberInput,
-  Slider,
-  Fieldset,
-  Chip,
+  Divider,
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 
 import { toast } from "react-toastify";
 
 import {
-  Gamepad2,
   CalendarDays,
   Check,
   Pause,
@@ -34,6 +30,7 @@ import {
   Trophy,
   Play,
   PowerOff,
+  Gift,
 } from "lucide-react";
 
 import classes from "./EditGameInfoModal.module.css";
@@ -57,7 +54,6 @@ export default function EditGameInfoModal({
   onSuccess,
 }: EditGameInfoModalProps) {
   // States for storing the selected game's Id when changing game info
-  const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
   const [selectedGame, setSelectedGame] = useState<any>(null);
   const activeGame = libraryGame || selectedGame;
 
@@ -179,15 +175,6 @@ export default function EditGameInfoModal({
       color: "red",
     },
     {
-      value: "Wishlist",
-      label: "Wishlist",
-      description: "Interested in playing this game in the future.",
-      icon: (
-        <Star size={25} color="rgb(231, 210, 20)" fill="rgb(231, 210, 20)" />
-      ),
-      color: "gold",
-    },
-    {
       value: "Backlog",
       label: "Backlog",
       description:
@@ -195,313 +182,226 @@ export default function EditGameInfoModal({
       icon: <Clock size={25} color="#21eebe" />,
       color: "orange",
     },
+
+    {
+      value: "Wishlist",
+      label: "Wishlist",
+      description: "Interested in playing this game in the future.",
+      icon: <Gift size={25} />,
+      color: "gray",
+    },
   ];
 
-  // Function to render the options in the Select component with their respective icons and descriptions for each game status
-  const renderSelectOption = ({ option }: any) => {
-    const statusItem = gameStatuses.find((s) => s.value === option.value);
-    return statusItem ? (
-      <Group gap="sm">
-        {statusItem.icon}
-        <Text size="md" fw={600}>
-          {statusItem.label}
-        </Text>
-        <Text size="xs" c="dimmed">
-          {statusItem.description}
-        </Text>
-      </Group>
-    ) : null;
-  };
-
   return (
-    <Modal
-      opened={opened}
-      onClose={onClose}
-      size="xl"
-      title={"Edit Game Info"}
-      styles={{
-        title: {
-          fontWeight: 700,
-          fontFamily: "Inter",
-          fontSize: "1.1rem",
-          color: "white",
-        },
-        header: {
-          borderBottom: "1px solid #533c69",
-          marginBottom: "10px",
-        },
-      }}
-    >
-      {/* ✅ LOADING OVERLAY */}
-      <LoadingOverlay
-        visible={loading}
-        overlayProps={{ radius: "sm", blur: 2 }}
-        loaderProps={{ size: "lg", color: "white", type: "oval" }}
-      />
+    <Modal.Root opened={opened} onClose={onClose} centered size="xl">
+      <Modal.Overlay />
 
-      <Stack gap="lg">
-        {!libraryGame ? (
-          <Select
-            leftSection={<Gamepad2 size={20} />}
-            maxDropdownHeight={300}
-            className={classes.select}
-            data={(libraryGames || []).map((game: any) => ({
-              value: game.gameId,
-              label: game.title,
-            }))}
-            scrollAreaProps={{
-              type: "auto",
-              scrollbarSize: 16,
-              scrollbars: "y",
-              color: "black",
-              classNames: { scrollbar: classes.scrollBar },
-            }}
-            size="md"
-            label="Game"
-            description="Choose a game from your library"
-            placeholder="(e.g. God of War)"
-            value={selectedGameId}
-            onChange={(value) => {
-              setSelectedGameId(value || "");
+      <Modal.Content>
+        <Modal.Header className={classes.header}>
+          <div className={classes.modalHeaderContent}>
+            {activeGame?.coverImage && (
+              <img
+                src={activeGame.coverImage}
+                alt={activeGame.title}
+                className={classes.gameCover}
+              />
+            )}
 
-              const selectedGame = (libraryGames || []).find(
-                (game) => game.gameId === value,
-              );
+            <div className={classes.gameInfo}>
+              <Modal.Title className={classes.gameTitle}>
+                {activeGame?.title || "Edit Game Info"}
+              </Modal.Title>
 
-              setSelectedGame(selectedGame);
-            }}
-            searchable
-            required
+              {activeGame?.releaseDate && (
+                <Text size="xs" c="dimmed" ff="Inter">
+                  {new Date(activeGame.releaseDate).getFullYear()}
+                </Text>
+              )}
+            </div>
+          </div>
+          <Modal.CloseButton />
+        </Modal.Header>
+
+        <Modal.Body mt="md">
+          <LoadingOverlay
+            visible={loading}
+            overlayProps={{ radius: "sm", blur: 2 }}
+            loaderProps={{ size: "lg", color: "white", type: "oval" }}
           />
-        ) : (
-          <TextInput
-            label="Game"
-            size="md"
-            required
-            value={activeGame?.title}
-            readOnly
-            leftSection={<Gamepad2 size={20} />}
-          />
-        )}
 
-        <Select
-          label="Platform"
-          size="md"
-          description="Select the platform you played this game on."
-          placeholder="Choose a platform"
-          data={availablePlatforms.map((platform: string) => ({
-            value: platform,
-            label: platform,
-          }))}
-          value={platform}
-          onChange={(value) => setPlatform(value || "")}
-          searchable
-        />
+          <Stack gap="lg" mb="lg">
+            {/* Status */}
+            <Stack gap="xs">
+              <Text className={classes.sectionText}>Status</Text>
 
-        {!isMobile ? (
-          <>
-            <Group grow align="flex-end">
-              <Select
-                className={classes.statusSelect}
-                label="Status"
-                placeholder="Select game status"
-                description="Track your current progress and relationship with this game."
-                size="md"
-                scrollAreaProps={{
-                  scrollbarSize: 16,
-                  type: "auto",
-                  scrollbars: "y",
-                  classNames: { scrollbar: classes.scrollBar },
-                }}
-                value={status}
-                onChange={(value) => {
-                  if (!value) return;
-                  setStatus(value);
-                }}
-                data={gameStatuses.map((status) => ({
-                  value: status.value,
-                  label: status.label,
-                }))}
-                renderOption={renderSelectOption}
-              />
-
-              <NumberInput
-                label="Hours Played"
-                size="md"
-                leftSection={<Clock size={20} />}
-                description="Record your total playtime and watch your gaming journey grow over time."
-                placeholder="Enter hours"
-                min={0}
-                value={hours}
-                onChange={(value) => setHours(Number(value) || 0)}
-              />
-            </Group>
-
-            <Group gap="lg" grow>
-              <DatePickerInput
-                size="md"
-                placeholder="(e.g. 5/27/2026)"
-                label="Start Date"
-                description="Select the date that you started playing"
-                clearable
-                leftSection={<CalendarDays size={20} />}
-                maxDate={new Date()}
-                // Convert stored string → Date ONLY for display
-                value={startingDate}
-                onChange={setStartingDate}
-                disabled={!activeGame}
-              />
-
-              <DatePickerInput
-                size="md"
-                placeholder="(e.g. 6/15/2026)"
-                label="Completion Date"
-                description="Select the date when you completed the game"
-                clearable
-                leftSection={<CalendarDays size={20} />}
-                maxDate={new Date()}
-                // Convert stored string → Date ONLY for display
-                value={completionDate}
-                onChange={setCompletionDate}
-                disabled={!activeGame}
-              />
-            </Group>
-          </>
-        ) : (
-          <>
-            <Stack gap="lg" align="flex-start">
-              <Select
-                className={classes.statusSelect}
-                label="Status"
-                placeholder="Select game status"
-                size="md"
-                scrollAreaProps={{
-                  scrollbarSize: 16,
-                  type: "auto",
-                  scrollbars: "y",
-                  classNames: { scrollbar: classes.scrollBar },
-                }}
-                value={status}
-                onChange={(value) => {
-                  if (!value) return;
-                  setStatus(value);
-                }}
-                data={gameStatuses.map((status) => ({
-                  value: status.value,
-                  label: status.label,
-                }))}
-                renderOption={renderSelectOption}
-              />
-
-              <NumberInput
-                label="Hours Played"
-                size="md"
-                leftSection={<Clock size={20} />}
-                description="Record your total playtime and watch your gaming journey grow over time."
-                placeholder="Enter hours"
-                min={0}
-                value={hours}
-                onChange={(value) => setHours(Number(value) || 0)}
-              />
+              <div className={classes.statusGrid}>
+                {gameStatuses.map((gameStatus) => (
+                  <Button
+                    radius="sm"
+                    key={gameStatus.value}
+                    variant={
+                      status === gameStatus.value ? "outline" : "default"
+                    }
+                    className={classes.statusButton}
+                    onClick={() => setStatus(gameStatus.value)}
+                    leftSection={gameStatus.icon}
+                  >
+                    {gameStatus.label}
+                  </Button>
+                ))}
+              </div>
             </Stack>
 
-            <Stack gap="lg">
-              <DatePickerInput
-                size="md"
-                placeholder="(e.g. 5/27/2026)"
-                label="Start Date"
-                description="Select the date that you started playing"
-                clearable
-                leftSection={<CalendarDays size={20} />}
-                maxDate={new Date()}
-                // Convert stored string → Date ONLY for display
-                value={startingDate}
-                onChange={setStartingDate}
-                disabled={!activeGame}
-              />
+            {/* Rating */}
+            <Stack gap={3}>
+              <Text className={classes.sectionText}>Rating</Text>
 
-              <DatePickerInput
-                size="md"
-                placeholder="(e.g. 6/15/2026)"
-                label="Completion Date"
-                description="Select the date when you completed the game"
-                clearable
-                leftSection={<CalendarDays size={20} />}
-                maxDate={new Date()}
-                // Convert stored string → Date ONLY for display
-                value={completionDate}
-                onChange={setCompletionDate}
-                disabled={!activeGame}
-              />
-            </Stack>
-          </>
-        )}
-
-        <Textarea
-          size="sm"
-          label="Notes"
-          placeholder="Add notes about this game..."
-          description="Record thoughts, goals, memorable moments, achievements, or anything you'd like to remember."
-          value={notes}
-          onChange={(e) => setNotes(e.currentTarget.value)}
-          minRows={2}
-          autosize
-          disabled={!activeGame}
-        />
-
-        <Stack gap="lg" mb="md">
-          <Group gap="lg" align="center">
-            <div className={classes.ratingContainer}>
-              <Text size="md" className={classes.ratingText}>
-                Your Rating:
-              </Text>
-              <div className={classes.ratingWrapper}>
+              <Group gap={7}>
                 <Rating
-                  size="xl"
+                  size="lg"
+                  count={10}
                   fractions={2}
                   value={rating}
-                  count={10}
-                  readOnly
-                  onChange={(value) => {
-                    setRating(value);
-                  }}
+                  onChange={setRating}
                 />
 
-                <p className={classes.starsCount}>{rating}/10</p>
-              </div>
+                <Text size="md" c="white">
+                  {rating}/10
+                </Text>
+              </Group>
+            </Stack>
+
+            {/* Platform */}
+            <div className={classes.platformContainer}>
+              <Select
+                size="md"
+                label="Platform Played"
+                placeholder="Select"
+                data={availablePlatforms.map((platform: string) => ({
+                  value: platform,
+                  label: platform,
+                }))}
+                value={platform}
+                onChange={(value) => setPlatform(value || "")}
+                searchable
+                styles={{
+                  label: {
+                    color: "white",
+                    fontSize: "16px",
+                    fontFamily: "Inter",
+                  },
+                }}
+              />
             </div>
-          </Group>
 
-          <Slider
-            size="lg"
-            radius="xl"
-            min={0}
-            max={10}
-            step={0.5}
-            value={rating}
-            onChange={(value) => {
-              setRating(value);
-            }}
-          />
+            {/* Play period */}
+            <Stack gap="xs">
+              <div className={classes.fieldRow}>
+                <DatePickerInput
+                  className={classes.startDateSelect}
+                  size="md"
+                  placeholder="(e.g. 5/27/2026)"
+                  label="Start Date"
+                  clearable
+                  leftSection={<CalendarDays size={20} />}
+                  maxDate={new Date()}
+                  // Convert stored string → Date ONLY for display
+                  value={startingDate}
+                  onChange={setStartingDate}
+                  disabled={!activeGame}
+                />
 
-          <Checkbox
-            size="lg"
-            label={"Platinum Achieved"}
-            checked={isPlatinum}
-            onChange={(event) => setIsPlatinum(event.currentTarget.checked)}
-            disabled={!activeGame}
-          />
-        </Stack>
+                <DatePickerInput
+                  className={classes.completionDateSelect}
+                  size="md"
+                  placeholder="(e.g. 6/15/2026)"
+                  label="Completion Date"
+                  clearable
+                  leftSection={<CalendarDays size={20} />}
+                  maxDate={new Date()}
+                  // Convert stored string → Date ONLY for display
+                  value={completionDate}
+                  onChange={setCompletionDate}
+                  disabled={!activeGame}
+                />
+              </div>
+            </Stack>
 
-        <Button
-          size="md"
-          radius="md"
-          leftSection={<SaveAll size={20} />}
-          onClick={handleSave}
-        >
-          Confirm Changes
-        </Button>
-      </Stack>
-    </Modal>
+            {/* Playtime */}
+            <Stack gap="xs">
+              <NumberInput
+                label="Hours Played"
+                size="md"
+                leftSection={<Clock size={20} />}
+                description="Record your total playtime and watch your gaming journey grow over time."
+                placeholder="Enter hours"
+                min={0}
+                value={hours}
+                onChange={(value) => setHours(Number(value) || 0)}
+                styles={{
+                  label: {
+                    color: "white",
+                    fontSize: "16px",
+                    fontFamily: "Inter",
+                  },
+                }}
+              />
+            </Stack>
+
+            {/* Notes */}
+            <Textarea
+              size="sm"
+              label="Notes"
+              placeholder="Add notes about this game..."
+              description="Record thoughts, goals, memorable moments, achievements, or anything you'd like to remember."
+              value={notes}
+              onChange={(e) => setNotes(e.currentTarget.value)}
+              minRows={2}
+              autosize
+              styles={{
+                label: {
+                  color: "white",
+                  fontSize: "16px",
+                  fontFamily: "Inter",
+                },
+              }}
+              disabled={!activeGame}
+            />
+
+            {/* Platinum */}
+            <Checkbox
+              size="md"
+              label="Platinum Achieved"
+              checked={isPlatinum}
+              onChange={(event) => setIsPlatinum(event.currentTarget.checked)}
+            />
+          </Stack>
+
+          <Divider labelPosition="center" color="dimmed" mt="md" />
+
+          {/* Footer */}
+          <div className={classes.footer}>
+            <Button
+              className={classes.cancelButton}
+              size="md"
+              variant="outline"
+              color="gray"
+              onClick={onClose}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              className={classes.saveButton}
+              size="md"
+              leftSection={<SaveAll size={18} />}
+              onClick={handleSave}
+            >
+              Save Changes
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal.Content>
+    </Modal.Root>
   );
 }
