@@ -154,7 +154,7 @@ export default function EditGameInfoModal({
     },
     {
       value: "100%",
-      label: "100% Complete",
+      label: "100%",
       description:
         "Completed all major content, achievements, collectibles, and optional objectives",
       icon: <Trophy size={25} fill="yellow" color="yellow" />,
@@ -193,7 +193,13 @@ export default function EditGameInfoModal({
   ];
 
   return (
-    <Modal.Root opened={opened} onClose={onClose} centered size="xl">
+    <Modal.Root
+      opened={opened}
+      onClose={onClose}
+      centered
+      size="xl"
+      fullScreen={isMobile}
+    >
       <Modal.Overlay />
 
       <Modal.Content>
@@ -229,7 +235,7 @@ export default function EditGameInfoModal({
             loaderProps={{ size: "lg", color: "white", type: "oval" }}
           />
 
-          <Stack gap="lg" mb="lg">
+          <Stack gap={isMobile ? 30 : "lg"} mb="lg">
             {/* Status */}
             <Stack gap="xs">
               <Text className={classes.sectionText}>Status</Text>
@@ -383,6 +389,7 @@ export default function EditGameInfoModal({
           <div className={classes.footer}>
             <Button
               className={classes.cancelButton}
+              fullWidth
               size="md"
               variant="outline"
               color="gray"
@@ -393,6 +400,7 @@ export default function EditGameInfoModal({
 
             <Button
               className={classes.saveButton}
+              fullWidth
               size="md"
               leftSection={<SaveAll size={18} />}
               onClick={handleSave}
