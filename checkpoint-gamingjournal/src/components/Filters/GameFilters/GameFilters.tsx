@@ -193,20 +193,6 @@ export default function GameFilters({
               classNames: { scrollbar: classes.scrollBar },
             }}
             styles={{
-              dropdown: {
-                background: "#212121",
-                color: "whitesmoke",
-              },
-              input: {
-                background: "#212121",
-                fontFamily: "Noto Sans",
-                color: "white",
-              },
-              option: {
-                background: "#212121",
-                fontFamily: "Noto Sans",
-                fontSize: "16px",
-              },
               label: {
                 color: "white",
                 fontFamily: "Noto Sans",
@@ -222,13 +208,10 @@ export default function GameFilters({
             }}
             data={[
               { value: "Main Game", label: "Main Game" },
-              { value: "DLC", label: "DLC" },
               { value: "Expansion", label: "Expansion" },
               { value: "Standalone Expansion", label: "Standalone Expansions" },
               { value: "Remake", label: "Remake" },
               { value: "Remaster", label: "Remaster" },
-              { value: "Episode", label: "Episode" },
-              { value: "Update", label: "Update" },
             ]}
             value={draftType}
             onChange={setDraftType}
@@ -250,20 +233,6 @@ export default function GameFilters({
               classNames: { scrollbar: classes.scrollBar },
             }}
             styles={{
-              dropdown: {
-                background: "#212121",
-                color: "whitesmoke",
-              },
-              input: {
-                background: "#212121",
-                fontFamily: "Noto Sans",
-                color: "white",
-              },
-              option: {
-                background: "#212121",
-                fontFamily: "Noto Sans",
-                fontSize: "16px",
-              },
               label: {
                 color: "white",
                 fontFamily: "Noto Sans",
@@ -329,20 +298,6 @@ export default function GameFilters({
               classNames: { scrollbar: classes.scrollBar },
             }}
             styles={{
-              dropdown: {
-                background: "#212121",
-                color: "whitesmoke",
-              },
-              input: {
-                background: "#212121",
-                fontFamily: "Noto Sans",
-                color: "white",
-              },
-              option: {
-                background: "#212121",
-                fontFamily: "Noto Sans",
-                fontSize: "16px",
-              },
               label: {
                 color: "white",
                 fontFamily: "Noto Sans",
@@ -399,20 +354,6 @@ export default function GameFilters({
               classNames: { scrollbar: classes.scrollBar },
             }}
             styles={{
-              dropdown: {
-                background: "#212121",
-                color: "whitesmoke",
-              },
-              input: {
-                background: "#212121",
-                fontFamily: "Noto Sans",
-                color: "white",
-              },
-              option: {
-                background: "#212121",
-                fontFamily: "Noto Sans",
-                fontSize: "16px",
-              },
               label: {
                 color: "white",
                 fontFamily: "Noto Sans",
@@ -456,20 +397,6 @@ export default function GameFilters({
               classNames: { scrollbar: classes.scrollBar },
             }}
             styles={{
-              dropdown: {
-                background: "#212121",
-                color: "whitesmoke",
-              },
-              input: {
-                background: "#212121",
-                fontFamily: "Noto Sans",
-                color: "white",
-              },
-              option: {
-                background: "#212121",
-                fontFamily: "Noto Sans",
-                fontSize: "16px",
-              },
               label: {
                 color: "white",
                 fontFamily: "Noto Sans",

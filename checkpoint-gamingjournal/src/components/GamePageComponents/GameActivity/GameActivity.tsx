@@ -4,7 +4,14 @@ import { useMemo } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 import { SimpleGrid, Stack, Text, Title, EmptyState } from "@mantine/core";
 import { DonutChart } from "@mantine/charts";
-import { Gamepad, Timer, Calendar, Hourglass, Flame } from "lucide-react";
+import {
+  Gamepad,
+  Timer,
+  Calendar,
+  Hourglass,
+  Flame,
+  CalendarClock,
+} from "lucide-react";
 
 import SessionHeatmap from "@/components/ActivityComponents/SessionHeatmap/SessionHeatmap";
 import { calculateCurrentStreak } from "@/utils/dateUtils";
@@ -154,7 +161,7 @@ export default function GameActivity({
               </div>
 
               <div className={classes.statCard}>
-                <Hourglass size={25} />
+                <CalendarClock size={25} />
 
                 <Stack gap={1}>
                   <Text className={classes.statValue}>
@@ -198,7 +205,6 @@ export default function GameActivity({
               {/* Session Types */}
               <Title className={classes.heatmapTitle}>Session Types</Title>
               <div className={classes.sessionStatsWrapper}>
-                {" "}
                 <DonutChart
                   data={sessionTypeData}
                   size={250}
