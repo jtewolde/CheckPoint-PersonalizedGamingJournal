@@ -103,7 +103,10 @@ export async function GET(req: NextRequest) {
     whereConditions.push("version_parent = null");
 
     if (searchQuery) {
-      whereConditions.push(`name ~ *"${searchQuery}"*`);
+      // Search both the official game name and alternative names
+      whereConditions.push(
+        `(name ~ *"${searchQuery}"* | alternative_names.name ~ *"${searchQuery}"*)`,
+      );
       whereConditions.push("cover != null");
       whereConditions.push("age_ratings != null");
     } else {
@@ -190,6 +193,7 @@ export async function GET(req: NextRequest) {
       ? `
         fields
           name,
+          alternative_names.name,
           summary,
           genres.name,
           genres.slug,
