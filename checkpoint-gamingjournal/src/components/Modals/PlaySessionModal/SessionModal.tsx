@@ -223,15 +223,6 @@ export default function PlaySessionModal({
       hours > 0 ||
       minutes > 0;
 
-    if (hasUnsavedChanges) {
-      const confirmed = window.confirm(
-        "You have unsaved changes. Are you sure you want to close?",
-      );
-
-      if (!confirmed) {
-        return;
-      }
-    }
     onClose();
   };
 

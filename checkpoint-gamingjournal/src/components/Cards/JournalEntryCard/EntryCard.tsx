@@ -16,6 +16,7 @@ import {
 import { modals } from "@mantine/modals";
 
 import { entryTypeColors } from "@/hooks/getEntryTypeColors";
+import { JournalEntry } from "@/app/types/JournalEntry";
 import JournalEntryModal from "../../Modals/JournalEntryModal/EntryModal";
 
 import { EllipsisVertical, Trash, Pencil, Eye, Calendar } from "lucide-react";
@@ -30,19 +31,7 @@ type EntryCardVariant = "dashboard" | "journal" | "compact";
 
 // Define the entryCard component props that uses all of the attributes and variant of entryCard
 interface JournalEntryCardProps {
-  entry: {
-    _id: string;
-    uuid: string;
-    gameId: string;
-    gameName: string;
-    coverImage?: string;
-    title: string;
-    content: string;
-    entryType?: string;
-    tags?: string[];
-    displayDate?: string;
-  };
-
+  entry: JournalEntry;
   variant?: EntryCardVariant;
   color?: string;
 }
@@ -96,9 +85,6 @@ export default function JournalEntryCard({
       },
 
       styles: {
-        header: {
-          borderBottom: "1px solid #5e427b",
-        },
         title: {
           fontSize: "18px",
           fontWeight: 600,
@@ -218,16 +204,7 @@ export default function JournalEntryCard({
           <JournalEntryModal
             opened={opened}
             onClose={close}
-            entry={{
-              _id: entry._id,
-              gameId: entry.gameId,
-              gameName: entry.gameName,
-              coverImage: entry.coverImage,
-              title: entry.title,
-              content: entry.content,
-              entryType: entry.entryType ?? "",
-              tags: entry.tags ?? [],
-            }}
+            entry={entry}
             onEntryCreated={() => {
               close();
               router.push("/journal");
