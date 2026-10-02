@@ -6,6 +6,7 @@ import { useMediaQuery, useDisclosure } from "@mantine/hooks";
 import { useLibraryGame } from "@/hooks/useLibraryGame";
 import { useAuth } from "@/context/Authcontext";
 
+import { modals } from "@mantine/modals";
 import PlaySessionModal from "../../Modals/PlaySessionModal/SessionModal";
 import EditGameInfoModal from "../../Modals/EditGameInfoModal/EditGameInfoModal";
 import AddToLibraryModal from "../../Modals/AddToLibraryModal/AddToLibraryModal";
@@ -16,7 +17,9 @@ import {
   Tooltip,
   ActionIcon,
   Rating,
-  OverflowList,
+  Menu,
+  Modal,
+  Button,
   Text,
   ThemeIcon,
   Group,
@@ -110,16 +113,19 @@ export default function GameCard({
   libraryGame,
   variant = "default",
   libraryMeta,
-  onQuickLog,
   onSuccess,
 }: GameCardProps) {
   const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
   const [opened, { open, close }] = useDisclosure(false);
+
   const [editOpened, { open: editOpen, close: editClose }] =
     useDisclosure(false);
   const [AddOpened, { open: openAddModal, close: closeAddModal }] =
     useDisclosure(false);
-  const anyModalOpen = opened || editOpened || AddOpened;
+  const [deleteOpened, { open: openDeleteModal, close: closeDeleteModal }] =
+    useDisclosure(false);
+
+  const anyModalOpen = opened || editOpened || AddOpened || deleteOpened;
 
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width: 646px)");
@@ -137,8 +143,7 @@ export default function GameCard({
   const shouldRenderAddModal = variant !== "library";
 
   // Function to handle removing the game from the user's library
-  const handleRemoveFromLibrary = async (e?: React.MouseEvent) => {
-    e?.stopPropagation();
+  const handleRemoveFromLibrary = async () => {
     try {
       setLoading(true);
 
@@ -290,26 +295,6 @@ export default function GameCard({
     return null;
   };
 
-  const PLATFORM_ICONS: Record<string, React.ReactNode> = {
-    PC: <FaWindows size={18} />,
-    Steam: <FaSteam size={18} />,
-    "PlayStation 5": <SiPlaystation5 size={18} />,
-    "PlayStation 4": <SiPlaystation4 size={18} />,
-    "PlayStation 3": <SiPlaystation3 size={18} />,
-    "PlayStation 2": <SiPlaystation2 size={18} />,
-    "PlayStation Vita": <SiPlaystationvita size={18} />,
-    "PlayStation Portable": <SiPlaystationportable size={18} />,
-    "Xbox Series X|S": <FaXbox size={18} />,
-    "Xbox One": <FaXbox size={18} />,
-    "Xbox 360": <FaXbox size={18} />,
-    "Nintendo Switch": <BsNintendoSwitch size={18} />,
-    Windows: <FaWindows size={18} />,
-    Linux: <FaLinux size={18} />,
-    macOS: <FaApple size={18} />,
-    Android: <FaAndroid size={18} />,
-    iOS: <FaApple size={18} />,
-  };
-
   // Function to help with identifying whether user is authenticated or not and whether to open add modal depending on it
   const handleQuickLibraryAction = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -330,12 +315,14 @@ export default function GameCard({
     <div
       key={game.id}
       className={`${classes.gameCard} ${variant === "compact" ? classes.compact : variant === "small" ? classes.small : variant === "library" ? classes.library : classes.default}`}
-      onClick={() => {
-        if (anyModalOpen) return;
-        router.push(`/games/${game.id}`);
-      }}
     >
-      <div className={classes.imageWrapper}>
+      <div
+        className={classes.imageWrapper}
+        onClick={() => {
+          if (anyModalOpen) return;
+          router.push(`/games/${game.id}`);
+        }}
+      >
         <Image
           src={
             game.cover
@@ -352,6 +339,8 @@ export default function GameCard({
               <Badge
                 className={classes.ratingBadge}
                 classNames={{ root: classes.root }}
+                radius={2}
+                size="md"
                 variant="dot"
                 color={
                   game.total_rating && game.total_rating >= 80
@@ -360,11 +349,9 @@ export default function GameCard({
                       ? "yellow"
                       : "#f01e1e"
                 }
-                radius="md"
-                size="md"
+                styles={{}}
               >
                 <Group gap={5} align="center">
-                  <Star size={12} color="gold" fill="gold" />
                   {game.total_rating
                     ? `${Math.round(game.total_rating)}`
                     : "N/A"}
@@ -376,14 +363,20 @@ export default function GameCard({
               <Badge
                 className={classes.gameTypeBadge}
                 size="sm"
-                variant="light"
-                radius="sm"
+                variant="outline"
+                radius={2}
                 color={
                   game.game_type?.type == "Expansion"
                     ? "grape"
                     : game.game_type?.type == "Remake"
-                      ? "blue"
-                      : "#2e2e2e"
+                      ? "#7ab3f0"
+                      : game.game_type?.type == "Remaster"
+                        ? "#f1a4a4"
+                        : game.game_type?.type == "Mod"
+                          ? "green"
+                          : game.game_type?.type == "Standalone Expansion"
+                            ? "#d46edf"
+                            : "#e1d966"
                 }
               >
                 {game.game_type?.type}
@@ -409,7 +402,7 @@ export default function GameCard({
               <ThemeIcon
                 className={classes.platinumIcon}
                 size="md"
-                radius="sm"
+                radius={2}
                 variant="outline"
                 color="black"
               >
@@ -418,164 +411,21 @@ export default function GameCard({
             )}
           </>
         )}
-
-        <div className={classes.overlay}>
-          {shouldRenderAddModal && (
-            <AddToLibraryModal
-              opened={AddOpened}
-              onClose={closeAddModal}
-              game={game}
-              onSuccess={() => {
-                closeAddModal();
-                onSuccess?.();
-              }}
-            />
-          )}
-
-          <div className={classes.gameName}>
-            <Text className={classes.gameNameText}>{game.name}</Text>
-          </div>
-
-          <div className={classes.quickAdd}>
-            {(variant === "default" || variant === "upcoming") && (
-              <Tooltip
-                label={
-                  loading
-                    ? "Checking library..."
-                    : isInLibrary
-                      ? "Remove from Library"
-                      : "Add to Library"
-                }
-                withArrow
-                disabled={isMobile || loading}
-              >
-                <ActionIcon
-                  size="lg"
-                  radius="xl"
-                  variant="filled"
-                  color={loading ? "gray" : isInLibrary ? "red" : "green"}
-                  disabled={loading || addingToLibrary}
-                  onClick={handleQuickLibraryAction}
-                >
-                  {loading || isInLibrary === null ? (
-                    <Ellipsis size={18} strokeWidth={2.5} />
-                  ) : isInLibrary ? (
-                    <Minus size={18} strokeWidth={2.5} />
-                  ) : (
-                    <Plus size={18} strokeWidth={2.5} />
-                  )}
-                </ActionIcon>
-              </Tooltip>
-            )}
-          </div>
-
-          <div className={classes.quickButtons}>
-            <PlaySessionModal
-              key={game.id}
-              opened={opened}
-              onClose={close}
-              gameId={game.id}
-              gameName={game.name}
-              onSuccess={() => close()}
-            />
-
-            <div className={classes.quickLibraryAdd}>
-              {variant === "library" && (
-                <Tooltip
-                  label={
-                    loading
-                      ? "Checking library..."
-                      : isInLibrary
-                        ? "Remove from Library"
-                        : "Add to Library"
-                  }
-                  withArrow
-                  disabled={isMobile || loading}
-                >
-                  <ActionIcon
-                    size="lg"
-                    radius="xl"
-                    variant="filled"
-                    color={loading ? "gray" : isInLibrary ? "red" : "green"}
-                    disabled={loading || addingToLibrary}
-                    onClick={handleRemoveFromLibrary}
-                  >
-                    {loading || isInLibrary === null ? (
-                      <Ellipsis size={18} strokeWidth={2.5} />
-                    ) : isInLibrary ? (
-                      <Minus size={18} strokeWidth={2.5} />
-                    ) : (
-                      <Plus size={18} strokeWidth={2.5} />
-                    )}
-                  </ActionIcon>
-                </Tooltip>
-              )}
-            </div>
-
-            <div className={classes.quickLog}>
-              {variant === "library" && (
-                <Tooltip
-                  label="Quick Log"
-                  events={{ hover: true, focus: true, touch: true }}
-                  withArrow
-                >
-                  <ActionIcon
-                    size="lg"
-                    radius="xl"
-                    variant="filled"
-                    color="blue"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      open();
-                    }}
-                  >
-                    {" "}
-                    <CalendarDays size={18} />{" "}
-                  </ActionIcon>
-                </Tooltip>
-              )}
-            </div>
-
-            <EditGameInfoModal
-              opened={editOpened}
-              onClose={editClose}
-              libraryGame={libraryGame}
-              onSuccess={() => close()}
-            />
-
-            <div className={classes.editInfo}>
-              {variant === "library" && (
-                <Tooltip
-                  label="Edit Info"
-                  events={{ hover: true, focus: true, touch: true }}
-                  withArrow
-                >
-                  <ActionIcon
-                    size="lg"
-                    radius="xl"
-                    variant="filled"
-                    color="violet"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      editOpen();
-                    }}
-                  >
-                    {" "}
-                    <ClipboardEdit size={18} />{" "}
-                  </ActionIcon>
-                </Tooltip>
-              )}
-            </div>
-          </div>
-        </div>
       </div>
 
       {variant === "library" && (
-        <div className={classes.gameInfo}>
+        <div className={classes.libraryGameInfo}>
           <h3 className={classes.gameTitle}>{game.name}</h3>
 
           <div className={classes.ratingSection}>
             <Group justify="space-between" align="center" wrap="nowrap">
+              <Group gap={4} align="center">
+                <Timer size={15} color="white" />
+                <Text className={classes.hoursPlayedText}>
+                  {libraryMeta?.hours || 0} Hours
+                </Text>
+              </Group>
+
               <Group gap={6} align="center" wrap="nowrap">
                 <Tooltip label={libraryMeta?.platform}>
                   <ActionIcon variant="transparent" size="lg">
@@ -598,13 +448,52 @@ export default function GameCard({
                 </Text>
               </Group>
             </Group>
+          </div>
 
-            <Group gap={4} align="center">
-              <Timer size={20} color="white" />
-              <Text className={classes.hoursPlayedText}>
-                {libraryMeta?.hours || 0} Hours Played
-              </Text>
-            </Group>
+          <div className={classes.cardButtons}>
+            <PlaySessionModal
+              key={game.id}
+              opened={opened}
+              onClose={close}
+              gameId={game.id}
+              gameName={game.name}
+              onSuccess={() => close()}
+            />
+
+            <EditGameInfoModal
+              opened={editOpened}
+              onClose={editClose}
+              libraryGame={libraryGame}
+              onSuccess={() => close()}
+            />
+
+            <Button
+              size="xs"
+              fullWidth
+              className={classes.logAction}
+              variant="filled"
+              leftSection={<CalendarDays size={17} />}
+              onClick={(e) => {
+                e.stopPropagation();
+                open();
+              }}
+            >
+              Log
+            </Button>
+
+            <Button
+              className={classes.editAction}
+              size="xs"
+              fullWidth
+              variant="outline"
+              leftSection={<ClipboardEdit size={17} />}
+              onClick={(e) => {
+                e.stopPropagation();
+                editOpen();
+              }}
+            >
+              Edit
+            </Button>
           </div>
         </div>
       )}
@@ -624,31 +513,6 @@ export default function GameCard({
             {game.genres?.[0]?.name || "N/A"}
           </Badge>
 
-          <Group gap={8}>
-            {visiblePlatforms.map((platform) => (
-              <Tooltip key={platform.name} label={platform.name} withArrow>
-                <ActionIcon variant="subtle" size="md">
-                  {getPlatformIcon(platform.name)}
-                </ActionIcon>
-              </Tooltip>
-            ))}
-
-            {remainingPlatforms > 0 && (
-              <Tooltip
-                withArrow
-                multiline
-                label={platforms
-                  .slice(3)
-                  .map((p) => p.name)
-                  .join(", ")}
-              >
-                <Badge variant="light" color="gray">
-                  +{remainingPlatforms}
-                </Badge>
-              </Tooltip>
-            )}
-          </Group>
-
           <p className={classes.gameDate}>
             {game.first_release_date
               ? new Date(game.first_release_date * 1000).toLocaleDateString(
@@ -661,6 +525,39 @@ export default function GameCard({
                 )
               : "N/A"}
           </p>
+
+          <div className={classes.cardButtons}>
+            {shouldRenderAddModal && (
+              <AddToLibraryModal
+                opened={AddOpened}
+                onClose={closeAddModal}
+                game={game}
+                onSuccess={() => {
+                  closeAddModal();
+                  onSuccess?.();
+                }}
+              />
+            )}
+            <Button
+              className={classes.addAction}
+              size="xs"
+              fullWidth
+              variant="outline"
+              color={loading ? "gray" : isInLibrary ? "#e65656" : "#24f149"}
+              disabled={loading || addingToLibrary}
+              leftSection={<Plus size={17} />}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (isInLibrary) {
+                  openDeleteModal();
+                } else {
+                  openAddModal();
+                }
+              }}
+            >
+              {isInLibrary ? "Remove" : "Add"}
+            </Button>
+          </div>
         </div>
       )}
     </div>
