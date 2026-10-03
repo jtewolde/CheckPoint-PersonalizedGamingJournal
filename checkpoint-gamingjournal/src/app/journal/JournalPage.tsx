@@ -282,7 +282,6 @@ export default function Journal() {
             styles={{
               header: {
                 marginBottom: "10px",
-                borderBottom: "1px solid #5f4670",
               },
               body: {
                 display: "flex",

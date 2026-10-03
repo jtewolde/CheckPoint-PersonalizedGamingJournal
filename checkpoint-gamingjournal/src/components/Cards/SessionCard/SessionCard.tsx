@@ -131,9 +131,6 @@ export default function PlaySessionCard({
       },
 
       styles: {
-        header: {
-          borderBottom: "1px solid #5e427b",
-        },
         title: {
           fontSize: "18px",
           fontWeight: 600,
