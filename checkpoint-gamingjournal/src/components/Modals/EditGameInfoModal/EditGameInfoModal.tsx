@@ -21,6 +21,7 @@ import { DatePickerInput } from "@mantine/dates";
 import { toast } from "react-toastify";
 
 import {
+  Trash2,
   CalendarDays,
   Check,
   Pause,
@@ -35,7 +36,7 @@ import {
 
 import classes from "./EditGameInfoModal.module.css";
 
-// Define the props for the Edit Game Info Modal that takes teh
+// Define the props for the Edit Game Info Modal that takes in the opened state, onClose function, game object, libraryGames array, libraryGame object, and onSuccess function
 interface EditGameInfoModalProps {
   opened: boolean;
   onClose: () => void;
@@ -262,24 +263,37 @@ export default function EditGameInfoModal({
             <Stack gap={3}>
               <Text className={classes.sectionText}>Rating</Text>
 
-              <Group gap={7}>
-                <Rating
-                  size="lg"
-                  count={10}
-                  fractions={2}
-                  value={rating}
-                  onChange={setRating}
-                />
+              <div className={classes.fieldRow}>
+                <Group gap={7}>
+                  <Rating
+                    size="lg"
+                    count={10}
+                    fractions={2}
+                    value={rating}
+                    onChange={setRating}
+                  />
 
-                <Text size="md" c="white">
-                  {rating}/10
-                </Text>
-              </Group>
+                  <Text size="md" c="white">
+                    {rating}/10
+                  </Text>
+                </Group>
+
+                {/* Platinum */}
+                <Checkbox
+                  size="md"
+                  label="Platinum Achieved"
+                  checked={isPlatinum}
+                  onChange={(event) =>
+                    setIsPlatinum(event.currentTarget.checked)
+                  }
+                />
+              </div>
             </Stack>
 
-            {/* Platform */}
-            <div className={classes.platformContainer}>
+            <div className={classes.fieldRow}>
+              {/* Platform */}
               <Select
+                className={classes.platformSelect}
                 size="md"
                 label="Platform Played"
                 placeholder="Select"
@@ -290,6 +304,24 @@ export default function EditGameInfoModal({
                 value={platform}
                 onChange={(value) => setPlatform(value || "")}
                 searchable
+                styles={{
+                  label: {
+                    color: "white",
+                    fontSize: "16px",
+                    fontFamily: "Inter",
+                  },
+                }}
+              />
+
+              <NumberInput
+                className={classes.hoursInput}
+                label="Hours Played"
+                size="md"
+                leftSection={<Clock size={20} />}
+                placeholder="Enter hours"
+                min={0}
+                value={hours}
+                onChange={(value) => setHours(Number(value) || 0)}
                 styles={{
                   label: {
                     color: "white",
@@ -333,27 +365,6 @@ export default function EditGameInfoModal({
               </div>
             </Stack>
 
-            {/* Playtime */}
-            <Stack gap="xs">
-              <NumberInput
-                label="Hours Played"
-                size="md"
-                leftSection={<Clock size={20} />}
-                description="Record your total playtime and watch your gaming journey grow over time."
-                placeholder="Enter hours"
-                min={0}
-                value={hours}
-                onChange={(value) => setHours(Number(value) || 0)}
-                styles={{
-                  label: {
-                    color: "white",
-                    fontSize: "16px",
-                    fontFamily: "Inter",
-                  },
-                }}
-              />
-            </Stack>
-
             {/* Notes */}
             <Textarea
               size="sm"
@@ -373,18 +384,9 @@ export default function EditGameInfoModal({
               }}
               disabled={!activeGame}
             />
-
-            {/* Platinum */}
-            <Checkbox
-              size="md"
-              label="Platinum Achieved"
-              checked={isPlatinum}
-              onChange={(event) => setIsPlatinum(event.currentTarget.checked)}
-            />
           </Stack>
 
-          <Divider labelPosition="center" color="dimmed" mt="md" />
-
+          <Divider color="dimmed" mt="md" />
           {/* Footer */}
           <div className={classes.footer}>
             <Button
