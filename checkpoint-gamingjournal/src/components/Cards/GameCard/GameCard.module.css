@@ -108,57 +108,14 @@
   background-color: #292828;
 }
 
-.overlay {
+.platformIcon {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(15, 15, 15, 0.4);
-  opacity: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.3s ease;
-}
-
-.quickButtons {
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-
-  z-index: 2;
-}
-
-.quickAdd {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-
-  z-index: 2;
-}
-
-.quickLog,
-.quickAdd {
-  opacity: 0;
-  transform: scale(0.9);
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
-}
-
-.imageWrapper:hover .quickAdd,
-.imageWrapper:hover .quickLog {
-  opacity: 1;
-  transform: scale(1);
+  align-self: center;
+  bottom: 0px;
+  left: 0px;
+  z-index: 5;
+  backdrop-filter: blur(6px);
+  background-color: #171717;
 }
 
 .gameInfo {

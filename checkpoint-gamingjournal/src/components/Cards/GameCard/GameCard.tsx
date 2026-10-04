@@ -17,8 +17,6 @@ import {
   Tooltip,
   ActionIcon,
   Rating,
-  Menu,
-  Modal,
   Button,
   Text,
   ThemeIcon,
@@ -28,8 +26,6 @@ import { toast } from "react-toastify";
 
 import {
   Plus,
-  Minus,
-  Ellipsis,
   Trophy,
   ClipboardEdit,
   Star,
@@ -105,6 +101,7 @@ interface GameCardProps {
   }) => void;
   onAddToLibrary?: (game: any) => void;
   onSuccess?: () => void;
+  onRemoveFromLibrary?: (gameId: string) => void;
   variant?: GameCardVariant;
 }
 
@@ -114,6 +111,7 @@ export default function GameCard({
   variant = "default",
   libraryMeta,
   onSuccess,
+  onRemoveFromLibrary,
 }: GameCardProps) {
   const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
   const [opened, { open, close }] = useDisclosure(false);
@@ -134,11 +132,6 @@ export default function GameCard({
   const { isInLibrary } = useLibraryGame(game.id);
   const [loading, setLoading] = useState(false);
   const [addingToLibrary, setAddingtoLibrary] = useState(false);
-
-  // Prepare platform data for display, showing up to 3 platforms and indicating if there are more.
-  const platforms = game.platforms ?? [];
-  const visiblePlatforms = platforms.slice(0, 3);
-  const remainingPlatforms = platforms.length - visiblePlatforms.length;
 
   const shouldRenderAddModal = variant !== "library";
 
@@ -239,7 +232,7 @@ export default function GameCard({
 
     // Windows / PC
     if (name.includes("windows") || name === "pc")
-      return <FaWindows size={18} />;
+      return <FaWindows size={15} />;
 
     // Apple
     if (name.includes("mac")) return <FaApple size={18} />;
@@ -263,26 +256,15 @@ export default function GameCard({
     if (name.includes("switch") || name.includes("nintendo"))
       return <BsNintendoSwitch size={18} />;
 
-    // PlayStation
-    if (name.includes("playstation 5") || name.includes("ps5"))
-      return <SiPlaystation5 size={39} />;
-
-    if (name.includes("playstation 4") || name.includes("ps4"))
-      return <SiPlaystation4 size={39} />;
-
-    if (name.includes("playstation 3") || name.includes("ps3"))
-      return <SiPlaystation3 size={39} />;
-
-    if (name.includes("playstation 2") || name.includes("ps2"))
-      return <SiPlaystation2 size={30} />;
-
-    if (name.includes("playstation")) return <SiPlaystation size={30} />;
-
-    if (name.includes("playstation vita"))
-      return <SiPlaystationvita size={18} />;
-
-    if (name.includes("playstation portable"))
-      return <SiPlaystationportable size={18} />;
+    // PlayStation — use one consistent icon for every generation
+    if (
+      name.includes("playstation") ||
+      /\bps[2354]\b/.test(name) ||
+      name.includes("ps vita") ||
+      name.includes("psp")
+    ) {
+      return <SiPlaystation size={20} />;
+    }
 
     // Xbox
     if (
@@ -290,7 +272,7 @@ export default function GameCard({
       name.includes("series x") ||
       name.includes("series s")
     )
-      return <FaXbox size={18} />;
+      return <FaXbox size={15} />;
 
     return null;
   };
@@ -305,7 +287,7 @@ export default function GameCard({
     }
 
     if (isInLibrary) {
-      handleRemoveFromLibrary();
+      openDeleteModal();
     } else {
       openAddModal();
     }
@@ -409,6 +391,20 @@ export default function GameCard({
                 <FaTrophy size={20} color="gold" cursor="pointer" />
               </ThemeIcon>
             )}
+
+            {libraryMeta?.platform && (
+              <Tooltip label={libraryMeta.platform} position="top" withArrow>
+                <ThemeIcon
+                  className={classes.platformIcon}
+                  size="lg"
+                  radius={2}
+                  variant="outline"
+                  color="white"
+                >
+                  {getPlatformIcon(libraryMeta.platform)}
+                </ThemeIcon>
+              </Tooltip>
+            )}
           </>
         )}
       </div>
@@ -424,14 +420,6 @@ export default function GameCard({
                 <Text className={classes.hoursPlayedText}>
                   {libraryMeta?.hours || 0} Hours
                 </Text>
-              </Group>
-
-              <Group gap={6} align="center" wrap="nowrap">
-                <Tooltip label={libraryMeta?.platform}>
-                  <ActionIcon variant="transparent" size="lg">
-                    {getPlatformIcon(libraryMeta?.platform ?? "")}
-                  </ActionIcon>
-                </Tooltip>
               </Group>
 
               <Group gap={6} align="center" wrap="nowrap">
