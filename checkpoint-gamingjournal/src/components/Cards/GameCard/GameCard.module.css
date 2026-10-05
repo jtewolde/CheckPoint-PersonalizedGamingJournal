@@ -24,6 +24,10 @@
   width: 105%;
 }
 
+.remove {
+  width: 95%;
+}
+
 .library {
   border: 1px solid #3d3853;
   object-fit: contain;
@@ -37,17 +41,60 @@
   overflow: hidden;
 }
 
-.imageWrapper {
+.imageWrapper,
+.removeImageWrapper {
   position: relative;
-  aspect-ratio: 5/6;
   overflow: hidden;
   cursor: pointer;
   flex-shrink: 0;
 }
 
+.imageWrapper {
+  aspect-ratio: 3/4;
+}
+
+.removeImageWrapper {
+  aspect-ratio: 4/5;
+}
+
 .imageWrapper:hover .overlay {
   opacity: 1;
   border: 2px solid rgb(77, 76, 76);
+}
+
+.remove {
+  cursor: pointer;
+  transition:
+    transform 150ms ease,
+    border-color 150ms ease;
+}
+
+.remove:hover {
+  transform: translateY(-2px);
+}
+
+.nonClickable {
+  cursor: pointer;
+}
+
+.selected {
+  outline: 2px solid #fa5252;
+  outline-offset: 2px;
+}
+
+.selectionIndicator {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #fa5252;
+  border: 2px solid white;
 }
 
 .gameNameText {
@@ -161,6 +208,16 @@
   white-space: nowrap;
 }
 
+.removeGameTitle {
+  width: 100%;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgb(255, 255, 255);
+  font-family: "Inter";
+  text-align: center;
+  line-height: 1.2;
+}
+
 .gameDate {
   font-size: 12px;
   font-weight: 500;
@@ -238,6 +295,10 @@
   .gameCard {
     width: 100%;
     height: auto;
+  }
+
+  .remove {
+    width: 90%;
   }
 
   .gameTitle {

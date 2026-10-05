@@ -48,23 +48,21 @@ import {
   FaTrophy,
   FaGoogle,
 } from "react-icons/fa";
-import {
-  SiPlaystation,
-  SiPlaystation2,
-  SiPlaystation3,
-  SiPlaystation4,
-  SiPlaystation5,
-  SiPlaystationportable,
-  SiPlaystationvita,
-} from "react-icons/si";
-import { BsNintendoSwitch, BsPc } from "react-icons/bs";
+import { SiPlaystation } from "react-icons/si";
+import { BsNintendoSwitch } from "react-icons/bs";
 
 import PlaceHolderImage from "../../../../public/no-cover-image.png";
 import classes from "./GameCard.module.css";
 
 // Create type variable to determine which variant of gameCard, default for search results and more info
 // Compact for Popular and Trending games sections with less info
-type GameCardVariant = "default" | "compact" | "small" | "library" | "upcoming";
+type GameCardVariant =
+  | "default"
+  | "compact"
+  | "small"
+  | "library"
+  | "upcoming"
+  | "remove";
 
 // Define the GameCard component that takes a game prop and attributes
 interface GameCardProps {
@@ -102,6 +100,9 @@ interface GameCardProps {
   onAddToLibrary?: (game: any) => void;
   onSuccess?: () => void;
   onRemoveFromLibrary?: (gameId: string) => void;
+  selectable?: boolean;
+  selected?: boolean;
+  onSelect?: (gameId: string) => void;
   variant?: GameCardVariant;
 }
 
@@ -112,6 +113,9 @@ export default function GameCard({
   libraryMeta,
   onSuccess,
   onRemoveFromLibrary,
+  selectable = false,
+  selected = false,
+  onSelect,
 }: GameCardProps) {
   const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
   const [opened, { open, close }] = useDisclosure(false);
@@ -126,7 +130,6 @@ export default function GameCard({
   const anyModalOpen = opened || editOpened || AddOpened || deleteOpened;
 
   const router = useRouter();
-  const isMobile = useMediaQuery("(max-width: 646px)");
 
   // State variables for determing if current gameCard is in the user's library
   const { isInLibrary } = useLibraryGame(game.id);
@@ -142,7 +145,9 @@ export default function GameCard({
 
       const token = localStorage.getItem("bearer_token");
 
-      const res = await fetch(`/api/library/${libraryGame.gameId}`, {
+      const gameId = libraryGame?.gameId ?? game.id;
+
+      const res = await fetch(`/api/library/${gameId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -159,6 +164,7 @@ export default function GameCard({
       onSuccess?.();
     } catch (err) {
       toast.error("Failed to remove game.");
+      console.error("Error removing game from library:", err);
     } finally {
       setLoading(false);
     }
@@ -287,7 +293,7 @@ export default function GameCard({
     }
 
     if (isInLibrary) {
-      openDeleteModal();
+      handleRemoveFromLibrary();
     } else {
       openAddModal();
     }
@@ -296,15 +302,43 @@ export default function GameCard({
   return (
     <div
       key={game.id}
-      className={`${classes.gameCard} ${variant === "compact" ? classes.compact : variant === "small" ? classes.small : variant === "library" ? classes.library : classes.default}`}
+      className={`${classes.gameCard} ${
+        variant === "remove"
+          ? classes.remove
+          : variant === "compact"
+            ? classes.compact
+            : variant === "small"
+              ? classes.small
+              : variant === "library"
+                ? classes.library
+                : classes.default
+      } ${selected ? classes.selected : ""}`}
     >
       <div
-        className={classes.imageWrapper}
+        className={`${classes.imageWrapper} ${
+          selectable
+            ? classes.nonClickable
+            : variant === "remove"
+              ? classes.removeImageWrapper
+              : ""
+        }`}
         onClick={() => {
+          if (selectable) {
+            onSelect?.(game.id);
+            return;
+          }
+
           if (anyModalOpen) return;
+
           router.push(`/games/${game.id}`);
         }}
       >
+        {variant === "remove" && selected && (
+          <div className={classes.selectionIndicator}>
+            <Check size={20} color="white" />
+          </div>
+        )}
+
         <Image
           src={
             game.cover
@@ -486,6 +520,12 @@ export default function GameCard({
         </div>
       )}
 
+      {variant === "remove" && (
+        <div className={classes.gameInfo}>
+          <h3 className={classes.removeGameTitle}>{game.name}</h3>
+        </div>
+      )}
+
       {showGameInfo && (
         <div className={classes.gameInfo}>
           <h3 className={classes.gameTitle}>{game.name}</h3>
@@ -534,14 +574,7 @@ export default function GameCard({
               color={loading ? "gray" : isInLibrary ? "#e65656" : "#24f149"}
               disabled={loading || addingToLibrary}
               leftSection={<Plus size={17} />}
-              onClick={(e) => {
-                e.stopPropagation();
-                if (isInLibrary) {
-                  openDeleteModal();
-                } else {
-                  openAddModal();
-                }
-              }}
+              onClick={handleQuickLibraryAction}
             >
               {isInLibrary ? "Remove" : "Add"}
             </Button>
