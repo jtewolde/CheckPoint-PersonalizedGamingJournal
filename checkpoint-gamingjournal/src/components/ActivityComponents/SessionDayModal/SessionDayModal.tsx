@@ -31,6 +31,17 @@ export default function SessionDayModal({
     setLocalSessions(sessions);
   }, [sessions]);
 
+  // Format session date to be displayed as "MMM DD, YYYY"
+  const formatDate = (date: string) => {
+    const [year, month, day] = date.split("-").map(Number);
+
+    return new Date(year, month - 1, day).toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
   // Get sessions for selected date to display in modal
   const sessionsForDate = localSessions;
 
@@ -39,7 +50,10 @@ export default function SessionDayModal({
       opened={opened}
       onClose={onClose}
       size="xl"
-      title={"Play Sessions on " + (selectedDate || "No Date Selected")}
+      title={
+        "Play Sessions on " +
+        (selectedDate ? formatDate(selectedDate) : "No Date Selected")
+      }
       styles={{
         title: {
           fontFamily: "Barlow",
@@ -64,7 +78,7 @@ export default function SessionDayModal({
         {sessionsForDate.map((s) => {
           return (
             <div key={s._id} className={classes.cardsWrapper}>
-              <PlaySessionCard session={s} variant="compact" />
+              <PlaySessionCard session={s} variant="sessions" color="#672adf" />
             </div>
           );
         })}

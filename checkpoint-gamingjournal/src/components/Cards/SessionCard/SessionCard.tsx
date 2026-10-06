@@ -82,16 +82,18 @@ export default function PlaySessionCard({
     return `${hours}h ${remainingMinutes}m`;
   };
 
-  // Format session date
+  // Format session date to be displayed as "MMM DD, YYYY"
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString("en-US", {
+    const [year, month, day] = date.split("-").map(Number);
+
+    return new Date(year, month - 1, day).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
     });
   };
 
-  // Session types
+  // Determine the session types, defaulting to ["Other"] if none are provided
   const sessionTypes =
     session.sessionType && session.sessionType.length > 0
       ? session.sessionType
@@ -146,11 +148,8 @@ export default function PlaySessionCard({
   const handleDeleteSession = async (sessionId: string) => {
     try {
       setLoading(true);
-
       const toastID = toast.info("Deleting play session...");
-
       const token = localStorage.getItem("bearer_token");
-
       const res = await fetch(`/api/playSession/${sessionId}`, {
         method: "DELETE",
         headers: {
@@ -221,14 +220,17 @@ export default function PlaySessionCard({
         )}
 
         {/* CONTENT */}
-        <div className={classes.header} onClick={(e) => e.stopPropagation()}>
-          {/* TOP ROW */}
+        <div className={classes.header}>
+          {/* GAME NAME + ACTIONS */}
           <div className={classes.headerRow}>
-            <Text className={classes.gameName} onClick={handleViewGame}>
+            <Text
+              className={classes.gameName}
+              onClick={handleViewGame}
+              lineClamp={1}
+            >
               {session.gameName}
             </Text>
 
-            {/* ACTION MENU */}
             <Menu shadow="md" width={180} position="bottom-end" withinPortal>
               <Menu.Target>
                 <ActionIcon
@@ -280,17 +282,15 @@ export default function PlaySessionCard({
             </Menu>
           </div>
 
-          {/* DATE + DURATION */}
-          <Group gap="md" wrap="wrap">
+          {/* SESSION METADATA */}
+          <Group gap="sm" wrap="wrap" className={classes.metadata}>
             <Group gap={5}>
-              <Calendar size={15} />
-
+              <Calendar size={14} />
               <Text className={classes.date}>{formatDate(session.date)}</Text>
             </Group>
 
             <Group gap={5}>
-              <Timer size={15} />
-
+              <Timer size={14} />
               <Text className={classes.duration}>
                 {formatDuration(session.duration)}
               </Text>
@@ -302,10 +302,10 @@ export default function PlaySessionCard({
           </Group>
 
           {/* SESSION TYPES */}
-          <Group gap={5} wrap="wrap">
+          <Group gap={5} wrap="wrap" className={classes.sessionTypes}>
             <OverflowList
               data={sessionTypes}
-              maxVisibleItems={isMobile ? 1 : 3}
+              maxVisibleItems={isMobile ? 2 : 3}
               gap={5}
               renderItem={(type) => (
                 <Badge
@@ -326,12 +326,10 @@ export default function PlaySessionCard({
             />
           </Group>
 
-          {/* NOTES PREVIEW */}
+          {/* NOTES */}
           {session.notes && (
-            <Text component="div" className={classes.content}>
-              <Spoiler maxHeight={40} showLabel="Show More" hideLabel="Hide">
-                {session.notes}
-              </Spoiler>
+            <Text className={classes.notes} lineClamp={2}>
+              {session.notes}
             </Text>
           )}
         </div>
