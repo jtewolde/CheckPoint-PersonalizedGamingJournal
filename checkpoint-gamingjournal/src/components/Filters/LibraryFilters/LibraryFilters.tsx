@@ -24,7 +24,7 @@ type LibraryFiltersVariant = "default" | "small";
 // Define the props for the LibraryFilter component
 interface LibraryFilterProps {
   color?: string;
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "input-lg" | "input-xl";
   radius?: "xs" | "sm" | "md" | "lg" | "xl";
   className?: string;
   variant: LibraryFiltersVariant;
@@ -92,7 +92,7 @@ export default function LibraryFilters({
             radius={radius}
             color={color}
             variant={buttonVariant}
-            leftSection={<Funnel size={30} />}
+            leftSection={<Funnel size={20} />}
             onClick={toggle}
           >
             Filters
@@ -102,12 +102,13 @@ export default function LibraryFilters({
         {variant === "small" && (
           <Tooltip label="Apply Filters" position="top">
             <ActionIcon
+              variant={buttonVariant}
               size={size}
               radius={radius}
               color={color}
               onClick={toggle}
             >
-              <Funnel size={30} />
+              <Funnel size={25} />
             </ActionIcon>
           </Tooltip>
         )}

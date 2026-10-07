@@ -1,14 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
-import { useMediaQuery, useDisclosure } from "@mantine/hooks";
+import { useMediaQuery } from "@mantine/hooks";
 
 import GamePageSearch from "@/components/GamePageSearch/GamePageSearch";
+import RemoveGameModal from "@/components/Modals/RemoveGameModal/RemoveGameModal";
 import LibraryFilters from "@/components/Filters/LibraryFilters/LibraryFilters";
 
-import { SimpleGrid, LoadingOverlay, Select } from "@mantine/core";
+import {
+  SimpleGrid,
+  LoadingOverlay,
+  Select,
+  Button,
+  ActionIcon,
+  EmptyState,
+} from "@mantine/core";
+import { Trash2, Gamepad } from "lucide-react";
 
 import classes from "./library.module.css";
 import GameCard from "@/components/Cards/GameCard/GameCard";
@@ -18,6 +28,8 @@ export default function Library() {
   const [games, setGames] = useState<any[]>([]);
   const [totalGames, setTotalGames] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  const [opened, { open, close }] = useDisclosure(false);
 
   // State variables for filtering library based on status, rating, and platinum
   const [selectedStatus, setSelectedStatus] = useState("all");
@@ -72,6 +84,7 @@ export default function Library() {
     fetchUserGames();
   }, []);
 
+  // Filter and sort the user's games based on search, status, rating, platinum, platform, and sort option
   const filteredGames = games
     .filter((game) => {
       // Search
@@ -146,6 +159,8 @@ export default function Library() {
     ...new Set(games.map((game) => game.platform).filter(Boolean)),
   ].sort();
 
+  // Confirmation modal to confirm game removal from user's library
+
   return (
     <div className={classes.background}>
       <div className={classes.wrapper}>
@@ -154,8 +169,7 @@ export default function Library() {
             <h2 className={classes.title}>Your Library</h2>
           </div>
           <p className={classes.subtitle}>
-            {" "}
-            Manage your collection and track your progress.{" "}
+            Manage your collection and track your progress.
           </p>
         </div>
 
@@ -206,11 +220,22 @@ export default function Library() {
             </div>
 
             <div className={classes.filterContainer}>
+              <div className={classes.removeButtonContainer}>
+                <ActionIcon
+                  size="input-lg"
+                  variant="outline"
+                  color="#e72a2a"
+                  onClick={open}
+                >
+                  <Trash2 size={25} />
+                </ActionIcon>
+              </div>
+
               <LibraryFilters
                 className={classes.filterButton}
-                size={isMobile ? "xl" : "lg"}
+                size={isMobile ? "input-lg" : "lg"}
                 variant={isMobile ? "small" : "default"}
-                buttonVariant="filled"
+                buttonVariant="outline"
                 totalGames={totalGames}
                 status={selectedStatus}
                 ratedOnly={filterRating}
@@ -224,6 +249,12 @@ export default function Library() {
               />
             </div>
           </div>
+
+          <RemoveGameModal
+            opened={opened}
+            onClose={close}
+            libraryGames={games}
+          />
         </div>
 
         {filteredGames.length > 0 && (
@@ -266,9 +297,13 @@ export default function Library() {
         )}
 
         {!loading && filteredGames.length === 0 && (
-          <p className={classes.noGamesText}>
-            No games found for the selected status.
-          </p>
+          <EmptyState
+            icon={<Gamepad />}
+            size="lg"
+            withIndicatorBackground
+            title="No games found"
+            description="No games were found in your library based on the selected filters."
+          />
         )}
       </div>
     </div>
