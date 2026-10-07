@@ -29,6 +29,7 @@ import {
   Timer,
   Calendar,
   Gamepad,
+  Smile,
 } from "lucide-react";
 
 import PlaceHolderImage from "../../../../public/no-cover-image.png";
@@ -168,8 +169,7 @@ export default function PlaySessionCard({
       });
 
       setLoading(false);
-
-      router.refresh();
+      router.push("/dashboard");
     } catch (error) {
       setLoading(false);
 
@@ -296,8 +296,11 @@ export default function PlaySessionCard({
               </Text>
             </Group>
 
-            {session.platform && (
-              <Text className={classes.platform}>{session.platform}</Text>
+            {session.mood && (
+              <Group gap={5}>
+                <Smile size={14} />
+                <Text className={classes.mood}>{session.mood}</Text>
+              </Group>
             )}
           </Group>
 
@@ -311,6 +314,7 @@ export default function PlaySessionCard({
                 <Badge
                   color="violet"
                   variant="light"
+                  size="sm"
                   radius="md"
                   fw={500}
                   key={type}

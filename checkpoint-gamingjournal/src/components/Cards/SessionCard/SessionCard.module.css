@@ -51,8 +51,10 @@
 }
 
 .date,
-.duration {
+.duration,
+.mood {
   font-size: 13px;
+  font-family: "Inter";
 }
 
 .platform {

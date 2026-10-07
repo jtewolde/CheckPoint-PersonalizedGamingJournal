@@ -37,6 +37,7 @@ type PlaySessionModalProps = {
   onClose: () => void;
   gameId?: string;
   gameName?: string;
+  coverImage?: string;
   session?: PlaySession | null;
   onSuccess?: (session: PlaySession) => void;
   onSessionCreated?: () => void;
@@ -48,7 +49,7 @@ export default function PlaySessionModal({
   gameId,
   session,
   gameName,
-  onSuccess,
+  coverImage,
   onSessionCreated,
 }: PlaySessionModalProps) {
   // State variables to hold info on play time duration using hours and minutes inputs
@@ -67,10 +68,9 @@ export default function PlaySessionModal({
 
   // State variables to hold selected game and user's game library for the select dropdown in the modal
   const [selectedGameName, setSelectedGameName] = useState(gameName || "");
-  const [gameCover, setGameCover] = useState("");
+  const [gameCover, setGameCover] = useState(coverImage || "");
   const [selectedGameId, setSelectedGameId] = useState(gameId || "");
   const [userGames, setUserGames] = useState<any[]>([]);
-  const [availablePlatforms, setAvailablePlatforms] = useState<string[]>([]);
 
   // Helper function to quickly reset the all of the info on the form
   const resetForm = () => {
@@ -119,39 +119,37 @@ export default function PlaySessionModal({
     if (!opened) return;
 
     if (session) {
+      // Editing an existing session
       setSelectedGameId(session.gameId || "");
       setSelectedGameName(session.gameName || "");
+
+      setGameCover(session.coverImage || "");
+
       setSessionType(session.sessionType || []);
       setPlaySessionNotes(session.notes || "");
       setPlaySessionDate(session.date ?? null);
       setMood(session.mood || []);
 
-      const game = userGames.find((g) => g.gameId === session.gameId);
-
-      // If the session has a game cover, set it for the entry
-      // Otherwise, find the matching game from library and set cover image for entry
-      if (session.coverImage) {
-        setGameCover(session.coverImage);
-      } else {
-        const matchingGame = userGames.find(
-          (game) => game.gameId === session.gameId,
-        );
-
-        console.log("Matching Game for Cover Image:", matchingGame);
-        console.log("User Games:", userGames);
-
-        if (matchingGame?.coverImage) {
-          setGameCover(matchingGame.coverImage);
-        }
-      }
-
       setHours(Math.floor(session.duration / 60));
       setMinutes(session.duration % 60);
-    } else if (!playSessionNotes) {
-      setSelectedGameId(gameId || "");
-      setSelectedGameName(gameName || "");
+
+      return;
     }
-  }, [opened, gameId, gameName, session, userGames, playSessionNotes]);
+
+    // Creating a new session from a GameCard
+    if (gameId) {
+      setSelectedGameId(gameId);
+      setSelectedGameName(gameName || "");
+      setGameCover(coverImage || "");
+
+      return;
+    }
+
+    // Creating a new Quick Log session
+    setSelectedGameId("");
+    setSelectedGameName("");
+    setGameCover("");
+  }, [opened, session, gameId, gameName, coverImage]);
 
   // Function to handle creating or updating a play session for a game
   // This will involve opening a modal with a form to input play session details such as duration and notes,
