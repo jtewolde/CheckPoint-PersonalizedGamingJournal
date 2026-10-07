@@ -112,12 +112,12 @@ export default function GameCard({
   variant = "default",
   libraryMeta,
   onSuccess,
-  onRemoveFromLibrary,
   selectable = false,
   selected = false,
   onSelect,
 }: GameCardProps) {
   const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
+  const isMobile = useMediaQuery("(max-width: 646px)");
   const [opened, { open, close }] = useDisclosure(false);
 
   const [editOpened, { open: editOpen, close: editClose }] =
@@ -450,7 +450,7 @@ export default function GameCard({
           <div className={classes.ratingSection}>
             <Group justify="space-between" align="center" wrap="nowrap">
               <Group gap={4} align="center">
-                <Timer size={15} color="white" />
+                <Timer size={isMobile ? 10 : 15} color="white" />
                 <Text className={classes.hoursPlayedText}>
                   {libraryMeta?.hours || 0} Hours
                 </Text>
@@ -479,6 +479,11 @@ export default function GameCard({
               onClose={close}
               gameId={game.id}
               gameName={game.name}
+              coverImage={
+                game.cover
+                  ? `${game.cover.url.replace("t_thumb", "t_1080p")}`
+                  : undefined
+              }
               onSuccess={() => close()}
             />
 
@@ -494,7 +499,7 @@ export default function GameCard({
               fullWidth
               className={classes.logAction}
               variant="filled"
-              leftSection={<CalendarDays size={17} />}
+              leftSection={<CalendarDays size={isMobile ? 10 : 17} />}
               onClick={(e) => {
                 e.stopPropagation();
                 open();
@@ -508,7 +513,7 @@ export default function GameCard({
               size="xs"
               fullWidth
               variant="outline"
-              leftSection={<ClipboardEdit size={17} />}
+              leftSection={<ClipboardEdit size={isMobile ? 10 : 17} />}
               onClick={(e) => {
                 e.stopPropagation();
                 editOpen();

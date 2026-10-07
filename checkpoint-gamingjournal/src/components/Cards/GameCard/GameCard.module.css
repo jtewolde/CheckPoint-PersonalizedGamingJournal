@@ -25,7 +25,7 @@
 }
 
 .remove {
-  width: 95%;
+  width: 100%;
 }
 
 .library {
@@ -78,7 +78,7 @@
 }
 
 .selected {
-  outline: 2px solid #fa5252;
+  outline: 2px solid #f02f2f;
   outline-offset: 2px;
 }
 
@@ -93,7 +93,7 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: #fa5252;
+  background-color: #f02f2f;
   border: 2px solid white;
 }
 
@@ -298,12 +298,16 @@
   }
 
   .remove {
-    width: 90%;
+    width: 100%;
   }
 
   .gameTitle {
     font-size: 0.9rem;
     color: white;
+  }
+
+  .hoursPlayedText {
+    font-size: 12px;
   }
 
   .gameDate {
