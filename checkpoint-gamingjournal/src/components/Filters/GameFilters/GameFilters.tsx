@@ -3,13 +3,11 @@
 import { useState, useEffect } from "react";
 import {
   MultiSelect,
-  Select,
   Drawer,
   Stack,
   Button,
   ActionIcon,
   Tooltip,
-  Divider,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Funnel, RefreshCcw } from "lucide-react";
@@ -20,7 +18,7 @@ type GameFiltersVariant = "default" | "small";
 // Define the props for the GameFilter component
 interface GameFilterProps {
   color?: string;
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "input-lg" | "input-xl";
   radius?: "xs" | "sm" | "md" | "lg" | "xl";
   className?: string;
   variant: GameFiltersVariant;
@@ -129,7 +127,7 @@ export default function GameFilters({
               size={size}
               radius={radius}
               color={color}
-              leftSection={<Funnel size={20} />}
+              leftSection={<Funnel size={25} />}
               onClick={toggle}
             >
               Filters ({numberOfActiveFilters})
@@ -140,12 +138,13 @@ export default function GameFilters({
         {variant === "small" && (
           <Tooltip label="Apply Filters" position="top">
             <ActionIcon
+              variant="outline"
               size={size}
               radius={radius}
               color={color}
               onClick={toggle}
             >
-              <Funnel size={20} />
+              <Funnel size={25} />
             </ActionIcon>
           </Tooltip>
         )}

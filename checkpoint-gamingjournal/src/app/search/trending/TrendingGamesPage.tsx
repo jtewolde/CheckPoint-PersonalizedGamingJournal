@@ -185,7 +185,7 @@ export default function TrendingPage() {
                 <GameFilters
                   className={classes.gameFilters}
                   variant={isMobile ? "small" : "default"}
-                  size={isMobile ? "xl" : "lg"}
+                  size={isMobile ? "input-lg" : "lg"}
                   radius="md"
                   totalGames={total}
                   sortOption={sortOption}
