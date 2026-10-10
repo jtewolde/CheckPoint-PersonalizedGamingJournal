@@ -235,7 +235,7 @@ export default function Library() {
                 className={classes.filterButton}
                 size={isMobile ? "input-lg" : "lg"}
                 variant={isMobile ? "small" : "default"}
-                buttonVariant="outline"
+                buttonVariant={isMobile ? "outline" : "filled"}
                 totalGames={totalGames}
                 status={selectedStatus}
                 ratedOnly={filterRating}
@@ -286,6 +286,7 @@ export default function Library() {
                     status: game.status,
                     rating: game.rating,
                     platinum: game.platinum,
+                    wishlist: game.wishlist,
                     platform: game.platform,
                     hours: game.hours,
                   }}

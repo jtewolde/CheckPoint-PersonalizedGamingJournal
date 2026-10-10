@@ -142,27 +142,25 @@
   font-weight: 600;
 }
 
-.libraryBadge {
+.libraryBadge,
+.wishlistIcon,
+.platinumIcon {
   background-color: #171717;
 }
 
-.platinumIcon {
+.collectionIcons {
   position: absolute;
   top: 0px;
   right: 0px;
-  z-index: 5;
-  backdrop-filter: blur(6px);
-  background-color: #292828;
+  z-index: 2;
+  display: flex;
+  align-items: center;
 }
 
-.platformIcon {
-  position: absolute;
-  align-self: center;
-  bottom: 0px;
-  left: 0px;
-  z-index: 5;
-  backdrop-filter: blur(6px);
-  background-color: #171717;
+.wishlistIcon,
+.platinumIcon {
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .gameInfo {

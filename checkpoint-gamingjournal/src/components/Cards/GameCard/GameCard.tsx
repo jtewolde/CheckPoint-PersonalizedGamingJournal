@@ -6,7 +6,6 @@ import { useMediaQuery, useDisclosure } from "@mantine/hooks";
 import { useLibraryGame } from "@/hooks/useLibraryGame";
 import { useAuth } from "@/context/Authcontext";
 
-import { modals } from "@mantine/modals";
 import PlaySessionModal from "../../Modals/PlaySessionModal/SessionModal";
 import EditGameInfoModal from "../../Modals/EditGameInfoModal/EditGameInfoModal";
 import AddToLibraryModal from "../../Modals/AddToLibraryModal/AddToLibraryModal";
@@ -36,6 +35,8 @@ import {
   Play,
   Timer,
   CalendarDays,
+  Gem,
+  Gift,
 } from "lucide-react";
 
 import {
@@ -49,6 +50,7 @@ import {
   FaGoogle,
 } from "react-icons/fa";
 import { SiPlaystation } from "react-icons/si";
+import { GiDiamondTrophy } from "react-icons/gi";
 import { BsNintendoSwitch } from "react-icons/bs";
 
 import PlaceHolderImage from "../../../../public/no-cover-image.png";
@@ -87,6 +89,7 @@ interface GameCardProps {
     hours?: number;
     platform: string;
     platinum?: boolean;
+    wishlist?: boolean;
     completionDate?: string;
   };
 
@@ -414,17 +417,38 @@ export default function GameCard({
               {libraryMeta?.status || "No Status"}
             </Badge>
 
-            {libraryMeta?.platinum === true && (
-              <ThemeIcon
-                className={classes.platinumIcon}
-                size="md"
-                radius={2}
-                variant="outline"
-                color="black"
-              >
-                <FaTrophy size={20} color="gold" cursor="pointer" />
-              </ThemeIcon>
-            )}
+            {/* Collection & Achievement Indicators */}
+            <div className={classes.collectionIcons}>
+              {libraryMeta?.wishlist === true && (
+                <Tooltip label="On Wishlist" position="top" withArrow>
+                  <ThemeIcon
+                    className={classes.wishlistIcon}
+                    size="md"
+                    radius={2}
+                    variant="filled"
+                    color="dark"
+                    aria-label="On Wishlist"
+                  >
+                    <Gift size={17} color="#e276de" />
+                  </ThemeIcon>
+                </Tooltip>
+              )}
+
+              {libraryMeta?.platinum === true && (
+                <Tooltip label="Platinum Achieved" position="top" withArrow>
+                  <ThemeIcon
+                    className={classes.platinumIcon}
+                    size="md"
+                    radius={2}
+                    variant="filled"
+                    color="dark"
+                    aria-label="Platinum Achieved"
+                  >
+                    <GiDiamondTrophy size={17} color="#ffffff" />
+                  </ThemeIcon>
+                </Tooltip>
+              )}
+            </div>
 
             {libraryMeta?.platform && (
               <Tooltip label={libraryMeta.platform} position="top" withArrow>
