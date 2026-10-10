@@ -36,6 +36,7 @@ export default function Library() {
   const [selectedPlatform, setSelectedPlatform] = useState("all");
   const [filterRating, setFilterRating] = useState(false);
   const [filterPlatinum, setFilterPlatinum] = useState(false);
+  const [filterWishlist, setFilterWishlist] = useState(false);
   const [sortOption, setSortOption] = useState("release_date_newest");
 
   const isMobile = useMediaQuery("(max-width: 646px)");
@@ -97,6 +98,11 @@ export default function Library() {
         selectedStatus !== "all" &&
         game.status?.toLowerCase() !== selectedStatus
       ) {
+        return false;
+      }
+
+      // Wishlist
+      if (filterWishlist && !game.wishlist) {
         return false;
       }
 
@@ -240,11 +246,13 @@ export default function Library() {
                 status={selectedStatus}
                 ratedOnly={filterRating}
                 platinumOnly={filterPlatinum}
+                wishlistOnly={filterWishlist}
                 platform={selectedPlatform}
                 platforms={availablePlatforms}
                 onStatusChange={setSelectedStatus}
                 onRatedChange={setFilterRating}
                 onPlatinumChange={setFilterPlatinum}
+                onWishlistChange={setFilterWishlist}
                 onPlatformChange={setSelectedPlatform}
               />
             </div>

@@ -34,12 +34,14 @@ interface LibraryFilterProps {
   status: string;
   ratedOnly: boolean;
   platinumOnly: boolean;
+  wishlistOnly: boolean;
   platform: string;
   platforms: string[];
 
   onStatusChange: (value: string) => void;
   onRatedChange: (value: boolean) => void;
   onPlatinumChange: (value: boolean) => void;
+  onWishlistChange: (value: boolean) => void;
   onPlatformChange: (value: string) => void;
 }
 
@@ -55,12 +57,14 @@ export default function LibraryFilters({
   status,
   ratedOnly,
   platinumOnly,
+  wishlistOnly,
   platform,
   platforms,
 
   onStatusChange,
   onRatedChange,
   onPlatinumChange,
+  onWishlistChange,
   onPlatformChange,
 }: LibraryFilterProps) {
   // States for managing the drawer visibility
@@ -72,6 +76,7 @@ export default function LibraryFilters({
     status !== "all",
     ratedOnly,
     platinumOnly,
+    wishlistOnly,
     platform !== "all",
   ].filter(Boolean).length;
 
@@ -80,6 +85,7 @@ export default function LibraryFilters({
     onRatedChange(false);
     onPlatinumChange(false);
     onPlatformChange("all");
+    onWishlistChange(false);
   };
 
   return (
@@ -172,7 +178,6 @@ export default function LibraryFilters({
                 { value: "playing", label: "Playing" },
                 { value: "completed", label: "Completed" },
                 { value: "100%", label: "100% Complete" },
-                { value: "wishlist", label: "Wishlist" },
                 { value: "on hold", label: "On Hold" },
                 { value: "dropped", label: "Dropped" },
               ]}
@@ -225,10 +230,19 @@ export default function LibraryFilters({
               }
             />
 
+            <Switch
+              label="Wishlist Games Only"
+              checked={wishlistOnly}
+              onChange={(event) =>
+                onWishlistChange(event.currentTarget.checked)
+              }
+            />
+
             <Group gap={5} align="flex-end" justify="flex-end">
               <Button
                 variant="filled"
-                color="red"
+                fullWidth
+                color="#cc1313"
                 leftSection={<RefreshCcw size={18} />}
                 onClick={resetFilters}
               >
