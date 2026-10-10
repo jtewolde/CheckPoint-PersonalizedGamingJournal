@@ -12,6 +12,7 @@ import {
   Select,
   Rating,
   Checkbox,
+  CheckboxIconComponent,
   Text,
   NumberInput,
   Divider,
@@ -21,17 +22,16 @@ import { DatePickerInput } from "@mantine/dates";
 import { toast } from "react-toastify";
 
 import {
-  Trash2,
   CalendarDays,
   Check,
   Pause,
   Clock,
   SaveAll,
-  Star,
+  Gem,
+  Gift,
   Trophy,
   Play,
   PowerOff,
-  Gift,
 } from "lucide-react";
 
 import classes from "./EditGameInfoModal.module.css";
@@ -63,6 +63,7 @@ export default function EditGameInfoModal({
   const [status, setStatus] = useState("");
   const [notes, setNotes] = useState("");
   const [isPlatinum, setIsPlatinum] = useState(false);
+  const [isWishlist, setIsWishlist] = useState(false);
   const [platform, setPlatform] = useState("");
   const [hours, setHours] = useState(0);
   const [rating, setRating] = useState(0);
@@ -85,6 +86,7 @@ export default function EditGameInfoModal({
     setStatus(activeGame.status ?? "");
     setNotes(activeGame.notes ?? "");
     setIsPlatinum(activeGame.platinum ?? false);
+    setIsWishlist(activeGame.wishlist ?? false);
     setPlatform(activeGame.platform ?? "");
     setRating(activeGame.rating ?? 0);
     setHours(activeGame.hours ?? "");
@@ -110,6 +112,7 @@ export default function EditGameInfoModal({
             notes,
             platform,
             platinum: isPlatinum,
+            wishlist: isWishlist,
             rating,
             startingDate,
             completionDate,
@@ -142,7 +145,7 @@ export default function EditGameInfoModal({
       value: "Playing",
       label: "Playing",
       description: "Currently playing and actively progressing in the game.",
-      icon: <Play size={25} color="#1969b9" fill="#1969b9" />,
+      icon: <Play size={20} color="#1969b9" fill="#1969b9" />,
       color: "#1969b9",
     },
     {
@@ -150,7 +153,7 @@ export default function EditGameInfoModal({
       label: "Completed",
       description:
         "Finished the main story or reached the game's primary ending",
-      icon: <Check size={25} color="#27a01c" />,
+      icon: <Check size={20} color="#27a01c" />,
       color: "#27a01c",
     },
     {
@@ -158,21 +161,21 @@ export default function EditGameInfoModal({
       label: "100%",
       description:
         "Completed all major content, achievements, collectibles, and optional objectives",
-      icon: <Trophy size={25} fill="yellow" color="yellow" />,
+      icon: <Trophy size={20} fill="yellow" color="yellow" />,
       color: "yellow",
     },
     {
       value: "On Hold",
       label: "On Hold",
       description: "Taking a break from the game with plans to return later.",
-      icon: <Pause size={25} color="violet" fill="violet" />,
+      icon: <Pause size={20} color="violet" fill="violet" />,
       color: "violet",
     },
     {
       value: "Dropped",
       label: "Dropped",
       description: "Stopped playing and do not currently plan to continue.",
-      icon: <PowerOff size={25} color="red" />,
+      icon: <PowerOff size={20} color="red" />,
       color: "red",
     },
     {
@@ -183,15 +186,10 @@ export default function EditGameInfoModal({
       icon: <Clock size={25} color="#21eebe" />,
       color: "orange",
     },
-
-    {
-      value: "Wishlist",
-      label: "Wishlist",
-      description: "Interested in playing this game in the future.",
-      icon: <Gift size={25} />,
-      color: "gray",
-    },
   ];
+
+  // Custom icon component for the Checkbox to display a diamond icon when checked
+  const CheckboxIcon: CheckboxIconComponent = (others) => <Gem {...others} />;
 
   return (
     <Modal.Root
@@ -263,31 +261,57 @@ export default function EditGameInfoModal({
             <Stack gap={3}>
               <Text className={classes.sectionText}>Rating</Text>
 
-              <div className={classes.fieldRow}>
-                <Group gap={7}>
-                  <Rating
-                    size="lg"
-                    count={10}
-                    fractions={2}
-                    value={rating}
-                    onChange={setRating}
-                  />
-
-                  <Text size="md" c="white">
-                    {rating}/10
-                  </Text>
-                </Group>
-
-                {/* Platinum */}
-                <Checkbox
-                  size="md"
-                  label="Platinum Achieved"
-                  checked={isPlatinum}
-                  onChange={(event) =>
-                    setIsPlatinum(event.currentTarget.checked)
-                  }
+              <Group gap={7} wrap="wrap">
+                <Rating
+                  size="lg"
+                  count={10}
+                  fractions={2}
+                  value={rating}
+                  onChange={setRating}
                 />
-              </div>
+
+                <Text size="md" c="white">
+                  {rating}/10
+                </Text>
+              </Group>
+            </Stack>
+
+            {/* Collection & Achievements */}
+            <Stack gap="xs">
+              <Text className={classes.sectionText}>
+                Collection & Achievements
+              </Text>
+
+              <Group gap="sm" grow>
+                {/* Wishlist Toggle */}
+                <Button
+                  type="button"
+                  size="md"
+                  radius="md"
+                  variant={isWishlist ? "light" : "default"}
+                  color={isWishlist ? "grape" : "gray"}
+                  leftSection={<Gift size={19} />}
+                  onClick={() => setIsWishlist((prev) => !prev)}
+                  aria-pressed={isWishlist}
+                  className={classes.featureToggle}
+                >
+                  {isWishlist ? "Wishlisted" : "Wishlist"}
+                </Button>
+
+                {/* Platinum Toggle */}
+                <Button
+                  type="button"
+                  size="md"
+                  radius="md"
+                  variant={isPlatinum ? "light" : "default"}
+                  color={isPlatinum ? "blue" : "gray"}
+                  leftSection={<Gem size={19} />}
+                  onClick={() => setIsPlatinum((prev) => !prev)}
+                  className={classes.featureToggle}
+                >
+                  {isPlatinum ? "Platinum Earned" : "Platinum"}
+                </Button>
+              </Group>
             </Stack>
 
             <div className={classes.fieldRow}>
