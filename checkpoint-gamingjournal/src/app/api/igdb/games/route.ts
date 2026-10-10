@@ -209,6 +209,7 @@ export async function GET(req: NextRequest) {
           platforms.slug,
           platforms.abbreviation,
           platforms.platform_logo.url,
+          involved_companies.company.name,
           involved_companies.developer,
           first_release_date,
           release_dates.human,
