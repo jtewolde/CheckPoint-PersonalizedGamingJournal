@@ -8,14 +8,21 @@ import {
   Group,
   Stack,
   Button,
-  Chip,
   Text,
   Paper,
   SimpleGrid,
   Image,
   Fieldset,
   Badge,
+  LoadingOverlay,
+  Textarea,
+  Select,
+  Rating,
+  NumberInput,
+  Divider,
 } from "@mantine/core";
+
+import { DatePickerInput } from "@mantine/dates";
 
 import { toast } from "react-toastify";
 
@@ -27,6 +34,10 @@ import {
   Trophy,
   Play,
   PowerOff,
+  Clock,
+  CalendarDays,
+  Gem,
+  Gift,
   Backpack,
 } from "lucide-react";
 
@@ -47,16 +58,34 @@ export default function AddToLibraryModal({
 }: AddToLibraryModalProps) {
   const isMobile = useMediaQuery("(max-width: 646px)");
   const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
+
+  // State variables for the form fields
   const [status, setStatus] = useState("Backlog");
-  const [platform, setPlatform] = useState<string | null>(null);
+  const [platform, setPlatform] = useState("");
+  const [rating, setRating] = useState(0);
+  const [isPlatinum, setIsPlatinum] = useState(false);
+  const [isWishlist, setIsWishlist] = useState(false);
+  const [hours, setHours] = useState<number | string>(0);
+  const [startingDate, setStartingDate] = useState<string | null>(null);
+  const [completionDate, setCompletionDate] = useState<string | null>(null);
+  const [notes, setNotes] = useState("");
+
   const [loading, setLoading] = useState(false);
+  const activeGame = game;
 
   useEffect(() => {
     if (!opened) return;
 
     setStatus("Backlog");
-    setPlatform(null);
-  }, [opened]);
+    setPlatform("");
+    setRating(0);
+    setIsPlatinum(false);
+    setIsWishlist(false);
+    setHours(0);
+    setStartingDate(null);
+    setCompletionDate(null);
+    setNotes("");
+  }, [opened, game?.id]);
 
   // Define possible game statuses for the Select component in the Modal with descriptions for each status that the user can read
   const gameStatuses = [
@@ -64,55 +93,46 @@ export default function AddToLibraryModal({
       value: "Playing",
       label: "Playing",
       description: "Currently playing and actively progressing in the game.",
-      icon: <Play size={25} color="#1969b9" fill="#1969b9" />,
-      color: "#1969b9",
+      icon: <Play size={22} fill="currentColor" />,
+      color: "#2281f5",
     },
     {
       value: "Completed",
       label: "Completed",
       description:
-        "Finished the main story or reached the game's primary ending",
-      icon: <Check size={25} color="#27a01c" />,
-      color: "#27a01c",
+        "Finished the main story or reached the game's primary ending.",
+      icon: <Check size={22} />,
+      color: "#1fdf1f",
     },
     {
       value: "100%",
       label: "100% Complete",
       description:
-        "Completed all major content, achievements, collectibles, and optional objectives",
-      icon: <Trophy size={25} fill="yellow" color="yellow" />,
-      color: "yellow",
+        "Completed all major content, achievements, collectibles, and optional objectives.",
+      icon: <Trophy size={22} />,
+      color: "#f5c542",
     },
     {
       value: "On Hold",
       label: "On Hold",
       description: "Taking a break from the game with plans to return later.",
-      icon: <Pause size={25} color="violet" fill="violet" />,
-      color: "violet",
+      icon: <Pause size={22} fill="currentColor" />,
+      color: "#9c6af7",
     },
     {
       value: "Dropped",
       label: "Dropped",
       description: "Stopped playing and do not currently plan to continue.",
-      icon: <PowerOff size={25} color="red" />,
-      color: "red",
-    },
-    {
-      value: "Wishlist",
-      label: "Wishlist",
-      description: "Interested in playing this game in the future.",
-      icon: (
-        <Star size={25} color="rgb(231, 210, 20)" fill="rgb(231, 210, 20)" />
-      ),
-      color: "gold",
+      icon: <PowerOff size={22} />,
+      color: "#f11d1d",
     },
     {
       value: "Backlog",
       label: "Backlog",
       description:
-        "Own or intend to play this game, but not have started it yet.",
-      icon: <Backpack size={25} color="#21eebe" />,
-      color: "orange",
+        "Own or intend to play this game, but have not started it yet.",
+      icon: <Backpack size={22} />,
+      color: "#0cf4dd",
     },
   ];
 
@@ -155,7 +175,13 @@ export default function AddToLibraryModal({
 
             dateAdded: new Date().toLocaleDateString(),
             status: status,
-            platinum: game.platinum,
+            platinum: isPlatinum,
+            wishlist: isWishlist,
+            rating: rating,
+            hoursPLayed: hours,
+            startingDate: startingDate,
+            completionDate: completionDate,
+            notes: notes,
           },
         }),
       });
@@ -165,7 +191,7 @@ export default function AddToLibraryModal({
         throw new Error(error.error);
       }
 
-      toast.success("Game added to your library!");
+      toast.success(`${activeGame?.name} has been added to your library!`);
 
       setLoading(false);
       onSuccess?.();
@@ -179,195 +205,286 @@ export default function AddToLibraryModal({
   };
 
   return (
-    <Modal
+    <Modal.Root
       opened={opened}
       onClose={onClose}
+      centered
       size="xl"
-      title="Add to Library"
-      styles={{
-        title: {
-          fontWeight: 700,
-          fontFamily: "Inter",
-          fontSize: "1.1rem",
-          color: "white",
-        },
-        header: {
-          borderBottom: "1px solid #a595b7",
-        },
-      }}
+      fullScreen={isMobile}
     >
-      {isMobile ? (
-        <Stack align="center" gap="md" mb="lg" mt="lg">
-          <Image
-            src={game?.cover?.url?.replace("t_thumb", "t_cover_big")}
-            w={180}
-            radius="md"
-            className={classes.imageCover}
+      <Modal.Overlay />
+
+      <Modal.Content>
+        <Modal.Header className={classes.header}>
+          <div className={classes.modalHeaderContent}>
+            {activeGame.cover.url && (
+              <img
+                src={activeGame.cover.url}
+                alt={activeGame.title}
+                className={classes.gameCover}
+              />
+            )}
+
+            <div className={classes.gameInfo}>
+              <Modal.Title className={classes.gameTitle}>
+                {activeGame?.name || "Edit Game Info"}
+              </Modal.Title>
+
+              <Group gap={5}>
+                <div className={classes.gameDetails}>
+                  <Text size="xs" c="dimmed" ff="Inter">
+                    {game.involved_companies?.length
+                      ? game.involved_companies
+                          .filter((company: any) => company.developer)
+                          .map((company: any) => company.company?.name)
+                          .filter(Boolean)
+                          .join(", ") || "N/A"
+                      : "N/A"}
+                  </Text>
+                </div>
+
+                {activeGame?.first_release_date && (
+                  <Text size="xs" c="dimmed" ff="Inter">
+                    {new Date(
+                      activeGame.first_release_date * 1000,
+                    ).getFullYear()}
+                  </Text>
+                )}
+              </Group>
+            </div>
+          </div>
+          <Modal.CloseButton />
+        </Modal.Header>
+
+        <Modal.Body mt="md">
+          <LoadingOverlay
+            visible={loading}
+            overlayProps={{ radius: "sm", blur: 2 }}
+            loaderProps={{ size: "lg", color: "white", type: "oval" }}
           />
 
-          <Stack gap={6} flex={1}>
-            <Group gap="lg" align="center">
-              <Text fw={700} size="xl">
-                {game.name}
+          <Stack gap={isMobile ? 30 : "lg"} mb="lg">
+            {/* Status */}
+            <Stack gap="xs">
+              <Text className={classes.sectionText}>Status</Text>
+
+              <div className={classes.statusGrid}>
+                {gameStatuses.map((gameStatus) => {
+                  const isSelected = status === gameStatus.value;
+
+                  return (
+                    <Button
+                      key={gameStatus.value}
+                      type="button"
+                      variant="default"
+                      className={`${classes.statusButton} ${
+                        isSelected ? classes.statusButtonSelected : ""
+                      }`}
+                      onClick={() => setStatus(gameStatus.value)}
+                      aria-pressed={isSelected}
+                      styles={{
+                        root: {
+                          "--status-color": gameStatus.color,
+                        } as React.CSSProperties,
+                      }}
+                    >
+                      <Stack gap={8} align="center" justify="center">
+                        <div className={classes.statusIcon}>
+                          {gameStatus.icon}
+                        </div>
+
+                        <Text className={classes.statusLabel}>
+                          {gameStatus.label}
+                        </Text>
+                      </Stack>
+                    </Button>
+                  );
+                })}
+              </div>
+            </Stack>
+
+            {/* Rating */}
+            <Stack gap={3}>
+              <Text className={classes.sectionText}>Rating</Text>
+
+              <Group gap={7} wrap="wrap">
+                <Rating
+                  size="lg"
+                  count={10}
+                  fractions={2}
+                  value={rating}
+                  onChange={setRating}
+                />
+
+                <Text size="md" c="white">
+                  {rating}/10
+                </Text>
+              </Group>
+            </Stack>
+
+            {/* Collection & Achievements */}
+            <Stack gap="xs">
+              <Text className={classes.sectionText}>
+                Collection & Achievements
               </Text>
 
-              <Text size="lg" c="dimmed">
-                {new Date(game.first_release_date * 1000).getFullYear()}
-              </Text>
-            </Group>
+              <Group gap="sm" grow>
+                {/* Wishlist Toggle */}
+                <Button
+                  type="button"
+                  size="md"
+                  radius="md"
+                  variant={isWishlist ? "light" : "default"}
+                  color={isWishlist ? "grape" : "gray"}
+                  leftSection={<Gift size={19} />}
+                  onClick={() => setIsWishlist((prev) => !prev)}
+                  aria-pressed={isWishlist}
+                  className={classes.featureToggle}
+                >
+                  {isWishlist ? "Wishlisted" : "Wishlist"}
+                </Button>
 
-            <Text size="sm" c="dimmed" mb="sm">
-              {game.summary}
-            </Text>
-
-            <Group gap={8}>
-              {/* Modes */}
-              <Group gap={6}>
-                {game.game_modes?.map((mode: any) => (
-                  <Badge key={mode.id} variant="light" radius="xl" fw={500}>
-                    {mode.name}
-                  </Badge>
-                ))}
+                {/* Platinum Toggle */}
+                <Button
+                  type="button"
+                  size="md"
+                  radius="md"
+                  variant={isPlatinum ? "light" : "default"}
+                  color={isPlatinum ? "blue" : "gray"}
+                  leftSection={<Gem size={19} />}
+                  onClick={() => setIsPlatinum((prev) => !prev)}
+                  className={classes.featureToggle}
+                >
+                  {isPlatinum ? "Platinum Earned" : "Platinum"}
+                </Button>
               </Group>
+            </Stack>
 
-              {/* Genres */}
-              <Group gap={6}>
-                {game.genres?.map((genre: any) => (
-                  <Badge key={genre.id} variant="light" radius="xl" fw={500}>
-                    {genre.name}
-                  </Badge>
-                ))}
-              </Group>
-            </Group>
-          </Stack>
-        </Stack>
-      ) : (
-        <Group align="flex-start" wrap="nowrap" mb="lg" mt="md">
-          <Image
-            src={game?.cover?.url?.replace("t_thumb", "t_cover_big")}
-            w={159}
-            radius="md"
-          />
-
-          <Stack gap={6} flex={1}>
-            <Group gap="lg" align="center">
-              <Text fw={700} size="xl">
-                {game.name}
-              </Text>
-
-              <Text size="lg" c="dimmed">
-                {new Date(game.first_release_date * 1000).getFullYear()}
-              </Text>
-            </Group>
-
-            <Text size="sm" c="dimmed" mb="sm">
-              {game.summary}
-            </Text>
-
-            <Group gap={10}>
-              {/* Modes */}
-              <Group gap={6}>
-                {game.game_modes?.map((mode: any) => (
-                  <Badge
-                    key={mode.id}
-                    variant="light"
-                    color="blue"
-                    radius="xl"
-                    fw={500}
-                  >
-                    {mode.name}
-                  </Badge>
-                ))}
-              </Group>
-
-              {/* Genres */}
-              <Group gap={6}>
-                {game.genres?.map((genre: any) => (
-                  <Badge key={genre.id} variant="light" radius="xl" fw={500}>
-                    {genre.name}
-                  </Badge>
-                ))}
-              </Group>
-            </Group>
-          </Stack>
-        </Group>
-      )}
-      <Fieldset
-        legend="Platform Played On:"
-        radius="lg"
-        variant="filled"
-        styles={{
-          legend: {
-            fontWeight: 500,
-            fontSize: "18px",
-          },
-        }}
-      >
-        <Chip.Group
-          value={platform}
-          onChange={(value) => setPlatform(value as string)}
-        >
-          <Group gap="sm">
-            {game?.platforms?.map((plat: any) => (
-              <Chip
-                key={plat.id}
-                value={plat.name}
-                radius="xl"
-                variant="filled"
+            <div className={classes.fieldRow}>
+              {/* Platform */}
+              <Select
+                className={classes.platformSelect}
                 size="md"
-              >
-                {plat.name}
-              </Chip>
-            ))}
-          </Group>
-        </Chip.Group>
-      </Fieldset>
+                required
+                label="Platform Played"
+                placeholder="Select"
+                data={(game?.platforms ?? []).map(
+                  (plat: { id: number; name: string }) => ({
+                    value: plat.name,
+                    label: plat.name,
+                  }),
+                )}
+                value={platform}
+                onChange={(value) => setPlatform(value || "")}
+                searchable
+                styles={{
+                  label: {
+                    color: "white",
+                    fontSize: "16px",
+                    fontFamily: "Inter",
+                  },
+                }}
+              />
 
-      <div className={classes.statusSection}>
-        <Fieldset
-          legend="Game Status:"
-          radius="lg"
-          variant="filled"
-          styles={{ legend: { fontWeight: 500, fontSize: "18px" } }}
-        >
-          <SimpleGrid cols={{ base: 2, sm: 2, md: 3 }} spacing="sm">
-            {gameStatuses.map((statusItem) => (
-              <Paper
-                key={statusItem.value}
-                radius="md"
-                withBorder
-                onClick={() => setStatus(statusItem.value)}
-                className={
-                  status === statusItem.value
-                    ? classes.selectedCard
-                    : classes.card
-                }
-              >
-                <Stack gap={3} align="center" justify="center" ta="center">
-                  {statusItem.icon}
-                  <div>
-                    <Text className={classes.statusText}>
-                      {statusItem.label}
-                    </Text>
-                  </div>
-                </Stack>
-              </Paper>
-            ))}
-          </SimpleGrid>
-        </Fieldset>
-      </div>
+              <NumberInput
+                className={classes.hoursInput}
+                label="Hours Played"
+                size="md"
+                leftSection={<Clock size={20} />}
+                placeholder="Enter hours"
+                min={0}
+                value={hours}
+                onChange={(value) => setHours(Number(value) || 0)}
+                styles={{
+                  label: {
+                    color: "white",
+                    fontSize: "16px",
+                    fontFamily: "Inter",
+                  },
+                }}
+              />
+            </div>
 
-      <Button
-        fullWidth
-        size="md"
-        radius="md"
-        mt="md"
-        loading={loading}
-        leftSection={<SaveAll size={20} />}
-        onClick={handleAddToLibrary}
-      >
-        Add to Library
-      </Button>
-    </Modal>
+            {/* Play period */}
+            <Stack gap="xs">
+              <div className={classes.fieldRow}>
+                <DatePickerInput
+                  className={classes.startDateSelect}
+                  size="md"
+                  placeholder="(e.g. 5/27/2026)"
+                  label="Start Date"
+                  clearable
+                  leftSection={<CalendarDays size={20} />}
+                  maxDate={new Date()}
+                  // Convert stored string → Date ONLY for display
+                  value={startingDate}
+                  onChange={setStartingDate}
+                  disabled={!activeGame}
+                />
+
+                <DatePickerInput
+                  className={classes.completionDateSelect}
+                  size="md"
+                  placeholder="(e.g. 6/15/2026)"
+                  label="Completion Date"
+                  clearable
+                  leftSection={<CalendarDays size={20} />}
+                  maxDate={new Date()}
+                  // Convert stored string → Date ONLY for display
+                  value={completionDate}
+                  onChange={setCompletionDate}
+                  disabled={!activeGame}
+                />
+              </div>
+            </Stack>
+
+            {/* Notes */}
+            <Textarea
+              size="sm"
+              label="Notes"
+              placeholder="Add notes about this game..."
+              description="Record thoughts, goals, memorable moments, achievements, or anything you'd like to remember."
+              value={notes}
+              onChange={(e) => setNotes(e.currentTarget.value)}
+              minRows={2}
+              autosize
+              styles={{
+                label: {
+                  color: "white",
+                  fontSize: "16px",
+                  fontFamily: "Inter",
+                },
+              }}
+              disabled={!activeGame}
+            />
+          </Stack>
+
+          <Divider color="dimmed" mt="md" />
+          {/* Footer */}
+          <div className={classes.footer}>
+            <Button
+              className={classes.cancelButton}
+              fullWidth
+              size="md"
+              variant="outline"
+              color="gray"
+              onClick={onClose}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              className={classes.saveButton}
+              fullWidth
+              size="md"
+              leftSection={<SaveAll size={18} />}
+              onClick={handleAddToLibrary}
+            >
+              Save to Library
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal.Content>
+    </Modal.Root>
   );
 }
