@@ -14,7 +14,6 @@ import {
   Badge,
   Image,
   Tooltip,
-  ActionIcon,
   Rating,
   Button,
   Text,
@@ -217,7 +216,7 @@ export default function GameCard({
 
       case "Backlog":
         return {
-          color: "#f7bf5e",
+          color: "#0cf4dd",
           icon: <Backpack size={14} />,
         };
 
@@ -368,7 +367,6 @@ export default function GameCard({
                       ? "yellow"
                       : "#f01e1e"
                 }
-                styles={{}}
               >
                 <Group gap={5} align="center">
                   {game.total_rating
@@ -429,7 +427,7 @@ export default function GameCard({
                     color="dark"
                     aria-label="On Wishlist"
                   >
-                    <Gift size={17} color="#e276de" />
+                    <Gift size={17} color="#E879F9" />
                   </ThemeIcon>
                 </Tooltip>
               )}
@@ -444,7 +442,7 @@ export default function GameCard({
                     color="dark"
                     aria-label="Platinum Achieved"
                   >
-                    <GiDiamondTrophy size={17} color="#ffffff" />
+                    <GiDiamondTrophy size={17} color="#F5C542" />
                   </ThemeIcon>
                 </Tooltip>
               )}

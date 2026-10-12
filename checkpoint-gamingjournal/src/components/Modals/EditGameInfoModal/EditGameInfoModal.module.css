@@ -53,20 +53,58 @@
 .statusButton {
   width: 100%;
   min-width: 0;
-  font-family: "Inter";
-  font-weight: 400;
-}
-
-.featureToggle {
+  height: 100px;
+  padding: 0.75rem 0.5rem;
+  background: #17151d;
+  border: 1px solid #393340;
+  border-radius: 12px;
+  color: #d6d2df;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
   transition:
-    background-color 150ms ease,
-    border-color 150ms ease,
-    color 150ms ease;
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
 }
 
-.featureToggle:focus-visible {
-  outline: 2px solid var(--mantine-color-blue-4);
-  outline-offset: 2px;
+.statusButton:hover {
+  background: #24202d;
+  border-color: #625570;
+  transform: translateY(-2px);
+}
+
+.statusButtonSelected {
+  background: color-mix(in srgb, var(--status-color) 13%, #17151d);
+  border: 1px solid var(--status-color);
+  color: white;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--status-color) 15%, transparent);
+}
+
+.statusButtonSelected:hover {
+  background: color-mix(in srgb, var(--status-color) 20%, #17151d);
+  border-color: var(--status-color);
+}
+
+.statusIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--status-color);
+}
+
+.statusLabel {
+  color: inherit;
+  font-size: 1rem;
+  font-family: "Inter";
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.statusButton:focus-visible {
+  outline: 2px solid var(--status-color);
+  outline-offset: 3px;
 }
 
 .fieldRow {
@@ -141,6 +179,11 @@
 @media (max-width: 700px) {
   .statusGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+
+  .statusButton {
+    height: 90px;
   }
 
   .platformContainer {

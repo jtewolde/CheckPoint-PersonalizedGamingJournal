@@ -157,10 +157,29 @@
   align-items: center;
 }
 
-.wishlistIcon,
 .platinumIcon {
-  flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  z-index: 5;
+  backdrop-filter: blur(6px);
+  background-color: #292828;
+}
+
+.platformIcon {
+  position: absolute;
+  align-self: center;
+  bottom: 0px;
+  left: 0px;
+  z-index: 5;
+  backdrop-filter: blur(6px);
+  background-color: #171717;
+}
+
+.platinumIcon,
+.wishlistIcon {
+  background-color: rgba(23, 23, 23, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .gameInfo {

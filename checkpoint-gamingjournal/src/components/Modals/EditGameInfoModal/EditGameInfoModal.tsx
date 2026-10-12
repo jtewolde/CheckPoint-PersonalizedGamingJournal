@@ -11,8 +11,6 @@ import {
   LoadingOverlay,
   Select,
   Rating,
-  Checkbox,
-  CheckboxIconComponent,
   Text,
   NumberInput,
   Divider,
@@ -29,6 +27,7 @@ import {
   SaveAll,
   Gem,
   Gift,
+  Backpack,
   Trophy,
   Play,
   PowerOff,
@@ -145,51 +144,48 @@ export default function EditGameInfoModal({
       value: "Playing",
       label: "Playing",
       description: "Currently playing and actively progressing in the game.",
-      icon: <Play size={20} color="#1969b9" fill="#1969b9" />,
-      color: "#1969b9",
+      icon: <Play size={22} fill="currentColor" />,
+      color: "#2281f5",
     },
     {
       value: "Completed",
       label: "Completed",
       description:
-        "Finished the main story or reached the game's primary ending",
-      icon: <Check size={20} color="#27a01c" />,
-      color: "#27a01c",
+        "Finished the main story or reached the game's primary ending.",
+      icon: <Check size={22} />,
+      color: "#1fdf1f",
     },
     {
       value: "100%",
-      label: "100%",
+      label: "100% Complete",
       description:
-        "Completed all major content, achievements, collectibles, and optional objectives",
-      icon: <Trophy size={20} fill="yellow" color="yellow" />,
-      color: "yellow",
+        "Completed all major content, achievements, collectibles, and optional objectives.",
+      icon: <Trophy size={22} />,
+      color: "#f5c542",
     },
     {
       value: "On Hold",
       label: "On Hold",
       description: "Taking a break from the game with plans to return later.",
-      icon: <Pause size={20} color="violet" fill="violet" />,
-      color: "violet",
+      icon: <Pause size={22} fill="currentColor" />,
+      color: "#9c6af7",
     },
     {
       value: "Dropped",
       label: "Dropped",
       description: "Stopped playing and do not currently plan to continue.",
-      icon: <PowerOff size={20} color="red" />,
-      color: "red",
+      icon: <PowerOff size={22} />,
+      color: "#f11d1d",
     },
     {
       value: "Backlog",
       label: "Backlog",
       description:
-        "Own or intend to play this game, but not have started it yet.",
-      icon: <Clock size={25} color="#21eebe" />,
-      color: "orange",
+        "Own or intend to play this game, but have not started it yet.",
+      icon: <Backpack size={22} />,
+      color: "#0cf4dd",
     },
   ];
-
-  // Custom icon component for the Checkbox to display a diamond icon when checked
-  const CheckboxIcon: CheckboxIconComponent = (others) => <Gem {...others} />;
 
   return (
     <Modal.Root
@@ -240,20 +236,37 @@ export default function EditGameInfoModal({
               <Text className={classes.sectionText}>Status</Text>
 
               <div className={classes.statusGrid}>
-                {gameStatuses.map((gameStatus) => (
-                  <Button
-                    radius="sm"
-                    key={gameStatus.value}
-                    variant={
-                      status === gameStatus.value ? "outline" : "default"
-                    }
-                    className={classes.statusButton}
-                    onClick={() => setStatus(gameStatus.value)}
-                    leftSection={gameStatus.icon}
-                  >
-                    {gameStatus.label}
-                  </Button>
-                ))}
+                {gameStatuses.map((gameStatus) => {
+                  const isSelected = status === gameStatus.value;
+
+                  return (
+                    <Button
+                      key={gameStatus.value}
+                      type="button"
+                      variant="default"
+                      className={`${classes.statusButton} ${
+                        isSelected ? classes.statusButtonSelected : ""
+                      }`}
+                      onClick={() => setStatus(gameStatus.value)}
+                      aria-pressed={isSelected}
+                      styles={{
+                        root: {
+                          "--status-color": gameStatus.color,
+                        } as React.CSSProperties,
+                      }}
+                    >
+                      <Stack gap={8} align="center" justify="center">
+                        <div className={classes.statusIcon}>
+                          {gameStatus.icon}
+                        </div>
+
+                        <Text className={classes.statusLabel}>
+                          {gameStatus.label}
+                        </Text>
+                      </Stack>
+                    </Button>
+                  );
+                })}
               </div>
             </Stack>
 
