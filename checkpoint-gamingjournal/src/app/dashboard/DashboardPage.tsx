@@ -521,8 +521,7 @@ export default function Dashboard() {
                     variant="filled"
                     color="indigo"
                   >
-                    {" "}
-                    <ClipboardCheck size={20} />{" "}
+                    <ClipboardCheck size={20} />
                   </ThemeIcon>
                   <Text className={classes.quickStatLabel}>Average Rating</Text>
                 </div>
@@ -546,8 +545,7 @@ export default function Dashboard() {
                     variant="filled"
                     color="#f2c617"
                   >
-                    {" "}
-                    <Trophy size={20} />{" "}
+                    <Trophy size={20} />
                   </ThemeIcon>
                   <Text className={classes.quickStatLabel}>
                     Games Platinumed
@@ -567,8 +565,7 @@ export default function Dashboard() {
               <Paper shadow="md" radius="lg" className={classes.quickStatItem}>
                 <div className={classes.quickStatHeader}>
                   <ThemeIcon size={42} radius="xl" variant="filled" color="red">
-                    {" "}
-                    <Notebook size={20} />{" "}
+                    <Notebook size={20} />
                   </ThemeIcon>
                   <Text className={classes.quickStatLabel}>Total Entries</Text>
                 </div>
@@ -589,8 +586,7 @@ export default function Dashboard() {
                     variant="filled"
                     color="teal"
                   >
-                    {" "}
-                    <Star size={20} />{" "}
+                    <Star size={20} />
                   </ThemeIcon>
                   <Text className={classes.quickStatLabel}>Top Rated Game</Text>
                 </div>

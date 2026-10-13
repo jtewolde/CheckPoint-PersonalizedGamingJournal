@@ -32,9 +32,7 @@ export default function DiscoverPage() {
           <Title className={classes.headerTitle}>Discover Games</Title>
 
           <Text className={classes.descriptionText}>
-            Explore trending releases, top-rated classics, and hidden gems.{" "}
-            <br />
-            Find your next gaming adventure.
+            Explore trending releases, top-rated classics, and hidden gems.
           </Text>
         </Stack>
 
@@ -58,8 +56,7 @@ export default function DiscoverPage() {
                 events={{ hover: true, focus: true, touch: true }}
               >
                 <a className={classes.viewMoreIcon} href="/search/trending">
-                  {" "}
-                  <CircleArrowRight size={35} />{" "}
+                  <CircleArrowRight size={35} />
                 </a>
               </Tooltip>
             </div>
@@ -146,8 +143,7 @@ export default function DiscoverPage() {
                   className={classes.viewMoreIcon}
                   href="/search/most-anticipated"
                 >
-                  {" "}
-                  <CircleArrowRight size={35} />{" "}
+                  <CircleArrowRight size={35} />
                 </a>
               </Tooltip>
             </div>
