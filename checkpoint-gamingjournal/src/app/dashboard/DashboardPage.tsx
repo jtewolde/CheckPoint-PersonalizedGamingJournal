@@ -426,9 +426,8 @@ export default function Dashboard() {
                   onClick={() => router.push("/settings/profile")}
                 />
                 <p className={classes.dashboardTitle}>
-                  {" "}
-                  Welcome back,{" "}
-                  <span className={classes.username}>{user?.name}! </span>{" "}
+                  Welcome back,
+                  <span className={classes.username}>{user?.name}! </span>
                 </p>
               </Group>
 

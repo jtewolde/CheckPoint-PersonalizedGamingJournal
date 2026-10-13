@@ -299,7 +299,7 @@ export default function PlaySessionCard({
             {session.mood && (
               <Group gap={5}>
                 <Smile size={14} />
-                <Text className={classes.mood}>{session.mood}</Text>
+                <Text className={classes.mood}>{session.mood.join(", ")}</Text>
               </Group>
             )}
           </Group>
