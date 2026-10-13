@@ -354,7 +354,7 @@ export default function GameDetails() {
           <GameJournal game={game} entries={entries} />
         )}
 
-        {activeTab === "achievements" && <div>Achievements content</div>}
+        {/* {activeTab === "achievements" && <div>Achievements content</div>} */}
 
         {activeTab === "media" && <GameMedia game={game} />}
 
