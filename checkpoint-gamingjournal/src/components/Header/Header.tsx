@@ -504,6 +504,7 @@ export function Header() {
               className={classes.searchBar}
               placeHolder="Search Games..."
               size="lg"
+              radius="sm"
               autoNavigate
               showActionIcon
               iconColor="#812fcf"
@@ -554,7 +555,7 @@ export function Header() {
           size={isMobile ? (isAuthenticated ? "290px" : "290px") : "300px"} // Adjust size based on conditions
           className={classes.drawer}
         >
-          <div className={classes.logoContainer}>
+          <div className={classes.drawerContainer}>
             <Image
               src={CheckPointMobileLogo.src}
               alt="CheckPoint Logo"
