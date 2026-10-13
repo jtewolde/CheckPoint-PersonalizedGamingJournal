@@ -101,16 +101,7 @@ export default function ViewJournalEntry() {
           <JournalEntryModal
             opened={entryModalOpened}
             onClose={closeEntryModal}
-            entry={{
-              _id: entry._id,
-              gameId: entry.gameId,
-              gameName: entry.gameName,
-              coverImage: entry.coverImage,
-              title: entry.title,
-              content: entry.content,
-              entryType: entry.entryType ?? "",
-              tags: entry.tags ?? [],
-            }}
+            entry={entry}
             onEntryCreated={() => {
               closeEntryModal();
               router.refresh();
