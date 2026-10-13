@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMediaQuery } from "@mantine/hooks";
 
-import GameFilters from "@/components/GameFilters/GameFilters";
-import ActiveFilters from "@/components/ActiveFilters/ActiveFilters";
-import GameCard from "@/components/GameCard/GameCard";
-import GameSkeletonCard from "@/components/GameCard/GameSkeletonCard";
+import GameFilters from "@/components/Filters/GameFilters/GameFilters";
+import ActiveFilters from "@/components/Filters/ActiveFilters/ActiveFilters";
+import GameCard from "@/components/Cards/GameCard/GameCard";
+import GameSkeletonCard from "@/components/Cards/GameCard/GameSkeletonCard";
 import GamePageSearch from "@/components/GamePageSearch/GamePageSearch";
 
 import { Text, SimpleGrid, Pagination, Select } from "@mantine/core";
@@ -182,9 +182,8 @@ export default function PopularPage() {
               <div className={classes.filterContainer}>
                 <GameFilters
                   className={classes.gameFilters}
+                  size={isMobile ? "input-lg" : "lg"}
                   variant={isMobile ? "small" : "default"}
-                  size={isMobile ? "xl" : "lg"}
-                  radius="md"
                   totalGames={total}
                   sortOption={sortOption}
                   selectedType={selectedType}

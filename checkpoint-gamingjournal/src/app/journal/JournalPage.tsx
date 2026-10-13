@@ -6,46 +6,36 @@ import Image from "next/image";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { authClient } from "@/lib/auth-client";
 
-import JournalEntryCard from "@/components/JournalEntryCard/EntryCard";
-import JournalEntryModal from "@/components/JournalEntryModal/EntryModal";
-import JournalFilters from "@/components/JournalFilters/JournalFilters";
+import JournalEntryCard from "@/components/Cards/JournalEntryCard/EntryCard";
+import JournalEntryModal from "@/components/Modals/JournalEntryModal/EntryModal";
+import JournalFilters from "@/components/Filters/JournalFilters/JournalFilters";
 import JournalPageSearch from "@/components/JournalPageSearch/JournalPageSearch";
+import JournalCalendar from "@/components/ActivityComponents/JournalCalendar/JournalCalendar";
 
 import {
   Button,
-  ThemeIcon,
   Select,
   SimpleGrid,
   Pagination,
   Modal,
   Group,
   Stack,
-  Title,
   Text,
   Checkbox,
-  Divider,
   Pill,
+  SegmentedControl,
+  Tooltip,
 } from "@mantine/core";
 
 import toast from "react-hot-toast";
-import {
-  FilePlus,
-  Bookmark,
-  Trash2,
-  ClipboardCheck,
-  Gamepad,
-  NotebookText,
-  Link,
-} from "lucide-react";
-
-import PlaceHolderImage from "../../../public/no-cover-image.png";
-import HeroImage from "../../../public/cyberpunkWallpaper.jpg";
+import { FilePlus, Trash2, List, Calendar } from "lucide-react";
 
 import classes from "./journal.module.css";
 
 export default function Journal() {
   // State variables for the journal entries
   const [entries, setEntries] = useState<any[]>([]);
+  const [calendarEntries, setCalendarEntries] = useState<any[]>([]);
   const [totalEntries, setTotalEntries] = useState(0);
   const [search, setSearch] = useState("");
 
@@ -61,16 +51,15 @@ export default function Journal() {
   );
   const [totalGames, setTotalGames] = useState(0);
 
-  // State variables for the most journaled game and last journal entry for the stat cards
-  const [mostJournaledGame, setMostJournaledGame] = useState<any>(null);
-  const [favoriteEntryType, setFavoriteEntryType] = useState<any>(null);
-
   // State variables for filters based on game, entry type, tags, and sorting order
   const [gameId, setGameId] = useState("all");
   const [selectedGame, setSelectedGame] = useState("");
   const [selectedType, setSelectedType] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+
+  // Create state variable for changing the view of the journal entries, whether with 2x2 grid or calendar
+  const [view, setView] = useState<"list" | "calendar">("list");
 
   // State for opening delete all modal
   const [opened, { open, close }] = useDisclosure(false);
@@ -82,6 +71,13 @@ export default function Journal() {
 
   // Filter the journal entries results if using search bar
   const filteredEntries = entries.filter(
+    (entry) =>
+      entry.title.toLowerCase().includes(search.toLowerCase()) ||
+      entry.gameName.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  // Filter the entries for the journal calendar
+  const filteredCalendarEntries = calendarEntries.filter(
     (entry) =>
       entry.title.toLowerCase().includes(search.toLowerCase()) ||
       entry.gameName.toLowerCase().includes(search.toLowerCase()),
@@ -120,14 +116,12 @@ export default function Journal() {
       const data = await res.json();
       setGames(data.games);
       setTotalGames(data.games.length);
-      setMostJournaledGame(data.mostJournaled[0] || null);
-      setFavoriteEntryType(data.favoriteEntryType[0] || null);
     } catch (error) {
       console.log("Error fetching games with journal entries", error);
     }
   };
 
-  // Function to fetch journal entries
+  // Function to fetch journal entries with pagination support
   const fetchEntries = async (pageNum = 1) => {
     setLoading(true);
     try {
@@ -165,44 +159,37 @@ export default function Journal() {
     }
   };
 
-  useEffect(() => {
-    fetchGames(); // Fetch games for filter dropdown
-    checkAuth(); // Check authentication on component mount
-  }, [router]);
-
-  // Refetch journal entries whenenver the page number changes
-  useEffect(() => {
-    fetchEntries(page);
-  }, [page, gameId, selectedTags, selectedType, sortOrder]);
-
-  // Function to delete a journal entry
-  const deleteJournalEntry = async (journalEntryId: string, gameID: string) => {
+  // Function to fetch all of the journal entries that the user has to put on the journal calendar view
+  const fetchCalendarEntries = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const res = await fetch(`/api/journal/${journalEntryId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("bearer_token")}`,
-        },
-        body: JSON.stringify({ journalEntryId, gameID }),
+      const token = localStorage.getItem("bearer_token"); // Retrieve Bearer Token
+
+      const params = new URLSearchParams({
+        gameId: gameId !== "all" ? gameId : "",
+        type: selectedType,
+        tag: selectedTags.length > 0 ? selectedTags.join(",") : "",
+        order: sortOrder,
       });
 
-      const data = await res.json();
+      const res = await fetch(`/api/journal/calendar?${params.toString()}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       if (!res.ok) {
-        throw new Error(data.error || "Failed to delete journal entry");
+        throw new Error("Failed to fetch user journal entries");
       }
 
-      console.log("Journal entry deleted successfully:", data.message);
-      toast.success("Journal entry deleted successfully");
-
-      // Re-fetch the journal entries to update the list
-      setLoading(false);
-      fetchEntries();
+      const data = await res.json();
+      setCalendarEntries(data.journalEntries);
     } catch (error) {
-      setLoading(false);
-      console.error("Error deleting journal entry:", error);
-      toast.error("Error deleting journal entry");
+      console.log("Error fetching user journal entries", error);
+    } finally {
+      setLoading(false); // Hide loading overlay after fetching data
     }
   };
 
@@ -249,195 +236,260 @@ export default function Journal() {
     }
   };
 
-  // Get unique game names from entries for the dropdown
-  const gameNames = Array.from(new Set(entries.map((entry) => entry.gameName)));
+  useEffect(() => {
+    fetchGames(); // Fetch games for filter dropdown
+    checkAuth(); // Check authentication on component mount
+  }, [router]);
 
-  // Find the selected game's object in the journal entries to get the gameID
-  const selectedGameObject = entries.find((e) => e.gameName === selectedGame);
+  useEffect(() => {
+    if (view === "calendar") {
+      fetchCalendarEntries();
+    }
+  }, [view, gameId, selectedTags, selectedType, sortOrder]);
+
+  // Refetch journal entries whenenver the page number changes
+  useEffect(() => {
+    fetchEntries(page);
+  }, [page, gameId, selectedTags, selectedType, sortOrder]);
+
+  const selectedGameObject = games.find(
+    (game) => game.gameName === selectedGame,
+  );
 
   return (
-    <div className={classes.pageWrapper}>
-      <div className={classes.journalWrapper}>
-        <div className={classes.hero}>
-          <Stack className={classes.heroContent} gap="sm" justify="center">
-            <h2 className={classes.journalTitle}>Gaming Journal</h2>
+    <div className={classes.background}>
+      <div className={classes.pageWrapper}>
+        <div className={classes.journalWrapper}>
+          <div className={classes.hero}>
+            <Stack className={classes.heroContent} gap="xs" justify="center">
+              <h2 className={classes.journalTitle}>Gaming Journal</h2>
 
-            <Text className={classes.description}>
-              Capture memorable moments, strategies, acheivements, endings, and
-              more from you gaming adventures.
-            </Text>
-          </Stack>
-        </div>
+              <Text className={classes.description}>
+                Capture memorable moments, strategies, acheivements, endings,
+                and more from you gaming adventures.
+              </Text>
+            </Stack>
+          </div>
 
-        {/* Delete Entries By Game Modal */}
-        <Modal
-          opened={opened}
-          onClose={close}
-          centered
-          styles={{
-            content: { border: "1px solid #545454ff" },
-            close: { color: "white" },
-          }}
-        >
-          <Group className={classes.modalText} mb={20} ta="left">
-            <Title className={classes.modalTitle} order={3} ta="center">
-              Delete All Entries of a Game
-            </Title>
+          {/* Delete Entries By Game Modal */}
+          <Modal
+            opened={opened}
+            onClose={close}
+            centered
+            size="md"
+            title="Delete All Entries of a Game"
+            className={classes.drawer}
+            styles={{
+              header: {
+                marginBottom: "10px",
+              },
+              body: {
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+                width: "100%",
+              },
+              title: {
+                fontSize: "24px",
+                color: "white",
+                fontFamily: "Noto Sans",
+                fontWeight: 300,
+              },
+              content: {
+                fontSize: "18px",
+                color: "white",
+                fontFamily: "Poppins",
+                fontWeight: 400,
+              },
+              close: {
+                color: "white",
+              },
+            }}
+          >
+            <Stack gap="md" ta="left">
+              <Text c="white" fz="md" ta="left" fw={300}>
+                This will permanently delete <b>all</b> journal entries
+                assoicated with the selected game. This action cannot be undone.
+              </Text>
 
-            <Text c="white" fz="md" ta="center" mb={10}>
-              This will permanently delete <b>all</b> journal entries assoicated
-              with the selected game. This action cannot be undone.
-            </Text>
+              <Select
+                label="Select Game"
+                size="md"
+                placeholder="Choose a game to delete its entries"
+                data={games.map((game) => ({
+                  value: game.gameName,
+                  label: game.gameName,
+                }))}
+                value={selectedGame}
+                onChange={(value) => setSelectedGame(value || "")}
+                styles={{
+                  label: {
+                    fontSize: "18px",
+                    color: "white",
+                    fontFamily: "Noto Sans",
+                    fontWeight: 300,
+                  },
+                }}
+                mb="sm"
+                error={error}
+              />
 
-            <Select
-              label="Select Game"
-              size="lg"
-              placeholder="Choose a game to delete its entries"
-              data={gameNames.map((game) => ({ value: game, label: game }))}
-              value={selectedGame}
-              onChange={(value) => setSelectedGame(value || "")}
-              styles={{
-                input: { backgroundColor: "#212121", color: "white" },
-                dropdown: { backgroundColor: "#2c2c2fff", color: "white" },
-                label: {
-                  fontFamily: "Noto Sans",
-                  color: "white",
-                  fontSize: "18px",
-                },
-                option: { background: "#212121" },
-              }}
-              mb="lg"
-              error={error}
-            />
+              <Checkbox
+                radius="md"
+                color="blue"
+                c="white"
+                size="md"
+                fw={300}
+                label="I understand that I am permanently deleting my journal entries for this game"
+                checked={checked}
+                error={error}
+                onChange={(event) => setChecked(event.currentTarget.checked)}
+              />
 
-            <Checkbox
-              radius="md"
-              color="blue"
-              c="white"
-              size="md"
-              label="I understand that I am permanently deleting my journal entries for this game"
-              checked={checked}
-              error={error}
-              onChange={(event) => setChecked(event.currentTarget.checked)}
-            />
+              <Button
+                className={classes.deleteEntriesButton}
+                color="#d8070b"
+                fullWidth
+                radius="md"
+                variant="filled"
+                rightSection={<Trash2 size={16} />}
+                disabled={!checked || !selectedGame}
+                loading={loading}
+                onClick={async () => {
+                  if (!selectedGame) {
+                    setError("Please select a game");
+                    return;
+                  }
 
-            <Button
-              className={classes.deleteEntriesButton}
-              color="#d8070b"
-              size="md"
-              mt={15}
-              radius="lg"
-              variant="filled"
-              rightSection={<Trash2 />}
-              disabled={!checked || !selectedGame}
-              loading={loading}
-              onClick={async () => {
-                if (!selectedGame) {
-                  setError("Please select a game");
-                  return;
-                }
+                  if (!checked) {
+                    setError("Please confirm before deleting");
+                    return;
+                  }
 
-                if (!checked) {
-                  setError("Please confirm before deleting");
-                  return;
-                }
+                  if (!selectedGameObject) {
+                    toast.error("Invalid game selection");
+                    return;
+                  }
 
-                if (!selectedGameObject) {
-                  toast.error("Invalid game selection");
-                  return;
-                }
+                  await deleteEntriesByGame(selectedGameObject.gameId); // ✅ Call your helper function
+                  setChecked(false);
+                  setSelectedGame("");
+                  close(); // ✅ Close modal
+                }}
+              >
+                Delete Entries
+              </Button>
+            </Stack>
+          </Modal>
 
-                await deleteEntriesByGame(selectedGameObject.gameId); // ✅ Call your helper function
-                setChecked(false);
-                setSelectedGame("");
-                close(); // ✅ Close modal
-              }}
-            >
-              Delete Entries
-            </Button>
-          </Group>
-        </Modal>
+          <div className={classes.toolbarContainer}>
+            <div className={classes.toolbar}>
+              <div className={classes.toolbarTop}>
+                <div className={classes.searchContainer}>
+                  <JournalPageSearch
+                    borderColor="border: 1px solid transparent"
+                    size="lg"
+                    radius="md"
+                    value={search}
+                    onChange={setSearch}
+                  />
+                </div>
 
-        <div className={classes.toolbarContainer}>
-          <div className={classes.toolbar}>
-            <div className={classes.toolbarTop}>
-              <div className={classes.searchContainer}>
-                <JournalPageSearch
-                  backgroundColor="#211b2c"
-                  borderColor="border: 1px solid transparent"
-                  size="lg"
-                  radius="md"
-                  value={search}
-                  onChange={setSearch}
-                />
+                <div className={classes.toolbarButtons}>
+                  <JournalEntryModal
+                    key={selectedGameObject?.gameId ?? "journal-entry-modal"}
+                    opened={entryModalOpened}
+                    onClose={closeEntryModal}
+                    gameId={selectedGameObject?.gameId ?? ""}
+                    gameName={selectedGameObject?.gameName ?? ""}
+                    onSuccess={() => close()}
+                    onEntryCreated={fetchEntries}
+                  />
+
+                  <Button
+                    variant="outline"
+                    color="#139609"
+                    size="md"
+                    radius="md"
+                    className={classes.addButton}
+                    onClick={openEntryModal}
+                    rightSection={<FilePlus />}
+                  >
+                    Add Entry
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    color="#e01515ff"
+                    size="md"
+                    radius="md"
+                    className={classes.removeButton}
+                    onClick={open}
+                    rightSection={<Trash2 />}
+                  >
+                    Delete
+                  </Button>
+                </div>
+
+                <div className={classes.filterContainer}>
+                  <JournalFilters
+                    className={classes.filterButton}
+                    color="indigo"
+                    size="md"
+                    radius="md"
+                    variant="default"
+                    buttonVariant="outline"
+                    availableGames={games.map((game) => ({
+                      id: game.gameId,
+                      name: game.gameName,
+                    }))}
+                    sortOption={sortOrder}
+                    selectedGameId={gameId}
+                    selectedEntryType={selectedType}
+                    selectedTags={selectedTags}
+                    onSortChange={setSortOrder}
+                    onGameIdChange={setGameId}
+                    onEntryTypeChange={setSelectedType}
+                    onTagsChange={setSelectedTags}
+                  />
+                </div>
               </div>
 
-              <div className={classes.toolbarButtons}>
-                <JournalEntryModal
-                  key={selectedGameObject?.gameId ?? "journal-entry-modal"}
-                  opened={entryModalOpened}
-                  onClose={closeEntryModal}
-                  gameId={selectedGameObject?.gameId ?? ""}
-                  gameName={selectedGameObject?.gameName ?? ""}
-                  onSuccess={() => close()}
-                  onEntryCreated={fetchEntries}
+              <div className={classes.toolbarBottom}>
+                <div className={classes.resultsContainer}>
+                  <Text className={classes.resultsText}>
+                    Showing {filteredEntries.length} of{" "}
+                    {totalEntries.toLocaleString()} entries
+                  </Text>
+                </div>
+
+                <SegmentedControl
+                  size="md"
+                  value={view}
+                  onChange={(value) => setView(value as "list" | "calendar")}
+                  data={[
+                    {
+                      label: (
+                        <Tooltip label="List View" withArrow>
+                          <span>
+                            <List size={25} />
+                          </span>
+                        </Tooltip>
+                      ),
+                      value: "list",
+                    },
+                    {
+                      label: (
+                        <Tooltip label="Calendar View" withArrow>
+                          <span>
+                            <Calendar size={25} />
+                          </span>
+                        </Tooltip>
+                      ),
+                      value: "calendar",
+                    },
+                  ]}
                 />
-
-                <Button
-                  variant="outline"
-                  color="#139609"
-                  size="md"
-                  radius="md"
-                  className={classes.addButton}
-                  onClick={openEntryModal}
-                  rightSection={<FilePlus />}
-                >
-                  Add Entry
-                </Button>
-
-                <Button
-                  variant="outline"
-                  color="#e01515ff"
-                  size="md"
-                  radius="md"
-                  className={classes.removeButton}
-                  onClick={open}
-                  rightSection={<Trash2 />}
-                >
-                  Delete
-                </Button>
-              </div>
-
-              <div className={classes.filterContainer}>
-                <JournalFilters
-                  className={classes.filterButton}
-                  color="indigo"
-                  size="md"
-                  radius="md"
-                  variant="default"
-                  buttonVariant="outline"
-                  availableGames={games.map((game) => ({
-                    id: game.gameId,
-                    name: game.gameName,
-                  }))}
-                  sortOption={sortOrder}
-                  selectedGameId={gameId}
-                  selectedEntryType={selectedType}
-                  selectedTags={selectedTags}
-                  onSortChange={setSortOrder}
-                  onGameIdChange={setGameId}
-                  onEntryTypeChange={setSelectedType}
-                  onTagsChange={setSelectedTags}
-                />
-              </div>
-            </div>
-
-            <div className={classes.toolbarBottom}>
-              <div className={classes.resultsContainer}>
-                <Text className={classes.resultsText}>
-                  Showing {filteredEntries.length} of{" "}
-                  {totalEntries.toLocaleString()} entries
-                </Text>
               </div>
 
               {activeFilters.length > 0 && (
@@ -494,45 +546,59 @@ export default function Journal() {
               )}
             </div>
           </div>
-        </div>
 
-        {filteredEntries.length > 0 && (
-          <SimpleGrid
-            cols={{ base: 1, sm: 2, md: 2, lg: 2 }}
-            spacing="lg"
-            className={classes.entriesGrid}
-          >
-            {filteredEntries.map((entry) => (
-              <JournalEntryCard
-                key={entry._id}
-                entry={entry}
-                variant="journal"
-                color="#7c18ed"
+          {view === "list" ? (
+            <>
+              {filteredEntries.length > 0 && (
+                <SimpleGrid
+                  cols={{ base: 1, sm: 2, md: 2, lg: 2 }}
+                  spacing="lg"
+                  className={classes.entriesGrid}
+                >
+                  {filteredEntries.map((entry) => (
+                    <JournalEntryCard
+                      key={entry._id}
+                      entry={entry}
+                      variant="journal"
+                      color="#7c18ed"
+                    />
+                  ))}
+                </SimpleGrid>
+              )}
+
+              {!loading && entries.length === 0 && (
+                <p className={classes.noGamesText}>
+                  No games found for the selected tags.
+                </p>
+              )}
+
+              {entries.length !== 0 && (
+                <div className={classes.paginationWrapper}>
+                  <Pagination
+                    classNames={{
+                      control: classes.paginationControl,
+                    }}
+                    size={isMobile ? "sm" : "xl"}
+                    radius="xs"
+                    total={totalPages}
+                    value={page}
+                    onChange={setPage}
+                  />
+                </div>
+              )}
+            </>
+          ) : (
+            <div className={classes.calendarContainer}>
+              <JournalCalendar
+                className={classes.calendar}
+                entries={filteredCalendarEntries}
+                fullWidth={true}
+                displayCover
+                variant="full"
               />
-            ))}
-          </SimpleGrid>
-        )}
-
-        {!loading && entries.length === 0 && (
-          <p className={classes.noGamesText}>
-            No games found for the selected tags.
-          </p>
-        )}
-
-        {entries.length !== 0 && (
-          <div className={classes.paginationWrapper}>
-            <Pagination
-              classNames={{
-                control: classes.paginationControl,
-              }}
-              size={isMobile ? "sm" : "xl"}
-              radius="xs"
-              total={totalPages}
-              value={page}
-              onChange={setPage}
-            />
-          </div>
-        )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ import { motion } from "motion/react";
 import classes from "./page.module.css";
 
 import Questions from "@/components/FrequentQuestions/FrequentQuestions";
-import TrendingSection from "@/components/TrendingSection/TrendingSection";
+import TrendingSection from "@/components/Sections/TrendingSection/TrendingSection";
 import CheckpointLogo from "../../public/LandingPageLogoFinal.png";
 
 export default function Home() {
@@ -83,7 +83,8 @@ export default function Home() {
 
                     <Button
                       className={classes.discoverButton}
-                      variant="outline"
+                      variant="white"
+                      autoContrast
                       size="lg"
                       radius="md"
                       fullWidth={isMobile}
@@ -174,7 +175,7 @@ export default function Home() {
               <div className={classes.gameDetailsSection}>
                 <div className={classes.imageReverseContainer}>
                   <Image
-                    src="/GameDetailsPage.png"
+                    src="/GameDetails.png"
                     alt="Game Details Page"
                     className={classes.image}
                     width={650}
@@ -267,18 +268,25 @@ export default function Home() {
               </div>
             </motion.div>
 
-            <div className={classes.faqSection}>
-              <Title className={classes.faqTitle} c="white" size="xl">
-                Frequently Asked Questions
-              </Title>
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            >
+              <div className={classes.faqSection}>
+                <Title className={classes.faqTitle} c="white" size="xl">
+                  Frequently Asked Questions
+                </Title>
 
-              <Text className={classes.faqSubtitle} c="white">
-                Everything you need to know before starting your gaming journey
-                with CheckPoint.
-              </Text>
+                <Text className={classes.faqSubtitle} c="white">
+                  Everything you need to know before starting your gaming
+                  journey with CheckPoint.
+                </Text>
 
-              <Questions />
-            </div>
+                <Questions />
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>

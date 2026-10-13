@@ -7,266 +7,277 @@ import verifyEmail from "@/emails/verify-email";
 import db from "./db";
 
 export const auth = betterAuth({
-    database: mongodbAdapter(db),
+  database: mongodbAdapter(db),
 
-    session: {
-        cookieCache: {
-            enabled: true,
-            maxAge: 5 * 60
-        }
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60,
     },
+  },
 
-    trustedOrigins: [
-        "https://checkpoint-gaming.vercel.app",
-        "https://checkpoint-gaming-qpy6bmti8-joseph-tewoldes-projects.vercel.app",
-        "https://www.checkpoint-gamingjournal.com"
-    ],
+  trustedOrigins: [
+    "https://checkpoint-gaming.vercel.app",
+    "https://checkpoint-gaming-qpy6bmti8-joseph-tewoldes-projects.vercel.app",
+    "https://www.checkpoint-gamingjournal.com",
+  ],
 
-    cors: {
+  cors: {
     origin: [
-        "https://checkpoint-gaming.vercel.app",
-        "https://checkpoint-gaming-qpy6bmti8-joseph-tewoldes-projects.vercel.app",
-        "https://www.checkpoint-gamingjournal.com"
+      "https://checkpoint-gaming.vercel.app",
+      "https://checkpoint-gaming-qpy6bmti8-joseph-tewoldes-projects.vercel.app",
+      "https://www.checkpoint-gamingjournal.com",
     ],
-    credentials: true
-},
+    credentials: true,
+  },
 
-    emailAndPassword: {
-        enabled: true,
-        autoSignIn: true,
-        minPasswordLength: 8,
-        maxPasswordLength: 128,
-        requireEmailVerification: true,
-        resetPasswordTokenExpiresIn: 60 * 60,
-        
-        sendResetPassword: async ({ user, url, token }) => {
+  emailAndPassword: {
+    enabled: true,
+    autoSignIn: true,
+    minPasswordLength: 8,
+    maxPasswordLength: 128,
+    requireEmailVerification: true,
+    resetPasswordTokenExpiresIn: 60 * 60,
 
-            console.log("Reset password for: ", user.email);
+    sendResetPassword: async ({ user, url, token }) => {
+      console.log("Reset password for: ", user.email);
 
-            if(!user.email) {
-                throw new Error("No account found with that email address")
-            }
+      if (!user.email) {
+        throw new Error("No account found with that email address");
+      }
 
-            console.log("Password Reset for : ", user.email);
-            await resend.emails.send({
-                from: "CheckPoint <noreply@emails.checkpoint-gamingjournal.com>",
-                to: user.email,
-                subject: "CheckPoint Reset Password",
-                react: ForgotPasswordEmail({
-                    username: user.name,
-                    resetUrl: url,
-                    userEmail: user.email,
-                }),
-            })
-        }
+      console.log("Password Reset for : ", user.email);
+      await resend.emails.send({
+        from: "CheckPoint <noreply@emails.checkpoint-gamingjournal.com>",
+        to: user.email,
+        subject: "CheckPoint Reset Password",
+        react: ForgotPasswordEmail({
+          username: user.name,
+          resetUrl: url,
+          userEmail: user.email,
+        }),
+      });
+    },
+  },
+
+  emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    sendVerificationEmail: async ({ user, url }) => {
+      console.log("Email Vertification for: ", user.email);
+      await resend.emails.send({
+        from: "CheckPoint <noreply@emails.checkpoint-gamingjournal.com>",
+        to: user.email,
+        subject: "CheckPoint Email Vertification",
+        react: verifyEmail({
+          username: user.name,
+          verifyUrl: url,
+        }),
+      });
+    },
+  },
+
+  account: {
+    accountLinking: {
+      enabled: true,
+    },
+  },
+
+  user: {
+    modelName: "users",
+    deleteUser: {
+      enabled: true,
     },
 
-    emailVerification: {
-        sendOnSignUp: true,
-        autoSignInAfterVerification: true,
-        sendVerificationEmail: async ( { user, url}) => {
-            console.log("Email Vertification for: ", user.email)
-            await resend.emails.send({
-                from: "CheckPoint <noreply@emails.checkpoint-gamingjournal.com>",
-                to: user.email,
-                subject: "CheckPoint Email Vertification",
-                react: verifyEmail({
-                    username: user.name,
-                    verifyUrl: url,
-                })
-            });
-        }
+    changeEmail: {
+      enabled: true,
     },
 
-    account: {
-        accountLinking:{
-            enabled: true,
-        }
+    additionalFields: {
+      games: {
+        type: "string[]",
+        defaultValue: [],
+        required: false,
+      },
     },
+  },
 
-    user: {
-        modelName: "users",
-        deleteUser: {
-            enabled:true
-        },
+  game: {
+    modelName: "games",
 
-        changeEmail: {
-            enabled: true
-        },
-
-        additionalFields: {
-            games: {
-                type: "string[]",
-                defaultValue: [],
-                required: false,
-            }
-        }
+    fields: {
+      igdbId: {
+        type: "string",
+        required: true,
+      },
+      name: {
+        type: "string",
+        required: true,
+      },
+      coverImageId: {
+        type: "string",
+        required: false,
+      },
+      status: {
+        type: "string",
+        required: false,
+        enum: [
+          "playing",
+          "completed",
+          "100%",
+          "on_hold",
+          "dropped",
+          "backlog",
+          "wishlist",
+        ],
+        defaultValue: "No Status Given",
+      },
+      platinum: {
+        type: "boolean",
+        required: false,
+        defaultValue: false,
+      },
+      wishlist: {
+        type: "boolean",
+        required: false,
+        defaultValue: false,
+      },
+      hoursPlayed: {
+        type: "number",
+        required: false,
+        defaultValue: 0,
+      },
+      startingDate: {
+        type: "date",
+        required: false,
+        defaultValue: null,
+      },
+      completionDate: {
+        type: "date",
+        required: false,
+        defaultValue: null,
+      },
+      rating: {
+        type: "number",
+        required: false,
+        defaultValue: 0,
+      },
+      summary: {
+        type: "string",
+        required: false,
+      },
+      journalEntries: {
+        type: "string[]",
+        required: false,
+        defaultValue: [],
+      },
+      userId: {
+        type: "string",
+        required: true,
+      },
     },
+  },
 
-    game: {
-        modelName: "games",
+  journalEntry: {
+    modelName: "journalEntries",
 
-        fields:{
-            igdbId: {
-                type: "string",
-                required: true,
-            },
-            name: {
-                type: "string",
-                required: true,
-            },
-            coverImageId: {
-                type: "string",
-                required: false,
-            },
-            status: {
-                type: "string",
-                required: false,
-                enum: ["playing", "completed", "100%", "on_hold", "dropped", "backlog", "wishlist"],
-                defaultValue: "No Status Given",
-            },
-            platinum: {
-                type: "boolean",
-                required: false,
-                defaultValue: false
-            },
-            hoursPlayed: {
-                type: 'number',
-                required: false,
-                defaultValue: 0
-            },
-            startingDate: {
-                type: "date",
-                required: false,
-                defaultValue: null,
-            },
-            completionDate: {
-                type: "date",
-                required: false,
-                defaultValue: null,
-            },
-            rating: {
-                type: "number",
-                required: false,
-                defaultValue: 0
-            },
-            summary: {
-                type: "string",
-                required: false,
-            },
-            journalEntries: {
-                type: "string[]",
-                required: false,
-                defaultValue: [],
-            },
-            userId: {
-                type: "string",
-                required: true,
-            },
-        }
+    fields: {
+      gameId: {
+        type: "string",
+        required: true,
+      },
+      gameName: {
+        type: "string",
+        required: true,
+      },
+      coverImage: {
+        type: "string",
+        required: false,
+        defaultValue: "",
+      },
+      userId: {
+        type: "string",
+        required: true,
+      },
+      title: {
+        type: "string",
+        required: true,
+      },
+      entryType: {
+        type: "string",
+        required: false,
+      },
+      tags: {
+        type: "string[]",
+        required: false,
+        defaultValue: [],
+      },
+      content: {
+        type: "string",
+        required: true,
+      },
+      date: {
+        type: "date",
+        required: true,
+      },
     },
+  },
 
-    journalEntry: {
-        modelName: "journalEntries",
+  playSessions: {
+    modelName: "playSessions",
 
-        fields:{
-            gameId: {
-                type: "string",
-                required: true,
-            },
-            gameName: {
-                type: "string",
-                required: true
-            },
-            coverImage: {
-                type: "string",
-                required: false,
-                defaultValue: ""
-            },
-            userId: {
-                type: "string",
-                required: true,
-            },
-            title: {
-                type: "string",
-                required: true,
-            },
-            entryType: {
-                type: "string",
-                required: false,
-            },
-            tags: {
-                type: 'string[]',
-                required: false,
-                defaultValue: []
-            },
-            content:{
-                type: "string",
-                required: true,
-            },
-            date:{
-                type: "date",
-                required:true,
-            },
-        }
+    fields: {
+      gameId: {
+        type: "string",
+        required: true,
+      },
+      userId: {
+        type: "string",
+        required: true,
+      },
+      gameName: {
+        type: "string",
+        required: true,
+      },
+      date: {
+        type: "date",
+        required: true,
+      },
+      duration: {
+        type: "number",
+        required: false, //Stored as minutes,
+      },
+      notes: {
+        type: "string",
+        required: false,
+      },
+      mood: {
+        type: "string",
+        required: false,
+      },
+      platform: {
+        type: "string",
+        required: false,
+      },
+      sessionType: {
+        type: "string[]",
+        required: false,
+        defaultValue: [],
+      },
     },
+  },
 
-    playSessions: {
-        modelName: 'playSessions',
-
-        fields: {
-            gameId: {
-                type: "string",
-                required: true,
-            },
-            userId: {
-                type: "string",
-                required: true,
-            },
-            gameName: {
-                type: "string",
-                required: true,
-            },
-            date: {
-                type: "date",
-                required: true
-            },
-            duration: {
-                type: 'number',
-                required: false //Stored as minutes,
-            },
-            notes: {
-                type: "string",
-                required: false
-            },
-            mood: {
-                type: "string",
-                required: false,
-            },
-            platform: {
-                type: "string",
-                required: false,
-            },
-            sessionType: {
-                type: "string[]",
-                required: false,
-                defaultValue: []
-            },
-        }
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
-
-    socialProviders: {
-        google:{
-            clientId: process.env.GOOGLE_CLIENT_ID as string, 
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string, 
-        },
-        discord:{
-            clientId: process.env.DISCORD_CLIENT_ID as string,
-            clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
-        }
+    discord: {
+      clientId: process.env.DISCORD_CLIENT_ID as string,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
     },
+  },
 
-    // Enable the bearer token authentication
-    plugins: [bearer()]
-
-})
+  // Enable the bearer token authentication
+  plugins: [bearer()],
+});

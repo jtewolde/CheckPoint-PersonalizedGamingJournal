@@ -1,60 +1,59 @@
-
-.wrapper{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    width: 100%;
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
 }
 
 .scrollBar {
-    &,
-    &:hover {
-        background-color: #555555;
-    }
+  &,
+  &:hover {
+    background-color: #555555;
+  }
 
-    &[data-orientation='vertical'] .thumb {
-        background-color: black;
-    }
+  &[data-orientation="vertical"] .thumb {
+    background-color: black;
+  }
 }
 
 .option {
-    background-color: #232526;
-    color: white;
+  background-color: #232526;
+  color: white;
 }
 
 .option:hover {
-    background-color: #3a3a3c; /* Darker hover color */
-    color: #ffffff;
+  background-color: #3a3a3c; /* Darker hover color */
+  color: #ffffff;
 }
 
-.button{
-    border: none;
-    cursor: pointer;
-    font-family: 'Barlow';
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    overflow: visible;
+.button {
+  border: none;
+  cursor: pointer;
+  font-family: "Barlow";
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  overflow: visible;
 }
 
-.button:hover{
-    background-color: #ffffff;
-    transform: scale(1.02);
-    transition: transform 0.3s ease;
+.button:hover {
+  background-color: #ffffff;
+  transform: scale(1.02);
+  transition: transform 0.3s ease;
 }
 
-.iconButton{
-    border: 1px solid rgb(65, 64, 64);
+.iconButton {
+  border: 1px solid rgb(65, 64, 64);
 }
 
 @media (max-width: 600px) {
-    .wrapper{
-        flex-direction: row;
-        align-items: center;
-        gap: 0.5rem;
-    }
+  .wrapper {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
 }

@@ -125,8 +125,7 @@
 }
 
 .discoverButton {
-  background-color: rgb(25, 24, 26);
-  border: 1px solid rgb(255, 255, 255);
+  border: 2px solid #fcf9ff;
 }
 
 .trendingHeader {

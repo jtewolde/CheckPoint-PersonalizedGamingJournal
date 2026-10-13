@@ -1,48 +1,36 @@
-.background{
+.background {
   background: var(--background);
   position: relative;
   min-height: 100%; /* Ensure the page takes up the full height */
   min-width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 0.5rem;
   z-index: 0;
 }
 
-.backgroundOverlay{
-  width: 100%;
-  height: 100%;
-  position: relative;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  /* Fade from transparent to dark */
-  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.80) 0%, #121213 100%);
-}
-
 .wrapper {
-  padding-bottom: 2rem;
-  padding-top: 1.4rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   width: 100%;
+  margin: 0 auto;
+  padding: 28px 16px;
   z-index: 0;
   gap: 1rem;
   pointer-events: auto;
 }
 
-.dashboardHeader{
+.dashboardHeader {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   gap: 0.4rem;
 }
 
-.heroContainer{
+.heroContainer {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -50,27 +38,27 @@
   gap: 1rem;
 }
 
-.dashboardTitle{
+.dashboardTitle {
   font-size: 32px;
   font-weight: 700;
   color: white; /* Dark text for contrast */
   text-align: left;
-  font-family: 'Barlow';
+  font-family: "Barlow";
   letter-spacing: 1px;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
   line-height: 1.2;
 }
 
-.welcomeText{
+.welcomeText {
   font-size: 20px;
   font-weight: 300;
   text-align: left;
-  font-family: 'Barlow';
+  font-family: "Barlow";
   color: #e7e5e5;
   width: auto;
 }
 
-.quickActionGroup{
+.quickActionGroup {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -79,8 +67,8 @@
   margin-top: 1rem;
 }
 
-.quickActionBtn{
-  font-family: 'Poppins';
+.quickActionBtn {
+  font-family: "Poppins";
   font-weight: 400;
   font-size: 16px;
   padding: 0.5rem 1rem;
@@ -88,26 +76,27 @@
 
 .profileStatSection,
 .playingSection,
-.recentEntriesSection{
+.recentEntriesSection {
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+
   gap: 0.4rem;
   width: 100%;
   font-weight: 800;
 
-  background: #1f1b2c;
   border: 1px solid #37324a;
   border-radius: 12px;
 
   margin-bottom: 1.2rem;
   padding: 0.4rem 0.8rem;
-  align-items: flex-start;
-  justify-content: space-between;
-  font-family: 'Inter';
+
+  font-family: "Inter";
   color: #e9e9e9;
 }
 
-.titleLogo{
+.titleLogo {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -116,8 +105,8 @@
 }
 
 .gamesPlayingText,
-.profileTitle{
-  font-family: 'Inter';
+.profileTitle {
+  font-family: "Inter";
   font-weight: 800;
   color: #f4f4f4;
   line-height: 1.2;
@@ -127,11 +116,10 @@
 }
 
 .quickStatItem:hover,
-.statusCard:hover{
-    transform: translateY(-3px);
-    border-color:#452f79;
-    box-shadow:
-        0 10px 28px rgba(139,92,246,.15);
+.statusCard:hover {
+  transform: translateY(-3px);
+  border-color: #452f79;
+  box-shadow: 0 10px 28px rgba(139, 92, 246, 0.15);
 }
 
 .statCards {
@@ -156,7 +144,6 @@
   padding: 1rem;
   gap: 1rem;
   border-radius: 12px;
-  background: #262235;
   border: 1px solid #3d3853;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -167,39 +154,39 @@
   margin-top: 0.5rem;
   margin-bottom: 1rem;
   color: #ffffff;
-  font-family: 'Inter';
+  font-family: "Inter";
 }
 
-.statusTitle::after{
-    content:"";
-    display:block;
+.statusTitle::after {
+  content: "";
+  display: block;
 
-    width:48px;
-    height:3px;
+  width: 48px;
+  height: 3px;
 
-    margin-top:10px;
+  margin-top: 10px;
 
-    background:#8b5cf6;
-    border-radius:999px;
+  background: #8b5cf6;
+  border-radius: 999px;
 }
 
 .statusCount {
   font-size: 4rem;
   font-weight: bold;
   color: #ffffff;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   text-align: center;
 }
 
-.statusTotalCount{
+.statusTotalCount {
   font-size: 1.1rem;
   font-weight: 500;
   color: #ffffff;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   text-align: center;
 }
 
-.chartWrapper{
+.chartWrapper {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -207,34 +194,70 @@
   height: 100%;
 }
 
-.heatmapWrapper{
+.sessionTypeLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 50%;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.legendName {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
+  font-family: "Inter";
+  font-weight: 300;
+}
+
+.legendDot {
+  width: 10px;
+  height: 10px;
+  min-width: 10px;
+  border-radius: 50%;
+}
+
+.legendValue {
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.heatmapWrapper {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 1rem;
 }
 
-.quickStatsContainer{
+.quickStatsContainer {
   width: 100%;
-  max-width: 98%;
+  max-width: 100%;
 }
 
-.quickStatHeader{
+.quickStatHeader {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.quickStatItem{
+.quickStatItem {
   display: flex;
   flex-direction: column;
 
   min-height: 100px;
   padding: 1.25rem;
   border-radius: 18px;
-  background: #1f1b2c;
-  border: 1px solid #37324a;
+  border: 1px solid #3d3853;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition:
     transform 0.2s ease,
@@ -242,7 +265,7 @@
     box-shadow 0.2s ease;
 }
 
-.quickStatBody{
+.quickStatBody {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -252,31 +275,31 @@
   width: 100%;
 }
 
-.quickStatLabel{
+.quickStatLabel {
   font-size: 1.2rem;
   font-weight: 600;
   color: #cfcfcf;
-  font-family: 'Inter';
+  font-family: "Inter";
 }
 
-.quickStatSubtext{
+.quickStatSubtext {
   font-size: 1rem;
-  font-family: 'Barlow';
+  font-family: "Barlow";
   color: #e5e3e3;
   margin-top: 15px;
   text-align: center;
 }
 
-.quickStatValue{
+.quickStatValue {
   font-size: 2.8rem;
   font-weight: 800;
   line-height: 1;
   align-self: center;
   color: white;
-  font-family: 'Barlow';
+  font-family: "Barlow";
 }
 
-.ratingWrapper{
+.ratingWrapper {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -284,41 +307,40 @@
 }
 
 .ratingValue,
-.platValue{
+.platValue {
   color: #e0e0e0;
   font-size: 20px;
   font-weight: 600;
-  font-family: 'Inter';
+  font-family: "Inter";
   text-align: center;
 }
 
-.topRatedCover{
+.topRatedCover {
   margin-top: 0.5rem;
   width: 27%;
   border-radius: 8px;
 }
 
-.ratingValue:hover{
+.ratingValue:hover {
   color: white;
   font-weight: 700;
 }
 
-.gamesGrid{
+.gamesGrid {
   display: grid;
   grid-template-columns: repeat(5, 1fr); /* Default: 5 columns */
-  gap: 2.4rem;
+  gap: 1rem;
   justify-content: center;
-  align-content: center;
   align-items: center;
 }
 
-.playingText{
+.playingText {
   margin-top: 5rem;
 }
 
-.playingGames{
+.playingGames {
   width: 100%;
-  max-width: 98%;
+  max-width: 100%;
   padding: 1rem 0;
   display: block;
 }
@@ -327,69 +349,60 @@
   margin-top: 4rem;
 }
 
-.noEntriesText{
+.noEntriesText {
   font-size: 1.5rem;
   font-weight: 300;
   color: rgb(208, 205, 205); /* Dark text for contrast */
   margin-bottom: 1rem;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: italic;
   margin-top: 1rem;
 }
 
 .recentEntries {
   width: 100%;
-  max-width: 98%;
   padding: 1rem 0;
   display: block;
 }
 
-.entriesGrid{
+.entriesGrid {
   gap: 1rem;
   padding: 0;
 }
 
-
-@media (max-width: 1920px){
-  .wrapper{
-    padding-left: 3.4rem;
-    padding-right: 3.4rem;
+@media (max-width: 1920px) {
+  .wrapper {
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }
 
 @media (max-width: 1248px) {
-
-  .wrapper{
-    padding-left: 3rem;
-    padding-right: 3rem;
-  }
-
   .gamesGrid,
   .popularGamesGrid,
-  .trendingGamesGrid{
+  .trendingGamesGrid {
     grid-template-columns: repeat(4, 1fr);
   }
 
-  .entriesGrid{
+  .entriesGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 800px) {
-
-  .wrapper{
+  .wrapper {
     padding: 1rem;
   }
 
-  .welcomeText{
+  .welcomeText {
     text-align: left;
   }
 
-  .dashboardTitle{
+  .dashboardTitle {
     font-size: 24px;
   }
 
-  .dashboardHeader{
+  .dashboardHeader {
     flex-direction: column;
     align-items: flex-start;
     text-align: center;
@@ -397,7 +410,7 @@
     margin-bottom: 0;
   }
 
-  .heroContainer{
+  .heroContainer {
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
@@ -406,10 +419,16 @@
   .gamesGrid,
   .popularGamesGrid,
   .trendingGamesGrid {
-    grid-template-columns: repeat(3, 1fr); /* 3 columns for screens smaller than 768px */
+    grid-template-columns: repeat(
+      3,
+      1fr
+    ); /* 3 columns for screens smaller than 768px */
   }
   .entriesGrid {
-    grid-template-columns: repeat(1, 1fr); /* 1 column for screens smaller than 768px */
+    grid-template-columns: repeat(
+      1,
+      1fr
+    ); /* 1 column for screens smaller than 768px */
   }
 
   .playingSection,
@@ -429,61 +448,73 @@
   .actions {
     width: 100%;
     justify-content: flex-end;
-    gap: .75rem;
+    gap: 0.75rem;
   }
 
-  .logButton{
+  .logButton {
     width: 100%;
   }
 }
 
-
 @media (max-width: 500px) {
-
-  .backgroundOverlay{
-    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 0%, #18181b 60%);
+  .backgroundOverlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(20, 20, 20, 0.7) 0%,
+      #18181b 60%
+    );
   }
 
-  .dashboardHeader{
+  .dashboardHeader {
     padding-top: 1rem;
   }
 
-  .dashboardTitle{
+  .dashboardTitle {
     font-size: 24px;
   }
 
-  .welcomeText{
+  .welcomeText {
     font-size: 18px;
   }
 
   .gamesGrid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns for screens smaller than 480px */
+    grid-template-columns: repeat(
+      2,
+      1fr
+    ); /* 2 columns for screens smaller than 480px */
+    gap: 1rem;
   }
 
-  .trendingGamesGrid{
-    grid-template-columns: repeat(2, 1fr);;
-  }
-
-  .popularGamesGrid{
+  .trendingGamesGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .profileStats{
+  .popularGamesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .profileStats {
     font-size: 1.2rem;
     margin-top: 1.5rem;
   }
-  
+
   .trendingSection,
   .playingSection,
   .recentEntriesSection,
-  .gamesPlayingSection{
+  .gamesPlayingSection {
     text-align: left;
   }
-  
+
+  .heatmapWrapper {
+    margin: 0;
+  }
 }
 
 @media (max-width: 320px) {
   .gamesGrid {
-    grid-template-columns: repeat(1, 1fr); /* 1 column for screens smaller than 320px */
+    grid-template-columns: repeat(
+      1,
+      1fr
+    ); /* 1 column for screens smaller than 320px */
   }
 }

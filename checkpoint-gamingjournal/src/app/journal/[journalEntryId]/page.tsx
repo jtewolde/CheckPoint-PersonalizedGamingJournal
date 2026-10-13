@@ -16,7 +16,7 @@ import {
 import toast from "react-hot-toast";
 
 import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
-import JournalEntryModal from "@/components/JournalEntryModal/EntryModal";
+import JournalEntryModal from "@/components/Modals/JournalEntryModal/EntryModal";
 
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import classes from "./viewJournal.module.css";
@@ -95,22 +95,13 @@ export default function ViewJournalEntry() {
             leftSection={<ArrowLeft size={18} />}
             onClick={() => router.back()}
           >
-            Back to Journal
+            Back
           </Button>
 
           <JournalEntryModal
             opened={entryModalOpened}
             onClose={closeEntryModal}
-            entry={{
-              _id: entry._id,
-              gameId: entry.gameId,
-              gameName: entry.gameName,
-              coverImage: entry.coverImage,
-              title: entry.title,
-              content: entry.content,
-              entryType: entry.entryType ?? "",
-              tags: entry.tags ?? [],
-            }}
+            entry={entry}
             onEntryCreated={() => {
               closeEntryModal();
               router.refresh();

@@ -1,0 +1,42 @@
+.durationContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.fieldRow {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  align-items: flex-start;
+  flex-direction: row;
+  margin-top: 0.4rem;
+}
+
+.gameSelect,
+.focusSelect,
+.moodSelect,
+.dateField {
+  flex: 1 1 0;
+  width: 100%;
+}
+
+.logButton,
+.cancelButton {
+  font-family: "Barlow";
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .fieldRow {
+    flex-direction: column;
+  }
+}

@@ -11,10 +11,10 @@ import {
   Megaphone,
 } from "lucide-react";
 
-import PopularSection from "@/components/PopularSection/PopularSection";
-import TrendingSection from "@/components/TrendingSection/TrendingSection";
-import UpcomingSection from "@/components/upcomingSection/upcomingSection";
-import AnticipatedSection from "@/components/AnticipatedSection/AnticipatedSection";
+import PopularSection from "@/components/Sections/PopularSection/PopularSection";
+import TrendingSection from "@/components/Sections/TrendingSection/TrendingSection";
+import UpcomingSection from "@/components/Sections/upcomingSection/upcomingSection";
+import AnticipatedSection from "@/components/Sections/AnticipatedSection/AnticipatedSection";
 
 import classes from "./discoverPage.module.css";
 
@@ -32,9 +32,7 @@ export default function DiscoverPage() {
           <Title className={classes.headerTitle}>Discover Games</Title>
 
           <Text className={classes.descriptionText}>
-            Explore trending releases, top-rated classics, and hidden gems.{" "}
-            <br />
-            Find your next gaming adventure.
+            Explore trending releases, top-rated classics, and hidden gems.
           </Text>
         </Stack>
 
@@ -58,8 +56,7 @@ export default function DiscoverPage() {
                 events={{ hover: true, focus: true, touch: true }}
               >
                 <a className={classes.viewMoreIcon} href="/search/trending">
-                  {" "}
-                  <CircleArrowRight size={35} />{" "}
+                  <CircleArrowRight size={35} />
                 </a>
               </Tooltip>
             </div>
@@ -146,8 +143,7 @@ export default function DiscoverPage() {
                   className={classes.viewMoreIcon}
                   href="/search/most-anticipated"
                 >
-                  {" "}
-                  <CircleArrowRight size={35} />{" "}
+                  <CircleArrowRight size={35} />
                 </a>
               </Tooltip>
             </div>

@@ -91,36 +91,57 @@ export default function RootLayout({
               defaultColorScheme="dark"
               withGlobalClasses
               theme={{
-                primaryColor: "violet",
+                primaryColor: "brand",
+
                 colors: {
+                  /*
+                   * Dark neutral palette
+                   *
+                   * 0 - Primary text
+                   * 1 - Secondary text
+                   * 2 - Muted text
+                   * 3 - Disabled/subtle text
+                   * 4 - Borders
+                   * 5 - Strong borders / muted surfaces
+                   * 6 - Cards
+                   * 7 - Sections
+                   * 8 - Application background
+                   * 9 - Deepest background
+                   */
                   dark: [
-                    "#d9d6e6", // text
-                    "#c4bfd7",
-                    "#ada7c3",
-                    "#8b85a3",
-                    "#5b5672",
-                    "#343043",
-                    "#262235", // cards
-                    "#1f1b2c", // sections
-                    "#17151f", // app background
-                    "#121019", // deepest
+                    "#f5f5f7", // 0 - primary text
+                    "#d4d4d8", // 1 - secondary text
+                    "#a1a1aa", // 2 - muted text
+                    "#71717a", // 3 - disabled/subtle text
+                    "#3f424b", // 4 - borders
+                    "#252831", // 5 - strong borders / muted surfaces
+                    "#15171c", // 6 - cards
+                    "#111318", // 7 - sections
+                    "#0d0e11", // 8 - app background
+                    "#08090b", // 9 - deepest background
                   ],
 
+                  /*
+                   * CheckPoint purple accent
+                   */
                   brand: [
-                    "#f3ecff",
-                    "#e4d3ff",
-                    "#d2b6ff",
-                    "#bc95ff",
-                    "#a774ff",
-                    "#8b5cf6",
-                    "#7c3aed",
-                    "#6d28d9",
-                    "#5b21b6",
-                    "#4c1d95",
+                    "#f5f3ff", // 0
+                    "#ede9fe", // 1
+                    "#ddd6fe", // 2
+                    "#c4b5fd", // 3
+                    "#a78bfa", // 4
+                    "#8b5cf6", // 5 - primary
+                    "#7c3aed", // 6
+                    "#6d28d9", // 7
+                    "#5b21b6", // 8
+                    "#4c1d95", // 9
                   ],
                 },
+
                 primaryShade: 5,
-                defaultRadius: "md",
+
+                defaultRadius: "sm",
+
                 components: {
                   Paper: {
                     defaultProps: {
@@ -137,7 +158,7 @@ export default function RootLayout({
                   AppShell: {
                     styles: {
                       main: {
-                        background: "#17151f",
+                        background: "#0d0e11",
                       },
                     },
                   },
@@ -151,11 +172,17 @@ export default function RootLayout({
                   Modal: {
                     styles: {
                       content: {
-                        background: "#1f1b2c",
+                        background: "#15171c",
+                        border: "1px solid #252831",
                       },
 
                       header: {
-                        background: "#1f1b2c",
+                        background: "#15171c",
+                        borderBottom: "1px solid #252831",
+                      },
+
+                      overlay: {
+                        backgroundColor: "rgba(0, 0, 0, 0.78)",
                       },
                     },
                   },
@@ -163,7 +190,12 @@ export default function RootLayout({
                   Drawer: {
                     styles: {
                       content: {
-                        background: "#1f1b2c",
+                        background: "#15171c",
+                        borderLeft: "1px solid #252831",
+                      },
+
+                      overlay: {
+                        backgroundColor: "rgba(0, 0, 0, 0.78)",
                       },
                     },
                   },
@@ -175,7 +207,7 @@ export default function RootLayout({
                 autoClose={5000}
                 hideProgressBar={false}
                 newestOnTop={false}
-                closeOnClick={false}
+                closeOnClick={true}
                 rtl={false}
                 pauseOnFocusLoss
                 draggable

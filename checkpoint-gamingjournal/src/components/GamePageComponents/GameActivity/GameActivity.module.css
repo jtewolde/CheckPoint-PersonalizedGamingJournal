@@ -1,0 +1,184 @@
+.wrapper {
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem 1rem;
+}
+
+/* Activity statistics section */
+.statsSection {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+/* Statistics grid */
+.activityGrid {
+  width: 100%;
+}
+
+/* Individual statistic card */
+.statCard,
+.streakCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 110px;
+  padding: 1rem;
+  gap: 10px;
+
+  border: 1px solid #3d3853;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+
+  text-align: center;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  font-family: "Inter";
+}
+
+.statLabel {
+  margin-top: 0.4rem;
+
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-family: "Inter";
+
+  color: var(--mantine-color-dimmed);
+}
+
+.heatmapContainer,
+.sessionsContainer {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+
+  border: 1px solid #3d3853;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+/* -------------------------
+  Heatmap Card
+------------------------- */
+.heatmapTitle,
+.sessionTypeTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  font-family: "Inter";
+}
+
+/* Everything underneath the title */
+.heatmapWrapper {
+  flex: 1;
+  width: 100%;
+  padding: 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* -------------------------
+  Session Type Card
+------------------------- */
+
+.sessionTypeContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* Donut + legend */
+.sessionStatsWrapper {
+  width: 100%;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  gap: 5rem;
+  padding-top: 3rem;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.sessionTypeLegend {
+  min-width: 180px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.legendName {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.legendName :global(.mantine-Text-root) {
+  color: var(--mantine-color-gray-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.legendDot {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.legendValue {
+  color: var(--mantine-color-gray-5);
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+@media (max-width: 646px) {
+  .sessionStatsWrapper {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sessionTypeLegend {
+    min-width: 0;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .legendItem {
+    gap: 10px;
+  }
+}

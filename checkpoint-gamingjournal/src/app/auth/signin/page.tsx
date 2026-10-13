@@ -20,8 +20,8 @@ import { redirect, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { authClient } from "@/lib/auth-client";
 
-import { GoogleButton } from "@/components/GoogleButton/GoogleButton";
-import { DiscordButton } from "@/components/DiscordButton/DiscordButton";
+import { GoogleButton } from "@/components/SocialButtons/GoogleButton/GoogleButton";
+import { DiscordButton } from "@/components/SocialButtons/DiscordButton/DiscordButton";
 import { useDisclosure } from "@mantine/hooks";
 
 import { LogIn, Lock, Mail } from "lucide-react";

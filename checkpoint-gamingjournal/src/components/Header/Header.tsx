@@ -35,6 +35,7 @@ import {
   Settings,
   LogOut,
   Megaphone,
+  Compass,
 } from "lucide-react";
 import AvatarMenu from "../AvatarMenu/AvatarMenu";
 
@@ -110,13 +111,13 @@ export function Header() {
 
   // Define the guest navigation links with their labels, icons, and hrefs
   const guestNavLinks = [
-    { label: "Home", icon: <House size={20} />, href: "/" },
+    { label: "Home", icon: <House size={15} />, href: "/" },
     {
       label: "Discover",
-      icon: <IconSearch size={20} />,
+      icon: <Compass size={15} />,
       href: "/search",
       links: [
-        { label: "Popular", icon: <Star size={20} />, href: "/search/popular" },
+        { label: "Popular", icon: <Star size={15} />, href: "/search/popular" },
         {
           label: "Trending",
           icon: <Flame size={20} />,
@@ -134,10 +135,10 @@ export function Header() {
         },
       ],
     },
-    { label: "Sign In", icon: <LogIn size={20} />, href: "/auth/signin" },
+    { label: "Sign In", icon: <LogIn size={15} />, href: "/auth/signin" },
     {
       label: "Register",
-      icon: <UserRoundPlus size={20} />,
+      icon: <UserRoundPlus size={15} />,
       href: "/auth/signup",
     },
   ];
@@ -146,7 +147,7 @@ export function Header() {
   const mobileGuestLinks = {
     main: [{ label: "Home", icon: <House size={25} />, href: "/" }],
     discover: [
-      { label: "Discover", icon: <IconSearch size={25} />, href: "/discover" },
+      { label: "Discover", icon: <Compass size={25} />, href: "/discover" },
       {
         label: "Popular",
         icon: <Star size={25} color="#e4c61d" fill="#e4c61d" />,
@@ -192,7 +193,7 @@ export function Header() {
     ],
 
     discover: [
-      { label: "Discover", icon: <IconSearch size={25} />, href: "/discover" },
+      { label: "Discover", icon: <Compass size={25} />, href: "/discover" },
       {
         label: "Popular",
         icon: <Star size={25} color="#e4c61d" fill="#e4c61d" />,
@@ -281,13 +282,7 @@ export function Header() {
                             }`}
                             style={{ cursor: "pointer" }}
                           >
-                            <div
-                              style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                              }}
-                            >
+                            <div className={classes.navItem}>
                               {link.icon}
                               {link.label}
                             </div>
@@ -359,13 +354,7 @@ export function Header() {
                         pathname === link.href ? classes.active : ""
                       }`}
                     >
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                        }}
-                      >
+                      <div className={classes.navItem}>
                         {link.icon}
                         {link.label}
                       </div>
@@ -398,13 +387,7 @@ export function Header() {
                               }`}
                               style={{ cursor: "pointer" }}
                             >
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  alignItems: "center",
-                                }}
-                              >
+                              <div className={classes.navItem}>
                                 {link.icon}
                                 {link.label}
                               </div>
@@ -490,13 +473,7 @@ export function Header() {
                           pathname === link.href ? classes.active : ""
                         }`}
                       >
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                          }}
-                        >
+                        <div className={classes.navItem}>
                           {link.icon}
                           {link.label}
                         </div>
@@ -509,7 +486,7 @@ export function Header() {
           </Group>
         </div>
 
-        <Group gap="md">
+        <Group className={classes.actions} gap="md">
           <Modal
             opened={searchOpened}
             onClose={searchClose}
@@ -527,6 +504,7 @@ export function Header() {
               className={classes.searchBar}
               placeHolder="Search Games..."
               size="lg"
+              radius="sm"
               autoNavigate
               showActionIcon
               iconColor="#812fcf"
@@ -538,7 +516,7 @@ export function Header() {
               <GameSearchBar
                 className={classes.searchBar}
                 placeHolder="Search Games..."
-                size="lg"
+                size="sm"
                 autoNavigate
                 showButton={false}
               />
@@ -577,7 +555,7 @@ export function Header() {
           size={isMobile ? (isAuthenticated ? "290px" : "290px") : "300px"} // Adjust size based on conditions
           className={classes.drawer}
         >
-          <div className={classes.logoContainer}>
+          <div className={classes.drawerContainer}>
             <Image
               src={CheckPointMobileLogo.src}
               alt="CheckPoint Logo"

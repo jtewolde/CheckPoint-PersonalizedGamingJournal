@@ -3,57 +3,22 @@
   flex-direction: column;
   position: relative;
   min-height: 100vh;
-  background-size: cover;
-  background-position: center top;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background: rgba(7, 8, 12, 0.92) 100%;
   z-index: 0;
 }
 
-.backgroundOverlay {
-  position: relative;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  /* Fade from transparent to dark */
-  background: linear-gradient(
-    to bottom,
-    rgba(20, 20, 20, 0.55) 0%,
-    #0a0a0a 40%
-  );
-}
-
 .wrapper {
-  padding: 2rem;
-  padding-top: 2rem;
   z-index: 3;
   position: relative;
   background: transparent;
   pointer-events: auto;
+  padding: 0 0rem;
 }
 
-.title {
-  font-size: 2.2rem;
-  font-weight: bold;
-  text-align: center;
-  font-family: "Inter";
-  color: white;
-  justify-self: center;
-  word-wrap: break-word;
-  white-space: normal;
-}
-
-.gameTypeBadge {
-  border: 0.5px solid #454444;
-}
-
-.titleType {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding-left: 3rem;
-  gap: 1rem;
+.gameHeroContainer {
+  position: relative;
+  width: 100%;
+  background: transparent;
 }
 
 .sectionHeader {
@@ -351,67 +316,6 @@
   font-weight: 600;
   font-family: "Inter";
   align-self: center;
-}
-
-.swiperContainer {
-  width: 100%;
-}
-
-.carouselSlide {
-  width: 100%;
-  margin-bottom: 1rem;
-}
-
-.carouselSlide :hover {
-  filter: brightness(70%);
-}
-
-.thumbnailSlide :hover {
-  filter: brightness(70%);
-}
-
-.screenshot {
-  width: 100%;
-  height: auto;
-  justify-self: center;
-  object-fit: contain;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid #373737;
-  margin-bottom: 1rem;
-  cursor: pointer;
-}
-
-.fullScreenOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 1);
-  z-index: 9999;
-
-  padding: 2rem;
-}
-
-.fullScreenSwiper {
-  width: 100%;
-  height: 100%;
-}
-
-.closeButton {
-  position: absolute; /* pin it relative to .fullScreenOverlay */
-  top: 1rem;
-  right: 1rem;
-  z-index: 2100;
-}
-
-.fullScreenImage {
-  max-width: 100%;
-  max-height: 90vh;
-  object-fit: contain;
-  justify-content: center;
-  align-items: center;
 }
 
 .gameSeries {

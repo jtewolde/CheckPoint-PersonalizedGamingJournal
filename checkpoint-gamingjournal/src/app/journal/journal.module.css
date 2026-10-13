@@ -1,8 +1,18 @@
+.background {
+  background: var(--background);
+  position: relative;
+  min-height: 100%; /* Ensure the page takes up the full height */
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 0;
+}
+
 .pageWrapper {
-  background: var(--mantine-color-dark-8);
   position: relative;
   min-height: 100vh; /* Ensure the page takes up the full height */
-  min-width: 100%;
+  padding: 15px 0px;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -23,7 +33,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 1.5rem;
+  padding-left: 1.5rem;
 
   overflow: hidden;
 }
@@ -79,7 +89,7 @@
 }
 
 .searchContainer {
-  width: 40%;
+  width: 30%;
 }
 
 .toolbarButtons {
@@ -119,14 +129,6 @@
   padding-right: 1rem;
 }
 
-.modalText {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 20px;
-}
-
 .modalTitle {
   color: white;
   font-family: "Poppins";
@@ -140,9 +142,18 @@
   color: rgb(208, 205, 205); /* Dark text for contrast */
   margin-bottom: 2.5rem;
   font-family: "Poppins";
-  font-style: italic;
-  text-align: center;
+  text-align: left;
   margin-top: 2rem;
+}
+
+.calendarContainer {
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.calendar :global(.mantine-Calendar-day) {
+  height: 80px;
+  min-height: 100px;
 }
 
 .paginationControl {
@@ -170,7 +181,6 @@
   display: flex;
   justify-content: center;
   margin-top: 1.4rem;
-  margin-bottom: 1.4rem;
 }
 
 @media (max-width: 1248px) {
@@ -181,8 +191,13 @@
 }
 
 @media (max-width: 650px) {
+  .pageWrapper {
+    padding: 0rem;
+  }
+
   .hero {
-    padding: 1rem;
+    padding: 0.4rem;
+    margin-top: 0.7rem;
   }
 
   .journalTitle {
@@ -222,6 +237,10 @@
     text-align: center;
   }
 
+  .toolbar {
+    padding: 0.5rem;
+  }
+
   .toolbarTop {
     flex-direction: column;
     align-items: stretch;
@@ -255,14 +274,13 @@
   .activeFiltersWrapper {
     margin-left: 0;
   }
+
+  .calendarContainer {
+    padding: 4px;
+  }
 }
 
 @media (max-width: 560px) {
-  .heroSection {
-    padding: 0.8rem;
-    padding-bottom: 0;
-  }
-
   .mainSection {
     padding-left: 0.5rem;
     padding-right: 0.5rem;

@@ -17,7 +17,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .landingLogo {
@@ -97,4 +97,12 @@
 .passwordInput label {
   color: white;
   font-weight: 300;
+}
+
+@media (max-width: 480px) {
+  .form {
+    width: 100%;
+    padding: 30px;
+    margin: 0px 0;
+  }
 }

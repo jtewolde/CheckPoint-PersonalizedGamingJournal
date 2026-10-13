@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
@@ -22,12 +22,12 @@ import {
 } from "@mantine/core";
 import { DonutChart, BarChart, LineChart } from "@mantine/charts";
 
-import SessionHeatmap from "@/components/SessionHeatmap/SessionHeatmap";
-import JournalEntryCard from "@/components/JournalEntryCard/EntryCard";
-import GameCard from "@/components/GameCard/GameCard";
-import PlaySessionModal from "@/components/PlaySessionModal/SessionModal";
-import EditGameInfoModal from "@/components/EditGameInfoModal/EditGameInfoModal";
-import JournalEntryModal from "@/components/JournalEntryModal/EntryModal";
+import SessionHeatmap from "@/components/ActivityComponents/SessionHeatmap/SessionHeatmap";
+import JournalEntryCard from "@/components/Cards/JournalEntryCard/EntryCard";
+import GameCard from "@/components/Cards/GameCard/GameCard";
+import PlaySessionModal from "@/components/Modals/PlaySessionModal/SessionModal";
+import EditGameInfoModal from "@/components/Modals/EditGameInfoModal/EditGameInfoModal";
+import JournalEntryModal from "@/components/Modals/JournalEntryModal/EntryModal";
 
 import PlaceHolderImage from "../../../public/no-cover-image.png";
 
@@ -73,6 +73,7 @@ export default function Dashboard() {
 
   const [completedPercentage, setCompletedPercentage] = useState(0);
 
+  const [sessions, setSessions] = useState<any[]>([]);
   const [recentEntries, setRecentEntries] = useState<any[]>([]); // State to store recent journal entries
   const [journalActivityData, setJournalActivityData] = useState<
     { month: string; entries: number }[]
@@ -184,6 +185,29 @@ export default function Dashboard() {
       setCompletedPercentage(completationRate);
     } catch (error) {
       console.error("Error fetching playing games: ", error);
+    }
+  };
+
+  // Function to fetch play sessions for the game to display on calendar and calculate total tracked playtime.
+  const fetchPlaySessions = async () => {
+    try {
+      const token = localStorage.getItem("bearer_token"); // Retrieve Bearer Token from local storage
+      const res = await fetch(`/api/playSession`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch play sessions");
+      }
+
+      const data = await res.json();
+      setSessions(data);
+    } catch (error) {
+      console.error("Error fetching recent play sessions:", error);
     }
   };
 
@@ -323,10 +347,68 @@ export default function Dashboard() {
     return topRatedGame;
   };
 
-  // useEffect to call both fetchPlayingGames and fetchRecentJournalEntries when the component mounts.
+  // Calcualte the data for the game status donut chart legend
+  const gameStatusData = useMemo(
+    () => [
+      {
+        name: "Backlog",
+        value: backlogLength,
+        color: "orange",
+        cssColor: "var(--mantine-color-orange-6)",
+      },
+      {
+        name: "Wishlist",
+        value: wishlistLength,
+        color: "pink",
+        cssColor: "var(--mantine-color-pink-6)",
+      },
+      {
+        name: "On Hold",
+        value: onHoldLength,
+        color: "red",
+        cssColor: "var(--mantine-color-red-6)",
+      },
+      {
+        name: "Playing",
+        value: playGamesLength,
+        color: "blue",
+        cssColor: "var(--mantine-color-blue-6)",
+      },
+      {
+        name: "No Status Given",
+        value: noStatusLength,
+        color: "lightgrey",
+        cssColor: "var(--mantine-color-gray-4)",
+      },
+      {
+        name: "Completed",
+        value: completedLength,
+        color: "green",
+        cssColor: "var(--mantine-color-green-6)",
+      },
+      {
+        name: "100%",
+        value: fullyDoneLength,
+        color: "gold",
+        cssColor: "var(--mantine-color-yellow-5)",
+      },
+    ],
+    [
+      backlogLength,
+      wishlistLength,
+      onHoldLength,
+      playGamesLength,
+      noStatusLength,
+      completedLength,
+      fullyDoneLength,
+    ],
+  );
+
+  // useEffect to fetch journal entries, playing games, and play sessions when the component mounts.
   useEffect(() => {
     fetchPlayingGames();
     fetchRecentJournalEntries();
+    fetchPlaySessions();
   }, []);
 
   return (
@@ -344,9 +426,8 @@ export default function Dashboard() {
                   onClick={() => router.push("/settings/profile")}
                 />
                 <p className={classes.dashboardTitle}>
-                  {" "}
-                  Welcome back,{" "}
-                  <span className={classes.username}>{user?.name}! </span>{" "}
+                  Welcome back,
+                  <span className={classes.username}>{user?.name}! </span>
                 </p>
               </Group>
 
@@ -383,7 +464,6 @@ export default function Dashboard() {
                 onClose={logClose}
                 gameId={selectedGame?.gameId}
                 gameName={selectedGame?.title}
-                platforms={selectedGame?.platforms}
               />
               <Tooltip
                 label="Log Play Session"
@@ -433,7 +513,7 @@ export default function Dashboard() {
               spacing="lg"
               className={classes.quickStatsGrid}
             >
-              <div className={classes.quickStatItem}>
+              <Paper shadow="md" radius="lg" className={classes.quickStatItem}>
                 <div className={classes.quickStatHeader}>
                   <ThemeIcon
                     size={42}
@@ -441,8 +521,7 @@ export default function Dashboard() {
                     variant="filled"
                     color="indigo"
                   >
-                    {" "}
-                    <ClipboardCheck size={20} />{" "}
+                    <ClipboardCheck size={20} />
                   </ThemeIcon>
                   <Text className={classes.quickStatLabel}>Average Rating</Text>
                 </div>
@@ -456,9 +535,9 @@ export default function Dashboard() {
                     Across rated games
                   </Text>
                 </div>
-              </div>
+              </Paper>
 
-              <div className={classes.quickStatItem}>
+              <Paper shadow="md" radius="lg" className={classes.quickStatItem}>
                 <div className={classes.quickStatHeader}>
                   <ThemeIcon
                     size={42}
@@ -466,8 +545,7 @@ export default function Dashboard() {
                     variant="filled"
                     color="#f2c617"
                   >
-                    {" "}
-                    <Trophy size={20} />{" "}
+                    <Trophy size={20} />
                   </ThemeIcon>
                   <Text className={classes.quickStatLabel}>
                     Games Platinumed
@@ -482,13 +560,12 @@ export default function Dashboard() {
                     Games you've earned a platinum trophy on
                   </Text>
                 </div>
-              </div>
+              </Paper>
 
-              <div className={classes.quickStatItem}>
+              <Paper shadow="md" radius="lg" className={classes.quickStatItem}>
                 <div className={classes.quickStatHeader}>
                   <ThemeIcon size={42} radius="xl" variant="filled" color="red">
-                    {" "}
-                    <Notebook size={20} />{" "}
+                    <Notebook size={20} />
                   </ThemeIcon>
                   <Text className={classes.quickStatLabel}>Total Entries</Text>
                 </div>
@@ -499,9 +576,9 @@ export default function Dashboard() {
                     Journal entries made
                   </Text>
                 </div>
-              </div>
+              </Paper>
 
-              <div className={classes.quickStatItem}>
+              <Paper shadow="md" radius="lg" className={classes.quickStatItem}>
                 <div className={classes.quickStatHeader}>
                   <ThemeIcon
                     size={42}
@@ -509,8 +586,7 @@ export default function Dashboard() {
                     variant="filled"
                     color="teal"
                   >
-                    {" "}
-                    <Star size={20} />{" "}
+                    <Star size={20} />
                   </ThemeIcon>
                   <Text className={classes.quickStatLabel}>Top Rated Game</Text>
                 </div>
@@ -548,7 +624,7 @@ export default function Dashboard() {
                     </Group>
                   </Stack>
                 </div>
-              </div>
+              </Paper>
             </SimpleGrid>
 
             <SimpleGrid
@@ -560,25 +636,22 @@ export default function Dashboard() {
                 <p className={classes.statusTitle}>Game Status Breakdown</p>
                 <div className={classes.chartWrapper}>
                   <DonutChart
-                    size={260}
+                    size={240}
                     strokeColor="black"
                     strokeWidth={2}
-                    thickness={24}
+                    thickness={45}
                     paddingAngle={3}
-                    chartLabel={`${numOfGames} Games Tracked`}
+                    chartLabel={`${numOfGames} Games`}
+                    data={gameStatusData}
                     styles={{
                       label: {
                         color: "white",
-                        fontFamily: "Poppins",
-                        fill: "white",
+                        fontFamily: "Inter",
+                        fontWeight: 600,
                         fontSize: "18px",
                       },
                       tooltip: {
                         border: "1px solid black",
-                      },
-                      tooltipBody: {
-                        backgroundColor: "#2b2b2b",
-                        color: "white",
                       },
                       tooltipItemName: {
                         color: "white",
@@ -587,36 +660,41 @@ export default function Dashboard() {
                         color: "white",
                       },
                     }}
-                    data={[
-                      {
-                        name: "Backlog",
-                        value: backlogLength,
-                        color: "orange",
-                      },
-                      {
-                        name: "Wishlist",
-                        value: wishlistLength,
-                        color: "pink",
-                      },
-                      { name: "On Hold", value: onHoldLength, color: "red" },
-                      {
-                        name: "Playing",
-                        value: playGamesLength,
-                        color: "blue",
-                      },
-                      {
-                        name: "No Status Given",
-                        value: noStatusLength,
-                        color: "lightgrey",
-                      },
-                      {
-                        name: "Completed",
-                        value: completedLength,
-                        color: "green",
-                      },
-                      { name: "100%", value: fullyDoneLength, color: "gold" },
-                    ]}
                   />
+
+                  {!isMobile ? (
+                    <div className={classes.sessionTypeLegend}>
+                      {gameStatusData
+                        .filter((item) => item.value > 0)
+                        .map((item) => {
+                          const percentage =
+                            numOfGames > 0
+                              ? Math.round((item.value / numOfGames) * 100)
+                              : 0;
+
+                          return (
+                            <div key={item.name} className={classes.legendItem}>
+                              <div className={classes.legendName}>
+                                <span
+                                  className={classes.legendDot}
+                                  style={{
+                                    backgroundColor: item.cssColor,
+                                  }}
+                                />
+
+                                <Text className={classes.legendName}>
+                                  {item.name}
+                                </Text>
+                              </div>
+
+                              <Text className={classes.legendValue}>
+                                {item.value} ({percentage}%)
+                              </Text>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  ) : null}
                 </div>
               </Paper>
 
@@ -643,15 +721,6 @@ export default function Dashboard() {
                         fontSize: "12px",
                         fontWeight: "bold",
                       },
-                      tooltip: {
-                        backgroundColor: "#2b2b2b",
-                        color: "white",
-                        border: "1px solid #424242",
-                      },
-                      tooltipBody: {
-                        backgroundColor: "#2b2b2b",
-                        color: "white",
-                      },
                       tooltipLabel: {
                         color: "white",
                       },
@@ -674,8 +743,8 @@ export default function Dashboard() {
                 <p className={classes.statusTitle}>Game Ratings</p>
                 <div className={classes.chartWrapper}>
                   <BarChart
-                    h={260}
-                    w="95%"
+                    h={320}
+                    w="100%"
                     dataKey="rating"
                     yAxisLabel="Games"
                     xAxisLabel="Rating (/10)"
@@ -694,15 +763,6 @@ export default function Dashboard() {
                         fill: "white",
                         fontSize: "12px",
                         fontWeight: "bold",
-                      },
-                      tooltip: {
-                        backgroundColor: "#2b2b2b",
-                        color: "white",
-                        border: "1px solid #424242",
-                      },
-                      tooltipBody: {
-                        backgroundColor: "#2b2b2b",
-                        color: "white",
                       },
                       tooltipLabel: {
                         color: "white",
@@ -725,7 +785,7 @@ export default function Dashboard() {
               <Paper shadow="md" radius="lg" className={classes.statusCard}>
                 <p className={classes.statusTitle}>Session Heatmap</p>
                 <div className={classes.heatmapWrapper}>
-                  <SessionHeatmap />
+                  <SessionHeatmap sessions={sessions} page="dashboard" />
                 </div>
               </Paper>
             </SimpleGrid>
@@ -740,7 +800,6 @@ export default function Dashboard() {
             }}
             gameId={selectedGame?.gameId || ""}
             gameName={selectedGame?.title || ""}
-            platforms={selectedGame?.platforms}
             onSuccess={() => {
               close();
             }}

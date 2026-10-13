@@ -1,0 +1,100 @@
+.wrapper {
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem 1rem;
+}
+
+.emptyStateContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ============================= */
+/* Journal Calendar               */
+/* ============================= */
+
+.calendar :global(.mantine-Calendar-day) {
+  height: 65px;
+  min-height: 65px;
+}
+
+.calendarContainer,
+.recentEntriesContainer {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+
+  border: 1px solid #37324a;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+  margin-bottom: 1.3rem;
+  color: #ffffff;
+  font-family: "Inter";
+}
+
+.calendarWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/*
+ * Keep the calendar wide, but don't let it become
+ * excessively large on very wide screens.
+ */
+.calendarWrapper > * {
+  width: 98%;
+  max-width: 1200px;
+}
+
+/* ============================= */
+/* Recent Entries                */
+/* ============================= */
+
+.recentEntriesContainer {
+  width: 100%;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.sectionHeader .sectionTitle {
+  margin-bottom: 0;
+}
+
+.viewAll {
+  color: var(--mantine-color-blue-text);
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 150ms ease;
+}
+
+.viewAll:hover {
+  opacity: 0.7;
+}
+
+.entriesGrid {
+  width: 100%;
+}
+
+/* ============================= */
+/* Responsive                    */
+/* ============================= */
+
+@media (max-width: 748px) {
+  .calendarWrapper > * {
+    width: 100%;
+  }
+}

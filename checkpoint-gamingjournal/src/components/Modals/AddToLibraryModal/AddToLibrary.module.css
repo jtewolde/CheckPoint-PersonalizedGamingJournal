@@ -1,0 +1,192 @@
+.header {
+  margin-bottom: 6px;
+  border-bottom: 1px solid #4f4065;
+}
+
+.modalHeaderContent {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.gameCover {
+  width: 55px;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.gameTitle {
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+  font-family: "Inter";
+}
+
+.sectionText {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Inter";
+}
+
+.gameInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.gameInfo :global(.mantine-Modal-title) {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.statusGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.statusButton {
+  width: 100%;
+  min-width: 0;
+  height: 100px;
+  padding: 0.75rem 0.5rem;
+  background: #17151d;
+  border: 1px solid #393340;
+  border-radius: 12px;
+  color: #d6d2df;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.statusButton:hover {
+  background: #24202d;
+  border-color: #625570;
+  transform: translateY(-2px);
+}
+
+.statusButtonSelected {
+  background: color-mix(in srgb, var(--status-color) 13%, #17151d);
+  border: 1px solid var(--status-color);
+  color: white;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--status-color) 15%, transparent);
+}
+
+.statusButtonSelected:hover {
+  background: color-mix(in srgb, var(--status-color) 20%, #17151d);
+  border-color: var(--status-color);
+}
+
+.statusIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--status-color);
+}
+
+.statusLabel {
+  color: inherit;
+  font-size: 1rem;
+  font-family: "Inter";
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.statusButton:focus-visible {
+  outline: 2px solid var(--status-color);
+  outline-offset: 3px;
+}
+
+.fieldRow {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  align-items: flex-start;
+  flex-direction: row;
+  margin-top: 0.4rem;
+}
+
+.gameSelect,
+.statusSelect,
+.hoursSelect,
+.platformSelect,
+.hoursInput,
+.startDateSelect,
+.completionDateSelect {
+  flex: 1 1 0;
+  width: 100%;
+}
+
+.ratingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.2rem;
+}
+
+.ratingWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+}
+
+.starsCount {
+  font-size: 1.3rem;
+  font-family: "Poppins";
+}
+
+.ratingText {
+  font-size: 16px;
+  color: #f0f0f0;
+  text-align: left;
+  font-weight: 500;
+}
+
+.footer {
+  position: sticky;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.saveButton,
+.removeButton,
+.cancelButton {
+  font-family: "Barlow";
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .fieldRow {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 700px) {
+  .statusGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+
+  .statusButton {
+    height: 90px;
+  }
+
+  .platformContainer {
+    width: 100%;
+  }
+}
