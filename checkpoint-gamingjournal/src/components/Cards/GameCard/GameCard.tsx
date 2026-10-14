@@ -557,14 +557,7 @@ export default function GameCard({
         <div className={classes.gameInfo}>
           <h3 className={classes.gameTitle}>{game.name}</h3>
 
-          <Badge
-            size="md"
-            variant="default"
-            color="#784ac3"
-            c="white"
-            radius="lg"
-            fw={500}
-          >
+          <Badge size="md" variant="default" c="white" radius="sm" fw={500}>
             {game.genres?.[0]?.name || "N/A"}
           </Badge>
 

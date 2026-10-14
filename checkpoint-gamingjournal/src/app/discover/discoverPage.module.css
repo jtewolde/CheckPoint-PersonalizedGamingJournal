@@ -1,116 +1,248 @@
-/* Wrapper for the entire search page */
+/* Main page wrapper */
 .wrapper {
   background: var(--mantine-color-dark-8);
   position: relative;
-  min-height: 100vh; /* Ensure the page takes up the full height */
-  min-width: 100%;
+  min-height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
   z-index: 0;
 }
 
+/* Main content */
 .mainContent {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 2rem;
+  gap: 2.5rem;
   padding: 2rem;
+  width: 100%;
+  max-width: 1600px;
+  min-width: 0;
+  height: 100%;
   z-index: 1;
   pointer-events: auto;
-
-  width: 100%;
-  height: 100%;
 }
 
+/* Discover page heading */
 .headerTitle {
-  font-size: 56px;
-  font-weight: 700;
-  color: white; /* Dark text for contrast */
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  font-weight: 750;
+  color: #f5f3ff;
   text-align: left;
-  font-family: "Noto Sans";
-  letter-spacing: 1px;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  font-family: "Noto Sans", sans-serif;
+  letter-spacing: -1.5px;
+  line-height: 1.15;
 }
 
 .descriptionText {
-  font-size: 20px;
-  font-weight: 300;
+  font-size: 1.05rem;
+  font-weight: 400;
   text-align: left;
-  font-family: "Barlow";
-  color: #e7e5e5;
-  width: auto;
+  font-family: "Barlow", sans-serif;
+  color: #aaa5bd;
+  line-height: 1.6;
+  max-width: 650px;
 }
 
+/* Individual game sections */
+.trendingGames,
+.popularGames,
+.upcomingGames,
+.anticipatedGames {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Shared section header */
 .trendingSection,
 .popularSection,
 .upcomingSection,
 .anticipatedSection {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: 0.4rem;
+  gap: 1rem;
+
   width: 100%;
-  margin-bottom: 1.2rem;
-  padding: 0.4rem 0.8rem;
+  min-width: 0;
 
-  border: 1px solid #37324a;
-  border-radius: 12px;
+  margin-bottom: 1.25rem;
+  padding: 0 0 1rem;
 
-  font-family: "Inter";
-  font-weight: 800;
+  border: none;
+  border-bottom: 1px solid #37324a;
+  border-radius: 0;
+
+  font-family: "Inter", sans-serif;
   color: #e9e9e9;
 }
 
+/* Icon + title + description */
 .titleLogo {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  gap: 0.8rem;
+  justify-content: flex-start;
+  gap: 0.85rem;
+  min-width: 0;
 }
 
+/* Keep the icon from shrinking */
+.sectionIcon {
+  flex-shrink: 0;
+}
+
+/* Title and subtitle wrapper */
+.sectionText {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+/* Section title */
+.gamesPlayingText {
+  margin: 0;
+  color: #f5f3ff;
+  font-family: "Inter", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.4px;
+}
+
+/* Section subtitle */
+.sectionDescription {
+  margin: 0;
+  color: #aaa5bd;
+  font-family: "Inter", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+/* View all link */
 .viewMoreIcon {
-  justify-self: flex-end;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+
+  flex-shrink: 0;
   align-self: center;
-  color: #a7a7a7;
-  font-size: 100%;
-  font-weight: 500;
-  font-family: "Poppins";
-  margin-top: 0.4rem;
+
+  padding: 0.5rem 0;
+  margin: 0;
+
+  color: #b7a5ff;
+  font-family: "Inter", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+
+  transition:
+    color 150ms ease,
+    gap 150ms ease;
 }
 
 .viewMoreIcon:hover {
-  color: #ffffff;
-  font-weight: 600;
+  color: #d5caff;
+  gap: 0.55rem;
 }
 
+.viewMoreIcon:focus-visible {
+  outline: 2px solid #b7a5ff;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Tablet */
 @media (max-width: 765px) {
-  .sectionsContainer {
-    width: 100%;
+  .mainContent {
+    padding: 1.5rem;
+    gap: 2rem;
   }
 
-  .searchBarContainer {
-    width: 100%;
+  .trendingSection,
+  .popularSection,
+  .upcomingSection,
+  .anticipatedSection {
+    margin-bottom: 1rem;
+    padding-bottom: 0.85rem;
+  }
+
+  .gamesPlayingText {
+    font-size: 1.25rem;
   }
 }
 
+/* Mobile */
 @media (max-width: 560px) {
   .mainContent {
     padding: 1rem;
+    gap: 1.75rem;
   }
 
   .headerTitle {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
+    letter-spacing: -1px;
   }
 
   .descriptionText {
-    font-size: 18px;
+    font-size: 0.95rem;
   }
 
-  .searchTitle {
-    font-size: 24px;
+  .trendingSection,
+  .popularSection,
+  .upcomingSection,
+  .anticipatedSection {
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .titleLogo {
+    gap: 0.6rem;
+  }
+
+  .sectionText {
+    gap: 0.2rem;
+  }
+
+  .gamesPlayingText {
+    font-size: 1.05rem;
+    letter-spacing: -0.25px;
+  }
+
+  .sectionDescription {
+    font-size: 0.75rem;
+    line-height: 1.35;
+  }
+
+  .viewMoreIcon {
+    gap: 0.2rem;
+    font-size: 0.75rem;
+  }
+
+  .viewMoreIcon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .sectionIcon {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .viewMoreIcon {
+    transition: none;
   }
 }
