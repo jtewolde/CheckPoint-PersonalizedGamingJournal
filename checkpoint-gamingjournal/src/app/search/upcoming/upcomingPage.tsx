@@ -10,7 +10,8 @@ import ActiveFilters from "@/components/Filters/ActiveFilters/ActiveFilters";
 import GameSkeletonCard from "@/components/Cards/GameCard/GameSkeletonCard";
 import GameCard from "@/components/Cards/GameCard/GameCard";
 
-import { Text, SimpleGrid, Pagination, Select } from "@mantine/core";
+import { Text, SimpleGrid, Pagination, Select, ThemeIcon } from "@mantine/core";
+import { CalendarClock } from "lucide-react";
 
 import classes from "./upcomingPage.module.css";
 
@@ -125,7 +126,19 @@ export default function UpcomingPage() {
       <div className={classes.mainContent}>
         <div className={classes.headerSection}>
           <div className={classes.titleDescriptionSection}>
-            <div className={classes.titleLogo}>
+            <div className={classes.pageHeading}>
+              <ThemeIcon
+                className={classes.sectionIcon}
+                size={isMobile ? 40 : 50}
+                radius="md"
+                style={{
+                  color: "#59d6a0",
+                  backgroundColor: "rgba(89, 214, 160, 0.13)",
+                }}
+              >
+                <CalendarClock size={isMobile ? 32 : 40} strokeWidth={2.2} />
+              </ThemeIcon>
+
               <h1 className={classes.titleText}>Upcoming Games</h1>
             </div>
 
