@@ -10,7 +10,9 @@ import GameCard from "@/components/Cards/GameCard/GameCard";
 import GameSkeletonCard from "@/components/Cards/GameCard/GameSkeletonCard";
 import GamePageSearch from "@/components/GamePageSearch/GamePageSearch";
 
-import { Text, SimpleGrid, Pagination, Select } from "@mantine/core";
+import { Star } from "lucide-react";
+
+import { Text, SimpleGrid, Pagination, Select, ThemeIcon } from "@mantine/core";
 
 import classes from "./Popular.module.css";
 
@@ -87,9 +89,6 @@ export default function PopularPage() {
         setGames(data.games);
         setLength(data.length);
         setTotal(data.total);
-
-        console.log("Game Results", data.games);
-        console.log("Total Count", data.total);
       } catch (error) {
         console.error("Error fetching games:", error);
       } finally {
@@ -118,12 +117,26 @@ export default function PopularPage() {
       <div className={classes.mainContent}>
         <div className={classes.headerSection}>
           <div className={classes.titleDescriptionSection}>
-            <div className={classes.titleLogo}>
+            <div className={classes.pageHeading}>
+              <ThemeIcon
+                className={classes.sectionIcon}
+                size={isMobile ? 40 : 50}
+                radius="md"
+                style={{
+                  color: "#f7c65b",
+                  backgroundColor: "rgba(247, 198, 91, 0.13)",
+                }}
+              >
+                <Star size={28} strokeWidth={2.2} />
+              </ThemeIcon>
+
               <h1 className={classes.titleText}>Popular Games</h1>
             </div>
 
             <Text className={classes.description}>
-              Explore the most popular games that define today’s gaming scene.
+              Explore the hottest games capturing attention today. From breakout
+              hits to rising favorites, see what's trending across the gaming
+              world.
             </Text>
           </div>
 

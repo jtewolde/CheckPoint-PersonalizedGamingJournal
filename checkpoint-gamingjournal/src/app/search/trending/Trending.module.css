@@ -35,31 +35,49 @@
 
 /* Search results heading */
 .titleText {
-  font-size: 56px;
-  font-weight: 700;
-  color: white; /* Dark text for contrast */
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  font-weight: 750;
+  color: #f5f3ff;
   text-align: left;
-  font-family: "Noto Sans";
-  letter-spacing: 1px;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  font-family: "Noto Sans", sans-serif;
+  letter-spacing: -1.5px;
+  line-height: 1.15;
+}
+
+/* Icon + heading layout */
+.pageHeading {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Category icon */
+.pageIcon {
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 134, 82, 0.22);
 }
 
 .titleDescriptionSection {
   width: 100%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  gap: 5px;
+  gap: 1rem;
 }
 
 .description {
-  font-size: 20px;
-  font-weight: 300;
+  font-size: 1.05rem;
+  font-weight: 400;
   text-align: left;
-  font-family: "Barlow";
-  color: #e7e5e5;
-  width: auto;
+  font-family: "Barlow", sans-serif;
+  color: #aaa5bd;
+  line-height: 1.6;
+  max-width: 650px;
 }
 
 .toolbar {

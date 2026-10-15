@@ -10,7 +10,8 @@ import ActiveFilters from "@/components/Filters/ActiveFilters/ActiveFilters";
 import GameSkeletonCard from "@/components/Cards/GameCard/GameSkeletonCard";
 import GameCard from "@/components/Cards/GameCard/GameCard";
 
-import { Text, SimpleGrid, Pagination, Select } from "@mantine/core";
+import { Text, SimpleGrid, Pagination, Select, ThemeIcon } from "@mantine/core";
+import { Flame } from "lucide-react";
 
 import classes from "./Trending.module.css";
 
@@ -118,7 +119,19 @@ export default function TrendingPage() {
       <div className={classes.mainContent}>
         <div className={classes.headerSection}>
           <div className={classes.titleDescriptionSection}>
-            <div className={classes.titleLogo}>
+            <div className={classes.pageHeading}>
+              <ThemeIcon
+                className={classes.sectionIcon}
+                size={isMobile ? 40 : 50}
+                radius="md"
+                style={{
+                  color: "#f7c65b",
+                  backgroundColor: "rgba(247, 198, 91, 0.13)",
+                }}
+              >
+                <Flame size={28} strokeWidth={2.2} />
+              </ThemeIcon>
+
               <h1 className={classes.titleText}>Trending Games</h1>
             </div>
 
