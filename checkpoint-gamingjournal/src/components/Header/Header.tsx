@@ -30,11 +30,13 @@ import {
   Notebook,
   House,
   Timer,
+  CalendarClock,
   Star,
   Flame,
   Settings,
   LogOut,
   Megaphone,
+  X,
   Compass,
 } from "lucide-react";
 import AvatarMenu from "../AvatarMenu/AvatarMenu";
@@ -46,13 +48,14 @@ export function Header() {
   const [opened, { toggle, close }] = useDisclosure(false); // State for mobile side bar
   const [searchOpened, { toggle: searchToggle, close: searchClose }] =
     useDisclosure(false); // State for search drawer
+  const [searchExpanded, setSearchExpanded] = useDisclosure(false); // State for search bar expansion
 
   const router = useRouter();
   const pathname = usePathname();
 
   const { isAuthenticated, setIsAuthenticated } = useAuth(); // Access global auth state
   const isMobile = useMediaQuery("(max-width: 650px)");
-  const isMobileSearch = useMediaQuery("(max-width: 1100px");
+  const isMobileSearch = useMediaQuery("(max-width: 1100px)");
 
   // Function to handle clicking the logo and redirecting user to dashboard or homepage based on authenication
   const handleLogoClick = async () => {
@@ -86,23 +89,27 @@ export function Header() {
     { label: "Journal", icon: <Notebook size={20} />, href: "/journal" },
     {
       label: "Discover",
-      icon: <IconSearch size={20} />,
+      icon: <Compass size={20} />,
       href: "/search",
       links: [
-        { label: "Popular", icon: <Star size={20} />, href: "/search/popular" },
+        {
+          label: "Popular",
+          icon: <Star size={20} color="#f7c65b" />,
+          href: "/search/popular",
+        },
         {
           label: "Trending",
-          icon: <Flame size={20} />,
+          icon: <Flame size={20} color="#ff8652" />,
           href: "/search/trending",
         },
         {
           label: "Upcoming",
-          icon: <Timer size={20} />,
+          icon: <CalendarClock size={20} color="#59d6a0" />,
           href: "/search/upcoming",
         },
         {
           label: "Most Anticipated",
-          icon: <Megaphone size={20} />,
+          icon: <Megaphone size={20} color="#c2a0ff" />,
           href: "/search/most-anticipated",
         },
       ],
@@ -117,20 +124,24 @@ export function Header() {
       icon: <Compass size={15} />,
       href: "/search",
       links: [
-        { label: "Popular", icon: <Star size={15} />, href: "/search/popular" },
+        {
+          label: "Popular",
+          icon: <Star size={15} color="#f7c65b" />,
+          href: "/search/popular",
+        },
         {
           label: "Trending",
-          icon: <Flame size={20} />,
+          icon: <Flame size={20} color="#ff8652" />,
           href: "/search/trending",
         },
         {
           label: "Upcoming",
-          icon: <Timer size={20} />,
+          icon: <CalendarClock size={20} color="#59d6a0" />,
           href: "/search/upcoming",
         },
         {
           label: "Most Anticipated",
-          icon: <Megaphone size={20} />,
+          icon: <Megaphone size={20} color="#c2a0ff" />,
           href: "/search/most-anticipated",
         },
       ],
@@ -150,22 +161,22 @@ export function Header() {
       { label: "Discover", icon: <Compass size={25} />, href: "/discover" },
       {
         label: "Popular",
-        icon: <Star size={25} color="#e4c61d" fill="#e4c61d" />,
+        icon: <Star size={25} color="#f7c65b" />,
         href: "/search/popular",
       },
       {
         label: "Trending",
-        icon: <Flame size={25} color="#ff8c00" fill="#ff8c00" />,
+        icon: <Flame size={25} color="#ff8652" />,
         href: "/search/trending",
       },
       {
         label: "Upcoming",
-        icon: <Timer size={20} color="#00c3ff" fill="#00c3ff" />,
+        icon: <CalendarClock size={20} color="#59d6a0" />,
         href: "/search/upcoming",
       },
       {
         label: "Most Anticipated",
-        icon: <Megaphone size={20} color="#45e629" fill="#24e848" />,
+        icon: <Megaphone size={25} color="#c2a0ff" />,
         href: "/search/most-anticipated",
       },
     ],
@@ -196,22 +207,22 @@ export function Header() {
       { label: "Discover", icon: <Compass size={25} />, href: "/discover" },
       {
         label: "Popular",
-        icon: <Star size={25} color="#e4c61d" fill="#e4c61d" />,
+        icon: <Star size={25} color="#f7c65b" />,
         href: "/search/popular",
       },
       {
         label: "Trending",
-        icon: <Flame size={25} color="#ff8c00" fill="#ff8c00" />,
+        icon: <Flame size={25} color="#ff8652" />,
         href: "/search/trending",
       },
       {
         label: "Upcoming",
-        icon: <Timer size={20} color="#00c3ff" fill="#00c3ff" />,
+        icon: <CalendarClock size={25} color="#59d6a0" />,
         href: "/search/upcoming",
       },
       {
         label: "Most Anticipated",
-        icon: <Megaphone size={20} color="#45e629" fill="#24e848" />,
+        icon: <Megaphone size={25} color="#c2a0ff" />,
         href: "/search/most-anticipated",
       },
     ],
@@ -301,9 +312,7 @@ export function Header() {
                           <Menu.Item
                             component={Link}
                             href="/search/popular"
-                            leftSection={
-                              <Star size={20} color="#e4c61d" fill="#e4c61d" />
-                            }
+                            leftSection={<Star size={20} color="#f7c65b" />}
                           >
                             Popular Games
                           </Menu.Item>
@@ -311,9 +320,7 @@ export function Header() {
                           <Menu.Item
                             component={Link}
                             href="/search/trending"
-                            leftSection={
-                              <Flame size={20} color="#ff8c00" fill="#ff8c00" />
-                            }
+                            leftSection={<Flame size={20} color="#ff8652" />}
                           >
                             Trending Games
                           </Menu.Item>
@@ -322,7 +329,7 @@ export function Header() {
                             component={Link}
                             href="/search/upcoming"
                             leftSection={
-                              <Timer size={20} color="#00c3ff" fill="#00c3ff" />
+                              <CalendarClock size={25} color="#59d6a0" />
                             }
                           >
                             Upcoming Games
@@ -332,11 +339,7 @@ export function Header() {
                             component={Link}
                             href="/search/most-anticipated"
                             leftSection={
-                              <Megaphone
-                                size={20}
-                                color="#45e629"
-                                fill="#24e848"
-                              />
+                              <Megaphone size={20} color="#c2a0ff" />
                             }
                           >
                             Most Anticipated Games
@@ -408,13 +411,7 @@ export function Header() {
                             <Menu.Item
                               component={Link}
                               href="/search/popular"
-                              leftSection={
-                                <Star
-                                  size={20}
-                                  color="#e4c61d"
-                                  fill="#e4c61d"
-                                />
-                              }
+                              leftSection={<Star size={20} color="#f7c65b" />}
                             >
                               Popular Games
                             </Menu.Item>
@@ -422,13 +419,7 @@ export function Header() {
                             <Menu.Item
                               component={Link}
                               href="/search/trending"
-                              leftSection={
-                                <Flame
-                                  size={20}
-                                  color="#ff8c00"
-                                  fill="#ff8c00"
-                                />
-                              }
+                              leftSection={<Flame size={20} color="#ff8652" />}
                             >
                               Trending Games
                             </Menu.Item>
@@ -437,11 +428,7 @@ export function Header() {
                               component={Link}
                               href="/search/upcoming"
                               leftSection={
-                                <Timer
-                                  size={20}
-                                  color="#00c3ff"
-                                  fill="#00c3ff"
-                                />
+                                <CalendarClock size={20} color="#59d6a0" />
                               }
                             >
                               Upcoming Games
@@ -451,11 +438,7 @@ export function Header() {
                               component={Link}
                               href="/search/most-anticipated"
                               leftSection={
-                                <Megaphone
-                                  size={20}
-                                  color="#45e629"
-                                  fill="#24e848"
-                                />
+                                <Megaphone size={20} color="#c2a0ff" />
                               }
                             >
                               Most Anticipated Games
@@ -516,7 +499,8 @@ export function Header() {
               <GameSearchBar
                 className={classes.searchBar}
                 placeHolder="Search Games..."
-                size="sm"
+                size="md"
+                radius="sm"
                 autoNavigate
                 showButton={false}
               />
@@ -552,16 +536,30 @@ export function Header() {
           onClose={close}
           position="left"
           withCloseButton={false}
-          size={isMobile ? (isAuthenticated ? "290px" : "290px") : "300px"} // Adjust size based on conditions
-          className={classes.drawer}
+          size={290}
+          padding={0}
+          classNames={{
+            content: classes.drawerContent,
+            body: classes.drawerBody,
+          }}
         >
           <div className={classes.drawerContainer}>
             <Image
-              src={CheckPointMobileLogo.src}
+              src={CheckPointLogo.src}
               alt="CheckPoint Logo"
               className={classes.drawerLogo}
-              style={{ cursor: "pointer" }}
             />
+
+            <ActionIcon
+              variant="subtle"
+              color="gray"
+              size="lg"
+              radius="md"
+              aria-label="Close navigation menu"
+              onClick={close}
+            >
+              <X size={21} />
+            </ActionIcon>
           </div>
 
           <Divider my="sm" color="grey" />
@@ -570,77 +568,51 @@ export function Header() {
             {isAuthenticated ? (
               <>
                 <div className={classes.mobileLinksContainer}>
-                  <Divider
-                    label="Main"
-                    labelPosition="left"
-                    size="lg"
-                    styles={{ label: { fontSize: "18px" } }}
-                  />
+                  <p className={classes.drawerSectionTitle}>Main</p>
                   {mobileAuthLinks.main.map((link) => (
                     <>
                       <Link
                         key={link.href}
                         href={link.href}
-                        className={`${classes.link} ${pathname === link.href ? classes.active : ""}`}
+                        onClick={close}
+                        className={`${classes.mobileLink} ${
+                          pathname === link.href ? classes.active : ""
+                        }`}
                       >
-                        <div className={classes.mobileLink}>
-                          {link.icon}
-                          {link.label}
-                        </div>
+                        {link.icon}
+                        <span>{link.label}</span>
                       </Link>
                     </>
                   ))}
 
-                  <Divider
-                    label="Discover Games"
-                    labelPosition="left"
-                    size="lg"
-                    styles={{
-                      label: { fontSize: "18px", fontFamily: "Poppins" },
-                    }}
-                  />
+                  <p className={classes.drawerSectionTitle}>Discover Games</p>
 
                   {mobileAuthLinks.discover.map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}
-                      className={`${classes.link} ${pathname === link.href ? classes.active : ""}`}
+                      onClick={close}
+                      className={`${classes.mobileLink} ${
+                        pathname === link.href ? classes.active : ""
+                      }`}
                     >
-                      <div className={classes.mobileLink}>
-                        {link.icon}
-                        {link.label}
-                      </div>
+                      {link.icon}
+                      <span>{link.label}</span>
                     </Link>
                   ))}
 
-                  <Divider
-                    label="Account"
-                    labelPosition="left"
-                    size="lg"
-                    styles={{
-                      label: { fontSize: "18px", fontFamily: "Poppins" },
-                    }}
-                  />
+                  <p className={classes.drawerSectionTitle}>Account</p>
 
                   {mobileAuthLinks.account.map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}
-                      className={`${classes.link} ${pathname === link.href ? classes.active : ""}`}
+                      className={`${classes.mobileLink} ${
+                        pathname === link.href ? classes.active : ""
+                      }`}
                     >
-                      <div
-                        className={classes.mobileLink}
-                        style={
-                          link.label === "Log Out"
-                            ? { color: "#f05345" }
-                            : link.label === "Settings"
-                              ? { color: "#aeaeae" }
-                              : {}
-                        }
-                      >
-                        {link.icon}
-                        {link.label}
-                      </div>
+                      {link.icon}
+                      <span>{link.label}</span>
                     </Link>
                   ))}
                 </div>
@@ -658,12 +630,13 @@ export function Header() {
                     <Link
                       key={link.href}
                       href={link.href}
-                      className={`${classes.link} ${pathname === link.href ? classes.active : ""}`}
+                      onClick={close}
+                      className={`${classes.mobileLink} ${
+                        pathname === link.href ? classes.active : ""
+                      }`}
                     >
-                      <div className={classes.mobileLink}>
-                        {link.icon}
-                        {link.label}
-                      </div>
+                      {link.icon}
+                      <span>{link.label}</span>
                     </Link>
                   ))}
 

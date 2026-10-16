@@ -1,11 +1,11 @@
 .header {
-  height: 80px;
+  min-height: 60px;
   border-bottom: 1px solid var(--border);
   background-color: var(--header-background);
   display: flex; /* Ensure flexbox is applied */
   justify-content: center;
   align-items: center;
-  padding: 0.1rem 1rem;
+  padding: 0.4rem 1rem;
   position: relative;
   z-index: 20;
 }
@@ -25,37 +25,11 @@
   align-items: center;
 }
 
-.drawerContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 1rem;
-  gap: 1rem;
-}
-
 .logo {
   display: inline-block;
   width: 160px;
   height: auto;
   object-fit: contain;
-}
-
-.drawerLogo {
-  width: 160px;
-  height: auto;
-  object-fit: contain;
-  margin-bottom: 1rem;
-}
-
-.mobileLogo {
-  width: 50px;
-  height: auto;
-  object-fit: contain;
-  margin-top: 0.1rem;
-  margin-left: -6rem; /* Remove negative margin */
-  justify-self: flex-start;
-  justify-content: flex-start;
 }
 
 .actions {
@@ -137,7 +111,7 @@
   border-radius: 8px;
 
   color: #b8b0aa;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 400;
   font-family: "Poppins";
 
@@ -174,58 +148,110 @@
   gap: 25px;
 }
 
+.drawerContent {
+  background: #17141f;
+  color: #f3eff8;
+  border-right: 1px solid #352b42;
+}
+
+.drawerBody {
+  padding: 0 16px 24px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.drawerHeader {
+  display: none;
+}
+
+/* Logo and drawer heading */
+.drawerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 4px 16px;
+}
+
+.drawerLogo {
+  display: block;
+  width: 180px;
+  height: auto;
+  object-fit: contain;
+  margin: 0;
+}
+
+/* Overall navigation layout */
 .linkSpacing {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center horizontally */
-  justify-content: flex-start;
+  align-items: stretch;
   gap: 20px;
-  text-align: left;
-}
-
-.mobileLink {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
   width: 100%;
-
-  padding: 6px 12px;
-
-  border-radius: 10px;
-
-  font-size: 20px;
-  font-family: "Poppins";
-  font-weight: 400;
-
-  transition: background-color 0.15s ease;
-}
-
-.mobileLink:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.mobileLink:active {
-  border-bottom: 2px solid black;
-  border-radius: 0;
-  font-weight: bold;
-}
-
-.drawer {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+  padding: 8px 0 20px;
 }
 
 .mobileLinksContainer,
 .guestMobileLinksContainer {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 7px;
-  padding: 0.2rem;
+  align-items: stretch;
+  gap: 4px;
+  width: 100%;
+  padding: 0;
+}
+
+/* Section headings */
+.drawerSectionTitle {
+  color: #9589a5;
+  font-family: "Poppins", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  padding: 0 12px;
+  margin: 0 0 5px;
+}
+
+/* Each navigation item */
+.mobileLink {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  min-height: 46px;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+
+  color: #c9c2d2;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-decoration: none;
+
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.mobileLink svg {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.mobileLink:hover {
+  background: rgba(129, 47, 207, 0.12);
+  color: #e5d2ff;
+}
+
+.mobileLink:focus-visible {
+  outline: 2px solid #a66be8;
+  outline-offset: 2px;
 }
 
 .active {
