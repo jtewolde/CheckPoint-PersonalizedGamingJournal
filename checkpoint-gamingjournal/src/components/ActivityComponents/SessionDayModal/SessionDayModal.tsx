@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Modal, Text, LoadingOverlay, Stack } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 
 import { PlaySession } from "@/app/types/PlaySession";
 import PlaySessionCard from "@/components/Cards/SessionCard/SessionCard";
@@ -25,6 +26,7 @@ export default function SessionDayModal({
 }: SessionDayModalProps) {
   const [loading, setLoading] = useState(false);
   const [localSessions, setLocalSessions] = useState<PlaySession[]>(sessions);
+  const isMobile = useMediaQuery("(max-width: 646px)");
 
   // Sync localSessions with sessions prop whenever it changes
   useEffect(() => {
@@ -50,6 +52,7 @@ export default function SessionDayModal({
       opened={opened}
       onClose={onClose}
       size="xl"
+      fullScreen={isMobile}
       title={
         "Play Sessions on " +
         (selectedDate ? formatDate(selectedDate) : "No Date Selected")
