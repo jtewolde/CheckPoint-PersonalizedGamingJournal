@@ -18,6 +18,7 @@ import {
   Avatar,
   Button,
   ActionIcon,
+  EmptyState,
   Stack,
 } from "@mantine/core";
 import { DonutChart, BarChart, LineChart } from "@mantine/charts";
@@ -283,23 +284,18 @@ export default function Dashboard() {
 
   // Function to calculate the distribution of game ratings for the user's library games. This will be used to display a bar chart of the user's game ratings.
   const calculateRatingDistribution = (games: any[]) => {
-    // Initialize ratingBuckets array that have the spread of potential ratings that games can be given
-    const ratingBuckets = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const ratingBuckets = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     const distribution: Record<number, number> = {};
 
-    // Iterate through array and initialize all count for each rating as zero
-    ratingBuckets.forEach((r) => {
-      distribution[r] = 0;
+    ratingBuckets.forEach((rating) => {
+      distribution[rating] = 0;
     });
 
-    // Loop through each journal entry and increment the count for the corresponding rating in the distribution object
     games.forEach((game) => {
       const rating = game.rating;
 
-      // Get the floor for any rating that has .5
-      if (rating >= 0 && rating <= 10) {
-        const bucket = Math.floor(rating);
-        distribution[bucket]++;
+      if (typeof rating === "number" && rating >= 1 && rating <= 10) {
+        distribution[Math.floor(rating)]++;
       }
     });
 
@@ -331,20 +327,19 @@ export default function Dashboard() {
   // Function to calculate the top rated game in the user's library. This will be used to display as a quick stat card
   const calculateTopRatedGame = (games: any[]) => {
     const ratedGames = games.filter(
-      (game) => game.rating >= 1 && game.rating <= 10,
+      (game) =>
+        typeof game.rating === "number" &&
+        game.rating >= 1 &&
+        game.rating <= 10,
     );
 
     if (ratedGames.length === 0) {
-      return 0;
+      return null;
     }
 
-    let topRatedGame = ratedGames[0];
-    ratedGames.forEach((game) => {
-      if (game.rating >= topRatedGame.rating) {
-        topRatedGame = game;
-      }
-    });
-    return topRatedGame;
+    return ratedGames.reduce((topGame, game) =>
+      game.rating > topGame.rating ? game : topGame,
+    );
   };
 
   // Calcualte the data for the game status donut chart legend
@@ -404,6 +399,13 @@ export default function Dashboard() {
     ],
   );
 
+  // Calculate total number of entries to display on line chart
+  const recentPeriodEntryCount = useMemo(
+    () =>
+      journalActivityData.reduce((total, month) => total + month.entries, 0),
+    [journalActivityData],
+  );
+
   // useEffect to fetch journal entries, playing games, and play sessions when the component mounts.
   useEffect(() => {
     fetchPlayingGames();
@@ -417,24 +419,34 @@ export default function Dashboard() {
         <div className={classes.wrapper}>
           <div className={classes.dashboardHeader}>
             <div className={classes.heroContainer}>
-              <Group gap={10} align="center">
+              <Group gap={14} align="center" wrap="nowrap">
                 <Avatar
                   radius="xl"
-                  size={isMobile ? 40 : 45}
+                  size={isMobile ? 44 : 56}
                   src={user?.image || undefined}
                   alt={user?.name || "User"}
+                  className={classes.headerAvatar}
                   onClick={() => router.push("/settings/profile")}
                 />
-                <p className={classes.dashboardTitle}>
-                  Welcome back,
-                  <span className={classes.username}>{user?.name}! </span>
-                </p>
+
+                <div className={classes.welcomeContent}>
+                  <Text className={classes.dashboardEyebrow}>
+                    YOUR GAMING SPACE
+                  </Text>
+
+                  <h1 className={classes.dashboardTitle}>
+                    Welcome back,{" "}
+                    <span className={classes.username}>
+                      {user?.name || "Gamer"}!
+                    </span>
+                  </h1>
+                </div>
               </Group>
 
-              <p className={classes.welcomeText}>
+              <Text className={classes.welcomeText}>
                 Track your gaming progress, review your latest activity, and
                 jump back into your library.
-              </p>
+              </Text>
             </div>
 
             <div className={classes.quickActionGroup}>
@@ -451,7 +463,7 @@ export default function Dashboard() {
                 <Button
                   className={classes.quickActionBtn}
                   size="md"
-                  radius="md"
+                  radius="sm"
                   leftSection={<Edit size={20} />}
                   onClick={editOpen}
                 >
@@ -474,7 +486,7 @@ export default function Dashboard() {
                   className={classes.quickActionBtn}
                   color="teal"
                   size="md"
-                  radius="md"
+                  radius="sm"
                   leftSection={<BookText size={20} />}
                   onClick={logOpen}
                 >
@@ -497,7 +509,8 @@ export default function Dashboard() {
                   className={classes.quickActionBtn}
                   color="pink"
                   size="md"
-                  radius="md"
+                  variant="filled"
+                  radius="sm"
                   leftSection={<NotebookPen size={20} />}
                   onClick={journalOpen}
                 >
@@ -509,44 +522,76 @@ export default function Dashboard() {
 
           <div className={classes.statCards}>
             <SimpleGrid
-              cols={{ base: 1, sm: 1, md: 2, lg: 4, xl: 4 }}
-              spacing="lg"
+              cols={{ base: 1, sm: 2, lg: 4 }}
+              spacing="md"
               className={classes.quickStatsGrid}
             >
-              <Paper shadow="md" radius="lg" className={classes.quickStatItem}>
+              {/* Average Rating */}
+              <Paper
+                shadow="sm"
+                radius="lg"
+                className={`${classes.quickStatItem} ${classes.ratingStat}`}
+              >
+                <div className={classes.statAccent} />
+
                 <div className={classes.quickStatHeader}>
                   <ThemeIcon
-                    size={42}
-                    radius="xl"
-                    variant="filled"
+                    size={44}
+                    radius="md"
+                    variant="light"
                     color="indigo"
+                    className={classes.statIcon}
                   >
-                    <ClipboardCheck size={20} />
+                    <ClipboardCheck size={22} />
                   </ThemeIcon>
+
                   <Text className={classes.quickStatLabel}>Average Rating</Text>
                 </div>
 
                 <div className={classes.quickStatBody}>
-                  <Text className={classes.quickStatValue}>
-                    {avgRating.toFixed(1)}
-                    <span className={classes.quickStatUnit}>/10</span>
-                  </Text>
+                  <div className={classes.statNumberRow}>
+                    <Text className={classes.quickStatValue}>
+                      {avgRating.toFixed(1)}
+                    </Text>
+                    <Text className={classes.quickStatUnit}>/10</Text>
+                  </div>
+
                   <Text className={classes.quickStatSubtext}>
-                    Across rated games
+                    {
+                      libraryGames.filter(
+                        (game) => game.rating >= 1 && game.rating <= 10,
+                      ).length
+                    }{" "}
+                    rated{" "}
+                    {libraryGames.filter(
+                      (game) => game.rating >= 1 && game.rating <= 10,
+                    ).length === 1
+                      ? "game"
+                      : "games"}{" "}
+                    in your library
                   </Text>
                 </div>
               </Paper>
 
-              <Paper shadow="md" radius="lg" className={classes.quickStatItem}>
+              {/* Games Platinumed */}
+              <Paper
+                shadow="sm"
+                radius="lg"
+                className={`${classes.quickStatItem} ${classes.platinumStat}`}
+              >
+                <div className={classes.statAccent} />
+
                 <div className={classes.quickStatHeader}>
                   <ThemeIcon
-                    size={42}
-                    radius="xl"
-                    variant="filled"
-                    color="#f2c617"
+                    size={44}
+                    radius="md"
+                    variant="light"
+                    color="yellow"
+                    className={classes.statIcon}
                   >
-                    <Trophy size={20} />
+                    <Trophy size={22} />
                   </ThemeIcon>
+
                   <Text className={classes.quickStatLabel}>
                     Games Platinumed
                   </Text>
@@ -556,74 +601,125 @@ export default function Dashboard() {
                   <Text className={classes.quickStatValue}>
                     {numPlatinumedGames}
                   </Text>
+
                   <Text className={classes.quickStatSubtext}>
-                    Games you've earned a platinum trophy on
+                    {numPlatinumedGames === 1
+                      ? "Platinum trophy earned"
+                      : "Platinum trophies earned"}
                   </Text>
                 </div>
               </Paper>
 
-              <Paper shadow="md" radius="lg" className={classes.quickStatItem}>
+              {/* Journal Entries */}
+              <Paper
+                shadow="sm"
+                radius="lg"
+                className={`${classes.quickStatItem} ${classes.entriesStat}`}
+              >
+                <div className={classes.statAccent} />
+
                 <div className={classes.quickStatHeader}>
-                  <ThemeIcon size={42} radius="xl" variant="filled" color="red">
-                    <Notebook size={20} />
+                  <ThemeIcon
+                    size={44}
+                    radius="md"
+                    variant="light"
+                    color="grape"
+                    className={classes.statIcon}
+                  >
+                    <Notebook size={22} />
                   </ThemeIcon>
-                  <Text className={classes.quickStatLabel}>Total Entries</Text>
+
+                  <Text className={classes.quickStatLabel}>
+                    Journal Entries
+                  </Text>
                 </div>
 
                 <div className={classes.quickStatBody}>
                   <Text className={classes.quickStatValue}>{numEntries}</Text>
+
                   <Text className={classes.quickStatSubtext}>
-                    Journal entries made
+                    {numEntries === 1
+                      ? "Entry in your gaming journal"
+                      : "Entries in your gaming journal"}
                   </Text>
                 </div>
               </Paper>
 
-              <Paper shadow="md" radius="lg" className={classes.quickStatItem}>
+              {/* Top Rated Game */}
+              <Paper
+                shadow="sm"
+                radius="lg"
+                className={`${classes.quickStatItem} ${classes.topRatedStat}`}
+              >
+                <div className={classes.statAccent} />
+
                 <div className={classes.quickStatHeader}>
                   <ThemeIcon
-                    size={42}
-                    radius="xl"
-                    variant="filled"
+                    size={44}
+                    radius="md"
+                    variant="light"
                     color="teal"
+                    className={classes.statIcon}
                   >
-                    <Star size={20} />
+                    <Star size={22} />
                   </ThemeIcon>
+
                   <Text className={classes.quickStatLabel}>Top Rated Game</Text>
                 </div>
 
-                <div className={classes.ratingWrapper}>
-                  <Image
-                    src={
-                      topRatedGame?.coverImage
-                        ? `https:${topRatedGame.coverImage.replace("t_thumb", "t_1080p")}`
-                        : PlaceHolderImage.src
-                    }
-                    alt={topRatedGame?.title || "No Image"}
-                    className={classes.topRatedCover}
-                  />
-                  <Stack gap="sm" align="center" justify="center">
-                    <Link
-                      className={classes.ratingValue}
-                      href={`/games/${topRatedGame?.gameId}`}
-                    >
-                      {topRatedGame?.title || "N/A"}
-                    </Link>
+                {topRatedGame ? (
+                  <Link
+                    href={`/games/${topRatedGame.gameId}`}
+                    className={classes.topRatedContent}
+                    aria-label={`View ${topRatedGame.title}, rated ${topRatedGame.rating} out of 10`}
+                  >
+                    <Image
+                      src={
+                        topRatedGame.coverImage
+                          ? `https:${topRatedGame.coverImage.replace(
+                              "t_thumb",
+                              "t_1080p",
+                            )}`
+                          : PlaceHolderImage.src
+                      }
+                      alt={topRatedGame.title || "Game cover"}
+                      className={classes.topRatedCover}
+                      fit="cover"
+                    />
 
-                    <Group gap="md" align="center">
-                      <Rating
-                        size="lg"
-                        count={1}
-                        value={1}
-                        readOnly
-                        fractions={2}
-                        color="yellow"
-                      />
-                      <Text className={classes.ratingValue} fw={600}>
-                        {topRatedGame?.rating}/10
+                    <div className={classes.topRatedDetails}>
+                      <Text className={classes.topRatedTitle} lineClamp={2}>
+                        {topRatedGame.title}
                       </Text>
-                    </Group>
-                  </Stack>
-                </div>
+
+                      <Group
+                        gap={6}
+                        align="center"
+                        className={classes.topRatedScore}
+                      >
+                        <Star size={17} fill="currentColor" />
+                        <Text className={classes.topRatedRating}>
+                          {Number(topRatedGame.rating).toFixed(1)}
+                        </Text>
+                        <Text className={classes.topRatedOutOf}>/10</Text>
+                      </Group>
+
+                      <Text className={classes.topRatedHint}>
+                        View Game Details
+                      </Text>
+                    </div>
+                  </Link>
+                ) : (
+                  <div className={classes.topRatedEmpty}>
+                    <Star size={24} />
+                    <Text className={classes.topRatedEmptyTitle}>
+                      No rated games yet
+                    </Text>
+                    <Text className={classes.quickStatSubtext}>
+                      Rate a game to see it featured here.
+                    </Text>
+                  </div>
+                )}
               </Paper>
             </SimpleGrid>
 
@@ -636,7 +732,7 @@ export default function Dashboard() {
                 <p className={classes.statusTitle}>Game Status Breakdown</p>
                 <div className={classes.chartWrapper}>
                   <DonutChart
-                    size={240}
+                    size={300}
                     strokeColor="black"
                     strokeWidth={2}
                     thickness={45}
@@ -700,10 +796,15 @@ export default function Dashboard() {
 
               <Paper shadow="md" radius="lg" className={classes.statusCard}>
                 <p className={classes.statusTitle}>Journal Entries Activity</p>
+
+                <Text className={classes.chartSummary}>
+                  {recentPeriodEntryCount} entries in the last six months
+                </Text>
+
                 <div className={classes.chartWrapper}>
                   <LineChart
-                    h={260}
-                    w="95%"
+                    h={300}
+                    w="100%"
                     dataKey="month"
                     yAxisLabel="# of Entries"
                     xAxisLabel="Months"
@@ -714,7 +815,7 @@ export default function Dashboard() {
                       axisLabel: {
                         fill: "white",
                         fontFamily: "Inter",
-                        fontSize: "14px",
+                        fontSize: "12px",
                       },
                       axis: {
                         fill: "white",
@@ -806,26 +907,38 @@ export default function Dashboard() {
           />
 
           <div className={classes.playingGames}>
-            <div className={classes.playingSection}>
-              <div className={classes.titleLogo}>
-                <ThemeIcon
-                  size={40}
-                  radius="md"
-                  variant="gradient"
-                  gradient={{ from: "#e96443", to: "#904e95", deg: 90 }}
-                >
-                  <Gamepad size={30} />
+            <div className={classes.sectionHeader}>
+              <Group gap="md" wrap="nowrap">
+                <ThemeIcon size={44} radius="lg" variant="light" color="orange">
+                  <Gamepad size={24} />
                 </ThemeIcon>
-                <a className={classes.gamesPlayingText} href="/library">
-                  Playing Games
-                </a>
-              </div>
+
+                <div className={classes.sectionHeadingContent}>
+                  <Text className={classes.sectionHeading}>Playing Games</Text>
+                  <Text className={classes.sectionSubtitle}>
+                    Pick up where you left off
+                  </Text>
+                </div>
+
+                <Text className={classes.sectionCount}>
+                  {playGamesLength} {playGamesLength === 1 ? "game" : "games"}
+                </Text>
+              </Group>
+
+              <Link href="/library" className={classes.viewAllLink}>
+                View library
+              </Link>
             </div>
 
             {playingGames.length === 0 ? (
-              <p className={classes.noEntriesText}>
-                You have no games that have the 'Playing' status.
-              </p>
+              <EmptyState
+                icon={<Gamepad size={20} />}
+                size="md"
+                variant="light"
+                withIndicatorBackground
+                title="No games to display"
+                description="Currently, you have no games that you are playing"
+              />
             ) : (
               <>
                 <SimpleGrid cols={5} spacing="lg" className={classes.gamesGrid}>
@@ -855,26 +968,39 @@ export default function Dashboard() {
           </div>
 
           <div className={classes.recentEntries}>
-            <div className={classes.recentEntriesSection}>
-              <div className={classes.titleLogo}>
-                <ThemeIcon
-                  size={40}
-                  radius="md"
-                  variant="gradient"
-                  gradient={{ from: "#7b25d7", to: "#702cee", deg: 60 }}
-                >
-                  <Notebook size={30} />
+            <div className={classes.sectionHeader}>
+              <Group gap="md" wrap="nowrap">
+                <ThemeIcon size={44} radius="lg" variant="light" color="grape">
+                  <Notebook size={24} />
                 </ThemeIcon>
-                <a className={classes.gamesPlayingText} href="/journal">
-                  Recent Entries
-                </a>
-              </div>
+
+                <div className={classes.sectionHeadingContent}>
+                  <Text className={classes.sectionHeading}>Recent Entries</Text>
+                  <Text className={classes.sectionSubtitle}>
+                    Your latest gaming thoughts
+                  </Text>
+                </div>
+
+                <Text className={classes.sectionCount}>
+                  {recentEntries.length}{" "}
+                  {recentEntries.length === 1 ? "entry" : "entries"}
+                </Text>
+              </Group>
+
+              <Link href="/journal" className={classes.viewAllLink}>
+                View journal
+              </Link>
             </div>
 
             {recentEntries.length === 0 ? (
-              <p className={classes.noEntriesText}>
-                No recent journal entries found.
-              </p>
+              <EmptyState
+                icon={<Notebook size={20} />}
+                size="lg"
+                variant="light"
+                withIndicatorBackground
+                title="No journal entries displayed"
+                description="Currently, you have no journal entries created."
+              />
             ) : (
               <SimpleGrid cols={2} spacing="lg" className={classes.entriesGrid}>
                 {recentEntries.map((entry) => (
