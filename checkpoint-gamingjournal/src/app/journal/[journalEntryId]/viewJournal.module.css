@@ -1,122 +1,251 @@
 .wrapper {
-  min-height: 100vh;
-  padding: 1rem 1.5rem;
-  background: var(--mantine-color-dark-8);
+  width: 100%;
+  min-height: 100%;
+  padding: 28px 32px 48px;
 }
 
 .entryContainer {
   width: 100%;
-  max-width: 100%;
+  max-width: 1180px;
   margin: 0 auto;
-
-  padding: 10px;
-}
-
-.coverWrapper {
-  width: 150px;
-  height: 200px;
-  border-radius: 10px;
-  overflow: hidden;
-  flex-shrink: 0;
-
-  border: 1px solid rgb(70, 68, 68);
-}
-
-.cover {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.35s ease;
 }
 
 .toolbar {
-  margin-bottom: 1rem;
+  margin-bottom: 20px;
+}
+
+.headerCard,
+.contentCard {
+  background: var(--mantine-color-body);
+  border: 1px solid var(--mantine-color-default-border);
 }
 
 .header {
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
+  min-width: 0;
+}
+
+.coverWrapper {
+  flex: 0 0 170px;
+  width: 170px;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--mantine-color-default);
+}
+
+.coverImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .headerContent {
   flex: 1;
+  min-width: 0;
+  padding: 8px 0;
+}
+
+.eyebrow {
+  margin-bottom: 8px;
+  color: var(--mantine-color-violet-4);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
 }
 
 .gameName {
-  font-family: "Poppins";
-  font-size: 0.85rem;
+  margin-bottom: 8px;
+  color: var(--mantine-color-dimmed);
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--mantine-color-purple-1);
-  margin-bottom: 0.75rem;
+  font-family: "Inter";
 }
 
 .title {
-  font-family: "Poppins";
-  font-size: clamp(2rem, 4vw, 2.75rem);
-  line-height: 1.2;
-  font-weight: 700;
-  color: white;
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.8px;
+  overflow-wrap: anywhere;
 }
 
 .metadata {
-  margin-top: 1rem;
-  color: var(--mantine-color-gray-5);
-  font-family: "Inter";
-  font-size: 0.9rem;
+  margin-top: 16px;
+  color: var(--mantine-color-dimmed);
+}
+
+.metadataDot {
+  padding: 0 2px;
+  color: var(--mantine-color-violet-4);
+}
+
+.tagsContainer {
+  row-gap: 8px;
+}
+
+.divider {
+  margin: 24px 0;
+  border-color: var(--mantine-color-default-border);
+}
+
+.contentCard {
+  padding: 28px;
+}
+
+.contentIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  color: var(--mantine-color-violet-3);
+  background: var(--mantine-color-violet-light);
 }
 
 .content {
-  max-width: 100%;
-
-  font-family: "Inter";
-  font-size: 1.08rem;
-  line-height: 1.9;
-
-  color: var(--mantine-color-gray-2);
+  color: var(--mantine-color-text);
+  font-size: 16px;
+  font-family: "Barlow";
+  line-height: 1.95;
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
-@media (max-width: 545px) {
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 500px;
+  margin: 80px auto;
+  padding: 40px;
+  border: 1px solid var(--mantine-color-default-border);
+  background: var(--mantine-color-body);
+}
+
+/* Tablet */
+@media (max-width: 768px) {
   .wrapper {
-    padding: 1rem;
+    padding: 20px 16px 32px;
   }
 
   .header {
-    flex-direction: column-reverse;
-    align-items: center;
-  }
-
-  .headerContent {
-    text-align: center;
-    align-items: center;
-  }
-
-  .metadata,
-  .tagsContainer {
-    justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    gap: 16px;
   }
 
   .coverWrapper {
-    width: 150px;
-    height: 200px;
-  }
-
-  .toolbar {
-    margin-bottom: 2.25rem;
+    flex-basis: 125px;
+    width: 125px;
   }
 
   .title {
-    font-size: 1.9rem;
+    font-size: 28px;
+    letter-spacing: -0.4px;
+  }
+
+  .metadata {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .contentCard {
+    padding: 22px;
   }
 
   .content {
-    font-size: 1rem;
+    font-size: 15px;
+    line-height: 1.85;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .wrapper {
+    padding: 14px 12px 24px;
+  }
+
+  .toolbar {
+    margin-bottom: 14px;
+  }
+
+  .headerCard {
+    padding: 12px;
+  }
+
+  .header {
+    gap: 12px;
+  }
+
+  .coverWrapper {
+    flex-basis: 95px;
+    width: 95px;
+    border-radius: 7px;
+  }
+
+  .headerContent {
+    padding: 2px 0;
+  }
+
+  .eyebrow {
+    margin-bottom: 5px;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+  }
+
+  .gameName {
+    margin-bottom: 5px;
+    font-size: 12px;
+  }
+
+  .title {
+    font-size: 22px;
+    line-height: 1.2;
+  }
+
+  .metadata {
+    margin-top: 10px;
+    gap: 5px;
+  }
+
+  .metadata :global(.mantine-Text-root) {
+    font-size: 11px;
+  }
+
+  .tagsContainer {
+    margin-top: 10px;
+    gap: 5px;
+  }
+
+  .tagsContainer :global(.mantine-Badge-root) {
+    font-size: 10px;
+  }
+
+  .divider {
+    margin: 16px 0;
+  }
+
+  .contentCard {
+    padding: 16px;
+  }
+
+  .contentIcon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .content {
+    font-size: 14px;
     line-height: 1.8;
+  }
+
+  .emptyState {
+    margin: 40px auto;
+    padding: 24px;
   }
 }
