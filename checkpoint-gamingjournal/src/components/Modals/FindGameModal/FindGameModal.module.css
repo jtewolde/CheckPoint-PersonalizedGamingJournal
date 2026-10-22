@@ -1,0 +1,19 @@
+.footer {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  border-top: 1px solid var(--mantine-color-dark-4);
+}
+
+.cancelButton,
+.saveButton {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 48em) {
+  .footer {
+    padding: 12px;
+    gap: 8px;
+  }
+}

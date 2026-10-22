@@ -63,7 +63,8 @@ type GameCardVariant =
   | "small"
   | "library"
   | "upcoming"
-  | "remove";
+  | "remove"
+  | "select";
 
 // Define the GameCard component that takes a game prop and attributes
 interface GameCardProps {
@@ -126,10 +127,7 @@ export default function GameCard({
     useDisclosure(false);
   const [AddOpened, { open: openAddModal, close: closeAddModal }] =
     useDisclosure(false);
-  const [deleteOpened, { open: openDeleteModal, close: closeDeleteModal }] =
-    useDisclosure(false);
-
-  const anyModalOpen = opened || editOpened || AddOpened || deleteOpened;
+  const anyModalOpen = opened || editOpened || AddOpened;
 
   const router = useRouter();
 
@@ -307,14 +305,24 @@ export default function GameCard({
       className={`${classes.gameCard} ${
         variant === "remove"
           ? classes.remove
-          : variant === "compact"
-            ? classes.compact
-            : variant === "small"
-              ? classes.small
-              : variant === "library"
-                ? classes.library
-                : classes.default
-      } ${selected ? classes.selected : ""}`}
+          : variant === "select"
+            ? classes.select
+            : variant === "compact"
+              ? classes.compact
+              : variant === "small"
+                ? classes.small
+                : variant === "library"
+                  ? classes.library
+                  : classes.default
+      } ${
+        selected
+          ? variant === "remove"
+            ? classes.removeSelected
+            : variant === "select"
+              ? classes.selectSelected
+              : ""
+          : ""
+      }`}
     >
       <div
         className={`${classes.imageWrapper} ${
@@ -335,8 +343,14 @@ export default function GameCard({
           router.push(`/games/${game.id}`);
         }}
       >
-        {variant === "remove" && selected && (
-          <div className={classes.selectionIndicator}>
+        {(variant === "remove" || variant === "select") && selected && (
+          <div
+            className={`${classes.selectionIndicator} ${
+              variant === "select"
+                ? classes.selectIndicator
+                : classes.removeIndicator
+            }`}
+          >
             <Check size={20} color="white" />
           </div>
         )}
@@ -547,7 +561,7 @@ export default function GameCard({
         </div>
       )}
 
-      {variant === "remove" && (
+      {(variant === "remove" || variant === "select") && (
         <div className={classes.gameInfo}>
           <h3 className={classes.removeGameTitle}>{game.name}</h3>
         </div>

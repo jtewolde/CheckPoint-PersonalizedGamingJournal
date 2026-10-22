@@ -77,9 +77,18 @@
   cursor: pointer;
 }
 
-.selected {
-  outline: 2px solid #f02f2f;
-  outline-offset: 2px;
+/* Selected card in the Remove Game modal */
+.removeSelected {
+  border: 2px solid #de4545;
+  box-shadow: 0 0 0 2px rgb(222 69 69 / 15%);
+  border-radius: 8px;
+}
+
+/* Selected card in the Find Game modal */
+.selectSelected {
+  border: 2px solid #a78bfa;
+  box-shadow: 0 0 0 2px rgb(167 139 250 / 20%);
+  border-radius: 8px;
 }
 
 .selectionIndicator {
@@ -95,6 +104,14 @@
   border-radius: 50%;
   background-color: #f02f2f;
   border: 2px solid white;
+}
+
+.removeIndicator {
+  background: #de4545;
+}
+
+.selectIndicator {
+  background: #8b5cf6;
 }
 
 .gameNameText {
