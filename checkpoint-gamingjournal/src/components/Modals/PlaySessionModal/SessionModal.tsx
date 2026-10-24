@@ -6,11 +6,13 @@ import {
   Modal,
   Divider,
   Stack,
+  Group,
   Button,
-  TextInput,
+  Text,
   LoadingOverlay,
   NumberInput,
   Select,
+  Image,
   MultiSelect,
   TagsInput,
   Textarea,
@@ -229,8 +231,9 @@ export default function PlaySessionModal({
       opened={opened}
       onClose={onClose}
       size="xl"
+      fullScreen={isMobile}
       centered
-      title={gameId ? `${gameName} - Play Session` : `Quick Log Session`}
+      title="Log Play Session"
       withCloseButton
       closeOnClickOutside={false}
       closeOnEscape={false}
@@ -240,9 +243,17 @@ export default function PlaySessionModal({
           fontFamily: "Inter",
           fontSize: "1.1rem",
           color: "white",
+          position: "absolute",
+          left: "50%",
+          transform: "translateX(-50%)",
+          textAlign: "center",
+          whiteSpace: "nowrap",
         },
         header: {
+          position: "relative",
           marginBottom: "10px",
+          alignItems: "center",
+          minHeight: "32px",
         },
       }}
     >
@@ -253,76 +264,43 @@ export default function PlaySessionModal({
         loaderProps={{ size: "lg", color: "white", type: "oval" }}
       />
 
-      <Stack gap="md">
-        <div className={classes.fieldRow}>
-          {gameId ? (
-            <TextInput
-              className={classes.gameSelect}
-              size="md"
-              label="Game"
-              description="Game you're logging a session for"
-              required
-              value={gameName}
-              readOnly
-              leftSection={<Gamepad2 size={20} />}
-            />
-          ) : (
-            <Select
-              leftSection={<Gamepad2 size={20} />}
-              maxDropdownHeight={300}
-              className={classes.gameSelect}
-              data={userGames.map((game: any) => ({
-                value: game.gameId,
-                label: game.title,
-              }))}
-              scrollAreaProps={{
-                type: "auto",
-                scrollbarSize: 16,
-                scrollbars: "y",
-                color: "black",
-                classNames: { scrollbar: classes.scrollBar },
-              }}
-              size="md"
-              label="Game"
-              description="Choose a game from your library"
-              placeholder="(e.g. God of War)"
-              value={selectedGameId}
-              onChange={(value, option) => {
-                setSelectedGameId(value || "");
-                setSelectedGameName(option?.label || "");
-
-                const game = userGames.find((g) => g.gameId === value);
-
-                setGameCover(game?.coverImage || "");
-              }}
-              searchable
-              required
-            />
-          )}
-
-          <MultiSelect
-            className={classes.focusSelect}
-            leftSection={<LibraryBig size={20} />}
-            label="Session Focus"
-            placeholder="Add session focus..."
-            description="What did you focus on during this session?"
-            data={[
-              "Story Progress",
-              "Exploration",
-              "Boss Fight",
-              "Side Quest",
-              "Grinding",
-              "Achievement Hunting",
-              "Build Testing",
-              "Multiplayer",
-              "Casual Play",
-            ]}
-            value={sessionType}
-            onChange={setSessionType}
-            searchable
-            size="md"
+      <Stack gap="lg">
+        {/* Selected game header */}
+        <Group gap="sm" wrap="nowrap" align="center">
+          <Image
+            src={coverImage || undefined}
+            alt={session?.gameName || gameName || "Game cover"}
+            className={classes.gameCover}
+            radius="md"
+            fit="cover"
           />
-        </div>
+
+          <Text className={classes.gameTitle} lineClamp={2}>
+            {gameName || "No game selected"}
+          </Text>
+        </Group>
+
+        {/* Session fields */}
+        <MultiSelect
+          label="Session Focus"
+          placeholder="Select or add a focus..."
+          description="What did you focus on during this session?"
+          data={[
+            "Story Progress",
+            "Exploration",
+            "Boss Fight",
+            "Side Quest",
+            "Grinding",
+            "Achievement Hunting",
+            "Build Testing",
+            "Multiplayer",
+            "Casual Play",
+          ]}
+          value={sessionType}
+          onChange={setSessionType}
+          searchable
+          size="md"
+        />
 
         <Textarea
           className={classes.textInput}
