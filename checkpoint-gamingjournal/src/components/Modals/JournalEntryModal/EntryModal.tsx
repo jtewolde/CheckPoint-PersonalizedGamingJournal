@@ -15,6 +15,7 @@ import {
   Group,
   Chip,
   Pill,
+  Image,
 } from "@mantine/core";
 
 import { JournalEntry } from "@/app/types/JournalEntry";
@@ -23,7 +24,7 @@ import { TAG_CATEGORIES } from "@/hooks/getTagsCategories";
 
 import { toast } from "react-toastify";
 
-import { NotebookPen, Gamepad2, Captions, LibraryBig } from "lucide-react";
+import { NotebookPen, Captions } from "lucide-react";
 
 import classes from "./EntryModal.module.css";
 
@@ -33,6 +34,7 @@ type JournalEntryModalProps = {
   onClose: () => void;
   gameId?: string;
   gameName?: string;
+  coverImage?: string;
   entry?: JournalEntry | null;
   onSuccess?: (Entry: JournalEntry) => void;
   onEntryCreated?: () => void;
@@ -43,6 +45,7 @@ export default function JournalEntryModal({
   onClose,
   gameId,
   gameName,
+  coverImage,
   entry,
   onSuccess,
   onEntryCreated,
@@ -224,7 +227,7 @@ export default function JournalEntryModal({
       onClose={onClose}
       size={900}
       fullScreen={isMobile}
-      title={gameId ? `${gameName} - Journal Entry` : `Create Journal Entry`}
+      title="Create Journal Entry"
       centered
       withCloseButton
       withinPortal
@@ -234,9 +237,17 @@ export default function JournalEntryModal({
           fontFamily: "Inter",
           fontSize: "1.1rem",
           color: "white",
+          position: "absolute",
+          left: "50%",
+          transform: "translateX(-50%)",
+          textAlign: "center",
+          whiteSpace: "nowrap",
         },
         header: {
+          position: "relative",
           marginBottom: "10px",
+          alignItems: "center",
+          minHeight: "32px",
         },
       }}
     >
@@ -248,76 +259,20 @@ export default function JournalEntryModal({
       />
 
       <Stack gap="md">
-        <div className={classes.fieldRow}>
-          {entry ? (
-            <TextInput
-              className={classes.gameSelect}
-              size="md"
-              label="Game"
-              description="Game you're creating an entry for"
-              required
-              value={selectedGameName}
-              readOnly
-              leftSection={<Gamepad2 size={20} />}
-            />
-          ) : (
-            <Select
-              leftSection={<Gamepad2 size={20} />}
-              maxDropdownHeight={300}
-              className={classes.gameSelect}
-              data={userGames.map((game: any) => ({
-                value: game.gameId,
-                label: game.title,
-              }))}
-              scrollAreaProps={{
-                type: "auto",
-                scrollbarSize: 16,
-                scrollbars: "y",
-                color: "black",
-                classNames: { scrollbar: classes.scrollBar },
-              }}
-              size="md"
-              label="Game"
-              description="Choose a game from your library"
-              placeholder="(e.g. God of War)"
-              value={selectedGameId}
-              onChange={(value, option) => {
-                setSelectedGameId(value || "");
-                setSelectedGameName(option?.label || "");
-
-                const selectedGame = userGames.find(
-                  (game) => game.gameId === value,
-                );
-
-                setGameCover(selectedGame?.coverImage || "");
-              }}
-              searchable
-              required
-            />
-          )}
-
-          <Select
-            className={classes.entrySelect}
-            leftSection={<LibraryBig size={20} />}
-            size="md"
-            required
-            label="Entry Type"
-            description="Choose the kind of experience you're documenting"
-            placeholder="Select an entry type"
-            data={[
-              "First Impressions",
-              "Progress Milestone",
-              "Reflection",
-              "Story Reaction",
-              "Build & Strategy",
-              "Game Completion",
-              "Review",
-            ]}
-            value={entryType}
-            onChange={(value) => setEntryType(value || "")}
-            searchable
+        {/* Selected game header */}
+        <Group gap="sm" wrap="nowrap" align="center">
+          <Image
+            src={coverImage || undefined}
+            alt={entry?.gameName || gameName || "Game cover"}
+            className={classes.gameCover}
+            radius="md"
+            fit="cover"
           />
-        </div>
+
+          <Text className={classes.gameTitle} lineClamp={2}>
+            {gameName || "No game selected"}
+          </Text>
+        </Group>
 
         <TextInput
           size="md"

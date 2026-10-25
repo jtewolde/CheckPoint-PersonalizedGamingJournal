@@ -1,3 +1,16 @@
+.gameCover {
+  width: 105px;
+  height: auto;
+  border: 0.5 solid #2e2c2f;
+}
+
+.gameTitle {
+  font-family: "Inter";
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: white;
+}
+
 .durationContainer {
   display: flex;
   flex-direction: row;
