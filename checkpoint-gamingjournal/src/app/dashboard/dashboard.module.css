@@ -456,8 +456,8 @@
 }
 
 .topRatedCover {
-  flex: 0 0 100px;
-  width: 40px;
+  flex: 0 0 70px;
+  width: 70px;
   height: auto;
   overflow: hidden;
   border-radius: 2px;
@@ -475,7 +475,7 @@
   flex: 1;
   flex-direction: column;
   justify-content: center;
-  gap: 9px;
+  gap: 2px;
   min-width: 0;
 }
 

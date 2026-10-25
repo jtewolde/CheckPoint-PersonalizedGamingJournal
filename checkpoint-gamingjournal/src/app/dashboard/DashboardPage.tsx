@@ -13,13 +13,10 @@ import {
   Text,
   ThemeIcon,
   Tooltip,
-  Rating,
   Group,
   Avatar,
   Button,
-  ActionIcon,
   EmptyState,
-  Stack,
 } from "@mantine/core";
 import { DonutChart, BarChart, LineChart } from "@mantine/charts";
 
@@ -29,6 +26,7 @@ import GameCard from "@/components/Cards/GameCard/GameCard";
 import PlaySessionModal from "@/components/Modals/PlaySessionModal/SessionModal";
 import EditGameInfoModal from "@/components/Modals/EditGameInfoModal/EditGameInfoModal";
 import JournalEntryModal from "@/components/Modals/JournalEntryModal/EntryModal";
+import FindGameModal from "@/components/Modals/FindGameModal/FindGameModal";
 
 import PlaceHolderImage from "../../../public/no-cover-image.png";
 
@@ -72,8 +70,6 @@ export default function Dashboard() {
   const [numPlatinumedGames, setNumPlatinumedGames] = useState(0);
   const [topRatedGame, setTopRatedGame] = useState<any | null>(null);
 
-  const [completedPercentage, setCompletedPercentage] = useState(0);
-
   const [sessions, setSessions] = useState<any[]>([]);
   const [recentEntries, setRecentEntries] = useState<any[]>([]); // State to store recent journal entries
   const [journalActivityData, setJournalActivityData] = useState<
@@ -90,6 +86,51 @@ export default function Dashboard() {
   const [logOpened, { open: logOpen, close: logClose }] = useDisclosure(false);
   const [journalOpened, { open: journalOpen, close: journalClose }] =
     useDisclosure(false);
+  const [findGameOpened, { open: findGameOpen, close: findGameClose }] =
+    useDisclosure(false);
+
+  // Define which quick action the user is performing.
+  type GameAction = "log" | "journal" | "edit";
+  const [pendingAction, setPendingAction] = useState<GameAction | null>(null);
+
+  // Store the selected game from the user's library
+  const [selectedLibraryGame, setSelectedLibraryGame] = useState<any | null>(
+    null,
+  );
+
+  const handleFindGame = (action: GameAction) => {
+    setPendingAction(action);
+    findGameOpen();
+  };
+
+  const handleGameSelected = (game: any) => {
+    // Keep the complete library record for the edit modal.
+    setSelectedLibraryGame(game);
+
+    // Preserve the fields used by the session and journal modals.
+    setSelectedGame({
+      gameId: game.gameId,
+      title: game.title,
+      cover: game.coverImage,
+      platforms: game.platform ?? [],
+    });
+
+    findGameClose();
+
+    switch (pendingAction) {
+      case "log":
+        logOpen();
+        break;
+
+      case "journal":
+        journalOpen();
+        break;
+
+      case "edit":
+        editOpen();
+        break;
+    }
+  };
 
   const [selectedGame, setSelectedGame] = useState<{
     gameId: string;
@@ -183,7 +224,6 @@ export default function Dashboard() {
       setNoStatusLength(noStatus);
       setOnHoldLength(onHold);
       setNumOfGames(totalGames);
-      setCompletedPercentage(completationRate);
     } catch (error) {
       console.error("Error fetching playing games: ", error);
     }
@@ -450,11 +490,27 @@ export default function Dashboard() {
             </div>
 
             <div className={classes.quickActionGroup}>
+              <FindGameModal
+                opened={findGameOpened}
+                onClose={() => {
+                  findGameClose();
+                  setPendingAction(null);
+                }}
+                libraryGames={libraryGames}
+                onSelect={handleGameSelected}
+              />
+
               <EditGameInfoModal
                 opened={editOpened}
-                onClose={editClose}
+                onClose={() => {
+                  editClose();
+                  setSelectedGame(null);
+                  setSelectedLibraryGame(null);
+                  setPendingAction(null);
+                }}
                 libraryGames={libraryGames}
               />
+
               <Tooltip
                 label="Edit Game Info"
                 position="top"
@@ -465,18 +521,30 @@ export default function Dashboard() {
                   size="md"
                   radius="sm"
                   leftSection={<Edit size={20} />}
-                  onClick={editOpen}
+                  onClick={() => handleFindGame("edit")}
                 >
                   Edit
                 </Button>
               </Tooltip>
 
+              {/*QUICK LOG SESSION MODAL*/}
               <PlaySessionModal
                 opened={logOpened}
-                onClose={logClose}
+                onClose={() => {
+                  logClose();
+                  setSelectedGame(null);
+                  setSelectedLibraryGame(null);
+                  setPendingAction(null);
+                }}
                 gameId={selectedGame?.gameId}
                 gameName={selectedGame?.title}
+                coverImage={
+                  selectedGame?.cover
+                    ? `${selectedGame?.cover.replace("t_thumb", "t_1080p")}`
+                    : PlaceHolderImage.src
+                }
               />
+
               <Tooltip
                 label="Log Play Session"
                 position="top"
@@ -488,7 +556,7 @@ export default function Dashboard() {
                   size="md"
                   radius="sm"
                   leftSection={<BookText size={20} />}
-                  onClick={logOpen}
+                  onClick={() => handleFindGame("log")}
                 >
                   Log
                 </Button>
@@ -496,10 +564,21 @@ export default function Dashboard() {
 
               <JournalEntryModal
                 opened={journalOpened}
-                onClose={journalClose}
-                gameId={selectedGame?.gameId}
-                gameName={selectedGame?.title}
+                onClose={() => {
+                  journalClose();
+                  setSelectedGame(null);
+                  setSelectedLibraryGame(null);
+                  setPendingAction(null);
+                }}
+                gameId={selectedGame?.gameId ?? ""}
+                gameName={selectedGame?.title ?? ""}
+                coverImage={
+                  selectedGame?.cover
+                    ? `${selectedGame?.cover.replace("t_thumb", "t_1080p")}`
+                    : PlaceHolderImage.src
+                }
               />
+
               <Tooltip
                 label="Create Journal Entry"
                 position="top"
@@ -512,7 +591,7 @@ export default function Dashboard() {
                   variant="filled"
                   radius="sm"
                   leftSection={<NotebookPen size={20} />}
-                  onClick={journalOpen}
+                  onClick={() => handleFindGame("journal")}
                 >
                   Journal
                 </Button>
@@ -892,24 +971,10 @@ export default function Dashboard() {
             </SimpleGrid>
           </div>
 
-          {/*QUICK LOG SESSION MODAL*/}
-          <PlaySessionModal
-            opened={opened}
-            onClose={() => {
-              close();
-              setSelectedGame(null);
-            }}
-            gameId={selectedGame?.gameId || ""}
-            gameName={selectedGame?.title || ""}
-            onSuccess={() => {
-              close();
-            }}
-          />
-
           <div className={classes.playingGames}>
             <div className={classes.sectionHeader}>
               <Group gap="md" wrap="nowrap">
-                <ThemeIcon size={44} radius="lg" variant="light" color="orange">
+                <ThemeIcon size={44} radius="md" variant="light" color="orange">
                   <Gamepad size={24} />
                 </ThemeIcon>
 
