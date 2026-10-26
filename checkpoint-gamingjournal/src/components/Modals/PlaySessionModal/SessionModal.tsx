@@ -268,7 +268,7 @@ export default function PlaySessionModal({
         {/* Selected game header */}
         <Group gap="sm" wrap="nowrap" align="center">
           <Image
-            src={coverImage || undefined}
+            src={coverImage || session?.coverImage || undefined}
             alt={session?.gameName || gameName || "Game cover"}
             className={classes.gameCover}
             radius="md"

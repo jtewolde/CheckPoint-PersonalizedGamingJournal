@@ -262,7 +262,7 @@ export default function JournalEntryModal({
         {/* Selected game header */}
         <Group gap="sm" wrap="nowrap" align="center">
           <Image
-            src={coverImage || undefined}
+            src={entry?.coverImage || coverImage || undefined}
             alt={entry?.gameName || gameName || "Game cover"}
             className={classes.gameCover}
             radius="md"
@@ -270,7 +270,7 @@ export default function JournalEntryModal({
           />
 
           <Text className={classes.gameTitle} lineClamp={2}>
-            {gameName || "No game selected"}
+            {gameName || entry?.gameName || "No game selected"}
           </Text>
         </Group>
 
@@ -291,7 +291,7 @@ export default function JournalEntryModal({
           minRows={3}
           autosize
           required
-          label="Journal Entry"
+          label="Content"
           description="Write about what happened, how you felt, or what stood out during your session"
           placeholder="Today I finally defeated the final boss after upgrading my build and learning the attack patterns..."
           value={content}
