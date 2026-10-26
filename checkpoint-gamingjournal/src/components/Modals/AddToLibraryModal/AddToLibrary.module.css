@@ -11,18 +11,16 @@
 }
 
 .gameCover {
-  width: 55px;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 4px;
-  flex-shrink: 0;
+  width: 105px;
+  height: auto;
+  border: 0.5 solid #2e2c2f;
 }
 
 .gameTitle {
-  color: white;
-  font-size: 24px;
-  font-weight: 600;
   font-family: "Inter";
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: white;
 }
 
 .sectionText {

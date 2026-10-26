@@ -15,6 +15,8 @@ import {
   Rating,
   NumberInput,
   Divider,
+  Image,
+  Badge,
 } from "@mantine/core";
 
 import { DatePickerInput } from "@mantine/dates";
@@ -35,6 +37,7 @@ import {
   Backpack,
 } from "lucide-react";
 
+import PlaceHolderImage from "../../../../public/no-cover-image.png";
 import classes from "./AddToLibrary.module.css";
 
 interface AddToLibraryModalProps {
@@ -209,44 +212,33 @@ export default function AddToLibraryModal({
       <Modal.Overlay />
 
       <Modal.Content>
-        <Modal.Header className={classes.header}>
-          <div className={classes.modalHeaderContent}>
-            {activeGame.cover.url && (
-              <img
-                src={activeGame.cover.url}
-                alt={activeGame.title}
-                className={classes.gameCover}
-              />
-            )}
-
-            <div className={classes.gameInfo}>
-              <Modal.Title className={classes.gameTitle}>
-                {activeGame?.name || "Edit Game Info"}
-              </Modal.Title>
-
-              <Group gap={5}>
-                <div className={classes.gameDetails}>
-                  <Text size="xs" c="dimmed" ff="Inter">
-                    {game.involved_companies?.length
-                      ? game.involved_companies
-                          .filter((company: any) => company.developer)
-                          .map((company: any) => company.company?.name)
-                          .filter(Boolean)
-                          .join(", ") || "N/A"
-                      : "N/A"}
-                  </Text>
-                </div>
-
-                {activeGame?.first_release_date && (
-                  <Text size="xs" c="dimmed" ff="Inter">
-                    {new Date(
-                      activeGame.first_release_date * 1000,
-                    ).getFullYear()}
-                  </Text>
-                )}
-              </Group>
-            </div>
-          </div>
+        <Modal.Header
+          styles={{
+            header: {
+              position: "relative",
+              marginBottom: "10px",
+              alignItems: "center",
+              minHeight: "32px",
+            },
+          }}
+        >
+          <Modal.Title
+            styles={{
+              title: {
+                fontWeight: 700,
+                fontFamily: "Inter",
+                fontSize: "1.1rem",
+                color: "white",
+                position: "absolute",
+                left: "50%",
+                transform: "translateX(-50%)",
+                textAlign: "center",
+                whiteSpace: "nowrap",
+              },
+            }}
+          >
+            Add Game to Library
+          </Modal.Title>
           <Modal.CloseButton />
         </Modal.Header>
 
@@ -258,6 +250,66 @@ export default function AddToLibraryModal({
           />
 
           <Stack gap={isMobile ? 30 : "lg"} mb="lg">
+            {/* Selected game header */}
+            <Group gap="sm" wrap="nowrap" align="center">
+              <Image
+                src={
+                  game.cover
+                    ? `https:${game.cover.url.replace("t_thumb", "t_1080p")}`
+                    : PlaceHolderImage.src
+                }
+                alt={game.name || "Game cover"}
+                className={classes.gameCover}
+                radius="md"
+                fit="cover"
+              />
+
+              <Stack gap="xs">
+                <Text className={classes.gameTitle} lineClamp={2}>
+                  {game.name || "No game selected"}
+                </Text>
+
+                <Group gap={5}>
+                  {activeGame?.first_release_date && (
+                    <Text size="sm" c="dimmed" ff="Inter">
+                      {new Date(
+                        activeGame.first_release_date * 1000,
+                      ).getFullYear()}
+                    </Text>
+                  )}
+
+                  <Text size="xs" c="dimmed" ff="Inter">
+                    •
+                  </Text>
+
+                  <div className={classes.gameDetails}>
+                    <Text size="sm" c="dimmed" ff="Inter">
+                      {game.involved_companies?.length
+                        ? game.involved_companies
+                            .filter((company: any) => company.developer)
+                            .map((company: any) => company.company?.name)
+                            .filter(Boolean)
+                            .join(", ") || "N/A"
+                        : "N/A"}
+                    </Text>
+                  </div>
+                </Group>
+
+                <Group gap={6} wrap="wrap">
+                  {(game.genres ?? []).slice(0, 2).map((genre: any) => (
+                    <Badge
+                      key={genre.id}
+                      size="sm"
+                      variant="light"
+                      color="gray"
+                    >
+                      {genre.name}
+                    </Badge>
+                  ))}
+                </Group>
+              </Stack>
+            </Group>
+
             {/* Status */}
             <Stack gap="xs">
               <Text className={classes.sectionText}>Status</Text>
@@ -360,7 +412,7 @@ export default function AddToLibraryModal({
                 className={classes.platformSelect}
                 size="md"
                 required
-                label="Platform Played"
+                label="Platform Played On"
                 placeholder="Select"
                 data={(game?.platforms ?? []).map(
                   (plat: { id: number; name: string }) => ({
