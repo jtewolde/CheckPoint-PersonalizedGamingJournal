@@ -509,6 +509,7 @@ export default function Dashboard() {
                   setPendingAction(null);
                 }}
                 libraryGames={libraryGames}
+                libraryGame={selectedLibraryGame}
               />
 
               <Tooltip

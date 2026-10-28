@@ -165,7 +165,7 @@ export default function AddToLibraryModal({
               game.platforms?.map((platform: any) => platform.name) || [],
             platform: platform,
 
-            coverImage: game.cover.url,
+            coverImage: game.cover.url.replace("t_thumb", "t_1080p"),
             releaseDate: game.first_release_date
               ? new Date(game.first_release_date * 1000).toLocaleDateString()
               : null,
