@@ -125,8 +125,8 @@ export default function TrendingPage() {
                 size={isMobile ? 40 : 50}
                 radius="md"
                 style={{
-                  color: "#f7c65b",
-                  backgroundColor: "rgba(247, 198, 91, 0.13)",
+                  color: "#ff8652",
+                  backgroundColor: "rgba(255, 134, 82, 0.13)",
                 }}
               >
                 <Flame size={28} strokeWidth={2.2} />

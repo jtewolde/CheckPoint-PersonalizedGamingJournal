@@ -14,6 +14,9 @@ import {
   Text,
   NumberInput,
   Divider,
+  Image,
+  Box,
+  VisuallyHidden,
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 
@@ -110,6 +113,11 @@ export default function EditGameInfoModal({
             status,
             notes,
             platform,
+
+            genre: game?.genres?.map((genre: any) => genre.name) || [],
+            availablePlatforms:
+              game?.platforms?.map((platform: any) => platform.name) || [],
+
             platinum: isPlatinum,
             wishlist: isWishlist,
             rating,
@@ -187,39 +195,63 @@ export default function EditGameInfoModal({
     },
   ];
 
+  // Retrieve the release year of the selected game that is to be edited
+  const releaseYear = activeGame?.releaseDate
+    ? new Date(activeGame.releaseDate).getFullYear()
+    : activeGame?.first_release_date
+      ? new Date(activeGame.first_release_date * 1000).getFullYear()
+      : null;
+
   return (
     <Modal.Root
       opened={opened}
       onClose={onClose}
       centered
-      size="xl"
+      size="lg"
       fullScreen={isMobile}
     >
       <Modal.Overlay />
 
       <Modal.Content>
-        <Modal.Header className={classes.header}>
-          <div className={classes.modalHeaderContent}>
-            {activeGame?.coverImage && (
-              <img
-                src={activeGame.coverImage}
-                alt={activeGame.title}
-                className={classes.gameCover}
-              />
-            )}
+        <Modal.Header className={classes.modalHeader}>
+          <VisuallyHidden>
+            <Modal.Title>Edit Game</Modal.Title>
+          </VisuallyHidden>
 
-            <div className={classes.gameInfo}>
-              <Modal.Title className={classes.gameTitle}>
-                {activeGame?.title || "Edit Game Info"}
-              </Modal.Title>
+          <Group
+            gap="md"
+            wrap="nowrap"
+            align="center"
+            className={classes.modalGameHeader}
+          >
+            <Image
+              src={
+                activeGame?.coverImage?.replace("t_thumb", "t_1080p") ||
+                undefined
+              }
+              alt={activeGame?.title || "Game cover"}
+              className={classes.headerCover}
+              radius="md"
+              fit="cover"
+            />
 
-              {activeGame?.releaseDate && (
-                <Text size="xs" c="dimmed" ff="Inter">
-                  {new Date(activeGame.releaseDate).getFullYear()}
+            <Stack gap={5} style={{ flex: 1, minWidth: 0 }}>
+              <Text className={classes.headerGameTitle} lineClamp={2}>
+                {activeGame?.title || "Edit Game"}
+              </Text>
+
+              {releaseYear && (
+                <Text size="sm" c="dimmed">
+                  {releaseYear}
                 </Text>
               )}
-            </div>
-          </div>
+
+              <Text size="xs" c="dimmed">
+                Edit your library details
+              </Text>
+            </Stack>
+          </Group>
+
           <Modal.CloseButton />
         </Modal.Header>
 
@@ -233,7 +265,7 @@ export default function EditGameInfoModal({
           <Stack gap={isMobile ? 30 : "lg"} mb="lg">
             {/* Status */}
             <Stack gap="xs">
-              <Text className={classes.sectionText}>Status</Text>
+              <Text className={classes.sectionText}>Your Library Status</Text>
 
               <div className={classes.statusGrid}>
                 {gameStatuses.map((gameStatus) => {
@@ -272,7 +304,7 @@ export default function EditGameInfoModal({
 
             {/* Rating */}
             <Stack gap={3}>
-              <Text className={classes.sectionText}>Rating</Text>
+              <Text className={classes.sectionText}>Your Rating</Text>
 
               <Group gap={7} wrap="wrap">
                 <Rating
@@ -332,7 +364,7 @@ export default function EditGameInfoModal({
               <Select
                 className={classes.platformSelect}
                 size="md"
-                label="Platform Played"
+                label="Platform Played On"
                 placeholder="Select"
                 data={availablePlatforms.map((platform: string) => ({
                   value: platform,
@@ -426,17 +458,6 @@ export default function EditGameInfoModal({
           <Divider color="dimmed" mt="md" />
           {/* Footer */}
           <div className={classes.footer}>
-            <Button
-              className={classes.cancelButton}
-              fullWidth
-              size="md"
-              variant="outline"
-              color="gray"
-              onClick={onClose}
-            >
-              Cancel
-            </Button>
-
             <Button
               className={classes.saveButton}
               fullWidth
