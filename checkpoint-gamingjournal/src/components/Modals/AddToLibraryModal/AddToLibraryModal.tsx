@@ -17,6 +17,7 @@ import {
   Divider,
   Image,
   Badge,
+  VisuallyHidden,
 } from "@mantine/core";
 
 import { DatePickerInput } from "@mantine/dates";
@@ -175,7 +176,7 @@ export default function AddToLibraryModal({
             platinum: isPlatinum,
             wishlist: isWishlist,
             rating: rating,
-            hoursPLayed: hours,
+            hoursPlayed: hours,
             startingDate: startingDate,
             completionDate: completionDate,
             notes: notes,
@@ -201,44 +202,80 @@ export default function AddToLibraryModal({
     }
   };
 
+  // Retrieve the release year of the selected game that is to be edited
+  const releaseYear = activeGame?.releaseDate
+    ? new Date(activeGame.releaseDate).getFullYear()
+    : activeGame?.first_release_date
+      ? new Date(activeGame.first_release_date * 1000).getFullYear()
+      : null;
+
   return (
     <Modal.Root
       opened={opened}
       onClose={onClose}
       centered
-      size="xl"
+      size="lg"
       fullScreen={isMobile}
     >
       <Modal.Overlay />
 
       <Modal.Content>
-        <Modal.Header
-          styles={{
-            header: {
-              position: "relative",
-              marginBottom: "10px",
-              alignItems: "center",
-              minHeight: "32px",
-            },
-          }}
-        >
-          <Modal.Title
-            styles={{
-              title: {
-                fontWeight: 700,
-                fontFamily: "Inter",
-                fontSize: "1.1rem",
-                color: "white",
-                position: "absolute",
-                left: "50%",
-                transform: "translateX(-50%)",
-                textAlign: "center",
-                whiteSpace: "nowrap",
-              },
-            }}
+        <Modal.Header className={classes.modalHeader}>
+          <VisuallyHidden>
+            <Modal.Title>Edit Game</Modal.Title>
+          </VisuallyHidden>
+
+          <Group
+            gap="md"
+            wrap="nowrap"
+            align="center"
+            className={classes.modalGameHeader}
           >
-            Add Game to Library
-          </Modal.Title>
+            <Image
+              src={
+                game.cover
+                  ? `https:${game.cover.url.replace("t_thumb", "t_1080p")}`
+                  : PlaceHolderImage.src
+              }
+              alt={activeGame?.title || "Game cover"}
+              className={classes.headerCover}
+              radius="md"
+              fit="cover"
+            />
+
+            <Stack gap={5} style={{ flex: 1, minWidth: 0 }}>
+              <Text className={classes.headerGameTitle} lineClamp={2}>
+                {activeGame?.name || "Edit Game"}
+              </Text>
+
+              <Group gap={5}>
+                {releaseYear && (
+                  <Text size="sm" c="dimmed">
+                    {releaseYear}
+                  </Text>
+                )}
+
+                <Text size="xs" c="dimmed" ff="Inter">
+                  •
+                </Text>
+
+                <Text size="sm" c="dimmed">
+                  {game.involved_companies?.length
+                    ? game.involved_companies
+                        .filter((company: any) => company.developer)
+                        .map((company: any) => company.company?.name)
+                        .filter(Boolean)
+                        .join(", ") || "N/A"
+                    : "N/A"}
+                </Text>
+              </Group>
+
+              <Text size="xs" c="dimmed">
+                Add game to your library
+              </Text>
+            </Stack>
+          </Group>
+
           <Modal.CloseButton />
         </Modal.Header>
 
@@ -250,66 +287,6 @@ export default function AddToLibraryModal({
           />
 
           <Stack gap={isMobile ? 30 : "lg"} mb="lg">
-            {/* Selected game header */}
-            <Group gap="sm" wrap="nowrap" align="center">
-              <Image
-                src={
-                  game.cover
-                    ? `https:${game.cover.url.replace("t_thumb", "t_1080p")}`
-                    : PlaceHolderImage.src
-                }
-                alt={game.name || "Game cover"}
-                className={classes.gameCover}
-                radius="md"
-                fit="cover"
-              />
-
-              <Stack gap="xs">
-                <Text className={classes.gameTitle} lineClamp={2}>
-                  {game.name || "No game selected"}
-                </Text>
-
-                <Group gap={5}>
-                  {activeGame?.first_release_date && (
-                    <Text size="sm" c="dimmed" ff="Inter">
-                      {new Date(
-                        activeGame.first_release_date * 1000,
-                      ).getFullYear()}
-                    </Text>
-                  )}
-
-                  <Text size="xs" c="dimmed" ff="Inter">
-                    •
-                  </Text>
-
-                  <div className={classes.gameDetails}>
-                    <Text size="sm" c="dimmed" ff="Inter">
-                      {game.involved_companies?.length
-                        ? game.involved_companies
-                            .filter((company: any) => company.developer)
-                            .map((company: any) => company.company?.name)
-                            .filter(Boolean)
-                            .join(", ") || "N/A"
-                        : "N/A"}
-                    </Text>
-                  </div>
-                </Group>
-
-                <Group gap={6} wrap="wrap">
-                  {(game.genres ?? []).slice(0, 2).map((genre: any) => (
-                    <Badge
-                      key={genre.id}
-                      size="sm"
-                      variant="light"
-                      color="gray"
-                    >
-                      {genre.name}
-                    </Badge>
-                  ))}
-                </Group>
-              </Stack>
-            </Group>
-
             {/* Status */}
             <Stack gap="xs">
               <Text className={classes.sectionText}>Status</Text>

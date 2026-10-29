@@ -1,26 +1,32 @@
-.header {
-  margin-bottom: 6px;
-  border-bottom: 1px solid #4f4065;
-}
-
-.modalHeaderContent {
+.modalHeader {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  min-width: 0;
+  min-height: 140px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--mantine-color-dark-4);
 }
 
-.gameCover {
-  width: 105px;
-  height: auto;
-  border: 0.5 solid #2e2c2f;
+.modalGameHeader {
+  width: 100%;
+  padding-right: 32px;
 }
 
-.gameTitle {
-  font-family: "Inter";
-  font-weight: 600;
-  font-size: 1.125rem;
-  color: white;
+.headerCover {
+  width: 84px;
+  height: 116px;
+  flex-shrink: 0;
+  object-fit: cover;
+  background: var(--mantine-color-dark-5);
+}
+
+.headerGameTitle {
+  font-family: Inter, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--mantine-color-white);
+  overflow-wrap: anywhere;
 }
 
 .sectionText {
@@ -186,5 +192,24 @@
 
   .platformContainer {
     width: 100%;
+  }
+
+  .modalHeader {
+    min-height: 120px;
+    padding: 16px;
+  }
+
+  .modalGameHeader {
+    gap: 12px;
+    padding-right: 28px;
+  }
+
+  .headerCover {
+    width: 68px;
+    height: 94px;
+  }
+
+  .headerGameTitle {
+    font-size: 1rem;
   }
 }
