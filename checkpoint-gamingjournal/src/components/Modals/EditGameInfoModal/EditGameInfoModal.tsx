@@ -246,7 +246,7 @@ export default function EditGameInfoModal({
                 </Text>
               )}
 
-              <Text size="xs" c="dimmed">
+              <Text size="sm" c="dimmed">
                 Edit your library details
               </Text>
             </Stack>

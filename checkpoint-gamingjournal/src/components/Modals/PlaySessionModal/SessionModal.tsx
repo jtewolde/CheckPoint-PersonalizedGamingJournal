@@ -17,8 +17,10 @@ import {
   Textarea,
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
+
 import { PlaySession } from "@/app/types/PlaySession";
 import { Game } from "@/app/types/Game";
+
 import { toast } from "react-toastify";
 import classes from "./SessionModal.module.css";
 import { Smile, CalendarDays, NotebookPen, Clock } from "lucide-react";

@@ -268,7 +268,7 @@ export default function AddToLibraryModal({
                 </Text>
               </Group>
 
-              <Text size="xs" c="dimmed">
+              <Text size="sm" c="dimmed">
                 Add game to your library
               </Text>
             </Stack>
