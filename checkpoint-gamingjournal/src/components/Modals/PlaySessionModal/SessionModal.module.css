@@ -1,14 +1,32 @@
-.gameCover {
-  width: 105px;
-  height: auto;
-  border: 0.5 solid #2e2c2f;
+.modalHeader {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 140px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--mantine-color-dark-4);
 }
 
-.gameTitle {
-  font-family: "Inter";
-  font-weight: 600;
-  font-size: 1.125rem;
-  color: white;
+.modalGameHeader {
+  width: 100%;
+  padding-right: 32px;
+}
+
+.headerCover {
+  width: 84px;
+  height: 116px;
+  flex-shrink: 0;
+  object-fit: cover;
+  background: var(--mantine-color-dark-5);
+}
+
+.headerGameTitle {
+  font-family: Inter, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--mantine-color-white);
+  overflow-wrap: anywhere;
 }
 
 .durationContainer {
