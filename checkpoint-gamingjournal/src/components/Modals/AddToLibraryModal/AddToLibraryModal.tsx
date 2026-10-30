@@ -221,9 +221,7 @@ export default function AddToLibraryModal({
 
       <Modal.Content>
         <Modal.Header className={classes.modalHeader}>
-          <VisuallyHidden>
-            <Modal.Title>Edit Game</Modal.Title>
-          </VisuallyHidden>
+          <VisuallyHidden></VisuallyHidden>
 
           <Group
             gap="md"
