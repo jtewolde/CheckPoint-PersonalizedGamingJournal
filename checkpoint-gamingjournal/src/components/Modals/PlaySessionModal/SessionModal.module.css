@@ -29,10 +29,26 @@
   overflow-wrap: anywhere;
 }
 
+.durationSection {
+  width: 100%;
+}
+
 .durationContainer {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.durationInput {
+  width: 100%;
+}
+
+.durationInput input {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  height: 48px;
 }
 
 .buttonGroup {

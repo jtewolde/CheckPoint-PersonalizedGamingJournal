@@ -302,25 +302,54 @@ export default function PlaySessionModal({
             </div>
 
             {/* Duration */}
-            <div className={classes.durationContainer}>
-              <NumberInput
-                label="Time Played (Hours)"
-                leftSection={<Clock size={20} />}
-                placeholder="Enter hours"
-                min={0}
-                value={hours}
-                onChange={(value) => setHours(Number(value) || 0)}
-              />
+            <Stack gap="xs" className={classes.durationSection}>
+              <Group gap={6}>
+                <Clock size={18} />
+                <Text size="sm" fw={600}>
+                  Time Played
+                </Text>
+              </Group>
 
-              <NumberInput
-                label="Minutes"
-                placeholder="Enter minutes"
-                min={0}
-                max={59}
-                value={minutes}
-                onChange={(value) => setMinutes(Number(value) || 0)}
-              />
-            </div>
+              <Text size="xs" c="dimmed">
+                How long did you play during this session?
+              </Text>
+
+              <div className={classes.durationContainer}>
+                <NumberInput
+                  className={classes.durationInput}
+                  placeholder="00"
+                  leftSection={<Clock size={20} />}
+                  min={0}
+                  max={999}
+                  value={hours}
+                  onChange={(value) => setHours(Number(value) || 0)}
+                  suffix=" hrs"
+                  size="md"
+                  hideControls
+                  allowDecimal={false}
+                  allowNegative={false}
+                />
+
+                <NumberInput
+                  className={classes.durationInput}
+                  placeholder="00"
+                  leftSection={<Clock size={20} />}
+                  min={0}
+                  max={59}
+                  value={minutes}
+                  onChange={(value) => setMinutes(Number(value) || 0)}
+                  suffix=" min"
+                  size="md"
+                  hideControls
+                  allowDecimal={false}
+                  allowNegative={false}
+                />
+              </div>
+
+              <Text size="xs" c="dimmed">
+                Total duration: {hours}h {minutes}m
+              </Text>
+            </Stack>
 
             <Divider
               styles={{ label: { color: "white" } }}
