@@ -565,13 +565,7 @@ export default function Dashboard() {
                   setSelectedLibraryGame(null);
                   setPendingAction(null);
                 }}
-                gameId={selectedGame?.gameId ?? ""}
-                gameName={selectedGame?.title ?? ""}
-                coverImage={
-                  selectedGame?.cover
-                    ? `${selectedGame?.cover.replace("t_thumb", "t_1080p")}`
-                    : PlaceHolderImage.src
-                }
+                selectedGame={selectedLibraryGame}
               />
 
               <Tooltip
