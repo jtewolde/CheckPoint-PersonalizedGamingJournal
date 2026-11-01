@@ -80,7 +80,6 @@ export default function Dashboard() {
   >([]); // State to store data for game ratings distribution chart
 
   // State variables for doing quick actions by opening modals for editing, log play session, and create journal entry
-  const [opened, { open, close }] = useDisclosure(false);
   const [editOpened, { open: editOpen, close: editClose }] =
     useDisclosure(false);
   const [logOpened, { open: logOpen, close: logClose }] = useDisclosure(false);

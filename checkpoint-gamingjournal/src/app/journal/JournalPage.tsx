@@ -8,6 +8,7 @@ import { authClient } from "@/lib/auth-client";
 
 import JournalEntryCard from "@/components/Cards/JournalEntryCard/EntryCard";
 import JournalEntryModal from "@/components/Modals/JournalEntryModal/EntryModal";
+import FindGameModal from "@/components/Modals/FindGameModal/FindGameModal";
 import JournalFilters from "@/components/Filters/JournalFilters/JournalFilters";
 import JournalPageSearch from "@/components/JournalPageSearch/JournalPageSearch";
 import JournalCalendar from "@/components/ActivityComponents/JournalCalendar/JournalCalendar";
@@ -50,6 +51,7 @@ export default function Journal() {
     [],
   );
   const [totalGames, setTotalGames] = useState(0);
+  const [libraryGames, setLibraryGames] = useState<any[]>([]);
 
   // State variables for filters based on game, entry type, tags, and sorting order
   const [gameId, setGameId] = useState("all");
@@ -64,6 +66,8 @@ export default function Journal() {
   // State for opening delete all modal
   const [opened, { open, close }] = useDisclosure(false);
   const [entryModalOpened, { open: openEntryModal, close: closeEntryModal }] =
+    useDisclosure(false);
+  const [findGameOpened, { open: findGameOpen, close: findGameClose }] =
     useDisclosure(false);
 
   const isMobile = useMediaQuery("(max-width: 560px)");
@@ -88,6 +92,34 @@ export default function Journal() {
     ...(selectedType ? [selectedType] : []),
     ...selectedTags,
   ];
+
+  // Define which quick action the user is performing.
+  type GameAction = "log" | "journal" | "edit";
+  const [pendingAction, setPendingAction] = useState<GameAction | null>(null);
+
+  // Store the selected game from the user's library
+  const [selectedLibraryGame, setSelectedLibraryGame] = useState<any | null>(
+    null,
+  );
+
+  // Handle the action when the user selects a game from the find game modal
+  const handleFindGame = (action: GameAction) => {
+    setPendingAction(action);
+    findGameOpen();
+  };
+
+  const handleGameSelected = (game: any) => {
+    // Keep the complete library record for the edit modal.
+    setSelectedLibraryGame(game);
+    openEntryModal();
+    findGameClose();
+
+    switch (pendingAction) {
+      case "journal":
+        openEntryModal();
+        break;
+    }
+  };
 
   // Check if the user is authenticated, if not redirect to auth page
   const checkAuth = async () => {
@@ -118,6 +150,30 @@ export default function Journal() {
       setTotalGames(data.games.length);
     } catch (error) {
       console.log("Error fetching games with journal entries", error);
+    }
+  };
+
+  // Function to get the games that the user is currently playing from their library
+  const fetchLibraryGames = async () => {
+    try {
+      const token = localStorage.getItem("bearer_token"); // Retrieve Bearer Token from local storage
+      const res = await fetch("/api/library", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch user library");
+      }
+
+      const data = await res.json();
+
+      setLibraryGames(data.games);
+    } catch (error) {
+      console.error("Error fetching playing games: ", error);
     }
   };
 
@@ -238,6 +294,7 @@ export default function Journal() {
 
   useEffect(() => {
     fetchGames(); // Fetch games for filter dropdown
+    fetchLibraryGames(); // Fetch library games for the find game modal
     checkAuth(); // Check authentication on component mount
   }, [router]);
 
@@ -396,13 +453,25 @@ export default function Journal() {
                 </div>
 
                 <div className={classes.toolbarButtons}>
+                  <FindGameModal
+                    opened={findGameOpened}
+                    onClose={() => {
+                      findGameClose();
+                      setPendingAction(null);
+                    }}
+                    libraryGames={libraryGames}
+                    onSelect={handleGameSelected}
+                  />
+
                   <JournalEntryModal
-                    key={selectedGameObject?.gameId ?? "journal-entry-modal"}
                     opened={entryModalOpened}
-                    onClose={closeEntryModal}
-                    gameId={selectedGameObject?.gameId ?? ""}
-                    gameName={selectedGameObject?.gameName ?? ""}
-                    onSuccess={() => close()}
+                    onClose={() => {
+                      closeEntryModal();
+                      setSelectedLibraryGame(null);
+                      setPendingAction(null);
+                    }}
+                    selectedGame={selectedLibraryGame}
+                    onSuccess={() => findGameClose()}
                     onEntryCreated={fetchEntries}
                   />
 
@@ -412,7 +481,7 @@ export default function Journal() {
                     size="md"
                     radius="md"
                     className={classes.addButton}
-                    onClick={openEntryModal}
+                    onClick={() => handleFindGame("journal")}
                     rightSection={<FilePlus />}
                   >
                     Add Entry
