@@ -5,7 +5,7 @@
   display: flex; /* Ensure flexbox is applied */
   justify-content: center;
   align-items: center;
-  padding: 0.4rem 1rem;
+  padding: 0.25rem 1rem;
   position: relative;
   z-index: 20;
 }
@@ -98,8 +98,9 @@
 
 .navItem {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 2px;
 }
 
 .link {
@@ -111,9 +112,9 @@
   border-radius: 8px;
 
   color: #b8b0aa;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 400;
-  font-family: "Poppins";
+  font-family: "Barlow";
 
   transition:
     background-color 0.2s ease,

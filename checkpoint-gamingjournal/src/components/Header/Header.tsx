@@ -82,14 +82,14 @@ export function Header() {
   const navLinks = [
     {
       label: "Dashboard",
-      icon: <LayoutDashboard size={20} />,
+      icon: <LayoutDashboard size={15} />,
       href: "/dashboard",
     },
-    { label: "Library", icon: <Library size={20} />, href: "/library" },
-    { label: "Journal", icon: <Notebook size={20} />, href: "/journal" },
+    { label: "Library", icon: <Library size={15} />, href: "/library" },
+    { label: "Journal", icon: <Notebook size={15} />, href: "/journal" },
     {
       label: "Discover",
-      icon: <Compass size={20} />,
+      icon: <Compass size={15} />,
       href: "/search",
       links: [
         {
@@ -500,7 +500,7 @@ export function Header() {
                 className={classes.searchBar}
                 placeHolder="Search Games..."
                 size="md"
-                radius="sm"
+                radius="lg"
                 autoNavigate
                 showButton={false}
               />
