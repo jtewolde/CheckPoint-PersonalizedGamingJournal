@@ -1,16 +1,14 @@
 import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/Authcontext";
 import { authClient } from "@/lib/auth-client";
 
 import { Menu, Avatar } from "@mantine/core";
 import { LogOut, User, CircleHelp, Settings } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 export default function AvatarMenu() {
   const router = useRouter();
-  const pathname = usePathname();
   const { isAuthenticated, setIsAuthenticated } = useAuth();
   const [user, setUser] = useState<{ name?: string; image?: string } | null>(
     null,

@@ -117,9 +117,26 @@ export default function Home() {
             >
               <div className={classes.trendingSection}>
                 <div className={classes.trendingHeader}>
-                  <Flame size={50} color="#f15c12" />
-                  <h1 className={classes.trendingText}>Trending</h1>
+                  <div className={classes.pageHeading}>
+                    <ThemeIcon
+                      className={classes.sectionIcon}
+                      size={isMobile ? 40 : 50}
+                      radius="md"
+                      style={{
+                        color: "#ff8652",
+                        backgroundColor: "rgba(255, 134, 82, 0.13)",
+                      }}
+                    >
+                      <Flame size={28} strokeWidth={2.2} />
+                    </ThemeIcon>
+                    <h1 className={classes.titleText}>Trending Games</h1>
+                  </div>
+
+                  <Text className={classes.trendingDescription}>
+                    Explore the hottest games capturing attention today.
+                  </Text>
                 </div>
+
                 <TrendingSection />
               </div>
             </motion.div>

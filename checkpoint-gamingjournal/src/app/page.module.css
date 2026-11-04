@@ -95,7 +95,7 @@
   color: var(--mantine-color-white);
   max-width: 600px;
   font-size: 1.125rem;
-  font-weight: 400;
+  font-weight: 300;
   text-align: center;
   font-family: "Poppins";
 
@@ -129,12 +129,13 @@
 }
 
 .trendingHeader {
+  width: 100%;
+  min-width: 0;
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: center;
-  gap: 0.5rem;
-  border-bottom: 4px solid white;
+  gap: 0.4rem;
 }
 
 .trendingText {
@@ -150,13 +151,44 @@
   margin-bottom: 4rem;
 }
 
+/* Icon + heading layout */
+.pageHeading {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Search results heading */
+.titleText {
+  font-size: 2.25rem;
+  font-weight: 750;
+  color: #f5f3ff;
+  text-align: left;
+  font-family: "Noto Sans", sans-serif;
+  letter-spacing: -1.5px;
+  line-height: 1.15;
+}
+
+.trendingDescription {
+  font-size: 1.05rem;
+  font-weight: 400;
+  text-align: left;
+  font-family: "Barlow", sans-serif;
+  color: #aaa5bd;
+  line-height: 1.6;
+  max-width: 650px;
+}
+
 .trendingSection {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
 
-  gap: 1rem;
+  gap: 1.3rem;
   margin-bottom: 4rem;
   width: 100%;
 }
