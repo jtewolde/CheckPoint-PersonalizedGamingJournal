@@ -92,6 +92,8 @@ export default function JournalEntryModal({
   // This will involve opening a modal with a form to input play session details such as duration and notes,
   // and then making an API call to save the play session to the database and associate it with the game and user's library.
   const handleSubmit = async () => {
+    const isEditing = !!entry;
+
     try {
       setLoading(true);
       // Validate required fields and show error toast if any are missing
@@ -102,7 +104,6 @@ export default function JournalEntryModal({
 
       // Receive session token for authenication and determine if play session is being edited or not
       const token = localStorage.getItem("bearer_token");
-      const isEditing = !!entry;
 
       // Create custom URL for updating or creating play session
       const url = isEditing ? `/api/journal/${entry._id}` : `/api/journal`;
@@ -133,7 +134,9 @@ export default function JournalEntryModal({
 
       // Show success toast and reset form fields after successful logging
       toast.success(
-        isEditing ? "Journal Entry updated!" : "Journal Entry created!",
+        isEditing
+          ? "Journal entry updated successfully!"
+          : "Journal entry created successfully!",
       );
       setTitle("");
       setContent("");

@@ -110,11 +110,12 @@ export default function PlaySessionModal({
       return;
     }
 
+    const isEditing = !!session;
+
     try {
       setLoading(true);
 
       const token = localStorage.getItem("bearer_token");
-      const isEditing = !!session;
 
       const url = isEditing
         ? `/api/playSession/${session._id}`
@@ -145,9 +146,11 @@ export default function PlaySessionModal({
         throw new Error(errorData.error || "Failed to log play session");
       }
 
-      const data = await res.json();
-
-      toast.success(isEditing ? "Session updated!" : "Session created!");
+      toast.success(
+        isEditing
+          ? "Play session updated successfully!"
+          : "Play session logged successfully!",
+      );
 
       resetForm();
 
@@ -155,7 +158,11 @@ export default function PlaySessionModal({
       onClose();
     } catch (error) {
       console.error("Error logging play session:", error);
-      toast.error("Failed to log play session. Please try again.");
+      toast.error(
+        isEditing
+          ? "Couldn't update your play session. Please try again."
+          : "Couldn't log your play session. Please try again.",
+      );
     } finally {
       setLoading(false);
     }

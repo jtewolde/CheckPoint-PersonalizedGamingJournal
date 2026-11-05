@@ -480,7 +480,13 @@ export default function AddToLibraryModal({
             />
           </Stack>
 
-          <Divider color="dimmed" mt="md" />
+          <Divider
+            styles={{ label: { color: "white" } }}
+            labelPosition="center"
+            color="#424143"
+            mt="md"
+          />
+
           {/* Footer */}
           <div className={classes.footer}>
             <Button
