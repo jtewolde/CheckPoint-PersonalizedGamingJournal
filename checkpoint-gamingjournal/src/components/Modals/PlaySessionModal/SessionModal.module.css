@@ -36,7 +36,7 @@
 .durationContainer {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 4px;
   width: 100%;
 }
 
@@ -73,6 +73,16 @@
 .moodSelect,
 .dateField {
   flex: 1 1 0;
+  width: 100%;
+}
+
+.durationPresets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.durationPresets button {
   width: 100%;
 }
 

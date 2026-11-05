@@ -93,7 +93,7 @@
 .quickActionBtn {
   min-height: 42px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  font-weight: 600;
+  font-weight: 500;
   font-family: "Inter";
   transition:
     transform 160ms ease,

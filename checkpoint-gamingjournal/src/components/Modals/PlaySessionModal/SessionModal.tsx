@@ -42,9 +42,8 @@ export default function PlaySessionModal({
   onSessionCreated,
 }: PlaySessionModalProps) {
   // Play session duration
-  const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(0);
-  const duration = hours * 60 + minutes;
+  const [duration, setDuration] = useState(0);
+  const [isCustomDuration, setIsCustomDuration] = useState(false);
 
   // Play session details
   const [playSessionNotes, setPlaySessionNotes] = useState("");
@@ -66,13 +65,19 @@ export default function PlaySessionModal({
     ? new Date(selectedGame.releaseDate).getFullYear()
     : null;
 
-  const genres = selectedGame?.genre ?? [];
-  const availablePlatforms = selectedGame?.availablePlatforms ?? [];
+  // Create duration presets for the play session modal
+  const durationPresets = [
+    { label: "30 min", value: 30 },
+    { label: "1 hour", value: 60 },
+    { label: "1.5 hours", value: 90 },
+    { label: "2 hours", value: 120 },
+    { label: "3 hours", value: 180 },
+  ];
 
   // Reset form fields
   const resetForm = () => {
-    setHours(0);
-    setMinutes(0);
+    setDuration(0);
+    setIsCustomDuration(false);
     setPlaySessionNotes("");
     setPlaySessionDate(null);
     setSessionType([]);
@@ -89,14 +94,16 @@ export default function PlaySessionModal({
       setPlaySessionDate(session.date ?? null);
       setMood(session.mood || []);
 
-      setHours(Math.floor(session.duration / 60));
-      setMinutes(session.duration % 60);
+      setDuration(session.duration);
+      setIsCustomDuration(
+        !durationPresets.some((p) => p.value === session.duration),
+      );
     } else {
       resetForm();
     }
   }, [opened, session]);
 
-  // Create or update a play session
+  // Function to handle form submission for creating or updating a play session
   const handleSubmit = async () => {
     if (!selectedGameId || !playSessionDate || duration <= 0) {
       toast.error("Please fill out all required fields.");
@@ -302,59 +309,79 @@ export default function PlaySessionModal({
             </div>
 
             {/* Duration */}
-            <Stack gap="xs" className={classes.durationSection}>
-              <Group gap={6}>
-                <Clock size={18} />
-                <Text size="sm" fw={600}>
+            <Stack gap="md" className={classes.durationSection}>
+              <Stack gap={1}>
+                <Text size="md" fw={600}>
                   Time Played
                 </Text>
-              </Group>
 
-              <Text size="xs" c="dimmed">
-                How long did you play during this session?
-              </Text>
+                <Text size="xs" c="dimmed">
+                  How long did you play during this session?
+                </Text>
+              </Stack>
 
-              <div className={classes.durationContainer}>
-                <NumberInput
-                  className={classes.durationInput}
-                  placeholder="00"
-                  leftSection={<Clock size={20} />}
-                  min={0}
-                  max={999}
-                  value={hours}
-                  onChange={(value) => setHours(Number(value) || 0)}
-                  suffix=" hrs"
+              {/* Duration Presets */}
+              <div className={classes.durationPresets}>
+                {durationPresets.map((preset) => (
+                  <Button
+                    key={preset.value}
+                    variant={
+                      duration === preset.value && !isCustomDuration
+                        ? "outline"
+                        : "default"
+                    }
+                    color={
+                      duration === preset.value && !isCustomDuration
+                        ? "#af7ff4"
+                        : ""
+                    }
+                    size="md"
+                    ff="Inter"
+                    fw={400}
+                    onClick={() => {
+                      setDuration(preset.value);
+                      setIsCustomDuration(false);
+                    }}
+                  >
+                    {preset.label}
+                  </Button>
+                ))}
+
+                <Button
+                  variant={isCustomDuration ? "outline" : "default"}
+                  color={isCustomDuration ? "#ae7cf6" : ""}
+                  ff="Inter"
+                  fw={400}
                   size="md"
-                  hideControls
-                  allowDecimal={false}
-                  allowNegative={false}
-                />
+                  onClick={() => setIsCustomDuration(true)}
+                >
+                  Custom
+                </Button>
+              </div>
 
+              {/* Custom Duration Input */}
+              {isCustomDuration && (
                 <NumberInput
-                  className={classes.durationInput}
-                  placeholder="00"
-                  leftSection={<Clock size={20} />}
+                  label="Custom Duration"
+                  placeholder="Enter minutes"
+                  description="Enter the total number of minutes played."
+                  value={duration || ""}
+                  onChange={(value) => setDuration(Number(value) || 0)}
                   min={0}
-                  max={59}
-                  value={minutes}
-                  onChange={(value) => setMinutes(Number(value) || 0)}
+                  max={9999}
                   suffix=" min"
                   size="md"
                   hideControls
                   allowDecimal={false}
                   allowNegative={false}
                 />
-              </div>
-
-              <Text size="xs" c="dimmed">
-                Total duration: {hours}h {minutes}m
-              </Text>
+              )}
             </Stack>
 
             <Divider
               styles={{ label: { color: "white" } }}
               labelPosition="center"
-              color="dimmed"
+              color="#424143"
               mt="md"
             />
 
