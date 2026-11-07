@@ -18,13 +18,23 @@
 }
 
 .option {
-  background-color: #232526;
-  color: white;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 3px;
 }
 
-.option:hover {
-  background-color: #3a3a3c; /* Darker hover color */
-  color: #ffffff;
+.optionImage {
+  width: 60px;
+  height: auto;
+}
+
+.gameInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  gap: 2px;
 }
 
 .button {
