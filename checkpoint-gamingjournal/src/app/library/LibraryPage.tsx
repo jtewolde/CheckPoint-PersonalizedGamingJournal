@@ -17,8 +17,10 @@ import {
   Button,
   ActionIcon,
   EmptyState,
+  ThemeIcon,
+  Text,
 } from "@mantine/core";
-import { Trash2, Gamepad } from "lucide-react";
+import { Trash2, Gamepad, LibraryBig } from "lucide-react";
 
 import classes from "./library.module.css";
 import GameCard from "@/components/Cards/GameCard/GameCard";
@@ -170,13 +172,26 @@ export default function Library() {
   return (
     <div className={classes.background}>
       <div className={classes.wrapper}>
-        <div className={classes.libraryHeader}>
-          <div className={classes.titleLogo}>
-            <h2 className={classes.title}>Your Library</h2>
+        <div className={classes.titleDescriptionSection}>
+          <div className={classes.pageHeading}>
+            <ThemeIcon
+              className={classes.sectionIcon}
+              size={isMobile ? 40 : 50}
+              radius="md"
+              style={{
+                color: "#35c9b2",
+                backgroundColor: "rgba(65, 246, 186, 0.13)",
+              }}
+            >
+              <LibraryBig size={28} strokeWidth={2.2} />
+            </ThemeIcon>
+
+            <h1 className={classes.titleText}>Your Library</h1>
           </div>
-          <p className={classes.subtitle}>
-            Manage your collection and track your progress.
-          </p>
+
+          <Text className={classes.description}>
+            View and manage all the games in your library.
+          </Text>
         </div>
 
         <div className={classes.toolbar}>

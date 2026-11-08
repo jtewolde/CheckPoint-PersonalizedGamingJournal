@@ -12,10 +12,7 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  padding-top: 1rem;
-  padding-bottom: 1.5rem;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding: 2rem;
   gap: 1rem;
   flex: 1;
   position: relative;
@@ -24,31 +21,44 @@
   justify-content: flex-start;
 }
 
-.libraryHeader {
+.titleDescriptionSection {
+  width: 100%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: flex-start;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 1rem;
 }
 
-.title {
-  font-size: 56px;
-  font-weight: 700;
-  color: white; /* Dark text for contrast */
-  text-align: left;
-  font-family: "Noto Sans";
-  letter-spacing: 1px;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+/* Icon + heading layout */
+.pageHeading {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  min-width: 0;
 }
 
-.subtitle {
-  font-size: 20px;
-  font-weight: 300;
+.description {
+  font-size: 1.05rem;
+  font-weight: 400;
   text-align: left;
-  font-family: "Barlow";
-  color: #e7e5e5;
-  width: auto;
+  font-family: "Barlow", sans-serif;
+  color: #aaa5bd;
+  line-height: 1.6;
+  max-width: 650px;
+}
+
+.titleText {
+  font-size: clamp(2.25rem, 4vw, 3.3rem);
+  font-weight: 750;
+  color: #f5f3ff;
+  text-align: left;
+  font-family: "Noto Sans", sans-serif;
+  letter-spacing: -1.5px;
+  line-height: 1.15;
 }
 
 .totalGames {
@@ -149,14 +159,6 @@
   .wrapper {
     padding-left: 1rem;
     padding-right: 1rem;
-  }
-
-  .title {
-    font-size: 2.3rem;
-  }
-
-  .subtitle {
-    font-size: 18px;
   }
 
   .toolbar {
