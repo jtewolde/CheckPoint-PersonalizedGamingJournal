@@ -46,9 +46,10 @@ import classes from "./Header.module.css";
 
 export function Header() {
   const [opened, { toggle, close }] = useDisclosure(false); // State for mobile side bar
-  const [searchOpened, { toggle: searchToggle, close: searchClose }] =
-    useDisclosure(false); // State for search drawer
-  const [searchExpanded, setSearchExpanded] = useDisclosure(false); // State for search bar expansion
+
+  // State for search bar expansion
+  const [searchExpanded, { open: openSearch, close: closeSearch }] =
+    useDisclosure(false);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -252,283 +253,299 @@ export function Header() {
   return (
     <header className={classes.header}>
       <div className={classes.inner}>
-        <div className={classes.logoContainer} onClick={handleLogoClick}>
-          <Image
-            src={CheckPointLogo.src}
-            alt="CheckPoint Logo"
-            className={classes.logo}
-            style={{ cursor: "pointer" }}
-          />
-        </div>
+        {!searchExpanded && (
+          <>
+            <div className={classes.logoContainer} onClick={handleLogoClick}>
+              <Image
+                src={CheckPointLogo.src}
+                alt="CheckPoint Logo"
+                className={classes.logo}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
 
-        {/* Desktop Links */}
-        <div className={classes.links}>
-          <Group
-            gap="lg"
-            visibleFrom="sm"
-            justify="flex-start"
-            className={classes.linkGroup}
-          >
-            {isAuthenticated ? (
-              <>
-                {navLinks.map((link) => {
-                  if (link.label === "Discover") {
-                    return (
-                      <Menu
-                        key={link.href}
-                        trigger="hover"
-                        openDelay={100}
-                        closeDelay={200}
-                        shadow="md"
-                        width={220}
-                      >
-                        <Menu.Target>
-                          <div
+            {/* Desktop Links */}
+            <div className={classes.links}>
+              <Group
+                gap="lg"
+                visibleFrom="sm"
+                justify="flex-start"
+                className={classes.linkGroup}
+              >
+                {isAuthenticated ? (
+                  <>
+                    {navLinks.map((link) => {
+                      if (link.label === "Discover") {
+                        return (
+                          <Menu
+                            key={link.href}
+                            trigger="hover"
+                            openDelay={100}
+                            closeDelay={200}
+                            shadow="md"
+                            width={220}
+                          >
+                            <Menu.Target>
+                              <div
+                                className={`${classes.link} ${
+                                  pathname === "/discover" ||
+                                  pathname === "/search/popular" ||
+                                  pathname === "/search/trending"
+                                    ? classes.active
+                                    : ""
+                                }`}
+                                style={{ cursor: "pointer" }}
+                              >
+                                <div className={classes.navItem}>
+                                  {link.icon}
+                                  {link.label}
+                                </div>
+                              </div>
+                            </Menu.Target>
+
+                            <Menu.Dropdown>
+                              <Menu.Item
+                                component={Link}
+                                href="/discover"
+                                leftSection={
+                                  <IconSearch size={20} color="white" />
+                                }
+                              >
+                                Discover Games
+                              </Menu.Item>
+
+                              <Menu.Item
+                                component={Link}
+                                href="/search/popular"
+                                leftSection={<Star size={20} color="#f7c65b" />}
+                              >
+                                Popular Games
+                              </Menu.Item>
+
+                              <Menu.Item
+                                component={Link}
+                                href="/search/trending"
+                                leftSection={
+                                  <Flame size={20} color="#ff8652" />
+                                }
+                              >
+                                Trending Games
+                              </Menu.Item>
+
+                              <Menu.Item
+                                component={Link}
+                                href="/search/upcoming"
+                                leftSection={
+                                  <CalendarClock size={25} color="#59d6a0" />
+                                }
+                              >
+                                Upcoming Games
+                              </Menu.Item>
+
+                              <Menu.Item
+                                component={Link}
+                                href="/search/most-anticipated"
+                                leftSection={
+                                  <Megaphone size={20} color="#c2a0ff" />
+                                }
+                              >
+                                Most Anticipated Games
+                              </Menu.Item>
+                            </Menu.Dropdown>
+                          </Menu>
+                        );
+                      }
+
+                      return (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className={`${classes.link} ${
+                            pathname === link.href ? classes.active : ""
+                          }`}
+                        >
+                          <div className={classes.navItem}>
+                            {link.icon}
+                            {link.label}
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <>
+                    <div className={classes.guestLinks}>
+                      {guestNavLinks.map((link) => {
+                        if (link.label === "Discover") {
+                          return (
+                            <Menu
+                              key={link.href}
+                              trigger="hover"
+                              openDelay={100}
+                              closeDelay={200}
+                              shadow="md"
+                              width={220}
+                            >
+                              <Menu.Target>
+                                <div
+                                  className={`${classes.link} ${
+                                    pathname === "/discover" ||
+                                    pathname === "/search/popular" ||
+                                    pathname === "/search/trending"
+                                      ? classes.active
+                                      : ""
+                                  }`}
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  <div className={classes.navItem}>
+                                    {link.icon}
+                                    {link.label}
+                                  </div>
+                                </div>
+                              </Menu.Target>
+
+                              <Menu.Dropdown>
+                                <Menu.Item
+                                  component={Link}
+                                  href="/discover"
+                                  leftSection={
+                                    <IconSearch size={20} color="white" />
+                                  }
+                                >
+                                  Discover Games
+                                </Menu.Item>
+
+                                <Menu.Item
+                                  component={Link}
+                                  href="/search/popular"
+                                  leftSection={
+                                    <Star size={20} color="#f7c65b" />
+                                  }
+                                >
+                                  Popular Games
+                                </Menu.Item>
+
+                                <Menu.Item
+                                  component={Link}
+                                  href="/search/trending"
+                                  leftSection={
+                                    <Flame size={20} color="#ff8652" />
+                                  }
+                                >
+                                  Trending Games
+                                </Menu.Item>
+
+                                <Menu.Item
+                                  component={Link}
+                                  href="/search/upcoming"
+                                  leftSection={
+                                    <CalendarClock size={20} color="#59d6a0" />
+                                  }
+                                >
+                                  Upcoming Games
+                                </Menu.Item>
+
+                                <Menu.Item
+                                  component={Link}
+                                  href="/search/most-anticipated"
+                                  leftSection={
+                                    <Megaphone size={20} color="#c2a0ff" />
+                                  }
+                                >
+                                  Most Anticipated Games
+                                </Menu.Item>
+                              </Menu.Dropdown>
+                            </Menu>
+                          );
+                        }
+
+                        return (
+                          <Link
+                            key={link.href}
+                            href={link.href}
                             className={`${classes.link} ${
-                              pathname === "/discover" ||
-                              pathname === "/search/popular" ||
-                              pathname === "/search/trending"
-                                ? classes.active
-                                : ""
+                              pathname === link.href ? classes.active : ""
                             }`}
-                            style={{ cursor: "pointer" }}
                           >
                             <div className={classes.navItem}>
                               {link.icon}
                               {link.label}
                             </div>
-                          </div>
-                        </Menu.Target>
-
-                        <Menu.Dropdown>
-                          <Menu.Item
-                            component={Link}
-                            href="/discover"
-                            leftSection={<IconSearch size={20} color="white" />}
-                          >
-                            Discover Games
-                          </Menu.Item>
-
-                          <Menu.Item
-                            component={Link}
-                            href="/search/popular"
-                            leftSection={<Star size={20} color="#f7c65b" />}
-                          >
-                            Popular Games
-                          </Menu.Item>
-
-                          <Menu.Item
-                            component={Link}
-                            href="/search/trending"
-                            leftSection={<Flame size={20} color="#ff8652" />}
-                          >
-                            Trending Games
-                          </Menu.Item>
-
-                          <Menu.Item
-                            component={Link}
-                            href="/search/upcoming"
-                            leftSection={
-                              <CalendarClock size={25} color="#59d6a0" />
-                            }
-                          >
-                            Upcoming Games
-                          </Menu.Item>
-
-                          <Menu.Item
-                            component={Link}
-                            href="/search/most-anticipated"
-                            leftSection={
-                              <Megaphone size={20} color="#c2a0ff" />
-                            }
-                          >
-                            Most Anticipated Games
-                          </Menu.Item>
-                        </Menu.Dropdown>
-                      </Menu>
-                    );
-                  }
-
-                  return (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className={`${classes.link} ${
-                        pathname === link.href ? classes.active : ""
-                      }`}
-                    >
-                      <div className={classes.navItem}>
-                        {link.icon}
-                        {link.label}
-                      </div>
-                    </Link>
-                  );
-                })}
-              </>
-            ) : (
-              <>
-                <div className={classes.guestLinks}>
-                  {guestNavLinks.map((link) => {
-                    if (link.label === "Discover") {
-                      return (
-                        <Menu
-                          key={link.href}
-                          trigger="hover"
-                          openDelay={100}
-                          closeDelay={200}
-                          shadow="md"
-                          width={220}
-                        >
-                          <Menu.Target>
-                            <div
-                              className={`${classes.link} ${
-                                pathname === "/discover" ||
-                                pathname === "/search/popular" ||
-                                pathname === "/search/trending"
-                                  ? classes.active
-                                  : ""
-                              }`}
-                              style={{ cursor: "pointer" }}
-                            >
-                              <div className={classes.navItem}>
-                                {link.icon}
-                                {link.label}
-                              </div>
-                            </div>
-                          </Menu.Target>
-
-                          <Menu.Dropdown>
-                            <Menu.Item
-                              component={Link}
-                              href="/discover"
-                              leftSection={
-                                <IconSearch size={20} color="white" />
-                              }
-                            >
-                              Discover Games
-                            </Menu.Item>
-
-                            <Menu.Item
-                              component={Link}
-                              href="/search/popular"
-                              leftSection={<Star size={20} color="#f7c65b" />}
-                            >
-                              Popular Games
-                            </Menu.Item>
-
-                            <Menu.Item
-                              component={Link}
-                              href="/search/trending"
-                              leftSection={<Flame size={20} color="#ff8652" />}
-                            >
-                              Trending Games
-                            </Menu.Item>
-
-                            <Menu.Item
-                              component={Link}
-                              href="/search/upcoming"
-                              leftSection={
-                                <CalendarClock size={20} color="#59d6a0" />
-                              }
-                            >
-                              Upcoming Games
-                            </Menu.Item>
-
-                            <Menu.Item
-                              component={Link}
-                              href="/search/most-anticipated"
-                              leftSection={
-                                <Megaphone size={20} color="#c2a0ff" />
-                              }
-                            >
-                              Most Anticipated Games
-                            </Menu.Item>
-                          </Menu.Dropdown>
-                        </Menu>
-                      );
-                    }
-
-                    return (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        className={`${classes.link} ${
-                          pathname === link.href ? classes.active : ""
-                        }`}
-                      >
-                        <div className={classes.navItem}>
-                          {link.icon}
-                          {link.label}
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </>
-            )}
-          </Group>
-        </div>
-
-        <Group className={classes.actions} gap="md">
-          <Modal
-            opened={searchOpened}
-            onClose={searchClose}
-            centered
-            withCloseButton
-            title="Search Games"
-            className={classes.drawer}
-            styles={{
-              close: {
-                color: "white",
-              },
-            }}
-          >
-            <GameSearchBar
-              className={classes.searchBar}
-              placeHolder="Search Games..."
-              size="lg"
-              radius="sm"
-              autoNavigate
-              showActionIcon
-              iconColor="#812fcf"
-            />
-          </Modal>
-
-          {!isMobileSearch ? (
-            <div className={classes.searchBarContainer}>
-              <GameSearchBar
-                className={classes.searchBar}
-                placeHolder="Search Games..."
-                size="md"
-                radius="lg"
-                autoNavigate
-                showButton={false}
-              />
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
+              </Group>
             </div>
-          ) : (
-            <div className={classes.searchButtonContainer}>
+          </>
+        )}
+
+        <Group
+          className={`${classes.actions} ${
+            searchExpanded ? classes.expandedActions : ""
+          }`}
+          gap="md"
+        >
+          {searchExpanded && isMobileSearch ? (
+            <div className={classes.expandedSearch}>
+              <GameSearchBar
+                className={classes.expandedSearchInput}
+                placeHolder="Search games..."
+                size="md"
+                radius="md"
+                autoNavigate
+              />
+
               <ActionIcon
                 size="lg"
-                variant="light"
+                variant="subtle"
                 color="white"
-                onClick={searchToggle}
+                aria-label="Close search"
+                onClick={closeSearch}
               >
-                <IconSearch size={30} />
+                <X size={24} />
               </ActionIcon>
             </div>
+          ) : (
+            <>
+              {!isMobileSearch ? (
+                <div className={classes.searchBarContainer}>
+                  <GameSearchBar
+                    className={classes.searchBar}
+                    placeHolder="Search Games..."
+                    size="md"
+                    radius="lg"
+                    autoNavigate
+                  />
+                </div>
+              ) : (
+                <div className={classes.searchButtonContainer}>
+                  <ActionIcon
+                    size="lg"
+                    variant="light"
+                    color="white"
+                    aria-label="Open search"
+                    onClick={openSearch}
+                  >
+                    <IconSearch size={30} />
+                  </ActionIcon>
+                </div>
+              )}
+
+              {isAuthenticated && !isMobile ? <AvatarMenu /> : null}
+
+              <Burger
+                className={classes.burger}
+                opened={opened}
+                onClick={toggle}
+                hiddenFrom="sm"
+                size="md"
+                color="white"
+              />
+            </>
           )}
-
-          {isAuthenticated && !isMobile ? <AvatarMenu /> : null}
-
-          {/* Mobile Links */}
-          <Burger
-            className={classes.burger}
-            opened={opened}
-            onClick={toggle}
-            hiddenFrom="sm"
-            size="md"
-            color="white"
-          />
         </Group>
 
         <Drawer

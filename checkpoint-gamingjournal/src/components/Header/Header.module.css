@@ -52,6 +52,24 @@
   color: var(--text);
 }
 
+.expandedActions {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+}
+
+.expandedSearch {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+}
+
+.expandedSearchInput {
+  flex: 1;
+  min-width: 0;
+}
+
 @media screen and (max-width: 868px) {
   .inner {
     flex-wrap: nowrap;
