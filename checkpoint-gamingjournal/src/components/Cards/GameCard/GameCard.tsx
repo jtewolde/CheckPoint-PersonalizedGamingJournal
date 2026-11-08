@@ -513,13 +513,7 @@ export default function GameCard({
               key={game.id}
               opened={opened}
               onClose={close}
-              gameId={game.id}
-              gameName={game.name}
-              coverImage={
-                game.cover
-                  ? `${game.cover.url.replace("t_thumb", "t_1080p")}`
-                  : undefined
-              }
+              selectedGame={libraryGame}
               onSuccess={() => close()}
             />
 

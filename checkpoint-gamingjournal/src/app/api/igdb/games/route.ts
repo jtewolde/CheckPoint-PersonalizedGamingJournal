@@ -217,7 +217,7 @@ export async function GET(req: NextRequest) {
 
         where ${whereClause};
 
-        ${sortClause}
+        sort total_rating desc;
 
         limit ${limit};
         offset ${offset};

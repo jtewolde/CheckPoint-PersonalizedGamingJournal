@@ -100,14 +100,16 @@ export default function GameSearchBar({
 
     // Cancel previous API request
     abortControllerRef.current?.abort();
-
     const trimmedQuery = query.trim();
 
+    // Clear search results if query is too short
     if (trimmedQuery.length < MIN_QUERY_LENGTH) {
       setSearchResults([]);
       setIsSearching(false);
+      combobox.closeDropdown();
       return;
     }
+
     debounceRef.current = setTimeout(async () => {
       const controller = new AbortController();
       abortControllerRef.current = controller;
@@ -132,9 +134,14 @@ export default function GameSearchBar({
             index === self.findIndex((g) => g.name === game.name),
         );
 
-        console.log("Unique Results", uniqueResults);
+        const results = uniqueResults.slice(0, MAX_RESULTS);
+        setSearchResults(results);
 
-        setSearchResults(uniqueResults.slice(0, MAX_RESULTS)); // Update search results with unique values
+        if (results.length > 0) {
+          combobox.openDropdown();
+        } else {
+          combobox.closeDropdown();
+        }
       } catch (error) {
         if (error instanceof Error && error.name !== "AbortError") {
           console.error("Error fetching search results", error);
