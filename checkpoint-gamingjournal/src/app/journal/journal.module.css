@@ -67,6 +67,14 @@
   flex-shrink: 0;
 }
 
+.viewText {
+  font-family: "Inter";
+  font-size: 14px;
+  font-weight: 300;
+
+  flex-shrink: 0;
+}
+
 .toolbar {
   display: flex;
   flex-direction: column;
@@ -83,13 +91,13 @@
 .toolbarBottom {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 1rem;
   width: 100%;
 }
 
 .searchContainer {
-  width: 30%;
+  width: 45%;
 }
 
 .toolbarButtons {

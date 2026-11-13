@@ -534,43 +534,38 @@ export default function Journal() {
                   onTagsChange={setSelectedTags}
                 />
               </div>
-            </div>
 
-            <div className={classes.toolbarBottom}>
-              <div className={classes.resultsContainer}>
-                <Text className={classes.resultsText}>
-                  Showing {filteredEntries.length} of{" "}
-                  {totalEntries.toLocaleString()} entries
-                </Text>
+              <div className={classes.toolbarBottom}>
+                <SegmentedControl
+                  size="md"
+                  value={view}
+                  onChange={(value) => setView(value as "list" | "calendar")}
+                  data={[
+                    {
+                      label: (
+                        <Tooltip label="List View" withArrow>
+                          <span>
+                            <List size={20} />
+                            <Text className={classes.viewText}>List</Text>
+                          </span>
+                        </Tooltip>
+                      ),
+                      value: "list",
+                    },
+                    {
+                      label: (
+                        <Tooltip label="Calendar View" withArrow>
+                          <span>
+                            <Calendar size={20} />
+                            <Text className={classes.viewText}>Calendar</Text>
+                          </span>
+                        </Tooltip>
+                      ),
+                      value: "calendar",
+                    },
+                  ]}
+                />
               </div>
-
-              <SegmentedControl
-                size="md"
-                value={view}
-                onChange={(value) => setView(value as "list" | "calendar")}
-                data={[
-                  {
-                    label: (
-                      <Tooltip label="List View" withArrow>
-                        <span>
-                          <List size={25} />
-                        </span>
-                      </Tooltip>
-                    ),
-                    value: "list",
-                  },
-                  {
-                    label: (
-                      <Tooltip label="Calendar View" withArrow>
-                        <span>
-                          <Calendar size={25} />
-                        </span>
-                      </Tooltip>
-                    ),
-                    value: "calendar",
-                  },
-                ]}
-              />
             </div>
 
             {activeFilters.length > 0 && (
