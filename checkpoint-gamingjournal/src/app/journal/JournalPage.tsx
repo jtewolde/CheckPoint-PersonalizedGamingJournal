@@ -674,7 +674,7 @@ export default function Journal() {
               className={classes.calendar}
               entries={filteredCalendarEntries}
               fullWidth={true}
-              displayCover
+              displayCover={false}
               variant="full"
             />
           </div>

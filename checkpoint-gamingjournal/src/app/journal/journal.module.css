@@ -133,7 +133,6 @@
 
 .calendarContainer {
   width: 100%;
-  padding: 0 1rem;
 }
 
 .calendar :global(.mantine-Calendar-day) {
