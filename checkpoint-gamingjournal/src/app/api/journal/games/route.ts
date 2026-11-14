@@ -40,8 +40,14 @@ export async function GET(req: NextRequest) {
     // -----------------------------------------
     const games = await JournalEntriesCollection.aggregate([
       { $match: { userId: userId } },
-      { $group: { _id: "$gameId", gameName: { $first: "$gameName" } } },
-      { $project: { _id: 0, gameId: "$_id", gameName: 1 } },
+      {
+        $group: {
+          _id: "$gameId",
+          gameName: { $first: "$gameName" },
+          coverImage: { $first: "$coverImage" },
+        },
+      },
+      { $project: { _id: 0, gameId: "$_id", gameName: 1, coverImage: 1 } },
     ]).toArray();
 
     //--------------------------------------------------------

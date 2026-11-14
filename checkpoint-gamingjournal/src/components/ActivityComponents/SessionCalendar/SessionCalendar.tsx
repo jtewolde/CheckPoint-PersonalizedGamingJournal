@@ -95,13 +95,11 @@ export default function SessionCalendar({
       />
 
       <PlaySessionModal
-        gameName={selectedSession?.gameName}
         opened={editModalOpened}
         onClose={() => {
           setEditModalOpened(false);
           setSelectedSession(null);
         }}
-        gameId={selectedSession?.gameId}
         session={selectedSession}
         onSuccess={(updatedSession) => {
           setLocalSessions((prev) =>
