@@ -167,7 +167,7 @@ export default function JournalCalendar({
           firstDayOfWeek={0}
           weekdayFormat="ddd"
           highlightToday
-          maxEventsPerDay={2}
+          maxEventsPerDay={1}
           consistentWeeks
           getDayProps={(dateString) => ({
             disabled: dateString > getDateKey(new Date()),

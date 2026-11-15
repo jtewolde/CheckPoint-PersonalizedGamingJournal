@@ -22,6 +22,7 @@ import {
   Stack,
   Text,
   Checkbox,
+  Image,
   Pill,
   SegmentedControl,
   Tooltip,
@@ -29,7 +30,7 @@ import {
   EmptyState,
 } from "@mantine/core";
 
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { FilePlus, Trash2, List, Calendar, Notebook } from "lucide-react";
 
 import classes from "./journal.module.css";
@@ -38,7 +39,6 @@ export default function Journal() {
   // State variables for the journal entries
   const [entries, setEntries] = useState<any[]>([]);
   const [calendarEntries, setCalendarEntries] = useState<any[]>([]);
-  const [totalEntries, setTotalEntries] = useState(0);
   const [search, setSearch] = useState("");
 
   const [loading, setLoading] = useState(true);
@@ -51,7 +51,6 @@ export default function Journal() {
   const [games, setGames] = useState<{ gameId: string; gameName: string }[]>(
     [],
   );
-  const [totalGames, setTotalGames] = useState(0);
   const [libraryGames, setLibraryGames] = useState<any[]>([]);
 
   // State variables for filters based on game, entry type, tags, and sorting order
@@ -95,13 +94,23 @@ export default function Journal() {
   ];
 
   // Define which quick action the user is performing.
-  type GameAction = "log" | "journal" | "edit";
+  type GameAction = "log" | "journal" | "edit" | "delete";
   const [pendingAction, setPendingAction] = useState<GameAction | null>(null);
 
   // Store the selected game from the user's library
   const [selectedLibraryGame, setSelectedLibraryGame] = useState<any | null>(
     null,
   );
+  // Store the selected game for deletion of its entries
+  const [selectedDeleteGame, setSelectedDeleteGame] = useState<any | null>(
+    null,
+  );
+
+  // Store the number of journal entries for the selected game
+  const [selectedGameEntryCount, setSelectedGameEntryCount] = useState<
+    number | null
+  >(null);
+  const [countLoading, setCountLoading] = useState(false);
 
   // Handle the action when the user selects a game from the find game modal
   const handleFindGame = (action: GameAction) => {
@@ -109,17 +118,25 @@ export default function Journal() {
     findGameOpen();
   };
 
+  // Handle the selected game based on the pending action.
   const handleGameSelected = (game: any) => {
-    // Keep the complete library record for the edit modal.
     setSelectedLibraryGame(game);
-    openEntryModal();
     findGameClose();
 
     switch (pendingAction) {
       case "journal":
         openEntryModal();
         break;
+
+      case "delete":
+        setSelectedDeleteGame(game);
+        setChecked(false);
+        setError("");
+        fetchSelectedGameEntryCount(game.gameId);
+        break;
     }
+
+    setPendingAction(null);
   };
 
   // Check if the user is authenticated, if not redirect to auth page
@@ -148,7 +165,6 @@ export default function Journal() {
 
       const data = await res.json();
       setGames(data.games);
-      setTotalGames(data.games.length);
     } catch (error) {
       console.log("Error fetching games with journal entries", error);
     }
@@ -208,7 +224,6 @@ export default function Journal() {
       const data = await res.json();
       setEntries(data.journalEntries);
       setTotalPages(data.pagination.totalPages);
-      setTotalEntries(data.pagination.totalEntries);
     } catch (error) {
       console.log("Error fetching user journal entries", error);
     } finally {
@@ -250,15 +265,51 @@ export default function Journal() {
     }
   };
 
-  // Function to delete all journal entries of a selected game
-  const deleteEntriesByGame = async (gameID: string) => {
+  // Helper function to fetch the number of journal entries for a selected game
+  const fetchSelectedGameEntryCount = async (gameID: string) => {
+    try {
+      setCountLoading(true);
+      setSelectedGameEntryCount(null);
+
+      const params = new URLSearchParams({
+        page: "1",
+        limit: "1",
+        gameId: gameID,
+        type: "",
+        tag: "",
+        order: "desc",
+      });
+
+      const res = await fetch(`/api/journal?${params.toString()}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("bearer_token")}`,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to retrieve game journal entries");
+      }
+
+      const data = await res.json();
+
+      setSelectedGameEntryCount(data.pagination.totalEntries);
+    } catch (error) {
+      console.error("Error fetching game entry count:", error);
+      setSelectedGameEntryCount(null);
+    } finally {
+      setCountLoading(false);
+    }
+  };
+
+  // Function to delete all journal entries of a selected game and refresh the journal data
+  const deleteEntriesByGame = async (gameID: string): Promise<boolean> => {
     try {
       // Set loading state to true to display overlay
       setLoading(true);
 
-      if (!selectedGame) {
+      if (!selectedDeleteGame) {
         setError("Please select a game");
-        return;
+        return false;
       }
 
       // Call deleteEntriesByGame API Route
@@ -278,18 +329,28 @@ export default function Journal() {
       }
 
       console.log(
-        `All Journal Entries for ${selectedGame} deleted successfully!`,
+        `All Journal Entries for ${selectedDeleteGame.title} deleted successfully!`,
       );
       toast.success(
-        `All Journal Entries for ${selectedGame} deleted successfully!`,
+        `All Journal Entries for ${selectedDeleteGame.title} deleted successfully!`,
       );
 
-      setLoading(false);
-      await fetchEntries();
+      // Refresh the journal data
+      await fetchGames();
+      await fetchEntries(page);
+
+      if (view === "calendar") {
+        await fetchCalendarEntries();
+      }
+
+      return true;
     } catch (error) {
       setLoading(false);
       console.error("Error deleting journal entries:", error);
-      toast.error("Error deleting journal entries");
+      toast.error("An error occurred while deleting journal entries");
+      return false;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -310,8 +371,9 @@ export default function Journal() {
     fetchEntries(page);
   }, [page, gameId, selectedTags, selectedType, sortOrder]);
 
-  const selectedGameObject = games.find(
-    (game) => game.gameName === selectedGame,
+  // Filter library games to only include games with journal entries
+  const deleteEligibleGames = libraryGames.filter((libraryGame) =>
+    games.some((journalGame) => journalGame.gameId === libraryGame.gameId),
   );
 
   return (
@@ -359,7 +421,7 @@ export default function Journal() {
               width: "100%",
             },
             title: {
-              fontSize: "24px",
+              fontSize: "18px",
               color: "white",
               fontFamily: "Noto Sans",
               fontWeight: 300,
@@ -367,7 +429,7 @@ export default function Journal() {
             content: {
               fontSize: "18px",
               color: "white",
-              fontFamily: "Poppins",
+              fontFamily: "Inter",
               fontWeight: 400,
             },
             close: {
@@ -381,72 +443,77 @@ export default function Journal() {
               with the selected game. This action cannot be undone.
             </Text>
 
-            <Select
-              label="Select Game"
+            <Button
+              variant="default"
+              fullWidth
               size="md"
-              placeholder="Choose a game to delete its entries"
-              data={games.map((game) => ({
-                value: game.gameName,
-                label: game.gameName,
-              }))}
-              value={selectedGame}
-              onChange={(value) => setSelectedGame(value || "")}
-              styles={{
-                label: {
-                  fontSize: "18px",
-                  color: "white",
-                  fontFamily: "Noto Sans",
-                  fontWeight: 300,
-                },
-              }}
-              mb="sm"
-              error={error}
-            />
+              radius="md"
+              onClick={() => handleFindGame("delete")}
+            >
+              <Group gap="xs">
+                {selectedDeleteGame?.coverImage && (
+                  <Image
+                    src={selectedDeleteGame.coverImage}
+                    alt={selectedDeleteGame.title}
+                    w={32}
+                    h={32}
+                    radius="sm"
+                  />
+                )}
+                {selectedDeleteGame?.title || "Select a Game"}
+              </Group>
+            </Button>
 
             <Checkbox
               radius="md"
-              color="blue"
+              color="#e70c0c"
               c="white"
               size="md"
               fw={300}
-              label="I understand that I am permanently deleting my journal entries for this game"
+              label={
+                countLoading
+                  ? "Retrieving journal entry count..."
+                  : `I understand that all ${selectedGameEntryCount ?? 0} journal entries for this game will be permanently deleted.`
+              }
               checked={checked}
-              error={error}
+              disabled={
+                countLoading ||
+                selectedGameEntryCount === null ||
+                selectedGameEntryCount === 0
+              }
               onChange={(event) => setChecked(event.currentTarget.checked)}
             />
 
             <Button
               className={classes.deleteEntriesButton}
-              color="#d8070b"
+              color="#e70c0c"
               fullWidth
               radius="md"
               variant="filled"
               rightSection={<Trash2 size={16} />}
-              disabled={!checked || !selectedGame}
+              disabled={
+                !checked ||
+                !selectedDeleteGame ||
+                countLoading ||
+                selectedGameEntryCount === null ||
+                selectedGameEntryCount === 0
+              }
               loading={loading}
               onClick={async () => {
-                if (!selectedGame) {
-                  setError("Please select a game");
-                  return;
-                }
+                if (!selectedDeleteGame || !checked) return;
 
-                if (!checked) {
-                  setError("Please confirm before deleting");
-                  return;
-                }
+                await deleteEntriesByGame(selectedDeleteGame.gameId);
 
-                if (!selectedGameObject) {
-                  toast.error("Invalid game selection");
-                  return;
-                }
-
-                await deleteEntriesByGame(selectedGameObject.gameId); // ✅ Call your helper function
                 setChecked(false);
-                setSelectedGame("");
-                close(); // ✅ Close modal
+                setSelectedDeleteGame(null);
+                setSelectedGameEntryCount(null);
+                setError("");
+                close();
               }}
             >
-              Delete Entries
+              {selectedGameEntryCount !== null
+                ? `Delete ${selectedGameEntryCount} Entries`
+                : "Delete Entries"}
             </Button>
           </Stack>
         </Modal>
@@ -471,7 +538,11 @@ export default function Journal() {
                     findGameClose();
                     setPendingAction(null);
                   }}
-                  libraryGames={libraryGames}
+                  libraryGames={
+                    pendingAction === "delete"
+                      ? deleteEligibleGames
+                      : libraryGames
+                  }
                   onSelect={handleGameSelected}
                 />
 

@@ -3,9 +3,8 @@
 
   width: 100%;
   min-width: 0;
-  background: #191720;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  overflow: hidden;
+  overflow-x: auto;
 }
 
 .headerNavButton {
@@ -54,7 +53,7 @@
 
 /* Weekday headers */
 .weekday {
-  height: 44px;
+  height: 40px;
   background: #201d29;
   color: #b9b3c7;
   font-size: 13px;
@@ -67,7 +66,7 @@
 /* Individual date cells */
 .dayCell {
   box-sizing: border-box;
-  height: 115px;
+  height: 80px;
   padding: 8px;
 
   display: flex;
@@ -92,7 +91,7 @@
 .dayNumber {
   width: 28px;
   height: 28px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
 }
 
@@ -104,8 +103,8 @@
 
 /* Event container */
 .events {
-  top: 38px;
-  bottom: 6px;
+  top: 40px;
+  bottom: 10px;
 }
 
 /* Compact variant */

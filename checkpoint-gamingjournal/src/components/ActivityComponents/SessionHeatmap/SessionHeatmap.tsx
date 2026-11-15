@@ -122,8 +122,8 @@ export default function SessionHeatmap({
       ? 24
       : isLaptop
         ? 28
-        : 32;
-  const dashboardGap = isSmallMobile ? 6 : isTablet ? 7 : isLaptop ? 8 : 10;
+        : 34;
+  const dashboardGap = isSmallMobile ? 6 : isTablet ? 7 : isLaptop ? 8 : 12;
 
   const gamePageRectSize = isSmallMobile
     ? 23
@@ -131,7 +131,7 @@ export default function SessionHeatmap({
       ? 24
       : isLaptop
         ? 28
-        : 30;
+        : 32;
   const gamePageGap = isSmallMobile ? 6 : isTablet ? 7 : isLaptop ? 8 : 12;
 
   // Format duration for tooltip
@@ -196,13 +196,11 @@ export default function SessionHeatmap({
       />
 
       <PlaySessionModal
-        gameName={selectedSession?.gameName}
         opened={editModalOpened}
         onClose={() => {
           setEditModalOpened(false);
           setSelectedSession(null);
         }}
-        gameId={selectedSession?.gameId ?? ""}
         session={selectedSession}
         onSuccess={(updatedSession) => {
           setLocalSessions((prev) =>
