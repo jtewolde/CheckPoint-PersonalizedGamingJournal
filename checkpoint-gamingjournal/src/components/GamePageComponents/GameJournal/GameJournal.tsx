@@ -2,7 +2,14 @@
 
 import { useMemo } from "react";
 
-import { Stack, Text, Title, EmptyState, SimpleGrid } from "@mantine/core";
+import {
+  Stack,
+  Text,
+  Title,
+  EmptyState,
+  SimpleGrid,
+  Paper,
+} from "@mantine/core";
 import { Gamepad } from "lucide-react";
 
 import JournalCalendar from "@/components/ActivityComponents/JournalCalendar/JournalCalendar";
@@ -16,31 +23,95 @@ interface GameJournalProps {
 }
 
 export default function GameJournal({ game, entries = [] }: GameJournalProps) {
-  // Get the most recent entries for the specific game
-  const recentEntries = useMemo(() => {
-    return [...entries]
-      .sort(
-        (a, b) =>
-          new Date(b.displayDate).getTime() - new Date(a.displayDate).getTime(),
-      )
-      .slice(0, 2);
+  // Sort entries from newest to oldest
+  const sortedEntries = useMemo(() => {
+    return [...entries].sort(
+      (a, b) =>
+        new Date(b.displayDate).getTime() - new Date(a.displayDate).getTime(),
+    );
   }, [entries]);
+
+  // Get the three most recent entries
+  const recentEntries = useMemo(() => {
+    return sortedEntries.slice(0, 3);
+  }, [sortedEntries]);
+
+  // Calculate journal statistics for days logged, total entries, and last entry date
+  const journalStats = useMemo(() => {
+    const uniqueDays = new Set(
+      entries
+        .map((entry) => new Date(entry.displayDate))
+        .filter((date) => !isNaN(date.getTime()))
+        .map((date) => date.toDateString()),
+    );
+
+    const latestEntry = sortedEntries[0];
+
+    const lastEntryDate = latestEntry
+      ? new Date(latestEntry.displayDate)
+      : null;
+
+    return {
+      totalEntries: entries.length,
+      daysLogged: uniqueDays.size,
+      lastEntry:
+        lastEntryDate && !isNaN(lastEntryDate.getTime())
+          ? lastEntryDate.toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })
+          : "—",
+    };
+  }, [entries, sortedEntries]);
 
   return (
     <div className={classes.wrapper}>
-      {entries.length === 0 ? (
-        <div className={classes.emptyStateContainer}>
-          <EmptyState
-            icon={<Gamepad />}
-            size="lg"
-            withIndicatorBackground
-            title="No journal entries yet"
-            description="Create journal entries to start building your journal for this game."
-          />
-        </div>
-      ) : (
-        <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
-          {/* Calendar */}
+      {/* Journal Overview */}
+      <div className={classes.overviewContainer}>
+        <Stack gap={4} mb="lg">
+          <Title order={3} ff="Inter">
+            Your Gaming Journal
+          </Title>
+          <Text size="sm" c="dimmed">
+            Keep track of your gaming experiences, milestones, and memories.
+          </Text>
+        </Stack>
+
+        <SimpleGrid cols={{ base: 1, xs: 3 }} spacing="md">
+          <Paper withBorder radius="md" p="md">
+            <Stack gap={4}>
+              <Text size="sm" c="dimmed">
+                Total Entries
+              </Text>
+              <Title order={2}>{journalStats.totalEntries}</Title>
+            </Stack>
+          </Paper>
+
+          <Paper withBorder radius="md" p="md">
+            <Stack gap={4}>
+              <Text size="sm" c="dimmed">
+                Days Logged
+              </Text>
+              <Title order={2}>{journalStats.daysLogged}</Title>
+            </Stack>
+          </Paper>
+
+          <Paper withBorder radius="md" p="md">
+            <Stack gap={4}>
+              <Text size="sm" c="dimmed">
+                Last Entry
+              </Text>
+              <Title order={3}>{journalStats.lastEntry}</Title>
+            </Stack>
+          </Paper>
+        </SimpleGrid>
+      </div>
+
+      {/* Calendar and Recent Entries */}
+      {entries.length > 0 ? (
+        <SimpleGrid cols={{ base: 1, md: 1 }} spacing="xl">
+          {/* Journal Calendar */}
           <div className={classes.calendarContainer}>
             <Title order={3} className={classes.sectionTitle}>
               Journal Calendar
@@ -51,35 +122,22 @@ export default function GameJournal({ game, entries = [] }: GameJournalProps) {
                 className={classes.calendar}
                 entries={entries}
                 displayCover={false}
-                variant="compact"
+                variant="full"
+                fullWidth={true}
               />
             </div>
           </div>
-
-          {/* Recent Entries */}
-          <div className={classes.recentEntriesContainer}>
-            <div className={classes.sectionHeader}>
-              <Title order={3} className={classes.sectionTitle}>
-                Recent Entries
-              </Title>
-
-              <Text component="a" href={`/journal`} className={classes.viewAll}>
-                View All
-              </Text>
-            </div>
-
-            <Stack gap="md">
-              {recentEntries.map((entry) => (
-                <JournalEntryCard
-                  key={entry._id}
-                  entry={entry}
-                  variant="compact"
-                  color="#7c18ed"
-                />
-              ))}
-            </Stack>
-          </div>
         </SimpleGrid>
+      ) : (
+        <div className={classes.emptyStateContainer}>
+          <EmptyState
+            icon={<Gamepad />}
+            size="md"
+            withIndicatorBackground
+            title="No journal entries yet"
+            description="Create your first journal entry to start documenting your gaming journey."
+          />
+        </div>
       )}
     </div>
   );
