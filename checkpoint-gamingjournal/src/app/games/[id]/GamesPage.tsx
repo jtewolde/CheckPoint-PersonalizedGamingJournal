@@ -13,6 +13,7 @@ import GameOverview from "@/components/GamePageComponents/GameOverview/GameOverv
 import GameMedia from "@/components/GamePageComponents/GameMedia/GameMedia";
 import GameActivity from "@/components/GamePageComponents/GameActivity/GameActivity";
 import GameJournal from "@/components/GamePageComponents/GameJournal/GameJournal";
+import RelatedGames from "@/components/GamePageComponents/RelatedGames/RelatedGames";
 
 import GlobalLoader from "@/components/GlobalLoader/GlobalLoader";
 import PlaySessionModal from "@/components/Modals/PlaySessionModal/SessionModal";
@@ -309,10 +310,11 @@ export default function GameDetails() {
     return notFound();
   }
 
-  // Sort the collection games by total rating in descending order
-  const sortedCollections = game.collections?.[0]?.games.sort(
-    (a: any, b: any) => b.total_rating - a.total_rating,
-  );
+  // Sort the collection games by total rating in descending order and exclude the current game from the list of same series games
+  const sortedCollections = game.collections?.[0]?.games
+    .filter((collectionGame: any) => collectionGame.id !== game.id)
+    .sort((a: any, b: any) => b.total_rating - a.total_rating)
+    .slice(0, 10); // Limit to top 10 games in the same series
 
   return (
     <div className={classes.background}>
@@ -358,6 +360,13 @@ export default function GameDetails() {
 
         {activeTab === "media" && <GameMedia game={game} />}
 
+        {activeTab === "related" && (
+          <RelatedGames
+            similarGames={game.similar_games}
+            sameSeriesGames={sortedCollections}
+          />
+        )}
+
         <EditGameInfoModal
           opened={opened}
           onClose={close}
@@ -369,8 +378,7 @@ export default function GameDetails() {
           key={game.id}
           opened={playSessionModalOpened}
           onClose={closePlaySessionModal}
-          gameId={game.id}
-          gameName={game.name}
+          selectedGame={libraryGame}
           onSuccess={() => close()}
         />
 
@@ -379,73 +387,6 @@ export default function GameDetails() {
           onClose={closeAddModal}
           game={game}
         />
-
-        <div className={classes.gameSeries}>
-          {game.collections?.[0]?.games.length > 4 && (
-            <>
-              <div className={classes.sectionHeader}>
-                <h2 className={classes.sectionTitle}>
-                  Games in the Same Series:
-                </h2>
-              </div>
-
-              <SimpleGrid
-                cols={{ base: 2, sm: 3, md: 5 }}
-                spacing="lg"
-                verticalSpacing="lg"
-                className={classes.seriesGrid}
-              >
-                {sortedCollections.slice(0, 10).map((collection: any) => (
-                  <GameCard
-                    variant="compact"
-                    key={collection.id}
-                    game={collection}
-                  />
-                ))}
-              </SimpleGrid>
-            </>
-          )}
-        </div>
-
-        <div className={classes.sectionHeader}>
-          <ThemeIcon
-            size={50}
-            variant="gradient"
-            gradient={{ from: "#0e6ce7", to: "#1d4ee2", deg: 20 }}
-            radius="md"
-          >
-            <Gamepad size={40} />
-          </ThemeIcon>
-          <h2 className={classes.sectionTitle}>Similar Games: </h2>
-        </div>
-
-        <div className={classes.similarGames}>
-          <Swiper
-            centeredSlides={isMobile ? true : false}
-            navigation={true}
-            pagination={{ clickable: true }}
-            modules={[Navigation, Pagination]}
-            slidesPerView={isMobile ? 1.4 : 5}
-            spaceBetween={20}
-            className={classes.swiperContainer}
-          >
-            {game.similar_games?.map((similarGame: any) => {
-              return (
-                <SwiperSlide
-                  key={similarGame.id}
-                  className={classes.similarGameSlide}
-                  onClick={() => router.push(`/games/${similarGame.id}`)} // Navigate to the similar game's details page
-                >
-                  <GameCard
-                    variant="default"
-                    key={similarGame.id}
-                    game={similarGame}
-                  />
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
-        </div>
       </div>
     </div>
   );
