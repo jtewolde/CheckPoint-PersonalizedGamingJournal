@@ -1,18 +1,28 @@
 .gameCard {
-  border: 1px solid #3d3853;
-  object-fit: contain;
-  border-radius: 2px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+
+  background-color: #17151f;
+
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+
   cursor: pointer;
+
   align-self: center;
   margin: 0 auto;
+
   height: auto;
-  width: 105%;
+  width: 100%;
+
   display: flex;
   flex-direction: column;
+
   overflow: hidden;
-  will-change: transform;
-  transition: transform 0.25s ease;
+
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .gameCard:hover {
@@ -29,32 +39,40 @@
 }
 
 .library {
-  border: 1px solid #3d3853;
-  object-fit: contain;
-  border-radius: 2px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
   width: 100%;
   height: auto;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+
+  background-color: #17151f;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+
+  cursor: pointer;
+
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.library:hover {
+  transform: translateY(-3px);
+  border-color: rgba(145, 92, 246, 0.55);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
 }
 
 .imageWrapper,
 .removeImageWrapper {
   position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
   overflow: hidden;
-  cursor: pointer;
   flex-shrink: 0;
-}
-
-.imageWrapper {
-  aspect-ratio: 3/4;
-}
-
-.removeImageWrapper {
-  aspect-ratio: 4/5;
+  cursor: pointer;
 }
 
 .imageWrapper:hover .overlay {
@@ -123,11 +141,12 @@
 }
 
 .cover {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-bottom: 1px solid #585757;
-  border-radius: 2px 2px 0 0;
+  border: none;
+  border-radius: 0;
 }
 
 .ratingBadge {
@@ -141,10 +160,15 @@
   top: 0px;
   left: 0px;
   z-index: 5;
-  backdrop-filter: blur(6px);
+
+  background: rgba(20, 20, 25, 0.85);
+  backdrop-filter: blur(8px);
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 5px;
+
   font-family: "Inter";
-  font-weight: 600;
-  background-color: rgba(15, 15, 15, 0.85);
+  font-weight: 500;
 }
 
 .gameTypeBadge {
@@ -169,74 +193,71 @@
   position: absolute;
   top: 0px;
   right: 0px;
-  z-index: 2;
+  z-index: 5;
+
   display: flex;
   align-items: center;
+  gap: 6px;
 }
 
+.wishlistIcon,
 .platinumIcon {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  z-index: 5;
-  backdrop-filter: blur(6px);
-  background-color: #292828;
+  background: rgba(20, 20, 25, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 5px;
+  backdrop-filter: blur(8px);
 }
 
 .platformIcon {
   position: absolute;
-  align-self: center;
   bottom: 0px;
   left: 0px;
   z-index: 5;
-  backdrop-filter: blur(6px);
-  background-color: #171717;
-}
 
-.platinumIcon,
-.wishlistIcon {
-  background-color: rgba(23, 23, 23, 0.9);
+  background: rgba(20, 20, 25, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 5px;
+  backdrop-filter: blur(8px);
 }
 
 .gameInfo {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: stretch;
+  gap: 10px;
 
-  gap: 12px;
   width: 100%;
-  padding: 0.75rem;
+  padding: 12px;
 
   flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .libraryGameInfo {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-
+  align-items: stretch;
   gap: 10px;
+
   width: 100%;
-  padding: 0.75rem;
+  padding: 12px;
 
   flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .gameTitle {
   width: 100%;
+
+  font-family: "Inter";
   font-size: 14px;
   font-weight: 600;
-  color: rgb(255, 255, 255);
-  font-family: "Inter";
-  line-height: 1.2;
+  line-height: 1.4;
+
+  color: #f5f4f7;
+
   margin: 0;
+
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -253,14 +274,12 @@
 }
 
 .gameDate {
+  font-family: "Inter";
   font-size: 12px;
-  font-weight: 500;
-  color: rgb(231, 229, 229);
-  font-family: "Barlow";
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-weight: 400;
+  color: #aaa5b5;
+
+  margin: 0;
 }
 
 .badgeContainer {
@@ -283,40 +302,71 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 0.3rem;
 }
 
-.ratingText {
-  font-family: "Inter";
-  font-weight: 300;
-  font-size: 14px;
-  color: white;
+.gameMetadata {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
 }
 
-.hoursPlayedText {
+.gameMetadata .gameDate {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.hoursPlayedText,
+.ratingText {
   font-family: "Inter";
-  font-weight: 300;
-  font-size: 14px;
-  color: rgb(244, 244, 244);
+  font-size: 13px;
+  font-weight: 400;
+  color: #c5c2ce;
 }
 
 .cardButtons {
   display: flex;
   flex-direction: row;
-  justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-
+  gap: 8px;
   width: 100%;
+  margin-top: 2px;
 }
 
 .editAction,
 .logAction,
 .addAction {
-  font-family: "Barlow";
-  font-weight: 500;
-  font-size: 14px;
+  height: 34px;
+  font-family: "Inter";
+  font-size: 12px;
+  font-weight: 400;
+  border-radius: 6px;
+
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+.logAction {
+  background-color: #8955e9;
+}
+
+.logAction:hover {
+  background-color: #7540d5;
+}
+
+.editAction {
+  border-color: #514b60;
+  color: #d5d1df;
+}
+
+.editAction:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: #8b5cf6;
 }
 
 @media (max-width: 746px) {
@@ -350,5 +400,39 @@
 
   .imageWrapper {
     height: 100%;
+  }
+}
+
+@media (max-width: 646px) {
+  .library {
+    width: 100%;
+  }
+
+  .libraryGameInfo {
+    padding: 9px;
+    gap: 8px;
+  }
+
+  .gameTitle {
+    font-size: 13px;
+  }
+
+  .hoursPlayedText,
+  .ratingText {
+    font-size: 11px;
+  }
+
+  .cardButtons {
+    gap: 6px;
+  }
+
+  .logAction,
+  .editAction {
+    height: 30px;
+    font-size: 11px;
+  }
+
+  .imageWrapper {
+    aspect-ratio: 3 / 4;
   }
 }

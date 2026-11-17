@@ -290,7 +290,7 @@ export default function Library() {
             />
 
             <SimpleGrid
-              cols={{ base: 2, xs: 2, sm: 3, md: 4, lg: 5, xl: 5 }}
+              cols={{ base: 2, xs: 2, md: 4, lg: 6, xl: 6 }}
               spacing="lg"
               verticalSpacing="xl"
               className={classes.responsiveGrid}

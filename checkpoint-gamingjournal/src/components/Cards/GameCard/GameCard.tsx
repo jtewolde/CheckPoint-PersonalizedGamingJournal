@@ -14,7 +14,6 @@ import {
   Badge,
   Image,
   Tooltip,
-  Rating,
   Button,
   Text,
   ThemeIcon,
@@ -34,8 +33,8 @@ import {
   Play,
   Timer,
   CalendarDays,
-  Gem,
   Gift,
+  Trash,
 } from "lucide-react";
 
 import {
@@ -45,7 +44,6 @@ import {
   FaAndroid,
   FaSteam,
   FaLinux,
-  FaTrophy,
   FaGoogle,
 } from "react-icons/fa";
 import { SiPlaystation } from "react-icons/si";
@@ -485,25 +483,26 @@ export default function GameCard({
 
           <div className={classes.ratingSection}>
             <Group justify="space-between" align="center" wrap="nowrap">
-              <Group gap={4} align="center">
-                <Timer size={isMobile ? 10 : 15} color="white" />
+              <Group gap={5} align="center">
+                <Timer size={14} color="#a5a1b2" />
+
                 <Text className={classes.hoursPlayedText}>
-                  {libraryMeta?.hours || 0} Hours
+                  {libraryMeta?.hours ?? 0} hours
                 </Text>
               </Group>
 
-              <Group gap={6} align="center" wrap="nowrap">
-                <Rating
-                  value={(libraryMeta?.rating ?? 0) / 2}
-                  readOnly
-                  fractions={2}
-                  size="sm"
-                  count={1}
-                />
+              <Group gap={5} align="center" wrap="nowrap">
+                {libraryMeta?.rating ? (
+                  <>
+                    <Star size={14} color="#a78bfa" fill="#a78bfa" />
 
-                <Text className={classes.ratingText}>
-                  {libraryMeta?.rating}/10
-                </Text>
+                    <Text className={classes.ratingText}>
+                      {libraryMeta.rating}/10
+                    </Text>
+                  </>
+                ) : (
+                  <Text className={classes.ratingText}>Not rated</Text>
+                )}
               </Group>
             </Group>
           </div>
@@ -565,22 +564,24 @@ export default function GameCard({
         <div className={classes.gameInfo}>
           <h3 className={classes.gameTitle}>{game.name}</h3>
 
-          <Badge size="md" variant="default" c="white" radius="sm" fw={500}>
-            {game.genres?.[0]?.name || "N/A"}
-          </Badge>
+          <div className={classes.gameMetadata}>
+            <Badge size="sm" variant="light" color="gray" radius="sm">
+              {game.genres?.[0]?.name || "N/A"}
+            </Badge>
 
-          <p className={classes.gameDate}>
-            {game.first_release_date
-              ? new Date(game.first_release_date * 1000).toLocaleDateString(
-                  "en-US",
-                  {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  },
-                )
-              : "N/A"}
-          </p>
+            <Text className={classes.gameDate}>
+              {game.first_release_date
+                ? new Date(game.first_release_date * 1000).toLocaleDateString(
+                    "en-US",
+                    {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    },
+                  )
+                : "Release date TBA"}
+            </Text>
+          </div>
 
           <div className={classes.cardButtons}>
             {shouldRenderAddModal && (
@@ -594,17 +595,20 @@ export default function GameCard({
                 }}
               />
             )}
+
             <Button
               className={classes.addAction}
-              size="xs"
+              size="sm"
               fullWidth
-              variant="outline"
-              color={loading ? "gray" : isInLibrary ? "#e65656" : "#24f149"}
+              variant={isInLibrary ? "outline" : "filled"}
+              color={isInLibrary ? "#fa7d7d" : "violet"}
               disabled={loading || addingToLibrary}
-              leftSection={<Plus size={17} />}
+              leftSection={
+                isInLibrary ? <Trash size={16} /> : <Plus size={16} />
+              }
               onClick={handleQuickLibraryAction}
             >
-              {isInLibrary ? "Remove" : "Add"}
+              {isInLibrary ? "Remove from Library" : "Add to Library"}
             </Button>
           </div>
         </div>
