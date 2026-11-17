@@ -122,8 +122,8 @@ export default function SessionHeatmap({
       ? 24
       : isLaptop
         ? 28
-        : 34;
-  const dashboardGap = isSmallMobile ? 6 : isTablet ? 7 : isLaptop ? 8 : 12;
+        : 32;
+  const dashboardGap = isSmallMobile ? 6 : isTablet ? 7 : isLaptop ? 8 : 10;
 
   const gamePageRectSize = isSmallMobile
     ? 23
